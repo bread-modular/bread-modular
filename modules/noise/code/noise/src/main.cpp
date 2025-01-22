@@ -1,8 +1,12 @@
 #include <Arduino.h>
 #include <avr/io.h>
 #include <util/delay.h>
+#include <SimpleMIDI.h>
 
 #define NOISE_TONE_PIN PIN_PA7
+
+// Create a MIDI object
+SimpleMIDI MIDI;
 
 // LFSR States (initialize with different seeds)
 uint16_t lfsr1 = 0xACE1; // LFSR 1
@@ -36,30 +40,53 @@ void setup() {
   VREF.CTRLB |= VREF_DAC0REFEN_bm;
   DAC0.CTRLA = DAC_ENABLE_bm | DAC_OUTEN_bm;
   DAC0.DATA = 128;
+
+  // Initialize the MIDI library
+  MIDI.begin(31250);
+  Serial.println("Noise App Started");
 }
 
 void outputToDAC(uint8_t value) {
   DAC0.DATA = value;
 }
 
+int ccValue = 0;
+double timeToDelay = 0;
+
 void loop() {
-  uint8_t metallicNoise = generateWhiteNoise(); // Generate noise
-  outputToDAC(metallicNoise); // Output noise to DAC
 
-  // Read the potentiometer value (0-1023)
-  double normalizedToneValue = analogRead(NOISE_TONE_PIN) / 1023.0;
+  if (MIDI.read()) {
+    uint8_t type = MIDI.getType();
+    uint8_t channel = MIDI.getChannel() + 1;
+    uint8_t data1 = MIDI.getData1();
+    uint8_t data2 = MIDI.getData2();
 
-  // Implement the noise value as liner for the first half
-  // and exponential for the next half
-  double timeToDelay;
-  if (normalizedToneValue < 0.5) {
-    timeToDelay = normalizedToneValue * 500;
-  } else {
-    timeToDelay = 500 * 0.5 + pow(2, normalizedToneValue * 18);
+    if (type == MIDI_CONTROL_CHANGE) {
+      // MIDI CC==74 is the CC for the filter cutoff
+      // So, we can use this to control the noise tone
+      if (data1 == 74) {
+        ccValue = data2 * 8;
+      }
+    }
   }
 
-  // Implement variable delay using a loop
-  for (long i = 0; i < (long)timeToDelay; i++) {
-      _delay_us(1);
+  if (timeToDelay > 0) {
+    timeToDelay -= 1;
+    _delay_us(1);
+  } else {
+    uint8_t noise = generateWhiteNoise(); // Generate noise
+    outputToDAC(noise); // Output noise to DAC
+
+    // Read the potentiometer value (0-1023)
+    int toneValue = ccValue + analogRead(NOISE_TONE_PIN);
+
+    // Implement the noise value as liner for the first half
+    // and exponential for the next half
+    if (toneValue < 512) {
+      timeToDelay = toneValue / 2;
+    } else {
+      float ratio = (toneValue - 512) / 30;
+      timeToDelay = 512 + pow(2, ratio);
+    }
   }
 }
