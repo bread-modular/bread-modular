@@ -1,10 +1,12 @@
 ﻿Designator,Footprint,Quantity,Value,LCSC Part #
 "5V1, GND1",PinHeader_1x05_P2.54mm_Vertical,2,Conn_01x05_Pin,
 "C1, C10, C2, C3, C4, C6, C7, C8, C9",1206,9,100uf,
+C5,0402,1,0.1uf,
 INPUT1,PinSocket_1x05_P2.54mm_Vertical,1,Conn_01x05_Socket,
 J1,Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical,1,AudioJack3,
 "R1, R4, R7, R8",0402,4,100k,
 "R11, R15",1206,2,10,
 "R2, R3",0402,2,1k,
+R9,0402,1,1M,
 "RV1, RV2",Potentiometer_RV09,2,50k,
-U1,SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm,1,MCP6002-xSN,
+"U1, U2",SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm,2,MCP6002-xSN,
