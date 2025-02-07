@@ -1,11 +1,6 @@
 #include <Arduino.h>
-#include "EnvHoldRelease.h"
-
-// Pin definitions.
-#define PIN_GATE_IN   PIN_PB2   // Gate input.
-#define PIN_CV1       PIN_PA1   // Controls hold time.
-#define PIN_CV2       PIN_PA2   // Controls release time.
-#define TOGGLE_LED    PIN_PC3   // LED output pin.
+#include "PinConfig.h"      // Include the pin definitions.
+#include "EnvHoldRelease.h" // Include the envelope generator.
 
 // Create an instance of the envelope generator.
 EnvHoldRelease envelope;
@@ -30,13 +25,11 @@ void setup() {
 }
 
 void loop() {
-  // Read the inputs.
+  // Read the gate input.
   bool gate = digitalRead(PIN_GATE_IN);
-  int cv1   = analogRead(PIN_CV1);
-  int cv2   = analogRead(PIN_CV2);
 
-  // Update the envelope generator with the current inputs.
-  envelope.update(gate, cv1, cv2);
+  // Update the envelope generator (CV1 and CV2 are read internally).
+  envelope.update(gate);
 
   // (Optional) Additional processing can be done here.
 }

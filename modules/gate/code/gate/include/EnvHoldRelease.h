@@ -1,18 +1,19 @@
 #ifndef ENVHOLDRELEASE_H
 #define ENVHOLDRELEASE_H
 
+#include "PinConfig.h"  // Include pin definitions.
 #include <Arduino.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 // This class implements a 0‑attack, CV1‑hold, CV2‑controlled release envelope generator.
-// It uses the gate input, CV1 (hold time), CV2 (release time), the DAC output, and an LED.
+// It reads CV1 and CV2 internally and drives the DAC output and an LED.
 class EnvHoldRelease {
 public:
-  // Define the envelope state machine.
+  // Envelope state machine.
   enum EnvelopeState { IDLE, HOLD, RELEASE };
 
-  EnvHoldRelease() 
+  EnvHoldRelease()
     : state(IDLE),
       lastGateState(false),
       phaseStartTime(0),
@@ -23,55 +24,56 @@ public:
       envelopeValue(0)
   { }
 
-  // Call this method from your main loop.
-  // - gate: current state of the gate input (true = HIGH)
-  // - cv1: analog reading from CV1 (for hold time)
-  // - cv2: analog reading from CV2 (for release time)
-  void update(bool gate, int cv1, int cv2) {
+  // Update the envelope generator.
+  // The parameter 'gate' is the current state of the gate input.
+  // A rising edge (transition from LOW to HIGH) triggers the envelope.
+  void update(bool gate) {
     unsigned long now = micros();
 
-    // If a new gate rising edge occurs, restart the envelope immediately.
+    // Trigger a new envelope on rising edge.
     if (gate && !lastGateState) {
-      envelopeValue = 255;  // Instant attack: full amplitude.
-
+      envelopeValue = 255; // Instant attack: full amplitude.
+      
       cli();
       DAC0.DATA = envelopeValue;           // Update DAC output.
-      PORTC.OUTSET = (1 << 3);               // Turn LED on (assumes LED on PC3).
+      PORTC.OUTSET = (1 << 3);               // Turn LED on (assumes LED is on TOGGLE_LED).
       sei();
-
-      // Map CV1 (0–1023) to a hold time between 0 and 100,000 µs.
-      holdDuration = map(cv1, 0, 1023, 0, 100000);
+      
+      // Read CV1 to set the hold duration.
+      int cv1Val = analogRead(PIN_CV1);
+      // Map CV1 (0–1023) to a hold time between 0 and 100,000 µs (0–100 ms).
+      holdDuration = map(cv1Val, 0, 1023, 0, 100000);
+      
       phaseStartTime = now;
       state = HOLD;
     }
 
-    // State machine:
+    // In the HOLD state, wait until the hold time elapses.
     if (state == HOLD) {
-      // Remain at full amplitude until the hold time elapses.
       if (now - phaseStartTime >= holdDuration) {
-        // Setup release phase:
-        // Map CV2 (0–1023) to a release time between 0 µs and 100,000 µs.
-        // When CV2 is 0, releaseDuration will be 0 meaning immediate release.
-        releaseDuration = map(cv2, 0, 1023, 0, 100000);
-        
+        // End of hold: read CV2 to determine release duration.
+        int cv2Val = analogRead(PIN_CV2);
+        // Map CV2 (0–1023) to a release time between 0 and 100,000 µs.
+        releaseDuration = map(cv2Val, 0, 1023, 0, 100000);
         if (releaseDuration == 0) {
-          // Immediate release: drop envelope right away.
+          // Immediate release.
           cli();
           DAC0.DATA = 0;
-          PORTC.OUTCLR = (1 << 3);  // Turn LED off.
+          PORTC.OUTCLR = (1 << 3); // Turn LED off.
           sei();
           state = IDLE;
         }
         else {
-          stepDelay = releaseDuration / 255;  // Time per decrement.
-          if (stepDelay < 1) { stepDelay = 1; }
+          // Calculate the delay per one-step decrement (for 255 steps).
+          stepDelay = releaseDuration / 255;
+          if (stepDelay < 1) stepDelay = 1;
           lastStepTime = now;
           state = RELEASE;
         }
       }
     }
+    // In the RELEASE state, ramp the envelope down to 0.
     else if (state == RELEASE) {
-      // Decrement the envelope step-by-step until it reaches 0.
       if (now - lastStepTime >= stepDelay) {
         if (envelopeValue > 0) {
           envelopeValue--;
@@ -80,9 +82,9 @@ public:
           sei();
           lastStepTime = now;
         } else {
-          // The envelope has fully released. Turn off the LED and return to idle.
+          // When the envelope reaches 0, turn off the LED and return to IDLE.
           cli();
-          PORTC.OUTCLR = (1 << 3);  // Turn LED off.
+          PORTC.OUTCLR = (1 << 3);
           DAC0.DATA = 0;
           sei();
           state = IDLE;
@@ -90,7 +92,7 @@ public:
       }
     }
 
-    // Save the current gate state for rising-edge detection.
+    // Save the current gate state for edge detection.
     lastGateState = gate;
   }
 
