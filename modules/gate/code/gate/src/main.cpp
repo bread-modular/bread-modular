@@ -7,8 +7,8 @@
 // Create instances of our classes.
 EnvHoldRelease envelope;
 SimpleMIDI midi;
-// Use TOGGLE_PIN (configured in PinConfig.h) for mode toggling.
-ToggleMode gateMode(TOGGLE_PIN, 50);  // 50 ms debounce
+
+ToggleMode gateMode(GATE_TOGGLE_PIN, 500);  // 500 ms debounce
 
 // Global modulation variables for MIDI CC values.
 int modCV1 = 0; // MIDI CC22 (affects hold time)
@@ -25,13 +25,11 @@ void setup() {
   pinMode(PIN_GATE_IN, INPUT);  // Manual gate input (active high).
   pinMode(PIN_CV1, INPUT);
   pinMode(PIN_CV2, INPUT);
-  // Toggle pin is handled by ToggleMode.
-  pinMode(TOGGLE_PIN, INPUT_PULLUP);
-  
-  // Configure LED output.
-  pinMode(TOGGLE_LED, OUTPUT);
-  // Initially, assume Manual Mode (LED OFF).
-  digitalWrite(TOGGLE_LED, LOW);
+
+  // GATE togglling
+  pinMode(GATE_TOGGLE_PIN, INPUT_PULLUP);
+  pinMode(GATE_TOGGLE_LED, OUTPUT);
+  digitalWrite(GATE_TOGGLE_LED, LOW);
   
   // Configure DAC0.
   VREF.CTRLA |= VREF_DAC0REFSEL_4V34_gc;
@@ -53,7 +51,7 @@ void loop() {
   
   // --- LED Mode Indicator ---
   // LED OFF indicates Manual Mode; LED ON indicates MIDI Mode.
-  digitalWrite(TOGGLE_LED, isManualMode ? LOW : HIGH);
+  digitalWrite(GATE_TOGGLE_LED, isManualMode ? LOW : HIGH);
   
   // --- MIDI Handling ---
   // Process any available MIDI messages.
