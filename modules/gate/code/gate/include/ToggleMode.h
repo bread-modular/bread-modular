@@ -20,7 +20,7 @@ public:
     pinMode(togglePin, INPUT_PULLUP);
     // Retrieve the mode from EEPROM.
     byte storedMode = EEPROM.read(eepromAddress);
-    mode = (storedMode == 1);
+    mode = storedMode > 0;
     buttonPressed = false;
     lastToggleTime = 0;
   }
