@@ -8,7 +8,7 @@
 EnvHoldRelease envelope;
 SimpleMIDI midi;
 
-ToggleMode gateMode(GATE_TOGGLE_PIN, 500);  // 500 ms debounce
+ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 500);  // 500 ms debounce
 
 // Global modulation variables for MIDI CC values.
 int modCV1 = 0; // MIDI CC22 (affects hold time)
