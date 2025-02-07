@@ -4,8 +4,8 @@
 
 #define PIN_GATE_IN   PIN_PB2   // Gate input pin.
 #define PIN_LOGGER_TX PIN_PB4   // Unused in this example.
-#define PIN_CV1       PIN_PA1   // Unused in this example.
-#define PIN_CV2       PIN_PA2   // Controls the impulse delay.
+#define PIN_CV1       PIN_PA1   // Controls the hold time before release.
+#define PIN_CV2       PIN_PA2   // Controls the release time.
 #define TOGGLE_PIN    PIN_PC2   // Unused in this example.
 #define TOGGLE_LED    PIN_PC3   // LED output pin.
 
@@ -14,14 +14,13 @@ void setup() {
   pinMode(TOGGLE_LED, OUTPUT);
   digitalWrite(TOGGLE_LED, LOW);
 
-  // Initialize the gate input.
+  // Initialize the gate and control inputs.
   pinMode(PIN_GATE_IN, INPUT);
-
-  // Ensure PIN_CV2 is set as an input.
+  pinMode(PIN_CV1, INPUT);
   pinMode(PIN_CV2, INPUT);
 
   // Configure DAC0:
-  // - Use VDD as the reference (using the 4V34 setting).
+  // - Use VDD as the reference (via the 4V34 selection).
   // - Enable the DAC reference and its output.
   VREF.CTRLA |= VREF_DAC0REFSEL_4V34_gc;
   VREF.CTRLB |= VREF_DAC0REFEN_bm;
@@ -35,39 +34,56 @@ void loop() {
 
   // Detect a rising edge (transition from LOW to HIGH).
   if (currentGateState && !lastGateState) {
-    // Read the analog value from PIN_CV2.
-    int cvVal = analogRead(PIN_CV2);
-    // Map the 10-bit value (0-1023) to an impulse delay between
-    // 250 microseconds and 100 milliseconds (100,000 microseconds).
-    unsigned long impulseDelay = map(cvVal, 0, 1023, 250, 100000);
-
-    // Update both outputs (DAC and LED) almost simultaneously.
-    cli();                      // Disable interrupts.
-    DAC0.DATA = 255;            // Set DAC output to full scale.
-    PORTC.OUTSET = (1 << 3);      // Set TOGGLE_LED (PC3) HIGH.
-    sei();                      // Re-enable interrupts.
-
-    // Generate the impulse pulse.
-    // For delays >= 1000 µs, use delay() for whole milliseconds
-    // and delayMicroseconds() for the remainder.
-    if (impulseDelay < 1000) {
-      delayMicroseconds(impulseDelay);
+    // --- Attack Phase (instant attack) ---
+    // Immediately set envelope to full amplitude (255) and turn on LED.
+    cli();  // Disable interrupts.
+    DAC0.DATA = 255;
+    PORTC.OUTSET = (1 << 3);  // Turn LED on (PIN_PC3).
+    sei();  // Re-enable interrupts.
+    
+    // --- Hold Phase (duration controlled by CV1) ---
+    int cv1Val = analogRead(PIN_CV1);
+    // Map CV1 (0–1023) to a hold time between 0 µs and 100,000 µs (0 to 100 ms).
+    unsigned long holdTime = map(cv1Val, 0, 1023, 0, 100000);
+    
+    // Use delay or delayMicroseconds depending on the duration.
+    if (holdTime < 1000) {
+      delayMicroseconds(holdTime);
     } else {
-      unsigned long msDelay = impulseDelay / 1000; // Whole milliseconds.
-      unsigned long usDelay = impulseDelay % 1000;   // Remaining microseconds.
+      unsigned long msDelay = holdTime / 1000;
+      unsigned long usDelay = holdTime % 1000;
       delay(msDelay);
       if (usDelay > 0) {
         delayMicroseconds(usDelay);
       }
     }
-
-    // Bring both outputs back to LOW simultaneously.
-    cli();                      // Disable interrupts.
-    DAC0.DATA = 0;
-    PORTC.OUTCLR = (1 << 3);      // Set TOGGLE_LED (PC3) LOW.
-    sei();                      // Re-enable interrupts.
+    
+    // --- Release Phase (ramp down, controlled by CV2) ---
+    int cv2Val = analogRead(PIN_CV2);
+    // Map CV2 (0–1023) to a release time between 250 µs and 100,000 µs (100 ms).
+    unsigned long releaseTime = map(cv2Val, 0, 1023, 250, 100000);
+    
+    // We'll use a 255-step linear ramp for the release.
+    float stepDelayF = (float)releaseTime / 255.0;
+    unsigned int stepDelay = (unsigned int)(stepDelayF + 0.5);  // Rounded step delay.
+    if (stepDelay < 1) {
+      stepDelay = 1;  // Ensure at least a 1 µs delay per step.
+    }
+    
+    // Ramp down the envelope from 255 to 0.
+    for (int value = 255; value >= 0; value--) {
+      cli();
+      DAC0.DATA = value;
+      sei();
+      delayMicroseconds(stepDelay);
+    }
+    
+    // Turn off the LED.
+    cli();
+    PORTC.OUTCLR = (1 << 3);
+    sei();
   }
-
+  
   // Update the last known gate state.
   lastGateState = currentGateState;
 }
