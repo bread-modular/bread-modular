@@ -9,8 +9,13 @@
 #define PIN_CV1       PIN_PA1   // Used for envelope hold time modulation.
 #define PIN_CV2       PIN_PA2   // Used for envelope release time modulation.
 
-// Outputs.
+// Toggles.
+//TODO: Change pins later when the PCB is ready.
 #define GATE_TOGGLE_LED    PIN_PC3   // LED output used for envelope visual feedback.
 #define GATE_TOGGLE_PIN    PIN_PC2   // Toggle button input for mode selection (manual vs. MIDI).
+
+// TODO: Change pins later when the PCB is ready.
+#define ALGO_TOGGLE_LED    PIN_PC3   // LED output used for envelope visual feedback.
+#define ALGO_TOGGLE_PIN    PIN_PC2   // Toggle button input for mode selection (manual vs. MIDI).
 
 #endif // PINCONFIG_H

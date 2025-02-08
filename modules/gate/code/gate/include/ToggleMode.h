@@ -10,8 +10,8 @@ public:
   // - togglePin: the pin connected to the toggle button.
   // - eepromAddress: the EEPROM address used to store the mode.
   // - debounceDelay: time in milliseconds for debouncing (default 50 ms).
-  ToggleMode(uint8_t togglePin, int eepromAddress, unsigned long debounceDelay = 50)
-    : togglePin(togglePin), eepromAddress(eepromAddress), debounceDelay(debounceDelay),
+  ToggleMode(byte togglePin, byte eepromAddress, byte totalModes, unsigned long debounceDelay = 50)
+    : togglePin(togglePin), eepromAddress(eepromAddress), totalModes(totalModes), debounceDelay(debounceDelay),
       mode(true), buttonPressed(false), lastToggleTime(0)
   { }
 
@@ -20,7 +20,7 @@ public:
     pinMode(togglePin, INPUT_PULLUP);
     // Retrieve the mode from EEPROM.
     byte storedMode = EEPROM.read(eepromAddress);
-    mode = storedMode > 0;
+    mode = storedMode >= totalModes ? 0 : storedMode;
     buttonPressed = false;
     lastToggleTime = 0;
   }
@@ -40,9 +40,12 @@ public:
     if (reading == HIGH && buttonPressed) {
       // Only toggle if the press lasted longer than the debounce delay.
       if (millis() - lastToggleTime > debounceDelay) {
-        mode = !mode;  // Toggle the mode.
+        mode++;
+        if (mode >= totalModes) {
+          mode = 0;
+        }
         // Save the new mode to EEPROM (1 for true, 0 for false).
-        EEPROM.write(eepromAddress, mode ? 1 : 0);
+        EEPROM.write(eepromAddress, mode);
       }
       buttonPressed = false;
     }
@@ -51,15 +54,16 @@ public:
   // Returns the current mode.
   // true  = Manual Mode.
   // false = MIDI Mode.
-  bool getMode() const {
+  byte getMode() const {
     return mode;
   }
 
 private:
-  uint8_t togglePin;
-  int eepromAddress;
+  byte togglePin;
+  byte eepromAddress;
+  byte totalModes;
   unsigned long debounceDelay;
-  bool mode;
+  byte mode;
   bool buttonPressed;
   unsigned long lastToggleTime;
 };

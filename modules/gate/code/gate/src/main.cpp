@@ -8,7 +8,7 @@
 EnvHoldRelease envelope;
 SimpleMIDI midi;
 
-ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 500);  // 500 ms debounce
+ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 2, 500);  // 500 ms debounce
 
 // Global modulation variables for MIDI CC values.
 int modCV1 = 0; // MIDI CC22 (affects hold time)
@@ -47,7 +47,7 @@ void loop() {
   gateMode.update();
   
   // Determine current mode: true = Manual Mode, false = MIDI Mode.
-  bool isManualMode = gateMode.getMode();
+  bool isManualMode = gateMode.getMode() == 0;
   
   // --- LED Mode Indicator ---
   // LED OFF indicates Manual Mode; LED ON indicates MIDI Mode.
