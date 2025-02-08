@@ -1,13 +1,14 @@
 #ifndef ENVATTACKRELEASE_H
 #define ENVATTACKRELEASE_H
 
+#include "EnvelopeGenerator.h"
 #include "PinConfig.h"
 #include <Arduino.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 // This is a very typical attack release envelope generator.
-class EnvAttackRelease {
+class EnvAttackRelease : public EnvelopeGenerator {
 public:
     enum EnvelopeState { IDLE, ATTACK, RELEASE };
 
@@ -18,7 +19,7 @@ public:
     { }
 
     // update() accepts modulation parameters (modCV1 and modCV2 are in 0–127 range)
-    void update(bool gate, int modCV1, int modCV2) {
+    void update(bool gate, int modCV1, int modCV2) override {
         unsigned long now = micros();
 
         // Trigger new envelope on rising edge

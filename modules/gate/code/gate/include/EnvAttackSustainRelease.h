@@ -2,12 +2,13 @@
 #define ENVATTACKSUSTAINRELEASE_H
 
 #include "PinConfig.h"
+#include "EnvelopeGenerator.h"
 #include <Arduino.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 // This is a very typical attack sustain release envelope generator.
-class EnvAttackSustainRelease {
+class EnvAttackSustainRelease : public EnvelopeGenerator {
 public:
     enum EnvelopeState { IDLE, ATTACK, SUSTAIN, RELEASE };
 

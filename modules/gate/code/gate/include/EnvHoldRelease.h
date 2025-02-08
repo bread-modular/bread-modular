@@ -2,6 +2,7 @@
 #define ENVHOLDRELEASE_H
 
 #include "PinConfig.h"
+#include "EnvelopeGenerator.h"
 #include <Arduino.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -10,7 +11,7 @@
 // and a release phase. The hold time is determined by CV1 (plus modulation from MIDI CC22),
 // and the release time is determined by CV2 (plus modulation from MIDI CC75).
 // The envelope drives the DAC output. (LED flashing has been removed.)
-class EnvHoldRelease {
+class EnvHoldRelease : public EnvelopeGenerator {
 public:
     enum EnvelopeState { IDLE, HOLD, RELEASE };
 

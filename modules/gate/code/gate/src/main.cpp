@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "PinConfig.h"
+#include "EnvelopeGenerator.h"
 #include "EnvHoldRelease.h"
 #include "EnvAttackRelease.h"
 #include "EnvAttackSustainRelease.h"
@@ -11,7 +12,10 @@
 #define ALGO_ATTACK_SUSTAIN_RELEASE 2
 
 // Create instances of our classes.
-EnvAttackSustainRelease envelope;
+EnvHoldRelease envHoldRelease;
+EnvAttackRelease envAttackRelease;
+EnvAttackSustainRelease envAttackSustainRelease;
+EnvelopeGenerator *envelope;
 SimpleMIDI midi;
 
 ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 2, 500);
@@ -30,6 +34,14 @@ void handleGateModeChange(byte newMode) {
 }
 
 void handleAlgoModeChange(byte newMode) {
+  if (newMode == ALGO_HOLD_RELEASE) {
+    envelope = &envHoldRelease;
+  } else if (newMode == ALGO_ATTACK_RELEASE) {
+    envelope = &envAttackRelease;
+  } else if (newMode == ALGO_ATTACK_SUSTAIN_RELEASE) {
+    envelope = &envAttackSustainRelease;
+  }
+
   for (byte i = 0; i < newMode + 1; i++) {
     digitalWrite(ALGO_TOGGLE_LED, HIGH);
     delay(300);
@@ -68,6 +80,9 @@ void setup() {
   gateMode.registerModeChangeCallback(handleGateModeChange);
   algoMode.begin();
   algoMode.registerModeChangeCallback(handleAlgoModeChange);
+
+  const byte currentAlgoMode = algoMode.getMode();
+  handleAlgoModeChange(currentAlgoMode);
 }
 
 void loop() {
@@ -124,7 +139,7 @@ void loop() {
   }
   
   // --- Envelope Processing ---
-  envelope.update(effectiveGate, modCV1, modCV2);
+  envelope->update(effectiveGate, modCV1, modCV2);
   
   // (Optional) Additional processing can be added here.
 }
