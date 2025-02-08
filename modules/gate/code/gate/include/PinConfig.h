@@ -11,8 +11,8 @@
 
 // Toggles.
 //TODO: Change pins later when the PCB is ready.
-#define GATE_TOGGLE_LED    PIN_PC3   // LED output used for envelope visual feedback.
-#define GATE_TOGGLE_PIN    PIN_PC2   // Toggle button input for mode selection (manual vs. MIDI).
+#define GATE_TOGGLE_LED    PIN_PC1   // LED output used for envelope visual feedback.
+#define GATE_TOGGLE_PIN    PIN_PC0   // Toggle button input for mode selection (manual vs. MIDI).
 
 // TODO: Change pins later when the PCB is ready.
 #define ALGO_TOGGLE_LED    PIN_PC3   // LED output used for envelope visual feedback.

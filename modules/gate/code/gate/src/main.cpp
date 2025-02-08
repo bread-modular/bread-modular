@@ -4,11 +4,16 @@
 #include "SimpleMIDI.h"
 #include "ToggleMode.h"  // New toggle mode class
 
+#define ALGO_HOLD_RELEASE 0
+#define ALGO_ATTACK_RELEASE 1
+#define ALGO_ATTACK_GATE_RELEASE 2
+
 // Create instances of our classes.
 EnvHoldRelease envelope;
 SimpleMIDI midi;
 
-ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 2, 500);  // 500 ms debounce
+ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 2, 500);
+ToggleMode algoMode(ALGO_TOGGLE_PIN, 1, 3, 500);
 
 // Global modulation variables for MIDI CC values.
 int modCV1 = 0; // MIDI CC22 (affects hold time)
@@ -16,6 +21,20 @@ int modCV2 = 0; // MIDI CC75 (affects release time)
 
 // Global variable for MIDI gate (used only in MIDI mode).
 bool midiGate = false;
+
+void handleGateModeChange(byte newMode) {
+  bool isManualMode = newMode == 0;
+  digitalWrite(GATE_TOGGLE_LED, isManualMode ? LOW : HIGH);
+}
+
+void handleAlgoModeChange(byte newMode) {
+  for (byte i = 0; i < newMode + 1; i++) {
+    digitalWrite(ALGO_TOGGLE_LED, HIGH);
+    delay(300);
+    digitalWrite(ALGO_TOGGLE_LED, LOW);
+    delay(300);
+  }
+}
 
 void setup() {
   // Initialize MIDI (31250 baud by default).
@@ -30,6 +49,11 @@ void setup() {
   pinMode(GATE_TOGGLE_PIN, INPUT_PULLUP);
   pinMode(GATE_TOGGLE_LED, OUTPUT);
   digitalWrite(GATE_TOGGLE_LED, LOW);
+
+  // ALGO toggling
+  pinMode(ALGO_TOGGLE_PIN, INPUT_PULLUP);
+  pinMode(ALGO_TOGGLE_LED, OUTPUT);
+  digitalWrite(ALGO_TOGGLE_LED, LOW);
   
   // Configure DAC0.
   VREF.CTRLA |= VREF_DAC0REFSEL_4V34_gc;
@@ -39,19 +63,21 @@ void setup() {
   
   // Initialize the toggle mode handler.
   gateMode.begin();
+  gateMode.registerModeChangeCallback(handleGateModeChange);
+  algoMode.begin();
+  algoMode.registerModeChangeCallback(handleAlgoModeChange);
 }
 
 void loop() {
   // --- Mode Toggle Handling ---
-  // Update the toggle mode; this will toggle the mode on a complete press–release.
   gateMode.update();
+  algoMode.update();
   
   // Determine current mode: true = Manual Mode, false = MIDI Mode.
   bool isManualMode = gateMode.getMode() == 0;
-  
-  // --- LED Mode Indicator ---
-  // LED OFF indicates Manual Mode; LED ON indicates MIDI Mode.
-  digitalWrite(GATE_TOGGLE_LED, isManualMode ? LOW : HIGH);
+
+  // Getting the algo mode
+  const byte algoMode = gateMode.getMode();
   
   // --- MIDI Handling ---
   // Process any available MIDI messages.

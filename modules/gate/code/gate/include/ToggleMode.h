@@ -46,6 +46,10 @@ public:
         }
         // Save the new mode to EEPROM (1 for true, 0 for false).
         EEPROM.write(eepromAddress, mode);
+        // Fire the callback (if registered) with the new mode.
+        if (modeChangeCallback) {
+          modeChangeCallback(mode);
+        }
       }
       buttonPressed = false;
     }
@@ -58,6 +62,13 @@ public:
     return mode;
   }
 
+  // --- New function to register a callback ---
+  // Registers a callback function to be invoked when the mode changes.
+  // The callback will receive the new mode as an argument.
+  void registerModeChangeCallback(void (*callback)(byte)) {
+    modeChangeCallback = callback;
+  }
+
 private:
   byte togglePin;
   byte eepromAddress;
@@ -66,6 +77,9 @@ private:
   byte mode;
   bool buttonPressed;
   unsigned long lastToggleTime;
+  
+  // --- New private member for storing the callback function ---
+  void (*modeChangeCallback)(byte) = nullptr;
 };
 
 #endif // TOGGLEMODE_H
