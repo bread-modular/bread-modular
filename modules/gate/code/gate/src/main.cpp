@@ -2,15 +2,16 @@
 #include "PinConfig.h"
 #include "EnvHoldRelease.h"
 #include "EnvAttackRelease.h"
+#include "EnvAttackSustainRelease.h"
 #include "SimpleMIDI.h"
 #include "ToggleMode.h"  // New toggle mode class
 
 #define ALGO_HOLD_RELEASE 0
 #define ALGO_ATTACK_RELEASE 1
-#define ALGO_ATTACK_GATE_RELEASE 2
+#define ALGO_ATTACK_SUSTAIN_RELEASE 2
 
 // Create instances of our classes.
-EnvAttackRelease envelope;
+EnvAttackSustainRelease envelope;
 SimpleMIDI midi;
 
 ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 2, 500);
