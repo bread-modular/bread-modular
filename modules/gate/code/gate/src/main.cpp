@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "PinConfig.h"
 #include "EnvHoldRelease.h"
+#include "EnvAttackRelease.h"
 #include "SimpleMIDI.h"
 #include "ToggleMode.h"  // New toggle mode class
 
@@ -9,7 +10,7 @@
 #define ALGO_ATTACK_GATE_RELEASE 2
 
 // Create instances of our classes.
-EnvHoldRelease envelope;
+EnvAttackRelease envelope;
 SimpleMIDI midi;
 
 ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 2, 500);
