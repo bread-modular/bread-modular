@@ -2271,12 +2271,6 @@
 		(uuid "36e8da11-4b92-49fe-8ee0-daa327c1e7dd")
 	)
 	(junction
-		(at 379.73 53.34)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3ad44b5d-390d-4c79-9a1c-76f98e29c900")
-	)
-	(junction
 		(at 355.6 31.75)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2337,6 +2331,12 @@
 		(uuid "c5ed27c0-67fd-46b8-8285-cd7e7b283952")
 	)
 	(junction
+		(at 379.73 53.34)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c9cb32c9-1449-4017-a96a-cf63f247b295")
+	)
+	(junction
 		(at 345.44 135.89)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2359,12 +2359,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f01cb701-6873-4f77-a02c-b5e571403f8c")
-	)
-	(junction
-		(at 379.73 50.8)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f9590d82-22c3-4a11-bd56-af13ee70d453")
 	)
 	(junction
 		(at 92.71 39.37)
@@ -2791,6 +2785,16 @@
 			(type default)
 		)
 		(uuid "500c47a8-5822-46c5-9c89-dca8f30ec1aa")
+	)
+	(wire
+		(pts
+			(xy 379.73 53.34) (xy 386.08 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "504ed072-ff1a-4574-b56c-bfc9e1424084")
 	)
 	(wire
 		(pts
@@ -3424,16 +3428,6 @@
 	)
 	(wire
 		(pts
-			(xy 379.73 50.8) (xy 379.73 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "daaff96b-812d-4795-9067-a221c7827b06")
-	)
-	(wire
-		(pts
 			(xy 44.45 185.42) (xy 44.45 186.69)
 		)
 		(stroke
@@ -3524,13 +3518,13 @@
 	)
 	(wire
 		(pts
-			(xy 379.73 50.8) (xy 386.08 50.8)
+			(xy 379.73 50.8) (xy 384.81 50.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f0040078-6a8d-4c6a-9574-9282f8b55c38")
+		(uuid "e7498fc5-e884-4229-8009-1f2d2b61d8cd")
 	)
 	(wire
 		(pts
@@ -3792,7 +3786,7 @@
 	)
 	(global_label "AUDIO_OUT"
 		(shape output)
-		(at 386.08 50.8 0)
+		(at 386.08 53.34 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -3802,7 +3796,7 @@
 		)
 		(uuid "774cb206-5174-4187-bae2-20a015bc7124")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 399.2858 50.8 0)
+			(at 399.2858 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3869,6 +3863,28 @@
 		(uuid "c46e50d8-2c42-4b19-a8e1-9ce1a725df24")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 244.4666 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "MIDI"
+		(shape input)
+		(at 384.81 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c79193d9-bed5-4d41-82c4-ab1706920308")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 391.7262 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)

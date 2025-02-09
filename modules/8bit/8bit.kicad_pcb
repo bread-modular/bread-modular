@@ -4562,7 +4562,7 @@
 			)
 		)
 		(property ki_fp_filters "SOIC*3.9x4.9mm*P1.27mm* DIP*W7.62mm* TO*99* OnSemi*Micro8* TSSOP*3x3mm*P0.65mm* TSSOP*4.4x3mm*P0.65mm* MSOP*3x3mm*P0.65mm* SSOP*3.9x4.9mm*P0.635mm* LFCSP*2x2mm*P0.5mm* *SIP* SOIC*5.3x6.2mm*P1.27mm*")
-		(path "/fecbd42b-2615-435b-87d0-33e4e5b4ba9a")
+		(path "/fa565b59-eba7-4056-b70c-3ff3e7b0af07")
 		(sheetname "Root")
 		(sheetfile "8bit.kicad_sch")
 		(attr smd)
@@ -4962,7 +4962,7 @@
 			)
 		)
 		(property ki_fp_filters "SOIC*3.9x4.9mm*P1.27mm* DIP*W7.62mm* TO*99* OnSemi*Micro8* TSSOP*3x3mm*P0.65mm* TSSOP*4.4x3mm*P0.65mm* MSOP*3x3mm*P0.65mm* SSOP*3.9x4.9mm*P0.635mm* LFCSP*2x2mm*P0.5mm* *SIP* SOIC*5.3x6.2mm*P1.27mm*")
-		(path "/b428b671-2b37-4156-b90c-c428d4b64e59")
+		(path "/c4e5b9d3-3fb9-419e-9d51-df960033b264")
 		(sheetname "Root")
 		(sheetfile "8bit.kicad_sch")
 		(attr smd)
@@ -5910,7 +5910,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 13 "AUDIO_OUT")
+			(net 8 "MIDI")
 			(pinfunction "Pin_1")
 			(pintype "passive")
 			(uuid "455df10b-7b3e-4ff4-a755-4324010bc167")
@@ -6842,6 +6842,16 @@
 		(layer "F.SilkS")
 		(uuid "4e623b0f-3646-45d2-b479-f6cba58a9dd2")
 	)
+	(gr_line
+		(start 70.612 46.99)
+		(end 74.295 46.99)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "8f70a1a7-ac40-4d0c-831d-e61f3b88430b")
+	)
 	(gr_poly
 		(pts
 			(xy 48.26 98.425) (xy 76.2 98.425) (xy 76.2 103.505) (xy 48.26 103.505)
@@ -6895,7 +6905,7 @@
 		(uuid "b1ee3254-efc4-4fcc-a50b-c144299b5a9a")
 	)
 	(gr_text "AUDIO"
-		(at 71.755 48.006 90)
+		(at 71.755 49.53 90)
 		(layer "F.SilkS")
 		(uuid "064b3a23-15f4-47d0-834f-19f721ac60cc")
 		(effects
@@ -6990,7 +7000,19 @@
 			(justify bottom)
 		)
 	)
-	(gr_text "8BIT\n0.1.0"
+	(gr_text "MIDI"
+		(at 72.009 46.482 0)
+		(layer "F.SilkS")
+		(uuid "707fe415-fb1d-4037-ac20-137324794458")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify right bottom)
+		)
+	)
+	(gr_text "8BIT\n0.2.0"
 		(at 76.327 107.95 0)
 		(layer "F.SilkS")
 		(uuid "73eb1f8f-7c2d-494d-9845-48bc49314a73")
@@ -8210,6 +8232,14 @@
 		(uuid "d6de6f05-3b08-4871-93ee-bf13828903c1")
 	)
 	(segment
+		(start 72.517 46.863)
+		(end 51.943 46.863)
+		(width 0.15)
+		(layer "F.Cu")
+		(net 8)
+		(uuid "2aaeb071-3d77-4d4a-bb08-3fb7d9434a06")
+	)
+	(segment
 		(start 60.255 81.31)
 		(end 60.28 81.31)
 		(width 0.15)
@@ -8248,6 +8278,22 @@
 		(layer "F.Cu")
 		(net 8)
 		(uuid "8e1186a9-970f-4c3c-9944-1021933c407f")
+	)
+	(segment
+		(start 73.66 45.72)
+		(end 72.517 46.863)
+		(width 0.15)
+		(layer "F.Cu")
+		(net 8)
+		(uuid "986f7563-eb16-4764-a166-59783f5c1f1e")
+	)
+	(segment
+		(start 51.943 46.863)
+		(end 50.8 45.72)
+		(width 0.15)
+		(layer "F.Cu")
+		(net 8)
+		(uuid "bb0b0c3a-9a55-44ce-9af1-1ad8aafe4621")
 	)
 	(segment
 		(start 60.255 79.051)
@@ -8778,14 +8824,6 @@
 		(uuid "f7e9d50e-6011-49ae-b001-374c1cd60f4b")
 	)
 	(segment
-		(start 73.66 50.8)
-		(end 73.66 45.72)
-		(width 0.15)
-		(layer "F.Cu")
-		(net 13)
-		(uuid "1bbdec0e-5a8a-4dd0-95a0-fb98005c8c83")
-	)
-	(segment
 		(start 65.28 54.102)
 		(end 70.358 54.102)
 		(width 0.15)
@@ -8800,6 +8838,14 @@
 		(layer "F.Cu")
 		(net 13)
 		(uuid "a7ec9b10-86ce-4068-9465-3bb194b231e5")
+	)
+	(segment
+		(start 73.66 50.8)
+		(end 73.66 48.26)
+		(width 0.15)
+		(layer "F.Cu")
+		(net 13)
+		(uuid "e0109fa6-289d-4410-a38c-0097f2a20e62")
 	)
 	(segment
 		(start 48.545 77.247)
