@@ -154,15 +154,20 @@ void loop() {
     uint8_t data1 = MIDI.getData1();
     uint8_t data2 = MIDI.getData2();
 
-    // Debug output
     if (type == MIDI_NOTE_ON) {
-      handleNoteOn(channel, data1, data2);
+      // Something some devices won't send MIDI_NOTE_OFF (like Elektron)
+      // Instead they send a Note On with velocity 0
+      if (data2 == 0) {
+        handleNoteOff(channel, data1, data2);
+      } else {
+        handleNoteOn(channel, data1, data2);
+      }
     } else if (type == MIDI_NOTE_OFF) {
       handleNoteOff(channel, data1, data2);
     } else if (type == MIDI_CONTROL_CHANGE) {
       handleControlChange(channel, data1, data2);
     } else {
-        // logger.print("Unknown MIDI Data| ");
+      //Serial.printf("Other MIDI Data: %d\r\n", type);
     }
 }
 }
