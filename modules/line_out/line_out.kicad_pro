@@ -51,7 +51,13 @@
           "min_clearance": 0.5
         }
       },
-      "diff_pair_dimensions": [],
+      "diff_pair_dimensions": [
+        {
+          "gap": 0.0,
+          "via_gap": 0.0,
+          "width": 0.0
+        }
+      ],
       "drc_exclusions": [],
       "meta": {
         "version": 2
@@ -171,7 +177,11 @@
           "td_width_to_size_filter_ratio": 0.9
         }
       ],
-      "track_widths": [],
+      "track_widths": [
+        0.0,
+        0.3,
+        0.5
+      ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
           "corner_radius_percentage": 80,
@@ -198,7 +208,16 @@
           "spacing": 0.6
         }
       },
-      "via_dimensions": [],
+      "via_dimensions": [
+        {
+          "diameter": 0.0,
+          "drill": 0.0
+        },
+        {
+          "diameter": 0.7,
+          "drill": 0.3
+        }
+      ],
       "zones_allow_external_fillets": false
     },
     "ipc2581": {
@@ -216,7 +235,11 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [],
+    "erc_exclusions": [
+      "power_pin_not_driven|3441700|393700|7ab626b2-5df3-48eb-9440-03a86f6db041|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|",
+      "power_pin_not_driven|3467100|400050|7ab626b2-5df3-48eb-9440-03a86f6db041|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|",
+      "power_pin_not_driven|3733800|914400|e731da8f-a4bb-4f1f-a6ca-54372433592b|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|"
+    ],
     "meta": {
       "version": 0
     },
@@ -564,6 +587,14 @@
       "version": 1
     },
     "net_format_name": "",
+    "ngspice": {
+      "fix_include_paths": true,
+      "meta": {
+        "version": 0
+      },
+      "model_mode": 4,
+      "workbook_filename": "line_out.wbk"
+    },
     "page_layout_descr_file": "",
     "plot_directory": "",
     "spice_current_sheet_as_root": false,
@@ -575,6 +606,11 @@
     "subpart_first_id": 65,
     "subpart_id_separator": 0
   },
-  "sheets": [],
+  "sheets": [
+    [
+      "b63493d3-5f6d-47e3-845b-87e7090fc1ab",
+      "Root"
+    ]
+  ],
   "text_variables": {}
 }

@@ -4,7 +4,7 @@
     {
       "analysis": "TRAN",
       "commands": [
-        ".tran 10u 5m",
+        ".tran 10u 20m",
         ".kicad adjustpaths",
         ".save all",
         ".probe alli",
@@ -21,55 +21,14 @@
       "showGrid": true,
       "traces": [
         {
-          "color": "rgb(55, 126, 184)",
+          "color": "rgb(228, 26, 28)",
           "signal": "V(IN_L)",
           "trace_type": 257
         },
         {
-          "color": "rgb(152, 78, 163)",
-          "signal": "V(IN_R)",
-          "trace_type": 257
-        },
-        {
-          "color": "rgb(228, 26, 28)",
+          "color": "rgb(77, 175, 74)",
           "signal": "V(OUT_L)",
           "trace_type": 257
-        },
-        {
-          "color": "rgb(77, 175, 74)",
-          "signal": "V(OUT_R)",
-          "trace_type": 257
-        }
-      ]
-    },
-    {
-      "analysis": "AC",
-      "commands": [
-        ".ac dec 10 20 20k",
-        ".kicad adjustpaths",
-        ".save all",
-        ".probe alli",
-        ".probe allp"
-      ],
-      "dottedSecondary": true,
-      "margins": {
-        "bottom": 45,
-        "left": 70,
-        "right": 70,
-        "top": 30
-      },
-      "measurements": [],
-      "showGrid": true,
-      "traces": [
-        {
-          "color": "rgb(228, 26, 28)",
-          "signal": "V(OUT_L) (gain)",
-          "trace_type": 521
-        },
-        {
-          "color": "rgb(55, 126, 184)",
-          "signal": "V(OUT_R) (gain)",
-          "trace_type": 521
         }
       ]
     }
