@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+Stop using buffers for the input stage.
+Since we use non-inverting buffers, they add noise & hum.
+With inverting buffers we need to face with phase issues. (L->R)
+So, now we get rid of those buffers & simply rely on voltage dividers.
+
 ## 0.2.0
 Introduce proper input buffering and normaling.
 Left channel will be normaled to right channel if no right input
