@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1
+Consider velocity=0 as MIDI_NOTE_OFF command.
+Some devices may not send MIDI_NOTE_OFF command but instead
+they will send MIDI_NOTE_ON with velocity=0
+(Usually Elektron devices)
+
 ## 0.4.0
 Connect MIDI GND to the common GND
 
