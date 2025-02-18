@@ -83,6 +83,9 @@ void setup() {
 
   const byte currentAlgoMode = algoMode.getMode();
   handleAlgoModeChange(currentAlgoMode);
+
+  const byte currentGateMode = gateMode.getMode();
+  handleGateModeChange(currentGateMode);
 }
 
 void loop() {
