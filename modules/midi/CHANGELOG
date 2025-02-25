@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0
+Fix instability in MIDI recieving.
+We were adding 10K resistor between the MIDI ground and the common ground.
+Which makes some MIDI devices(i.e. Elektron) to behave weirdly.
+Now we simply connect it to the ground.
+
+Also added some debug code in the firmware too.
+(Which is commented out for now) 
+
 ## 0.4.1
 Consider velocity=0 as MIDI_NOTE_OFF command.
 Some devices may not send MIDI_NOTE_OFF command but instead
