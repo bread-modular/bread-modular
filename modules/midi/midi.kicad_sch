@@ -2626,7 +2626,7 @@
 	)
 	(wire
 		(pts
-			(xy 35.56 24.13) (xy 43.18 24.13)
+			(xy 35.56 24.13) (xy 64.77 24.13)
 		)
 		(stroke
 			(width 0)
@@ -2846,16 +2846,6 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 24.13) (xy 64.77 24.13)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ef620a47-e86f-46a4-a5b6-1b082b800f89")
-	)
-	(wire
-		(pts
 			(xy 88.9 139.7) (xy 88.9 143.51)
 		)
 		(stroke
@@ -2964,9 +2954,9 @@
 		)
 		(uuid "feede7eb-9744-4913-8f4d-3fb1d933e600")
 	)
-	(text "If the shield gives us some positive voltage \ninstead of the correct MIDI GND, \n10k resistor will ground it properly."
+	(text "Shield contains the ground of the MIDI device, we need to ground it.\nWe tried using a resistor for protection, but it backfired by messing up with the device.\nSo, we are now just grounding it."
 		(exclude_from_sim no)
-		(at 53.086 18.288 0)
+		(at 39.624 19.304 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4697,74 +4687,6 @@
 			(project "midi"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
 					(reference "#PWR07")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 46.99 24.13 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "49fbbc24-0feb-4b40-9eb6-fb81ebd6a0be")
-		(property "Reference" "R18"
-			(at 46.99 17.78 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 46.99 20.32 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 46.99 25.908 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 46.99 24.13 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 46.99 24.13 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "09e64fde-1007-4639-a871-0a9393fb5870")
-		)
-		(pin "1"
-			(uuid "e6131b65-e91d-408e-9a7b-3d7da13ccfe1")
-		)
-		(instances
-			(project "midi"
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
-					(reference "R18")
 					(unit 1)
 				)
 			)
