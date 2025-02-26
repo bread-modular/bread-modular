@@ -26,9 +26,9 @@ SoftwareSerial logger = SoftwareSerial(-1, LOGGER_PIN_TX);
 ModeHandler modes = ModeHandler(TOGGLE_PIN, 3, 300);
 
 void toggleLED() {
-  delay(500);
+  delay(300);
   digitalWrite(TOGGLE_LED, HIGH);
-  delay(500);
+  delay(300);
   digitalWrite(TOGGLE_LED, LOW);
 }
 
@@ -54,39 +54,6 @@ ISR(TCB0_INT_vect) {
 
   // Clear the interrupt flag∫
   TCB0.INTFLAGS = TCB_CAPT_bm;
-}
-
-void setup() {
-  // define the gate pin
-  pinMode(GATE_PIN, OUTPUT);
-  digitalWrite(GATE_PIN, LOW);
-
-  // Setup Logger
-  pinMode(LOGGER_PIN_TX, OUTPUT);
-  logger.begin(9600);
-  
-  // Set the analog reference for ADC with supply voltage.
-  analogReference(VDD);
-  pinMode(PIN_CV1, INPUT);
-  pinMode(PIN_CV2, INPUT);
- 
-  // DAC0 setup for sending velocity via the PA6 pin
-  VREF.CTRLA |= VREF_DAC0REFSEL_4V34_gc; //this will force it to use VDD as the VREF
-  VREF.CTRLB |= VREF_DAC0REFEN_bm;
-  DAC0.CTRLA = DAC_ENABLE_bm | DAC_OUTEN_bm;
-  DAC0.DATA = 0;
-
-  // Setup MIDI
-  MIDI.begin(31250);
-
-  // Timer related
-  setupTimer();
-  
-  // Modes
-  modes.begin();
-  pinMode(TOGGLE_LED, OUTPUT);
-
-  logger.println("MCO 0.2.0 Started!");
 }
 
 void pickSound(uint8_t note, uint8_t velocity) {
@@ -127,26 +94,57 @@ void pickSound(uint8_t note, uint8_t velocity) {
   }
 }
 
-void loop() {
-  // parse incoming MIDI messages
-   if (MIDI.read()) {
-      uint8_t type = MIDI.getType();
-      uint8_t channel = MIDI.getChannel();
-      uint8_t data1 = MIDI.getData1();
-      uint8_t data2 = MIDI.getData2();
 
-      // Debug output
-      if (type == MIDI_NOTE_ON) {
-        digitalWrite(GATE_PIN, HIGH);
-        pickSound(data1, data2);
-      } else if (type == MIDI_NOTE_OFF) {
-        digitalWrite(GATE_PIN, LOW);
-      } else if (type == MIDI_CONTROL_CHANGE) {
-          
-      } else {
-          // logger.print("Unknown MIDI Data| ");
-      }
-  }
+// Callback functions for MIDI events
+void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+  digitalWrite(GATE_PIN, HIGH);
+  pickSound(note, velocity);
+}
+
+void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
+  digitalWrite(GATE_PIN, LOW);
+}
+
+void setup() {
+  // define the gate pin
+  pinMode(GATE_PIN, OUTPUT);
+  digitalWrite(GATE_PIN, LOW);
+
+  // Setup Logger
+  pinMode(LOGGER_PIN_TX, OUTPUT);
+  logger.begin(9600);
+  
+  // Set the analog reference for ADC with supply voltage.
+  analogReference(VDD);
+  pinMode(PIN_CV1, INPUT);
+  pinMode(PIN_CV2, INPUT);
+ 
+  // DAC0 setup for sending velocity via the PA6 pin
+  VREF.CTRLA |= VREF_DAC0REFSEL_4V34_gc; //this will force it to use VDD as the VREF
+  VREF.CTRLB |= VREF_DAC0REFEN_bm;
+  DAC0.CTRLA = DAC_ENABLE_bm | DAC_OUTEN_bm;
+  DAC0.DATA = 0;
+
+  // Setup MIDI
+  MIDI.begin(31250);
+
+  // Timer related
+  setupTimer();
+  
+  // Modes
+  modes.begin();
+  pinMode(TOGGLE_LED, OUTPUT);
+
+  // Register MIDI callbacks
+  MIDI.setNoteOnCallback(onNoteOn);
+  MIDI.setNoteOffCallback(onNoteOff);
+
+   logger.println("8Bit Drums Started!");
+}
+
+void loop() {
+  // Process MIDI messages
+  MIDI.update();
 
   // mode related code
   if (modes.update()) {
