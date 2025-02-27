@@ -1,10 +1,10 @@
 #include <Arduino.h>
-#include <SoftwareSerial.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "SimpleMIDI.h"
 #include "ModeHandler.h"
 #include "LEDToggler.h"
+#include "SoftwareSerial.h"
 
 #define GATE_PIN PIN_PA7
 #define LOGGER_PIN_TX PIN_PB4
@@ -14,7 +14,8 @@
 #define TOGGLE_LED PIN_PA5
 
 SimpleMIDI MIDI;
-SoftwareSerial logger = SoftwareSerial(-1, LOGGER_PIN_TX);
+// TODO: Change this to real serial port. (We need to update the schematic for that)
+SoftwareSerial logger(-1, LOGGER_PIN_TX);
 ModeHandler modes = ModeHandler(TOGGLE_PIN, 3, 300);
 LEDToggler ledToggler = LEDToggler(TOGGLE_LED, 300, false);
 
@@ -88,17 +89,20 @@ void setup() {
   MIDI.setNoteOnCallback(onNoteOn);
   MIDI.setNoteOffCallback(onNoteOff);
 
-   logger.println("8Bit Drums Started!");
+  logger.println("8Bit HelloWorld Started!");
 }
 
 void loop() {
   // Process MIDI messages
   MIDI.update();
 
+  // Update the LED toggler
+  ledToggler.update();
+
   // mode related code
   if (modes.update()) {
     byte newMode = modes.getMode();
-    
+    logger.println("mode changed: " + String(newMode));
 
     if (newMode == 0) {
       ledToggler.startToggle(1);
