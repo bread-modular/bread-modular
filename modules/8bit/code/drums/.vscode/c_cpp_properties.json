@@ -1,0 +1,88 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/Users/arunoda/data/projects/bread-modular/modules/8bit/code/drums/include",
+                "/Users/arunoda/data/projects/bread-modular/modules/8bit/code/drums/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/EEPROM/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/SoftwareSerial/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/cores/megatinycore/api/deprecated",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/cores/megatinycore",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/variants/txy6",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Comparator/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Event/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Logic/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Optiboot_flasher/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/SD/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/SPI/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Servo/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Servo_megaTinyCore/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/USERSIG/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Wire/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/megaTinyCore/src",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/tinyNeoPixel",
+                "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/tinyNeoPixel_Static",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/Users/arunoda/data/projects/bread-modular/modules/8bit/code/drums/include",
+                    "/Users/arunoda/data/projects/bread-modular/modules/8bit/code/drums/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/EEPROM/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/SoftwareSerial/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/cores/megatinycore/api/deprecated",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/cores/megatinycore",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/variants/txy6",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Comparator/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Event/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Logic/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Optiboot_flasher/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/SD/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/SPI/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Servo/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Servo_megaTinyCore/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/USERSIG/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/Wire/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/megaTinyCore/src",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/tinyNeoPixel",
+                    "/Users/arunoda/.platformio/packages/framework-arduino-megaavr-megatinycore/libraries/tinyNeoPixel_Static",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60117",
+                "ARDUINO_attinyxy6",
+                "MILLIS_USE_TIMERD0",
+                "UARTBAUD5V",
+                "F_CPU=20000000L",
+                "ARDUINO_ARCH_MEGAAVR",
+                "ARDUINO=10808",
+                "CLOCK_SOURCE=0",
+                "MEGATINYCORE=\"2.6.7\"",
+                "MEGATINYCORE_MAJOR=2UL",
+                "MEGATINYCORE_MINOR=6UL",
+                "MEGATINYCORE_PATCH=7UL",
+                "MEGATINYCORE_RELEASED=1",
+                "CORE_ATTACH_ALL",
+                "TWI_MORS",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "compilerPath": "/Users/arunoda/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=attiny1616",
+                "-mrelax",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

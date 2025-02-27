@@ -2388,7 +2388,7 @@
 	)
 	(wire
 		(pts
-			(xy 115.57 81.28) (xy 115.57 72.39)
+			(xy 115.57 80.01) (xy 115.57 72.39)
 		)
 		(stroke
 			(width 0)
@@ -2748,7 +2748,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 81.28) (xy 146.05 104.14)
+			(xy 146.05 80.01) (xy 146.05 104.14)
 		)
 		(stroke
 			(width 0)
@@ -3158,6 +3158,16 @@
 	)
 	(wire
 		(pts
+			(xy 107.95 82.55) (xy 114.3 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "99f0c6ad-8fb0-418d-ab77-98163571c63b")
+	)
+	(wire
+		(pts
 			(xy 375.92 137.16) (xy 375.92 134.62)
 		)
 		(stroke
@@ -3165,16 +3175,6 @@
 			(type default)
 		)
 		(uuid "9aeaeaa9-559d-4d37-b2c7-75e55f8116ed")
-	)
-	(wire
-		(pts
-			(xy 107.95 87.63) (xy 114.3 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9f1c847d-dcf2-4be8-8e0b-0f32385b0b24")
 	)
 	(wire
 		(pts
@@ -3468,7 +3468,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 81.28) (xy 115.57 81.28)
+			(xy 146.05 80.01) (xy 115.57 80.01)
 		)
 		(stroke
 			(width 0)
@@ -3918,7 +3918,7 @@
 	)
 	(global_label "TX"
 		(shape output)
-		(at 114.3 87.63 0)
+		(at 114.3 82.55 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -3928,7 +3928,7 @@
 		)
 		(uuid "cce9f2c2-065e-4c68-ba8e-e7d410625dc6")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 119.4623 87.63 0)
+			(at 119.4623 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
