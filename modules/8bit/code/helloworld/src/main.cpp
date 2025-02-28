@@ -55,6 +55,10 @@ void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
   digitalWrite(GATE_PIN, LOW);
 }
 
+void onControlChange(uint8_t channel, uint8_t control, uint8_t value) {
+  logger.println("control change: " + String(control) + " " + String(value));
+}
+
 void setup() {
   // define the gate pin
   pinMode(GATE_PIN, OUTPUT);
@@ -88,6 +92,7 @@ void setup() {
   // Register MIDI callbacks
   MIDI.setNoteOnCallback(onNoteOn);
   MIDI.setNoteOffCallback(onNoteOff);
+  MIDI.setControlChangeCallback(onControlChange);
 
   logger.println("8Bit HelloWorld Started!");
 }
@@ -98,6 +103,18 @@ void loop() {
 
   // Update the LED toggler
   ledToggler.update();
+
+  // Read the CV values
+  // This is 10bit ADC, so the value will be between 0-1023
+  // Although this is CV, we can get audio from this as well
+  // We should not convert this into float, but instead use integer math and
+  // convert it to 0-127 range since we use an 8bit DAC
+  uint16_t cv1 = analogRead(PIN_CV1);
+  uint16_t cv2 = analogRead(PIN_CV2);
+
+  // Wrap the DAC value between 0-127
+  // Here we simply mix both CVs, but we can do more complex stuff here
+  DAC0.DATA = constrain((cv1 + cv2) / 8, 0, 127);
 
   // mode related code
   if (modes.update()) {
