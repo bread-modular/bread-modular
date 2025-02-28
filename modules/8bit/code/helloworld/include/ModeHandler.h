@@ -1,5 +1,9 @@
+#ifndef MODE_HANDLER_H
+#define MODE_HANDLER_H
+
 #include <Arduino.h>
 #include <EEPROM.h>
+
 
 class ModeHandler {
 public:
@@ -57,3 +61,5 @@ private:
     unsigned long lastToggleTime;
     unsigned long debounceTime;
 };
+
+#endif // MODE_HANDLER_H
