@@ -2280,7 +2280,7 @@
 		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R11"
-			(at 0 -1.17 360)
+			(at 0 -1.17 0)
 			(layer "F.SilkS")
 			(uuid "38fac8b3-78b0-4dfa-b031-15498f2b39fa")
 			(effects
@@ -2291,7 +2291,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 0 1.17 360)
+			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "fc013a0a-d2b6-45fc-9fb4-153b33ffbfcb")
 			(effects
@@ -2447,7 +2447,7 @@
 			(uuid "6b31ba72-f995-4aca-9b6f-1da1b920f2a8")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "7f08e03d-6fed-463f-8671-1336d7d23f53")
 			(effects
@@ -3486,7 +3486,7 @@
 		(descr "SOIC, 8 Pin (https://www.analog.com/media/en/technical-documentation/data-sheets/ada4898-1_4898-2.pdf#page=29), generated with kicad-footprint-generator ipc_gullwing_generator.py")
 		(tags "SOIC SO")
 		(property "Reference" "U3"
-			(at 4.761 1.778 360)
+			(at 4.761 1.778 0)
 			(layer "F.SilkS")
 			(uuid "f2497b9b-f7ba-4f43-9d32-c04edf5ae95c")
 			(effects
@@ -5171,7 +5171,7 @@
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C5"
-			(at 0 -1.016 360)
+			(at 0 -1.016 0)
 			(layer "F.SilkS")
 			(uuid "6fc74076-e3e1-4e41-9351-1e334d726acf")
 			(effects
@@ -5182,7 +5182,7 @@
 			)
 		)
 		(property "Value" "0.1uf"
-			(at 0 1.27 360)
+			(at 0 1.27 0)
 			(layer "F.Fab")
 			(uuid "86aa19f4-fee6-47d8-9229-f2a01ce3ea32")
 			(effects
@@ -5337,7 +5337,7 @@
 			(uuid "a69bad34-9a01-4c4a-8056-829bd6b5c655")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "23b257e4-30b8-422e-a88c-ab8e67acc64d")
 			(effects
@@ -7593,7 +7593,7 @@
 			(justify bottom)
 		)
 	)
-	(gr_text "LINE_IN\n0.2.0"
+	(gr_text "LINE_IN\n1.0.0"
 		(at 76.327 107.95 0)
 		(layer "F.SilkS")
 		(uuid "73eb1f8f-7c2d-494d-9845-48bc49314a73")
