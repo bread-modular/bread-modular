@@ -21,7 +21,7 @@
 #define MIN_FREQ 20  // Minimum frequency in Hz
 
 // CV control parameters
-#define CV_THRESHOLD 5// Threshold for CV value changes (0-1023)
+#define CV_THRESHOLD 5 // Threshold for CV value changes (0-1023)
 
 SimpleMIDI MIDI;
 // TODO: Change this to real serial port. (We need to update the schematic for that)
@@ -36,6 +36,7 @@ volatile uint16_t triangleStep = 0;
 volatile uint16_t triangleMaxStep = DAC_MAX_VALUE;
 volatile uint16_t currentFrequency = DEFAULT_TRIANGLE_FREQ;
 volatile uint16_t pendingFrequency = 0; // New frequency to be applied at the next cycle
+volatile bool frequencyChangeRequested = false; // Flag for frequency change
 
 // Variables for CV control
 uint16_t lastCVValue = 0;
@@ -56,18 +57,9 @@ void setTriangleFrequency(uint16_t frequency) {
     // With timer running at TIMER_FREQ, each step needs TIMER_FREQ / (F * 512) ticks
     uint32_t timerPeriod = TIMER_FREQ / (frequency * 512UL);
     
-    // Update the timer period
-    // Temporarily disable the timer to safely update CCMP
-    bool wasEnabled = (TCB0.CTRLA & TCB_ENABLE_bm);
-    if (wasEnabled) {
-        TCB0.CTRLA &= ~TCB_ENABLE_bm; // Disable timer
-    }
-    
+    // We'll just update the CCMP value without disabling/enabling the timer
+    // This reduces potential timing glitches
     TCB0.CCMP = (uint16_t)timerPeriod;
-    
-    if (wasEnabled) {
-        TCB0.CTRLA |= TCB_ENABLE_bm; // Re-enable timer
-    }
 }
 
 // Get the current triangle wave frequency
@@ -88,8 +80,15 @@ void updateFrequencyFromCV() {
         // Map the CV value (0-1023) to frequency range (MIN_FREQ to MAX_FREQ Hz)
         uint16_t newFrequency = map(rawCV, 0, 1023, MIN_FREQ, MAX_FREQ);
         
+        // We're in the main loop, so use atomic operations to update volatile variables
+        // This prevents race conditions with the ISR
+        noInterrupts();
+        
         // Set the pending frequency to be applied at the next cycle
         pendingFrequency = newFrequency;
+        frequencyChangeRequested = true;
+        
+        interrupts();
     }
 }
 
@@ -100,7 +99,9 @@ void setupTimer() {
     TCB0.INTCTRL = TCB_CAPT_bm;         // Enable capture interrupt
     
     // Set initial frequency directly
-    setTriangleFrequency(DEFAULT_TRIANGLE_FREQ);
+    uint32_t timerPeriod = TIMER_FREQ / (DEFAULT_TRIANGLE_FREQ * 512UL);
+    TCB0.CCMP = (uint16_t)timerPeriod;
+    currentFrequency = DEFAULT_TRIANGLE_FREQ;
     
     // Reset triangle wave state
     triangleStep = 0;
@@ -114,6 +115,20 @@ void setupTimer() {
 
 // TCB0 Interrupt Service Routine
 ISR(TCB0_INT_vect) {
+    // First, clear the interrupt flag immediately to reduce jitter
+    TCB0.INTFLAGS = TCB_CAPT_bm;
+    
+    // At the exact zero-crossing is the best time to change frequency
+    // This happens when we're about to start rising and at step 0
+    if (triangleStep == 0 && triangleRising && frequencyChangeRequested) {
+        if (pendingFrequency > 0) {
+            // Apply the new frequency
+            setTriangleFrequency(pendingFrequency);
+            // Reset the pending frequency and flag
+            pendingFrequency = 0;
+            frequencyChangeRequested = false;
+        }
+    }
     
     // Update triangle wave value
     if (triangleRising) {
@@ -126,21 +141,10 @@ ISR(TCB0_INT_vect) {
         if (triangleStep == 0) {
             triangleRising = true;
         }
-
-        // At the start of a new cycle, check if there's a pending frequency change
-        if (pendingFrequency > 0) {
-            // Apply the new frequency
-            setTriangleFrequency(pendingFrequency);
-            // Reset the pending frequency
-            pendingFrequency = 0;
-        }
     }
     
     // Update DAC directly from the ISR for consistent timing
     DAC0.DATA = triangleStep;
-    
-    // Clear the interrupt flag
-    TCB0.INTFLAGS = TCB_CAPT_bm;
 }
 
 // Callback functions for MIDI events
