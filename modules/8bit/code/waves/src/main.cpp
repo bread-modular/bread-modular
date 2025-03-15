@@ -14,7 +14,7 @@
 #define TOGGLE_LED PIN_PA5
 
 // Triangle wave parameters
-#define DEFAULT_TRIANGLE_FREQ 500 // Default triangle wave frequency
+#define DEFAULT_SAWTOOTH_FREQ 500 // Default sawtooth wave frequency
 #define DAC_MAX_VALUE 255 // 8-bit DAC max value
 #define TIMER_FREQ 10000000 // 10MHz (20MHz / 2)
 #define MAX_FREQ 500 // Maximum frequency in Hz
@@ -29,21 +29,20 @@ SoftwareSerial logger(-1, LOGGER_PIN_TX);
 ModeHandler modes = ModeHandler(TOGGLE_PIN, 3, 300);
 LEDToggler ledToggler = LEDToggler(TOGGLE_LED, 300, false);
 
-// Variables for triangle wave generation
-volatile uint8_t triangleValue = 0;
-volatile bool triangleRising = true;
-volatile uint16_t triangleStep = 0;
-volatile uint16_t triangleMaxStep = DAC_MAX_VALUE;
-volatile uint16_t currentFrequency = DEFAULT_TRIANGLE_FREQ;
+// Variables for sawtooth wave generation
+volatile uint8_t sawtoothValue = 0;
+volatile uint16_t sawtoothStep = 0;
+volatile uint16_t sawtoothMaxStep = DAC_MAX_VALUE;
+volatile uint16_t currentFrequency = DEFAULT_SAWTOOTH_FREQ;
 volatile uint16_t pendingFrequency = 0; // New frequency to be applied at the next cycle
 volatile bool frequencyChangeRequested = false; // Flag for frequency change
 
 // Variables for CV control
 uint16_t lastCVValue = 0;
 
-// Function to update the triangle wave frequency
+// Function to update the sawtooth wave frequency
 // This is now only called from the ISR
-void setTriangleFrequency(uint16_t frequency) {
+void setSawtoothFrequency(uint16_t frequency) {
     // Ensure frequency is within reasonable bounds (MIN_FREQ to MAX_FREQ Hz)
     if (frequency < MIN_FREQ) frequency = MIN_FREQ;
     if (frequency > MAX_FREQ) frequency = MAX_FREQ;
@@ -52,18 +51,18 @@ void setTriangleFrequency(uint16_t frequency) {
     currentFrequency = frequency;
     
     // Simple direct calculation for timer period
-    // One complete cycle needs 512 steps (256 up + 256 down)
-    // At frequency F, we need F * 512 steps per second
-    // With timer running at TIMER_FREQ, each step needs TIMER_FREQ / (F * 512) ticks
-    uint32_t timerPeriod = TIMER_FREQ / (frequency * 512UL);
+    // One complete cycle needs 256 steps (just the ramp up)
+    // At frequency F, we need F * 256 steps per second
+    // With timer running at TIMER_FREQ, each step needs TIMER_FREQ / (F * 256) ticks
+    uint32_t timerPeriod = TIMER_FREQ / (frequency * 256UL);
     
     // We'll just update the CCMP value without disabling/enabling the timer
     // This reduces potential timing glitches
     TCB0.CCMP = (uint16_t)timerPeriod;
 }
 
-// Get the current triangle wave frequency
-uint16_t getTriangleFrequency() {
+// Get the current sawtooth wave frequency
+uint16_t getSawtoothFrequency() {
     return currentFrequency;
 }
 
@@ -93,19 +92,18 @@ void updateFrequencyFromCV() {
 }
 
 void setupTimer() {
-    // Configure TCB0 for triangle wave generation
+    // Configure TCB0 for sawtooth wave generation
     TCB0.CTRLA = TCB_CLKSEL_CLKDIV2_gc; // Clock div by 2 (10MHz)
     TCB0.CTRLB = TCB_CNTMODE_INT_gc;    // Timer interrupt mode
     TCB0.INTCTRL = TCB_CAPT_bm;         // Enable capture interrupt
     
     // Set initial frequency directly
-    uint32_t timerPeriod = TIMER_FREQ / (DEFAULT_TRIANGLE_FREQ * 512UL);
+    uint32_t timerPeriod = TIMER_FREQ / (DEFAULT_SAWTOOTH_FREQ * 256UL);
     TCB0.CCMP = (uint16_t)timerPeriod;
-    currentFrequency = DEFAULT_TRIANGLE_FREQ;
+    currentFrequency = DEFAULT_SAWTOOTH_FREQ;
     
-    // Reset triangle wave state
-    triangleStep = 0;
-    triangleRising = true;
+    // Reset sawtooth wave state
+    sawtoothStep = 0;
     
     // Enable the timer
     TCB0.CTRLA |= TCB_ENABLE_bm;
@@ -118,33 +116,26 @@ ISR(TCB0_INT_vect) {
     // First, clear the interrupt flag immediately to reduce jitter
     TCB0.INTFLAGS = TCB_CAPT_bm;
     
-    // At the exact zero-crossing is the best time to change frequency
-    // This happens when we're about to start rising and at step 0
-    if (triangleStep == 0 && triangleRising && frequencyChangeRequested) {
+    // At the reset point is the best time to change frequency
+    // This happens when we're at step 0
+    if (sawtoothStep == 0 && frequencyChangeRequested) {
         if (pendingFrequency > 0) {
             // Apply the new frequency
-            setTriangleFrequency(pendingFrequency);
+            setSawtoothFrequency(pendingFrequency);
             // Reset the pending frequency and flag
             pendingFrequency = 0;
             frequencyChangeRequested = false;
         }
     }
     
-    // Update triangle wave value
-    if (triangleRising) {
-        triangleStep++;
-        if (triangleStep >= triangleMaxStep) {
-            triangleRising = false;
-        }
-    } else {
-        triangleStep--;
-        if (triangleStep == 0) {
-            triangleRising = true;
-        }
+    // Update sawtooth wave value
+    sawtoothStep++;
+    if (sawtoothStep > sawtoothMaxStep) {
+        sawtoothStep = 0; // Reset to start a new ramp
     }
     
     // Update DAC directly from the ISR for consistent timing
-    DAC0.DATA = triangleStep;
+    DAC0.DATA = sawtoothStep;
 }
 
 // Callback functions for MIDI events
@@ -183,7 +174,7 @@ void setup() {
   // Setup MIDI
   MIDI.begin(31250);
 
-  // Timer related - this will start the triangle wave generation
+  // Timer related - this will start the sawtooth wave generation
   setupTimer();
   
   // Modes
@@ -196,8 +187,8 @@ void setup() {
   MIDI.setControlChangeCallback(onControlChange);
 
   logger.println("8Bit HelloWorld Started!");
-  logger.print("Initial triangle wave frequency: ");
-  logger.println(getTriangleFrequency());
+  logger.print("Initial sawtooth wave frequency: ");
+  logger.println(getSawtoothFrequency());
 }
 
 void loop() {
