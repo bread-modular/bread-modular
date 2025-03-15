@@ -13,12 +13,13 @@
 #define TOGGLE_PIN PIN_PA4
 #define TOGGLE_LED PIN_PA5
 
-// Triangle wave parameters
+// Sawtooth wave parameters
 #define DEFAULT_SAWTOOTH_FREQ 500 // Default sawtooth wave frequency
 #define DAC_MAX_VALUE 255 // 8-bit DAC max value
 #define TIMER_FREQ 10000000 // 10MHz (20MHz / 2)
 #define MAX_FREQ 500 // Maximum frequency in Hz
 #define MIN_FREQ 20  // Minimum frequency in Hz
+#define OCTAVE_DIVIDER 2 // Divider for one octave down
 
 // CV control parameters
 #define CV_THRESHOLD 5 // Threshold for CV value changes (0-1023)
@@ -29,19 +30,22 @@ SoftwareSerial logger(-1, LOGGER_PIN_TX);
 ModeHandler modes = ModeHandler(TOGGLE_PIN, 3, 300);
 LEDToggler ledToggler = LEDToggler(TOGGLE_LED, 300, false);
 
-// Variables for sawtooth wave generation
-volatile uint8_t sawtoothValue = 0;
+// Variables for main sawtooth wave generation (TCB0)
 volatile uint16_t sawtoothStep = 0;
 volatile uint16_t sawtoothMaxStep = DAC_MAX_VALUE;
 volatile uint16_t currentFrequency = DEFAULT_SAWTOOTH_FREQ;
 volatile uint16_t pendingFrequency = 0; // New frequency to be applied at the next cycle
 volatile bool frequencyChangeRequested = false; // Flag for frequency change
 
+// Variables for octave-down sawtooth wave generation (TCB1)
+volatile uint16_t sawtoothStepOctaveDown = 0;
+volatile uint16_t sawtoothMaxStepOctaveDown = DAC_MAX_VALUE;
+volatile uint16_t currentFrequencyOctaveDown = DEFAULT_SAWTOOTH_FREQ / OCTAVE_DIVIDER;
+
 // Variables for CV control
 uint16_t lastCVValue = 0;
 
-// Function to update the sawtooth wave frequency
-// This is now only called from the ISR
+// Function to update the main sawtooth wave frequency
 void setSawtoothFrequency(uint16_t frequency) {
     // Ensure frequency is within reasonable bounds (MIN_FREQ to MAX_FREQ Hz)
     if (frequency < MIN_FREQ) frequency = MIN_FREQ;
@@ -59,6 +63,11 @@ void setSawtoothFrequency(uint16_t frequency) {
     // We'll just update the CCMP value without disabling/enabling the timer
     // This reduces potential timing glitches
     TCB0.CCMP = (uint16_t)timerPeriod;
+    
+    // Also update the octave-down frequency
+    currentFrequencyOctaveDown = frequency / OCTAVE_DIVIDER;
+    uint32_t timerPeriodOctaveDown = TIMER_FREQ / (currentFrequencyOctaveDown * 256UL);
+    TCB1.CCMP = (uint16_t)timerPeriodOctaveDown;
 }
 
 // Get the current sawtooth wave frequency
@@ -91,27 +100,39 @@ void updateFrequencyFromCV() {
     }
 }
 
-void setupTimer() {
-    // Configure TCB0 for sawtooth wave generation
+void setupTimers() {
+    // Configure TCB0 for main sawtooth wave generation
     TCB0.CTRLA = TCB_CLKSEL_CLKDIV2_gc; // Clock div by 2 (10MHz)
     TCB0.CTRLB = TCB_CNTMODE_INT_gc;    // Timer interrupt mode
     TCB0.INTCTRL = TCB_CAPT_bm;         // Enable capture interrupt
     
-    // Set initial frequency directly
+    // Set initial frequency directly for TCB0
     uint32_t timerPeriod = TIMER_FREQ / (DEFAULT_SAWTOOTH_FREQ * 256UL);
     TCB0.CCMP = (uint16_t)timerPeriod;
     currentFrequency = DEFAULT_SAWTOOTH_FREQ;
     
-    // Reset sawtooth wave state
-    sawtoothStep = 0;
+    // Configure TCB1 for octave-down sawtooth wave generation
+    TCB1.CTRLA = TCB_CLKSEL_CLKDIV2_gc; // Clock div by 2 (10MHz)
+    TCB1.CTRLB = TCB_CNTMODE_INT_gc;    // Timer interrupt mode
+    TCB1.INTCTRL = TCB_CAPT_bm;         // Enable capture interrupt
     
-    // Enable the timer
+    // Set initial frequency for TCB1 (one octave down)
+    currentFrequencyOctaveDown = DEFAULT_SAWTOOTH_FREQ / OCTAVE_DIVIDER;
+    uint32_t timerPeriodOctaveDown = TIMER_FREQ / (currentFrequencyOctaveDown * 256UL);
+    TCB1.CCMP = (uint16_t)timerPeriodOctaveDown;
+    
+    // Reset sawtooth wave states
+    sawtoothStep = 0;
+    sawtoothStepOctaveDown = 0;
+    
+    // Enable the timers
     TCB0.CTRLA |= TCB_ENABLE_bm;
+    TCB1.CTRLA |= TCB_ENABLE_bm;
     
     sei(); // Enable global interrupts
 }
 
-// TCB0 Interrupt Service Routine
+// TCB0 Interrupt Service Routine (Main sawtooth wave)
 ISR(TCB0_INT_vect) {
     // First, clear the interrupt flag immediately to reduce jitter
     TCB0.INTFLAGS = TCB_CAPT_bm;
@@ -134,8 +155,26 @@ ISR(TCB0_INT_vect) {
         sawtoothStep = 0; // Reset to start a new ramp
     }
     
+    // Combine both waveforms and send to DAC
+    // Mix the main sawtooth with the octave-down sawtooth (equal weight)
+    uint16_t combinedValue = (sawtoothStep + sawtoothStepOctaveDown) / 2;
+    
     // Update DAC directly from the ISR for consistent timing
-    DAC0.DATA = sawtoothStep;
+    DAC0.DATA = combinedValue;
+}
+
+// TCB1 Interrupt Service Routine (Octave-down sawtooth wave)
+ISR(TCB1_INT_vect) {
+    // Clear the interrupt flag immediately
+    TCB1.INTFLAGS = TCB_CAPT_bm;
+    
+    // Update octave-down sawtooth wave value
+    sawtoothStepOctaveDown++;
+    if (sawtoothStepOctaveDown > sawtoothMaxStepOctaveDown) {
+        sawtoothStepOctaveDown = 0; // Reset to start a new ramp
+    }
+    
+    // Note: We don't update the DAC here, that's done in the TCB0 ISR
 }
 
 // Callback functions for MIDI events
@@ -174,8 +213,8 @@ void setup() {
   // Setup MIDI
   MIDI.begin(31250);
 
-  // Timer related - this will start the sawtooth wave generation
-  setupTimer();
+  // Timer related - this will start both sawtooth wave generators
+  setupTimers();
   
   // Modes
   modes.begin();
@@ -189,6 +228,8 @@ void setup() {
   logger.println("8Bit HelloWorld Started!");
   logger.print("Initial sawtooth wave frequency: ");
   logger.println(getSawtoothFrequency());
+  logger.print("Initial octave-down frequency: ");
+  logger.println(currentFrequencyOctaveDown);
 }
 
 void loop() {
