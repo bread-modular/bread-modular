@@ -1,0 +1,222 @@
+#include <Arduino.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include "SimpleMIDI.h"
+#include "ModeHandler.h"
+#include "LEDToggler.h"
+#include "SoftwareSerial.h"
+
+#define GATE_PIN PIN_PA7
+#define LOGGER_PIN_TX PIN_PB4
+#define PIN_CV1 PIN_PA1
+#define PIN_CV2 PIN_PA2
+#define TOGGLE_PIN PIN_PA4
+#define TOGGLE_LED PIN_PA5
+
+// Triangle wave parameters
+#define DEFAULT_TRIANGLE_FREQ 500 // Default triangle wave frequency
+#define DAC_MAX_VALUE 255 // 8-bit DAC max value
+#define TIMER_FREQ 10000000 // 10MHz (20MHz / 2)
+#define MAX_FREQ 500 // Maximum frequency in Hz
+#define MIN_FREQ 20  // Minimum frequency in Hz
+
+// CV control parameters
+#define CV_THRESHOLD 5// Threshold for CV value changes (0-1023)
+
+SimpleMIDI MIDI;
+// TODO: Change this to real serial port. (We need to update the schematic for that)
+SoftwareSerial logger(-1, LOGGER_PIN_TX);
+ModeHandler modes = ModeHandler(TOGGLE_PIN, 3, 300);
+LEDToggler ledToggler = LEDToggler(TOGGLE_LED, 300, false);
+
+// Variables for triangle wave generation
+volatile uint8_t triangleValue = 0;
+volatile bool triangleRising = true;
+volatile uint16_t triangleStep = 0;
+volatile uint16_t triangleMaxStep = DAC_MAX_VALUE;
+volatile uint16_t currentFrequency = DEFAULT_TRIANGLE_FREQ;
+volatile uint16_t pendingFrequency = 0; // New frequency to be applied at the next cycle
+
+// Variables for CV control
+uint16_t lastCVValue = 0;
+
+// Function to update the triangle wave frequency
+// This is now only called from the ISR
+void setTriangleFrequency(uint16_t frequency) {
+    // Ensure frequency is within reasonable bounds (MIN_FREQ to MAX_FREQ Hz)
+    if (frequency < MIN_FREQ) frequency = MIN_FREQ;
+    if (frequency > MAX_FREQ) frequency = MAX_FREQ;
+    
+    // Store the current frequency
+    currentFrequency = frequency;
+    
+    // Simple direct calculation for timer period
+    // One complete cycle needs 512 steps (256 up + 256 down)
+    // At frequency F, we need F * 512 steps per second
+    // With timer running at TIMER_FREQ, each step needs TIMER_FREQ / (F * 512) ticks
+    uint32_t timerPeriod = TIMER_FREQ / (frequency * 512UL);
+    
+    // Update the timer period
+    // Temporarily disable the timer to safely update CCMP
+    bool wasEnabled = (TCB0.CTRLA & TCB_ENABLE_bm);
+    if (wasEnabled) {
+        TCB0.CTRLA &= ~TCB_ENABLE_bm; // Disable timer
+    }
+    
+    TCB0.CCMP = (uint16_t)timerPeriod;
+    
+    if (wasEnabled) {
+        TCB0.CTRLA |= TCB_ENABLE_bm; // Re-enable timer
+    }
+}
+
+// Get the current triangle wave frequency
+uint16_t getTriangleFrequency() {
+    return currentFrequency;
+}
+
+// Update frequency based on CV1 input
+void updateFrequencyFromCV() {
+    // Read CV1 (0-1023)
+    uint16_t rawCV = analogRead(PIN_CV1);
+    
+    // Only update if the CV value has changed beyond the threshold
+    if (abs((int)rawCV - (int)lastCVValue) > CV_THRESHOLD) {
+        // Save the current CV value
+        lastCVValue = rawCV;
+        
+        // Map the CV value (0-1023) to frequency range (MIN_FREQ to MAX_FREQ Hz)
+        uint16_t newFrequency = map(rawCV, 0, 1023, MIN_FREQ, MAX_FREQ);
+        
+        // Set the pending frequency to be applied at the next cycle
+        pendingFrequency = newFrequency;
+    }
+}
+
+void setupTimer() {
+    // Configure TCB0 for triangle wave generation
+    TCB0.CTRLA = TCB_CLKSEL_CLKDIV2_gc; // Clock div by 2 (10MHz)
+    TCB0.CTRLB = TCB_CNTMODE_INT_gc;    // Timer interrupt mode
+    TCB0.INTCTRL = TCB_CAPT_bm;         // Enable capture interrupt
+    
+    // Set initial frequency directly
+    setTriangleFrequency(DEFAULT_TRIANGLE_FREQ);
+    
+    // Reset triangle wave state
+    triangleStep = 0;
+    triangleRising = true;
+    
+    // Enable the timer
+    TCB0.CTRLA |= TCB_ENABLE_bm;
+    
+    sei(); // Enable global interrupts
+}
+
+// TCB0 Interrupt Service Routine
+ISR(TCB0_INT_vect) {
+    
+    // Update triangle wave value
+    if (triangleRising) {
+        triangleStep++;
+        if (triangleStep >= triangleMaxStep) {
+            triangleRising = false;
+        }
+    } else {
+        triangleStep--;
+        if (triangleStep == 0) {
+            triangleRising = true;
+        }
+
+        // At the start of a new cycle, check if there's a pending frequency change
+        if (pendingFrequency > 0) {
+            // Apply the new frequency
+            setTriangleFrequency(pendingFrequency);
+            // Reset the pending frequency
+            pendingFrequency = 0;
+        }
+    }
+    
+    // Update DAC directly from the ISR for consistent timing
+    DAC0.DATA = triangleStep;
+    
+    // Clear the interrupt flag
+    TCB0.INTFLAGS = TCB_CAPT_bm;
+}
+
+// Callback functions for MIDI events
+void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+  digitalWrite(GATE_PIN, HIGH);
+}
+
+void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
+  digitalWrite(GATE_PIN, LOW);
+}
+
+void onControlChange(uint8_t channel, uint8_t control, uint8_t value) {
+  logger.println("control change: " + String(control) + " " + String(value));
+}
+
+void setup() {
+  // define the gate pin
+  pinMode(GATE_PIN, OUTPUT);
+  digitalWrite(GATE_PIN, LOW);
+
+  // Setup Logger
+  pinMode(LOGGER_PIN_TX, OUTPUT);
+  logger.begin(9600);
+  
+  // Set the analog reference for ADC with supply voltage.
+  analogReference(VDD);
+  pinMode(PIN_CV1, INPUT);
+  pinMode(PIN_CV2, INPUT);
+ 
+  // DAC0 setup for sending velocity via the PA6 pin
+  VREF.CTRLA |= VREF_DAC0REFSEL_4V34_gc; //this will force it to use VDD as the VREF
+  VREF.CTRLB |= VREF_DAC0REFEN_bm;
+  DAC0.CTRLA = DAC_ENABLE_bm | DAC_OUTEN_bm;
+  DAC0.DATA = 0;
+
+  // Setup MIDI
+  MIDI.begin(31250);
+
+  // Timer related - this will start the triangle wave generation
+  setupTimer();
+  
+  // Modes
+  modes.begin();
+  pinMode(TOGGLE_LED, OUTPUT);
+
+  // Register MIDI callbacks
+  MIDI.setNoteOnCallback(onNoteOn);
+  MIDI.setNoteOffCallback(onNoteOff);
+  MIDI.setControlChangeCallback(onControlChange);
+
+  logger.println("8Bit HelloWorld Started!");
+  logger.print("Initial triangle wave frequency: ");
+  logger.println(getTriangleFrequency());
+}
+
+void loop() {
+  // Process MIDI messages
+  MIDI.update();
+
+  // Update the LED toggler
+  ledToggler.update();
+  
+  // Update frequency based on CV1
+  updateFrequencyFromCV();
+
+  // mode related code
+  if (modes.update()) {
+    byte newMode = modes.getMode();
+    logger.println("mode changed: " + String(newMode));
+
+    if (newMode == 0) {
+      ledToggler.startToggle(1);
+    } else if (newMode == 1) {
+      ledToggler.startToggle(2);
+    } else if (newMode == 2) {
+      ledToggler.startToggle(3);
+    }
+  }
+}
