@@ -39,11 +39,14 @@ volatile bool frequencyChangeRequested = false; // Flag for frequency change
 
 // Variables for octave-down sawtooth wave generation (TCB1)
 volatile uint16_t sawtoothStepOctaveDown = 0;
+volatile uint16_t sawtoothStepOctaveDownWithVolume = 0;
 volatile uint16_t sawtoothMaxStepOctaveDown = DAC_MAX_VALUE;
 volatile uint16_t currentFrequencyOctaveDown = DEFAULT_SAWTOOTH_FREQ / OCTAVE_DIVIDER;
 
 // Variables for CV control
 uint16_t lastCVValue = 0;
+uint16_t lastCV2Value = 0;
+uint8_t octaveDownVolume = 128; // Default volume (0-255, where 255 is full volume)
 
 // Function to update the main sawtooth wave frequency
 void setSawtoothFrequency(uint16_t frequency) {
@@ -97,6 +100,21 @@ void updateFrequencyFromCV() {
         frequencyChangeRequested = true;
         
         interrupts();
+    }
+}
+
+// Update volume of octave-down sawtooth based on CV2 input
+void updateVolumeFromCV2() {
+    // Read CV2 (0-1023)
+    uint16_t rawCV2 = analogRead(PIN_CV2);
+    
+    // Only update if the CV2 value has changed beyond the threshold
+    if (abs((int)rawCV2 - (int)lastCV2Value) > CV_THRESHOLD) {
+        // Save the current CV2 value
+        lastCV2Value = rawCV2;
+        
+        // Map the CV2 value (0-1023) to volume range (0-255)
+        octaveDownVolume = map(rawCV2, 0, 1023, 0, 255);
     }
 }
 
@@ -155,9 +173,8 @@ ISR(TCB0_INT_vect) {
         sawtoothStep = 0; // Reset to start a new ramp
     }
     
-    // Combine both waveforms and send to DAC
-    // Mix the main sawtooth with the octave-down sawtooth (equal weight)
-    uint16_t combinedValue = (sawtoothStep + sawtoothStepOctaveDown) / 2;
+    // Mix the main sawtooth with the volume-adjusted octave-down sawtooth
+    uint16_t combinedValue = (sawtoothStep + sawtoothStepOctaveDownWithVolume) / 2;
     
     // Update DAC directly from the ISR for consistent timing
     DAC0.DATA = combinedValue;
@@ -174,6 +191,11 @@ ISR(TCB1_INT_vect) {
         sawtoothStepOctaveDown = 0; // Reset to start a new ramp
     }
     
+    // Combine both waveforms and send to DAC
+    // Apply volume control to octave-down sawtooth using integer math
+    // Scale octaveDownVolume from 0-255 to 0-1 fraction using integer division
+   sawtoothStepOctaveDownWithVolume = (sawtoothStepOctaveDown * octaveDownVolume) >> 8;
+
     // Note: We don't update the DAC here, that's done in the TCB0 ISR
 }
 
@@ -241,6 +263,9 @@ void loop() {
   
   // Update frequency based on CV1
   updateFrequencyFromCV();
+  
+  // Update volume based on CV2
+  updateVolumeFromCV2();
 
   // mode related code
   if (modes.update()) {
