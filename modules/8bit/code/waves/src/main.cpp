@@ -67,6 +67,9 @@ void setSawtoothFrequency(uint16_t frequency) {
     // With timer running at TIMER_FREQ, each step needs TIMER_FREQ / (F * 256) ticks
     uint32_t timerPeriod = TIMER_FREQ / (frequency * 256UL);
     
+    // Ensure timer period is at least 1 to prevent timer from getting stuck
+    if (timerPeriod < 1) timerPeriod = 1;
+    
     // We'll just update the CCMP value without disabling/enabling the timer
     // This reduces potential timing glitches
     TCB0.CCMP = (uint16_t)timerPeriod;
@@ -74,6 +77,10 @@ void setSawtoothFrequency(uint16_t frequency) {
     // Also update the octave-down frequency
     currentFrequencyOctaveDown = frequency / OCTAVE_DIVIDER;
     uint32_t timerPeriodOctaveDown = TIMER_FREQ / (currentFrequencyOctaveDown * 256UL);
+    
+    // Ensure timer period is at least 1 to prevent timer from getting stuck
+    if (timerPeriodOctaveDown < 1) timerPeriodOctaveDown = 1;
+    
     TCB1.CCMP = (uint16_t)timerPeriodOctaveDown;
 }
 
@@ -213,11 +220,13 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
   // Only update frequency if in MIDI control mode
   if (midControlMode) {
     // Set frequency based on MIDI note using SimpleMIDI's midiToFrequency function
-    uint16_t frequency = (uint16_t)MIDI.midiToFrequency(note);
+    float rawFrequency = MIDI.midiToFrequency(note);
+    uint16_t frequency = (uint16_t)rawFrequency;
     
-    // Ensure frequency is within our range
-    if (frequency < MIN_FREQ) frequency = MIN_FREQ;
-    if (frequency > MAX_FREQ) frequency = MAX_FREQ;
+    // If the frequency is out of range, don't update the frequency
+    if (frequency > MAX_FREQ || frequency < MIN_FREQ) {
+      return;
+    }
     
     // Set the pending frequency to be applied at the next cycle
     noInterrupts();
