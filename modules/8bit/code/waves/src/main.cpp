@@ -3,6 +3,7 @@
 #include <avr/interrupt.h>
 #include "SimpleMIDI.h"
 #include "SoftwareSerial.h"
+#include "ModeHandler.h"
 
 #define GATE_PIN PIN_PA7
 #define LOGGER_PIN_TX PIN_PB4
@@ -12,7 +13,7 @@
 #define TOGGLE_LED PIN_PA5
 
 // Sawtooth wave parameters
-#define DEFAULT_SAWTOOTH_FREQ 500 // Default sawtooth wave frequency
+#define DEFAULT_SAWTOOTH_FREQ 100 // Default sawtooth wave frequency
 #define DAC_MAX_VALUE 255 // 8-bit DAC max value
 #define TIMER_FREQ 10000000 // 10MHz (20MHz / 2)
 #define MAX_FREQ 500 // Maximum frequency in Hz
@@ -28,6 +29,7 @@
 SimpleMIDI MIDI;
 // TODO: Change this to real serial port. (We need to update the schematic for that)
 SoftwareSerial logger(-1, LOGGER_PIN_TX);
+ModeHandler modes = ModeHandler(TOGGLE_PIN, 2, 200);
 
 // Variables for main sawtooth wave generation (TCB0)
 volatile uint16_t sawtoothStep = 0;
@@ -48,8 +50,7 @@ uint16_t lastCV2Value = 0;
 uint8_t octaveDownVolume = 128; // Default volume (0-255, where 255 is full volume)
 
 // Mode control variables
-volatile bool cvControlMode = true; // true = CV1 control, false = MIDI control
-unsigned long lastToggleTime = 0;   // For debouncing
+bool midControlMode = false; // true = MIDI control, false = CV1 control
 
 // Function to update the main sawtooth wave frequency
 void setSawtoothFrequency(uint16_t frequency) {
@@ -84,7 +85,7 @@ uint16_t getSawtoothFrequency() {
 // Update frequency based on CV1 input
 void updateFrequencyFromCV() {
     // Only update if in CV control mode
-    if (!cvControlMode) return;
+    if (midControlMode) return;
     
     // Read CV1 (0-1023)
     uint16_t rawCV = analogRead(PIN_CV1);
@@ -122,37 +123,6 @@ void updateVolumeFromCV2() {
         // Map the CV2 value (0-1023) to volume range (0-255)
         octaveDownVolume = map(rawCV2, 0, 1023, 0, 255);
     }
-}
-
-// Check and update the mode toggle button
-bool updateModeToggle() {
-    int toggleValue = digitalRead(TOGGLE_PIN);
-    unsigned long currentTime = millis();
-    
-    if (toggleValue == LOW) { // Button pressed (active low)
-        if (lastToggleTime == 0) {
-            lastToggleTime = currentTime;
-        }
-        return false;
-    }
-    
-    // Button released
-    if (lastToggleTime > 0) {
-        // Check if button was pressed long enough (debounce)
-        if (currentTime - lastToggleTime >= DEBOUNCE_TIME) {
-            // Toggle the mode
-            cvControlMode = !cvControlMode;
-            
-            // Update LED state based on mode
-            digitalWrite(TOGGLE_LED, cvControlMode ? HIGH : LOW);
-            
-            lastToggleTime = 0;
-            return true;
-        }
-        lastToggleTime = 0;
-    }
-    
-    return false;
 }
 
 void setupTimers() {
@@ -241,7 +211,7 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
   digitalWrite(GATE_PIN, HIGH);
   
   // Only update frequency if in MIDI control mode
-  if (!cvControlMode) {
+  if (midControlMode) {
     // Set frequency based on MIDI note using SimpleMIDI's midiToFrequency function
     uint16_t frequency = (uint16_t)MIDI.midiToFrequency(note);
     
@@ -265,6 +235,12 @@ void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
 void onControlChange(uint8_t channel, uint8_t control, uint8_t value) {  
 
 }
+
+void activateMode() {
+  midControlMode = modes.getMode() == 1;
+  digitalWrite(TOGGLE_LED, midControlMode ? HIGH : LOW);
+}
+
 
 void setup() {
   // define the gate pin
@@ -295,9 +271,9 @@ void setup() {
   // Setup mode toggle button and LED
   pinMode(TOGGLE_PIN, INPUT_PULLUP);
   pinMode(TOGGLE_LED, OUTPUT);
-  
-  // Set initial LED state based on mode (CV control by default)
-  digitalWrite(TOGGLE_LED, cvControlMode ? HIGH : LOW);
+
+  modes.begin();
+  activateMode();
 
   // Register MIDI callbacks
   MIDI.setNoteOnCallback(onNoteOn);
@@ -310,7 +286,9 @@ void loop() {
   MIDI.update();
   
   // Check and update mode toggle
-  updateModeToggle();
+  if (modes.update()) {
+    activateMode();
+  }
   
   // Update frequency based on CV1 (only if in CV control mode)
   updateFrequencyFromCV();
