@@ -2,8 +2,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "SimpleMIDI.h"
-#include "ModeHandler.h"
-#include "LEDToggler.h"
 #include "SoftwareSerial.h"
 
 #define GATE_PIN PIN_PA7
@@ -24,11 +22,12 @@
 // CV control parameters
 #define CV_THRESHOLD 5 // Threshold for CV value changes (0-1023)
 
+// Mode button debounce time
+#define DEBOUNCE_TIME 300
+
 SimpleMIDI MIDI;
 // TODO: Change this to real serial port. (We need to update the schematic for that)
 SoftwareSerial logger(-1, LOGGER_PIN_TX);
-ModeHandler modes = ModeHandler(TOGGLE_PIN, 3, 300);
-LEDToggler ledToggler = LEDToggler(TOGGLE_LED, 300, false);
 
 // Variables for main sawtooth wave generation (TCB0)
 volatile uint16_t sawtoothStep = 0;
@@ -47,6 +46,10 @@ volatile uint16_t currentFrequencyOctaveDown = DEFAULT_SAWTOOTH_FREQ / OCTAVE_DI
 uint16_t lastCVValue = 0;
 uint16_t lastCV2Value = 0;
 uint8_t octaveDownVolume = 128; // Default volume (0-255, where 255 is full volume)
+
+// Mode control variables
+volatile bool cvControlMode = true; // true = CV1 control, false = MIDI control
+unsigned long lastToggleTime = 0;   // For debouncing
 
 // Function to update the main sawtooth wave frequency
 void setSawtoothFrequency(uint16_t frequency) {
@@ -80,6 +83,9 @@ uint16_t getSawtoothFrequency() {
 
 // Update frequency based on CV1 input
 void updateFrequencyFromCV() {
+    // Only update if in CV control mode
+    if (!cvControlMode) return;
+    
     // Read CV1 (0-1023)
     uint16_t rawCV = analogRead(PIN_CV1);
     
@@ -104,7 +110,7 @@ void updateFrequencyFromCV() {
 }
 
 // Update volume of octave-down sawtooth based on CV2 input
-void updateVolumeFromCV2() {
+void updateVolumeFromCV2() {    
     // Read CV2 (0-1023)
     uint16_t rawCV2 = analogRead(PIN_CV2);
     
@@ -116,6 +122,37 @@ void updateVolumeFromCV2() {
         // Map the CV2 value (0-1023) to volume range (0-255)
         octaveDownVolume = map(rawCV2, 0, 1023, 0, 255);
     }
+}
+
+// Check and update the mode toggle button
+bool updateModeToggle() {
+    int toggleValue = digitalRead(TOGGLE_PIN);
+    unsigned long currentTime = millis();
+    
+    if (toggleValue == LOW) { // Button pressed (active low)
+        if (lastToggleTime == 0) {
+            lastToggleTime = currentTime;
+        }
+        return false;
+    }
+    
+    // Button released
+    if (lastToggleTime > 0) {
+        // Check if button was pressed long enough (debounce)
+        if (currentTime - lastToggleTime >= DEBOUNCE_TIME) {
+            // Toggle the mode
+            cvControlMode = !cvControlMode;
+            
+            // Update LED state based on mode
+            digitalWrite(TOGGLE_LED, cvControlMode ? HIGH : LOW);
+            
+            lastToggleTime = 0;
+            return true;
+        }
+        lastToggleTime = 0;
+    }
+    
+    return false;
 }
 
 void setupTimers() {
@@ -202,14 +239,31 @@ ISR(TCB1_INT_vect) {
 // Callback functions for MIDI events
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
   digitalWrite(GATE_PIN, HIGH);
+  
+  // Only update frequency if in MIDI control mode
+  if (!cvControlMode) {
+    // Set frequency based on MIDI note using SimpleMIDI's midiToFrequency function
+    uint16_t frequency = (uint16_t)MIDI.midiToFrequency(note);
+    
+    // Ensure frequency is within our range
+    if (frequency < MIN_FREQ) frequency = MIN_FREQ;
+    if (frequency > MAX_FREQ) frequency = MAX_FREQ;
+    
+    // Set the pending frequency to be applied at the next cycle
+    noInterrupts();
+    pendingFrequency = frequency;
+    frequencyChangeRequested = true;
+    interrupts();
+  }
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
   digitalWrite(GATE_PIN, LOW);
+  // We don't reset frequency or volume on note off to allow for legato playing
 }
 
-void onControlChange(uint8_t channel, uint8_t control, uint8_t value) {
-  logger.println("control change: " + String(control) + " " + String(value));
+void onControlChange(uint8_t channel, uint8_t control, uint8_t value) {  
+
 }
 
 void setup() {
@@ -238,46 +292,29 @@ void setup() {
   // Timer related - this will start both sawtooth wave generators
   setupTimers();
   
-  // Modes
-  modes.begin();
+  // Setup mode toggle button and LED
+  pinMode(TOGGLE_PIN, INPUT_PULLUP);
   pinMode(TOGGLE_LED, OUTPUT);
+  
+  // Set initial LED state based on mode (CV control by default)
+  digitalWrite(TOGGLE_LED, cvControlMode ? HIGH : LOW);
 
   // Register MIDI callbacks
   MIDI.setNoteOnCallback(onNoteOn);
   MIDI.setNoteOffCallback(onNoteOff);
   MIDI.setControlChangeCallback(onControlChange);
-
-  logger.println("8Bit HelloWorld Started!");
-  logger.print("Initial sawtooth wave frequency: ");
-  logger.println(getSawtoothFrequency());
-  logger.print("Initial octave-down frequency: ");
-  logger.println(currentFrequencyOctaveDown);
 }
 
 void loop() {
   // Process MIDI messages
   MIDI.update();
-
-  // Update the LED toggler
-  ledToggler.update();
   
-  // Update frequency based on CV1
+  // Check and update mode toggle
+  updateModeToggle();
+  
+  // Update frequency based on CV1 (only if in CV control mode)
   updateFrequencyFromCV();
   
-  // Update volume based on CV2
+  // Update volume based on CV2 (always active regardless of mode)
   updateVolumeFromCV2();
-
-  // mode related code
-  if (modes.update()) {
-    byte newMode = modes.getMode();
-    logger.println("mode changed: " + String(newMode));
-
-    if (newMode == 0) {
-      ledToggler.startToggle(1);
-    } else if (newMode == 1) {
-      ledToggler.startToggle(2);
-    } else if (newMode == 2) {
-      ledToggler.startToggle(3);
-    }
-  }
 }
