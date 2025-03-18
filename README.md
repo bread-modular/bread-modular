@@ -1,7 +1,7 @@
 # Bread Modular
 Bread Modular is an open-source hardware modular synthesizer format designed to be minimalistic and cost-effective.
 
-![Bread Modular](https://github.com/user-attachments/assets/3bf549e3-6082-49f3-a8fa-cad0afa621e0)
+![Bread Modular](https://www.breadmodular.com/images/home-slide/01.jpg)
 ### Key Features
 
 * **Modular Design:** Just like Eurorack
