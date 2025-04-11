@@ -1,0 +1,17 @@
+.program i2s
+.side_set 2; WS=1, BCK=0
+
+.define public BCK_CYCLES 2
+
+.wrap_target
+    set x 14        side 0b11
+loop_l:
+    out pins, 1     side 0b00
+    jmp x--, loop_l side 0b01
+    out pins, 1     side 0b00
+    set x 14        side 0b01
+loop_r:
+    out pins, 1     side 0b10
+    jmp x--, loop_r side 0b11
+    out pins, 1     side 0b10
+.wrap
