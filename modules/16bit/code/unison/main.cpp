@@ -1,75 +1,38 @@
 #include <stdio.h>
-#include <math.h>
 #include "pico/stdlib.h"
-#include "pico/multicore.h"
-#include "pico/util/queue.h"
-#include "DAC.h"
+#include "audio.h"
 
-#define BCK_PIN 0
-#define SAMPLE_RATE 48000
-#define QUEUE_LENGTH 2
+uint16_t samplesPerCycle;
+uint16_t sampleId = 0;
 
-// Define a simple message type for inter-core communication
-typedef struct {
-    bool process_sample;  // Flag to indicate when to process a new sample
-} audio_request_t;
+void generateUnison(AudioResponse* response) {
+    float phase = sampleId / (float)samplesPerCycle;
+    float angle = 2.0f * M_PI * phase;
+    int16_t value = (int16_t)(32767.0f * sin(angle));
 
-// Create queues for communication between cores
-queue_t request_queue;
-queue_t result_queue;
+    response->left = value;
+    response->right = value;
 
-DAC dac(pio0, 0, BCK_PIN, SAMPLE_RATE); // Using pio0, state machine 0, BCK pin 0
-
-void main1() {
-    uint16_t freq = 110;
-    int samples_per_cycle = dac.get_sample_rate() / freq;
-    int sample_id = 0;
-    audio_request_t message;
-
-    while (true) {
-        // Wait for message from core0
-        queue_remove_blocking(&request_queue, &message);
-        
-        if (message.process_sample) {
-            float phase = sample_id / (float)samples_per_cycle;
-            float angle = 2.0f * M_PI * phase;
-            int16_t value = (int16_t)(32767.0f * sin(angle));
-            dac.write_mono(value, value);
-            sample_id = (sample_id + 1) % samples_per_cycle;
-            
-            // Signal completion to core0
-            message.process_sample = true;
-            queue_add_blocking(&result_queue, &message);
-        }
-    }
+    sampleId = (sampleId + 1) % samplesPerCycle;
 }
 
-int main()
-{
+int main() {
     stdio_init_all();
-    
-    // Initialize queues
-    queue_init(&request_queue, sizeof(audio_request_t), QUEUE_LENGTH);
-    queue_init(&result_queue, sizeof(audio_request_t), QUEUE_LENGTH);
-    
-    multicore_launch_core1(main1);
 
-    // Create and initialize the DAC
-    dac.init();
+    AudioManager *audioManager = AudioManager::getInstance();
 
-    audio_request_t message;
-    message.process_sample = true;
+    // initialize params
+    samplesPerCycle = audioManager->getDac()->getSampleRate() / 55;
     
-    // Send initial message to start processing
-    queue_add_blocking(&request_queue, &message);
-
+    // Initialize the AudioManager singleton
+    audioManager->setGenCallback(generateUnison);
+    audioManager->init(48000);
+    
     while (true) {
-        // Wait for core1 to complete processing & then send a new request
-        if (queue_try_remove(&result_queue, &message)) {
-            // Send message to process next sample
-            queue_add_blocking(&request_queue, &message);
-        }
+        // make sure the audio manager is generating samples
+        // processing in the background
+        audioManager->update();
 
-        // do something else
+        // we are free to do anything here. But better not to sleep as it might affects
     }
 }
