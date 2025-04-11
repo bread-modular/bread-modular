@@ -2,10 +2,13 @@
 #include "pico/stdlib.h"
 #include "audio.h"
 
+#define LED_PIN 13
+
 uint16_t samplesPerCycle;
 uint16_t sampleId = 0;
 
 void generateUnison(AudioResponse* response) {
+    // Just a sine wave for now
     float phase = sampleId / (float)samplesPerCycle;
     float angle = 2.0f * M_PI * phase;
     int16_t value = (int16_t)(32767.0f * sin(angle));
@@ -19,6 +22,9 @@ void generateUnison(AudioResponse* response) {
 int main() {
     stdio_init_all();
 
+    gpio_init(LED_PIN);
+    gpio_set_dir(LED_PIN, GPIO_OUT);
+
     AudioManager *audioManager = AudioManager::getInstance();
 
     // initialize params
@@ -29,10 +35,11 @@ int main() {
     audioManager->init(48000);
     
     while (true) {
-        // make sure the audio manager is generating samples
-        // processing in the background
-        audioManager->update();
-
-        // we are free to do anything here. But better not to sleep as it might affects
+        // audio is processing on the second core.
+        // we are free to whatever here.
+        gpio_put(LED_PIN, true);
+        sleep_ms(250);
+        gpio_put(LED_PIN, false);
+        sleep_ms(250);
     }
 }
