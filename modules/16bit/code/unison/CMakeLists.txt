@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(unison main.c )
+add_executable(unison main.cpp )
 pico_generate_pio_header(unison ${CMAKE_CURRENT_LIST_DIR}/i2s.pio)
 
 pico_set_program_name(unison "unison")
