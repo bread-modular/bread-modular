@@ -49,7 +49,9 @@ pico_enable_stdio_usb(unison 1)
 target_link_libraries(unison
         pico_stdlib
         hardware_pio
-        pico_multicore)
+        pico_multicore
+        hardware_adc
+        )
 
 # Add the standard include files to the build
 target_include_directories(unison PRIVATE
