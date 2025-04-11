@@ -53,6 +53,7 @@ target_link_libraries(unison
 # Add the standard include files to the build
 target_include_directories(unison PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/includes
 )
 
 pico_add_extra_outputs(unison)
