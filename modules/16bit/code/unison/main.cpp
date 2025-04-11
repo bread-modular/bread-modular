@@ -14,22 +14,15 @@ int main()
     DAC dac(pio0, 0, BCK_PIN, SAMPLE_RATE); // Using pio0, state machine 0, BCK pin 0
     dac.init();
 
-    // Generate sine wave samples for stereo output
-    const int SAMPLES = SAMPLE_RATE / 110; // One period of 440Hz tone (A4 note)
-    int16_t sine_wave[SAMPLES]; // Single channel sine wave
-    
-    // Generate one complete sine wave cycle
-    for (int i = 0; i < SAMPLES; i++) {
-        // Calculate the phase angle for this sample (0 to 2π)
-        float phase = (2.0f * M_PI * i) / (float)SAMPLES;
-        
-        // Generate sine wave sample scaled to full 16-bit range (-32768 to 32767)
-        sine_wave[i] = (int16_t)(32767.0f * sin(phase));
-    }
+    uint16_t freq = 110;
+    int samples_per_cycle = dac.get_sample_rate() / freq;
+    int sample_id = 0;
 
     while (true) {
-        for (int i = 0; i < SAMPLES; i++) {
-            dac.write_mono(sine_wave[i], sine_wave[i]);
-        }
+        float phase = sample_id / (float)samples_per_cycle;
+        float angle = 2.0f * M_PI * phase;
+        int16_t value = (int16_t)(32767.0f * sin(angle));
+        dac.write_mono(value, value);
+        sample_id = (sample_id + 1) % samples_per_cycle;
     }
 }
