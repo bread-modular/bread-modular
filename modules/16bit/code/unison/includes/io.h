@@ -41,13 +41,32 @@ class IO {
             gpio_set_dir(LED_PIN, GPIO_OUT);
         }
 
+        // Low level LED control function
+        void setLED(bool state) {
+            gpio_put(LED_PIN, state);
+        }
+
+        // Blink LED a specified number of times with given interval
+        void blink(uint8_t times = 1, uint32_t interval_ms = 5) {
+            for (uint8_t i = 0; i < times; i++) {
+                setLED(true);
+                sleep_ms(interval_ms);
+                setLED(false);
+                
+                // Only add interval between blinks (not after the last one)
+                if (i < times - 1) {
+                    sleep_ms(interval_ms);
+                }
+            }
+        }
+
         void setCV1UpdateCallback(CVUpdateCallback callback) {
             // Set the callback function for CV1 updates
             cv1UpdateCallback = callback;
         }
 
         void setCV2UpdateCallback(CVUpdateCallback callback) {
-            // Set the callback function for CV1 updates
+            // Set the callback function for CV2 updates
             cv2UpdateCallback = callback;
         }
 

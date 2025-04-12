@@ -5,15 +5,20 @@
 #include "audio.h"
 #include "io.h"
 
-#define LED_PIN 13
-#define CV1_PIN 2
-#define FREQUENCY_THRESHOLD 5  // Ignore changes less than this
-
 uint16_t sampleId = 0;
 uint16_t samplesPerCycle;
 uint16_t nextSamplesPerCycle; // Default sample rate
 AudioManager *audioManager; // Global reference to access in callback
+IO *io; // Global reference to IO instance
 
+// Callback function for CV1 updates
+void onCV1Update(uint16_t cv1Value) {
+    uint16_t newFreq = MAX(20, cv1Value / 4);
+    nextSamplesPerCycle = audioManager->getDac()->getSampleRate() / newFreq;
+    
+    // Visual feedback when frequency changes - use IO class blink method
+    io->blink(1, 5);
+}
 
 void generateUnison(AudioResponse* response) {
     if (sampleId == 0 && nextSamplesPerCycle != samplesPerCycle) {
@@ -32,25 +37,8 @@ void generateUnison(AudioResponse* response) {
     sampleId = (sampleId + 1) % samplesPerCycle;
 }
 
-// Callback function for CV1 updates
-void onCV1Update(uint16_t cv1Value) {
-    uint16_t newFreq = MAX(20, cv1Value / 6);
-    nextSamplesPerCycle = audioManager->getDac()->getSampleRate() / newFreq;
-    
-    // Visual feedback when frequency changes
-    gpio_put(LED_PIN, true);
-    sleep_ms(5); // Brief flash
-    gpio_put(LED_PIN, false);
-}
-
 int main() {
     stdio_init_all();
-
-    adc_init();
-    adc_gpio_init(26 + CV1_PIN);
-
-    gpio_init(LED_PIN);
-    gpio_set_dir(LED_PIN, GPIO_OUT);
 
     // initial audio
     audioManager = AudioManager::getInstance();    
@@ -58,7 +46,7 @@ int main() {
     audioManager->init(48000);
 
     // initialize io
-    IO* io = IO::getInstance();
+    io = IO::getInstance();
     io->init();
     
     // Register the CV1 callback
@@ -66,6 +54,9 @@ int main() {
     
     // Set initial frequency
     nextSamplesPerCycle = audioManager->getDac()->getSampleRate() / 110;
+    
+    // Initial blink to show startup complete
+    io->blink(2, 100);
     
     while (true) {
         // Just update IO, callback will handle CV1 changes
