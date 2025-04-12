@@ -5,20 +5,29 @@
 #include "audio.h"
 #include "io.h"
 #include "gen/Sine.h"
+#include "gen/Saw.h"
+#include "gen/Tri.h"
+#include "gen/Square.h"
 
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
 Sine sine;
+Saw saw;
+Tri tri;
+Square square;
 
 // Callback function for CV1 updates
 void onCV1Update(uint16_t cv1) {
-    uint16_t newFreq = MAX(20, IO::normalizeCV(cv1) * 440);
+    uint16_t newFreq = MAX(20, IO::normalizeCV(cv1) * 2000);
     sine.setFrequency(newFreq);
+    saw.setFrequency(newFreq);
+    tri.setFrequency(newFreq);
+    square.setFrequency(newFreq);
     io->blink(1, 20);
 }
 
 void generateUnison(AudioResponse* response) {
-    int16_t value = sine.getSample();
+    int16_t value = square.getSample();
 
     response->left = value;
     response->right = value;
@@ -34,6 +43,9 @@ int main() {
 
     // initialize waveforms
     sine.init(audioManager);
+    saw.init(audioManager);
+    tri.init(audioManager);
+    square.init(audioManager);
 
     // initialize io
     io = IO::getInstance();
