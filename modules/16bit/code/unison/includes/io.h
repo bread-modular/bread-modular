@@ -20,6 +20,9 @@ class IO {
         CVUpdateCallback cv1UpdateCallback = nullptr;
         CVUpdateCallback cv2UpdateCallback = nullptr;
 
+        uint16_t cv1DiffThreshold = 50;
+        uint16_t cv2DiffThreshold = 50;
+
         bool blinking = false;
         uint8_t blinkCount = 0;
         uint8_t blinkTotal = 0;
@@ -61,14 +64,16 @@ class IO {
             setLED(true);
         }
 
-        void setCV1UpdateCallback(CVUpdateCallback callback) {
+        void setCV1UpdateCallback(CVUpdateCallback callback, uint16_t diffThreshold = 50) {
             // Set the callback function for CV1 updates
             cv1UpdateCallback = callback;
+            cv1DiffThreshold = diffThreshold;
         }
 
-        void setCV2UpdateCallback(CVUpdateCallback callback) {
+        void setCV2UpdateCallback(CVUpdateCallback callback, uint16_t diffThreshold = 50) {
             // Set the callback function for CV2 updates
             cv2UpdateCallback = callback;
+            cv2DiffThreshold = diffThreshold;
         }
 
         bool update() {
@@ -98,7 +103,7 @@ class IO {
                 // handle cv1 changes
                 adc_select_input(CV1_PIN);
                 uint16_t newCv1Value = adc_read();
-                if (abs(cv1Value - newCv1Value) > 20) {
+                if (abs(cv1Value - newCv1Value) > cv1DiffThreshold) {
                     cv1Value = newCv1Value;
                     if (cv1UpdateCallback != nullptr) {
                         cv1UpdateCallback(cv1Value);
@@ -108,7 +113,7 @@ class IO {
                 // handle cv2 changes
                 adc_select_input(CV2_PIN);
                 uint16_t newCv2Value = adc_read();
-                if (abs(cv2Value - newCv2Value) > 20) {
+                if (abs(cv2Value - newCv2Value) > cv2DiffThreshold) {
                     cv2Value = newCv2Value;
 
                     if (cv2UpdateCallback != nullptr) {
@@ -126,7 +131,11 @@ class IO {
             return cv1Value;
         }
 
-        uint16_t getCv2Value() {
+        uint16_t getCV2() {
             return cv2Value;
+        }
+
+        static float normalizeCV(uint16_t value) {
+            return value / (float)4095.0;
         }
 };
