@@ -18,7 +18,7 @@ Square square;
 
 // Callback function for CV1 updates
 void onCV1Update(uint16_t cv1) {
-    uint16_t newFreq = MAX(20, IO::normalizeCV(cv1) * 2000);
+    uint16_t newFreq = MAX(20, IO::normalizeCV(cv1) * 220);
     sine.setFrequency(newFreq);
     saw.setFrequency(newFreq);
     tri.setFrequency(newFreq);
