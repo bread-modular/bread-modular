@@ -7,7 +7,7 @@
 
 uint16_t sampleId = 0;
 uint16_t samplesPerCycle;
-uint16_t nextSamplesPerCycle; // Default sample rate
+uint16_t nextSamplesPerCycle;
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
 
@@ -17,7 +17,7 @@ void onCV1Update(uint16_t cv1Value) {
     nextSamplesPerCycle = audioManager->getDac()->getSampleRate() / newFreq;
     
     // Visual feedback when frequency changes - use IO class blink method
-    io->blink(1, 5);
+    io->blink(1, 20);
 }
 
 void generateUnison(AudioResponse* response) {
@@ -61,8 +61,5 @@ int main() {
     while (true) {
         // Just update IO, callback will handle CV1 changes
         io->update();
-        
-        // Small delay to prevent too much CPU usage
-        sleep_us(100);
     }
 }

@@ -20,6 +20,12 @@ class IO {
         CVUpdateCallback cv1UpdateCallback = nullptr;
         CVUpdateCallback cv2UpdateCallback = nullptr;
 
+        bool blinking = false;
+        uint8_t blinkCount = 0;
+        uint8_t blinkTotal = 0;
+        uint32_t blinkIntervalMs = 0;
+        uint32_t blinkStartTime = 0;
+
         IO() {
             
         }
@@ -46,18 +52,13 @@ class IO {
             gpio_put(LED_PIN, state);
         }
 
-        // Blink LED a specified number of times with given interval
         void blink(uint8_t times = 1, uint32_t interval_ms = 5) {
-            for (uint8_t i = 0; i < times; i++) {
-                setLED(true);
-                sleep_ms(interval_ms);
-                setLED(false);
-                
-                // Only add interval between blinks (not after the last one)
-                if (i < times - 1) {
-                    sleep_ms(interval_ms);
-                }
-            }
+            blinking = true;
+            blinkCount = 0;
+            blinkTotal = times;
+            blinkIntervalMs = interval_ms;
+            blinkStartTime = time_us_32() / 1000;
+            setLED(true);
         }
 
         void setCV1UpdateCallback(CVUpdateCallback callback) {
@@ -72,6 +73,25 @@ class IO {
 
         bool update() {
             uint32_t currentTime = time_us_32() / 1000;
+
+            if (blinking) {
+                uint32_t timeSinceStart = currentTime - blinkStartTime;
+                if (timeSinceStart >= blinkIntervalMs) {
+                    if (gpio_get(LED_PIN)) {
+                        setLED(false);
+                    } else {
+                        setLED(true);
+                        blinkCount++;
+                    }
+                    blinkStartTime = currentTime;
+
+                    if (blinkCount >= blinkTotal * 2) {
+                        blinking = false;
+                        setLED(false);
+                    }
+                }
+            }
+
             if (currentTime - lastReadTime >= 1) {
                 lastReadTime = currentTime;
                 
