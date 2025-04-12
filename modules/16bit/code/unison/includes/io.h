@@ -7,6 +7,8 @@
 #define CV2_PIN 3
 #define LED_PIN 13
 
+typedef void (*CVUpdateCallback)(uint16_t);
+
 class IO;
 IO* io_instance = nullptr;
 
@@ -15,6 +17,8 @@ class IO {
         uint16_t cv1Value = 0;
         uint16_t cv2Value = 0;
         uint32_t lastReadTime = 0;  
+        CVUpdateCallback cv1UpdateCallback = nullptr;
+        CVUpdateCallback cv2UpdateCallback = nullptr;
 
         IO() {
             
@@ -37,22 +41,40 @@ class IO {
             gpio_set_dir(LED_PIN, GPIO_OUT);
         }
 
+        void setCV1UpdateCallback(CVUpdateCallback callback) {
+            // Set the callback function for CV1 updates
+            cv1UpdateCallback = callback;
+        }
+
+        void setCV2UpdateCallback(CVUpdateCallback callback) {
+            // Set the callback function for CV1 updates
+            cv2UpdateCallback = callback;
+        }
+
         bool update() {
             uint32_t currentTime = time_us_32() / 1000;
             if (currentTime - lastReadTime >= 1) {
                 lastReadTime = currentTime;
                 
-                // Read and smooth the ADC value
+                // handle cv1 changes
                 adc_select_input(CV1_PIN);
                 uint16_t newCv1Value = adc_read();
                 if (abs(cv1Value - newCv1Value) > 20) {
                     cv1Value = newCv1Value;
+                    if (cv1UpdateCallback != nullptr) {
+                        cv1UpdateCallback(cv1Value);
+                    }
                 }
 
+                // handle cv2 changes
                 adc_select_input(CV2_PIN);
                 uint16_t newCv2Value = adc_read();
                 if (abs(cv2Value - newCv2Value) > 20) {
                     cv2Value = newCv2Value;
+
+                    if (cv2UpdateCallback != nullptr) {
+                        cv2UpdateCallback(cv2Value);
+                    }
                 }
 
                 return true;

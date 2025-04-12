@@ -12,6 +12,8 @@
 uint16_t sampleId = 0;
 uint16_t samplesPerCycle;
 uint16_t nextSamplesPerCycle; // Default sample rate
+AudioManager *audioManager; // Global reference to access in callback
+
 
 void generateUnison(AudioResponse* response) {
     if (sampleId == 0 && nextSamplesPerCycle != samplesPerCycle) {
@@ -30,6 +32,17 @@ void generateUnison(AudioResponse* response) {
     sampleId = (sampleId + 1) % samplesPerCycle;
 }
 
+// Callback function for CV1 updates
+void onCV1Update(uint16_t cv1Value) {
+    uint16_t newFreq = MAX(20, cv1Value / 6);
+    nextSamplesPerCycle = audioManager->getDac()->getSampleRate() / newFreq;
+    
+    // Visual feedback when frequency changes
+    gpio_put(LED_PIN, true);
+    sleep_ms(5); // Brief flash
+    gpio_put(LED_PIN, false);
+}
+
 int main() {
     stdio_init_all();
 
@@ -40,20 +53,25 @@ int main() {
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
     // initial audio
-    AudioManager *audioManager = AudioManager::getInstance();    
+    audioManager = AudioManager::getInstance();    
     audioManager->setGenCallback(generateUnison);
     audioManager->init(48000);
 
     // initialize io
-    IO::getInstance()->init();
+    IO* io = IO::getInstance();
+    io->init();
+    
+    // Register the CV1 callback
+    io->setCV1UpdateCallback(onCV1Update);
     
     // Set initial frequency
     nextSamplesPerCycle = audioManager->getDac()->getSampleRate() / 110;
     
     while (true) {
-        if (IO::getInstance()->update()) {
-            uint16_t newFreq  = MAX(20, IO::getInstance()->getCV1() / 4);
-            nextSamplesPerCycle = audioManager->getDac()->getSampleRate() / newFreq;
-        }
+        // Just update IO, callback will handle CV1 changes
+        io->update();
+        
+        // Small delay to prevent too much CPU usage
+        sleep_us(100);
     }
 }
