@@ -18,6 +18,8 @@ class ADSR {
         int32_t decaySamples;
         int32_t releaseSamples;
         int32_t sustainValue;  // Fixed-point representation (0-1024)
+        bool triggerAtZero = false;
+        int16_t previousSample = 0; // Store the previous sample to detect zero-crossing
     public:
         ADSR(float attackTime, float decayTime, float sustainLevel, float releaseTime): 
             attackTime(attackTime), decayTime(decayTime), sustainLevel(sustainLevel), releaseTime(releaseTime),
@@ -66,10 +68,15 @@ class ADSR {
         }
 
         void setTrigger(bool trigger) {
-            if (trigger && !isTriggered) {
-                // Start attack phase
-                currentTime = 0;
-                isTriggered = true;
+            if (trigger) {
+                // if the current level is not 0, we need to trigger at sample is near 0
+                if (currentLevel != 0) {
+                    triggerAtZero = true;
+                } else if (!isTriggered) {
+                    // Start attack phase
+                    currentTime = 0;
+                    isTriggered = true;
+                }
             } else if (!trigger && isTriggered) {
                 // Start release phase
                 releaseStartLevel = currentLevel; // Store the level at which release began
@@ -79,6 +86,15 @@ class ADSR {
         }
 
         int16_t process(int16_t sample) {
+            // Check for zero-crossing from positive to negative
+            if (triggerAtZero && previousSample >= 0 && sample < 0) {
+                triggerAtZero = false;
+                isTriggered = true;
+                currentTime = 0;
+            }
+
+            previousSample = sample;
+
             currentTime++;
             
             if (isTriggered) {

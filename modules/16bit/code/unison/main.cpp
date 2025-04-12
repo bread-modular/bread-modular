@@ -19,7 +19,7 @@ Sine sine;
 Saw saw;
 Tri tri;
 Square square;
-ADSR adsr(10.0f, 200.0f, 0.0f, 500.0f); // Attack: 10ms, Decay: 100ms, Sustain: 70%, Release: 200ms
+ADSR adsr(10.0f, 200.0f, 1.0f, 500.0f); // Attack: 10ms, Decay: 100ms, Sustain: 70%, Release: 200ms
 
 // Callback function for CV1 updates
 void onCV1Update(uint16_t cv1) {
@@ -28,6 +28,7 @@ void onCV1Update(uint16_t cv1) {
     saw.setFrequency(newFreq);
     tri.setFrequency(newFreq);
     square.setFrequency(newFreq);
+    
     io->blink(1, 20);
 }
 
@@ -50,7 +51,12 @@ void onButtonPressed(bool pressed) {
 }
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
-    printf("Note on: %d %d %d\n", channel, note, velocity);
+    uint16_t frequency = MIDI::midiNoteToFrequency(note);
+    printf("Note on: %d %d(%d) %d\n", channel, note, frequency, velocity);
+    sine.setFrequency(frequency);
+    saw.setFrequency(frequency);
+    tri.setFrequency(frequency);
+    square.setFrequency(frequency);
     adsr.setTrigger(true);
 }
 

@@ -186,4 +186,10 @@ public:
         }
         return midi_instance;
     }
+
+    static uint16_t midiNoteToFrequency(uint8_t note) {
+        // Convert MIDI note number to frequency
+        return 440 * pow(2, (note - 69) / 12.0);
+    }
+    
 };
