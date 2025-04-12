@@ -8,6 +8,7 @@
 #include "gen/Saw.h"
 #include "gen/Tri.h"
 #include "gen/Square.h"
+#include "gen/ADSR.h"
 
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
@@ -15,10 +16,11 @@ Sine sine;
 Saw saw;
 Tri tri;
 Square square;
+ADSR adsr(10.0f, 100.0f, 1.0f, 500.0f); // Attack: 10ms, Decay: 100ms, Sustain: 70%, Release: 200ms
 
 // Callback function for CV1 updates
 void onCV1Update(uint16_t cv1) {
-    uint16_t newFreq = MAX(20, IO::normalizeCV(cv1) * 220);
+    uint16_t newFreq = MAX(20, IO::normalizeCV(cv1) * 440);
     sine.setFrequency(newFreq);
     saw.setFrequency(newFreq);
     tri.setFrequency(newFreq);
@@ -27,10 +29,21 @@ void onCV1Update(uint16_t cv1) {
 }
 
 void generateUnison(AudioResponse* response) {
-    int16_t value = square.getSample();
+    int16_t value = tri.getSample();
+    value = adsr.process(value);
 
     response->left = value;
     response->right = value;
+}
+
+void onButtonPressed(bool pressed) {
+    if (pressed) {
+        io->setLED(true);
+        adsr.setTrigger(true);
+    } else {
+        io->setLED(false);
+        adsr.setTrigger(false);
+    }
 }
 
 int main() {
@@ -41,11 +54,12 @@ int main() {
     audioManager->setGenCallback(generateUnison);
     audioManager->init(48000);
 
-    // initialize waveforms
+    // initialize waveform generators
     sine.init(audioManager);
     saw.init(audioManager);
     tri.init(audioManager);
     square.init(audioManager);
+    adsr.init(audioManager);
 
     // initialize io
     io = IO::getInstance();
@@ -53,6 +67,7 @@ int main() {
     
     // Register the CV1 callback
     io->setCV1UpdateCallback(onCV1Update);
+    io->setButtonPressedCallback(onButtonPressed);
     
     // Initial blink to show startup complete
     io->blink(2, 100);

@@ -6,6 +6,7 @@
 #define CV1_PIN 2
 #define CV2_PIN 3
 #define LED_PIN 13
+#define BUTTON_PIN 12
 
 typedef void (*CVUpdateCallback)(uint16_t);
 
@@ -29,6 +30,10 @@ class IO {
         uint32_t blinkIntervalMs = 0;
         uint32_t blinkStartTime = 0;
 
+        bool buttonPressed = false;
+
+        void (*buttonPressedCallback)(bool) = nullptr;
+
         IO() {
             
         }
@@ -48,6 +53,10 @@ class IO {
 
             gpio_init(LED_PIN);
             gpio_set_dir(LED_PIN, GPIO_OUT);
+
+            gpio_init(BUTTON_PIN);
+            gpio_set_dir(BUTTON_PIN, GPIO_IN);
+            gpio_pull_up(BUTTON_PIN);
         }
 
         // Low level LED control function
@@ -74,6 +83,10 @@ class IO {
             // Set the callback function for CV2 updates
             cv2UpdateCallback = callback;
             cv2DiffThreshold = diffThreshold;
+        }
+
+        void setButtonPressedCallback(void (*callback)(bool)) {
+            buttonPressedCallback = callback;
         }
 
         bool update() {
@@ -121,10 +134,25 @@ class IO {
                     }
                 }
 
+                // handle button presses
+                if (!gpio_get(BUTTON_PIN) && !buttonPressed) {
+                    buttonPressedCallback(true);
+                    buttonPressed = true; 
+                }
+                
+                else if (gpio_get(BUTTON_PIN) &&buttonPressed) {
+                    buttonPressedCallback(false);
+                    buttonPressed = false;
+                }
+
                 return true;
             }
 
             return false;
+        }
+
+        bool isButtonPressed() {
+            return buttonPressed;
         }
 
         uint16_t getCV1() {
