@@ -9,14 +9,17 @@
 #include "gen/Tri.h"
 #include "gen/Square.h"
 #include "gen/ADSR.h"
+#include "midi.h"
 
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
+MIDI *midi; // Global reference to MIDI instance
+
 Sine sine;
 Saw saw;
 Tri tri;
 Square square;
-ADSR adsr(10.0f, 100.0f, 1.0f, 500.0f); // Attack: 10ms, Decay: 100ms, Sustain: 70%, Release: 200ms
+ADSR adsr(10.0f, 200.0f, 0.0f, 500.0f); // Attack: 10ms, Decay: 100ms, Sustain: 70%, Release: 200ms
 
 // Callback function for CV1 updates
 void onCV1Update(uint16_t cv1) {
@@ -46,6 +49,16 @@ void onButtonPressed(bool pressed) {
     }
 }
 
+void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+    printf("Note on: %d %d %d\n", channel, note, velocity);
+    adsr.setTrigger(true);
+}
+
+void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
+    printf("Note off: %d %d %d\n", channel, note, velocity);
+    adsr.setTrigger(false);
+}
+
 int main() {
     stdio_init_all();
 
@@ -61,6 +74,12 @@ int main() {
     square.init(audioManager);
     adsr.init(audioManager);
 
+    // initialize midi
+    midi = MIDI::getInstance();
+    midi->init();
+    midi->setNoteOnCallback(onNoteOn);
+    midi->setNoteOffCallback(onNoteOff);
+
     // initialize io
     io = IO::getInstance();
     io->init();
@@ -75,5 +94,6 @@ int main() {
     while (true) {
         // Just update IO, callback will handle CV1 changes
         io->update();
+        midi->update();
     }
 }
