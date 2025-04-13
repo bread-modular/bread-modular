@@ -8,23 +8,14 @@ class AttackReleaseEnvelope : public Envelope {
         float attackTime;
         float releaseTime;
         int32_t sampleRate;
-
-        float currentLevel;  // Using fixed-point representation (0-1024 range)
-        int32_t currentTime;   // In sample count
         
-        bool isTriggered = false;
-        bool triggerAtZero = false;
-
-        int32_t releaseStartLevel; // Level at which release began
-
         int32_t attackSamples;
-        int32_t decaySamples;
         int32_t releaseSamples;
-        int32_t sustainValue;  // Fixed-point representation (0-1024)
-        int16_t previousSample = 0; // Store the previous sample to detect zero-crossing
 
+        int32_t currentTime;   // In sample count
+        bool triggerAtZero = false;
         int8_t currentState = IDLE;
-
+        int16_t previousSample = 0; // Store the previous sample to detect zero-crossing
     public:
         const static int8_t IDLE = -1;
         const static int8_t ATTACK = 0;
@@ -32,7 +23,7 @@ class AttackReleaseEnvelope : public Envelope {
         
         AttackReleaseEnvelope(float attackTime, float releaseTime): 
             attackTime(attackTime), releaseTime(releaseTime),
-            currentLevel(0), currentTime(0), isTriggered(false), releaseStartLevel(0), sampleRate(44100) {
+            currentTime(0), sampleRate(44100) {
         }
 
         void updateTimings() {
@@ -91,6 +82,8 @@ class AttackReleaseEnvelope : public Envelope {
 
             previousSample = sample;
             currentTime++;
+
+            float currentLevel = 0;
             
             // State machine for ADSR envelope
             switch (currentState) {
