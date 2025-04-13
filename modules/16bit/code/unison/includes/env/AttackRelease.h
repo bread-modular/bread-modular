@@ -1,0 +1,124 @@
+#pragma once
+
+#include "../audio.h"
+
+class AttackReleaseEnvelope {
+    private:
+        float attackTime;
+        float releaseTime;
+        int32_t sampleRate;
+
+        float currentLevel;  // Using fixed-point representation (0-1024 range)
+        int32_t currentTime;   // In sample count
+        
+        bool isTriggered = false;
+        bool triggerAtZero = false;
+
+        int32_t releaseStartLevel; // Level at which release began
+
+        int32_t attackSamples;
+        int32_t decaySamples;
+        int32_t releaseSamples;
+        int32_t sustainValue;  // Fixed-point representation (0-1024)
+        int16_t previousSample = 0; // Store the previous sample to detect zero-crossing
+
+        // Add enum for ADSR state
+        enum State {
+            IDLE,
+            ATTACK,
+            RELEASE
+        };
+        
+        State currentState = IDLE;
+
+    public:
+        AttackReleaseEnvelope(float attackTime, float releaseTime): 
+            attackTime(attackTime), releaseTime(releaseTime),
+            currentLevel(0), currentTime(0), isTriggered(false), releaseStartLevel(0), sampleRate(44100) {
+        }
+        
+        void setAttackTime(float attackTime) { 
+            this->attackTime = attackTime; 
+            updateTimings();
+        }
+        
+        void setReleaseTime(float releaseTime) { 
+            this->releaseTime = releaseTime; 
+            updateTimings();
+        }
+        
+        void init(AudioManager *audioManager) {
+            sampleRate = audioManager->getDac()->getSampleRate();
+            updateTimings();
+        }
+        
+        void updateTimings() {
+            // Convert ms to sample counts
+            attackSamples = (attackTime * sampleRate) / 1000;
+            releaseSamples = (releaseTime * sampleRate) / 1000;
+            
+            // Ensure we don't divide by zero
+            if (attackSamples <= 0) attackSamples = 1;
+            if (releaseSamples <= 0) releaseSamples = 1;
+        }
+
+        // here gate input has no relation with the release
+        // so, it will keep going if the gate is closed
+        void setTrigger(bool trigger) {
+            if (trigger) {
+                // if currently not at IDLE state, we need to trigger at zero crossing
+                if (currentState != IDLE) {
+                    triggerAtZero = true;
+                } else {
+                    // Start attack phase immediately
+                    currentTime = 0;
+                    currentState = ATTACK;
+                }
+            }
+        }
+
+        int16_t process(int16_t sample) {
+            // Check for zero-crossing from positive to negative
+            if (triggerAtZero && previousSample >= 0 && sample < 0) {
+                triggerAtZero = false;
+                currentTime = 0;
+                currentState = ATTACK; // Start in attack phase
+            }
+
+            previousSample = sample;
+            currentTime++;
+            
+            // State machine for ADSR envelope
+            switch (currentState) {
+                case IDLE:
+                    currentLevel = 0;
+                    break;
+                    
+                case ATTACK:
+                    if (currentTime <= attackSamples) {
+                        // Linear ramp from 0 to 1024 (full scale in our fixed point)
+                        currentLevel = currentTime / (float)attackSamples;
+                    } else {
+                        // Move to decay phase
+                        currentState = RELEASE;
+                        currentTime = 0;
+                        currentLevel = 1.0;
+                    }
+                    break;
+                    
+                case RELEASE:
+                    if (currentTime <= releaseSamples) {
+                        // Linear ramp from releaseStartLevel to 0
+                        currentLevel = 1.0 - (currentTime / (float)releaseSamples);
+                    } else {
+                        // End of release
+                        currentLevel = 0;
+                        currentState = IDLE;
+                    }
+                    break;
+            }
+            
+            
+            return sample * currentLevel;
+        }
+};

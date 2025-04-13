@@ -20,6 +20,18 @@ class ADSR {
         int32_t sustainValue;  // Fixed-point representation (0-1024)
         bool triggerAtZero = false;
         int16_t previousSample = 0; // Store the previous sample to detect zero-crossing
+
+        // Add enum for ADSR state
+        enum State {
+            IDLE,
+            ATTACK,
+            DECAY,
+            SUSTAIN,
+            RELEASE
+        };
+        
+        State currentState = IDLE;
+
     public:
         ADSR(float attackTime, float decayTime, float sustainLevel, float releaseTime): 
             attackTime(attackTime), decayTime(decayTime), sustainLevel(sustainLevel), releaseTime(releaseTime),
@@ -69,19 +81,21 @@ class ADSR {
 
         void setTrigger(bool trigger) {
             if (trigger) {
-                // if the current level is not 0, we need to trigger at sample is near 0
-                if (currentLevel != 0) {
+                // if currently not at IDLE state, we need to trigger at zero crossing
+                if (currentState != IDLE) {
                     triggerAtZero = true;
                 } else if (!isTriggered) {
-                    // Start attack phase
+                    // Start attack phase immediately
                     currentTime = 0;
                     isTriggered = true;
+                    currentState = ATTACK;
                 }
             } else if (!trigger && isTriggered) {
                 // Start release phase
-                releaseStartLevel = currentLevel; // Store the level at which release began
+                releaseStartLevel = currentLevel;
                 isTriggered = false;
                 currentTime = 0;
+                currentState = RELEASE;
             }
         }
 
@@ -91,46 +105,71 @@ class ADSR {
                 triggerAtZero = false;
                 isTriggered = true;
                 currentTime = 0;
+                currentState = ATTACK; // Start in attack phase
             }
 
             previousSample = sample;
-
             currentTime++;
             
-            if (isTriggered) {
-                // Attack phase
-                if (currentTime <= attackSamples) {
-                    // Linear ramp from 0 to 1024 (full scale in our fixed point)
-                    currentLevel = (1024 * currentTime) / attackSamples;
-                } 
-                // Decay phase
-                else if (currentTime <= attackSamples + decaySamples) {
-                    int32_t decayPos = currentTime - attackSamples;
-                    int32_t decayAmount = ((1024 - sustainValue) * decayPos) / decaySamples;
-                    currentLevel = 1024 - decayAmount;
-                } 
-                // Sustain phase
-                else {
-                    currentLevel = sustainValue;
-                }
-            } 
-            // Release phase
-            else {
-                if (currentTime <= releaseSamples) {
-                    // Linear ramp from releaseStartLevel to 0
-                    int32_t releaseAmount = (releaseStartLevel * currentTime) / releaseSamples;
-                    currentLevel = releaseStartLevel - releaseAmount;
-                } else {
+            // State machine for ADSR envelope
+            switch (currentState) {
+                case IDLE:
                     currentLevel = 0;
-                }
+                    break;
+                    
+                case ATTACK:
+                    if (currentTime <= attackSamples) {
+                        // Linear ramp from 0 to 1024 (full scale in our fixed point)
+                        currentLevel = (1024 * currentTime) / attackSamples;
+                    } else {
+                        // Move to decay phase
+                        currentState = DECAY;
+                        currentTime = 0;
+                        currentLevel = 1024; // Peak level
+                    }
+                    break;
+                    
+                case DECAY:
+                    if (currentTime <= decaySamples) {
+                        // Linear decay from 1024 to sustainValue
+                        int32_t decayAmount = ((1024 - sustainValue) * currentTime) / decaySamples;
+                        currentLevel = 1024 - decayAmount;
+                    } else {
+                        // Move to sustain phase
+                        currentState = SUSTAIN;
+                        currentLevel = sustainValue;
+                    }
+                    break;
+                    
+                case SUSTAIN:
+                    currentLevel = sustainValue;
+                    // Stay in sustain until trigger is released
+                    if (!isTriggered) {
+                        currentState = RELEASE;
+                        releaseStartLevel = currentLevel;
+                        currentTime = 0;
+                    }
+                    break;
+                    
+                case RELEASE:
+                    if (currentTime <= releaseSamples) {
+                        // Linear ramp from releaseStartLevel to 0
+                        int32_t releaseAmount = (releaseStartLevel * currentTime) / releaseSamples;
+                        currentLevel = releaseStartLevel - releaseAmount;
+                    } else {
+                        // End of release
+                        currentLevel = 0;
+                        currentState = IDLE;
+                    }
+                    break;
             }
+            
             
             // Ensure level is between 0 and 1024
             if (currentLevel < 0) currentLevel = 0;
             if (currentLevel > 1024) currentLevel = 1024;
             
             // Apply envelope to sample (multiply by the envelope level)
-            // Multiply sample by currentLevel and divide by 1024 to get the enveloped sample
             int32_t envelopedSample = ((int32_t)sample * currentLevel) / 1024;
             
             // Clip to int16_t range if needed

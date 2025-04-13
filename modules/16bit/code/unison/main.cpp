@@ -8,61 +8,55 @@
 #include "gen/Saw.h"
 #include "gen/Tri.h"
 #include "gen/Square.h"
-#include "gen/ADSR.h"
+#include "env/AttackRelease.h"
 #include "midi.h"
 
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
 MIDI *midi; // Global reference to MIDI instance
 
-Sine sine;
-Saw saw;
 Tri tri;
-Square square;
-ADSR adsr(10.0f, 200.0f, 1.0f, 500.0f); // Attack: 10ms, Decay: 100ms, Sustain: 70%, Release: 200ms
-
-// Callback function for CV1 updates
-void onCV1Update(uint16_t cv1) {
-    uint16_t newFreq = MAX(20, IO::normalizeCV(cv1) * 440);
-    sine.setFrequency(newFreq);
-    saw.setFrequency(newFreq);
-    tri.setFrequency(newFreq);
-    square.setFrequency(newFreq);
-    
-    io->blink(1, 20);
-}
+AttackReleaseEnvelope env(10.0f, 500.0f); // Attack: 10ms, Decay: 100ms, Sustain: 70%, Release: 200ms
 
 void generateUnison(AudioResponse* response) {
     int16_t value = tri.getSample();
-    value = adsr.process(value);
+    value = env.process(value);
 
     response->left = value;
     response->right = value;
 }
 
+void handleCV1(uint16_t cv_value) {
+    float holdTime =MAX(1, IO::normalizeCV(cv_value) * 500);
+    env.setAttackTime(holdTime);
+}
+
+void handleCV2(uint16_t cv_value) {
+    float releaseTime = MAX(10, IO::normalizeCV(cv_value) * 1000);
+    env.setReleaseTime(releaseTime);
+}
+
 void onButtonPressed(bool pressed) {
     if (pressed) {
         io->setLED(true);
-        adsr.setTrigger(true);
+        env.setTrigger(true);
     } else {
         io->setLED(false);
-        adsr.setTrigger(false);
+        env.setTrigger(false);
     }
 }
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
     uint16_t frequency = MIDI::midiNoteToFrequency(note);
     printf("Note on: %d %d(%d) %d\n", channel, note, frequency, velocity);
-    sine.setFrequency(frequency);
-    saw.setFrequency(frequency);
     tri.setFrequency(frequency);
-    square.setFrequency(frequency);
-    adsr.setTrigger(true);
+    // tri.reset();
+    env.setTrigger(true);
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
     printf("Note off: %d %d %d\n", channel, note, velocity);
-    adsr.setTrigger(false);
+    env.setTrigger(false);
 }
 
 int main() {
@@ -74,11 +68,8 @@ int main() {
     audioManager->init(48000);
 
     // initialize waveform generators
-    sine.init(audioManager);
-    saw.init(audioManager);
     tri.init(audioManager);
-    square.init(audioManager);
-    adsr.init(audioManager);
+    env.init(audioManager);
 
     // initialize midi
     midi = MIDI::getInstance();
@@ -88,10 +79,11 @@ int main() {
 
     // initialize io
     io = IO::getInstance();
+    io->setCV1UpdateCallback(handleCV1);
+    io->setCV2UpdateCallback(handleCV2);
     io->init();
     
     // Register the CV1 callback
-    io->setCV1UpdateCallback(onCV1Update);
     io->setButtonPressedCallback(onButtonPressed);
     
     // Initial blink to show startup complete
