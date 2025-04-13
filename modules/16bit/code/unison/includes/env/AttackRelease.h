@@ -1,8 +1,9 @@
 #pragma once
 
 #include "../audio.h"
+#include "Envelope.h"
 
-class AttackReleaseEnvelope {
+class AttackReleaseEnvelope : public Envelope {
     private:
         float attackTime;
         float releaseTime;
@@ -22,36 +23,18 @@ class AttackReleaseEnvelope {
         int32_t sustainValue;  // Fixed-point representation (0-1024)
         int16_t previousSample = 0; // Store the previous sample to detect zero-crossing
 
-        // Add enum for ADSR state
-        enum State {
-            IDLE,
-            ATTACK,
-            RELEASE
-        };
-        
-        State currentState = IDLE;
+        int8_t currentState = IDLE;
 
     public:
+        const static int8_t IDLE = -1;
+        const static int8_t ATTACK = 0;
+        const static int8_t RELEASE = 1;
+        
         AttackReleaseEnvelope(float attackTime, float releaseTime): 
             attackTime(attackTime), releaseTime(releaseTime),
             currentLevel(0), currentTime(0), isTriggered(false), releaseStartLevel(0), sampleRate(44100) {
         }
-        
-        void setAttackTime(float attackTime) { 
-            this->attackTime = attackTime; 
-            updateTimings();
-        }
-        
-        void setReleaseTime(float releaseTime) { 
-            this->releaseTime = releaseTime; 
-            updateTimings();
-        }
-        
-        void init(AudioManager *audioManager) {
-            sampleRate = audioManager->getDac()->getSampleRate();
-            updateTimings();
-        }
-        
+
         void updateTimings() {
             // Convert ms to sample counts
             attackSamples = (attackTime * sampleRate) / 1000;
@@ -62,9 +45,30 @@ class AttackReleaseEnvelope {
             if (releaseSamples <= 0) releaseSamples = 1;
         }
 
+        
+        void init(AudioManager *audioManager) override {
+            sampleRate = audioManager->getDac()->getSampleRate();
+            updateTimings();
+        }
+        
+        void setTime(int8_t state, float time) override { 
+            switch (state)
+            {
+                case ATTACK:
+                    attackTime = time;
+                    break;
+                case RELEASE:
+                    releaseTime = time;
+                default:
+                    break;
+            }
+
+            updateTimings();
+        }
+
         // here gate input has no relation with the release
         // so, it will keep going if the gate is closed
-        void setTrigger(bool trigger) {
+        void setTrigger(bool trigger) override {
             if (trigger) {
                 // if currently not at IDLE state, we need to trigger at zero crossing
                 if (currentState != IDLE) {
@@ -77,7 +81,7 @@ class AttackReleaseEnvelope {
             }
         }
 
-        int16_t process(int16_t sample) {
+        int16_t process(int16_t sample) override {
             // Check for zero-crossing from positive to negative
             if (triggerAtZero && previousSample >= 0 && sample < 0) {
                 triggerAtZero = false;

@@ -9,6 +9,7 @@
 #include "gen/Tri.h"
 #include "gen/Square.h"
 #include "env/AttackRelease.h"
+#include "env/Envelope.h"
 #include "midi.h"
 
 AudioManager *audioManager; // Global reference to access in callback
@@ -16,11 +17,11 @@ IO *io; // Global reference to IO instance
 MIDI *midi; // Global reference to MIDI instance
 
 Tri tri;
-AttackReleaseEnvelope env(10.0f, 500.0f); // Attack: 10ms, Decay: 100ms, Sustain: 70%, Release: 200ms
+Envelope* env = new AttackReleaseEnvelope(10.0f, 500.0f); // Attack: 10ms, Release: 500ms
 
 void generateUnison(AudioResponse* response) {
     int16_t value = tri.getSample();
-    value = env.process(value);
+    value = env->process(value);
 
     response->left = value;
     response->right = value;
@@ -28,21 +29,21 @@ void generateUnison(AudioResponse* response) {
 
 void handleCV1(uint16_t cv_value) {
     float holdTime =MAX(1, IO::normalizeCV(cv_value) * 500);
-    env.setAttackTime(holdTime);
+    env->setTime(AttackReleaseEnvelope::ATTACK, holdTime);
 }
 
 void handleCV2(uint16_t cv_value) {
     float releaseTime = MAX(10, IO::normalizeCV(cv_value) * 1000);
-    env.setReleaseTime(releaseTime);
+    env->setTime(AttackReleaseEnvelope::RELEASE, releaseTime);
 }
 
 void onButtonPressed(bool pressed) {
     if (pressed) {
         io->setLED(true);
-        env.setTrigger(true);
+        env->setTrigger(true);
     } else {
         io->setLED(false);
-        env.setTrigger(false);
+        env->setTrigger(false);
     }
 }
 
@@ -51,12 +52,12 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
     printf("Note on: %d %d(%d) %d\n", channel, note, frequency, velocity);
     tri.setFrequency(frequency);
     // tri.reset();
-    env.setTrigger(true);
+    env->setTrigger(true);
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
     printf("Note off: %d %d %d\n", channel, note, velocity);
-    env.setTrigger(false);
+    env->setTrigger(false);
 }
 
 int main() {
@@ -69,7 +70,7 @@ int main() {
 
     // initialize waveform generators
     tri.init(audioManager);
-    env.init(audioManager);
+    env->init(audioManager);
 
     // initialize midi
     midi = MIDI::getInstance();
