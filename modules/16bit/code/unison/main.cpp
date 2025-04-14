@@ -8,7 +8,7 @@
 #include "gen/Saw.h"
 #include "gen/Tri.h"
 #include "gen/Square.h"
-#include "env/AttackRelease.h"
+#include "env/AttackHoldRelease.h"
 #include "env/Envelope.h"
 #include "midi.h"
 
@@ -17,7 +17,10 @@ IO *io; // Global reference to IO instance
 MIDI *midi; // Global reference to MIDI instance
 
 Tri tri;
-Envelope* env = new AttackReleaseEnvelope(10.0f, 500.0f); // Attack: 10ms, Release: 500ms
+AttackHoldReleaseEnvelope attackHoldReleaseEnv(10.0f, 500.0f);
+Envelope* env = &attackHoldReleaseEnv; // Attack: 10ms, Release: 500ms
+
+uint8_t lastPlayedNote = 0;
 
 void generateUnison(AudioResponse* response) {
     int16_t value = tri.getSample();
@@ -29,12 +32,12 @@ void generateUnison(AudioResponse* response) {
 
 void handleCV1(uint16_t cv_value) {
     float holdTime =MAX(1, IO::normalizeCV(cv_value) * 500);
-    env->setTime(AttackReleaseEnvelope::ATTACK, holdTime);
+    env->setTime(AttackHoldReleaseEnvelope::ATTACK, holdTime);
 }
 
 void handleCV2(uint16_t cv_value) {
     float releaseTime = MAX(10, IO::normalizeCV(cv_value) * 1000);
-    env->setTime(AttackReleaseEnvelope::RELEASE, releaseTime);
+    env->setTime(AttackHoldReleaseEnvelope::RELEASE, releaseTime);
 }
 
 void onButtonPressed(bool pressed) {
@@ -48,16 +51,18 @@ void onButtonPressed(bool pressed) {
 }
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+    lastPlayedNote = note;
     uint16_t frequency = MIDI::midiNoteToFrequency(note);
     printf("Note on: %d %d(%d) %d\n", channel, note, frequency, velocity);
     tri.setFrequency(frequency);
-    // tri.reset();
     env->setTrigger(true);
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
-    printf("Note off: %d %d %d\n", channel, note, velocity);
-    env->setTrigger(false);
+    if (note == lastPlayedNote) {
+        printf("Note off: %d %d %d\n", channel, note, velocity);
+        env->setTrigger(false);
+    }
 }
 
 int main() {
