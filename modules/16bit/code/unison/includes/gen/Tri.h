@@ -2,8 +2,9 @@
 
 #include "pico/stdlib.h"
 #include "audio.h"
+#include "AudioGenerator.h"
 
-class Tri {
+class Tri : public AudioGenerator {
     private:
         uint32_t sampleRate = 48000;
         uint16_t sampleId = 0;

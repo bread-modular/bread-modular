@@ -11,6 +11,7 @@
 #include "env/AttackHoldRelease.h"
 #include "env/Envelope.h"
 #include "midi.h"
+#include "tools/Voice.h"
 
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
@@ -18,65 +19,55 @@ MIDI *midi; // Global reference to MIDI instance
 
 Tri tri;
 AttackHoldReleaseEnvelope attackHoldReleaseEnv(10.0f, 500.0f);
-Envelope* env = &attackHoldReleaseEnv; // Attack: 10ms, Release: 500ms
-
-uint8_t lastPlayedNote = 0;
+AudioGenerator* generators[] = { &tri };
+Voice voice(1, generators, &attackHoldReleaseEnv);
 
 void generateUnison(AudioResponse* response) {
-    int16_t value = tri.getSample();
-    value = env->process(value);
-
+    int16_t value = voice.process();
     response->left = value;
     response->right = value;
 }
 
 void handleCV1(uint16_t cv_value) {
-    float holdTime =MAX(1, IO::normalizeCV(cv_value) * 500);
-    env->setTime(AttackHoldReleaseEnvelope::ATTACK, holdTime);
+    float holdTime = MAX(1, IO::normalizeCV(cv_value) * 500);
+    voice.getEnvelope()->setTime(AttackHoldReleaseEnvelope::ATTACK, holdTime);
 }
 
 void handleCV2(uint16_t cv_value) {
     float releaseTime = MAX(10, IO::normalizeCV(cv_value) * 1000);
-    env->setTime(AttackHoldReleaseEnvelope::RELEASE, releaseTime);
+    voice.getEnvelope()->setTime(AttackHoldReleaseEnvelope::RELEASE, releaseTime);
 }
 
 void onButtonPressed(bool pressed) {
     if (pressed) {
         io->setLED(true);
-        env->setTrigger(true);
+        voice.getEnvelope()->setTrigger(true);
     } else {
         io->setLED(false);
-        env->setTrigger(false);
+        voice.getEnvelope()->setTrigger(false);
     }
 }
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
-    lastPlayedNote = note;
-    uint16_t frequency = MIDI::midiNoteToFrequency(note);
-    printf("Note on: %d %d(%d) %d\n", channel, note, frequency, velocity);
-    tri.setFrequency(frequency);
-    env->setTrigger(true);
+    printf("Note on: %d %d(%d) %d\n", channel, note, MIDI::midiNoteToFrequency(note), velocity);
+    voice.setNoteOn(note);
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
-    if (note == lastPlayedNote) {
-        printf("Note off: %d %d %d\n", channel, note, velocity);
-        env->setTrigger(false);
-    }
+    printf("Note off: %d %d %d\n", channel, note, velocity);
+    voice.setNoteOff(note);
 }
 
 int main() {
     stdio_init_all();
-
 
     // initial audio
     audioManager = AudioManager::getInstance();    
     audioManager->setAudioCallback(generateUnison);
     audioManager->init(48000);
 
-    // initialize waveform generators
-    tri.init(audioManager);
-    env->init(audioManager);
+    // initialize voice (which initializes generators and envelope)
+    voice.init(audioManager);
 
     // initialize midi
     midi = MIDI::getInstance();

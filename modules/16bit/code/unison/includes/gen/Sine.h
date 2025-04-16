@@ -3,8 +3,9 @@
 #include <math.h>
 #include "pico/stdlib.h"
 #include "audio.h"
+#include "AudioGenerator.h"
 
-class Sine {
+class Sine: public AudioGenerator {
     private:
         uint32_t sampleRate = 48000;
         uint16_t sampleId = 0;
