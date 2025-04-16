@@ -56,8 +56,7 @@ void onVoiceComplete(Voice* voice) {
 
 void init_voices() {
     for (int i = 0; i < TOTAL_VOICES; i++) {
-        AudioGenerator* generators[] = { &sawGenerators[i] };
-        voices[i] = new Voice(1, generators, new AttackHoldReleaseEnvelope(10.0f, 500.0f));
+        voices[i] = new Voice(1, (AudioGenerator*[]){ &sawGenerators[i] }, new AttackHoldReleaseEnvelope(10.0f, 500.0f));
         voices[i]->init(audioManager);
         voices[i]->setOnCompleteCallback(onVoiceComplete);
     }
@@ -83,23 +82,19 @@ void onButtonPressed(bool pressed) {
         // changing generators on button release
         if (generatorIndex == 0) {
             for (int i = 0; i < TOTAL_VOICES; i++) {
-                AudioGenerator* generators[] = { &sawGenerators[i] };
-                voices[i]->changeGenerators(generators);
+                voices[i]->changeGenerators((AudioGenerator*[]){ &sawGenerators[i] });
             }
         } else if (generatorIndex == 1) {
             for (int i = 0; i < TOTAL_VOICES; i++) {
-                AudioGenerator* generators[] = { &triGenerators[i] };
-                voices[i]->changeGenerators(generators);
+                voices[i]->changeGenerators((AudioGenerator*[]){ &triGenerators[i] });
             }
         } else if (generatorIndex == 2) {
             for (int i = 0; i < TOTAL_VOICES; i++) {
-                AudioGenerator* generators[] = { &squareGenerators[i] };
-                voices[i]->changeGenerators(generators);
+                voices[i]->changeGenerators((AudioGenerator*[]){ &squareGenerators[i] });
             }
         } else if (generatorIndex == 3) {
             for (int i = 0; i < TOTAL_VOICES; i++) {
-                AudioGenerator* generators[] = { &sineGenerators[i] };
-                voices[i]->changeGenerators(generators);
+                voices[i]->changeGenerators((AudioGenerator*[]){ &sineGenerators[i] });
             }
         }
         
