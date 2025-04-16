@@ -22,12 +22,12 @@ class Voice {
             envelope->init(audioManager);
         }
 
-        void setNoteOn(uint8_t note, uint16_t* generatorNotes[] = nullptr) {
+        void setNoteOn(uint8_t note, uint8_t* generatorNotes = nullptr) {
             currentNote = note;
             for (uint8_t i = 0; i < totalGenerators; ++i) {
                 uint16_t freq;
-                if (generatorNotes && generatorNotes[i]) {
-                    freq = MIDI::midiNoteToFrequency(*generatorNotes[i]);
+                if (generatorNotes) {
+                    freq = MIDI::midiNoteToFrequency(generatorNotes[i]);
                 } else {
                     freq = MIDI::midiNoteToFrequency(note);
                 }

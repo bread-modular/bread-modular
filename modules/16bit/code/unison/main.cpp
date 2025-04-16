@@ -50,7 +50,10 @@ void onButtonPressed(bool pressed) {
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
     printf("Note on: %d %d(%d) %d\n", channel, note, MIDI::midiNoteToFrequency(note), velocity);
-    voice.setNoteOn(note);
+    // generatorNotes is optional. But it allows to set different notes for each generator.
+    // This is useful for unison & related voices
+    uint8_t generatorNotes[] = { static_cast<uint8_t>(note) };
+    voice.setNoteOn(note, generatorNotes);
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
