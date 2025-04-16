@@ -40,6 +40,10 @@ void handleCV2(uint16_t cv_value) {
     voice.getEnvelope()->setTime(AttackHoldReleaseEnvelope::RELEASE, releaseTime);
 }
 
+void onVoiceComplete(Voice* voice) {
+    printf("Voice %d complete\n", voice->getVoiceId());
+}
+
 void onButtonPressed(bool pressed) {
     if (pressed) {
         io->setLED(true);
@@ -73,6 +77,7 @@ int main() {
 
     // initialize voice (which initializes generators and envelope)
     voice.init(audioManager);
+    voice.setOnCompleteCallback(onVoiceComplete);
 
     // initialize midi
     midi = MIDI::getInstance();

@@ -126,6 +126,9 @@ class AttackHoldReleaseEnvelope : public Envelope {
                         // End of release
                         currentLevel = 0;
                         currentState = IDLE;
+                        if (onCompleteCallback) {
+                            onCompleteCallback();
+                        }
                     }
                     break;
             }

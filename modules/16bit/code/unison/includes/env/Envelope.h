@@ -1,8 +1,12 @@
 #pragma once
 
 #include "../audio.h"
+#include <functional>
 
 class Envelope {
+protected:
+    std::function<void()> onCompleteCallback = nullptr;
+
 public:
     virtual ~Envelope() = default;
     
@@ -17,4 +21,9 @@ public:
     
     // Process a sample through the envelope
     virtual int16_t process(int16_t sample) = 0;
+
+    // Set the callback function to be called when the envelope is complete
+    void setOnCompleteCallback(std::function<void()> callback) {
+        this->onCompleteCallback = callback;
+    }
 };
