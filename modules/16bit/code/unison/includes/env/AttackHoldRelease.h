@@ -136,4 +136,8 @@ class AttackHoldReleaseEnvelope : public Envelope {
             
             return sample * currentLevel;
         }
+
+        bool isActive() override {
+            return currentState != IDLE;
+        }
 };

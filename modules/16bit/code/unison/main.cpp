@@ -13,14 +13,18 @@
 #include "midi.h"
 #include "tools/Voice.h"
 
-#define TOTAL_VOICES 3
+// TODO
+// * Change generators via the button
+
+#define TOTAL_VOICES 6
 
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
 MIDI *midi; // Global reference to MIDI instance
 
 Voice* voices[TOTAL_VOICES];
-int8_t lastUsedVoice = -1;
+
+int8_t totalNotesOn = 0;
 
 // This is the callback function that is called when the audio is processed
 // This is running in the background in the second core
@@ -80,14 +84,29 @@ void onButtonPressed(bool pressed) {
     }
 }
 
+Voice* findFreeVoice() {
+    for (int i = 0; i < TOTAL_VOICES; i++) {
+        if (!voices[i]->getEnvelope()->isActive()) {
+            return voices[i];
+        }
+    }
+
+    // If no free voice is found, return the first voice
+    return voices[0];
+}
+
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
     printf("Note on: %d %d(%d) %d\n", channel, note, MIDI::midiNoteToFrequency(note), velocity);
     // generatorNotes is optional. But it allows to set different notes for each generator.
     // This is useful for unison & related voices
     uint8_t generatorNotes[] = { static_cast<uint8_t>(note) };
-    uint8_t voiceIndex = (lastUsedVoice + 1) % TOTAL_VOICES;
-    voices[voiceIndex]->setNoteOn(note, generatorNotes);
-    lastUsedVoice = voiceIndex;
+    Voice* voice = findFreeVoice();
+    voice->setNoteOn(note, generatorNotes);
+
+    totalNotesOn++;
+    if (totalNotesOn > 0) {
+        io->setGate1(true);
+    }
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
@@ -96,6 +115,11 @@ void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
         if (voices[i]->getCurrentNote() == note) {
             voices[i]->setNoteOff(note);
         }
+    }
+
+    totalNotesOn--;
+    if (totalNotesOn == 0) {
+        io->setGate1(false);
     }
 }
 

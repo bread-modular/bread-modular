@@ -8,6 +8,8 @@
 #define LED_PIN 13
 #define BUTTON_PIN 12
 
+#define GATE1_PIN 20
+#define GATE2_PIN 19
 typedef void (*CVUpdateCallback)(uint16_t);
 
 class IO;
@@ -57,11 +59,24 @@ class IO {
             gpio_init(BUTTON_PIN);
             gpio_set_dir(BUTTON_PIN, GPIO_IN);
             gpio_pull_up(BUTTON_PIN);
+
+            gpio_init(GATE1_PIN);
+            gpio_set_dir(GATE1_PIN, GPIO_OUT);
+            gpio_init(GATE2_PIN);
+            gpio_set_dir(GATE2_PIN, GPIO_OUT);
         }
 
         // Low level LED control function
         void setLED(bool state) {
             gpio_put(LED_PIN, state);
+        }
+
+        void setGate1(bool state) {
+            gpio_put(GATE1_PIN, state);
+        }
+
+        void setGate2(bool state) {
+            gpio_put(GATE2_PIN, state);
         }
 
         void blink(uint8_t times = 1, uint32_t interval_ms = 5) {
