@@ -14,6 +14,8 @@ class Voice {
         uint8_t voiceId;
         static uint8_t voiceIdCounter;
         std::function<void(Voice*)> onCompleteCallback = nullptr;
+
+        int16_t waveform = 0;
         
     public:
         Voice(uint8_t totalGenerators, AudioGenerator* generators[], Envelope* envelope)
@@ -79,8 +81,13 @@ class Voice {
             for (uint8_t i = 0; i < totalGenerators; ++i) {
                 sum += generators[i]->getSample();
             }
-            int16_t mixed = sum / totalGenerators;
-            return envelope->process(mixed);
+             
+            waveform = sum / totalGenerators;
+            return envelope->process(waveform);
+        }
+
+        int16_t getWaveformOnly() {
+            return waveform;
         }
 
         Envelope* getEnvelope() {

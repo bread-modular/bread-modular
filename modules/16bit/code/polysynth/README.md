@@ -24,7 +24,8 @@ This synth uses an ATTACK, HOLD, RELEASE envelope. The envelope maintains the to
 
 ## Audio Output
 
-Both A1 and A2 provide the audio output after the waveforms are processed through the envelope.
+* A1 - Merged waveform of all voices processed through the envelope.
+* A2 - Merged waveforms of all voices without envelope or gate processing. This output contains the waveforms of all voices at all times.
 
 ## Gate Output
 

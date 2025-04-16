@@ -32,22 +32,28 @@ int8_t totalNotesOn = 0;
 // This is the callback function that is called when the audio is processed
 // This is running in the background in the second core
 void audioProcessCallback(AudioResponse* response) {
-    int32_t value = 0;
+    int32_t valueWithEnvelope = 0;
+    int32_t valueWithWaveform = 0;
     for (int i = 0; i < TOTAL_VOICES; i++) {
         if (voices[i] != nullptr) {
-            value += voices[i]->process();            
+            valueWithEnvelope += voices[i]->process();            
+            valueWithWaveform += voices[i]->getWaveformOnly();
         }
     }
 
-    // Normalize the value to 16-bit range
+    // Normalize the valueWithEnvelope to 16-bit range
     // If we divide by the number of voices, it will sound quieter
     // With this method we will a decent headroom plus loudness with a bit of distortion
-    value = value / (MAX(3, TOTAL_VOICES / 2));
-    value = MAX(value, -32768);
-    value = MIN(value, 32767);
+    valueWithEnvelope = valueWithEnvelope / (MAX(3, TOTAL_VOICES / 2));
+    valueWithEnvelope = MAX(valueWithEnvelope, -32768);
+    valueWithEnvelope = MIN(valueWithEnvelope, 32767);
 
-    response->left = value;
-    response->right = value;
+    valueWithWaveform = valueWithWaveform / TOTAL_VOICES;
+    valueWithWaveform = MAX(valueWithWaveform, -32768);
+    valueWithWaveform = MIN(valueWithWaveform, 32767);
+
+    response->left = valueWithEnvelope;
+    response->right = valueWithWaveform;
 }
 
 void onVoiceComplete(Voice* voice) {
@@ -110,34 +116,36 @@ Voice* findFreeVoice() {
     }
 
     // If no free voice is found, return the first voice
-    return voices[0];
+    return nullptr;
 }
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+    if (++totalNotesOn > 0) {
+        io->setGate1(true);
+    }
+
     printf("Note on: %d %d(%d) %d\n", channel, note, MIDI::midiNoteToFrequency(note), velocity);
     // generatorNotes is optional. But it allows to set different notes for each generator.
     // This is useful for unison & related voices
-    uint8_t generatorNotes[] = { static_cast<uint8_t>(note) };
     Voice* voice = findFreeVoice();
-    voice->setNoteOn(note, generatorNotes);
-
-    totalNotesOn++;
-    if (totalNotesOn > 0) {
-        io->setGate1(true);
+    if (voice == nullptr) {
+        return;
     }
+
+    uint8_t generatorNotes[] = { static_cast<uint8_t>(note) };
+    voice->setNoteOn(note, generatorNotes);
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
+    if (--totalNotesOn == 0) {
+        io->setGate1(false);
+    }
+
     printf("Note off: %d %d %d\n", channel, note, velocity);
     for (int i = 0; i < TOTAL_VOICES; i++) {
         if (voices[i]->getCurrentNote() == note) {
             voices[i]->setNoteOff(note);
         }
-    }
-
-    totalNotesOn--;
-    if (totalNotesOn == 0) {
-        io->setGate1(false);
     }
 }
 
