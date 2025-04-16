@@ -33,8 +33,12 @@ void audioProcessCallback(AudioResponse* response) {
     }
 
     // Normalize the value to 16-bit range
-    value = value / TOTAL_VOICES;
-    
+    // If we divide by the number of voices, it will sound quieter
+    // With this method we will a decent headroom plus loudness with a bit of distortion
+    value = value / (MAX(3, TOTAL_VOICES / 2));
+    value = MAX(value, -32768);
+    value = MIN(value, 32767);
+
     response->left = value;
     response->right = value;
 }
@@ -45,7 +49,7 @@ void onVoiceComplete(Voice* voice) {
 
 void init_voices() {
     for (int i = 0; i < TOTAL_VOICES; i++) {
-        AudioGenerator* generators[] = { new Tri() };
+        AudioGenerator* generators[] = { new Saw() };
         voices[i] = new Voice(1, generators, new AttackHoldReleaseEnvelope(10.0f, 500.0f));
         voices[i]->init(audioManager);
         voices[i]->setOnCompleteCallback(onVoiceComplete);
