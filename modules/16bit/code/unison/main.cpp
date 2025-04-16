@@ -13,44 +13,66 @@
 #include "midi.h"
 #include "tools/Voice.h"
 
+#define TOTAL_VOICES 3
+
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
 MIDI *midi; // Global reference to MIDI instance
 
-Tri tri;
-AttackHoldReleaseEnvelope attackHoldReleaseEnv(10.0f, 500.0f);
-AudioGenerator* generators[] = { &tri };
-Voice voice(1, generators, &attackHoldReleaseEnv);
+Voice* voices[TOTAL_VOICES];
+int8_t lastUsedVoice = -1;
 
 // This is the callback function that is called when the audio is processed
 // This is running in the background in the second core
 void audioProcessCallback(AudioResponse* response) {
-    int16_t value = voice.process();
+    int32_t value = 0;
+    for (int i = 0; i < TOTAL_VOICES; i++) {
+        if (voices[i] != nullptr) {
+            value += voices[i]->process();            
+        }
+    }
+
+    // Normalize the value to 16-bit range
+    value = value / TOTAL_VOICES;
+    
     response->left = value;
     response->right = value;
-}
-
-void handleCV1(uint16_t cv_value) {
-    float holdTime = MAX(1, IO::normalizeCV(cv_value) * 500);
-    voice.getEnvelope()->setTime(AttackHoldReleaseEnvelope::ATTACK, holdTime);
-}
-
-void handleCV2(uint16_t cv_value) {
-    float releaseTime = MAX(10, IO::normalizeCV(cv_value) * 1000);
-    voice.getEnvelope()->setTime(AttackHoldReleaseEnvelope::RELEASE, releaseTime);
 }
 
 void onVoiceComplete(Voice* voice) {
     printf("Voice %d complete\n", voice->getVoiceId());
 }
 
+void init_voices() {
+    for (int i = 0; i < TOTAL_VOICES; i++) {
+        AudioGenerator* generators[] = { new Tri() };
+        voices[i] = new Voice(1, generators, new AttackHoldReleaseEnvelope(10.0f, 500.0f));
+        voices[i]->init(audioManager);
+        voices[i]->setOnCompleteCallback(onVoiceComplete);
+    }
+}
+
+void handleCV1(uint16_t cv_value) {
+    float holdTime = MAX(1, IO::normalizeCV(cv_value) * 500);
+    for (int i = 0; i < TOTAL_VOICES; i++) {
+        voices[i]->getEnvelope()->setTime(AttackHoldReleaseEnvelope::ATTACK, holdTime);
+    }
+}
+
+void handleCV2(uint16_t cv_value) {
+    float releaseTime = MAX(10, IO::normalizeCV(cv_value) * 1000);
+    for (int i = 0; i < TOTAL_VOICES; i++) {
+        voices[i]->getEnvelope()->setTime(AttackHoldReleaseEnvelope::RELEASE, releaseTime);
+    }
+}
+
 void onButtonPressed(bool pressed) {
     if (pressed) {
         io->setLED(true);
-        voice.getEnvelope()->setTrigger(true);
+        voices[0]->getEnvelope()->setTrigger(true);
     } else {
         io->setLED(false);
-        voice.getEnvelope()->setTrigger(false);
+        voices[0]->getEnvelope()->setTrigger(false);
     }
 }
 
@@ -59,12 +81,18 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
     // generatorNotes is optional. But it allows to set different notes for each generator.
     // This is useful for unison & related voices
     uint8_t generatorNotes[] = { static_cast<uint8_t>(note) };
-    voice.setNoteOn(note, generatorNotes);
+    uint8_t voiceIndex = (lastUsedVoice + 1) % TOTAL_VOICES;
+    voices[voiceIndex]->setNoteOn(note, generatorNotes);
+    lastUsedVoice = voiceIndex;
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
     printf("Note off: %d %d %d\n", channel, note, velocity);
-    voice.setNoteOff(note);
+    for (int i = 0; i < TOTAL_VOICES; i++) {
+        if (voices[i]->getCurrentNote() == note) {
+            voices[i]->setNoteOff(note);
+        }
+    }
 }
 
 int main() {
@@ -76,8 +104,7 @@ int main() {
     audioManager->init(48000);
 
     // initialize voice (which initializes generators and envelope)
-    voice.init(audioManager);
-    voice.setOnCompleteCallback(onVoiceComplete);
+    init_voices();
 
     // initialize midi
     midi = MIDI::getInstance();

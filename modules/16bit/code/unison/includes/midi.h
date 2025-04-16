@@ -25,7 +25,8 @@ MIDI* midi_instance = nullptr;
 class MIDI {
 private:
     // Message buffer
-    uint8_t buffer[3];
+    static constexpr uint8_t MIDI_BUFFER_SIZE = 8;
+    uint8_t buffer[MIDI_BUFFER_SIZE];
     uint8_t buffer_index;
     bool expect_two_data_bytes;
     bool midi_thru_enabled;
@@ -91,10 +92,14 @@ public:
             }
             // Data byte
             else if (buffer_index > 0) {
-                buffer[buffer_index++] = byte;
-                
+                if (buffer_index < MIDI_BUFFER_SIZE) {
+                    buffer[buffer_index++] = byte;
+                } else {
+                    // Buffer overflow, reset parser
+                    buffer_index = 0;
+                    continue;
+                }
                 bool message_complete = false;
-                
                 // Complete message with 1 data byte
                 if (buffer_index == 2 && !expect_two_data_bytes) {
                     message_complete = true;
@@ -103,17 +108,14 @@ public:
                 else if (buffer_index == 3) {
                     message_complete = true;
                 }
-                
                 if (message_complete) {
                     // Process the complete message
                     uint8_t status = buffer[0];
                     uint8_t data1 = buffer[1];
                     uint8_t data2 = (buffer_index == 3) ? buffer[2] : 0;
-                    
                     // Extract message type and channel
                     uint8_t msg_type = status & MIDI_STATUS_MASK;
                     uint8_t channel = status & MIDI_CHANNEL_MASK;
-                    
                     // Process based on message type
                     if (msg_type == MIDI_NOTE_ON) {
                         if (data2 == 0) {
@@ -135,7 +137,6 @@ public:
                             cc_callback(channel, data1, data2);
                         }
                     }
-                    
                     // Reset buffer index for next message
                     buffer_index = 0;
                 }

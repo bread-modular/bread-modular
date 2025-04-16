@@ -17,9 +17,17 @@ class Voice {
         
     public:
         Voice(uint8_t totalGenerators, AudioGenerator* generators[], Envelope* envelope)
-            : generators(generators), totalGenerators(totalGenerators), envelope(envelope) {
+            : totalGenerators(totalGenerators), envelope(envelope) {
+                this->generators = new AudioGenerator*[totalGenerators];
+                for (uint8_t i = 0; i < totalGenerators; ++i) {
+                    this->generators[i] = generators[i];
+                }
                 voiceId = voiceIdCounter++;
             }
+
+        ~Voice() {
+            delete[] generators;
+        }
 
         void init(AudioManager* audioManager) {
             for (uint8_t i = 0; i < totalGenerators; ++i) {
