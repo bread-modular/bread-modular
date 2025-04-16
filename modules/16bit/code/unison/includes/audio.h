@@ -14,7 +14,7 @@ typedef struct {
     int16_t right;
 } AudioResponse;
 
-typedef void (*AudioGenCallbackFn)(AudioResponse*);
+typedef void (*AudioCallbackFn)(AudioResponse*);
 
 
 // Forward declaration of the singleton class for Core1
@@ -24,7 +24,7 @@ AudioManager* g_audio_manager_instance = nullptr;
 class AudioManager {
 private:
     // Create queues for communication between cores
-    AudioGenCallbackFn genCallback = nullptr;
+    AudioCallbackFn audioCallback = nullptr;
     
     DAC dac;
     bool initialized;
@@ -47,7 +47,7 @@ private:
         while (true) {
             // Wait for message from core0
             AudioResponse response;
-            audio_mgr->genCallback(&response);
+            audio_mgr->audioCallback(&response);
             audio_mgr->dac.writeMono(response.left, response.right);
         }
     }
@@ -76,8 +76,8 @@ public:
         initialized = true;
     }
 
-    void setGenCallback(AudioGenCallbackFn callback) {
-        genCallback = callback;
+    void setAudioCallback(AudioCallbackFn callback) {
+        audioCallback = callback;
     }
     
     // Get the DAC instance

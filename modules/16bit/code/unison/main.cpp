@@ -68,9 +68,10 @@ void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
 int main() {
     stdio_init_all();
 
+
     // initial audio
     audioManager = AudioManager::getInstance();    
-    audioManager->setGenCallback(generateUnison);
+    audioManager->setAudioCallback(generateUnison);
     audioManager->init(48000);
 
     // initialize waveform generators
