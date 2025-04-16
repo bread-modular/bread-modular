@@ -32,6 +32,7 @@ class Voice {
         void init(AudioManager* audioManager) {
             for (uint8_t i = 0; i < totalGenerators; ++i) {
                 generators[i]->init(audioManager);
+                generators[i]->setFrequency(220);
             }
             envelope->init(audioManager);
             envelope->setOnCompleteCallback([this]() { this->onEnvelopeComplete(); });
