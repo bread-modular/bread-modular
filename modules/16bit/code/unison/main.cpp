@@ -22,7 +22,9 @@ AttackHoldReleaseEnvelope attackHoldReleaseEnv(10.0f, 500.0f);
 AudioGenerator* generators[] = { &tri };
 Voice voice(1, generators, &attackHoldReleaseEnv);
 
-void generateUnison(AudioResponse* response) {
+// This is the callback function that is called when the audio is processed
+// This is running in the background in the second core
+void audioProcessCallback(AudioResponse* response) {
     int16_t value = voice.process();
     response->left = value;
     response->right = value;
@@ -66,7 +68,7 @@ int main() {
 
     // initial audio
     audioManager = AudioManager::getInstance();    
-    audioManager->setAudioCallback(generateUnison);
+    audioManager->setAudioCallback(audioProcessCallback);
     audioManager->init(48000);
 
     // initialize voice (which initializes generators and envelope)
