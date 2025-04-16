@@ -118,7 +118,7 @@ class IO {
                     }
                     blinkStartTime = currentTime;
 
-                    if (blinkCount >= blinkTotal * 2) {
+                    if (blinkCount >= blinkTotal) {
                         blinking = false;
                         setLED(false);
                     }

@@ -98,7 +98,7 @@ void onButtonPressed(bool pressed) {
             }
         }
         
-        io->blink(2, 100);
+        io->blink(generatorIndex + 1, 250);
     }
 }
 
@@ -168,7 +168,7 @@ int main() {
     io->setButtonPressedCallback(onButtonPressed);
     
     // Initial blink to show startup complete
-    io->blink(2, 100);
+    io->blink(1, 100);
     
     while (true) {
         // Just update IO, callback will handle CV1 changes
