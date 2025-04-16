@@ -13,14 +13,17 @@
 #include "midi.h"
 #include "tools/Voice.h"
 
-// TODO
-// * Change generators via the button
-
 #define TOTAL_VOICES 6
 
 AudioManager *audioManager; // Global reference to access in callback
 IO *io; // Global reference to IO instance
 MIDI *midi; // Global reference to MIDI instance
+
+uint8_t generatorIndex = 0;
+Saw sawGenerators[TOTAL_VOICES];
+Tri triGenerators[TOTAL_VOICES];
+Square squareGenerators[TOTAL_VOICES];
+Sine sineGenerators[TOTAL_VOICES];
 
 Voice* voices[TOTAL_VOICES];
 
@@ -53,7 +56,7 @@ void onVoiceComplete(Voice* voice) {
 
 void init_voices() {
     for (int i = 0; i < TOTAL_VOICES; i++) {
-        AudioGenerator* generators[] = { new Saw() };
+        AudioGenerator* generators[] = { &sawGenerators[i] };
         voices[i] = new Voice(1, generators, new AttackHoldReleaseEnvelope(10.0f, 500.0f));
         voices[i]->init(audioManager);
         voices[i]->setOnCompleteCallback(onVoiceComplete);
@@ -75,12 +78,32 @@ void handleCV2(uint16_t cv_value) {
 }
 
 void onButtonPressed(bool pressed) {
-    if (pressed) {
-        io->setLED(true);
-        voices[0]->getEnvelope()->setTrigger(true);
-    } else {
-        io->setLED(false);
-        voices[0]->getEnvelope()->setTrigger(false);
+    if (!pressed) {
+        generatorIndex = (generatorIndex + 1) % 4;
+        // changing generators on button release
+        if (generatorIndex == 0) {
+            for (int i = 0; i < TOTAL_VOICES; i++) {
+                AudioGenerator* generators[] = { &sawGenerators[i] };
+                voices[i]->changeGenerators(generators);
+            }
+        } else if (generatorIndex == 1) {
+            for (int i = 0; i < TOTAL_VOICES; i++) {
+                AudioGenerator* generators[] = { &triGenerators[i] };
+                voices[i]->changeGenerators(generators);
+            }
+        } else if (generatorIndex == 2) {
+            for (int i = 0; i < TOTAL_VOICES; i++) {
+                AudioGenerator* generators[] = { &squareGenerators[i] };
+                voices[i]->changeGenerators(generators);
+            }
+        } else if (generatorIndex == 3) {
+            for (int i = 0; i < TOTAL_VOICES; i++) {
+                AudioGenerator* generators[] = { &sineGenerators[i] };
+                voices[i]->changeGenerators(generators);
+            }
+        }
+        
+        io->blink(2, 100);
     }
 }
 

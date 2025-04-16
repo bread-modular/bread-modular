@@ -30,12 +30,24 @@ class Voice {
         }
 
         void init(AudioManager* audioManager) {
+            currentNote = 48;
+            uint16_t freq = MIDI::midiNoteToFrequency(currentNote);
+
             for (uint8_t i = 0; i < totalGenerators; ++i) {
                 generators[i]->init(audioManager);
-                generators[i]->setFrequency(220);
+                generators[i]->setFrequency(freq);
             }
             envelope->init(audioManager);
             envelope->setOnCompleteCallback([this]() { this->onEnvelopeComplete(); });
+        }
+
+
+        void changeGenerators(AudioGenerator* generators[]) {
+            uint16_t freq = MIDI::midiNoteToFrequency(currentNote);
+            for (uint8_t i = 0; i < totalGenerators; ++i) {
+                this->generators[i] = generators[i];
+                this->generators[i]->setFrequency(freq);
+            }
         }
 
         void setOnCompleteCallback(std::function<void(Voice*)> callback) {

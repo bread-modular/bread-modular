@@ -16,7 +16,6 @@ typedef struct {
 
 typedef void (*AudioCallbackFn)(AudioResponse*);
 
-
 // Forward declaration of the singleton class for Core1
 class AudioManager;
 AudioManager* g_audio_manager_instance = nullptr;
