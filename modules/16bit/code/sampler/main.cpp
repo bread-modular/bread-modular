@@ -5,7 +5,7 @@
 #include "midi.h"
 #include "kick.h"
 #include "DAC.h"
-#include <cmath>
+#include "math.h"
 
 #define SAMPLE_RATE 44100
 #define BCK_PIN 0
