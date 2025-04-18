@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "io.h"
+#include "audio.h"
+#include "midi.h"
 #include "kick.h"
 #include "DAC.h"
 
@@ -11,24 +13,48 @@ int16_t* KICK_SAMPLES = (int16_t*)kick_wav;
 uint32_t KICK_SAMPLES_LEN = kick_wav_len / 2;
 
 IO *io = IO::getInstance();
-DAC dac(pio0, 0, BCK_PIN);
+AudioManager *audioManager = AudioManager::getInstance();
+MIDI *midi = MIDI::getInstance();
+
+uint8_t sampleVelocity = 127;
+uint32_t sampleIndex = 0;
+void audioCallback(AudioResponse *response) {
+    if (sampleIndex >= KICK_SAMPLES_LEN) {
+        return;
+    }
+
+    uint16_t sample = KICK_SAMPLES[sampleIndex] * sampleVelocity / 127;
+    response->left = sample;
+    response->right = sample;
+
+    sampleIndex++;
+}
+
+void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
+    sampleVelocity = velocity;
+    sampleIndex = 0;
+}
+
+void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
+    
+}
 
 int main() {
     stdio_init_all();
 
     io->init();
-    dac.init(SAMPLE_RATE);
 
-    uint16_t sampleIndex = 0;
+    audioManager->setAudioCallback(audioCallback);
+    audioManager->init(SAMPLE_RATE);
+    
+    midi->setNoteOnCallback(noteOnCallback);
+    midi->setNoteOffCallback(noteOffCallback);
+    midi->init();
+
 
     while (true) {
         io->update();
-        dac.writeMono(KICK_SAMPLES[sampleIndex], KICK_SAMPLES[sampleIndex]);
-        sampleIndex++;
-        if (sampleIndex >= KICK_SAMPLES_LEN) {
-            sampleIndex = 0;
-            sleep_ms(50);
-        }
+        midi->update();
     }
 
     return 0;
