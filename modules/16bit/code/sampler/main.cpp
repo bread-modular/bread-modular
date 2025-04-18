@@ -17,15 +17,16 @@ IO *io = IO::getInstance();
 AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
 
-uint8_t sampleVelocity = 127;
-uint32_t sampleIndex = 0;
+float sampleVelocity = 1.0f;
+uint32_t sampleIndex = 0xFFFFFFFF;
+
 void audioCallback(AudioResponse *response) {
     if (sampleIndex >= KICK_SAMPLES_LEN) {
         return;
     }
 
-    uint16_t scaledVelocity = (sampleVelocity * sampleVelocity) / 127;
-    uint16_t sample = (KICK_SAMPLES[sampleIndex] * scaledVelocity) / 127;
+    float sample = KICK_SAMPLES[sampleIndex] * sampleVelocity;
+
     response->left = sample;
     response->right = sample;
 
@@ -33,12 +34,9 @@ void audioCallback(AudioResponse *response) {
 }
 
 void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
-    sampleVelocity = velocity;
+    float velocityNorm = velocity / 127.0f;
+    sampleVelocity = powf(velocityNorm, 2.0f);
     sampleIndex = 0;
-}
-
-void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
-    
 }
 
 int main() {
@@ -50,7 +48,6 @@ int main() {
     audioManager->init(SAMPLE_RATE);
     
     midi->setNoteOnCallback(noteOnCallback);
-    midi->setNoteOffCallback(noteOffCallback);
     midi->init();
 
 
