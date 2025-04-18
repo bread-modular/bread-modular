@@ -5,6 +5,7 @@
 #include "midi.h"
 #include "kick.h"
 #include "DAC.h"
+#include <cmath>
 
 #define SAMPLE_RATE 44100
 #define BCK_PIN 0
@@ -23,7 +24,8 @@ void audioCallback(AudioResponse *response) {
         return;
     }
 
-    uint16_t sample = KICK_SAMPLES[sampleIndex] * sampleVelocity / 127;
+    uint16_t scaledVelocity = (sampleVelocity * sampleVelocity) / 127;
+    uint16_t sample = (KICK_SAMPLES[sampleIndex] * scaledVelocity) / 127;
     response->left = sample;
     response->right = sample;
 
