@@ -82,7 +82,6 @@ void cv1UpdateCallback(uint16_t cv1) {
 void cv2UpdateCallback(uint16_t cv2) {
     float cv2Norm = IO::normalizeCV(cv2);
     float cutoff = 20.0f * powf(20000.0f / 20.0f, cv2Norm);
-    printf("highpass cutoff: %f\n", cutoff);
     highpassFilter.setCutoff(cutoff);
 }
 
@@ -92,6 +91,15 @@ void buttonPressedCallback(bool pressed) {
         io->setLED(true);
     } else {
         applyFilters = true;
+        io->setLED(false);
+    }
+}
+
+void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
+    if (cc == 71) {
+        cv1UpdateCallback(value * 32);
+    } else if (cc == 74) {
+        cv2UpdateCallback(value * 32);
     }
 }
 
@@ -108,6 +116,7 @@ int main() {
     lowpassFilter.init(audioManager);
     highpassFilter.init(audioManager);
     
+    midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);
     midi->init();
 
