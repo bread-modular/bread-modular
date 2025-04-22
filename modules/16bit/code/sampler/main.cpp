@@ -47,14 +47,16 @@ void audioCallback(AudioResponse *response) {
 
     for (uint8_t i = 0; i < TOTAL_SAMPLES; i++) {
         if (SAMPLE_PLAYHEAD[i] < SAMPLES_LEN[i]) {
-            sampleSum += SAMPLES[i][SAMPLE_PLAYHEAD[i]] * SAMPLE_VELOCITY[i];
+            float sample = SAMPLES[i][SAMPLE_PLAYHEAD[i]] / 32768.0f;
+            sampleSum += sample * SAMPLE_VELOCITY[i];
             SAMPLE_PLAYHEAD[i]++;
         }
     }
+    
 
     sampleSum = lowpassFilter.process(sampleSum);
     sampleSum = highpassFilter.process(sampleSum);
-    sampleSum = std::clamp(sampleSum, -32768.0f, 32767.0f);
+    sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
 
     response->left = sampleSum;
     response->right = sampleSum;
@@ -78,6 +80,7 @@ void cv1UpdateCallback(uint16_t cv1) {
 void cv2UpdateCallback(uint16_t cv2) {
     float cv2Norm = IO::normalizeCV(cv2);
     float cutoff = 20.0f * powf(15000.0f / 20.0f, cv2Norm);
+    printf("highpass cutoff: %f\n", cutoff);
     highpassFilter.setCutoff(cutoff);
 }
 

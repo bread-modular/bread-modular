@@ -50,8 +50,8 @@ public:
                 noFilter = false;
             }
         } else if (type == HIGHPASS) {
-            float fadeStart = 25;
-            float fadeEnd = 200;
+            float fadeStart = 23;
+            float fadeEnd = 50;
 
             if (freq <= fadeStart) {
                 bypassBlend = 1.0f; // full bypass
@@ -64,10 +64,8 @@ public:
                 bypassBlend = 0.0f;
                 noFilter = false;
             }
-
-            bypassBlend = 0.0f;
-            noFilter = false;
         }
+
         cutoff = freq;
         updateCoeffs();
     }
