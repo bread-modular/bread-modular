@@ -8,7 +8,7 @@
 #include "DAC.h"
 #include <algorithm>
 #include "math.h"
-#include "mod/SVF.h"
+#include "mod/Biquad.h"
 
 #define SAMPLE_RATE 44100
 
@@ -37,8 +37,9 @@ float SAMPLE_VELOCITY[TOTAL_SAMPLES] = {
 IO *io = IO::getInstance();
 AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
-SVF lowpassFilter(SVF::FilterType::LOWPASS);
-SVF highpassFilter(SVF::FilterType::HIGHPASS);
+Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
+Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
+bool applyFilters = true;
 
 float sampleVelocity = 1.0f;
 
@@ -53,9 +54,10 @@ void audioCallback(AudioResponse *response) {
         }
     }
     
-
-    sampleSum = lowpassFilter.process(sampleSum);
-    sampleSum = highpassFilter.process(sampleSum);
+    if (applyFilters) {
+        sampleSum = lowpassFilter.process(sampleSum);
+        sampleSum = highpassFilter.process(sampleSum);
+    }
     sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
 
     response->left = sampleSum;
@@ -73,20 +75,30 @@ void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
 
 void cv1UpdateCallback(uint16_t cv1) {
     float cv1Norm = 1.0 - IO::normalizeCV(cv1);
-    float cutoff = 20.0f * powf(20000.0f / 20.0f, cv1Norm);
+    float cutoff = 50.0f * powf(20000.0f / 50.0f, cv1Norm * cv1Norm);
     lowpassFilter.setCutoff(cutoff);
 }
 
 void cv2UpdateCallback(uint16_t cv2) {
     float cv2Norm = IO::normalizeCV(cv2);
-    float cutoff = 20.0f * powf(15000.0f / 20.0f, cv2Norm);
+    float cutoff = 20.0f * powf(20000.0f / 20.0f, cv2Norm);
     printf("highpass cutoff: %f\n", cutoff);
     highpassFilter.setCutoff(cutoff);
+}
+
+void buttonPressedCallback(bool pressed) {
+    if (pressed) {
+        applyFilters = false;
+        io->setLED(true);
+    } else {
+        applyFilters = true;
+    }
 }
 
 int main() {
     stdio_init_all();
 
+    io->setButtonPressedCallback(buttonPressedCallback);
     io->setCV1UpdateCallback(cv1UpdateCallback, 50);
     io->setCV2UpdateCallback(cv2UpdateCallback, 50);
     io->init();

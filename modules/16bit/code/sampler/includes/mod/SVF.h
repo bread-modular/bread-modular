@@ -34,38 +34,6 @@ public:
     }
 
     void setCutoff(float freq) {
-        if (type == LOWPASS) {
-            float fadeStart = sampleRate * 0.20f;
-            float fadeEnd = sampleRate * 0.45f;
-
-            if (freq >= fadeEnd) {
-                bypassBlend = 1.0f; // full bypass
-                noFilter = true;
-                return;
-            } else if (freq > fadeStart) {
-                bypassBlend = (freq - fadeStart) / (fadeEnd - fadeStart); // 0.0 to 1.0
-                noFilter = false;
-            } else {
-                bypassBlend = 0.0f;
-                noFilter = false;
-            }
-        } else if (type == HIGHPASS) {
-            float fadeStart = 23;
-            float fadeEnd = 50;
-
-            if (freq <= fadeStart) {
-                bypassBlend = 1.0f; // full bypass
-                noFilter = true;
-                return;
-            } else if (freq < fadeEnd) {
-                bypassBlend = (fadeEnd - freq) / (fadeEnd - fadeStart); // 1.0 to 0.0
-                noFilter = false;
-            } else {
-                bypassBlend = 0.0f;
-                noFilter = false;
-            }
-        }
-
         cutoff = freq;
         updateCoeffs();
     }
@@ -78,10 +46,6 @@ public:
 
     // Process a single sample
     float process(float input) {
-        if (noFilter && bypassBlend >= 1.0f) {
-            return input;
-        }
-
         float v0 = input;
         float v1 = a1 * ic1eq + a2 * (v0 - ic2eq);
         float v2 = ic2eq + a2 * v1;
@@ -93,12 +57,8 @@ public:
         } else { // HIGHPASS
             out = v0 - resonance * v1 - v2;
         }
-        // Crossfade between filtered and unfiltered output
-        if (bypassBlend > 0.0f) {
-            return out * (1.0f - bypassBlend) + input * bypassBlend;
-        } else {
-            return out;
-        }
+        
+        return out;
     }
 
     void reset() {
@@ -113,8 +73,6 @@ private:
     FilterType type;
     float a1, a2;
     float ic1eq, ic2eq;
-    bool noFilter = false;
-    float bypassBlend = 0.0f;
 
     void updateCoeffs() {
         // Clamp cutoff to Nyquist
