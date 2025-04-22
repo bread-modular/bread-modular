@@ -7,7 +7,7 @@
 #include "pico/util/queue.h"
 #include "DAC.h"
 
-#define BCK_PIN 0
+#define BCK_PIN 1
 
 typedef struct {
     int16_t left;

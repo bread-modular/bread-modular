@@ -10,7 +10,6 @@
 #include "math.h"
 
 #define SAMPLE_RATE 44100
-#define BCK_PIN 0
 
 #define TOTAL_SAMPLES 2
 
