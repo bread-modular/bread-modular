@@ -34,6 +34,7 @@ class IO {
         uint32_t blinkStartTime = 0;
 
         bool buttonPressed = false;
+        bool firstRun = true;
 
         void (*buttonPressedCallback)(bool) = nullptr;
 
@@ -132,7 +133,8 @@ class IO {
                 // handle cv1 changes
                 adc_select_input(CV1_PIN);
                 uint16_t newCv1Value = adc_read();
-                if (abs(cv1Value - newCv1Value) > cv1DiffThreshold) {
+
+                if (firstRun || (abs(cv1Value - newCv1Value) > cv1DiffThreshold)) {
                     cv1Value = newCv1Value;
                     if (cv1UpdateCallback != nullptr) {
                         cv1UpdateCallback(cv1Value);
@@ -142,7 +144,7 @@ class IO {
                 // handle cv2 changes
                 adc_select_input(CV2_PIN);
                 uint16_t newCv2Value = adc_read();
-                if (abs(cv2Value - newCv2Value) > cv2DiffThreshold) {
+                if (firstRun || (abs(cv2Value - newCv2Value) > cv2DiffThreshold)) {
                     cv2Value = newCv2Value;
 
                     if (cv2UpdateCallback != nullptr) {
@@ -161,6 +163,8 @@ class IO {
                     buttonPressed = false;
                 }
 
+
+                firstRun = false;
                 return true;
             }
 
