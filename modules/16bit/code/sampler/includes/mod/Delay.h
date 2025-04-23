@@ -119,7 +119,7 @@ public:
         }
         
         // Wet/dry mix
-        int32_t out = (int32_t)(input * MAX(0.8f, 1.0f - currentWet) + filteredDelayed * currentWet);
+        int32_t out = (int32_t)(input * MAX(0.9f, 1.0f - currentWet) + filteredDelayed * currentWet);
         if (out > 32767) out = 32767;
         if (out < -32768) out = -32768;
         return (float)out;
