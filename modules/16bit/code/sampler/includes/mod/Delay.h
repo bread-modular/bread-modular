@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "audio.h"
+#include "mod/Biquad.h"
 
 // Feedback Delay Effect
 // Efficient for MCUs, uses int16_t buffer for audio data
@@ -30,6 +31,8 @@ public:
         buffer = new int16_t[maxDelay];
         reset();
         currentDelaySamples = (float)delaySamples;
+        lowpassFilter.init(audioManager);
+        lowpassFilter.setCutoff(lowpassCutoff);
     }
     // Set the delay time as a normalized value (0.0 = no delay, 1.0 = max delay)
     void setDelayNormalized(float norm) {
@@ -100,8 +103,10 @@ public:
         size_t readIndex = (writeIndex + maxDelay - (size_t)currentDelaySamples) % maxDelay;
         int16_t delayed = buffer[readIndex];
         
-        // Feedback: add delayed sample to input, scaled
-        int32_t fbSample = input + (int32_t)(delayed * feedback);
+        // Apply lowpass filter to delayed sample before feedback
+        float filteredDelayed = lowpassFilter.process((float)delayed / 32768.0f) * 32768.0f;
+        int32_t fbSample = input + (int32_t)(filteredDelayed * feedback);
+        
         // Clamp to int16_t
         if (fbSample > 32767) fbSample = 32767;
         if (fbSample < -32768) fbSample = -32768;
@@ -114,10 +119,16 @@ public:
         }
         
         // Wet/dry mix
-        int32_t out = (int32_t)(input * MAX(0.8f, 1.0f - currentWet) + delayed * currentWet);
+        int32_t out = (int32_t)(input * MAX(0.8f, 1.0f - currentWet) + filteredDelayed * currentWet);
         if (out > 32767) out = 32767;
         if (out < -32768) out = -32768;
         return (float)out;
+    }
+
+    // Set the lowpass filter cutoff frequency (Hz)
+    void setLowpassCutoff(float freq) {
+        lowpassCutoff = freq;
+        lowpassFilter.setCutoff(freq);
     }
 
 private:
@@ -142,4 +153,6 @@ private:
     float currentWet = 0.0f;
     float pendingWet = 0.0f;
     bool pendingWetUpdate = false;
+    Biquad lowpassFilter = Biquad(Biquad::FilterType::LOWPASS);
+    float lowpassCutoff = 20000.0f;
 }; 

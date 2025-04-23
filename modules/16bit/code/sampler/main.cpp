@@ -116,6 +116,10 @@ void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
         delay.setFeedback(value / 127.0f);
     } else if (cc == 22) {  
         delay.setWet(value / 127.0f);
+    } else if (cc == 23) {
+        float valNormalized = 1.0 - value / 127.0f;
+        float cutoff = 100.0f * powf(20000.0f / 100.0f, valNormalized * valNormalized);
+        delay.setLowpassCutoff(cutoff);
     }
 }
 
