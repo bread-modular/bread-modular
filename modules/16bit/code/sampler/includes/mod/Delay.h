@@ -29,16 +29,25 @@ public:
         }
         buffer = new int16_t[maxDelay];
         reset();
+        currentDelaySamples = (float)delaySamples;
     }
     // Set the delay time as a normalized value (0.0 = no delay, 1.0 = max delay)
     void setDelayNormalized(float norm) {
+        size_t samples = 0;
         if (norm <= 0.0f) {
-            delaySamples = 0;
+            samples = 0;
         } else {
             if (norm > 1.0f) norm = 1.0f;
-            size_t samples = (size_t)(norm * maxDelay);
+            samples = (size_t)(norm * maxDelay);
             if (samples < 1) samples = 1;
+        }
+        // If smoothing is in progress, queue the update
+        if (fabs(currentDelaySamples - (float)delaySamples) > 0.5f) {
+            pendingDelaySamples = (float)samples;
+            pendingUpdate = true;
+        } else {
             setDelaySamples(samples);
+            pendingUpdate = false;
         }
     }
 
@@ -60,13 +69,22 @@ public:
     void reset() {
         for (size_t i = 0; i < maxDelay; ++i) buffer[i] = 0;
         writeIndex = 0;
+        currentDelaySamples = (float)delaySamples;
     }
 
     // Process a single sample 
     float process(float input) {
         if (buffer == nullptr) return input;
 
-        size_t readIndex = (writeIndex + maxDelay - delaySamples) % maxDelay;
+        // Parameter smoothing for delay time
+        const float smoothing = 0.01f; // 0.0 = no smoothing, 1.0 = instant
+        currentDelaySamples += smoothing * ((float)delaySamples - currentDelaySamples);
+        // If smoothing is finished and a pending update exists, apply it
+        if (pendingUpdate && fabs(currentDelaySamples - (float)delaySamples) < 0.5f) {
+            setDelaySamples((size_t)pendingDelaySamples);
+            pendingUpdate = false;
+        }
+        size_t readIndex = (writeIndex + maxDelay - (size_t)currentDelaySamples) % maxDelay;
         int16_t delayed = buffer[readIndex];
         
         // Feedback: add delayed sample to input, scaled
@@ -83,10 +101,10 @@ public:
         }
         
         // Wet/dry mix
-        int32_t out = (int32_t)(input * MAX(0.5f, 1.0f - wet) + delayed * wet);
+        int32_t out = (int32_t)(input * MAX(0.8f, 1.0f - wet) + delayed * wet);
         if (out > 32767) out = 32767;
         if (out < -32768) out = -32768;
-        return (int16_t)out;
+        return (float)out;
     }
 
 private:
@@ -105,4 +123,7 @@ private:
     float wet;
     size_t writeIndex;
     uint32_t sampleRate;
+    float currentDelaySamples;
+    float pendingDelaySamples = 0.0f;
+    bool pendingUpdate = false;
 }; 

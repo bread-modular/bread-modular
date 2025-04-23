@@ -25,7 +25,7 @@ MIDI* midi_instance = nullptr;
 class MIDI {
 private:
     // Message buffer
-    static constexpr uint8_t MIDI_BUFFER_SIZE = 4;
+    static constexpr uint8_t MIDI_BUFFER_SIZE = 8;
     uint8_t buffer[MIDI_BUFFER_SIZE];
     uint8_t buffer_index;
     bool expect_two_data_bytes;
