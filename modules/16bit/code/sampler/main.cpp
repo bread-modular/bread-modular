@@ -9,6 +9,7 @@
 #include <algorithm>
 #include "math.h"
 #include "mod/Biquad.h"
+#include "mod/Delay.h"
 
 #define SAMPLE_RATE 44100
 
@@ -39,6 +40,8 @@ AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
 Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
 Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
+Delay delay(200.0f);
+
 bool applyFilters = true;
 
 float sampleVelocity = 1.0f;
@@ -59,6 +62,7 @@ void audioCallback(AudioResponse *response) {
         sampleSum = highpassFilter.process(sampleSum);
     }
     sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
+    sampleSum = delay.process(sampleSum);
 
     response->left = sampleSum;
     response->right = sampleSum;
@@ -98,10 +102,20 @@ void buttonPressedCallback(bool pressed) {
 void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
     printf("ccChangeCallback: %d %d %d\n", channel, cc, value);
     
+    // Filter Controls
     if (cc == 71) {
         cv1UpdateCallback(value * 32);
     } else if (cc == 74) {
         cv2UpdateCallback(value * 32);
+    }
+
+    // Delay Controls
+    if (cc == 20) {
+        delay.setDelayNormalized(value / 127.0f);
+    } else if (cc == 21) {
+        delay.setFeedback(value / 127.0f);
+    } else if (cc == 22) {  
+        delay.setWet(value / 127.0f);
     }
 }
 
@@ -117,6 +131,7 @@ int main() {
     audioManager->init(SAMPLE_RATE);
     lowpassFilter.init(audioManager);
     highpassFilter.init(audioManager);
+    delay.init(audioManager);
     
     midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);
