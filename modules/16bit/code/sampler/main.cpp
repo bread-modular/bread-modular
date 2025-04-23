@@ -12,7 +12,6 @@
 #include "mod/Delay.h"
 
 #define SAMPLE_RATE 44100
-
 #define TOTAL_SAMPLES 2
 
 int16_t* SAMPLES[TOTAL_SAMPLES] = {
@@ -49,6 +48,7 @@ float sampleVelocity = 1.0f;
 void audioCallback(AudioResponse *response) {
     float sampleSum = 0.0f;
 
+    audioManager->startAudioLock();
     for (uint8_t i = 0; i < TOTAL_SAMPLES; i++) {
         if (SAMPLE_PLAYHEAD[i] < SAMPLES_LEN[i]) {
             float sample = SAMPLES[i][SAMPLE_PLAYHEAD[i]] / 32768.0f;
@@ -56,6 +56,7 @@ void audioCallback(AudioResponse *response) {
             SAMPLE_PLAYHEAD[i]++;
         }
     }
+    audioManager->endAudioLock();
     
     if (applyFilters) {
         sampleSum = lowpassFilter.process(sampleSum);
@@ -72,8 +73,11 @@ void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
     uint8_t sampleToPlay = note % 12;
     if (sampleToPlay < TOTAL_SAMPLES) {
         float velocityNorm = velocity / 127.0f;
+
+        audioManager->startAudioLock();
         SAMPLE_VELOCITY[sampleToPlay] = powf(velocityNorm, 2.0f);
         SAMPLE_PLAYHEAD[sampleToPlay] = 0;
+        audioManager->endAudioLock();
     }
 }
 
@@ -99,9 +103,7 @@ void buttonPressedCallback(bool pressed) {
     }
 }
 
-void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
-    printf("ccChangeCallback: %d %d %d\n", channel, cc, value);
-    
+void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {    
     // Filter Controls
     if (cc == 71) {
         cv1UpdateCallback(value * 32);
@@ -140,7 +142,6 @@ int main() {
     midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);
     midi->init();
-
 
     while (true) {
         io->update();

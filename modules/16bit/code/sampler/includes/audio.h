@@ -16,6 +16,8 @@ typedef struct {
 
 typedef void (*AudioCallbackFn)(AudioResponse*);
 
+critical_section_t audioCS;
+
 // Forward declaration of the singleton class for Core1
 class AudioManager;
 AudioManager* g_audio_manager_instance = nullptr;
@@ -65,6 +67,8 @@ public:
         if (initialized) {
             return;
         }
+
+        critical_section_init(&audioCS);
         
         // Initialize DAC
         dac.init(sample_rate);
@@ -82,5 +86,13 @@ public:
     // Get the DAC instance
     DAC* getDac() {
         return &dac;
+    }
+
+    void startAudioLock() {
+        critical_section_enter_blocking(&audioCS);
+    }
+
+    void endAudioLock() {
+        critical_section_exit(&audioCS);
     }
 };
