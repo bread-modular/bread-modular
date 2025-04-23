@@ -9,12 +9,17 @@ class ModeHandler {
 public:
     ModeHandler(byte togglePin, byte totalModes, unsigned long debounceTime = 200)
         : togglePin(togglePin), totalModes(totalModes), debounceTime(debounceTime) {
-        mode = EEPROM.read(0); // Load the mode from EEPROM
+        
     }
 
     void begin() {
         pinMode(togglePin, INPUT_PULLUP);
         lastToggleTime = 0;
+        mode = EEPROM.read(0);
+        if (mode < 0 || mode >= totalModes) {
+            mode = 0;
+            EEPROM.write(0, mode);
+        }
     }
 
     bool update() {

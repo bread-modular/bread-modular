@@ -1,11 +1,21 @@
 #include <Arduino.h>
-#include "SimpleMIDI.h"
 #include <avr/io.h>
+#include "SimpleMIDI.h"
+#include "ModeHandler.h"
 
-#define LED_PIN PIN_PC3
 #define AI_PIN PIN_PA4
 
+#define BANK_SELECTOR_PIN PIN_PC0
+#define BANK_A_LED_PIN PIN_PC1
+#define BANK_B_LED_PIN PIN_PC2
+#define BANK_C_LED_PIN PIN_PC3
+#define BANK_A_CC_BASE 20
+#define BANK_B_CC_BASE 27
+#define BANK_C_CC_BASE 85
+
 SimpleMIDI midi;
+ModeHandler modeHandler(BANK_SELECTOR_PIN, 3);
+uint8_t baseCcValue = 20;
 
 // Simply pipe the incoming MIDI messages to the output
 void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
@@ -20,9 +30,27 @@ void controlChangeCallback(uint8_t channel, uint8_t controller, uint8_t value) {
   midi.sendControlChange(channel, controller, value);
 }
 
+void handleBankSelection(uint8_t mode) {
+  digitalWrite(BANK_A_LED_PIN, mode == 0 ? HIGH : LOW);
+  digitalWrite(BANK_B_LED_PIN, mode == 1 ? HIGH : LOW);
+  digitalWrite(BANK_C_LED_PIN, mode == 2 ? HIGH : LOW);
+
+  if (mode == 0) {
+    baseCcValue = BANK_A_CC_BASE;
+  } else if (mode == 1) {
+    baseCcValue = BANK_B_CC_BASE;
+  } else if (mode == 2) {
+    baseCcValue = BANK_C_CC_BASE;
+  }
+}
+
 void setup() {
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
+  pinMode(BANK_A_LED_PIN, OUTPUT);
+  pinMode(BANK_B_LED_PIN, OUTPUT);
+  pinMode(BANK_C_LED_PIN, OUTPUT);
+  digitalWrite(BANK_A_LED_PIN, LOW);
+  digitalWrite(BANK_B_LED_PIN, LOW);
+  digitalWrite(BANK_C_LED_PIN, LOW);
   
   pinMode(AI_PIN, INPUT);
   pinMode(AI_PIN + 1, INPUT);
@@ -35,20 +63,53 @@ void setup() {
   midi.setNoteOnCallback(noteOnCallback);
   midi.setNoteOffCallback(noteOffCallback);
   midi.setControlChangeCallback(controlChangeCallback);
+
+  modeHandler.begin();
+  handleBankSelection(modeHandler.getMode());
 }
 
 void loop() {
   midi.update();
-  
-  // put your main code here, to run repeatedly:
-  int8_t ai_value0 = analogRead(AI_PIN) / 8;
-  int8_t ai_value1 = analogRead(AI_PIN + 1) / 8;
-  int8_t ai_value2 = analogRead(AI_PIN + 2) / 8;
-  int8_t ai_value3 = analogRead(AI_PIN + 3) / 8;
+  if (modeHandler.update()) {
+    handleBankSelection(modeHandler.getMode());
+  }
 
-  midi.sendControlChange(1, 20, ai_value0);
-  midi.sendControlChange(1, 21, ai_value1);
-  midi.sendControlChange(1, 22, ai_value2);
-  midi.sendControlChange(1, 23, ai_value3);
+  static uint8_t lastCv1 = 0;
+  static uint8_t lastCv2 = 0;
+  static uint8_t lastCv3 = 0;
+  static uint8_t lastCv4 = 0;
+  static unsigned long lastCheck = 0;
+  static unsigned long lastForceSend = 0;
 
+  unsigned long now = millis();
+  bool forceSend = false;
+  if (now - lastForceSend >= 1000) {
+    lastForceSend = now;
+    forceSend = true;
+  }
+
+  if (now - lastCheck >= 10) {
+    lastCheck = now;
+    uint8_t cv1 = analogRead(AI_PIN) / 8;
+    uint8_t cv2 = analogRead(AI_PIN + 1) / 8;
+    uint8_t cv3 = analogRead(AI_PIN + 2) / 8;
+    uint8_t cv4 = analogRead(AI_PIN + 3) / 8;
+
+    if (forceSend || cv1 != lastCv1) {
+      midi.sendControlChange(1, baseCcValue, cv1);
+      lastCv1 = cv1;
+    }
+    if (forceSend || cv2 != lastCv2) {
+      midi.sendControlChange(1, baseCcValue + 1, cv2);
+      lastCv2 = cv2;
+    }
+    if (forceSend || cv3 != lastCv3) {
+      midi.sendControlChange(1, baseCcValue + 2, cv3);
+      lastCv3 = cv3;
+    }
+    if (forceSend || cv4 != lastCv4) {
+      midi.sendControlChange(1, baseCcValue + 3, cv4);
+      lastCv4 = cv4;
+    }
+  }
 }
