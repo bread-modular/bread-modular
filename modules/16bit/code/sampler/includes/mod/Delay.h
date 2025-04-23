@@ -62,7 +62,14 @@ public:
     void setWet(float w) {
         if (w < 0.0f) w = 0.0f;
         if (w > 1.0f) w = 1.0f;
-        wet = w;
+        // If smoothing is in progress, queue the update
+        if (fabs(currentWet - wet) > 0.01f) {
+            pendingWet = w;
+            pendingWetUpdate = true;
+        } else {
+            wet = w;
+            pendingWetUpdate = false;
+        }
     }
 
     // Reset buffer
@@ -79,10 +86,16 @@ public:
         // Parameter smoothing for delay time
         const float smoothing = 0.01f; // 0.0 = no smoothing, 1.0 = instant
         currentDelaySamples += smoothing * ((float)delaySamples - currentDelaySamples);
+        // Smoothing for wet parameter
+        currentWet += smoothing * (wet - currentWet);
         // If smoothing is finished and a pending update exists, apply it
         if (pendingUpdate && fabs(currentDelaySamples - (float)delaySamples) < 0.5f) {
             setDelaySamples((size_t)pendingDelaySamples);
             pendingUpdate = false;
+        }
+        if (pendingWetUpdate && fabs(currentWet - wet) < 0.01f) {
+            wet = pendingWet;
+            pendingWetUpdate = false;
         }
         size_t readIndex = (writeIndex + maxDelay - (size_t)currentDelaySamples) % maxDelay;
         int16_t delayed = buffer[readIndex];
@@ -101,7 +114,7 @@ public:
         }
         
         // Wet/dry mix
-        int32_t out = (int32_t)(input * MAX(0.8f, 1.0f - wet) + delayed * wet);
+        int32_t out = (int32_t)(input * MAX(0.8f, 1.0f - currentWet) + delayed * currentWet);
         if (out > 32767) out = 32767;
         if (out < -32768) out = -32768;
         return (float)out;
@@ -126,4 +139,7 @@ private:
     float currentDelaySamples;
     float pendingDelaySamples = 0.0f;
     bool pendingUpdate = false;
+    float currentWet = 0.0f;
+    float pendingWet = 0.0f;
+    bool pendingWetUpdate = false;
 }; 
