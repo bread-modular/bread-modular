@@ -24,11 +24,10 @@ MIDI* midi_instance = nullptr;
 
 class MIDI {
 private:
-    // Message buffer
-    static constexpr uint8_t MIDI_BUFFER_SIZE = 8;
-    uint8_t buffer[MIDI_BUFFER_SIZE];
-    uint8_t buffer_index;
-    bool expect_two_data_bytes;
+    // --- New MIDI parsing state (from SimpleMIDI) ---
+    uint8_t status = 0;      // Last received status byte
+    uint8_t data[2] = {0};   // Data bytes
+    uint8_t dataIndex = 0;   // Current position in the data array
     bool midi_thru_enabled;
     
     // Callback types
@@ -42,11 +41,8 @@ private:
     ControlChangeCallback cc_callback;
 
 public:
-    MIDI() : buffer_index(0), expect_two_data_bytes(true), midi_thru_enabled(false) {
-        // Initialize buffer
-        buffer[0] = 0;
-        buffer[1] = 0;
-        buffer[2] = 0;
+    MIDI() : midi_thru_enabled(false) {
+        // No buffer initialization needed
     }
     
     void init() {
@@ -69,76 +65,40 @@ public:
                 uart_putc(MIDI_UART, byte);
             }
             
-            // Is this a status byte? (MSB set)
-            if (byte & 0x80) {
-                buffer[0] = byte;
-                buffer_index = 1;
-                
-                // Check message type to determine number of data bytes
-                uint8_t msg_type = byte & MIDI_STATUS_MASK;
-                expect_two_data_bytes = true;
-                
-                // Some message types only have one data byte
-                if (msg_type == MIDI_PROGRAM_CHANGE || msg_type == MIDI_CHANNEL_AFTERTOUCH) {
-                    expect_two_data_bytes = false;
-                }
-                
-                // System real-time messages (0xF8-0xFF) have no data bytes
-                // System common messages are not fully implemented here
-                if (byte >= 0xF8) {
-                    // Handle real-time messages if needed
-                    buffer_index = 0;
-                }
-            }
-            // Data byte
-            else if (buffer_index > 0) {
-                if (buffer_index < MIDI_BUFFER_SIZE) {
-                    buffer[buffer_index++] = byte;
-                } else {
-                    // Buffer overflow, reset parser
-                    buffer_index = 0;
-                    continue;
-                }
-                bool message_complete = false;
-                // Complete message with 1 data byte
-                if (buffer_index == 2 && !expect_two_data_bytes) {
-                    message_complete = true;
-                }
-                // Complete message with 2 data bytes
-                else if (buffer_index == 3) {
-                    message_complete = true;
-                }
-                if (message_complete) {
-                    // Process the complete message
-                    uint8_t status = buffer[0];
-                    uint8_t data1 = buffer[1];
-                    uint8_t data2 = (buffer_index == 3) ? buffer[2] : 0;
-                    // Extract message type and channel
-                    uint8_t msg_type = status & MIDI_STATUS_MASK;
-                    uint8_t channel = status & MIDI_CHANNEL_MASK;
-                    // Process based on message type
-                    if (msg_type == MIDI_NOTE_ON) {
-                        if (data2 == 0) {
-                            // Note On with velocity 0 is equivalent to Note Off
-                            if (note_off_callback) {
-                                note_off_callback(channel, data1, 0);
+            if (byte & 0x80) { // Status byte
+                status = byte;
+                dataIndex = 0;
+            } else if (status != 0) { // Data byte
+                data[dataIndex++] = byte;
+                if (dataIndex >= 2) {
+                    dataIndex = 0;
+                    // Parse message
+                    uint8_t messageType = status & 0xF0;
+                    uint8_t channel = status & 0x0F;
+                    uint8_t data1 = data[0];
+                    uint8_t data2 = data[1];
+                    switch (messageType) {
+                        case MIDI_NOTE_ON:
+                            if (note_on_callback && data2 > 0) {
+                                note_on_callback(channel, data1, data2);
+                            } else if (note_off_callback && data2 == 0) {
+                                note_off_callback(channel, data1, data2);
                             }
-                        } else if (note_on_callback) {
-                            note_on_callback(channel, data1, data2);
-                        }
+                            break;
+                        case MIDI_NOTE_OFF:
+                            if (note_off_callback) {
+                                note_off_callback(channel, data1, data2);
+                            }
+                            break;
+                        case MIDI_CONTROL_CHANGE:
+                            if (cc_callback) {
+                                cc_callback(channel, data1, data2);
+                            }
+                            break;
+                        default:
+                            // Unknown MIDI message type
+                            break;
                     }
-                    else if (msg_type == MIDI_NOTE_OFF) {
-                        if (note_off_callback) {
-                            note_off_callback(channel, data1, data2);
-                        }
-                    }
-                    else if (msg_type == MIDI_CONTROL_CHANGE) {
-                        if (cc_callback) {
-                            cc_callback(channel, data1, data2);
-                        }
-                    }
-                    // Reset buffer index for next message
-                    buffer_index = 0;
                 }
             }
         }
