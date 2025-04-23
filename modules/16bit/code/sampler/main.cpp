@@ -96,6 +96,8 @@ void buttonPressedCallback(bool pressed) {
 }
 
 void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
+    printf("ccChangeCallback: %d %d %d\n", channel, cc, value);
+    
     if (cc == 71) {
         cv1UpdateCallback(value * 32);
     } else if (cc == 74) {
