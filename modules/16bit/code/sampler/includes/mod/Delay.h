@@ -34,23 +34,20 @@ public:
         lowpassFilter.init(audioManager);
         lowpassFilter.setCutoff(lowpassCutoff);
     }
-    // Set the delay time as a normalized value (0.0 = no delay, 1.0 = max delay)
-    void setDelayNormalized(float norm) {
-        size_t samples = 0;
-        if (norm <= 0.0f) {
-            samples = 0;
-        } else {
-            if (norm > 1.0f) norm = 1.0f;
-            samples = (size_t)(norm * maxDelay);
-            if (samples < 1) samples = 1;
-        }
-        // If smoothing is in progress, queue the update
-        if (fabs(currentDelaySamples - (float)delaySamples) > 0.5f) {
-            pendingDelaySamples = (float)samples;
-            pendingUpdate = true;
-        } else {
-            setDelaySamples(samples);
-            pendingUpdate = false;
+
+    // Set delay in beats (fractional allowed, e.g., 0.5 = eighth note)
+    void setDelayBeats(float beats) {
+        delayBeats = beats;
+        if (bpm > 0 && delayBeats > 0.0f) {
+            float seconds = (60.0f * delayBeats) / bpm;
+            size_t samples = MIN((size_t)(seconds * sampleRate), maxDelay);
+            if (fabs(currentDelaySamples - (float)samples) > 0.5f) {
+                pendingDelaySamples = (float)samples;
+                pendingUpdate = true;
+            } else {
+                setDelaySamples(samples);
+                pendingUpdate = false;
+            }
         }
     }
 
@@ -87,7 +84,7 @@ public:
         if (buffer == nullptr) return input;
 
         // Parameter smoothing for delay time
-        const float smoothing = 0.01f; // 0.0 = no smoothing, 1.0 = instant
+        const float smoothing = 0.005f; // 0.0 = no smoothing, 1.0 = instant
         currentDelaySamples += smoothing * ((float)delaySamples - currentDelaySamples);
         // Smoothing for wet parameter
         currentWet += smoothing * (wet - currentWet);
@@ -131,6 +128,12 @@ public:
         lowpassFilter.setCutoff(freq);
     }
 
+    // Set BPM and update delay if using beat-based delay
+    void setBPM(uint16_t bpm) {
+        this->bpm = bpm;
+        setDelayBeats(delayBeats);
+    }
+
 private:
     // Set the delay time in samples (should be <= maxDelay)
     void setDelaySamples(size_t samples) {
@@ -155,4 +158,6 @@ private:
     bool pendingWetUpdate = false;
     Biquad lowpassFilter = Biquad(Biquad::FilterType::LOWPASS);
     float lowpassCutoff = 20000.0f;
+    uint16_t bpm = 0;
+    float delayBeats = 0.0f;
 }; 

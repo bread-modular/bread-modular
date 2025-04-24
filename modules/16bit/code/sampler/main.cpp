@@ -40,14 +40,12 @@ AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
 Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
 Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
-Delay delay(200.0f);
+Delay delay(1000.0f);
 
 bool applyFilters = true;
 
 float sampleVelocity = 1.0f;
 float midi_bpm = 0.0f;
-
-#define MIDI_BPM_AVG_BEATS 8
 
 void audioCallback(AudioResponse *response) {
     float sampleSum = 0.0f;
@@ -117,7 +115,7 @@ void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
 
     // Delay Controls
     if (cc == 20) {
-        delay.setDelayNormalized(value / 127.0f);
+        delay.setDelayBeats(value / 127.0f / 2.0f );
     } else if (cc == 21) {
         delay.setFeedback(value / 127.0f);
     } else if (cc == 22) {  
@@ -130,29 +128,11 @@ void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
 }
 
 void realtimeCallback(uint8_t realtimeType) {
-    static uint32_t clock_count = 0;
-    static absolute_time_t beat_times[MIDI_BPM_AVG_BEATS] = {0};
-    static int beat_index = 0;
-    static bool buffer_filled = false;
+    // You can still handle other realtime messages here if needed
+}
 
-    if (realtimeType == MIDI_REALTIME_CLOCK) {
-        clock_count++;
-        if (clock_count == 24) { // 24 clocks = 1 quarter note
-            clock_count = 0;
-            beat_times[beat_index] = get_absolute_time();
-            if (buffer_filled) {
-                int oldest_index = (beat_index + 1) % MIDI_BPM_AVG_BEATS;
-                int64_t us = absolute_time_diff_us(beat_times[oldest_index], beat_times[beat_index]);
-                if (us < 0) us = -us;
-                if (us > 0) {
-                    midi_bpm = 60.0f * 1000000.0f * (MIDI_BPM_AVG_BEATS - 1) / (float)us;
-                    printf("BPM: %d\n", (int)(midi_bpm + 0.5f));
-                }
-            }
-            beat_index = (beat_index + 1) % MIDI_BPM_AVG_BEATS;
-            if (beat_index == 0 && !buffer_filled) buffer_filled = true;
-        }
-    }
+void bpmChangeCallback(int bpm) {
+    delay.setBPM(bpm);
 }
 
 int main() {
@@ -169,6 +149,8 @@ int main() {
     highpassFilter.init(audioManager);
     delay.init(audioManager);
     
+    // Set up BPM calculation and print BPM when it changes
+    midi->calculateBPM(bpmChangeCallback);
     midi->setRealtimeCallback(realtimeCallback);
     midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);

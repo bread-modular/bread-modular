@@ -44,6 +44,7 @@ private:
     using ControlChangeCallback = std::function<void(uint8_t channel, uint8_t controller, uint8_t value)>;
     // Real-time callback type
     using RealtimeCallback = std::function<void(uint8_t realtimeType)>;
+    using BpmChangeCallback = std::function<void(uint16_t bpm)>;
     
     // Callbacks
     NoteOnCallback note_on_callback;
@@ -51,6 +52,16 @@ private:
     ControlChangeCallback cc_callback;
     // Real-time callback
     RealtimeCallback realtime_callback;
+
+    // BPM calculation state
+    static constexpr int BPM_AVG_BEATS = 8;
+    absolute_time_t bpm_beat_times[BPM_AVG_BEATS] = {0};
+    int bpm_beat_index = 0;
+    bool bpm_buffer_filled = false;
+    uint32_t bpm_clock_count = 0;
+    float bpm_value = 0.0f;
+    BpmChangeCallback bpm_callback = nullptr;
+    bool bpm_calc_enabled = false;
 
 public:
     MIDI() : midi_thru_enabled(false) {
@@ -79,6 +90,33 @@ public:
             
             // Handle real-time messages (0xF8 - 0xFF)
             if (byte >= 0xF8) {
+                // BPM calculation on MIDI clock
+                if (bpm_calc_enabled && byte == MIDI_REALTIME_CLOCK) {
+                    bpm_clock_count++;
+                    if (bpm_clock_count == 24) {
+                        bpm_clock_count = 0;
+                        bpm_beat_times[bpm_beat_index] = get_absolute_time();
+                        if (bpm_buffer_filled) {
+                            int oldest_index = (bpm_beat_index + 1) % BPM_AVG_BEATS;
+                            int64_t us = absolute_time_diff_us(bpm_beat_times[oldest_index], bpm_beat_times[bpm_beat_index]);
+                            if (us < 0) us = -us;
+                            if (us > 0) {
+                                float new_bpm = 60.0f * 1000000.0f * (BPM_AVG_BEATS - 1) / (float)us;
+                                uint16_t rounded_bpm = (uint16_t)(new_bpm + 0.5f);
+                                if ((int)(bpm_value + 0.5f) != rounded_bpm) {
+                                    bpm_value = new_bpm;
+                                    if (bpm_callback) {
+                                        bpm_callback(rounded_bpm);
+                                    }
+                                } else {
+                                    bpm_value = new_bpm;
+                                }
+                            }
+                        }
+                        bpm_beat_index = (bpm_beat_index + 1) % BPM_AVG_BEATS;
+                        if (bpm_beat_index == 0 && !bpm_buffer_filled) bpm_buffer_filled = true;
+                    }
+                }
                 if (realtime_callback) {
                     realtime_callback(byte);
                 }
@@ -183,4 +221,14 @@ public:
         return 440 * pow(2, (note - 69) / 12.0);
     }
     
+    // Enable BPM calculation and set callback
+    void calculateBPM(BpmChangeCallback callback = nullptr) {
+        bpm_callback = callback;
+        bpm_calc_enabled = true;
+    }
+    
+    // Get current BPM
+    uint16_t getBPM() const {
+        return (uint16_t)(bpm_value + 0.5f);
+    }
 };
