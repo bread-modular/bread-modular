@@ -19,6 +19,14 @@
 #define MIDI_CHANNEL_AFTERTOUCH 0xD0
 #define MIDI_PITCH_BEND        0xE0
 
+// --- MIDI Real-time message types ---
+#define MIDI_REALTIME_CLOCK    0xF8
+#define MIDI_REALTIME_START    0xFA
+#define MIDI_REALTIME_CONTINUE 0xFB
+#define MIDI_REALTIME_STOP     0xFC
+#define MIDI_REALTIME_ACTIVE_SENSING 0xFE
+#define MIDI_REALTIME_RESET    0xFF
+
 class MIDI;
 MIDI* midi_instance = nullptr;
 
@@ -34,11 +42,15 @@ private:
     using NoteOnCallback = std::function<void(uint8_t channel, uint8_t note, uint8_t velocity)>;
     using NoteOffCallback = std::function<void(uint8_t channel, uint8_t note, uint8_t velocity)>;
     using ControlChangeCallback = std::function<void(uint8_t channel, uint8_t controller, uint8_t value)>;
+    // Real-time callback type
+    using RealtimeCallback = std::function<void(uint8_t realtimeType)>;
     
     // Callbacks
     NoteOnCallback note_on_callback;
     NoteOffCallback note_off_callback;
     ControlChangeCallback cc_callback;
+    // Real-time callback
+    RealtimeCallback realtime_callback;
 
 public:
     MIDI() : midi_thru_enabled(false) {
@@ -63,6 +75,14 @@ public:
             // Forward MIDI data if thru is enabled
             if (midi_thru_enabled && uart_is_writable(MIDI_UART)) {
                 uart_putc(MIDI_UART, byte);
+            }
+            
+            // Handle real-time messages (0xF8 - 0xFF)
+            if (byte >= 0xF8) {
+                if (realtime_callback) {
+                    realtime_callback(byte);
+                }
+                continue; // Don't process as normal message
             }
             
             if (byte & 0x80) { // Status byte
@@ -117,6 +137,11 @@ public:
         cc_callback = callback;
     }
     
+    // Set real-time callback
+    void setRealtimeCallback(RealtimeCallback callback) {
+        realtime_callback = callback;
+    }
+    
     // Enable/disable MIDI Thru
     void enableMIDIThru(bool enabled) {
         midi_thru_enabled = enabled;
@@ -139,6 +164,11 @@ public:
         uart_putc(MIDI_UART, MIDI_CONTROL_CHANGE | (channel & MIDI_CHANNEL_MASK));
         uart_putc(MIDI_UART, controller & 0x7F);
         uart_putc(MIDI_UART, value & 0x7F);
+    }
+
+    // Send MIDI real-time message
+    void sendRealtime(uint8_t realtimeType) {
+        uart_putc(MIDI_UART, realtimeType);
     }
 
     static MIDI* getInstance() {
