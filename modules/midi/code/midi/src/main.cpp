@@ -59,21 +59,21 @@ SoftwareSerial midiSerialArray[] = {
 
 int getGatePin(int id) {
   switch (id) {
-    case 1:
+    case 0:
       return GATE_PIN_01;
-    case 2:
+    case 1:
       return GATE_PIN_02;
-    case 3:
+    case 2:
       return GATE_PIN_03;
-    case 4:
+    case 3:
       return GATE_PIN_04;
-    case 5:
+    case 4:
       return GATE_PIN_05;
-    case 6:
+    case 5:
       return GATE_PIN_06;
-    case 7:
+    case 6:
       return GATE_PIN_07;
-    case 8:
+    case 7:
       return GATE_PIN_08;
     default:
       return -1;
@@ -81,7 +81,7 @@ int getGatePin(int id) {
 }
 
 void sendMIDI(byte channel, byte status, byte data1, byte data2) {
-  int channelIndex = channel - 1;
+  int channelIndex = channel;
   if (channelIndex >= 0 && channelIndex < 7) {
     SoftwareSerial serialCh = midiSerialArray[channelIndex];
     serialCh.write(status); // Send the status byte

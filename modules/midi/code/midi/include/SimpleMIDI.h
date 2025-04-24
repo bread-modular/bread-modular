@@ -66,19 +66,19 @@ public:
             switch (messageType) {
                 case MIDI_NOTE_ON:
                     if (noteOnCallback && data2 > 0) { // Note on with velocity > 0
-                        noteOnCallback(channel + 1, data1, data2);
+                        noteOnCallback(channel, data1, data2);
                     } else if (noteOffCallback && data2 == 0) { // Note on with velocity 0 is treated as note off
-                        noteOffCallback(channel + 1, data1, data2);
+                        noteOffCallback(channel, data1, data2);
                     }
                     break;
                 case MIDI_NOTE_OFF:
                     if (noteOffCallback) {
-                        noteOffCallback(channel + 1, data1, data2);
+                        noteOffCallback(channel, data1, data2);
                     }
                     break;
                 case MIDI_CONTROL_CHANGE:
                     if (controlChangeCallback) {
-                        controlChangeCallback(channel + 1, data1, data2);
+                        controlChangeCallback(channel, data1, data2);
                     }
                     break;
                 default:
