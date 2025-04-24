@@ -115,6 +115,8 @@ void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
 
     // Delay Controls
     if (cc == 20) {
+        // from 0 to 1/2 beats
+        // This range is configurable via the physical hand control & useful
         delay.setDelayBeats(value / 127.0f / 2.0f );
     } else if (cc == 21) {
         delay.setFeedback(value / 127.0f);
@@ -125,10 +127,6 @@ void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
         float cutoff = 100.0f * powf(20000.0f / 100.0f, valNormalized * valNormalized);
         delay.setLowpassCutoff(cutoff);
     }
-}
-
-void realtimeCallback(uint8_t realtimeType) {
-    // You can still handle other realtime messages here if needed
 }
 
 void bpmChangeCallback(int bpm) {
@@ -151,7 +149,6 @@ int main() {
     
     // Set up BPM calculation and print BPM when it changes
     midi->calculateBPM(bpmChangeCallback);
-    midi->setRealtimeCallback(realtimeCallback);
     midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);
     midi->init();
