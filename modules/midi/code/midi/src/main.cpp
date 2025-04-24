@@ -59,21 +59,21 @@ SoftwareSerial midiSerialArray[] = {
 
 int getGatePin(int id) {
   switch (id) {
-    case 1:
+    case 0:
       return GATE_PIN_01;
-    case 2:
+    case 1:
       return GATE_PIN_02;
-    case 3:
+    case 2:
       return GATE_PIN_03;
-    case 4:
+    case 3:
       return GATE_PIN_04;
-    case 5:
+    case 4:
       return GATE_PIN_05;
-    case 6:
+    case 5:
       return GATE_PIN_06;
-    case 7:
+    case 6:
       return GATE_PIN_07;
-    case 8:
+    case 7:
       return GATE_PIN_08;
     default:
       return -1;
@@ -81,12 +81,18 @@ int getGatePin(int id) {
 }
 
 void sendMIDI(byte channel, byte status, byte data1, byte data2) {
-  int channelIndex = channel - 1;
+  int channelIndex = channel;
   if (channelIndex >= 0 && channelIndex < 7) {
     SoftwareSerial serialCh = midiSerialArray[channelIndex];
     serialCh.write(status); // Send the status byte
     serialCh.write(data1);  // Send the first data byte
     serialCh.write(data2);  // Send the second data byte
+  }
+}
+
+void sendMIDIRealtime(byte realtimeByte) {
+  for (int i = 0; i < 7; i++) {
+    midiSerialArray[i].write(realtimeByte);
   }
 }
 
@@ -136,11 +142,19 @@ void handleControlChange(byte channel, byte controller, byte value) {
   sendMIDI(channel, 0xB0, controller, value);
 }
 
+void handleRealtime(byte realtimeType) {
+  sendMIDIRealtime(realtimeType);
+}
+
 void setup() {
   setupGates();
 
-   // Initialize the MIDI library
+  // Initialize the MIDI library
   MIDI.begin(31250);
+  MIDI.setNoteOnCallback(handleNoteOn);
+  MIDI.setNoteOffCallback(handleNoteOff);
+  MIDI.setControlChangeCallback(handleControlChange);
+  MIDI.setRealtimeCallback(handleRealtime);
 
   setupIMIDI();
 
@@ -148,28 +162,5 @@ void setup() {
 }
 
 void loop() {
- if (MIDI.read()) {
-    uint8_t type = MIDI.getType();
-    uint8_t channel = MIDI.getChannel() + 1;
-    uint8_t data1 = MIDI.getData1();
-    uint8_t data2 = MIDI.getData2();
-
-    if (type == MIDI_NOTE_ON) {
-      // Serial.printf("MIDI ON: %d %d %d\r\n", channel, data1, data2);
-      // Something some devices won't send MIDI_NOTE_OFF (like Elektron)
-      // Instead they send a Note On with velocity 0
-      if (data2 == 0) {
-        handleNoteOff(channel, data1, data2);
-      } else {
-        handleNoteOn(channel, data1, data2);
-      }
-    } else if (type == MIDI_NOTE_OFF) {
-      // Serial.printf("MIDI OFF: %d %d %d\r\n", channel, data1, data2);
-      handleNoteOff(channel, data1, data2);
-    } else if (type == MIDI_CONTROL_CHANGE) {
-      handleControlChange(channel, data1, data2);
-    } else {
-      // Serial.printf("Other MIDI Data: %d\r\n", type);
-    }
-}
+  MIDI.update();
 }
