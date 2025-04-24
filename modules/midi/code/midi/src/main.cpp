@@ -90,6 +90,12 @@ void sendMIDI(byte channel, byte status, byte data1, byte data2) {
   }
 }
 
+void sendMIDIRealtime(byte realtimeByte) {
+  for (int i = 0; i < 7; i++) {
+    midiSerialArray[i].write(realtimeByte);
+  }
+}
+
 void setupGates() {
   for (int x = 1; x <= 8; x = x + 1) {
     int gatePin = getGatePin(x);
@@ -136,6 +142,10 @@ void handleControlChange(byte channel, byte controller, byte value) {
   sendMIDI(channel, 0xB0, controller, value);
 }
 
+void handleRealtime(byte realtimeType) {
+  sendMIDIRealtime(realtimeType);
+}
+
 void setup() {
   setupGates();
 
@@ -144,6 +154,7 @@ void setup() {
   MIDI.setNoteOnCallback(handleNoteOn);
   MIDI.setNoteOffCallback(handleNoteOff);
   MIDI.setControlChangeCallback(handleControlChange);
+  MIDI.setRealtimeCallback(handleRealtime);
 
   setupIMIDI();
 

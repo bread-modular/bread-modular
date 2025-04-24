@@ -8,6 +8,14 @@
 #define MIDI_NOTE_ON       0x90
 #define MIDI_CONTROL_CHANGE 0xB0
 
+// Real-time MIDI message types
+#define MIDI_REALTIME_CLOCK    0xF8
+#define MIDI_REALTIME_START    0xFA
+#define MIDI_REALTIME_CONTINUE 0xFB
+#define MIDI_REALTIME_STOP     0xFC
+#define MIDI_REALTIME_ACTIVE_SENSING 0xFE
+#define MIDI_REALTIME_RESET    0xFF
+
 // MIDI frequency conversion constants
 #define A4_FREQ 440.0
 #define A4_MIDI_NOTE 69
@@ -16,6 +24,7 @@
 typedef void (*NoteOnCallback)(uint8_t channel, uint8_t note, uint8_t velocity);
 typedef void (*NoteOffCallback)(uint8_t channel, uint8_t note, uint8_t velocity);
 typedef void (*ControlChangeCallback)(uint8_t channel, uint8_t controller, uint8_t value);
+typedef void (*RealtimeCallback)(uint8_t realtimeType);
 
 class SimpleMIDI {
 public:
@@ -26,6 +35,15 @@ public:
     bool read() {
         if (Serial.available() >= 1) {
             uint8_t byte = Serial.read();
+
+            // Handle real-time messages (0xF8 - 0xFF)
+            if (byte >= 0xF8) {
+                lastRealtimeType = byte;
+                if (realtimeCallback) {
+                    realtimeCallback(byte);
+                }
+                return false; // Don't process as normal message
+            }
 
             if (byte & 0x80) { // Status byte
                 status = byte;
@@ -58,6 +76,10 @@ public:
 
     void setControlChangeCallback(ControlChangeCallback callback) {
         controlChangeCallback = callback;
+    }
+
+    void setRealtimeCallback(RealtimeCallback callback) {
+        realtimeCallback = callback;
     }
 
     // Process MIDI messages and trigger appropriate callbacks
@@ -111,6 +133,10 @@ public:
         sendMessage(MIDI_CONTROL_CHANGE | (channel & 0x0F), controller, value);
     }
 
+    void sendRealtime(uint8_t realtimeType) {
+        Serial.write(realtimeType);
+    }
+
 private:
     uint8_t status = 0;      // Last received status byte
     uint8_t data[2] = {0};   // Data bytes
@@ -126,6 +152,8 @@ private:
     NoteOnCallback noteOnCallback = nullptr;
     NoteOffCallback noteOffCallback = nullptr;
     ControlChangeCallback controlChangeCallback = nullptr;
+    RealtimeCallback realtimeCallback = nullptr;
+    uint8_t lastRealtimeType = 0;
 
     bool parseMessage() {
         messageType = status & 0xF0; // High nibble for message type
