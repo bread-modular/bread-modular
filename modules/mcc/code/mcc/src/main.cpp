@@ -30,6 +30,10 @@ void controlChangeCallback(uint8_t channel, uint8_t controller, uint8_t value) {
   midi.sendControlChange(channel, controller, value);
 }
 
+void realtimeCallback(uint8_t realtimeType) {
+  midi.sendRealtime(realtimeType);
+}
+
 void handleBankSelection(uint8_t mode) {
   digitalWrite(BANK_A_LED_PIN, mode == 0 ? HIGH : LOW);
   digitalWrite(BANK_B_LED_PIN, mode == 1 ? HIGH : LOW);
@@ -63,6 +67,7 @@ void setup() {
   midi.setNoteOnCallback(noteOnCallback);
   midi.setNoteOffCallback(noteOffCallback);
   midi.setControlChangeCallback(controlChangeCallback);
+  midi.setRealtimeCallback(realtimeCallback);
 
   modeHandler.begin();
   handleBankSelection(modeHandler.getMode());
