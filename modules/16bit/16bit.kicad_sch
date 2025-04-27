@@ -5016,12 +5016,6 @@
 		(uuid "cbab6b72-bba0-44ef-b158-4abea071a9f5")
 	)
 	(junction
-		(at 43.18 368.3)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "cc6139e4-926a-41ed-816a-3619576742a3")
-	)
-	(junction
 		(at 214.63 81.28)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5307,6 +5301,16 @@
 	)
 	(wire
 		(pts
+			(xy 240.03 132.08) (xy 229.87 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "16105427-9a67-4886-9086-24e653d4f11f")
+	)
+	(wire
+		(pts
 			(xy 105.41 322.58) (xy 105.41 321.31)
 		)
 		(stroke
@@ -5477,16 +5481,6 @@
 	)
 	(wire
 		(pts
-			(xy 463.55 128.27) (xy 469.9 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "24375301-ac26-4383-a6aa-6b0a745ad5a2")
-	)
-	(wire
-		(pts
 			(xy 83.82 370.84) (xy 83.82 381)
 		)
 		(stroke
@@ -5554,6 +5548,16 @@
 			(type default)
 		)
 		(uuid "2be2085a-fa7c-48d9-a01e-d599a4be9377")
+	)
+	(wire
+		(pts
+			(xy 469.9 128.27) (xy 463.55 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2be749d5-d4aa-423f-a971-1b30159ffb43")
 	)
 	(wire
 		(pts
@@ -5794,16 +5798,6 @@
 			(type default)
 		)
 		(uuid "43f3a6df-869b-453b-a15e-a951180f4acd")
-	)
-	(wire
-		(pts
-			(xy 502.92 125.73) (xy 508 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4490ef99-25cf-4955-b5af-a41b8256e4a2")
 	)
 	(wire
 		(pts
@@ -6577,7 +6571,7 @@
 	)
 	(wire
 		(pts
-			(xy 502.92 120.65) (xy 508 120.65)
+			(xy 525.78 121.92) (xy 530.86 121.92)
 		)
 		(stroke
 			(width 0)
@@ -6634,16 +6628,6 @@
 			(type default)
 		)
 		(uuid "849caae7-34df-4616-ace9-8dbca6e44563")
-	)
-	(wire
-		(pts
-			(xy 33.02 368.3) (xy 43.18 368.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8682fb5c-7afd-45a1-854b-940b51971c94")
 	)
 	(wire
 		(pts
@@ -7077,7 +7061,7 @@
 	)
 	(wire
 		(pts
-			(xy 502.92 118.11) (xy 508 118.11)
+			(xy 525.78 119.38) (xy 530.86 119.38)
 		)
 		(stroke
 			(width 0)
@@ -7477,6 +7461,16 @@
 	)
 	(wire
 		(pts
+			(xy 525.78 127) (xy 530.86 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cebd2ebc-9cac-4ace-9630-e725f7d9d67e")
+	)
+	(wire
+		(pts
 			(xy 537.21 212.09) (xy 529.59 212.09)
 		)
 		(stroke
@@ -7547,7 +7541,7 @@
 	)
 	(wire
 		(pts
-			(xy 502.92 115.57) (xy 508 115.57)
+			(xy 525.78 116.84) (xy 530.86 116.84)
 		)
 		(stroke
 			(width 0)
@@ -8057,7 +8051,7 @@
 	)
 	(wire
 		(pts
-			(xy 502.92 123.19) (xy 508 123.19)
+			(xy 525.78 124.46) (xy 530.86 124.46)
 		)
 		(stroke
 			(width 0)
@@ -8438,28 +8432,6 @@
 			)
 		)
 	)
-	(global_label "CV2"
-		(shape input)
-		(at 469.9 128.27 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "12561515-505d-4c8e-9670-5e568a34911f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 475.7991 128.27 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "GOUT_1"
 		(shape output)
 		(at 234.95 162.56 0)
@@ -8506,7 +8478,7 @@
 	)
 	(global_label "GOUT_1"
 		(shape output)
-		(at 502.92 123.19 180)
+		(at 525.78 124.46 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -8516,7 +8488,7 @@
 		)
 		(uuid "2ce22fab-d03a-442a-90ae-d5d7c8223f86")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 493.5133 123.19 0)
+			(at 516.3733 124.46 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8726,7 +8698,7 @@
 	)
 	(global_label "MIDI_OUT"
 		(shape output)
-		(at 502.92 115.57 180)
+		(at 525.78 116.84 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -8736,7 +8708,7 @@
 		)
 		(uuid "72ba06cd-e0e0-4ec1-b154-50a80a5bac7c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 492.0618 115.57 0)
+			(at 514.9218 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8856,7 +8828,7 @@
 			)
 		)
 	)
-	(global_label "GOUT_2"
+	(global_label "DGITIAL_AUDIO_OUT"
 		(shape output)
 		(at 234.95 160.02 0)
 		(fields_autoplaced yes)
@@ -8868,7 +8840,51 @@
 		)
 		(uuid "99e733bf-ebc1-4178-a41e-fe741486ed31")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 244.3567 160.02 0)
+			(at 255.3031 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "DGITIAL_AUDIO_IN"
+		(shape input)
+		(at 240.03 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9c713eec-677a-4955-a4ad-976dec8213eb")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 258.6898 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "DGITIAL_AUDIO_IN"
+		(shape input)
+		(at 469.9 128.27 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9eedffd7-8248-4a15-a39f-3689a116f7af")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 488.5598 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8896,28 +8912,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "CV2"
-		(shape input)
-		(at 33.02 368.3 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "9f4c56a4-a07a-4453-8e43-e307e90842b7")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 26.4667 368.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
 				(hide yes)
 			)
 		)
@@ -9012,7 +9006,7 @@
 	)
 	(global_label "AOUT_1"
 		(shape output)
-		(at 502.92 118.11 180)
+		(at 525.78 119.38 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -9022,7 +9016,7 @@
 		)
 		(uuid "afea3dc9-d3f0-43c6-a870-9b339fe8428d")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 493.6947 118.11 0)
+			(at 516.5547 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9050,28 +9044,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "GOUT_2"
-		(shape output)
-		(at 502.92 125.73 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c14cf02b-d928-4925-a176-7e97f029d3b9")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 493.5133 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
 				(hide yes)
 			)
 		)
@@ -9144,7 +9116,7 @@
 	)
 	(global_label "AOUT_2"
 		(shape output)
-		(at 502.92 120.65 180)
+		(at 525.78 121.92 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -9154,7 +9126,7 @@
 		)
 		(uuid "df6ce615-4ded-4655-9b1f-fca56510c80f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 493.6947 120.65 0)
+			(at 516.5547 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9243,6 +9215,28 @@
 		(uuid "ee96a2c8-34f3-4978-af6c-ec22a5917849")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 259.08 338.5635 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "DGITIAL_AUDIO_OUT"
+		(shape output)
+		(at 525.78 127 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f88432cb-8230-49d5-8650-f7e5e39de7ec")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 505.4269 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16573,7 +16567,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x05_Socket")
-		(at 513.08 120.65 0)
+		(at 535.94 121.92 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -16581,7 +16575,7 @@
 		(dnp no)
 		(uuid "fb8bb971-37da-416a-979d-e36b3eb15d0d")
 		(property "Reference" "J2"
-			(at 514.35 119.634 90)
+			(at 537.21 120.904 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16589,7 +16583,7 @@
 			)
 		)
 		(property "Value" "Conn_01x08_Socket"
-			(at 516.382 120.142 90)
+			(at 539.242 121.412 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16597,7 +16591,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical"
-			(at 513.08 120.65 0)
+			(at 535.94 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16606,7 +16600,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 513.08 120.65 0)
+			(at 535.94 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16615,7 +16609,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x05, script generated"
-			(at 513.08 120.65 0)
+			(at 535.94 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
