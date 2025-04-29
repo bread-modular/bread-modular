@@ -29,7 +29,7 @@
 SimpleMIDI MIDI;
 // TODO: Change this to real serial port. (We need to update the schematic for that)
 SoftwareSerial logger(-1, LOGGER_PIN_TX);
-ModeHandler modes = ModeHandler(TOGGLE_PIN, 2, 200);
+ModeHandler modes = ModeHandler(TOGGLE_PIN, 2, 100);
 
 // Variables for main sawtooth wave generation (TCB0)
 volatile uint16_t sawtoothStep = 0;
@@ -51,6 +51,9 @@ uint8_t octaveDownVolume = 128; // Default volume (0-255, where 255 is full volu
 
 // Mode control variables
 bool midControlMode = false; // true = MIDI control, false = CV1 control
+
+// Keep the current note for gate handling
+uint8_t currentNote = 0;
 
 // Function to update the main sawtooth wave frequency
 void setSawtoothFrequency(uint16_t frequency) {
@@ -219,17 +222,17 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
   
   // Only update frequency if in MIDI control mode
   if (midControlMode) {
+    if (note > 65) {
+      return;
+    }
+
     // Set frequency based on MIDI note using SimpleMIDI's midiToFrequency function
     float rawFrequency = MIDI.midiToFrequency(note);
     uint16_t frequency = (uint16_t)rawFrequency;
     
-    // If the frequency is out of range, don't update the frequency
-    if (frequency > MAX_FREQ || frequency < MIN_FREQ) {
-      return;
-    }
-    
     // Set the pending frequency to be applied at the next cycle
     noInterrupts();
+    currentNote = note;
     pendingFrequency = frequency;
     frequencyChangeRequested = true;
     interrupts();
@@ -237,8 +240,9 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
-  digitalWrite(GATE_PIN, LOW);
-  // We don't reset frequency or volume on note off to allow for legato playing
+  if (note == currentNote) {
+    digitalWrite(GATE_PIN, LOW);
+  }
 }
 
 void onControlChange(uint8_t channel, uint8_t control, uint8_t value) {  
