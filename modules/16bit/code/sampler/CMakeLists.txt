@@ -23,7 +23,12 @@ if (EXISTS ${picoVscode})
     include(${picoVscode})
 endif()
 # ====================================================================================
-set(PICO_BOARD pico2 CACHE STRING "Board type")
+# 16bit board script will set the flash size to 16MB in the runtime
+set(PICO_BOARD 16bit)
+set(PICO_BOARD_HEADER_DIRS ${CMAKE_CURRENT_LIST_DIR}/includes/boards)
+# This configures the firmware flash size to 2MB
+# So, it won't override the 14MB filesystem when flashing the firmware
+set(PICO_FLASH_SIZE_BYTES 2097152)
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
@@ -45,18 +50,26 @@ pico_set_program_version(sampler "0.1")
 pico_enable_stdio_uart(sampler 0)
 pico_enable_stdio_usb(sampler 1)
 
+# Add external libraries
+add_library(lfs STATIC
+    ${CMAKE_CURRENT_LIST_DIR}/lib/lfs/lfs.c
+    ${CMAKE_CURRENT_LIST_DIR}/lib/lfs/lfs_util.c
+)
+
 # Add the standard library to the build
 target_link_libraries(sampler
         pico_stdlib
         hardware_pio
         pico_multicore
         hardware_adc
+        lfs
         )
 
 # Add the standard include files to the build
 target_include_directories(sampler PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/includes
+        ${CMAKE_CURRENT_LIST_DIR}/lib/lfs
 )
 
 pico_add_extra_outputs(sampler)

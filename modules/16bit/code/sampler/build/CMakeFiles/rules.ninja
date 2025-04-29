@@ -51,6 +51,25 @@ rule CXX_EXECUTABLE_LINKER__sampler_Release
 
 
 #############################################
+# Rule for compiling C files.
+
+rule C_COMPILER__lfs_unscanned_Release
+  depfile = $DEP_FILE
+  deps = gcc
+  command = ${LAUNCHER}${CODE_CHECK}/Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building C object $out
+
+
+#############################################
+# Rule for linking C static library.
+
+rule C_STATIC_LIBRARY_LINKER__lfs_Release
+  command = $PRE_LINK && /Users/arunoda/.pico-sdk/cmake/v3.31.5/CMake.app/Contents/bin/cmake -E rm -f $TARGET_FILE && /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-ranlib $TARGET_FILE && /Users/arunoda/.pico-sdk/cmake/v3.31.5/CMake.app/Contents/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
+  description = Linking C static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
 # Rule for running custom commands.
 
 rule CUSTOM_COMMAND

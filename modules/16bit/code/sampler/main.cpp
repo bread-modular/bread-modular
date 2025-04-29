@@ -11,6 +11,7 @@
 #include "mod/Biquad.h"
 #include "mod/Delay.h"
 #include "pico/time.h"
+#include "fs/pico_lfs.h"
 
 #define SAMPLE_RATE 44100
 #define TOTAL_SAMPLES 2
@@ -152,6 +153,12 @@ int main() {
     midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);
     midi->init();
+
+    // Mount the filesystem
+    if (!mount_lfs()) {
+        printf("Failed to mount filesystem\n");
+        return 1;
+    }
 
     while (true) {
         io->update();

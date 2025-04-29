@@ -259,10 +259,10 @@ FETCHCONTENT_QUIET:BOOL=ON
 FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
 
 //PICO target board (e.g. pico, pico2)
-PICO_BOARD:STRING=pimoroni_plasma2350
+PICO_BOARD:STRING=16bit
 
 //PICO board header directories
-PICO_BOARD_HEADER_DIRS:STRING=
+PICO_BOARD_HEADER_DIRS:STRING=/Users/arunoda/data/projects/bread-modular/modules/16bit/code/sampler/includes/boards
 
 //Build HTML Doxygen docs
 PICO_BUILD_DOCS:BOOL=OFF
