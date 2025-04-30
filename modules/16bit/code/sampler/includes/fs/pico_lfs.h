@@ -4,14 +4,18 @@
 #include "hardware/sync.h"
 #include "lfs.h"
 #include <string.h>
+#include "../utils/base64.h"
 
 bool mount_lfs();
 void unmount_lfs();
 bool write_file(const char* filename, const void* data, size_t data_size);
+bool append_file(const char* filename, const void* data, size_t data_size);
 bool read_file(const char* filename, void* buffer, size_t buffer_size, size_t* bytes_read);
+bool read_file_chunk(lfs_file_t* file, void* buffer, size_t buffer_size, size_t* bytes_read);
 bool delete_file(const char* filename);
 bool list_directory(const char* path);
 bool create_directory(const char* path);
+bool process_base64_file(const char* temp_filename, const char* output_filename);
 
 // Define the flash offset where our filesystem will start
 // Choose an offset that doesn't conflict with your program code
@@ -183,7 +187,34 @@ bool write_file(const char* filename, const void* data, size_t data_size) {
         return false;
     }
     
-    printf("File written successfully: %s (%d bytes)\n", filename, written);
+    return true;
+}
+
+// Append data to a file in the filesystem
+bool append_file(const char* filename, const void* data, size_t data_size) {
+    // Open the file for appending
+    lfs_file_t file;
+    int err = lfs_file_open(&lfs, &file, filename, LFS_O_WRONLY | LFS_O_CREAT | LFS_O_APPEND);
+    if (err) {
+        printf("Failed to open file for appending: error %d\n", err);
+        return false;
+    }
+    
+    // Write the data
+    lfs_ssize_t written = lfs_file_write(&lfs, &file, data, data_size);
+    if (written < 0) {
+        printf("Failed to append to file: error %d\n", written);
+        lfs_file_close(&lfs, &file);
+        return false;
+    }
+    
+    // Close the file
+    err = lfs_file_close(&lfs, &file);
+    if (err) {
+        printf("Failed to close file: error %d\n", err);
+        return false;
+    }
+    
     return true;
 }
 
@@ -217,7 +248,26 @@ bool read_file(const char* filename, void* buffer, size_t buffer_size, size_t* b
         return false;
     }
     
-    printf("File read successfully: %s (%d bytes)\n", filename, read_size);
+    return true;
+}
+
+// Read a chunk from an already opened file
+bool read_file_chunk(lfs_file_t* file, void* buffer, size_t buffer_size, size_t* bytes_read) {
+    if (!file || !buffer) {
+        return false;
+    }
+    
+    // Read the data
+    lfs_ssize_t read_size = lfs_file_read(&lfs, file, buffer, buffer_size);
+    if (read_size < 0) {
+        return false;
+    }
+    
+    // Set the number of bytes read
+    if (bytes_read) {
+        *bytes_read = read_size;
+    }
+    
     return true;
 }
 
@@ -229,7 +279,6 @@ bool delete_file(const char* filename) {
         return false;
     }
     
-    printf("File deleted successfully: %s\n", filename);
     return true;
 }
 
@@ -294,4 +343,59 @@ bool create_directory(const char* path) {
     
     printf("Directory created successfully: %s\n", path);
     return true;
+}
+
+// Process a base64 encoded file in chunks and write binary output
+bool process_base64_file(const char* temp_filename, const char* output_filename) {
+    // Open the base64 source file
+    lfs_file_t src_file;
+    int err = lfs_file_open(&lfs, &src_file, temp_filename, LFS_O_RDONLY);
+    if (err) {
+        return false;
+    }
+    
+    // Create/truncate the output file
+    lfs_file_t out_file;
+    err = lfs_file_open(&lfs, &out_file, output_filename, LFS_O_WRONLY | LFS_O_CREAT | LFS_O_TRUNC);
+    if (err) {
+        lfs_file_close(&lfs, &src_file);
+        return false;
+    }
+    
+    // Buffer for reading base64 data
+    char base64_buffer[65536]; // Adjust size as needed
+    // Buffer for decoded binary data
+    uint8_t bin_buffer[49152];  // 3/4 the size of base64 buffer is sufficient
+    
+    size_t bytes_read;
+    bool success = true;
+    
+    // Process the file in chunks
+    while (true) {
+        // Read a chunk of base64 data
+        if (!read_file_chunk(&src_file, base64_buffer, sizeof(base64_buffer), &bytes_read) || bytes_read == 0) {
+            break; // End of file or error
+        }
+        
+        // Decode the base64 chunk
+        size_t decoded_len = base64_decode(base64_buffer, bytes_read, bin_buffer, sizeof(bin_buffer));
+        
+        // Write the decoded data to output file
+        lfs_ssize_t written = lfs_file_write(&lfs, &out_file, bin_buffer, decoded_len);
+        if (written < 0) {
+            success = false;
+            break;
+        }
+    }
+    
+    // Clean up
+    lfs_file_close(&lfs, &src_file);
+    lfs_file_close(&lfs, &out_file);
+    
+    // Delete the temporary file
+    if (success) {
+        delete_file(temp_filename);
+    }
+    
+    return success;
 }
