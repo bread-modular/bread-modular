@@ -81,6 +81,13 @@ int getGatePin(int id) {
 }
 
 void sendMIDI(byte channel, byte status, byte data1, byte data2) {
+  if (channel == 7) {
+    Serial.write(status); // Send the status byte
+    Serial.write(data1);  // Send the first data byte
+    Serial.write(data2);  // Send the second data byte
+    return;
+  }
+
   int channelIndex = channel;
   if (channelIndex >= 0 && channelIndex < 7) {
     SoftwareSerial serialCh = midiSerialArray[channelIndex];
