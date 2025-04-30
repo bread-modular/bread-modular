@@ -12,6 +12,7 @@
 #include "mod/Delay.h"
 #include "pico/time.h"
 #include "fs/pico_lfs.h"
+#include "api/WebSerial.h"
 
 #define SAMPLE_RATE 44100
 #define TOTAL_SAMPLES 2
@@ -42,6 +43,7 @@ MIDI *midi = MIDI::getInstance();
 Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
 Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
 Delay delay(1000.0f);
+WebSerial webSerial;
 
 bool applyFilters = true;
 
@@ -160,9 +162,13 @@ int main() {
         return 1;
     }
 
+    // Initialize WebSerial
+    webSerial.init();
+
     while (true) {
         io->update();
         midi->update();
+        webSerial.update();
     }
 
     return 0;

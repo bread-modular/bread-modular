@@ -74,3 +74,5 @@ target_include_directories(sampler PRIVATE
 
 pico_add_extra_outputs(sampler)
 
+# Add WebSerial.cpp to the build if not already present
+
