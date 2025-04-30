@@ -11,7 +11,7 @@
 #include "mod/Biquad.h"
 #include "mod/Delay.h"
 #include "pico/time.h"
-#include "fs/pico_lfs.h"
+#include "fs/FS.h"
 #include "api/WebSerial.h"
 
 #define SAMPLE_RATE 44100
@@ -37,6 +37,7 @@ float SAMPLE_VELOCITY[TOTAL_SAMPLES] = {
     1.0f
 };
 
+FS *fs = FS::getInstance();
 IO *io = IO::getInstance();
 AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
@@ -156,9 +157,8 @@ int main() {
     midi->setNoteOnCallback(noteOnCallback);
     midi->init();
 
-    // Mount the filesystem
-    if (!mount_lfs()) {
-        printf("Failed to mount filesystem\n");
+    // Initialize the filesystem
+    if (!fs->init()) {
         return 1;
     }
 
