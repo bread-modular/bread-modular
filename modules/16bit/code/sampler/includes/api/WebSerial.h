@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "fs/pico_lfs.h"
-#include "utils/base64.h"
 
 class WebSerial {
     public:
@@ -14,21 +13,21 @@ class WebSerial {
         ~WebSerial() {}
         
         void init() {
-            reset_base64_state();
+            reset_encoding_state();
             buffer_pos = 0;
         }
         
         void update() {
-            if (base64_mode) {
-                // Process Base64 encoded data
+            if (backslash_escape_mode) {
+                // Process backslash-escaped binary data
                 int c = getchar_timeout_us(0);
                 if (c != PICO_ERROR_TIMEOUT) {
                     if (c == '\n' || c == '\r') {
-                        // Newline indicates end of Base64 data
-                        if (base64_buffer_pos > 0) {
+                        // Newline indicates end of encoded data
+                        if (encoded_buffer_pos > 0) {
                             // Decode final buffer and append
-                            uint8_t decoded_data[base64_buffer_pos]; // Temp decode buffer (will be smaller than base64 data)
-                            int decoded_len = decode_base64_chunk(base64_buffer, base64_buffer_pos, decoded_data, sizeof(decoded_data));
+                            uint8_t decoded_data[encoded_buffer_pos]; // Temp decode buffer
+                            int decoded_len = decode_backslash_escape(encoded_buffer, encoded_buffer_pos, decoded_data, sizeof(decoded_data));
                             
                             if (decoded_len > 0) {
                                 // Append to sample file
@@ -40,21 +39,21 @@ class WebSerial {
                                 }
                             }
                             
-                            printf("Base64 transfer complete. Total received: %d chars, decoded to sample file\n", 
-                                  received_chars + base64_buffer_pos);
+                            printf("Transfer complete. Total received: %d chars, decoded to sample file\n", 
+                                  received_chars + encoded_buffer_pos);
                         }
-                        reset_base64_state();
+                        reset_encoding_state();
                         return;
                     }
                     
-                    // Store Base64 character
-                    base64_buffer[base64_buffer_pos++] = (char)c;
+                    // Store character in buffer
+                    encoded_buffer[encoded_buffer_pos++] = (char)c;
                     
                     // When buffer fills up, decode and write to sample file
-                    if (base64_buffer_pos >= sizeof(base64_buffer) - 1) {
+                    if (encoded_buffer_pos >= sizeof(encoded_buffer) - 1) {
                         // Decode current buffer
-                        uint8_t decoded_data[base64_buffer_pos]; // Temp decode buffer (will be smaller than base64 data)
-                        int decoded_len = decode_base64_chunk(base64_buffer, base64_buffer_pos, decoded_data, sizeof(decoded_data));
+                        uint8_t decoded_data[encoded_buffer_pos]; // Temp decode buffer
+                        int decoded_len = decode_backslash_escape(encoded_buffer, encoded_buffer_pos, decoded_data, sizeof(decoded_data));
                         
                         if (decoded_len > 0) {
                             // Create or append to sample file
@@ -77,12 +76,12 @@ class WebSerial {
                         }
                         
                         // Update progress and reset buffer for next chunk
-                        received_chars += base64_buffer_pos;
-                        base64_buffer_pos = 0;
+                        received_chars += encoded_buffer_pos;
+                        encoded_buffer_pos = 0;
                         
                         // Print progress
-                        printf("Received %d/%d Base64 chars, decoded and written\n", 
-                              received_chars, base64_expected);
+                        printf("Received %d/%d chars, decoded and written\n", 
+                              received_chars, encoded_expected);
                     }
                 }
                 return;
@@ -108,21 +107,21 @@ class WebSerial {
         char buffer[256];
         int buffer_pos = 0;
         
-        // Sample data and Base64 state
+        // Sample data and encoding state
         int sample_id = -1;
-        bool base64_mode = false;
-        char base64_buffer[1024 * 64]; // 64KB buffer for Base64 data
-        int base64_buffer_pos = 0;
-        int base64_expected = 0;
+        bool backslash_escape_mode = false;
+        char encoded_buffer[1024 * 64]; // 64KB buffer for encoded data
+        int encoded_buffer_pos = 0;
+        int encoded_expected = 0;
         int original_size = 0;
         int received_chars = 0;
         bool file_written = false;
         
-        // Reset Base64 state
-        void reset_base64_state() {
-            base64_mode = false;
-            base64_buffer_pos = 0;
-            base64_expected = 0;
+        // Reset encoding state
+        void reset_encoding_state() {
+            backslash_escape_mode = false;
+            encoded_buffer_pos = 0;
+            encoded_expected = 0;
             original_size = 0;
             sample_id = -1;
             received_chars = 0;
@@ -144,43 +143,74 @@ class WebSerial {
             }
         }
         
-        // Helper to decode a chunk of Base64 data
-        int decode_base64_chunk(const char* base64_data, int base64_len, uint8_t* out_buffer, int out_buffer_size) {
-            // Assuming base64_decode function from utils/base64.h
-            size_t decoded_len = base64_decode(base64_data, base64_len, out_buffer, out_buffer_size);
-            return (int)decoded_len;
+        // Helper to decode backslash-escaped data
+        int decode_backslash_escape(const char* data, int data_len, uint8_t* out, int out_max) {
+            int out_len = 0;
+            bool in_escape = false;
+            
+            for (int i = 0; i < data_len && out_len < out_max; i++) {
+                char c = data[i];
+                
+                if (in_escape) {
+                    // Process escaped character
+                    switch (c) {
+                        case 'n': // \n
+                            out[out_len++] = 10; // LF
+                            break;
+                        case 'r': // \r
+                            out[out_len++] = 13; // CR
+                            break;
+                        case '\\': // \\
+                            out[out_len++] = 92; // Backslash
+                            break;
+                        default:
+                            // Unknown escape sequence, just output the character
+                            out[out_len++] = (uint8_t)c;
+                            break;
+                    }
+                    in_escape = false;
+                } else if (c == '\\') {
+                    // Start of escape sequence
+                    in_escape = true;
+                } else {
+                    // Regular character
+                    out[out_len++] = (uint8_t)c;
+                }
+            }
+            
+            return out_len;
         }
         
         void process_command(const char* cmd) {
-            // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
-            if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
-                int id = -1, orig_size = -1, b64_len = -1;
-                if (sscanf(cmd + 20, "%d %d %d", &id, &orig_size, &b64_len) == 3) {
+            // Parse: write-sample-escaped <sample-id> <original-size> <encoded-length>
+            if (strncmp(cmd, "write-sample-escaped ", 21) == 0) {
+                int id = -1, orig_size = -1, encoded_len = -1;
+                if (sscanf(cmd + 21, "%d %d %d", &id, &orig_size, &encoded_len) == 3) {
                     if (id >= 0 && id <= 11 && 
                         orig_size > 0 &&
-                        b64_len > 0) {
+                        encoded_len > 0) {
                         
                         // Delete existing file if it exists 
                         char path[32];
                         snprintf(path, sizeof(path), "/samples/%02d.raw", id);
                         delete_file(path);
                         
-                        base64_mode = true;
+                        backslash_escape_mode = true;
                         sample_id = id;
                         original_size = orig_size;
-                        base64_expected = b64_len;
-                        base64_buffer_pos = 0;
+                        encoded_expected = encoded_len;
+                        encoded_buffer_pos = 0;
                         received_chars = 0;
                         file_written = false;
                         
-                        printf("Ready to receive %d Base64 chars for sample %02d (original %d bytes)\n", 
-                               b64_len, id, orig_size);
+                        printf("Ready to receive %d backslash-escaped chars for sample %02d (original %d bytes)\n", 
+                               encoded_len, id, orig_size);
                     } else {
-                        printf("Invalid parameters: id=%d, orig_size=%d, b64_len=%d\n", 
-                               id, orig_size, b64_len);
+                        printf("Invalid parameters: id=%d, orig_size=%d, encoded_len=%d\n", 
+                               id, orig_size, encoded_len);
                     }
                 } else {
-                    printf("Usage: write-sample-base64 <sample-id 0-11> <original-size> <base64-length>\n");
+                    printf("Usage: write-sample-escaped <sample-id 0-11> <original-size> <encoded-length>\n");
                 }
             }
             else if (strcmp(cmd, "ping") == 0) {
