@@ -26,28 +26,22 @@ class WebSerial {
                     if (c == '\n' || c == '\r') {
                         // Newline indicates end of Base64 data
                         if (base64_buffer_pos > 0) {
-                            printf("Received %d Base64 chars, finalizing temp file...\n", base64_buffer_pos);
+                            // Decode final buffer and append
+                            uint8_t decoded_data[base64_buffer_pos]; // Temp decode buffer (will be smaller than base64 data)
+                            int decoded_len = decode_base64_chunk(base64_buffer, base64_buffer_pos, decoded_data, sizeof(decoded_data));
                             
-                            // Save any remaining data to the temp file
-                            if (base64_buffer_pos > 0) {
-                                append_file("/temp_base64.txt", base64_buffer, base64_buffer_pos);
-                            }
-                            
-                            // Now process the temp file to decode base64 to binary
-                            if (sample_id >= 0 && sample_id <= 11) {
+                            if (decoded_len > 0) {
+                                // Append to sample file
                                 char path[32];
                                 snprintf(path, sizeof(path), "/samples/%02d.raw", sample_id);
-                                
-                                printf("Processing Base64 file into %s...\n", path);
-                                if (process_base64_file("/temp_base64.txt", path)) {
-                                    printf("Sample %02d saved to %s\n", sample_id, path);
-                                } else {
-                                    printf("Failed to process Base64 data\n");
+                                bool success = append_file(path, decoded_data, decoded_len);
+                                if (!success) {
+                                    printf("Error appending final chunk to sample file\n");
                                 }
-                            } else {
-                                printf("Invalid sample id\n");
-                                delete_file("/temp_base64.txt");
                             }
+                            
+                            printf("Base64 transfer complete. Total received: %d chars, decoded to sample file\n", 
+                                  received_chars + base64_buffer_pos);
                         }
                         reset_base64_state();
                         return;
@@ -56,27 +50,39 @@ class WebSerial {
                     // Store Base64 character
                     base64_buffer[base64_buffer_pos++] = (char)c;
                     
-                    // When buffer fills up, write to temp file and reset buffer
+                    // When buffer fills up, decode and write to sample file
                     if (base64_buffer_pos >= sizeof(base64_buffer) - 1) {
-                        // Save chunk to temp file
-                        if (base64_buffer_pos > 0) {
-                            bool first_write = !temp_file_exists;
-                            if (first_write) {
-                                // Create the temp file
-                                write_file("/temp_base64.txt", base64_buffer, base64_buffer_pos);
-                                temp_file_exists = true;
+                        // Decode current buffer
+                        uint8_t decoded_data[base64_buffer_pos]; // Temp decode buffer (will be smaller than base64 data)
+                        int decoded_len = decode_base64_chunk(base64_buffer, base64_buffer_pos, decoded_data, sizeof(decoded_data));
+                        
+                        if (decoded_len > 0) {
+                            // Create or append to sample file
+                            char path[32];
+                            snprintf(path, sizeof(path), "/samples/%02d.raw", sample_id);
+                            
+                            bool success;
+                            if (!file_written) {
+                                // First chunk, create the file
+                                success = write_file(path, decoded_data, decoded_len);
+                                file_written = true;
                             } else {
-                                // Append to the temp file
-                                append_file("/temp_base64.txt", base64_buffer, base64_buffer_pos);
+                                // Append to existing file
+                                success = append_file(path, decoded_data, decoded_len);
                             }
                             
-                            // Reset buffer
-                            base64_buffer_pos = 0;
-                            
-                            // Print progress periodically
-                            received_chars += sizeof(base64_buffer) - 1;
-                            printf("Received %d/%d Base64 chars\n", received_chars, base64_expected);
+                            if (!success) {
+                                printf("Error writing to sample file\n");
+                            }
                         }
+                        
+                        // Update progress and reset buffer for next chunk
+                        received_chars += base64_buffer_pos;
+                        base64_buffer_pos = 0;
+                        
+                        // Print progress
+                        printf("Received %d/%d Base64 chars, decoded and written\n", 
+                              received_chars, base64_expected);
                     }
                 }
                 return;
@@ -102,17 +108,15 @@ class WebSerial {
         char buffer[256];
         int buffer_pos = 0;
         
-        // Sample data buffer (just for small operations)
+        // Sample data and Base64 state
         int sample_id = -1;
-        
-        // Base64 receive state
         bool base64_mode = false;
         char base64_buffer[1024 * 64]; // 64KB buffer for Base64 data
         int base64_buffer_pos = 0;
         int base64_expected = 0;
-        int original_size = 0; // Original binary size before Base64 encoding
+        int original_size = 0;
         int received_chars = 0;
-        bool temp_file_exists = false;
+        bool file_written = false;
         
         // Reset Base64 state
         void reset_base64_state() {
@@ -122,7 +126,7 @@ class WebSerial {
             original_size = 0;
             sample_id = -1;
             received_chars = 0;
-            temp_file_exists = false;
+            file_written = false;
         }
         
         // Flush serial buffer
@@ -140,6 +144,13 @@ class WebSerial {
             }
         }
         
+        // Helper to decode a chunk of Base64 data
+        int decode_base64_chunk(const char* base64_data, int base64_len, uint8_t* out_buffer, int out_buffer_size) {
+            // Assuming base64_decode function from utils/base64.h
+            size_t decoded_len = base64_decode(base64_data, base64_len, out_buffer, out_buffer_size);
+            return (int)decoded_len;
+        }
+        
         void process_command(const char* cmd) {
             // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
             if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
@@ -149,13 +160,19 @@ class WebSerial {
                         orig_size > 0 &&
                         b64_len > 0) {
                         
+                        // Delete existing file if it exists 
+                        char path[32];
+                        snprintf(path, sizeof(path), "/samples/%02d.raw", id);
+                        delete_file(path);
+                        
                         base64_mode = true;
                         sample_id = id;
                         original_size = orig_size;
                         base64_expected = b64_len;
                         base64_buffer_pos = 0;
                         received_chars = 0;
-                        temp_file_exists = false;
+                        file_written = false;
+                        
                         printf("Ready to receive %d Base64 chars for sample %02d (original %d bytes)\n", 
                                b64_len, id, orig_size);
                     } else {
