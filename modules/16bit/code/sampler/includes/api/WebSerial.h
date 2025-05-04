@@ -111,10 +111,19 @@ class WebSerial {
             size_t data_len = (original_size < decoded_size - 4) ? original_size : (decoded_size - 4);
             calc_crc = crc32(calc_crc, decoded_buffer + 4, data_len);
             calc_crc = ~calc_crc;
-            
+
             printf("Checksum: received=0x%08x, calculated=0x%08x\n", received_crc, calc_crc);
             if (calc_crc == received_crc) {
                 printf("Checksum OK\n");
+                // Save to file in /samples directory
+                char path[32];
+                snprintf(path, sizeof(path), "/samples/%02d.raw", sample_id);
+                printf("Saving sample to %s\n", path);
+                if (write_file(path, decoded_buffer + 4, data_len)) {
+                    printf("Sample saved to %s (%zu bytes)\n", path, data_len);
+                } else {
+                    printf("Failed to save sample to %s\n", path);
+                }
             } else {
                 printf("Checksum FAILED!\n");
             }
