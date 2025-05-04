@@ -51,6 +51,10 @@ bool applyFilters = true;
 float sampleVelocity = 1.0f;
 float midi_bpm = 0.0f;
 
+static size_t webserial_playhead = 0;
+int16_t* ws_samples = nullptr;
+size_t ws_len = 0;
+
 void audioCallback(AudioResponse *response) {
     float sampleSum = 0.0f;
 
@@ -60,6 +64,15 @@ void audioCallback(AudioResponse *response) {
             float sample = SAMPLES[i][SAMPLE_PLAYHEAD[i]] / 32768.0f;
             sampleSum += sample * SAMPLE_VELOCITY[i];
             SAMPLE_PLAYHEAD[i]++;
+        }
+    }
+    // WebSerial buffer playback
+    if (webserial_playhead < webSerial.decoded_size) {
+        // Assume 16-bit signed PCM, little endian
+        if (webserial_playhead < ws_len) {
+            float ws_sample = ws_samples[webserial_playhead] / 32768.0f;
+            sampleSum += ws_sample; // Mix in
+            webserial_playhead++;
         }
     }
     audioManager->endAudioLock();
@@ -101,10 +114,15 @@ void cv2UpdateCallback(uint16_t cv2) {
 
 void buttonPressedCallback(bool pressed) {
     if (pressed) {
-        applyFilters = false;
+        printf("button pressed %d\n", webSerial.decoded_size);
         io->setLED(true);
+        // Reset playhead to start playback from beginning
+        audioManager->startAudioLock();
+        ws_samples = (int16_t*)webSerial.decoded_buffer;
+        ws_len = (webSerial.original_size / 2) - 100;
+        webserial_playhead = 0;
+        audioManager->endAudioLock();
     } else {
-        applyFilters = true;
         io->setLED(false);
     }
 }
