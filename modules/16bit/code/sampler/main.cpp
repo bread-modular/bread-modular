@@ -14,9 +14,11 @@
 #include "fs/FS.h"
 #include "api/WebSerial.h"
 #include "psram.h"
+#include "includes/fs/pico_lfs.h"
 
 #define SAMPLE_RATE 44100
 #define TOTAL_SAMPLES 2
+#define STREAM_BUFFER_SIZE 1024 // 1KB (512 samples for int16_t)
 
 int16_t* SAMPLES[TOTAL_SAMPLES] = {
     (int16_t*)s01_wav,
@@ -57,35 +59,66 @@ static size_t webserial_playhead = 0;
 int16_t* ws_samples = nullptr;
 size_t ws_len = 0;
 
+static int16_t stream_buffer_a[STREAM_BUFFER_SIZE / 2];
+static int16_t stream_buffer_b[STREAM_BUFFER_SIZE / 2];
+static int16_t* active_buffer = stream_buffer_a;
+static int16_t* next_buffer = stream_buffer_b;
+static size_t active_buffer_samples = 0;
+static size_t next_buffer_samples = 0;
+static size_t playhead_in_buffer = 0;
+static size_t file_offset = 0;
+static size_t total_streaming_samples = 0;
+static size_t current_stream_sample = 0;
+static bool next_buffer_ready = false;
+static bool streaming = false;
+
+// Prototype for sample streaming chunk loader
+bool load_sample_chunk(const char* path, size_t offset, int16_t* buffer, size_t* samples_loaded);
+
 void audioCallback(AudioResponse *response) {
     float sampleSum = 0.0f;
 
     audioManager->startAudioLock();
-    for (uint8_t i = 0; i < TOTAL_SAMPLES; i++) {
+
+    // In-memory sample playback (noteOnCallback logic)
+    for (int i = 0; i < TOTAL_SAMPLES; i++) {
         if (SAMPLE_PLAYHEAD[i] < SAMPLES_LEN[i]) {
-            float sample = SAMPLES[i][SAMPLE_PLAYHEAD[i]] / 32768.0f;
-            sampleSum += sample * SAMPLE_VELOCITY[i];
+            float s = SAMPLES[i][SAMPLE_PLAYHEAD[i]] / 32768.0f;
+            sampleSum += s * SAMPLE_VELOCITY[i];
             SAMPLE_PLAYHEAD[i]++;
         }
     }
-    // WebSerial buffer playback
-    if (webserial_playhead < webSerial.decoded_size) {
-        // Assume 16-bit signed PCM, little endian
-        if (webserial_playhead < ws_len) {
-            float ws_sample = ws_samples[webserial_playhead] / 32768.0f;
-            sampleSum += ws_sample; // Mix in
-            webserial_playhead++;
+
+    if (streaming && current_stream_sample < total_streaming_samples) {
+        // Streaming sample from disk
+        if (playhead_in_buffer >= active_buffer_samples && next_buffer_ready) {
+            // Swap in next buffer if ready
+            int16_t* tmp = active_buffer;
+            active_buffer = next_buffer;
+            next_buffer = tmp;
+            active_buffer_samples = next_buffer_samples;
+            playhead_in_buffer = 0;
+            file_offset += STREAM_BUFFER_SIZE;
+            next_buffer_ready = false;
         }
+        
+        if (playhead_in_buffer < active_buffer_samples) {
+            float s = active_buffer[playhead_in_buffer] / 32768.0f;
+            sampleSum += s;
+            playhead_in_buffer++;
+            current_stream_sample++;
+        }
+    } else {
+        streaming = false;
     }
+
     audioManager->endAudioLock();
-    
     if (applyFilters) {
         sampleSum = lowpassFilter.process(sampleSum);
         sampleSum = highpassFilter.process(sampleSum);
     }
     sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
     sampleSum = delay.process(sampleSum);
-
     response->left = sampleSum;
     response->right = sampleSum;
 }
@@ -118,11 +151,28 @@ void buttonPressedCallback(bool pressed) {
     if (pressed) {
         printf("button pressed %d\n", webSerial.decoded_size);
         io->setLED(true);
-        // Reset playhead to start playback from beginning
+
+        // Initialize streaming state
         audioManager->startAudioLock();
-        ws_samples = (int16_t*)webSerial.decoded_buffer;
-        ws_len = (webSerial.decoded_size / 2) - 100;
-        webserial_playhead = 0;
+
+        // Get file size and set total_streaming_samples
+        const char* stream_path = "/samples/00.raw";
+        size_t file_size = get_file_size(stream_path);
+        total_streaming_samples = MAX(0, file_size / sizeof(int16_t) - 100);
+        current_stream_sample = 0;
+
+        // Load the first buffer
+        size_t samples_loaded = 0;
+        if (load_sample_chunk(stream_path, 0, active_buffer, &samples_loaded) && samples_loaded > 0) {
+            active_buffer_samples = samples_loaded;
+        } else {
+            active_buffer_samples = 0;
+        }
+        playhead_in_buffer = 0;
+        file_offset = 0;
+        next_buffer_samples = 0;
+        next_buffer_ready = false;
+        streaming = true;
         audioManager->endAudioLock();
     } else {
         io->setLED(false);
@@ -155,6 +205,35 @@ void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
 
 void bpmChangeCallback(int bpm) {
     delay.setBPM(bpm);
+}
+
+bool load_sample_chunk(const char* path, size_t offset, int16_t* buffer, size_t* samples_loaded) {
+    lfs_file_t file;
+    int err = lfs_file_open(&lfs, &file, path, LFS_O_RDONLY);
+    if (err) {
+        printf("Failed to open file for streaming: %s\n", path);
+        *samples_loaded = 0;
+        return false;
+    }
+    // Seek to the offset
+    lfs_soff_t seek_res = lfs_file_seek(&lfs, &file, offset, LFS_SEEK_SET);
+    if (seek_res < 0) {
+        printf("Failed to seek in file: %s\n", path);
+        lfs_file_close(&lfs, &file);
+        *samples_loaded = 0;
+        return false;
+    }
+    // Read up to STREAM_BUFFER_SIZE bytes
+    lfs_ssize_t bytes_read = lfs_file_read(&lfs, &file, buffer, STREAM_BUFFER_SIZE);
+    if (bytes_read < 0) {
+        printf("Failed to read chunk from file: %s\n", path);
+        lfs_file_close(&lfs, &file);
+        *samples_loaded = 0;
+        return false;
+    }
+    lfs_file_close(&lfs, &file);
+    *samples_loaded = bytes_read / sizeof(int16_t);
+    return true;
 }
 
 int main() {
@@ -191,6 +270,20 @@ int main() {
         io->update();
         midi->update();
         webSerial.update();
+        // Prefetch next buffer if streaming and needed
+        if (streaming && !next_buffer_ready && active_buffer_samples > 0 &&
+            playhead_in_buffer >= (active_buffer_samples * 3) / 4) {
+            char path[32];
+            snprintf(path, sizeof(path), "/samples/00.raw");
+            size_t samples_loaded = 0;
+            if (load_sample_chunk(path, file_offset + STREAM_BUFFER_SIZE, next_buffer, &samples_loaded) && samples_loaded > 0) {
+                next_buffer_samples = samples_loaded;
+                next_buffer_ready = true;
+            } else {
+                next_buffer_samples = 0;
+                next_buffer_ready = false;
+            }
+        }
     }
 
     return 0;

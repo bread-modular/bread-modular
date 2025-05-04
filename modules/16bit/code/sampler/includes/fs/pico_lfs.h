@@ -344,3 +344,15 @@ bool create_directory(const char* path) {
     printf("Directory created successfully: %s\n", path);
     return true;
 }
+
+// Returns the file size in bytes, or 0 on error
+inline size_t get_file_size(const char* filename) {
+    struct lfs_info info;
+    int res = lfs_stat(&lfs, filename, &info);
+    if (res == 0) {
+        return info.size;
+    } else {
+        printf("Failed to stat file %s\n", filename);
+        return 0;
+    }
+}
