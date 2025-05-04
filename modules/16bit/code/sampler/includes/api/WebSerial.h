@@ -8,6 +8,7 @@
 #include "fs/pico_lfs.h"
 #include "utils/base64.h"
 #include "psram.h"
+#include "utils/crc32.h"
 
 #define WEB_SERIAL_BUFFER_SIZE (2 * 1024 * 1024) // 2MB per buffer
 
@@ -114,7 +115,26 @@ class WebSerial {
             if (!encoded_buffer || !decoded_buffer) return;
             decoded_size = base64_decode(encoded_buffer, encoded_pos, decoded_buffer, WEB_SERIAL_BUFFER_SIZE);
             printf("Decoded %zu bytes of sample data for sample %02d (expected: %d)\n", decoded_size, sample_id, original_size);
-            // Data is now in decoded_buffer, size decoded_size
+            // Checksum verification: first 4 bytes are CRC32 (little-endian)
+            if (decoded_size < 4) {
+                printf("Decoded data too small for checksum\n");
+                return;
+            }
+            uint32_t received_crc =
+                (uint32_t)decoded_buffer[0] |
+                ((uint32_t)decoded_buffer[1] << 8) |
+                ((uint32_t)decoded_buffer[2] << 16) |
+                ((uint32_t)decoded_buffer[3] << 24);
+            uint32_t calc_crc = 0xFFFFFFFF;
+            size_t data_len = (original_size < decoded_size - 4) ? original_size : (decoded_size - 4);
+            calc_crc = crc32(calc_crc, decoded_buffer + 4, data_len);
+            calc_crc = ~calc_crc;
+            printf("Checksum: received=0x%08x, calculated=0x%08x\n", received_crc, calc_crc);
+            if (calc_crc == received_crc) {
+                printf("Checksum OK\n");
+            } else {
+                printf("Checksum FAILED!\n");
+            }
         }
         void process_command(const char* cmd) {
             // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
