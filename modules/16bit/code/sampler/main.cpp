@@ -4,7 +4,6 @@
 #include "audio.h"
 #include "midi.h"
 #include "samples/s01.h"
-#include "samples/s02.h"
 #include "DAC.h"
 #include <algorithm>
 #include "math.h"
@@ -17,26 +16,22 @@
 #include "includes/fs/pico_lfs.h"
 
 #define SAMPLE_RATE 44100
-#define TOTAL_SAMPLES 2
-#define STREAM_BUFFER_SIZE 1024 // 1KB (512 samples for int16_t)
+#define TOTAL_SAMPLES 1
+#define STREAM_BUFFER_SIZE 1024 * 10
 
 int16_t* SAMPLES[TOTAL_SAMPLES] = {
-    (int16_t*)s01_wav,
-    (int16_t*)s02_wav
+    (int16_t*)s01_wav
 };
 
 uint32_t SAMPLES_LEN[TOTAL_SAMPLES] = {
-    s01_wav_len / 2,
-    s02_wav_len / 2
+    s01_wav_len / 2
 };
 
 uint32_t SAMPLE_PLAYHEAD[TOTAL_SAMPLES] = {
-    0xFFFFFFFF,
     0xFFFFFFFF
 };
 
 float SAMPLE_VELOCITY[TOTAL_SAMPLES] = {
-    1.0f,
     1.0f
 };
 
@@ -149,7 +144,6 @@ void cv2UpdateCallback(uint16_t cv2) {
 
 void buttonPressedCallback(bool pressed) {
     if (pressed) {
-        printf("button pressed %d\n", webSerial.decoded_size);
         io->setLED(true);
 
         // Initialize streaming state
