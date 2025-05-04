@@ -120,11 +120,12 @@ Voice* findFreeVoice() {
 }
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+    printf("Note on: %d %d(%d) %d\n", channel, note, MIDI::midiNoteToFrequency(note), velocity);
+    
     if (++totalNotesOn > 0) {
         io->setGate1(true);
     }
 
-    printf("Note on: %d %d(%d) %d\n", channel, note, MIDI::midiNoteToFrequency(note), velocity);
     // generatorNotes is optional. But it allows to set different notes for each generator.
     // This is useful for unison & related voices
     Voice* voice = findFreeVoice();
