@@ -7,15 +7,26 @@
 #include "pico/stdlib.h"
 #include "fs/pico_lfs.h"
 #include "utils/base64.h"
+#include "psram.h"
+
+#define WEB_SERIAL_BUFFER_SIZE (2 * 1024 * 1024) // 2MB per buffer
 
 class WebSerial {
     public:
-        WebSerial() {}
+        WebSerial() {
+            psram = PSRAM::getInstance();
+            encoded_buffer = nullptr;
+            decoded_buffer = nullptr;
+        }
         ~WebSerial() {}
         
         void init() {
             reset_transfer_state();
             buffer_pos = 0;
+            // Use PSRAM as a linear buffer: first 2MB for encoded, next 2MB for decoded
+            volatile uint8_t* base = psram->getPsram();
+            encoded_buffer = (char*)base;
+            decoded_buffer = (uint8_t*)(base + WEB_SERIAL_BUFFER_SIZE);
         }
         
         void update() {
@@ -25,8 +36,8 @@ class WebSerial {
                     if (c == '\n' || c == '\r') {
                         // End of data
                         if (current_transfer_size > 0) {
-                            if (buffer_pos > 0) {
-                                if (encoded_pos + buffer_pos < sizeof(encoded_buffer)) {
+                            if (buffer_pos > 0 && encoded_buffer) {
+                                if (encoded_pos + buffer_pos < WEB_SERIAL_BUFFER_SIZE) {
                                     memcpy(encoded_buffer + encoded_pos, buffer, buffer_pos);
                                     encoded_pos += buffer_pos;
                                     total_bytes_transferred += buffer_pos;
@@ -42,8 +53,8 @@ class WebSerial {
                         return;
                     }
                     buffer[buffer_pos++] = (char)c;
-                    if (buffer_pos >= sizeof(buffer) - 1) {
-                        if (encoded_pos + buffer_pos < sizeof(encoded_buffer)) {
+                    if (buffer_pos >= sizeof(buffer) - 1 && encoded_buffer) {
+                        if (encoded_pos + buffer_pos < WEB_SERIAL_BUFFER_SIZE) {
                             memcpy(encoded_buffer + encoded_pos, buffer, buffer_pos);
                             encoded_pos += buffer_pos;
                             total_bytes_transferred += buffer_pos;
@@ -76,30 +87,33 @@ class WebSerial {
             }
         }
     public:
-        uint8_t decoded_buffer[1024 * 64]; // 64KB for decoded data
+        uint8_t* decoded_buffer = nullptr; // 2MB for decoded data (PSRAM)
         size_t decoded_size = 0;
         int original_size = 0;
-
     private:
+        PSRAM* psram;
         char buffer[1024];
         int buffer_pos = 0;
         bool transfer_mode = false;
         int current_transfer_size = 0;
         int total_bytes_transferred = 0;
         int sample_id = -1;
-        char encoded_buffer[1024 * 64]; // 64KB for encoded data
+        char* encoded_buffer = nullptr; // 2MB for encoded data (PSRAM)
         size_t encoded_pos = 0;
         void reset_transfer_state() {
             transfer_mode = false;
             current_transfer_size = 0;
             total_bytes_transferred = 0;
             sample_id = -1;
+            original_size = 0;
             buffer_pos = 0;
             encoded_pos = 0;
+            // decoded_size is not reset here
         }
         void decode_base64_data() {
-            decoded_size = base64_decode(encoded_buffer, encoded_pos, decoded_buffer, sizeof(decoded_buffer));
-            printf("Decoded %zu bytes of sample data for sample %02d\n", decoded_size, sample_id);
+            if (!encoded_buffer || !decoded_buffer) return;
+            decoded_size = base64_decode(encoded_buffer, encoded_pos, decoded_buffer, WEB_SERIAL_BUFFER_SIZE);
+            printf("Decoded %zu bytes of sample data for sample %02d (expected: %d)\n", decoded_size, sample_id, original_size);
             // Data is now in decoded_buffer, size decoded_size
         }
         void process_command(const char* cmd) {
@@ -108,8 +122,8 @@ class WebSerial {
                 int id = -1, orig_size = -1, b64_len = -1;
                 if (sscanf(cmd + 20, "%d %d %d", &id, &orig_size, &b64_len) == 3) {
                     if (id >= 0 && id <= 11 && orig_size > 0 && b64_len > 0) {
-                        if (b64_len > sizeof(encoded_buffer)) {
-                            printf("Error: Base64 data too large (%d > %zu)\n", b64_len, sizeof(encoded_buffer));
+                        if (b64_len > WEB_SERIAL_BUFFER_SIZE) {
+                            printf("Error: Base64 data too large (%d > %d)\n", b64_len, WEB_SERIAL_BUFFER_SIZE);
                             return;
                         }
                         transfer_mode = true;

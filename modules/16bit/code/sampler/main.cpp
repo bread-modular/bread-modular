@@ -13,6 +13,7 @@
 #include "pico/time.h"
 #include "fs/FS.h"
 #include "api/WebSerial.h"
+#include "psram.h"
 
 #define SAMPLE_RATE 44100
 #define TOTAL_SAMPLES 2
@@ -39,6 +40,7 @@ float SAMPLE_VELOCITY[TOTAL_SAMPLES] = {
 
 FS *fs = FS::getInstance();
 IO *io = IO::getInstance();
+PSRAM *psram = PSRAM::getInstance();
 AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
 Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
@@ -119,7 +121,7 @@ void buttonPressedCallback(bool pressed) {
         // Reset playhead to start playback from beginning
         audioManager->startAudioLock();
         ws_samples = (int16_t*)webSerial.decoded_buffer;
-        ws_len = (webSerial.original_size / 2) - 100;
+        ws_len = (webSerial.decoded_size / 2) - 100;
         webserial_playhead = 0;
         audioManager->endAudioLock();
     } else {
@@ -174,6 +176,8 @@ int main() {
     midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);
     midi->init();
+
+    psram->init();
 
     // Initialize the filesystem
     if (!fs->init()) {
