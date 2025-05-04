@@ -17,7 +17,10 @@
 
 #define SAMPLE_RATE 44100
 #define TOTAL_SAMPLES 1
-#define STREAM_BUFFER_SIZE 1024 * 10
+// When the sample is over the size of the buffer
+// when loading the next buffer there's a pop
+// increasting buffer size helps.
+#define STREAM_BUFFER_SIZE 1024 * 100
 
 int16_t* SAMPLES[TOTAL_SAMPLES] = {
     (int16_t*)s01_wav
@@ -153,7 +156,7 @@ void buttonPressedCallback(bool pressed) {
         const char* stream_path = "/samples/00.raw";
         size_t file_size = get_file_size(stream_path);
         total_streaming_samples = MAX(0, file_size / sizeof(int16_t) - 100);
-        current_stream_sample = 0;
+        current_stream_sample = 22;
 
         // Load the first buffer
         size_t samples_loaded = 0;
@@ -266,7 +269,9 @@ int main() {
         webSerial.update();
         // Prefetch next buffer if streaming and needed
         if (streaming && !next_buffer_ready && active_buffer_samples > 0 &&
-            playhead_in_buffer >= (active_buffer_samples * 3) / 4) {
+            file_offset + STREAM_BUFFER_SIZE < total_streaming_samples) {
+
+            printf("Prefetching next buffer\n");
             char path[32];
             snprintf(path, sizeof(path), "/samples/00.raw");
             size_t samples_loaded = 0;
@@ -274,6 +279,7 @@ int main() {
                 next_buffer_samples = samples_loaded;
                 next_buffer_ready = true;
             } else {
+                printf("Failed to prefetch next buffer\n");
                 next_buffer_samples = 0;
                 next_buffer_ready = false;
             }
