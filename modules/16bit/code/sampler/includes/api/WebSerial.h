@@ -36,42 +36,24 @@ class WebSerial {
                 if (c != PICO_ERROR_TIMEOUT) {
                     if (c == '\n' || c == '\r') {
                         // End of data
-                        if (current_transfer_size > 0) {
-                            if (buffer_pos > 0 && encoded_buffer) {
-                                if (encoded_pos + buffer_pos < WEB_SERIAL_BUFFER_SIZE) {
-                                    memcpy(encoded_buffer + encoded_pos, buffer, buffer_pos);
-                                    encoded_pos += buffer_pos;
-                                    total_bytes_transferred += buffer_pos;
-                                } else {
-                                    printf("Error: Buffer overflow\n");
-                                }
-                                buffer_pos = 0;
-                            }
-                            printf("Received %d bytes of data, now decoding...\n", total_bytes_transferred);
-                            decode_base64_data();
-                        }
+                        printf("Received %d bytes of data, now decoding...\n", total_bytes_transferred);
+                        decode_base64_data();
                         reset_transfer_state();
                         return;
                     }
-                    buffer[buffer_pos++] = (char)c;
-                    if (buffer_pos >= sizeof(buffer) - 1 && encoded_buffer) {
-                        if (encoded_pos + buffer_pos < WEB_SERIAL_BUFFER_SIZE) {
-                            memcpy(encoded_buffer + encoded_pos, buffer, buffer_pos);
-                            encoded_pos += buffer_pos;
-                            total_bytes_transferred += buffer_pos;
-                            buffer_pos = 0;
-                            if (total_bytes_transferred % 1000 == 0 || total_bytes_transferred == 1) {
-                                printf("Received %d/%d bytes\n", total_bytes_transferred, current_transfer_size);
-                            }
-                        } else {
-                            printf("Error: Buffer overflow\n");
-                            reset_transfer_state();
-                            return;
-                        }
+
+                    if (encoded_pos < WEB_SERIAL_BUFFER_SIZE) {
+                        encoded_buffer[encoded_pos++] = (char)c;
+                        total_bytes_transferred ++;
+                    } else {
+                        printf("Error: Buffer overflow\n");
+                        reset_transfer_state();
+                        return;
                     }
                 }
                 return;
             }
+
             int c = getchar_timeout_us(0);
             if (c != PICO_ERROR_TIMEOUT) {
                 if (c == '\n' || c == '\r') {
@@ -101,6 +83,7 @@ class WebSerial {
         int sample_id = -1;
         char* encoded_buffer = nullptr; // 2MB for encoded data (PSRAM)
         size_t encoded_pos = 0;
+
         void reset_transfer_state() {
             transfer_mode = false;
             current_transfer_size = 0;
@@ -109,17 +92,16 @@ class WebSerial {
             original_size = 0;
             buffer_pos = 0;
             encoded_pos = 0;
-            // decoded_size is not reset here
         }
+
         void decode_base64_data() {
             if (!encoded_buffer || !decoded_buffer) return;
-            decoded_size = base64_decode(encoded_buffer, encoded_pos, decoded_buffer, WEB_SERIAL_BUFFER_SIZE);
-            printf("Decoded %zu bytes of sample data for sample %02d (expected: %d)\n", decoded_size, sample_id, original_size);
-            // Checksum verification: first 4 bytes are CRC32 (little-endian)
+            decoded_size = base64_decode(encoded_buffer, encoded_pos, decoded_buffer, WEB_SERIAL_BUFFER_SIZE);            // Checksum verification: first 4 bytes are CRC32 (little-endian)
             if (decoded_size < 4) {
                 printf("Decoded data too small for checksum\n");
                 return;
             }
+
             uint32_t received_crc =
                 (uint32_t)decoded_buffer[0] |
                 ((uint32_t)decoded_buffer[1] << 8) |
@@ -129,6 +111,7 @@ class WebSerial {
             size_t data_len = (original_size < decoded_size - 4) ? original_size : (decoded_size - 4);
             calc_crc = crc32(calc_crc, decoded_buffer + 4, data_len);
             calc_crc = ~calc_crc;
+            
             printf("Checksum: received=0x%08x, calculated=0x%08x\n", received_crc, calc_crc);
             if (calc_crc == received_crc) {
                 printf("Checksum OK\n");
@@ -136,6 +119,7 @@ class WebSerial {
                 printf("Checksum FAILED!\n");
             }
         }
+
         void process_command(const char* cmd) {
             // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
             if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
