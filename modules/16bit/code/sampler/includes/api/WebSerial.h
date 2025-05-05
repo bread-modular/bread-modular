@@ -36,6 +36,7 @@ class WebSerial {
                         printf("Received %d bytes of data, now decoding...\n", total_bytes_transferred);
                         decode_base64_data();
                         reset_transfer_state();
+                        psram->freeall();
                         return;
                     }
 
