@@ -20,7 +20,7 @@
 // When the sample is over the size of the buffer
 // when loading the next buffer there's a pop
 // increasting buffer size helps.
-#define STREAM_BUFFER_SIZE 1024 * 100
+#define STREAM_BUFFER_SIZE 1024 * 50
 
 int16_t* SAMPLES[TOTAL_SAMPLES] = {
     (int16_t*)s01_wav
@@ -53,9 +53,9 @@ bool applyFilters = true;
 float sampleVelocity = 1.0f;
 float midi_bpm = 0.0f;
 
-static size_t webserial_playhead = 0;
-int16_t* ws_samples = nullptr;
-size_t ws_len = 0;
+static size_t sample_playhead = 0;
+int16_t* sample_data = nullptr;
+size_t sample_len = 0;
 
 static int16_t stream_buffer_a[STREAM_BUFFER_SIZE / 2];
 static int16_t stream_buffer_b[STREAM_BUFFER_SIZE / 2];

@@ -1,0 +1,95 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../../../bread-modular-website"
+		}
+	],
+	"settings": {
+		"cmake.options.statusBarVisibility": "hidden",
+		"cmake.options.advanced": {
+			"build": {
+				"statusBarVisibility": "hidden"
+			},
+			"launch": {
+				"statusBarVisibility": "hidden"
+			},
+			"debug": {
+				"statusBarVisibility": "hidden"
+			}
+		},
+		"terminal.integrated.env.windows": {
+			"PICO_SDK_PATH": "${env:USERPROFILE}/.pico-sdk/sdk/2.1.1",
+			"PICO_TOOLCHAIN_PATH": "${env:USERPROFILE}/.pico-sdk/toolchain/14_2_Rel1",
+			"Path": "${env:USERPROFILE}/.pico-sdk/toolchain/14_2_Rel1/bin;${env:USERPROFILE}/.pico-sdk/picotool/2.1.1/picotool;${env:USERPROFILE}/.pico-sdk/cmake/v3.31.5/bin;${env:USERPROFILE}/.pico-sdk/ninja/v1.12.1;${env:PATH}"
+		},
+		"terminal.integrated.env.osx": {
+			"PICO_SDK_PATH": "${env:HOME}/.pico-sdk/sdk/2.1.1",
+			"PICO_TOOLCHAIN_PATH": "${env:HOME}/.pico-sdk/toolchain/14_2_Rel1",
+			"PATH": "${env:HOME}/.pico-sdk/toolchain/14_2_Rel1/bin:${env:HOME}/.pico-sdk/picotool/2.1.1/picotool:${env:HOME}/.pico-sdk/cmake/v3.31.5/bin:${env:HOME}/.pico-sdk/ninja/v1.12.1:${env:PATH}"
+		},
+		"terminal.integrated.env.linux": {
+			"PICO_SDK_PATH": "${env:HOME}/.pico-sdk/sdk/2.1.1",
+			"PICO_TOOLCHAIN_PATH": "${env:HOME}/.pico-sdk/toolchain/14_2_Rel1",
+			"PATH": "${env:HOME}/.pico-sdk/toolchain/14_2_Rel1/bin:${env:HOME}/.pico-sdk/picotool/2.1.1/picotool:${env:HOME}/.pico-sdk/cmake/v3.31.5/bin:${env:HOME}/.pico-sdk/ninja/v1.12.1:${env:PATH}"
+		},
+		"raspberry-pi-pico.cmakeAutoConfigure": true,
+		"raspberry-pi-pico.useCmakeTools": false,
+		"raspberry-pi-pico.cmakePath": "${HOME}/.pico-sdk/cmake/v3.31.5/bin/cmake",
+		"raspberry-pi-pico.ninjaPath": "${HOME}/.pico-sdk/ninja/v1.12.1/ninja",
+		"files.associations": {
+			"compare": "cpp",
+			"cstdint": "cpp",
+			"__bit_reference": "cpp",
+			"__hash_table": "cpp",
+			"__locale": "cpp",
+			"__split_buffer": "cpp",
+			"array": "cpp",
+			"atomic": "cpp",
+			"bitset": "cpp",
+			"cstddef": "cpp",
+			"cstdio": "cpp",
+			"cstdlib": "cpp",
+			"cstring": "cpp",
+			"ctime": "cpp",
+			"cwchar": "cpp",
+			"deque": "cpp",
+			"memory": "cpp",
+			"format": "cpp",
+			"initializer_list": "cpp",
+			"ios": "cpp",
+			"istream": "cpp",
+			"iterator": "cpp",
+			"locale": "cpp",
+			"mutex": "cpp",
+			"new": "cpp",
+			"optional": "cpp",
+			"ostream": "cpp",
+			"print": "cpp",
+			"random": "cpp",
+			"span": "cpp",
+			"string": "cpp",
+			"string_view": "cpp",
+			"tuple": "cpp",
+			"type_traits": "cpp",
+			"typeinfo": "cpp",
+			"unordered_map": "cpp",
+			"utility": "cpp",
+			"variant": "cpp",
+			"vector": "cpp",
+			"bit": "cpp",
+			"*.tcc": "cpp",
+			"chrono": "cpp",
+			"concepts": "cpp",
+			"forward_list": "cpp",
+			"functional": "cpp",
+			"memory_resource": "cpp",
+			"stdexcept": "cpp",
+			"system_error": "cpp",
+			"text_encoding": "cpp",
+			"ratio": "cpp"
+		}
+	}
+}

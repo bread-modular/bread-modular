@@ -24,10 +24,7 @@ class WebSerial {
         void init() {
             reset_transfer_state();
             buffer_pos = 0;
-            // Use PSRAM as a linear buffer: first 2MB for encoded, next 2MB for decoded
-            volatile uint8_t* base = psram->getPsram();
-            encoded_buffer = (char*)base;
-            decoded_buffer = (uint8_t*)(base + WEB_SERIAL_BUFFER_SIZE);
+            allocate_memory();
         }
         
         void update() {
@@ -132,6 +129,8 @@ class WebSerial {
         void process_command(const char* cmd) {
             // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
             if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
+                // before we begin we need to allocate the memory
+                allocate_memory();
                 int id = -1, orig_size = -1, b64_len = -1;
                 if (sscanf(cmd + 20, "%d %d %d", &id, &orig_size, &b64_len) == 3) {
                     if (id >= 0 && id <= 11 && orig_size > 0 && b64_len > 0) {
@@ -162,5 +161,12 @@ class WebSerial {
             } else {
                 printf("Unknown command: %s\n", cmd);
             }
+        }
+        
+        void allocate_memory() {
+            psram->freeall();
+            volatile uint8_t* base = psram->alloc(WEB_SERIAL_BUFFER_SIZE);
+            encoded_buffer = (char*)base;
+            decoded_buffer = (uint8_t*)psram->alloc(WEB_SERIAL_BUFFER_SIZE);
         }
 };
