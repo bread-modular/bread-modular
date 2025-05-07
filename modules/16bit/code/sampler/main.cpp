@@ -78,6 +78,8 @@ bool load_sample_chunk(const char* path, size_t offset, int16_t* buffer, size_t*
 
 void audioCallback(AudioResponse *response) {
     float sampleSum = 0.0f;
+    float sampleSumWithFx = 0.0f;
+    float sampleSumNoFx = 0.0f;
 
     audioManager->startAudioLock();
 
@@ -85,25 +87,35 @@ void audioCallback(AudioResponse *response) {
     for (int i = 0; i < TOTAL_SAMPLES; i++) {
         if (SAMPLE_PLAYHEAD[i] < SAMPLES_LEN[i]) {
             float s = SAMPLES[i][SAMPLE_PLAYHEAD[i]] / 32768.0f;
-            sampleSum += s * SAMPLE_VELOCITY[i];
+            sampleSumWithFx += s * SAMPLE_VELOCITY[i];
             SAMPLE_PLAYHEAD[i]++;
         }
     }
 
+    // first 6 samples has FX support & others are just playing (no fx)
     if (!webSerial.isInUse()) {
-        for (int i = 0; i < TOTAL_SAMPLE_PLAYERS; ++i) {
-            sampleSum += players[i].process() / 32768.0f;
+        for (int i = 0; i < 6; ++i) {
+            sampleSumWithFx += players[i].process() / 32768.0f;
+        }
+
+        for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
+            sampleSumNoFx += players[i].process() / 32768.0f;
         }
     }
 
     audioManager->endAudioLock();
 
     if (applyFilters) {
-        sampleSum = lowpassFilter.process(sampleSum);
-        sampleSum = highpassFilter.process(sampleSum);
+        sampleSumWithFx = lowpassFilter.process(sampleSumWithFx);
+        sampleSumWithFx = highpassFilter.process(sampleSumWithFx);
     }
-    sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
-    sampleSum = delay.process(sampleSum);
+
+    sampleSumWithFx = sampleSumWithFx * 32768.0f;
+    sampleSum = delay.process(sampleSumWithFx);
+    
+    sampleSum += sampleSumNoFx * 32768.0f;
+    sampleSum = std::clamp(sampleSum, -32768.0f, 32767.0f);
+
     response->left = sampleSum;
     response->right = sampleSum;
 }
