@@ -218,6 +218,11 @@ int main() {
     // Initialize WebSerial
     webSerial.init();
 
+    // init all the samples
+    for (int i=0; i<TOTAL_SAMPLE_PLAYERS; i++) {
+        players[i].init();
+    }
+
     while (true) {
         io->update();
         midi->update();

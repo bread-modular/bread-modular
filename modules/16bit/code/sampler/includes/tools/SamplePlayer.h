@@ -17,6 +17,7 @@ public:
 
         if (sample_data == nullptr) {
             sample_len = MAX(0, file_size / sizeof(int16_t) - 100);
+            sample_playhead = sample_len; // to prevent instant playback
             sample_data = (int16_t*)psram->alloc(file_size);
 
             // Load the whole file into PSRAM
