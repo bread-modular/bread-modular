@@ -14,6 +14,7 @@
 #include "api/WebSerial.h"
 #include "psram.h"
 #include "includes/fs/pico_lfs.h"
+#include "tools/SamplePlayer.h"
 
 #define SAMPLE_RATE 44100
 #define TOTAL_SAMPLES 1
@@ -47,15 +48,12 @@ Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
 Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
 Delay delay(1000.0f);
 WebSerial webSerial;
+SamplePlayer player(1);
 
 bool applyFilters = true;
 
 float sampleVelocity = 1.0f;
 float midi_bpm = 0.0f;
-
-static size_t sample_playhead = 0;
-int16_t* sample_data = nullptr;
-size_t sample_len = 0;
 
 static int16_t stream_buffer_a[STREAM_BUFFER_SIZE / 2];
 static int16_t stream_buffer_b[STREAM_BUFFER_SIZE / 2];
@@ -87,9 +85,7 @@ void audioCallback(AudioResponse *response) {
         }
     }
 
-    if (sample_data != nullptr && sample_playhead < sample_len) {
-        sampleSum = sample_data[sample_playhead++] / 32768.0f * SAMPLE_VELOCITY[0];
-    }
+    sampleSum += player.process() / 32768.0f;
     audioManager->endAudioLock();
 
     if (applyFilters) {
@@ -132,27 +128,9 @@ void buttonPressedCallback(bool pressed) {
 
         // Initialize streaming state
         audioManager->startAudioLock();
-
-        // Get file size and set total_streaming_samples
-        const char* stream_path = "/samples/00.raw";
-        size_t file_size = get_file_size(stream_path);
-
-        if (sample_data == nullptr) {
-            sample_len = MAX(0, file_size / sizeof(int16_t) - 100);
-            sample_data = (int16_t*)psram->alloc(file_size);
-
-            // Load the whole file into PSRAM
-            size_t bytes_read = 0;
-            if (!read_file(stream_path, sample_data, file_size, &bytes_read) || bytes_read != file_size) {
-                printf("Failed to load the whole file into PSRAM\n");
-                sample_len = 0;
-            }
-        }
-
-        // the first 44 bytes are the header of the wave file
-        sample_playhead = 22;   
-
+        player.play();
         audioManager->endAudioLock();
+
     } else {
         io->setLED(false);
     }
@@ -188,9 +166,7 @@ void bpmChangeCallback(int bpm) {
 
 void resetAllMemory() {
     audioManager->startAudioLock();
-    sample_data = nullptr;
-    sample_len = 0;
-    sample_playhead = 0;
+    player.reset();
     audioManager->endAudioLock();
 }
 
