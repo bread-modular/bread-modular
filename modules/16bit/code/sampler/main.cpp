@@ -24,22 +24,6 @@
 #define STREAM_BUFFER_SIZE 1024 * 50
 #define TOTAL_SAMPLE_PLAYERS 12
 
-int16_t* SAMPLES[TOTAL_SAMPLES] = {
-    (int16_t*)s01_wav
-};
-
-uint32_t SAMPLES_LEN[TOTAL_SAMPLES] = {
-    s01_wav_len / 2
-};
-
-uint32_t SAMPLE_PLAYHEAD[TOTAL_SAMPLES] = {
-    0xFFFFFFFF
-};
-
-float SAMPLE_VELOCITY[TOTAL_SAMPLES] = {
-    1.0f
-};
-
 FS *fs = FS::getInstance();
 IO *io = IO::getInstance();
 PSRAM *psram = PSRAM::getInstance();
@@ -49,6 +33,15 @@ Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
 Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
 Delay delay(1000.0f);
 WebSerial webSerial;
+
+
+// Default sample
+int16_t* defaultSample = (int16_t*)s01_wav;
+uint32_t defaultSampleLen = s01_wav_len / 2;
+uint32_t defaultSamplePlayhead = defaultSampleLen;
+float defaultSampleVelocity = 1.0f;
+
+// Uploadable samples
 SamplePlayer players[TOTAL_SAMPLE_PLAYERS] = {
     SamplePlayer(0), SamplePlayer(1), SamplePlayer(2), SamplePlayer(3), SamplePlayer(4), SamplePlayer(5),
     SamplePlayer(6), SamplePlayer(7), SamplePlayer(8), SamplePlayer(9), SamplePlayer(10),
@@ -83,13 +76,8 @@ void audioCallback(AudioResponse *response) {
 
     audioManager->startAudioLock();
 
-    // In-memory sample playback (noteOnCallback logic)
-    for (int i = 0; i < TOTAL_SAMPLES; i++) {
-        if (SAMPLE_PLAYHEAD[i] < SAMPLES_LEN[i]) {
-            float s = SAMPLES[i][SAMPLE_PLAYHEAD[i]] / 32768.0f;
-            sampleSumWithFx += s * SAMPLE_VELOCITY[i];
-            SAMPLE_PLAYHEAD[i]++;
-        }
+    if (defaultSamplePlayhead < defaultSampleLen) {
+        sampleSumWithFx += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * defaultSampleVelocity;
     }
 
     // first 6 samples has FX support & others are just playing (no fx)
@@ -127,8 +115,8 @@ void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
     float realVelocity = powf(velocityNorm, 2.0f);
     if (sampleToPlay == 0) {
         audioManager->startAudioLock();
-        SAMPLE_VELOCITY[sampleToPlay] = realVelocity;
-        SAMPLE_PLAYHEAD[sampleToPlay] = 0;
+        defaultSamplePlayhead = 0;
+        defaultSampleVelocity = realVelocity;
         audioManager->endAudioLock();
     } else if (sampleToPlay <= 11) {
         // Use SamplePlayer for sampleId 1 to 11
