@@ -110,17 +110,18 @@ void audioCallback(AudioResponse *response) {
 
 void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
     uint8_t sampleToPlay = note % 12;
+    // Keep current playback method for sampleId 0
+    float velocityNorm = velocity / 127.0f;
+    float realVelocity = powf(velocityNorm, 2.0f);
     if (sampleToPlay == 0) {
-        // Keep current playback method for sampleId 0
-        float velocityNorm = velocity / 127.0f;
         audioManager->startAudioLock();
-        SAMPLE_VELOCITY[sampleToPlay] = powf(velocityNorm, 2.0f);
+        SAMPLE_VELOCITY[sampleToPlay] = realVelocity;
         SAMPLE_PLAYHEAD[sampleToPlay] = 0;
         audioManager->endAudioLock();
     } else if (sampleToPlay <= 11) {
         // Use SamplePlayer for sampleId 1 to 11
         audioManager->startAudioLock();
-        players[sampleToPlay].play();
+        players[sampleToPlay].play(realVelocity);
         audioManager->endAudioLock();
     }
 }
@@ -143,7 +144,7 @@ void buttonPressedCallback(bool pressed) {
 
         // Initialize streaming state
         audioManager->startAudioLock();
-        players[0].play();
+        players[0].play(1.0);
         audioManager->endAudioLock();
 
     } else {

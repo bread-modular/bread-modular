@@ -5,8 +5,8 @@
 class SamplePlayer {
 public:
     SamplePlayer(uint8_t sampleId): sampleId(sampleId) {
-        sample_len = 0;
-        sample_playhead = sample_len;
+        length = 0;
+        playhead = length;
     }
 
     void init() {
@@ -15,36 +15,37 @@ public:
         snprintf(stream_path, sizeof(stream_path), "/samples/%02d.raw", sampleId);
         size_t file_size = get_file_size(stream_path);
 
-        if (sample_data == nullptr) {
-            sample_len = MAX(0, file_size / sizeof(int16_t) - 100);
-            sample_playhead = sample_len; // to prevent instant playback
-            sample_data = (int16_t*)psram->alloc(file_size);
+        if (data == nullptr) {
+            length = MAX(0, file_size / sizeof(int16_t) - 100);
+            playhead = length; // to prevent instant playback
+            data = (int16_t*)psram->alloc(file_size);
 
             // Load the whole file into PSRAM
             size_t bytes_read = 0;
-            if (!read_file(stream_path, sample_data, file_size, &bytes_read) || bytes_read != file_size) {
+            if (!read_file(stream_path, data, file_size, &bytes_read) || bytes_read != file_size) {
                 printf("Failed to load the whole file into PSRAM\n");
-                sample_len = 0;
+                length = 0;
             }
 
             printf("Samples loaded");
         }
     }
 
-    void play() {
+    void play(float v) {
         init();
-        sample_playhead = 22;   
+        playhead = 22;
+        velocity = v;
     }
 
     void reset() {
-        sample_data = nullptr;
-        sample_len = 0;
-        sample_playhead = sample_len;
+        data = nullptr;
+        length = 0;
+        playhead = length;
     }
 
     int16_t process() {
-        if (sample_data != nullptr && sample_playhead < sample_len) {
-            return sample_data[sample_playhead++];
+        if (data != nullptr && playhead < length) {
+            return data[playhead++];
         }
 
         return 0;
@@ -52,7 +53,8 @@ public:
 
 private:
     uint8_t sampleId;
-    size_t sample_playhead = 0;
-    int16_t* sample_data = nullptr;
-    size_t sample_len = 0;
+    size_t playhead = 0;
+    int16_t* data = nullptr;
+    size_t length = 0;
+    float velocity = 1.0f;
 };
