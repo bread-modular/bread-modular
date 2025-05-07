@@ -37,6 +37,7 @@ class WebSerial {
                         decode_base64_data();
                         reset_transfer_state();
                         psram->freeall();
+                        inUse = false;
                         return;
                     }
 
@@ -67,6 +68,11 @@ class WebSerial {
                 }
             }
         }
+
+        bool isInUse() {
+            return inUse;
+        }
+        
     public:
         uint8_t* decoded_buffer = nullptr; // 2MB for decoded data (PSRAM)
         size_t decoded_size = 0;
@@ -81,6 +87,7 @@ class WebSerial {
         int sample_id = -1;
         char* encoded_buffer = nullptr; // 2MB for encoded data (PSRAM)
         size_t encoded_pos = 0;
+        bool inUse = false;
 
         void reset_transfer_state() {
             transfer_mode = false;
@@ -132,6 +139,7 @@ class WebSerial {
             if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
                 // before we begin we need to allocate the memory
                 allocate_memory();
+                inUse = true;
                 int id = -1, orig_size = -1, b64_len = -1;
                 if (sscanf(cmd + 20, "%d %d %d", &id, &orig_size, &b64_len) == 3) {
                     if (id >= 0 && id <= 11 && orig_size > 0 && b64_len > 0) {

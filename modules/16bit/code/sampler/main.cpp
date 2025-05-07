@@ -22,6 +22,7 @@
 // when loading the next buffer there's a pop
 // increasting buffer size helps.
 #define STREAM_BUFFER_SIZE 1024 * 50
+#define TOTAL_SAMPLE_PLAYERS 12
 
 int16_t* SAMPLES[TOTAL_SAMPLES] = {
     (int16_t*)s01_wav
@@ -48,7 +49,11 @@ Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
 Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
 Delay delay(1000.0f);
 WebSerial webSerial;
-SamplePlayer player(1);
+SamplePlayer players[TOTAL_SAMPLE_PLAYERS] = {
+    SamplePlayer(0), SamplePlayer(1), SamplePlayer(2), SamplePlayer(3), SamplePlayer(4), SamplePlayer(5),
+    SamplePlayer(6), SamplePlayer(7), SamplePlayer(8), SamplePlayer(9), SamplePlayer(10),
+    SamplePlayer(11)
+};
 
 bool applyFilters = true;
 
@@ -85,7 +90,12 @@ void audioCallback(AudioResponse *response) {
         }
     }
 
-    sampleSum += player.process() / 32768.0f;
+    if (!webSerial.isInUse()) {
+        for (int i = 0; i < TOTAL_SAMPLE_PLAYERS; ++i) {
+            sampleSum += players[i].process() / 32768.0f;
+        }
+    }
+
     audioManager->endAudioLock();
 
     if (applyFilters) {
@@ -100,12 +110,17 @@ void audioCallback(AudioResponse *response) {
 
 void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
     uint8_t sampleToPlay = note % 12;
-    if (sampleToPlay < TOTAL_SAMPLES) {
+    if (sampleToPlay == 0) {
+        // Keep current playback method for sampleId 0
         float velocityNorm = velocity / 127.0f;
-
         audioManager->startAudioLock();
         SAMPLE_VELOCITY[sampleToPlay] = powf(velocityNorm, 2.0f);
         SAMPLE_PLAYHEAD[sampleToPlay] = 0;
+        audioManager->endAudioLock();
+    } else if (sampleToPlay <= 11) {
+        // Use SamplePlayer for sampleId 1 to 11
+        audioManager->startAudioLock();
+        players[sampleToPlay].play();
         audioManager->endAudioLock();
     }
 }
@@ -128,7 +143,7 @@ void buttonPressedCallback(bool pressed) {
 
         // Initialize streaming state
         audioManager->startAudioLock();
-        player.play();
+        players[0].play();
         audioManager->endAudioLock();
 
     } else {
@@ -166,7 +181,9 @@ void bpmChangeCallback(int bpm) {
 
 void resetAllMemory() {
     audioManager->startAudioLock();
-    player.reset();
+    for (int i = 0; i < TOTAL_SAMPLE_PLAYERS; ++i) {
+        players[i].reset();
+    }
     audioManager->endAudioLock();
 }
 

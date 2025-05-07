@@ -5,7 +5,8 @@
 class SamplePlayer {
 public:
     SamplePlayer(uint8_t sampleId): sampleId(sampleId) {
-
+        sample_len = 0;
+        sample_playhead = sample_len;
     }
 
     void init() {
@@ -36,6 +37,8 @@ public:
 
     void reset() {
         sample_data = nullptr;
+        sample_len = 0;
+        sample_playhead = sample_len;
     }
 
     int16_t process() {
