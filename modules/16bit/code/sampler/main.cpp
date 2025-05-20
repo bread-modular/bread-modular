@@ -34,12 +34,11 @@ Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
 Delay delay(1000.0f);
 WebSerial webSerial;
 
-
 // Default sample
 int16_t* defaultSample = (int16_t*)s01_wav;
 uint32_t defaultSampleLen = s01_wav_len / 2;
 uint32_t defaultSamplePlayhead = defaultSampleLen;
-float defaultSampleVelocity = 1.0f;
+float velocityOfDefaultSample = 1.0f;
 
 // Uploadable samples
 SamplePlayer players[TOTAL_SAMPLE_PLAYERS] = {
@@ -49,22 +48,6 @@ SamplePlayer players[TOTAL_SAMPLE_PLAYERS] = {
 };
 
 bool applyFilters = true;
-
-float sampleVelocity = 1.0f;
-float midi_bpm = 0.0f;
-
-static int16_t stream_buffer_a[STREAM_BUFFER_SIZE / 2];
-static int16_t stream_buffer_b[STREAM_BUFFER_SIZE / 2];
-static int16_t* active_buffer = stream_buffer_a;
-static int16_t* next_buffer = stream_buffer_b;
-static size_t active_buffer_samples = 0;
-static size_t next_buffer_samples = 0;
-static size_t playhead_in_buffer = 0;
-static size_t file_offset = 0;
-static size_t total_streaming_samples = 0;
-static size_t current_stream_sample = 0;
-static bool next_buffer_ready = false;
-static bool streaming = false;
 
 // Prototype for sample streaming chunk loader
 bool load_sample_chunk(const char* path, size_t offset, int16_t* buffer, size_t* samples_loaded);
@@ -77,7 +60,7 @@ void audioCallback(AudioResponse *response) {
     audioManager->startAudioLock();
 
     if (defaultSamplePlayhead < defaultSampleLen) {
-        sampleSumWithFx += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * defaultSampleVelocity;
+        sampleSumWithFx += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * velocityOfDefaultSample;
     }
 
     // first 6 samples has FX support & others are just playing (no fx)
@@ -116,7 +99,7 @@ void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
     if (sampleToPlay == 0) {
         audioManager->startAudioLock();
         defaultSamplePlayhead = 0;
-        defaultSampleVelocity = realVelocity;
+        velocityOfDefaultSample = realVelocity;
         audioManager->endAudioLock();
     } else if (sampleToPlay <= 11) {
         // Use SamplePlayer for sampleId 1 to 11
@@ -144,7 +127,8 @@ void buttonPressedCallback(bool pressed) {
 
         // Initialize streaming state
         audioManager->startAudioLock();
-        players[0].play(1.0);
+        defaultSamplePlayhead = 0;
+        velocityOfDefaultSample = 0.8f;
         audioManager->endAudioLock();
 
     } else {

@@ -45,7 +45,7 @@ public:
 
     int16_t process() {
         if (data != nullptr && playhead < length) {
-            return data[playhead++];
+            return data[playhead++] * velocity;
         }
 
         return 0;
