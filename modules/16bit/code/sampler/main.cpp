@@ -47,13 +47,10 @@ SamplePlayer players[TOTAL_SAMPLE_PLAYERS] = {
     SamplePlayer(11)
 };
 
-bool applyFilters = true;
-
 // Prototype for sample streaming chunk loader
 bool load_sample_chunk(const char* path, size_t offset, int16_t* buffer, size_t* samples_loaded);
 
 void audioCallback(AudioResponse *response) {
-    float sampleSum = 0.0f;
     float sampleSumWithFx = 0.0f;
     float sampleSumNoFx = 0.0f;
 
@@ -76,16 +73,13 @@ void audioCallback(AudioResponse *response) {
 
     audioManager->endAudioLock();
 
-    if (applyFilters) {
-        sampleSumWithFx = lowpassFilter.process(sampleSumWithFx);
-        sampleSumWithFx = highpassFilter.process(sampleSumWithFx);
-    }
+    sampleSumWithFx = lowpassFilter.process(sampleSumWithFx);
+    sampleSumWithFx = highpassFilter.process(sampleSumWithFx);
 
-    sampleSumWithFx = sampleSumWithFx * 32768.0f;
-    sampleSum = delay.process(sampleSumWithFx);
-    
-    sampleSum += sampleSumNoFx * 32768.0f;
-    sampleSum = std::clamp(sampleSum, -32768.0f, 32767.0f);
+    float sampleSum = sampleSumNoFx;
+    sampleSum += delay.process(sampleSumWithFx);
+
+    sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
 
     response->left = sampleSum;
     response->right = sampleSum;

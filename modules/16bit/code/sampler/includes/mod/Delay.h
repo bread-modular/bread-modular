@@ -98,16 +98,13 @@ public:
             pendingWetUpdate = false;
         }
         size_t readIndex = (writeIndex + maxDelay - (size_t)currentDelaySamples) % maxDelay;
-        int16_t delayed = buffer[readIndex];
+        float delayed = buffer[readIndex] / 32768.0f;
         
         // Apply lowpass filter to delayed sample before feedback
-        float filteredDelayed = lowpassFilter.process((float)delayed / 32768.0f) * 32768.0f;
-        int32_t fbSample = input + (int32_t)(filteredDelayed * feedback);
+        float filteredDelayed = lowpassFilter.process(delayed);
+        float fbSample = input + filteredDelayed * feedback;
         
-        // Clamp to int16_t
-        if (fbSample > 32767) fbSample = 32767;
-        if (fbSample < -32768) fbSample = -32768;
-        buffer[writeIndex] = (int16_t)fbSample;
+        buffer[writeIndex] = fbSample * 32768.0f;
         writeIndex = (writeIndex + 1) % maxDelay;
         
         // If delay is 0, return input
@@ -116,10 +113,8 @@ public:
         }
         
         // Wet/dry mix
-        int32_t out = (int32_t)(input * MAX(0.9f, 1.0f - currentWet) + filteredDelayed * currentWet);
-        if (out > 32767) out = 32767;
-        if (out < -32768) out = -32768;
-        return (float)out;
+        float out = input * MAX(0.9f, 1.0f - currentWet) + filteredDelayed * currentWet;
+        return out;
     }
 
     // Set the lowpass filter cutoff frequency (Hz)
