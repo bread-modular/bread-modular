@@ -6,6 +6,7 @@
 #include "pico/multicore.h"
 #include "pico/util/queue.h"
 #include "DAC.h"
+#include <functional>
 
 #define BCK_PIN 1
 
@@ -15,6 +16,10 @@ typedef struct {
 } AudioResponse;
 
 typedef void (*AudioCallbackFn)(AudioResponse*);
+typedef void (*OnAudioStartCallbackFn)();
+
+using AudioStopCallbackFn = std::function<void()>;
+using OnAudioStopCallbackFn = std::function<void()>;
 
 critical_section_t audioCS;
 
@@ -26,9 +31,13 @@ class AudioManager {
 private:
     // Create queues for communication between cores
     AudioCallbackFn audioCallback = nullptr;
+    AudioStopCallbackFn audioStopCallback = nullptr;
+    OnAudioStopCallbackFn onAudioStopCallback = nullptr;
+    OnAudioStartCallbackFn onAudioStartCallback = nullptr;
     
     DAC dac;
     bool initialized;
+    bool running = false;
     
     // Private constructor for singleton pattern
     AudioManager() : 
@@ -46,10 +55,20 @@ private:
         AudioManager* audio_mgr = AudioManager::getInstance();
 
         while (true) {
-            // Wait for message from core0
             AudioResponse response;
             audio_mgr->audioCallback(&response);
             audio_mgr->dac.writeMono(response.left, response.right);
+
+            if (!audio_mgr->running) {
+                if (audio_mgr->audioStopCallback) {
+                    audio_mgr->audioStopCallback();
+                    audio_mgr->audioStopCallback = nullptr;
+                    if (audio_mgr->onAudioStopCallback) {
+                        audio_mgr->onAudioStopCallback();
+                    }
+                }
+                break;
+            }
         }
     }
 
@@ -73,14 +92,20 @@ public:
         // Initialize DAC
         dac.init(sample_rate);
         
-        // Launch Core1 with our static helper function
-        multicore_launch_core1(core1_main);
-        
         initialized = true;
+        start();
     }
 
     void setAudioCallback(AudioCallbackFn callback) {
         audioCallback = callback;
+    }
+
+    void setOnAudioStartCallback(OnAudioStartCallbackFn callback) {
+        onAudioStartCallback = callback;
+    }
+
+    void setOnAudioStopCallback(OnAudioStopCallbackFn callback) {
+        onAudioStopCallback = callback;
     }
     
     // Get the DAC instance
@@ -94,5 +119,20 @@ public:
 
     void endAudioLock() {
         critical_section_exit(&audioCS);
+    }
+
+    void stop(AudioStopCallbackFn callback = nullptr) {
+        running = false;
+        audioStopCallback = callback;
+    }
+
+    void start() {
+        if (onAudioStartCallback) {
+            onAudioStartCallback();
+        }
+        running = true;
+        // Launch Core1 with our static helper function
+        multicore_reset_core1();
+        multicore_launch_core1(core1_main);
     }
 };

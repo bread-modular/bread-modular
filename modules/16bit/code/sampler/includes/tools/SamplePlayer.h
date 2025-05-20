@@ -15,32 +15,22 @@ public:
         snprintf(stream_path, sizeof(stream_path), "/samples/%02d.raw", sampleId);
         size_t file_size = get_file_size(stream_path);
 
-        if (data == nullptr) {
-            length = MAX(0, file_size / sizeof(int16_t) - 100);
-            playhead = length; // to prevent instant playback
-            data = (int16_t*)psram->alloc(file_size);
+        printf("Loading sample %02d\n", sampleId);
+        length = MAX(0, file_size / sizeof(int16_t) - 100);
+        playhead = length; // to prevent instant playback
+        data = (int16_t*)psram->alloc(file_size);
 
-            // Load the whole file into PSRAM
-            size_t bytes_read = 0;
-            if (!read_file(stream_path, data, file_size, &bytes_read) || bytes_read != file_size) {
-                printf("Failed to load the whole file into PSRAM\n");
-                length = 0;
-            }
-
-            printf("Samples loaded");
+        // Load the whole file into PSRAM
+        size_t bytes_read = 0;
+        if (!read_file(stream_path, data, file_size, &bytes_read) || bytes_read != file_size) {
+            printf("Failed to load the whole file into PSRAM\n");
+            length = 0;
         }
     }
 
     void play(float v) {
-        init();
         playhead = 22;
         velocity = v;
-    }
-
-    void reset() {
-        data = nullptr;
-        length = 0;
-        playhead = length;
     }
 
     int16_t process() {

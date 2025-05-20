@@ -9,6 +9,7 @@
 #include "utils/base64.h"
 #include "psram.h"
 #include "utils/crc32.h"
+#include "audio.h"
 
 #define WEB_SERIAL_BUFFER_SIZE (2 * 1024 * 1024) // 2MB per buffer
 
@@ -24,7 +25,6 @@ class WebSerial {
         void init() {
             reset_transfer_state();
             buffer_pos = 0;
-            allocate_memory();
         }
         
         void update() {
@@ -36,8 +36,7 @@ class WebSerial {
                         printf("Received %d bytes of data, now decoding...\n", total_bytes_transferred);
                         decode_base64_data();
                         reset_transfer_state();
-                        psram->freeall();
-                        inUse = false;
+                        audioManager->start();
                         return;
                     }
 
@@ -68,10 +67,6 @@ class WebSerial {
                 }
             }
         }
-
-        bool isInUse() {
-            return inUse;
-        }
         
     public:
         uint8_t* decoded_buffer = nullptr; // 2MB for decoded data (PSRAM)
@@ -87,7 +82,7 @@ class WebSerial {
         int sample_id = -1;
         char* encoded_buffer = nullptr; // 2MB for encoded data (PSRAM)
         size_t encoded_pos = 0;
-        bool inUse = false;
+        AudioManager* audioManager = AudioManager::getInstance();
 
         void reset_transfer_state() {
             transfer_mode = false;
@@ -137,9 +132,6 @@ class WebSerial {
         void process_command(const char* cmd) {
             // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
             if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
-                // before we begin we need to allocate the memory
-                allocate_memory();
-                inUse = true;
                 int id = -1, orig_size = -1, b64_len = -1;
                 if (sscanf(cmd + 20, "%d %d %d", &id, &orig_size, &b64_len) == 3) {
                     if (id >= 0 && id <= 11 && orig_size > 0 && b64_len > 0) {
@@ -155,6 +147,8 @@ class WebSerial {
                         buffer_pos = 0;
                         encoded_pos = 0;
                         printf("Ready to receive %d Base64 chars for sample %02d (original %d bytes)\n", b64_len, id, orig_size);
+                        audioManager->stop();
+                        allocate_memory();
                     } else {
                         printf("Invalid parameters: id=%d, orig_size=%d, b64_len=%d\n", id, orig_size, b64_len);
                     }
@@ -173,7 +167,6 @@ class WebSerial {
         }
         
         void allocate_memory() {
-            psram->freeall();
             volatile uint8_t* base = psram->alloc(WEB_SERIAL_BUFFER_SIZE);
             encoded_buffer = (char*)base;
             decoded_buffer = (uint8_t*)psram->alloc(WEB_SERIAL_BUFFER_SIZE);

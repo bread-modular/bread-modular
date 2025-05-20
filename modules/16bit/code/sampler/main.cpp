@@ -17,11 +17,6 @@
 #include "tools/SamplePlayer.h"
 
 #define SAMPLE_RATE 44100
-#define TOTAL_SAMPLES 1
-// When the sample is over the size of the buffer
-// when loading the next buffer there's a pop
-// increasting buffer size helps.
-#define STREAM_BUFFER_SIZE 1024 * 50
 #define TOTAL_SAMPLE_PLAYERS 12
 
 FS *fs = FS::getInstance();
@@ -47,8 +42,17 @@ SamplePlayer players[TOTAL_SAMPLE_PLAYERS] = {
     SamplePlayer(11)
 };
 
-// Prototype for sample streaming chunk loader
-bool load_sample_chunk(const char* path, size_t offset, int16_t* buffer, size_t* samples_loaded);
+// This will be called every time the audioCallback loop starts
+void onAudioStartCallback() {
+    psram->freeall();
+    lowpassFilter.init(audioManager);
+    highpassFilter.init(audioManager);
+    delay.init(audioManager);
+
+    for (int i=0; i<TOTAL_SAMPLE_PLAYERS; i++) {
+        players[i].init();
+    }
+}
 
 void audioCallback(AudioResponse *response) {
     float sampleSumWithFx = 0.0f;
@@ -61,14 +65,12 @@ void audioCallback(AudioResponse *response) {
     }
 
     // first 6 samples has FX support & others are just playing (no fx)
-    if (!webSerial.isInUse()) {
-        for (int i = 0; i < 6; ++i) {
-            sampleSumWithFx += players[i].process() / 32768.0f;
-        }
+    for (int i = 0; i < 6; ++i) {
+        sampleSumWithFx += players[i].process() / 32768.0f;
+    }
 
-        for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
-            sampleSumNoFx += players[i].process() / 32768.0f;
-        }
+    for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
+        sampleSumNoFx += players[i].process() / 32768.0f;
     }
 
     audioManager->endAudioLock();
@@ -118,15 +120,18 @@ void cv2UpdateCallback(uint16_t cv2) {
 void buttonPressedCallback(bool pressed) {
     if (pressed) {
         io->setLED(true);
-
+        audioManager->stop([]() {
+            printf("Audio stopped\n");
+        });
+    } else {
+        audioManager->start();
+        io->setLED(false);
+        
         // Initialize streaming state
         audioManager->startAudioLock();
         defaultSamplePlayhead = 0;
         velocityOfDefaultSample = 0.8f;
         audioManager->endAudioLock();
-
-    } else {
-        io->setLED(false);
     }
 }
 
@@ -158,35 +163,9 @@ void bpmChangeCallback(int bpm) {
     delay.setBPM(bpm);
 }
 
-void resetAllMemory() {
-    audioManager->startAudioLock();
-    for (int i = 0; i < TOTAL_SAMPLE_PLAYERS; ++i) {
-        players[i].reset();
-    }
-    audioManager->endAudioLock();
-}
-
 int main() {
     stdio_init_all();
 
-    io->setButtonPressedCallback(buttonPressedCallback);
-    io->setCV1UpdateCallback(cv1UpdateCallback, 50);
-    io->setCV2UpdateCallback(cv2UpdateCallback, 50);
-    io->init();
-
-    audioManager->setAudioCallback(audioCallback);
-    audioManager->init(SAMPLE_RATE);
-    lowpassFilter.init(audioManager);
-    highpassFilter.init(audioManager);
-    delay.init(audioManager);
-    
-    // Set up BPM calculation and print BPM when it changes
-    midi->calculateBPM(bpmChangeCallback);
-    midi->setControlChangeCallback(ccChangeCallback);
-    midi->setNoteOnCallback(noteOnCallback);
-    midi->init();
-
-    psram->onFreeall(resetAllMemory);
     psram->init();
 
     // Initialize the filesystem
@@ -194,13 +173,23 @@ int main() {
         return 1;
     }
 
+    io->setButtonPressedCallback(buttonPressedCallback);
+    io->setCV1UpdateCallback(cv1UpdateCallback, 50);
+    io->setCV2UpdateCallback(cv2UpdateCallback, 50);
+    io->init();
+
+    audioManager->setOnAudioStartCallback(onAudioStartCallback);
+    audioManager->setAudioCallback(audioCallback);
+    audioManager->init(SAMPLE_RATE);
+    
+    // Set up BPM calculation and print BPM when it changes
+    midi->calculateBPM(bpmChangeCallback);
+    midi->setControlChangeCallback(ccChangeCallback);
+    midi->setNoteOnCallback(noteOnCallback);
+    midi->init();
+
     // Initialize WebSerial
     webSerial.init();
-
-    // init all the samples
-    for (int i=0; i<TOTAL_SAMPLE_PLAYERS; i++) {
-        players[i].init();
-    }
 
     while (true) {
         io->update();
