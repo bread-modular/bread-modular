@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include "audio.h"
 #include "mod/Biquad.h"
+#include "psram.h"
 
 // Feedback Delay Effect
 // Efficient for MCUs, uses int16_t buffer for audio data
@@ -15,9 +16,6 @@ public:
     }
 
     ~Delay() {
-        if (buffer) {
-            delete[] buffer;
-        }
     }
 
     // Initialize with AudioManager to get sample rate and allocate buffer
@@ -25,10 +23,8 @@ public:
         sampleRate = audioManager->getDac()->getSampleRate();
         maxDelay = (size_t)((maxDelayMs * sampleRate) / 1000.0f);
         if (maxDelay < 1) maxDelay = 1;
-        if (buffer) {
-            delete[] buffer;
-        }
-        buffer = new int16_t[maxDelay];
+
+        buffer = (float*)psram->alloc(maxDelay * sizeof(float));
         reset();
         currentDelaySamples = (float)delaySamples;
         lowpassFilter.init(audioManager);
@@ -98,13 +94,13 @@ public:
             pendingWetUpdate = false;
         }
         size_t readIndex = (writeIndex + maxDelay - (size_t)currentDelaySamples) % maxDelay;
-        float delayed = buffer[readIndex] / 32768.0f;
+        float delayed = buffer[readIndex];
         
         // Apply lowpass filter to delayed sample before feedback
         float filteredDelayed = lowpassFilter.process(delayed);
         float fbSample = input + filteredDelayed * feedback;
         
-        buffer[writeIndex] = fbSample * 32768.0f;
+        buffer[writeIndex] = fbSample;
         writeIndex = (writeIndex + 1) % maxDelay;
         
         // If delay is 0, return input
@@ -137,7 +133,7 @@ private:
         delaySamples = samples;
     }
     
-    int16_t* buffer;
+    float* buffer;
     size_t maxDelay;
     float maxDelayMs;
     size_t delaySamples;
@@ -155,4 +151,5 @@ private:
     float lowpassCutoff = 20000.0f;
     uint16_t bpm = 0;
     float delayBeats = 0.0f;
+    PSRAM *psram = PSRAM::getInstance();
 }; 
