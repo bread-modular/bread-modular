@@ -147,23 +147,23 @@ class WebSerial {
                 return;
             }
 
-            uint32_t received_crc =
+            uint32_t receivedCrc =
                 (uint32_t)decodedBuffer[0] |
                 ((uint32_t)decodedBuffer[1] << 8) |
                 ((uint32_t)decodedBuffer[2] << 16) |
                 ((uint32_t)decodedBuffer[3] << 24);
-            uint32_t calc_crc = 0xFFFFFFFF;
-            size_t data_len = (originalSize < decodedSize - 4) ? originalSize : (decodedSize - 4);
-            calc_crc = crc32(calc_crc, decodedBuffer + 4, data_len);
-            calc_crc = ~calc_crc;
+            uint32_t calculatedCrc = 0xFFFFFFFF;
+            size_t dataLength = (originalSize < decodedSize - 4) ? originalSize : (decodedSize - 4);
+            calculatedCrc = crc32(calculatedCrc, decodedBuffer + 4, dataLength);
+            calculatedCrc = ~calculatedCrc;
 
-            if (calc_crc == received_crc) {
+            if (calculatedCrc == receivedCrc) {
                 if (onBinaryCallback) {
-                    onBinaryCallback(decodedBuffer + 4, data_len);
+                    onBinaryCallback(decodedBuffer + 4, dataLength);
                 }
                 audioManager->start();
             } else {
-                printf("Checksum FAILED, received=0x%08x, calculated=0x%08x\n", received_crc, calc_crc);
+                printf("Checksum FAILED, received=0x%08x, calculated=0x%08x\n", receivedCrc, calculatedCrc);
             }
         }
 
