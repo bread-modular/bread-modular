@@ -62,6 +62,7 @@ class WebSerial {
             encodedPos = 0;
 
             allocateMemory();
+            audioManager->stop();
             return true;
         }
         
@@ -160,6 +161,7 @@ class WebSerial {
                 if (onBinaryCallback) {
                     onBinaryCallback(decodedBuffer + 4, data_len);
                 }
+                audioManager->start();
             } else {
                 printf("Checksum FAILED, received=0x%08x, calculated=0x%08x\n", received_crc, calc_crc);
             }

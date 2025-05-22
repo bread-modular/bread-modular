@@ -191,7 +191,6 @@ bool onCommandCallback(const char* cmd) {
             } else {
                 printf("Failed to save sample %02d\n", sampleId);
             }
-            audioManager->start();
         });
 
         if (!accepted) {
@@ -199,7 +198,6 @@ bool onCommandCallback(const char* cmd) {
         }
 
         printf("Ready to receive %d Base64 chars for sample %02d (original %d bytes)\n", base64Size, sampleId, originalSize);
-        audioManager->stop();
         return true;
     }
 
