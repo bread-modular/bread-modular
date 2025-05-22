@@ -5,7 +5,7 @@
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "pico/util/queue.h"
-#include "DAC.h"
+#include "audio/dac.h"
 #include <functional>
 
 #define BCK_PIN 1

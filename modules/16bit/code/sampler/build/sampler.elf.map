@@ -2614,21 +2614,21 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
  .text._Z16ccChangeCallbackhhh
                 0x10000f60      0x4a0 CMakeFiles/sampler.dir/main.cpp.o
                 0x10000f60                ccChangeCallback(unsigned char, unsigned char, unsigned char)
- .text._ZN3DAC4initEm
-                0x10001400      0x1a0 CMakeFiles/sampler.dir/main.cpp.o
-                0x10001400                DAC::init(unsigned long)
- .text._ZN12AudioManager11getInstanceEv
-                0x100015a0       0x48 CMakeFiles/sampler.dir/main.cpp.o
-                0x100015a0                AudioManager::getInstance()
  .text._Z9mount_lfsv
-                0x100015e8       0xb0 CMakeFiles/sampler.dir/main.cpp.o
-                0x100015e8                mount_lfs()
+                0x10001400       0xb0 CMakeFiles/sampler.dir/main.cpp.o
+                0x10001400                mount_lfs()
  .text._Z14list_directoryPKc
-                0x10001698       0xa4 CMakeFiles/sampler.dir/main.cpp.o
-                0x10001698                list_directory(char const*)
+                0x100014b0       0xa4 CMakeFiles/sampler.dir/main.cpp.o
+                0x100014b0                list_directory(char const*)
  .text._ZN2FS4initEv
-                0x1000173c       0x70 CMakeFiles/sampler.dir/main.cpp.o
-                0x1000173c                FS::init()
+                0x10001554       0x70 CMakeFiles/sampler.dir/main.cpp.o
+                0x10001554                FS::init()
+ .text._ZN3DAC4initEm
+                0x100015c4      0x1a0 CMakeFiles/sampler.dir/main.cpp.o
+                0x100015c4                DAC::init(unsigned long)
+ .text._ZN12AudioManager11getInstanceEv
+                0x10001764       0x48 CMakeFiles/sampler.dir/main.cpp.o
+                0x10001764                AudioManager::getInstance()
  .text._ZN12SamplePlayer4initEv
                 0x100017ac       0xfc CMakeFiles/sampler.dir/main.cpp.o
                 0x100017ac                SamplePlayer::init()
@@ -3679,8 +3679,6 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
  .rodata._ZNSt17_Function_handlerIFvvEZ21buttonPressedCallbackbEUlvE_E9_M_invokeERKSt9_Any_data.str1.4
                 0x10017bb0      0xe2a CMakeFiles/sampler.dir/main.cpp.o
                                   0xe (size before relaxing)
- .rodata._ZN3DAC4initEm.str1.4
-                0x100189da       0x32 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._Z9mount_lfsv.str1.4
                 0x100189da       0xac CMakeFiles/sampler.dir/main.cpp.o
  .rodata._Z10write_filePKcPKvj.str1.4
@@ -3693,6 +3691,8 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
                 0x100189da       0x6c CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN2FS4initEv.str1.4
                 0x100189da       0x4b CMakeFiles/sampler.dir/main.cpp.o
+ .rodata._ZN3DAC4initEm.str1.4
+                0x100189da       0x32 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN12SamplePlayer4initEv.str1.4
                 0x100189da       0x6d CMakeFiles/sampler.dir/main.cpp.o
  .rodata.main.str1.4
@@ -3701,14 +3701,14 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
  .rodata._ZZ5crc32mPKvjE5table
                 0x100189dc       0x40 CMakeFiles/sampler.dir/main.cpp.o
                 0x100189dc                crc32(unsigned long, void const*, unsigned int)::table
- .rodata._ZL16base64_dec_table
-                0x10018a1c      0x100 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZL7s01_wav
-                0x10018b1c     0xa1ac CMakeFiles/sampler.dir/main.cpp.o
+                0x10018a1c     0xa1ac CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZL11i2s_program
-                0x10022cc8        0x8 CMakeFiles/sampler.dir/main.cpp.o
+                0x10022bc8        0x8 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZL24i2s_program_instructions
-                0x10022cd0       0x10 CMakeFiles/sampler.dir/main.cpp.o
+                0x10022bd0       0x10 CMakeFiles/sampler.dir/main.cpp.o
+ .rodata._ZL16base64_dec_table
+                0x10022be0      0x100 CMakeFiles/sampler.dir/main.cpp.o
  .rodata.panic.str1.4
                 0x10022ce0       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
  .rodata.spin_lock_claim_unused.str1.4
@@ -4005,12 +4005,12 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
  .data.defaultSample
                 0x200017ec        0x4 CMakeFiles/sampler.dir/main.cpp.o
                 0x200017ec                defaultSample
- .data.PSRAM_BASE
-                0x200017f0        0x4 CMakeFiles/sampler.dir/main.cpp.o
-                0x200017f0                PSRAM_BASE
  .data.s01_wav_len
+                0x200017f0        0x4 CMakeFiles/sampler.dir/main.cpp.o
+                0x200017f0                s01_wav_len
+ .data.PSRAM_BASE
                 0x200017f4        0x4 CMakeFiles/sampler.dir/main.cpp.o
-                0x200017f4                s01_wav_len
+                0x200017f4                PSRAM_BASE
  .data.striped_spin_lock_num
                 0x200017f8        0x1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
  *fill*         0x200017f9        0x3 
@@ -4716,121 +4716,121 @@ LOAD linker stubs
  .comment       0x00000045       0x46 liblfs.a(lfs.c.o)
  .comment       0x00000045       0x46 liblfs.a(lfs_util.c.o)
 
-.debug_info     0x00000000    0x67136
- .debug_info    0x00000000     0xffab CMakeFiles/sampler.dir/main.cpp.o
- .debug_info    0x0000ffab     0x243e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_gpio/gpio.c.o
- .debug_info    0x000123e9      0x1be CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
- .debug_info    0x000125a7      0xb78 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/hardware_claim/claim.c.o
- .debug_info    0x0001311f      0x46f CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
- .debug_info    0x0001358e     0x145e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
- .debug_info    0x000149ec     0x260d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_irq/irq.c.o
- .debug_info    0x00016ff9      0x187 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/lock_core.c.o
- .debug_info    0x00017180     0x1e7c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/mutex.c.o
- .debug_info    0x00018ffc      0x389 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/critical_section.c.o
- .debug_info    0x00019385     0x5487 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_time/time.c.o
- .debug_info    0x0001e80c     0x30c6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_timer/timer.c.o
- .debug_info    0x000218d2     0x19a6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_uart/uart.c.o
- .debug_info    0x00023278     0x28a2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_clocks/clocks.c.o
- .debug_info    0x00025b1a      0x507 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pll/pll.c.o
- .debug_info    0x00026021      0xba4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_watchdog/watchdog.c.o
- .debug_info    0x00026bc5      0x26c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_ticks/ticks.c.o
- .debug_info    0x00026e31      0x914 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom.c.o
- .debug_info    0x00027745      0x1c4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom_lock.c.o
- .debug_info    0x00027909      0x316 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_boot_lock/boot_lock.c.o
- .debug_info    0x00027c1f      0x1b1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xosc/xosc.c.o
- .debug_info    0x00027dd0      0x21a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime/runtime.c.o
- .debug_info    0x00027fea     0x1bcd CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init.c.o
- .debug_info    0x00029bb7      0x7c9 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
- .debug_info    0x0002a380       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_aeabi_dcp.S.o
- .debug_info    0x0002a3a3       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_sci_m33.S.o
- .debug_info    0x0002a3c6       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_conv_m33.S.o
- .debug_info    0x0002a3e9     0x3946 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_math.c.o
- .debug_info    0x0002dd2f       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_common_m33.S.o
- .debug_info    0x0002dd52       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
- .debug_info    0x0002dd75      0x6c1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_malloc/malloc.c.o
- .debug_info    0x0002e436      0x6ff CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_cxx_options/new_delete.cpp.o
- .debug_info    0x0002eb35      0x2e2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
- .debug_info    0x0002ee17     0x22ff CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
- .debug_info    0x00031116       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
- .debug_info    0x00031139      0xbdf CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_clib_interface/newlib_interface.c.o
- .debug_info    0x00031d18     0x1c5b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio/stdio.c.o
- .debug_info    0x00033973      0xb12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
- .debug_info    0x00034485     0x1f93 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
- .debug_info    0x00036418      0x72b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
- .debug_info    0x00036b43      0x2b7 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_unique_id/unique_id.c.o
- .debug_info    0x00036dfa     0x1332 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_flash/flash.c.o
- .debug_info    0x0003812c      0x360 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xip_cache/xip_cache.c.o
- .debug_info    0x0003848c     0x2d28 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
- .debug_info    0x0003b1b4     0x126b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
- .debug_info    0x0003c41f     0x4b88 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd.c.o
- .debug_info    0x00040fa7      0xc13 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd_control.c.o
- .debug_info    0x00041bba     0x210b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/cdc/cdc_device.c.o
- .debug_info    0x00043cc5     0x178d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/vendor/vendor_device.c.o
- .debug_info    0x00045452     0x2081 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/tusb.c.o
- .debug_info    0x000474d3     0x28a2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/common/tusb_fifo.c.o
- .debug_info    0x00049d75     0x41e0 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pio/pio.c.o
- .debug_info    0x0004df55     0x28a7 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_multicore/multicore.c.o
- .debug_info    0x000507fc      0x410 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_adc/adc.c.o
- .debug_info    0x00050c0c    0x163b8 liblfs.a(lfs.c.o)
- .debug_info    0x00066fc4      0x172 liblfs.a(lfs_util.c.o)
+.debug_info     0x00000000    0x67135
+ .debug_info    0x00000000     0xffaa CMakeFiles/sampler.dir/main.cpp.o
+ .debug_info    0x0000ffaa     0x243e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_gpio/gpio.c.o
+ .debug_info    0x000123e8      0x1be CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
+ .debug_info    0x000125a6      0xb78 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/hardware_claim/claim.c.o
+ .debug_info    0x0001311e      0x46f CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
+ .debug_info    0x0001358d     0x145e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
+ .debug_info    0x000149eb     0x260d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_irq/irq.c.o
+ .debug_info    0x00016ff8      0x187 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/lock_core.c.o
+ .debug_info    0x0001717f     0x1e7c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/mutex.c.o
+ .debug_info    0x00018ffb      0x389 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/critical_section.c.o
+ .debug_info    0x00019384     0x5487 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_time/time.c.o
+ .debug_info    0x0001e80b     0x30c6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_timer/timer.c.o
+ .debug_info    0x000218d1     0x19a6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_uart/uart.c.o
+ .debug_info    0x00023277     0x28a2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_clocks/clocks.c.o
+ .debug_info    0x00025b19      0x507 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pll/pll.c.o
+ .debug_info    0x00026020      0xba4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_watchdog/watchdog.c.o
+ .debug_info    0x00026bc4      0x26c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_ticks/ticks.c.o
+ .debug_info    0x00026e30      0x914 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom.c.o
+ .debug_info    0x00027744      0x1c4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom_lock.c.o
+ .debug_info    0x00027908      0x316 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_boot_lock/boot_lock.c.o
+ .debug_info    0x00027c1e      0x1b1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xosc/xosc.c.o
+ .debug_info    0x00027dcf      0x21a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime/runtime.c.o
+ .debug_info    0x00027fe9     0x1bcd CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init.c.o
+ .debug_info    0x00029bb6      0x7c9 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
+ .debug_info    0x0002a37f       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+ .debug_info    0x0002a3a2       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_sci_m33.S.o
+ .debug_info    0x0002a3c5       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_conv_m33.S.o
+ .debug_info    0x0002a3e8     0x3946 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_math.c.o
+ .debug_info    0x0002dd2e       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_common_m33.S.o
+ .debug_info    0x0002dd51       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
+ .debug_info    0x0002dd74      0x6c1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_malloc/malloc.c.o
+ .debug_info    0x0002e435      0x6ff CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_cxx_options/new_delete.cpp.o
+ .debug_info    0x0002eb34      0x2e2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+ .debug_info    0x0002ee16     0x22ff CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
+ .debug_info    0x00031115       0x23 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
+ .debug_info    0x00031138      0xbdf CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+ .debug_info    0x00031d17     0x1c5b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio/stdio.c.o
+ .debug_info    0x00033972      0xb12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+ .debug_info    0x00034484     0x1f93 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+ .debug_info    0x00036417      0x72b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+ .debug_info    0x00036b42      0x2b7 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_unique_id/unique_id.c.o
+ .debug_info    0x00036df9     0x1332 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_flash/flash.c.o
+ .debug_info    0x0003812b      0x360 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xip_cache/xip_cache.c.o
+ .debug_info    0x0003848b     0x2d28 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+ .debug_info    0x0003b1b3     0x126b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+ .debug_info    0x0003c41e     0x4b88 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd.c.o
+ .debug_info    0x00040fa6      0xc13 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd_control.c.o
+ .debug_info    0x00041bb9     0x210b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/cdc/cdc_device.c.o
+ .debug_info    0x00043cc4     0x178d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/vendor/vendor_device.c.o
+ .debug_info    0x00045451     0x2081 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/tusb.c.o
+ .debug_info    0x000474d2     0x28a2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/common/tusb_fifo.c.o
+ .debug_info    0x00049d74     0x41e0 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pio/pio.c.o
+ .debug_info    0x0004df54     0x28a7 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_multicore/multicore.c.o
+ .debug_info    0x000507fb      0x410 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_adc/adc.c.o
+ .debug_info    0x00050c0b    0x163b8 liblfs.a(lfs.c.o)
+ .debug_info    0x00066fc3      0x172 liblfs.a(lfs_util.c.o)
 
-.debug_abbrev   0x00000000     0xbf8c
- .debug_abbrev  0x00000000     0x10db CMakeFiles/sampler.dir/main.cpp.o
- .debug_abbrev  0x000010db      0x56d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_gpio/gpio.c.o
- .debug_abbrev  0x00001648      0x12b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
- .debug_abbrev  0x00001773      0x35e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/hardware_claim/claim.c.o
- .debug_abbrev  0x00001ad1      0x22f CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
- .debug_abbrev  0x00001d00      0x26e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
- .debug_abbrev  0x00001f6e      0x644 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_irq/irq.c.o
- .debug_abbrev  0x000025b2      0x11e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/lock_core.c.o
- .debug_abbrev  0x000026d0      0x49b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/mutex.c.o
- .debug_abbrev  0x00002b6b      0x23a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/critical_section.c.o
- .debug_abbrev  0x00002da5      0x644 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_time/time.c.o
- .debug_abbrev  0x000033e9      0x4f9 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_timer/timer.c.o
- .debug_abbrev  0x000038e2      0x367 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_uart/uart.c.o
- .debug_abbrev  0x00003c49      0x4f0 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_clocks/clocks.c.o
- .debug_abbrev  0x00004139      0x1a8 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pll/pll.c.o
- .debug_abbrev  0x000042e1      0x34b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_watchdog/watchdog.c.o
- .debug_abbrev  0x0000462c      0x146 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_ticks/ticks.c.o
- .debug_abbrev  0x00004772      0x36d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom.c.o
- .debug_abbrev  0x00004adf       0xfb CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom_lock.c.o
- .debug_abbrev  0x00004bda      0x1de CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_boot_lock/boot_lock.c.o
- .debug_abbrev  0x00004db8      0x109 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xosc/xosc.c.o
- .debug_abbrev  0x00004ec1      0x182 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime/runtime.c.o
- .debug_abbrev  0x00005043      0x2dd CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init.c.o
- .debug_abbrev  0x00005320      0x2b8 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
- .debug_abbrev  0x000055d8       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_aeabi_dcp.S.o
- .debug_abbrev  0x000055ea       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_sci_m33.S.o
- .debug_abbrev  0x000055fc       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_conv_m33.S.o
- .debug_abbrev  0x0000560e      0x379 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_math.c.o
- .debug_abbrev  0x00005987       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_common_m33.S.o
- .debug_abbrev  0x00005999       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
- .debug_abbrev  0x000059ab      0x21d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_malloc/malloc.c.o
- .debug_abbrev  0x00005bc8      0x217 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_cxx_options/new_delete.cpp.o
- .debug_abbrev  0x00005ddf       0xb8 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
- .debug_abbrev  0x00005e97      0x505 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
- .debug_abbrev  0x0000639c       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
- .debug_abbrev  0x000063ae      0x375 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_clib_interface/newlib_interface.c.o
- .debug_abbrev  0x00006723      0x609 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio/stdio.c.o
- .debug_abbrev  0x00006d2c      0x3b6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
- .debug_abbrev  0x000070e2      0x5f4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
- .debug_abbrev  0x000076d6      0x16c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
- .debug_abbrev  0x00007842      0x1b2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_unique_id/unique_id.c.o
- .debug_abbrev  0x000079f4      0x46c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_flash/flash.c.o
- .debug_abbrev  0x00007e60      0x154 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xip_cache/xip_cache.c.o
- .debug_abbrev  0x00007fb4      0x610 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
- .debug_abbrev  0x000085c4      0x48e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
- .debug_abbrev  0x00008a52      0x84e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd.c.o
- .debug_abbrev  0x000092a0      0x3ed CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd_control.c.o
- .debug_abbrev  0x0000968d      0x5ac CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/cdc/cdc_device.c.o
- .debug_abbrev  0x00009c39      0x4d0 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/vendor/vendor_device.c.o
- .debug_abbrev  0x0000a109      0x575 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/tusb.c.o
- .debug_abbrev  0x0000a67e      0x44d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/common/tusb_fifo.c.o
- .debug_abbrev  0x0000aacb      0x594 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pio/pio.c.o
- .debug_abbrev  0x0000b05f      0x6e2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_multicore/multicore.c.o
- .debug_abbrev  0x0000b741      0x141 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_adc/adc.c.o
- .debug_abbrev  0x0000b882      0x622 liblfs.a(lfs.c.o)
- .debug_abbrev  0x0000bea4       0xe8 liblfs.a(lfs_util.c.o)
+.debug_abbrev   0x00000000     0xbf86
+ .debug_abbrev  0x00000000     0x10d5 CMakeFiles/sampler.dir/main.cpp.o
+ .debug_abbrev  0x000010d5      0x56d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_gpio/gpio.c.o
+ .debug_abbrev  0x00001642      0x12b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
+ .debug_abbrev  0x0000176d      0x35e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/hardware_claim/claim.c.o
+ .debug_abbrev  0x00001acb      0x22f CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
+ .debug_abbrev  0x00001cfa      0x26e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
+ .debug_abbrev  0x00001f68      0x644 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_irq/irq.c.o
+ .debug_abbrev  0x000025ac      0x11e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/lock_core.c.o
+ .debug_abbrev  0x000026ca      0x49b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/mutex.c.o
+ .debug_abbrev  0x00002b65      0x23a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/critical_section.c.o
+ .debug_abbrev  0x00002d9f      0x644 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_time/time.c.o
+ .debug_abbrev  0x000033e3      0x4f9 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_timer/timer.c.o
+ .debug_abbrev  0x000038dc      0x367 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_uart/uart.c.o
+ .debug_abbrev  0x00003c43      0x4f0 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_clocks/clocks.c.o
+ .debug_abbrev  0x00004133      0x1a8 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pll/pll.c.o
+ .debug_abbrev  0x000042db      0x34b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_watchdog/watchdog.c.o
+ .debug_abbrev  0x00004626      0x146 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_ticks/ticks.c.o
+ .debug_abbrev  0x0000476c      0x36d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom.c.o
+ .debug_abbrev  0x00004ad9       0xfb CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom_lock.c.o
+ .debug_abbrev  0x00004bd4      0x1de CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_boot_lock/boot_lock.c.o
+ .debug_abbrev  0x00004db2      0x109 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xosc/xosc.c.o
+ .debug_abbrev  0x00004ebb      0x182 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime/runtime.c.o
+ .debug_abbrev  0x0000503d      0x2dd CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init.c.o
+ .debug_abbrev  0x0000531a      0x2b8 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
+ .debug_abbrev  0x000055d2       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+ .debug_abbrev  0x000055e4       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_sci_m33.S.o
+ .debug_abbrev  0x000055f6       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_conv_m33.S.o
+ .debug_abbrev  0x00005608      0x379 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_math.c.o
+ .debug_abbrev  0x00005981       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_common_m33.S.o
+ .debug_abbrev  0x00005993       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
+ .debug_abbrev  0x000059a5      0x21d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_malloc/malloc.c.o
+ .debug_abbrev  0x00005bc2      0x217 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_cxx_options/new_delete.cpp.o
+ .debug_abbrev  0x00005dd9       0xb8 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+ .debug_abbrev  0x00005e91      0x505 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
+ .debug_abbrev  0x00006396       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
+ .debug_abbrev  0x000063a8      0x375 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+ .debug_abbrev  0x0000671d      0x609 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio/stdio.c.o
+ .debug_abbrev  0x00006d26      0x3b6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+ .debug_abbrev  0x000070dc      0x5f4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+ .debug_abbrev  0x000076d0      0x16c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+ .debug_abbrev  0x0000783c      0x1b2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_unique_id/unique_id.c.o
+ .debug_abbrev  0x000079ee      0x46c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_flash/flash.c.o
+ .debug_abbrev  0x00007e5a      0x154 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xip_cache/xip_cache.c.o
+ .debug_abbrev  0x00007fae      0x610 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+ .debug_abbrev  0x000085be      0x48e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+ .debug_abbrev  0x00008a4c      0x84e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd.c.o
+ .debug_abbrev  0x0000929a      0x3ed CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd_control.c.o
+ .debug_abbrev  0x00009687      0x5ac CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/cdc/cdc_device.c.o
+ .debug_abbrev  0x00009c33      0x4d0 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/vendor/vendor_device.c.o
+ .debug_abbrev  0x0000a103      0x575 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/tusb.c.o
+ .debug_abbrev  0x0000a678      0x44d CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/common/tusb_fifo.c.o
+ .debug_abbrev  0x0000aac5      0x594 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pio/pio.c.o
+ .debug_abbrev  0x0000b059      0x6e2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_multicore/multicore.c.o
+ .debug_abbrev  0x0000b73b      0x141 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_adc/adc.c.o
+ .debug_abbrev  0x0000b87c      0x622 liblfs.a(lfs.c.o)
+ .debug_abbrev  0x0000be9e       0xe8 liblfs.a(lfs_util.c.o)
 
 .debug_loclists
                 0x00000000    0x39790
@@ -5158,63 +5158,63 @@ LOAD linker stubs
  .debug_rnglists
                 0x0000ac10       0x13 liblfs.a(lfs_util.c.o)
 
-.debug_line     0x00000000    0x3e19d
- .debug_line    0x00000000     0x5d39 CMakeFiles/sampler.dir/main.cpp.o
- .debug_line    0x00005d39     0x1c66 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_gpio/gpio.c.o
- .debug_line    0x0000799f      0x285 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
- .debug_line    0x00007c24      0x810 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/hardware_claim/claim.c.o
- .debug_line    0x00008434      0x424 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
- .debug_line    0x00008858      0x3a4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
- .debug_line    0x00008bfc     0x1708 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_irq/irq.c.o
- .debug_line    0x0000a304      0x270 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/lock_core.c.o
- .debug_line    0x0000a574     0x1280 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/mutex.c.o
- .debug_line    0x0000b7f4      0x3c0 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/critical_section.c.o
- .debug_line    0x0000bbb4     0x315e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_time/time.c.o
- .debug_line    0x0000ed12     0x1d68 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_timer/timer.c.o
- .debug_line    0x00010a7a      0xea1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_uart/uart.c.o
- .debug_line    0x0001191b     0x1e69 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_clocks/clocks.c.o
- .debug_line    0x00013784      0x4d9 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pll/pll.c.o
- .debug_line    0x00013c5d      0x9ca CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_watchdog/watchdog.c.o
- .debug_line    0x00014627      0x33a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_ticks/ticks.c.o
- .debug_line    0x00014961      0x690 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom.c.o
- .debug_line    0x00014ff1      0x3ad CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom_lock.c.o
- .debug_line    0x0001539e      0x427 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_boot_lock/boot_lock.c.o
- .debug_line    0x000157c5      0x35c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xosc/xosc.c.o
- .debug_line    0x00015b21      0x319 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime/runtime.c.o
- .debug_line    0x00015e3a      0x5dc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init.c.o
- .debug_line    0x00016416      0x580 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
- .debug_line    0x00016996      0x28f CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_aeabi_dcp.S.o
- .debug_line    0x00016c25      0x4a7 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_sci_m33.S.o
- .debug_line    0x000170cc      0x1ca CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_conv_m33.S.o
- .debug_line    0x00017296     0x25b9 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_math.c.o
- .debug_line    0x0001984f      0x19e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_common_m33.S.o
- .debug_line    0x000199ed      0x263 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
- .debug_line    0x00019c50      0x492 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_malloc/malloc.c.o
- .debug_line    0x0001a0e2      0x27a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_cxx_options/new_delete.cpp.o
- .debug_line    0x0001a35c      0x1f5 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
- .debug_line    0x0001a551     0x1bb6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
- .debug_line    0x0001c107       0xa1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
- .debug_line    0x0001c1a8      0x830 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_clib_interface/newlib_interface.c.o
- .debug_line    0x0001c9d8     0x152b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio/stdio.c.o
- .debug_line    0x0001df03      0x50e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
- .debug_line    0x0001e411     0x1143 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
- .debug_line    0x0001f554      0x3bf CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
- .debug_line    0x0001f913      0x73e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_unique_id/unique_id.c.o
- .debug_line    0x00020051      0xe21 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_flash/flash.c.o
- .debug_line    0x00020e72      0x346 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xip_cache/xip_cache.c.o
- .debug_line    0x000211b8     0x1ea6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
- .debug_line    0x0002305e      0xc60 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
- .debug_line    0x00023cbe     0x26ac CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd.c.o
- .debug_line    0x0002636a      0x73b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd_control.c.o
- .debug_line    0x00026aa5     0x1070 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/cdc/cdc_device.c.o
- .debug_line    0x00027b15      0xa66 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/vendor/vendor_device.c.o
- .debug_line    0x0002857b     0x1342 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/tusb.c.o
- .debug_line    0x000298bd     0x18fe CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/common/tusb_fifo.c.o
- .debug_line    0x0002b1bb     0x2888 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pio/pio.c.o
- .debug_line    0x0002da43     0x1b0c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_multicore/multicore.c.o
- .debug_line    0x0002f54f      0x3ef CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_adc/adc.c.o
- .debug_line    0x0002f93e     0xe66c liblfs.a(lfs.c.o)
- .debug_line    0x0003dfaa      0x1f3 liblfs.a(lfs_util.c.o)
+.debug_line     0x00000000    0x3e20a
+ .debug_line    0x00000000     0x5da6 CMakeFiles/sampler.dir/main.cpp.o
+ .debug_line    0x00005da6     0x1c66 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_gpio/gpio.c.o
+ .debug_line    0x00007a0c      0x285 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
+ .debug_line    0x00007c91      0x810 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/hardware_claim/claim.c.o
+ .debug_line    0x000084a1      0x424 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
+ .debug_line    0x000088c5      0x3a4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
+ .debug_line    0x00008c69     0x1708 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_irq/irq.c.o
+ .debug_line    0x0000a371      0x270 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/lock_core.c.o
+ .debug_line    0x0000a5e1     0x1280 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/mutex.c.o
+ .debug_line    0x0000b861      0x3c0 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_sync/critical_section.c.o
+ .debug_line    0x0000bc21     0x315e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/common/pico_time/time.c.o
+ .debug_line    0x0000ed7f     0x1d68 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_timer/timer.c.o
+ .debug_line    0x00010ae7      0xea1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_uart/uart.c.o
+ .debug_line    0x00011988     0x1e69 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_clocks/clocks.c.o
+ .debug_line    0x000137f1      0x4d9 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pll/pll.c.o
+ .debug_line    0x00013cca      0x9ca CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_watchdog/watchdog.c.o
+ .debug_line    0x00014694      0x33a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_ticks/ticks.c.o
+ .debug_line    0x000149ce      0x690 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom.c.o
+ .debug_line    0x0001505e      0x3ad CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_bootrom/bootrom_lock.c.o
+ .debug_line    0x0001540b      0x427 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_boot_lock/boot_lock.c.o
+ .debug_line    0x00015832      0x35c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xosc/xosc.c.o
+ .debug_line    0x00015b8e      0x319 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime/runtime.c.o
+ .debug_line    0x00015ea7      0x5dc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init.c.o
+ .debug_line    0x00016483      0x580 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
+ .debug_line    0x00016a03      0x28f CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+ .debug_line    0x00016c92      0x4a7 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_sci_m33.S.o
+ .debug_line    0x00017139      0x1ca CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_double/double_conv_m33.S.o
+ .debug_line    0x00017303     0x25b9 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_math.c.o
+ .debug_line    0x000198bc      0x19e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_common_m33.S.o
+ .debug_line    0x00019a5a      0x263 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
+ .debug_line    0x00019cbd      0x492 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_malloc/malloc.c.o
+ .debug_line    0x0001a14f      0x27a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_cxx_options/new_delete.cpp.o
+ .debug_line    0x0001a3c9      0x1f5 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+ .debug_line    0x0001a5be     0x1bb6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
+ .debug_line    0x0001c174       0xa1 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
+ .debug_line    0x0001c215      0x830 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+ .debug_line    0x0001ca45     0x152b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio/stdio.c.o
+ .debug_line    0x0001df70      0x50e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+ .debug_line    0x0001e47e     0x1143 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+ .debug_line    0x0001f5c1      0x3bf CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+ .debug_line    0x0001f980      0x73e CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_unique_id/unique_id.c.o
+ .debug_line    0x000200be      0xe21 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_flash/flash.c.o
+ .debug_line    0x00020edf      0x346 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_xip_cache/xip_cache.c.o
+ .debug_line    0x00021225     0x1ea6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+ .debug_line    0x000230cb      0xc60 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+ .debug_line    0x00023d2b     0x26ac CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd.c.o
+ .debug_line    0x000263d7      0x73b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd_control.c.o
+ .debug_line    0x00026b12     0x1070 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/cdc/cdc_device.c.o
+ .debug_line    0x00027b82      0xa66 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/class/vendor/vendor_device.c.o
+ .debug_line    0x000285e8     0x1342 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/tusb.c.o
+ .debug_line    0x0002992a     0x18fe CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/common/tusb_fifo.c.o
+ .debug_line    0x0002b228     0x2888 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_pio/pio.c.o
+ .debug_line    0x0002dab0     0x1b0c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_multicore/multicore.c.o
+ .debug_line    0x0002f5bc      0x3ef CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_adc/adc.c.o
+ .debug_line    0x0002f9ab     0xe66c liblfs.a(lfs.c.o)
+ .debug_line    0x0003e017      0x1f3 liblfs.a(lfs_util.c.o)
 
 .debug_str      0x00000000    0x11170
  .debug_str     0x00000000    0x11170 CMakeFiles/sampler.dir/main.cpp.o

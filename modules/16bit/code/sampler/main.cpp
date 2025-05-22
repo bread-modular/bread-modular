@@ -1,20 +1,17 @@
 #include <stdio.h>
-#include "pico/stdlib.h"
-#include "io.h"
-#include "audio.h"
-#include "midi.h"
-#include "samples/s01.h"
-#include "DAC.h"
 #include <algorithm>
-#include "math.h"
-#include "mod/Biquad.h"
-#include "mod/Delay.h"
-#include "pico/time.h"
-#include "fs/FS.h"
-#include "api/WebSerial.h"
+#include "pico/stdlib.h"
+
+#include "io.h"
+#include "midi.h"
+#include "fs/fs.h"
 #include "psram.h"
-#include "includes/fs/pico_lfs.h"
-#include "tools/SamplePlayer.h"
+#include "audio/manager.h"
+#include "audio/samples/s01.h"
+#include "audio/mod/Biquad.h"
+#include "audio/mod/Delay.h"
+#include "audio/tools/SamplePlayer.h"
+#include "api/WebSerial.h"
 
 #define SAMPLE_RATE 44100
 #define TOTAL_SAMPLE_PLAYERS 12

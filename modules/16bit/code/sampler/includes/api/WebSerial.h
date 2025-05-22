@@ -9,7 +9,7 @@
 #include "utils/base64.h"
 #include "psram.h"
 #include "utils/crc32.h"
-#include "audio.h"
+#include "audio/manager.h"
 
 #define WEB_SERIAL_BUFFER_SIZE (2 * 1024 * 1024) // 2MB per buffer
 
