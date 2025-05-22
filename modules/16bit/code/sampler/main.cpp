@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <algorithm>
+#include <string.h>
 #include "pico/stdlib.h"
 
 #include "io.h"
@@ -8,10 +9,10 @@
 #include "psram.h"
 #include "audio/manager.h"
 #include "audio/samples/s01.h"
-#include "audio/mod/Biquad.h"
-#include "audio/mod/Delay.h"
-#include "audio/tools/SamplePlayer.h"
-#include "api/WebSerial.h"
+#include "audio/mod/biquad.h"
+#include "audio/mod/delay.h"
+#include "audio/tools/sample_player.h"
+#include "api/web_serial.h"
 
 #define SAMPLE_RATE 44100
 #define TOTAL_SAMPLE_PLAYERS 12
@@ -21,10 +22,10 @@ IO *io = IO::getInstance();
 PSRAM *psram = PSRAM::getInstance();
 AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
+WebSerial* webSerial = WebSerial::getInstance();
 Biquad lowpassFilter(Biquad::FilterType::LOWPASS);
 Biquad highpassFilter(Biquad::FilterType::HIGHPASS);
 Delay delay(1000.0f);
-WebSerial webSerial;
 
 // Default sample
 int16_t* defaultSample = (int16_t*)s01_wav;
@@ -74,10 +75,9 @@ void audioCallback(AudioResponse *response) {
 
     sampleSumWithFx = lowpassFilter.process(sampleSumWithFx);
     sampleSumWithFx = highpassFilter.process(sampleSumWithFx);
+    sampleSumWithFx = delay.process(sampleSumWithFx);
 
-    float sampleSum = sampleSumNoFx;
-    sampleSum += delay.process(sampleSumWithFx);
-
+    float sampleSum = sampleSumNoFx + sampleSumWithFx;
     sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
 
     response->left = sampleSum;
@@ -160,6 +160,52 @@ void bpmChangeCallback(int bpm) {
     delay.setBPM(bpm);
 }
 
+bool onCommandCallback(const char* cmd) {
+    if (strncmp(cmd, "ping", 4) == 0) {
+        printf("pong\n");
+        io->blink(3, 100);
+        return true;
+    }
+
+    if (strncmp(cmd, "whoami", 6) == 0) {
+        printf("16bit\n");
+        return true;
+    }
+
+    // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
+    if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
+        int sampleId = -1, originalSize = -1, base64Size = -1;
+        if (!sscanf(cmd + 20, "%d %d %d", &sampleId, &originalSize, &base64Size)) {
+            printf("Usage: write-sample-base64 <sample-id 0-11> <original-size> <base64-length>\n");
+            return false;
+        }
+
+        if (!(sampleId >= 0 && sampleId <= 11 && originalSize > 0 && base64Size > 0)) {
+            printf("Usage: write-sample-base64 <sample-id 0-11> <original-size> <base64-length>\n");
+            return false;
+        }
+
+        bool accepted = webSerial->acceptBinary(originalSize, base64Size, [sampleId](uint8_t* data, int size) {
+            if(SamplePlayer::saveSample(sampleId, data, size)) {
+                printf("Sample %02d saved\n", sampleId);
+            } else {
+                printf("Failed to save sample %02d\n", sampleId);
+            }
+            audioManager->start();
+        });
+
+        if (!accepted) {
+            return false;
+        }
+
+        printf("Ready to receive %d Base64 chars for sample %02d (original %d bytes)\n", base64Size, sampleId, originalSize);
+        audioManager->stop();
+        return true;
+    }
+
+    return false;
+}
+
 int main() {
     stdio_init_all();
 
@@ -185,13 +231,13 @@ int main() {
     midi->setNoteOnCallback(noteOnCallback);
     midi->init();
 
-    // Initialize WebSerial
-    webSerial.init();
+    webSerial->onCommand(onCommandCallback);
+    webSerial->init();
 
     while (true) {
         io->update();
         midi->update();
-        webSerial.update();
+        webSerial->update();
     }
 
     return 0;

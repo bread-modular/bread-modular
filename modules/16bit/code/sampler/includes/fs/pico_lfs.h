@@ -224,7 +224,11 @@ bool read_file(const char* filename, void* buffer, size_t buffer_size, size_t* b
     lfs_file_t file;
     int err = lfs_file_open(&lfs, &file, filename, LFS_O_RDONLY);
     if (err) {
-        printf("Failed to open file for reading: error %d\n", err);
+        if (err == LFS_ERR_NOENT) {
+            return false;
+        }
+
+        //printf("Failed to open file for reading: error %d\n", err);
         return false;
     }
     
@@ -352,7 +356,6 @@ inline size_t get_file_size(const char* filename) {
     if (res == 0) {
         return info.size;
     } else {
-        printf("Failed to stat file %s\n", filename);
         return 0;
     }
 }

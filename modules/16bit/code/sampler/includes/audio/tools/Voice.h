@@ -1,8 +1,8 @@
 #pragma once
 #include "../midi.h"
-#include "../audio.h"
-#include "../gen/AudioGenerator.h"
-#include "../env/Envelope.h"
+#include "audio/manager.h"
+#include "audio/gen/AudioGenerator.h"
+#include "audio/env/Envelope.h"
 
 
 class Voice {

@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "audio/manager.h"
-#include "audio/mod/Biquad.h"
+#include "audio/mod/biquad.h"
 #include "psram.h"
 
 // Feedback Delay Effect
