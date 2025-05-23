@@ -10,6 +10,7 @@
 #include "audio/manager.h"
 #include "api/web_serial.h"
 
+#include "audio/apps/audio_app.h"
 #include "audio/apps/sampler_app.h"
 
 #define SAMPLE_RATE 44100
@@ -21,7 +22,7 @@ AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
 WebSerial* webSerial = WebSerial::getInstance();
 
-SamplerApp* app = SamplerApp::getInstance();
+AudioApp* app = SamplerApp::getInstance();
 
 void onAudioStartCallback() {
     app->init();

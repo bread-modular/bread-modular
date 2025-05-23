@@ -11,10 +11,11 @@
 #include "audio/mod/delay.h"
 #include "audio/tools/sample_player.h"
 #include "api/web_serial.h"
+#include "audio/apps/audio_app.h"
 
 #define TOTAL_SAMPLE_PLAYERS 12
 
-class SamplerApp {
+class SamplerApp : public AudioApp {
     private:
         static SamplerApp* instance;
         FS *fs = FS::getInstance();
@@ -40,19 +41,19 @@ class SamplerApp {
             SamplePlayer(11)
         };
 
+    public:
         SamplerApp() {
 
         }
-    public:
-
-        static SamplerApp* getInstance() {
+        
+        static AudioApp* getInstance() {
             if (!instance) {
                 instance = new SamplerApp();
             }
             return instance;
         }
 
-        void init() {
+        void init() override {
             psram->freeall();
             lowpassFilter.init(audioManager);
             highpassFilter.init(audioManager);
@@ -63,7 +64,7 @@ class SamplerApp {
             }
         }
 
-        void audioCallback(AudioResponse *response) {
+        void audioCallback(AudioResponse *response) override {
             float sampleSumWithFx = 0.0f;
             float sampleSumNoFx = 0.0f;
 
@@ -95,7 +96,7 @@ class SamplerApp {
             response->right = sampleSum;
         }
 
-        void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
+        void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
             uint8_t sampleToPlay = note % 12;
             // Keep current playback method for sampleId 0
             float velocityNorm = velocity / 127.0f;
@@ -113,11 +114,11 @@ class SamplerApp {
             }
         }
 
-        void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) {   
+        void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {   
     
         }
 
-        void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {    
+        void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {    
             // Filter Controls
             if (cc == 71) {
                 cv1UpdateCallback(value * 32);
@@ -141,19 +142,19 @@ class SamplerApp {
             }
         }
 
-        void cv1UpdateCallback(uint16_t cv1) {
+        void cv1UpdateCallback(uint16_t cv1) override {
             float cv1Norm = 1.0 - IO::normalizeCV(cv1);
             float cutoff = 50.0f * powf(20000.0f / 50.0f, cv1Norm * cv1Norm);
             lowpassFilter.setCutoff(cutoff);
         }
 
-        void cv2UpdateCallback(uint16_t cv2) {
+        void cv2UpdateCallback(uint16_t cv2) override {
             float cv2Norm = IO::normalizeCV(cv2);
             float cutoff = 20.0f * powf(20000.0f / 20.0f, cv2Norm);
             highpassFilter.setCutoff(cutoff);
         }
 
-        void buttonPressedCallback(bool pressed) {
+        void buttonPressedCallback(bool pressed) override {
             if (pressed) {
                 io->setLED(true);
                 audioManager->stop([]() {
@@ -171,11 +172,11 @@ class SamplerApp {
             }
         }
 
-        void bpmChangeCallback(int bpm) {
+        void bpmChangeCallback(int bpm) override {
             delay.setBPM(bpm);
         }
 
-        bool onCommandCallback(const char* cmd) {
+        bool onCommandCallback(const char* cmd) override {
             if (strncmp(cmd, "get-appname", 11) == 0) {
                 webSerial->sendValue("sampler");
                 return true;
@@ -213,7 +214,7 @@ class SamplerApp {
             return false;
         }
 
-        void update() {
+        void update() override {
 
         }
 };
