@@ -43,6 +43,42 @@ class WebSerial {
             commandBufferPos = 0;
         }
 
+        void sendValue(int value) {
+            printf("::val::%d::val::\n", value);
+        }
+
+        void sendValue(float value) {
+            printf("::val::%f::val::\n", value);
+        }
+
+        void sendValue(const char* value) {
+            printf("::val::%s::val::\n", value);
+        }
+
+        void sendList(int* values, int length) {
+            printf("::list::");
+            for (int i = 0; i < length; i++) {
+                printf("%d,", values[i]);
+            }
+            printf("::list::\n");
+        }
+
+        void sendList(float* values, int length) {
+            printf("::list::");
+            for (int i = 0; i < length; i++) {
+                printf("%f,", values[i]);
+            }
+            printf("::list::\n");
+        }
+
+        void sendList(const char** values, int length) {
+            printf("::list::");
+            for (int i = 0; i < length; i++) {
+                printf("%s,", values[i]);
+            }
+            printf("::list::\n");
+        }
+
         void onCommand(CommandCallback callback) {
             onCommandCallback = callback;
         }

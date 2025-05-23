@@ -168,7 +168,7 @@ bool onCommandCallback(const char* cmd) {
     }
 
     if (strncmp(cmd, "whoami", 6) == 0) {
-        printf("16bit\n");
+        webSerial->sendValue("16bit");
         return true;
     }
 
