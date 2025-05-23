@@ -12,6 +12,7 @@
 
 #include "audio/apps/audio_app.h"
 #include "audio/apps/sampler_app.h"
+#include "audio/apps/noop_app.h"
 
 #define SAMPLE_RATE 44100
 
@@ -61,6 +62,20 @@ void bpmChangeCallback(int bpm) {
 }
 
 bool onCommandCallback(const char* cmd) {
+    if (strncmp(cmd, "set-app noop", 12) == 0) {
+        audioManager->stop();
+        app = NoopApp::getInstance();
+        audioManager->start();
+        return true;
+    }
+
+    if (strncmp(cmd, "set-app sampler", 15) == 0) {
+        audioManager->stop();
+        app = SamplerApp::getInstance();
+        audioManager->start();
+        return true;
+    }
+
     if (strncmp(cmd, "ping", 4) == 0) {
         printf("pong\n");
         io->blink(3, 100);
