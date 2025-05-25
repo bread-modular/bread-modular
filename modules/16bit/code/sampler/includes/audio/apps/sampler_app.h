@@ -8,10 +8,10 @@
 #include "audio/manager.h"
 #include "audio/samples/s01.h"
 #include "audio/mod/biquad.h"
-#include "audio/mod/delay.h"
 #include "audio/tools/sample_player.h"
 #include "api/web_serial.h"
-#include "audio/apps/audio_app.h"
+#include "audio/apps/interfaces/audio_app.h"
+#include "audio/apps/fx/delay_fx.h"
 
 #define TOTAL_SAMPLE_PLAYERS 12
 
@@ -26,7 +26,7 @@ class SamplerApp : public AudioApp {
         WebSerial* webSerial = WebSerial::getInstance();
         Biquad lowpassFilter{Biquad::FilterType::LOWPASS};
         Biquad highpassFilter{Biquad::FilterType::HIGHPASS};
-        Delay delay{1000.0f};
+        DelayFX delay;
 
         // Default sample
         int16_t* defaultSample = (int16_t*)s01_wav;
@@ -118,7 +118,8 @@ class SamplerApp : public AudioApp {
     
         }
 
-        void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {    
+        void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {
+            float valueNormalized = value / 127.0f;
             // Filter Controls
             if (cc == 71) {
                 cv1UpdateCallback(value * 32);
@@ -128,17 +129,13 @@ class SamplerApp : public AudioApp {
 
             // Delay Controls
             if (cc == 20) {
-                // from 0 to 1/2 beats
-                // This range is configurable via the physical hand control & useful
-                delay.setDelayBeats(value / 127.0f / 2.0f );
+                delay.setParameter(0, valueNormalized);
             } else if (cc == 21) {
-                delay.setFeedback(value / 127.0f);
+                delay.setParameter(1, valueNormalized);
             } else if (cc == 22) {  
-                delay.setWet(value / 127.0f);
+                delay.setParameter(2, valueNormalized);
             } else if (cc == 23) {
-                float valNormalized = 1.0 - value / 127.0f;
-                float cutoff = 100.0f * powf(20000.0f / 100.0f, valNormalized * valNormalized);
-                delay.setLowpassCutoff(cutoff);
+                delay.setParameter(3, valueNormalized);
             }
         }
 

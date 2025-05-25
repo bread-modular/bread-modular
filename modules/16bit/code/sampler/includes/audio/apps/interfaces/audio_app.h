@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdint.h>
 #include "audio/manager.h"
 
 class AudioApp {

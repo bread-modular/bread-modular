@@ -10,7 +10,7 @@
 #include "audio/manager.h"
 #include "api/web_serial.h"
 
-#include "audio/apps/audio_app.h"
+#include "audio/apps/interfaces/audio_app.h"
 #include "audio/apps/sampler_app.h"
 #include "audio/apps/noop_app.h"
 

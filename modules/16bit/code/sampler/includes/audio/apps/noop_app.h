@@ -1,6 +1,6 @@
 #pragma once
 
-#include "audio_app.h"
+#include "audio/apps/interfaces/audio_app.h"
 
 class NoopApp : public AudioApp {
     private:
