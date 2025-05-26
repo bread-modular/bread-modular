@@ -56,28 +56,22 @@ public:
     }
 
     void audioCallback(AudioResponse *response) override {
-        float valueWithEnvelope = 0;
-        int32_t valueWithWaveform = 0;
+        float sumVoice = 0.0f;
         for (int i = 0; i < TOTAL_VOICES; i++) {
             if (voices[i] != nullptr) {
-                valueWithEnvelope += voices[i]->process();            
-                valueWithWaveform += voices[i]->getWaveformOnly();
+                sumVoice += voices[i]->process();            
             }
         }
 
         // Normalize the valueWithEnvelope to 16-bit range
         // If we divide by the number of voices, it will sound quieter
         // With this method we will a decent headroom plus loudness with a bit of distortion
-        valueWithEnvelope = valueWithEnvelope / (MAX(3, TOTAL_VOICES / 2));
-        valueWithEnvelope = MAX(valueWithEnvelope, -32768);
-        valueWithEnvelope = MIN(valueWithEnvelope, 32767);
+        sumVoice = sumVoice / (MAX(3, TOTAL_VOICES / 2));
 
-        valueWithWaveform = valueWithWaveform / TOTAL_VOICES;
-        valueWithWaveform = MAX(valueWithWaveform, -32768);
-        valueWithWaveform = MIN(valueWithWaveform, 32767);
+        sumVoice = std::clamp(sumVoice * 32768.0f, -32768.0f, 32767.0f);
 
-        response->left = valueWithEnvelope;
-        response->right = valueWithWaveform;
+        response->left = sumVoice;
+        response->right = sumVoice;
     }
 
     // Update method for handling UI and other non-audio updates

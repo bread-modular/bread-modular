@@ -75,14 +75,14 @@ class Voice {
             }
         }
 
-        int16_t process() {
+        float process() {
             int32_t sum = 0;
             for (uint8_t i = 0; i < totalGenerators; ++i) {
                 sum += generators[i]->getSample();
             }
              
             waveform = sum / totalGenerators;
-            return envelope->process(waveform);
+            return envelope->process(waveform) / 32768.0f;
         }
 
         int16_t getWaveformOnly() {
