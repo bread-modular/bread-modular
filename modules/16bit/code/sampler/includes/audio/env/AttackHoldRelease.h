@@ -76,7 +76,7 @@ class AttackHoldReleaseEnvelope : public Envelope {
             }
         }
 
-        int16_t process(int16_t sample) override {
+        float process(float sample) override {
             // Check for zero-crossing from positive to negative
             if (triggerAtZero && previousSample >= 0 && sample < 0) {
                 triggerAtZero = false;

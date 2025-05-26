@@ -20,7 +20,7 @@ public:
     virtual void setTrigger(bool trigger) = 0;
     
     // Process a sample through the envelope
-    virtual int16_t process(int16_t sample) = 0;
+    virtual float process(float sample) = 0;
 
     virtual bool isActive() = 0;
 
