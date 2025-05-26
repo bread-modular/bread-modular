@@ -49,12 +49,14 @@ public:
             voices[i] = new Voice(
                 1, // total generators
                 (AudioGenerator*[]){ &sawGenerators[i] }, // generators
-                new AttackHoldReleaseEnvelope(10.0f, 500.0f) // amp envelope
+                new AttackHoldReleaseEnvelope(10.0f, 500.0f), // amp envelope
+                new AttackHoldReleaseEnvelope(10.0f, 500.0f) // filter envelope
             );
             voices[i]->init(audioManager); // init voice
 
             if (oldVoice != nullptr) {
                 delete oldVoice->getAmpEnvelope();
+                delete oldVoice->getFilterEnvelope();
                 delete oldVoice;
             }
         }
@@ -84,7 +86,9 @@ public:
     
     // MIDI callback methods
     void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
-        printf("Note on: %d %d(%d) %d\n", channel, note, MIDI::midiNoteToFrequency(note), velocity);
+        // Convert MIDI velocity to logarithmic scale for more musical response
+        float velocityNorm = velocity / 127.0f;
+        float realVelocity = powf(velocityNorm, 2.0f);
     
         if (++totalNotesOn > 0) {
             io->setGate1(true);
@@ -98,7 +102,7 @@ public:
         }
 
         uint8_t generatorNotes[] = { static_cast<uint8_t>(note) };
-        voice->setNoteOn(note, generatorNotes);
+        voice->setNoteOn(realVelocity, note, generatorNotes);
     }
 
     void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
