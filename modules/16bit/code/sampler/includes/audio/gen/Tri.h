@@ -26,25 +26,30 @@ class Tri : public AudioGenerator {
             sampleId = 0;
         }
 
-        uint16_t getSample() {
+        float getSample() {
             if (sampleId == 0 && nextSamplesPerCycle != samplesPerCycle) {
                 samplesPerCycle = nextSamplesPerCycle;
             }
         
-            // Triangle wave generation using integer math
-            uint32_t halfCycle = samplesPerCycle / 2;
-            int32_t amplitude;
+            // Prevent division by zero
+            if (samplesPerCycle == 0) {
+                return 0.0f;
+            }
+        
+            // Triangle wave generation using floats
+            float halfCycle = samplesPerCycle / 2.0f;
+            float amplitude;
             
             if (sampleId < halfCycle) {
-                // Rising part: 0 to halfCycle maps to -32768 to 32767
-                amplitude = ((int32_t)sampleId * 65535) / halfCycle - 32768;
+                // Rising part: 0 to halfCycle maps to -1.0 to 1.0
+                amplitude = (2.0f * sampleId / halfCycle) - 1.0f;
             } else {
-                // Falling part: halfCycle to samplesPerCycle maps to 32767 to -32768
-                amplitude = 32767 - ((int32_t)(sampleId - halfCycle) * 65535) / halfCycle;
+                // Falling part: halfCycle to samplesPerCycle maps to 1.0 to -1.0
+                amplitude = 1.0f - (2.0f * (sampleId - halfCycle) / halfCycle);
             }
 
             sampleId = (sampleId + 1) % samplesPerCycle;
 
-            return (int16_t)amplitude;
+            return amplitude;
         }
 };

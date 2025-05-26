@@ -27,18 +27,18 @@ class Sine: public AudioGenerator {
             sampleId = 0;
         }
 
-        uint16_t getSample() {
+        float getSample() {
             if (sampleId == 0 && nextSamplesPerCycle != samplesPerCycle) {
                 samplesPerCycle = nextSamplesPerCycle;
             }
         
             // Just a sine wave for now
-            float phase = sampleId / (float)samplesPerCycle;
+            float phase = samplesPerCycle == 0 ? 0.0f : sampleId / (float)samplesPerCycle;
             phase = phase > 1.0 ? 1.0 : phase;
             float angle = 2.0f * M_PI * phase;
 
             sampleId = (sampleId + 1) % samplesPerCycle;
 
-            return (int16_t)(32767.0f * sin(angle));
+            return sin(angle);
         }
 };

@@ -32,7 +32,7 @@ class Square: public AudioGenerator {
             sampleId = 0;
         }
 
-        uint16_t getSample() {
+        float getSample() {
             if (sampleId == 0 && nextSamplesPerCycle != samplesPerCycle) {
                 samplesPerCycle = nextSamplesPerCycle;
             }
@@ -41,7 +41,7 @@ class Square: public AudioGenerator {
             uint32_t thresholdSample = (samplesPerCycle * pulseWidth) / 100;
             
             // Output full positive amplitude for pulse width duration, then full negative amplitude
-            int16_t amplitude = (sampleId < thresholdSample) ? 32767 : -32768;
+            float amplitude = (sampleId < thresholdSample) ? 1.0f : -1.0f;
             
             sampleId = (sampleId + 1) % samplesPerCycle;
 

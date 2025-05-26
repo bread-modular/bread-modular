@@ -26,17 +26,17 @@ class Saw: public AudioGenerator {
             sampleId = 0;
         }
 
-        uint16_t getSample() {
+        float getSample() {
             if (sampleId == 0 && nextSamplesPerCycle != samplesPerCycle) {
                 samplesPerCycle = nextSamplesPerCycle;
             }
         
             // Sawtooth wave generation using integer math
             // Maps sampleId from 0 to samplesPerCycle to amplitude -32768 to 32767
-            int32_t amplitude = ((int32_t)sampleId * 65535) / samplesPerCycle - 32768;
+            float amplitude = ((sampleId * 2.0f) / samplesPerCycle) - 1.0f;
 
             sampleId = (sampleId + 1) % samplesPerCycle;
 
-            return (int16_t)amplitude;
+            return amplitude;
         }
 };

@@ -11,5 +11,5 @@ public:
 
     virtual void reset() = 0;
 
-    virtual uint16_t getSample() = 0;
+    virtual float getSample() = 0;
 };
