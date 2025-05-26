@@ -11,7 +11,9 @@
 #include "audio/tools/sample_player.h"
 #include "api/web_serial.h"
 #include "audio/apps/interfaces/audio_app.h"
+
 #include "audio/apps/fx/delay_fx.h"
+#include "audio/apps/fx/noop_fx.h"
 
 #define TOTAL_SAMPLE_PLAYERS 12
 
@@ -27,6 +29,8 @@ class SamplerApp : public AudioApp {
         Biquad lowpassFilter{Biquad::FilterType::LOWPASS};
         Biquad highpassFilter{Biquad::FilterType::HIGHPASS};
         DelayFX delay;
+        NoopFX noop;
+        AudioFX* fx1 = &delay;
 
         // Default sample
         int16_t* defaultSample = (int16_t*)s01_wav;
@@ -57,7 +61,7 @@ class SamplerApp : public AudioApp {
             psram->freeall();
             lowpassFilter.init(audioManager);
             highpassFilter.init(audioManager);
-            delay.init(audioManager);
+            fx1->init(audioManager);
 
             for (int i=0; i<TOTAL_SAMPLE_PLAYERS; i++) {
                 players[i].init();
@@ -87,7 +91,7 @@ class SamplerApp : public AudioApp {
 
             sampleSumWithFx = lowpassFilter.process(sampleSumWithFx);
             sampleSumWithFx = highpassFilter.process(sampleSumWithFx);
-            sampleSumWithFx = delay.process(sampleSumWithFx);
+            sampleSumWithFx = fx1->process(sampleSumWithFx);
 
             float sampleSum = sampleSumNoFx + sampleSumWithFx;
             sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
@@ -129,13 +133,13 @@ class SamplerApp : public AudioApp {
 
             // Delay Controls
             if (cc == 20) {
-                delay.setParameter(0, valueNormalized);
+                fx1->setParameter(0, valueNormalized);
             } else if (cc == 21) {
-                delay.setParameter(1, valueNormalized);
+                fx1->setParameter(1, valueNormalized);
             } else if (cc == 22) {  
-                delay.setParameter(2, valueNormalized);
+                fx1->setParameter(2, valueNormalized);
             } else if (cc == 23) {
-                delay.setParameter(3, valueNormalized);
+                fx1->setParameter(3, valueNormalized);
             }
         }
 
@@ -170,12 +174,22 @@ class SamplerApp : public AudioApp {
         }
 
         void bpmChangeCallback(int bpm) override {
-            delay.setBPM(bpm);
+            fx1->setBPM(bpm);
         }
 
         bool onCommandCallback(const char* cmd) override {
             if (strncmp(cmd, "get-appname", 11) == 0) {
                 webSerial->sendValue("sampler");
+                return true;
+            }
+
+            if (strncmp(cmd, "set-fx1 noop", 12) == 0) {
+                fx1 = &noop;
+                return true;
+            }
+
+            if (strncmp(cmd, "set-fx1 delay", 13) == 0) {
+                fx1 = &delay;
                 return true;
             }
 
