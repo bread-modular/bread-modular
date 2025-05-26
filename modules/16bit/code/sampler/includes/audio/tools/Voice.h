@@ -8,7 +8,7 @@ class Voice {
     private:
         AudioGenerator** generators;
         uint8_t totalGenerators;
-        Envelope* envelope;
+        Envelope* ampEnvelope;
         uint8_t currentNote;
         uint8_t voiceId;
         static uint8_t voiceIdCounter;
@@ -17,8 +17,8 @@ class Voice {
         float waveform = 0;
         
     public:
-        Voice(uint8_t totalGenerators, AudioGenerator* generators[], Envelope* envelope)
-            : totalGenerators(totalGenerators), envelope(envelope) {
+        Voice(uint8_t totalGenerators, AudioGenerator* generators[], Envelope* ampEnvelope)
+            : totalGenerators(totalGenerators), ampEnvelope(ampEnvelope) {
                 this->generators = new AudioGenerator*[totalGenerators];
                 for (uint8_t i = 0; i < totalGenerators; ++i) {
                     this->generators[i] = generators[i];
@@ -38,8 +38,8 @@ class Voice {
                 generators[i]->init(audioManager);
                 generators[i]->setFrequency(freq);
             }
-            envelope->init(audioManager);
-            envelope->setOnCompleteCallback([this]() { this->onEnvelopeComplete(); });
+            ampEnvelope->init(audioManager);
+            ampEnvelope->setOnCompleteCallback([this]() { this->onEnvelopeComplete(); });
         }
 
 
@@ -66,12 +66,12 @@ class Voice {
                 }
                 generators[i]->setFrequency(freq);
             }
-            envelope->setTrigger(true);
+            ampEnvelope->setTrigger(true);
         }
 
         void setNoteOff(uint8_t note) {
             if (note == currentNote) {
-                envelope->setTrigger(false);
+                ampEnvelope->setTrigger(false);
             }
         }
 
@@ -82,15 +82,15 @@ class Voice {
             }
              
             waveform = sum / totalGenerators;
-            return envelope->process(waveform);
+            return ampEnvelope->process(waveform);
         }
 
         int16_t getWaveformOnly() {
             return waveform;
         }
 
-        Envelope* getEnvelope() {
-            return envelope;
+        Envelope* getAmpEnvelope() {
+            return ampEnvelope;
         }
 
         uint8_t getCurrentNote() {

@@ -33,7 +33,7 @@ class PolySynthApp : public AudioApp {
 
         Voice* findFreeVoice() {
             for (int i = 0; i < TOTAL_VOICES; i++) {
-                if (!voices[i]->getEnvelope()->isActive()) {
+                if (!voices[i]->getAmpEnvelope()->isActive()) {
                     return voices[i];
                 }
             }
@@ -46,10 +46,15 @@ public:
     void init() override {
         for (int i = 0; i < TOTAL_VOICES; i++) {
             Voice* oldVoice = voices[i];
-            voices[i] = new Voice(1, (AudioGenerator*[]){ &sawGenerators[i] }, new AttackHoldReleaseEnvelope(10.0f, 500.0f));
-            voices[i]->init(audioManager);
+            voices[i] = new Voice(
+                1, // total generators
+                (AudioGenerator*[]){ &sawGenerators[i] }, // generators
+                new AttackHoldReleaseEnvelope(10.0f, 500.0f) // amp envelope
+            );
+            voices[i]->init(audioManager); // init voice
 
             if (oldVoice != nullptr) {
+                delete oldVoice->getAmpEnvelope();
                 delete oldVoice;
             }
         }
@@ -117,14 +122,14 @@ public:
     void cv1UpdateCallback(uint16_t cv1) override {
         float holdTime = MAX(1, IO::normalizeCV(cv1) * 500);
         for (int i = 0; i < TOTAL_VOICES; i++) {
-            voices[i]->getEnvelope()->setTime(AttackHoldReleaseEnvelope::ATTACK, holdTime);
+            voices[i]->getAmpEnvelope()->setTime(AttackHoldReleaseEnvelope::ATTACK, holdTime);
         }
     }
 
     void cv2UpdateCallback(uint16_t cv2) override {
         float releaseTime = MAX(10, IO::normalizeCV(cv2) * 1000);
         for (int i = 0; i < TOTAL_VOICES; i++) {
-            voices[i]->getEnvelope()->setTime(AttackHoldReleaseEnvelope::RELEASE, releaseTime);
+            voices[i]->getAmpEnvelope()->setTime(AttackHoldReleaseEnvelope::RELEASE, releaseTime);
         }
     }
 
