@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../audio.h"
-#include "Envelope.h"
+#include "audio/manager.h"
+#include "./Envelope.h"
 
 class AttackReleaseEnvelope : public Envelope {
     private:

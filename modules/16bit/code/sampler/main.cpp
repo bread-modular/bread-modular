@@ -12,6 +12,7 @@
 
 #include "audio/apps/interfaces/audio_app.h"
 #include "audio/apps/sampler_app.h"
+#include "audio/apps/polysynth_app.h"
 #include "audio/apps/noop_app.h"
 
 #define SAMPLE_RATE 44100
@@ -23,7 +24,7 @@ AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
 WebSerial* webSerial = WebSerial::getInstance();
 
-AudioApp* app = SamplerApp::getInstance();
+AudioApp* app = PolySynthApp::getInstance();
 
 void onAudioStartCallback() {
     app->init();

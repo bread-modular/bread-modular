@@ -29,12 +29,11 @@ class SamplerApp : public AudioApp {
         WebSerial* webSerial = WebSerial::getInstance();
         Biquad lowpassFilter{Biquad::FilterType::LOWPASS};
         Biquad highpassFilter{Biquad::FilterType::HIGHPASS};
-        DelayFX delay;
-        NoopFX noop;
-        MetalVerbFX metalverb;
-        AudioFX* fx1 = &delay;
-        AudioFX* fx2 = &metalverb;
-        AudioFX* fx3 = &noop;
+        AudioFX* fx1 = new DelayFX;
+        AudioFX* fx2 = new MetalVerbFX;
+        AudioFX* fx3 = new NoopFX;
+
+        uint16_t currentBPM = 120;
 
         // Default sample
         int16_t* defaultSample = (int16_t*)s01_wav;
@@ -75,33 +74,37 @@ class SamplerApp : public AudioApp {
         }
 
         void audioCallback(AudioResponse *response) override {
-            float sampleSumWithFx = 0.0f;
-            float sampleSumNoFx = 0.0f;
-
             audioManager->startAudioLock();
 
-            if (defaultSamplePlayhead < defaultSampleLen) {
-                sampleSumWithFx += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * velocityOfDefaultSample;
-            }
-
             // first 6 samples has FX support & others are just playing (no fx)
-            for (int i = 0; i < 6; ++i) {
-                sampleSumWithFx += players[i].process() / 32768.0f;
+            float sumGroupA = 0.0f;
+
+            if (defaultSamplePlayhead < defaultSampleLen) {
+                sumGroupA += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * velocityOfDefaultSample;
             }
 
+            for (int i = 0; i < 6; ++i) {
+                sumGroupA += players[i].process() / 32768.0f;
+            }
+
+            float sumGroupB = 0.0f;
             for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
-                sampleSumNoFx += players[i].process() / 32768.0f;
+                sumGroupB += players[i].process() / 32768.0f;
             }
 
             audioManager->endAudioLock();
 
-            sampleSumWithFx = lowpassFilter.process(sampleSumWithFx);
-            sampleSumWithFx = highpassFilter.process(sampleSumWithFx);
-            sampleSumWithFx = fx1->process(sampleSumWithFx);
-            sampleSumWithFx = fx2->process(sampleSumWithFx);
-            sampleSumWithFx = fx3->process(sampleSumWithFx);
+            sumGroupA = lowpassFilter.process(sumGroupA);
+            sumGroupA = highpassFilter.process(sumGroupA);
 
-            float sampleSum = sampleSumNoFx + sampleSumWithFx;
+            // Apply FX to group A
+            sumGroupA = fx1->process(sumGroupA);
+            sumGroupA = fx2->process(sumGroupA);
+
+            // Apply FX to group B
+            sumGroupB = fx3->process(sumGroupB);
+
+            float sampleSum = sumGroupB + sumGroupA;
             sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
 
             response->left = sampleSum;
@@ -204,6 +207,7 @@ class SamplerApp : public AudioApp {
         }
 
         void bpmChangeCallback(int bpm) override {
+            currentBPM = bpm;
             fx1->setBPM(bpm);
             fx2->setBPM(bpm);
             fx3->setBPM(bpm);
@@ -231,16 +235,26 @@ class SamplerApp : public AudioApp {
                 }
 
                 const char* fxName = cmd + 8;
+                AudioFX* newFx = nullptr;
                 if (strncmp(fxName, "noop", 4) == 0) {
-                    *targetFx = &noop;
+                    newFx = new NoopFX;
                 } else if (strncmp(fxName, "delay", 5) == 0) {
-                    *targetFx = &delay;
+                    newFx = new DelayFX;
                 } else if (strncmp(fxName, "metalverb", 9) == 0) {
-                    *targetFx = &metalverb;
+                    newFx = new MetalVerbFX;
                 } else {
                     printf("No such fx found: %s\n", fxName);
                     return true;
                 }
+
+                if (newFx != nullptr) {
+                    newFx->init(audioManager);
+                    newFx->setBPM(currentBPM);
+                    AudioFX* fxToDelete = *targetFx;
+                    *targetFx = newFx;
+                    delete fxToDelete;
+                }
+
                 return true;
             }
 

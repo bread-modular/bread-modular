@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../audio.h"
+#include "audio/manager.h"
 
 class AudioGenerator {
 public:

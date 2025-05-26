@@ -62,9 +62,14 @@ void onVoiceComplete(Voice* voice) {
 
 void init_voices() {
     for (int i = 0; i < TOTAL_VOICES; i++) {
+        Voice* oldVoice = voices[i];
         voices[i] = new Voice(1, (AudioGenerator*[]){ &sawGenerators[i] }, new AttackHoldReleaseEnvelope(10.0f, 500.0f));
         voices[i]->init(audioManager);
         voices[i]->setOnCompleteCallback(onVoiceComplete);
+            
+        if (oldVoice != nullptr) {
+            delete oldVoice;
+        }
     }
 }
 

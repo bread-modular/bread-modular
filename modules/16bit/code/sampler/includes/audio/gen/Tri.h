@@ -1,8 +1,8 @@
 #pragma once
 
 #include "pico/stdlib.h"
-#include "audio.h"
-#include "AudioGenerator.h"
+#include "audio/manager.h"
+#include "./AudioGenerator.h"
 
 class Tri : public AudioGenerator {
     private:

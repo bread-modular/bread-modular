@@ -2,8 +2,8 @@
 
 #include <math.h>
 #include "pico/stdlib.h"
-#include "audio.h"
-#include "AudioGenerator.h"
+#include "audio/manager.h"
+#include "./AudioGenerator.h"
 
 class Sine: public AudioGenerator {
     private:
