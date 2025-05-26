@@ -14,6 +14,7 @@
 
 #include "audio/apps/fx/delay_fx.h"
 #include "audio/apps/fx/noop_fx.h"
+#include "audio/apps/fx/metalverb_fx.h"
 
 #define TOTAL_SAMPLE_PLAYERS 12
 
@@ -30,7 +31,10 @@ class SamplerApp : public AudioApp {
         Biquad highpassFilter{Biquad::FilterType::HIGHPASS};
         DelayFX delay;
         NoopFX noop;
+        MetalVerbFX metalverb;
         AudioFX* fx1 = &delay;
+        AudioFX* fx2 = &metalverb;
+        AudioFX* fx3 = &noop;
 
         // Default sample
         int16_t* defaultSample = (int16_t*)s01_wav;
@@ -62,6 +66,8 @@ class SamplerApp : public AudioApp {
             lowpassFilter.init(audioManager);
             highpassFilter.init(audioManager);
             fx1->init(audioManager);
+            fx2->init(audioManager);
+            fx3->init(audioManager);
 
             for (int i=0; i<TOTAL_SAMPLE_PLAYERS; i++) {
                 players[i].init();
@@ -92,6 +98,8 @@ class SamplerApp : public AudioApp {
             sampleSumWithFx = lowpassFilter.process(sampleSumWithFx);
             sampleSumWithFx = highpassFilter.process(sampleSumWithFx);
             sampleSumWithFx = fx1->process(sampleSumWithFx);
+            sampleSumWithFx = fx2->process(sampleSumWithFx);
+            sampleSumWithFx = fx3->process(sampleSumWithFx);
 
             float sampleSum = sampleSumNoFx + sampleSumWithFx;
             sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
@@ -131,7 +139,7 @@ class SamplerApp : public AudioApp {
                 cv2UpdateCallback(value * 32);
             }
 
-            // Delay Controls
+            // FX1 Controls
             if (cc == 20) {
                 fx1->setParameter(0, valueNormalized);
             } else if (cc == 21) {
@@ -140,6 +148,28 @@ class SamplerApp : public AudioApp {
                 fx1->setParameter(2, valueNormalized);
             } else if (cc == 23) {
                 fx1->setParameter(3, valueNormalized);
+            }
+
+            // FX2 Controls
+            if (cc == 27) {
+                fx2->setParameter(0, valueNormalized);
+            } else if (cc == 28) {
+                fx2->setParameter(1, valueNormalized);
+            } else if (cc == 29) {
+                fx2->setParameter(2, valueNormalized);
+            } else if (cc == 30) {
+                fx2->setParameter(3, valueNormalized);
+            }
+
+            // FX3 Controls
+            if (cc == 85) {
+                fx3->setParameter(0, valueNormalized);
+            } else if (cc == 86) {
+                fx3->setParameter(1, valueNormalized);
+            } else if (cc == 87) {
+                fx3->setParameter(2, valueNormalized);
+            } else if (cc == 88) {  
+                fx3->setParameter(3, valueNormalized);
             }
         }
 
@@ -175,6 +205,8 @@ class SamplerApp : public AudioApp {
 
         void bpmChangeCallback(int bpm) override {
             fx1->setBPM(bpm);
+            fx2->setBPM(bpm);
+            fx3->setBPM(bpm);
         }
 
         bool onCommandCallback(const char* cmd) override {
@@ -183,13 +215,32 @@ class SamplerApp : public AudioApp {
                 return true;
             }
 
-            if (strncmp(cmd, "set-fx1 noop", 12) == 0) {
-                fx1 = &noop;
-                return true;
-            }
+            // Parse: set-fx<fx-id> <fx-name>  
+            if (strncmp(cmd, "set-fx", 6) == 0) {
+                AudioFX** targetFx = nullptr;
+                char fxId = cmd[6];
+                if (fxId == '1') {
+                    targetFx = &fx1;
+                } else if (fxId == '2') {
+                    targetFx = &fx2;
+                } else if (fxId == '3') {
+                    targetFx = &fx3;
+                } else {
+                    printf("Usage: set-fx<fx-id> <fx-name>\n");
+                    return true;
+                }
 
-            if (strncmp(cmd, "set-fx1 delay", 13) == 0) {
-                fx1 = &delay;
+                const char* fxName = cmd + 8;
+                if (strncmp(fxName, "noop", 4) == 0) {
+                    *targetFx = &noop;
+                } else if (strncmp(fxName, "delay", 5) == 0) {
+                    *targetFx = &delay;
+                } else if (strncmp(fxName, "metalverb", 9) == 0) {
+                    *targetFx = &metalverb;
+                } else {
+                    printf("No such fx found: %s\n", fxName);
+                    return true;
+                }
                 return true;
             }
 
