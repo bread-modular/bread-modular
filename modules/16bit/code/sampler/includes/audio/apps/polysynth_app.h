@@ -80,11 +80,13 @@ public:
         // With this method we will a decent headroom plus loudness with a bit of distortion
         sumVoice = sumVoice / (MAX(3, TOTAL_VOICES / 2));
 
-        sumVoice = fx1->process(sumVoice);
+        float voiceWithFx = sumVoice;
+        voiceWithFx = fx1->process(voiceWithFx);
 
         sumVoice = std::clamp(sumVoice * 32768.0f, -32768.0f, 32767.0f);
+        voiceWithFx = std::clamp(voiceWithFx * 32768.0f, -32768.0f, 32767.0f);
 
-        response->left = sumVoice;
+        response->left = voiceWithFx;
         response->right = sumVoice;
     }
 
