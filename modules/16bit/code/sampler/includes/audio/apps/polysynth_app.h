@@ -13,7 +13,9 @@
 #include "audio/env/Envelope.h"
 #include "audio/tools/Voice.h"
 
-#define TOTAL_VOICES 6
+#include "audio/apps/fx/filter_fx.h"
+
+#define TOTAL_VOICES 9
 
 class PolySynthApp : public AudioApp {
     private:
@@ -26,6 +28,7 @@ class PolySynthApp : public AudioApp {
         Tri triGenerators[TOTAL_VOICES];
         Square squareGenerators[TOTAL_VOICES];
         Sine sineGenerators[TOTAL_VOICES];
+        AudioFX* fx1 = new FilterFX();
 
         Voice* voices[TOTAL_VOICES];
 
@@ -60,6 +63,8 @@ public:
                 delete oldVoice;
             }
         }
+
+        fx1->init(audioManager);
     }
 
     void audioCallback(AudioResponse *response) override {
@@ -74,6 +79,8 @@ public:
         // If we divide by the number of voices, it will sound quieter
         // With this method we will a decent headroom plus loudness with a bit of distortion
         sumVoice = sumVoice / (MAX(3, TOTAL_VOICES / 2));
+
+        sumVoice = fx1->process(sumVoice);
 
         sumVoice = std::clamp(sumVoice * 32768.0f, -32768.0f, 32767.0f);
 
@@ -118,7 +125,22 @@ public:
         }
     }
 
-    void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {}
+    void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {
+        float normalizedValue = value / 127.0f;
+        // printf("ccChangeCallback: %d %d %d %f\n", channel, cc, value, normalizedValue);
+        if (cc == 20) {
+            fx1->setParameter(0, normalizedValue);
+        }
+        else if (cc == 21) {
+            fx1->setParameter(1, normalizedValue);
+        }
+        else if (cc == 22) {
+            fx1->setParameter(2, normalizedValue);
+        }
+        else if (cc == 23) {
+            fx1->setParameter(3, normalizedValue);
+        }
+    }
 
     void bpmChangeCallback(int bpm) override {}
     
