@@ -1,11 +1,12 @@
 #pragma once
 
 #include "audio/apps/interfaces/audio_fx.h"
-#include "audio/mod/Biquad.h"
+#include "audio/mod/Ladder.h"
 
 class FilterFX : public AudioFX {
     private:
-        Biquad filter{Biquad::FilterType::LOWPASS};
+        Ladder filter{Ladder::FilterType::LOWPASS};
+        float cutoff = 20000.0f;
 
 public:
     FilterFX() {
@@ -42,25 +43,30 @@ public:
         
     }
 
+    virtual void setGate(bool gate) override {
+        // this is gate on and off
+    }
+
     virtual void setParameter(uint8_t parameter, float value) override {
         switch (parameter) {
             case 0:
-                // filter.setAttack(value);
+                // attack (value is 0.0 to 1.0)
                 break;
             case 1:
-                // filter.setRelease(value);
+                // release (value is 0.0 to 1.0)
                 break;
             case 2:
                 filter.setResonance(0.1f + value * 2.9f);
                 break;
             case 3:
                 float oneMinusValue = 1.0f - value;
-                filter.setCutoff(50.0f + (oneMinusValue * oneMinusValue * oneMinusValue) * 19950.0f);
+                cutoff = 220.0f + (oneMinusValue * oneMinusValue) * 14700.0f;
+                filter.setCutoff(cutoff);
                 break;
         }
     }
 
     virtual float getParameter(uint8_t parameter) override {
         return 0.0f;
-    }
+    }       
 };

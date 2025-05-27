@@ -12,6 +12,7 @@ public:
     
     virtual void init(AudioManager* audioManager) = 0;
     virtual float process(float input) = 0;
+    virtual void setGate(bool gate) = 0;
     virtual void setBPM(uint16_t bpm) = 0;
     virtual void setParameter(uint8_t parameter, float value) = 0;
     virtual float getParameter(uint8_t parameter) = 0;

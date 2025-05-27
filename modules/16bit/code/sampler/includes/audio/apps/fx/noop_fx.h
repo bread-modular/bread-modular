@@ -40,4 +40,7 @@ public:
         return 0.0f;
     }
 
+    virtual void setGate(bool gate) override {
+        // noop
+    }
 };

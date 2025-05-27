@@ -98,6 +98,7 @@ public:
         float realVelocity = powf(velocityNorm, 2.0f);
     
         if (++totalNotesOn > 0) {
+            fx1->setGate(true);
             io->setGate1(true);
         }
 
@@ -115,6 +116,7 @@ public:
     void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
         if (--totalNotesOn == 0) {
             io->setGate1(false);
+            fx1->setGate(false);
         }
 
         printf("Note off: %d %d %d\n", channel, note, velocity);

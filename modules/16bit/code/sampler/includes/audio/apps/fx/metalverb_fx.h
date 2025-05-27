@@ -79,4 +79,8 @@ public:
 
         return parameterValues[parameter];
     }
+
+    virtual void setGate(bool gate) override {
+        // noop
+    }
 };
