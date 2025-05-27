@@ -55,27 +55,32 @@ public:
         // Limit feedback to avoid runaway
         r = std::min(r, 3.99f);
 
-        // soft clippping allow some stability to the filter
         auto softclip = [](float v) { return v / (1.0f + fabsf(v)); };
         // Four cascaded one-pole filters: first two use tanh, last two use soft clipping
         float x = input - r * z[3];
         z[0] += p * (softclip(x) - softclip(z[0]));
         z[1] += p * (softclip(z[0]) - softclip(z[1]));
-        
-        z[2] += p * (tanhf(z[1]) - tanhf(z[2]));
-        z[3] += p * (tanhf(z[2]) - tanhf(z[3]));
+        // Soft clipping for last two stages
+        z[2] += p * (tanh(z[1]) - tanh(z[2]));
+        z[3] += p * (tanh(z[2]) - tanh(z[3]));
 
         // Denormal protection (flush subnormals to zero)
         for (int i = 0; i < 4; ++i) {
             if (fabsf(z[i]) < 1e-15f) z[i] = 0.0f;
         }
 
+        // Resonance compensation to preserve low frequencies
+        // Simple compensation: boost output by (1 + k * compensation_factor)
+        float compensation = 1.0f + k * 0.5f; // 0.5 is a typical value, can be tuned
+
+        float out = z[3] * compensation;
+
         if (type == LOWPASS) {
-            return z[3];
+            return out;
         } else if (type == HIGHPASS) {
-            return input - z[3];
+            return input - out;
         }
-        return z[3];
+        return out;
     }
 
     void reset() {
