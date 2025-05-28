@@ -18,6 +18,15 @@
 
 #define TOTAL_SAMPLE_PLAYERS 12
 
+#define CONFIG_FX1_INDEX 0
+#define CONFIG_FX2_INDEX 1
+#define CONFIG_FX3_INDEX 2
+#define CONFIG_SPLIT_AUDIO_INDEX 3
+
+#define CONFIG_FX_NOOP 0
+#define CONFIG_FX_DELAY 1
+#define CONFIG_FX_METALVERB 2
+
 class SamplerApp : public AudioApp {
     private:
         static SamplerApp* instance;
@@ -40,6 +49,8 @@ class SamplerApp : public AudioApp {
         uint32_t defaultSampleLen = s01_wav_len / 2;
         uint32_t defaultSamplePlayhead = defaultSampleLen;
         float velocityOfDefaultSample = 1.0f;
+
+        Config config{4, "/sampler_config.dat"};
 
         // Uploadable samples
         SamplePlayer players[TOTAL_SAMPLE_PLAYERS] = {
@@ -71,6 +82,16 @@ class SamplerApp : public AudioApp {
             for (int i=0; i<TOTAL_SAMPLE_PLAYERS; i++) {
                 players[i].init();
             }
+
+            config.load();
+            uint8_t fx1Value = config.get(CONFIG_FX1_INDEX, CONFIG_FX_DELAY);
+            uint8_t fx2Value = config.get(CONFIG_FX2_INDEX, CONFIG_FX_METALVERB);
+            uint8_t fx3Value = config.get(CONFIG_FX3_INDEX, CONFIG_FX_NOOP);
+
+            setFX(CONFIG_FX1_INDEX, fx1Value);
+            setFX(CONFIG_FX2_INDEX, fx2Value);
+            setFX(CONFIG_FX3_INDEX, fx3Value);
+            
         }
 
         void audioCallback(AudioResponse *response) override {
@@ -213,43 +234,80 @@ class SamplerApp : public AudioApp {
             fx3->setBPM(bpm);
         }
 
+        void setFX(int8_t index, int8_t value) {
+            AudioFX** targetFx = nullptr;
+            switch (index) {
+                case CONFIG_FX1_INDEX:
+                    targetFx = &fx1;
+                    break;
+                case CONFIG_FX2_INDEX:
+                    targetFx = &fx2;
+                    break;
+                case CONFIG_FX3_INDEX:
+                    targetFx = &fx3;
+                    break;
+                default:
+                    return;
+            }
+
+            AudioFX* newFx = nullptr;
+            switch (value) {
+                case CONFIG_FX_NOOP:
+                    newFx = new NoopFX;
+                    break;
+                case CONFIG_FX_DELAY:
+                    newFx = new DelayFX;
+                    break;
+                case CONFIG_FX_METALVERB:
+                    newFx = new MetalVerbFX;
+                    break;
+                default:
+                    return;
+            }
+
+            newFx->init(audioManager);
+            newFx->setBPM(currentBPM);
+            AudioFX* fxToDelete = *targetFx;
+            *targetFx = newFx;
+            delete fxToDelete;
+        }
+
         bool onCommandCallback(const char* cmd) override {
             // Parse: set-fx<fx-id> <fx-name>  
             if (strncmp(cmd, "set-fx", 6) == 0) {
-                AudioFX** targetFx = nullptr;
+                uint8_t fxIndex = -1;
                 char fxId = cmd[6];
                 if (fxId == '1') {
-                    targetFx = &fx1;
+                    fxIndex = CONFIG_FX1_INDEX;
                 } else if (fxId == '2') {
-                    targetFx = &fx2;
+                    fxIndex = CONFIG_FX2_INDEX;
                 } else if (fxId == '3') {
-                    targetFx = &fx3;
+                    fxIndex = CONFIG_FX3_INDEX;
                 } else {
                     printf("Usage: set-fx<fx-id> <fx-name>\n");
                     return true;
                 }
 
                 const char* fxName = cmd + 8;
-                AudioFX* newFx = nullptr;
+                uint8_t newFx = -1;
                 if (strncmp(fxName, "noop", 4) == 0) {
-                    newFx = new NoopFX;
+                    newFx = CONFIG_FX_NOOP;
                 } else if (strncmp(fxName, "delay", 5) == 0) {
-                    newFx = new DelayFX;
+                    newFx = CONFIG_FX_DELAY;
                 } else if (strncmp(fxName, "metalverb", 9) == 0) {
-                    newFx = new MetalVerbFX;
+                    newFx = CONFIG_FX_METALVERB;
                 } else {
                     printf("No such fx found: %s\n", fxName);
                     return true;
                 }
 
-                if (newFx != nullptr) {
-                    newFx->init(audioManager);
-                    newFx->setBPM(currentBPM);
-                    AudioFX* fxToDelete = *targetFx;
-                    *targetFx = newFx;
-                    delete fxToDelete;
-                }
-
+                // Stop the audio manager & save the config
+                // Once we start the audio manager, it will reload this app
+                // So it will load the fx from the config
+                audioManager->stop();
+                config.set(fxIndex, newFx);
+                config.save();
+                audioManager->start();
                 return true;
             }
 
