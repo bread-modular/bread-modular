@@ -26,6 +26,10 @@ public:
             if (read_file(path, buffer, file_size, &bytes_read)) {
                 int8_t idx = 0;
                 for (size_t i = 0; i < bytes_read; i++) {
+                    // We don't want to read more than the length of the store
+                    if (i >= length) {
+                        break;
+                    }
                     store[idx++] = buffer[i];
                 }
             }
