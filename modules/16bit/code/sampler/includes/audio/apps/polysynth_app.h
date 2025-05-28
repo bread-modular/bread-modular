@@ -190,11 +190,6 @@ public:
     
     // System callback methods
     bool onCommandCallback(const char* cmd) override { 
-        if (strncmp(cmd, "get-appname", 11) == 0) {
-            webSerial->sendValue("polysynth");
-            return true;
-        }
-
         return false;
     }
 

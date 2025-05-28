@@ -123,6 +123,26 @@ bool onCommandCallback(const char* cmd) {
         return true;
     }
 
+    if (strncmp(cmd, "get-app", 7) == 0) {
+        int8_t appName = mainConfig.get(CONFIG_APP_INDEX, CONFIG_APP_POLYSYNTH);
+        switch (appName) {
+            case CONFIG_APP_NOOP:
+                webSerial->sendValue("noop");
+                break;
+            case CONFIG_APP_SAMPLER:
+                webSerial->sendValue("sampler");
+                break;
+            case CONFIG_APP_POLYSYNTH:
+                webSerial->sendValue("polysynth");
+                break;
+            default:
+                webSerial->sendValue("unknown");
+                break;
+        }
+
+        return true;
+    }
+
     if (strncmp(cmd, "ping", 4) == 0) {
         printf("pong\n");
         io->blink(3, 100);

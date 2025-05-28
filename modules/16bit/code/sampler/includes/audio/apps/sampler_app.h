@@ -214,11 +214,6 @@ class SamplerApp : public AudioApp {
         }
 
         bool onCommandCallback(const char* cmd) override {
-            if (strncmp(cmd, "get-appname", 11) == 0) {
-                webSerial->sendValue("sampler");
-                return true;
-            }
-
             // Parse: set-fx<fx-id> <fx-name>  
             if (strncmp(cmd, "set-fx", 6) == 0) {
                 AudioFX** targetFx = nullptr;
