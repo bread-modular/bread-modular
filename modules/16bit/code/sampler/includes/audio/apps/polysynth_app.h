@@ -121,7 +121,6 @@ public:
             fx1->setGate(false);
         }
 
-        printf("Note off: %d %d %d\n", channel, note, velocity);
         for (int i = 0; i < TOTAL_VOICES; i++) {
             if (voices[i]->getCurrentNote() == note) {
                 voices[i]->setNoteOff(note);

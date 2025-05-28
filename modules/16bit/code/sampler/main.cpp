@@ -77,6 +77,13 @@ bool onCommandCallback(const char* cmd) {
         return true;
     }
 
+    if (strncmp(cmd, "set-app polysynth", 18) == 0) {
+        audioManager->stop();
+        app = PolySynthApp::getInstance();
+        audioManager->start();
+        return true;
+    }
+
     if (strncmp(cmd, "ping", 4) == 0) {
         printf("pong\n");
         io->blink(3, 100);
