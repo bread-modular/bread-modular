@@ -104,12 +104,12 @@ class SamplerApp : public AudioApp {
                 sumGroupA += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * velocityOfDefaultSample;
             }
 
-            for (int i = 0; i < 6; ++i) {
+            for (int i = 0; i < 5; ++i) {
                 sumGroupA += players[i].process() / 32768.0f;
             }
 
             float sumGroupB = 0.0f;
-            for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
+            for (int i = 5; i < TOTAL_SAMPLE_PLAYERS; ++i) {
                 sumGroupB += players[i].process() / 32768.0f;
             }
 
@@ -273,6 +273,33 @@ class SamplerApp : public AudioApp {
         }
 
         bool onCommandCallback(const char* cmd) override {
+
+            // Parse: play-sample <sample-id>
+            if (strncmp(cmd, "play-sample", 11) == 0) {
+                int sampleId = -1;
+                if (!sscanf(cmd + 11, "%d", &sampleId)) {
+                    printf("Usage: play-sample <sample-id 0-11>\n");
+                    return true;
+                }   
+
+                if (sampleId < 0 || sampleId > 11) {
+                    printf("Usage: play-sample <sample-id 0-11>\n");
+                    return true;
+                }
+
+                audioManager->startAudioLock();
+                if (sampleId == 0) {
+                    defaultSamplePlayhead = 0;
+                    velocityOfDefaultSample = 0.8f;
+                } else {
+                    players[sampleId].play(0.8f);
+                }
+                audioManager->endAudioLock();
+
+                return true;
+            }
+
+
             // Parse: set-fx<fx-id> <fx-name>  
             if (strncmp(cmd, "set-fx", 6) == 0) {
                 uint8_t fxIndex = -1;
