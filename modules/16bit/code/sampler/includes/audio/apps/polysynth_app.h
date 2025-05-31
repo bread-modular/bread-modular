@@ -215,6 +215,19 @@ public:
 
             return true;
         }
+
+        if (strncmp(cmd, "get-waveform", 12) == 0) {
+            int8_t waveformIndex = config.get(CONFIG_WAVEFORM_INDEX, CONFIG_WAVEFORM_SAW);
+            if (waveformIndex == CONFIG_WAVEFORM_SAW) {
+                webSerial->sendValue("saw");
+            } else if (waveformIndex == CONFIG_WAVEFORM_TRI) {
+                webSerial->sendValue("tri");
+            } else if (waveformIndex == CONFIG_WAVEFORM_SQUARE) {
+                webSerial->sendValue("square");
+            }
+            
+            return true;
+        }
         
         return false;
     }
