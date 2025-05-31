@@ -103,40 +103,48 @@ class WebSerial {
         }
         
         void update() {
+            static int poll_counter = 0;
+            const int POLL_INTERVAL = 100;
             if (transferMode) {
-                int c = getchar_timeout_us(0);
-                if (c != PICO_ERROR_TIMEOUT) {
-                    if (c == '\n' || c == '\r') {
-                        // End of data
-                        printf("Received %d bytes of data, now decoding...\n", totalBytesTransferred);
-                        decodeBase64Data();
-                        resetTransferState();
-                        return;
-                    }
+                if (++poll_counter >= POLL_INTERVAL) {
+                    poll_counter = 0;
+                    int c = getchar_timeout_us(0);
+                    if (c != PICO_ERROR_TIMEOUT) {
+                        if (c == '\n' || c == '\r') {
+                            // End of data
+                            printf("Received %d bytes of data, now decoding...\n", totalBytesTransferred);
+                            decodeBase64Data();
+                            resetTransferState();
+                            return;
+                        }
 
-                    if (encodedPos < WEB_SERIAL_BUFFER_SIZE) {
-                        encodedBuffer[encodedPos++] = (char)c;
-                        totalBytesTransferred ++;
-                    } else {
-                        printf("Error: Buffer overflow\n");
-                        resetTransferState();
-                        return;
+                        if (encodedPos < WEB_SERIAL_BUFFER_SIZE) {
+                            encodedBuffer[encodedPos++] = (char)c;
+                            totalBytesTransferred ++;
+                        } else {
+                            printf("Error: Buffer overflow\n");
+                            resetTransferState();
+                            return;
+                        }
                     }
                 }
                 return;
             }
 
-            int c = getchar_timeout_us(0);
-            if (c != PICO_ERROR_TIMEOUT) {
-                if (c == '\n' || c == '\r') {
-                    if (commandBufferPos > 0) {
-                        commandBuffer[commandBufferPos] = '\0';
-                        commandBufferPos = 0;
-                        processCommand(commandBuffer);
-                    }
-                } else {
-                    if (commandBufferPos < (int)sizeof(commandBuffer) - 1) {
-                        commandBuffer[commandBufferPos++] = (char)c;
+            if (++poll_counter >= POLL_INTERVAL) {
+                poll_counter = 0;
+                int c = getchar_timeout_us(0);
+                if (c != PICO_ERROR_TIMEOUT) {
+                    if (c == '\n' || c == '\r') {
+                        if (commandBufferPos > 0) {
+                            commandBuffer[commandBufferPos] = '\0';
+                            commandBufferPos = 0;
+                            processCommand(commandBuffer);
+                        }
+                    } else {
+                        if (commandBufferPos < (int)sizeof(commandBuffer) - 1) {
+                            commandBuffer[commandBufferPos++] = (char)c;
+                        }
                     }
                 }
             }

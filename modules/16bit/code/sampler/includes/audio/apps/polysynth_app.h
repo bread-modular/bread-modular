@@ -27,7 +27,6 @@ class PolySynthApp : public AudioApp {
         Saw sawGenerators[TOTAL_VOICES];
         Tri triGenerators[TOTAL_VOICES];
         Square squareGenerators[TOTAL_VOICES];
-        Sine sineGenerators[TOTAL_VOICES];
         AudioFX* fx1 = new FilterFX();
 
         Voice* voices[TOTAL_VOICES];
@@ -163,33 +162,34 @@ public:
     }
 
     void buttonPressedCallback(bool pressed) override {
-        if (!pressed) {
-            generatorIndex = (generatorIndex + 1) % 4;
-            // changing generators on button release
-            if (generatorIndex == 0) {
-                for (int i = 0; i < TOTAL_VOICES; i++) {
-                    voices[i]->changeGenerators((AudioGenerator*[]){ &sawGenerators[i] });
-                }
-            } else if (generatorIndex == 1) {
-                for (int i = 0; i < TOTAL_VOICES; i++) {
-                    voices[i]->changeGenerators((AudioGenerator*[]){ &triGenerators[i] });
-                }
-            } else if (generatorIndex == 2) {
-                for (int i = 0; i < TOTAL_VOICES; i++) {
-                    voices[i]->changeGenerators((AudioGenerator*[]){ &squareGenerators[i] });
-                }
-            } else if (generatorIndex == 3) {
-                for (int i = 0; i < TOTAL_VOICES; i++) {
-                    voices[i]->changeGenerators((AudioGenerator*[]){ &sineGenerators[i] });
-                }
-            }
-            
-            io->blink(generatorIndex + 1, 250);
-        }
+        
     }
     
     // System callback methods
-    bool onCommandCallback(const char* cmd) override { 
+    bool onCommandCallback(const char* cmd) override {
+        if (strncmp(cmd, "set-waveform", 12) == 0) {
+            const char* waveformName = cmd + 13;
+
+            if (strncmp(waveformName, "saw", 3) == 0) {
+                for (int i = 0; i < TOTAL_VOICES; i++) {
+                    voices[i]->changeGenerators((AudioGenerator*[]){ &sawGenerators[i] });
+                }
+            } else if (strncmp(waveformName, "tri", 3) == 0) {
+                for (int i = 0; i < TOTAL_VOICES; i++) {
+                    voices[i]->changeGenerators((AudioGenerator*[]){ &triGenerators[i] });
+                }
+            } else if (strncmp(waveformName, "square", 6) == 0) {
+                for (int i = 0; i < TOTAL_VOICES; i++) {
+                    voices[i]->changeGenerators((AudioGenerator*[]){ &squareGenerators[i] });
+                }
+            } else {
+                printf("Usage: set-waveform saw|tri|square\n");
+                return false;
+            }
+
+            return true;
+        }
+        
         return false;
     }
 
