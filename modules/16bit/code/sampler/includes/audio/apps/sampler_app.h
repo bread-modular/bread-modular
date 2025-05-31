@@ -338,6 +338,32 @@ class SamplerApp : public AudioApp {
                 return true;
             }
 
+            // Parse: get-fx<fx-id>
+            if (strncmp(cmd, "get-fx", 6) == 0) {
+                uint8_t fxIndex = -1;
+                char fxId = cmd[6];
+                if (fxId == '1') {
+                    fxIndex = CONFIG_FX1_INDEX;
+                } else if (fxId == '2') {   
+                    fxIndex = CONFIG_FX2_INDEX;
+                } else if (fxId == '3') {
+                    fxIndex = CONFIG_FX3_INDEX;
+                } else {
+                    printf("Usage: get-fx<fx-id>\n");
+                    return true;
+                }
+
+                uint8_t fxValue = config.get(fxIndex, CONFIG_FX_NOOP);
+                if (fxValue == CONFIG_FX_NOOP) {
+                    webSerial->sendValue("noop");
+                } else if (fxValue == CONFIG_FX_DELAY) {
+                    webSerial->sendValue("delay");
+                } else if (fxValue == CONFIG_FX_METALVERB) {
+                    webSerial->sendValue("metalverb");
+                }
+                return true;
+            }
+
             // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
             if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
                 int sampleId = -1, originalSize = -1, base64Size = -1;
