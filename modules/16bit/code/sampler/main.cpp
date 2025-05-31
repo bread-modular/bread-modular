@@ -194,7 +194,7 @@ int main() {
         io->update();
         midi->update();
         webSerial->update();
-        // app->update();
+        app->update();
     }
 
     return 0;

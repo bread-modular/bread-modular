@@ -12,10 +12,15 @@
 #include "audio/env/AttackHoldRelease.h"
 #include "audio/env/Envelope.h"
 #include "audio/tools/Voice.h"
-
+#include "fs/config.h"
 #include "audio/apps/fx/filter_fx.h"
 
 #define TOTAL_VOICES 9
+
+#define CONFIG_WAVEFORM_INDEX 0
+#define CONFIG_WAVEFORM_SAW 0
+#define CONFIG_WAVEFORM_SQUARE 1
+#define CONFIG_WAVEFORM_TRI 2
 
 class PolySynthApp : public AudioApp {
     private:
@@ -28,6 +33,7 @@ class PolySynthApp : public AudioApp {
         Tri triGenerators[TOTAL_VOICES];
         Square squareGenerators[TOTAL_VOICES];
         AudioFX* fx1 = new FilterFX();
+        Config config{1, "/polysynth_config.dat"};
 
         Voice* voices[TOTAL_VOICES];
 
@@ -64,6 +70,10 @@ public:
         }
 
         fx1->init(audioManager);
+
+        config.load();
+        int8_t waveformIndex = config.get(CONFIG_WAVEFORM_INDEX, CONFIG_WAVEFORM_SAW);
+        setWaveform(waveformIndex);
     }
 
     void audioCallback(AudioResponse *response) override {
@@ -164,28 +174,44 @@ public:
     void buttonPressedCallback(bool pressed) override {
         
     }
+
+    void setWaveform(int8_t waveformIndex) {
+        if (waveformIndex == CONFIG_WAVEFORM_SAW) {
+            for (int i = 0; i < TOTAL_VOICES; i++) {
+                voices[i]->changeGenerators((AudioGenerator*[]){ &sawGenerators[i] });
+            }
+        } else if (waveformIndex == CONFIG_WAVEFORM_TRI) {
+            for (int i = 0; i < TOTAL_VOICES; i++) {
+                voices[i]->changeGenerators((AudioGenerator*[]){ &triGenerators[i] });
+            }
+        } else if (waveformIndex == CONFIG_WAVEFORM_SQUARE) {
+            for (int i = 0; i < TOTAL_VOICES; i++) {
+                voices[i]->changeGenerators((AudioGenerator*[]){ &squareGenerators[i] });
+            }
+        }
+    }
     
     // System callback methods
     bool onCommandCallback(const char* cmd) override {
         if (strncmp(cmd, "set-waveform", 12) == 0) {
             const char* waveformName = cmd + 13;
 
+            int8_t waveformIndex = -1;
             if (strncmp(waveformName, "saw", 3) == 0) {
-                for (int i = 0; i < TOTAL_VOICES; i++) {
-                    voices[i]->changeGenerators((AudioGenerator*[]){ &sawGenerators[i] });
-                }
+                waveformIndex = CONFIG_WAVEFORM_SAW;
             } else if (strncmp(waveformName, "tri", 3) == 0) {
-                for (int i = 0; i < TOTAL_VOICES; i++) {
-                    voices[i]->changeGenerators((AudioGenerator*[]){ &triGenerators[i] });
-                }
+                waveformIndex = CONFIG_WAVEFORM_TRI;
             } else if (strncmp(waveformName, "square", 6) == 0) {
-                for (int i = 0; i < TOTAL_VOICES; i++) {
-                    voices[i]->changeGenerators((AudioGenerator*[]){ &squareGenerators[i] });
-                }
+                waveformIndex = CONFIG_WAVEFORM_SQUARE;
             } else {
                 printf("Usage: set-waveform saw|tri|square\n");
                 return false;
             }
+
+            audioManager->stop();
+            config.set(CONFIG_WAVEFORM_INDEX, waveformIndex);
+            config.save();
+            audioManager->start();
 
             return true;
         }

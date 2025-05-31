@@ -104,7 +104,7 @@ class WebSerial {
         
         void update() {
             static int poll_counter = 0;
-            const int POLL_INTERVAL = 100;
+            const int POLL_INTERVAL = 300;
             if (transferMode) {
                 if (++poll_counter >= POLL_INTERVAL) {
                     poll_counter = 0;
