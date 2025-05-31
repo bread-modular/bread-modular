@@ -15,7 +15,7 @@
 
 #include "audio/apps/fx/filter_fx.h"
 
-#define TOTAL_VOICES 12
+#define TOTAL_VOICES 9
 
 class PolySynthApp : public AudioApp {
     private:
