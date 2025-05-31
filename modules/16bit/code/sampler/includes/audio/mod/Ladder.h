@@ -55,14 +55,12 @@ public:
         // Limit feedback to avoid runaway
         r = std::min(r, 3.99f);
 
-        auto softclip = [](float v) { return v / (1.0f + fabsf(v)); };
         // Four cascaded one-pole filters: first two use tanh, last two use soft clipping
         float x = input - r * z[3];
-        z[0] += p * (softclip(x) - softclip(z[0]));
-        z[1] += p * (softclip(z[0]) - softclip(z[1]));
-        // Soft clipping for last two stages
-        z[2] += p * (tanh(z[1]) - tanh(z[2]));
-        z[3] += p * (tanh(z[2]) - tanh(z[3]));
+        z[0] += p * (fast_tanh(x) - fast_tanh(z[0]));
+        z[1] += p * (fast_tanh(z[0]) - fast_tanh(z[1]));
+        z[2] += p * (fast_tanh(z[1]) - fast_tanh(z[2]));
+        z[3] += p * (fast_tanh(z[2]) - fast_tanh(z[3]));
 
         // Denormal protection (flush subnormals to zero)
         for (int i = 0; i < 4; ++i) {
@@ -88,6 +86,14 @@ public:
     }
 
 private:
+    static inline float fast_tanh(float x) {
+        // Clamp input for stability
+        if (x < -3.0f) return -1.0f;
+        if (x >  3.0f) return  1.0f;
+        float x2 = x * x;
+        return x * (27.0f + x2) / (27.0f + 9.0f * x2);
+    }
+
     float sampleRate;
     float cutoff;
     float q;
