@@ -34,6 +34,7 @@ Config mainConfig(1, "/main_config.ini");
 AudioApp* app = PolySynthApp::getInstance();
 
 void onAudioStartCallback() {
+    psram->freeall();
     app->init();
 }
 
@@ -151,6 +152,11 @@ bool onCommandCallback(const char* cmd) {
 
     if (strncmp(cmd, "whoami", 6) == 0) {
         webSerial->sendValue("16bit");
+        return true;
+    }
+
+    if (strncmp(cmd, "psram-usage", 11) == 0) {
+        webSerial->sendValue((int)psram->getUsageInBytes());
         return true;
     }
 

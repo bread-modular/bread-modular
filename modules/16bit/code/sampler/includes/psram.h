@@ -21,7 +21,7 @@ class PSRAM {
         }
 
         // We have a very simple allocator, so we need to free all the memory when we're done
-        volatile uint8_t* alloc(size_t size) {
+        volatile uint8_t* alloc(uint32_t size) {
             volatile uint8_t* ptr = PSRAM_BASE + current_position;
             current_position += size;
             return ptr;
@@ -39,6 +39,10 @@ class PSRAM {
             return psram_instance;
         }
 
+        uint32_t getUsageInBytes() {
+            return current_position;
+        }
+
     private:
-        size_t current_position = 0;
+        uint32_t current_position = 0;
 };

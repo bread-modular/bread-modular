@@ -24,7 +24,11 @@ public:
 
         length = MAX(0, file_size / sizeof(int16_t) - 100);
         playhead = length; // to prevent instant playback
-        data = (int16_t*)psram->alloc(file_size);
+
+        // Sometimes with the large files, we need to allocate at least double the size
+        // honestly, I(arunoda) don't know why this is needed.
+        // Anyway, this is a workaround. We can fix it later may be :P
+        data = (int16_t*)psram->alloc(file_size * 2);
 
         // Load the whole file into PSRAM
         size_t bytes_read = 0;
