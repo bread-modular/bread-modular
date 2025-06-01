@@ -49,13 +49,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  22 .debug_rnglists 0000d07f  00000000  00000000  00100aa8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 23 .debug_line   000492d8  00000000  00000000  0010db27  2**0
+ 23 .debug_line   000492e1  00000000  00000000  0010db27  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 24 .debug_str    00016776  00000000  00000000  00156dff  2**0
+ 24 .debug_str    00016776  00000000  00000000  00156e08  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 25 .debug_frame  00007868  00000000  00000000  0016d578  2**2
+ 25 .debug_frame  00007868  00000000  00000000  0016d580  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 26 .debug_line_str 0000035a  00000000  00000000  00174de0  2**0
+ 26 .debug_line_str 0000035a  00000000  00000000  00174de8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 /Users/arunoda/data/projects/bread-modular/modules/16bit/code/sampler/build/sampler.elf:     file format elf32-littlearm
@@ -3470,31 +3470,31 @@ Disassembly of section .text:
 100023ee:	f8d4 610c 	ldr.w	r6, [r4, #268]	@ 0x10c
 100023f2:	42b1      	cmp	r1, r6
 100023f4:	f0c0 81a3 	bcc.w	1000273e <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x426>
-100023f8:	eddf 6a93 	vldr	s13, [pc, #588]	@ 10002648 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x330>
+100023f8:	ed9f 7a93 	vldr	s14, [pc, #588]	@ 10002648 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x330>
 100023fc:	f8d4 011c 	ldr.w	r0, [r4, #284]	@ 0x11c
-10002400:	ee76 6aa7 	vadd.f32	s13, s13, s15
+10002400:	ee77 7a87 	vadd.f32	s15, s15, s14
 10002404:	b130      	cbz	r0, 10002414 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0xfc>
 10002406:	f8d4 1118 	ldr.w	r1, [r4, #280]	@ 0x118
 1000240a:	f8d4 6120 	ldr.w	r6, [r4, #288]	@ 0x120
 1000240e:	42b1      	cmp	r1, r6
 10002410:	f0c0 817e 	bcc.w	10002710 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x3f8>
-10002414:	eddf 7a8c 	vldr	s15, [pc, #560]	@ 10002648 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x330>
-10002418:	ed9f 7a8b 	vldr	s14, [pc, #556]	@ 10002648 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x330>
-1000241c:	f8d4 0130 	ldr.w	r0, [r4, #304]	@ 0x130
-10002420:	ee77 7a87 	vadd.f32	s15, s15, s14
-10002424:	b130      	cbz	r0, 10002434 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x11c>
-10002426:	f8d4 112c 	ldr.w	r1, [r4, #300]	@ 0x12c
-1000242a:	f8d4 6134 	ldr.w	r6, [r4, #308]	@ 0x134
-1000242e:	42b1      	cmp	r1, r6
-10002430:	f0c0 8157 	bcc.w	100026e2 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x3ca>
-10002434:	f8d4 0144 	ldr.w	r0, [r4, #324]	@ 0x144
-10002438:	ee77 7a87 	vadd.f32	s15, s15, s14
-1000243c:	b130      	cbz	r0, 1000244c <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x134>
-1000243e:	f8d4 1140 	ldr.w	r1, [r4, #320]	@ 0x140
-10002442:	f8d4 6148 	ldr.w	r6, [r4, #328]	@ 0x148
-10002446:	42b1      	cmp	r1, r6
-10002448:	f0c0 8134 	bcc.w	100026b4 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x39c>
-1000244c:	ed9f 7a7e 	vldr	s14, [pc, #504]	@ 10002648 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x330>
+10002414:	eddf 6a8c 	vldr	s13, [pc, #560]	@ 10002648 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x330>
+10002418:	f8d4 0130 	ldr.w	r0, [r4, #304]	@ 0x130
+1000241c:	ee76 6aa7 	vadd.f32	s13, s13, s15
+10002420:	b130      	cbz	r0, 10002430 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x118>
+10002422:	f8d4 112c 	ldr.w	r1, [r4, #300]	@ 0x12c
+10002426:	f8d4 6134 	ldr.w	r6, [r4, #308]	@ 0x134
+1000242a:	42b1      	cmp	r1, r6
+1000242c:	f0c0 8159 	bcc.w	100026e2 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x3ca>
+10002430:	eddf 7a85 	vldr	s15, [pc, #532]	@ 10002648 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x330>
+10002434:	ed9f 7a84 	vldr	s14, [pc, #528]	@ 10002648 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x330>
+10002438:	f8d4 0144 	ldr.w	r0, [r4, #324]	@ 0x144
+1000243c:	ee77 7a87 	vadd.f32	s15, s15, s14
+10002440:	b130      	cbz	r0, 10002450 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x138>
+10002442:	f8d4 1140 	ldr.w	r1, [r4, #320]	@ 0x140
+10002446:	f8d4 6148 	ldr.w	r6, [r4, #328]	@ 0x148
+1000244a:	42b1      	cmp	r1, r6
+1000244c:	f0c0 8132 	bcc.w	100026b4 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x39c>
 10002450:	f8d4 0158 	ldr.w	r0, [r4, #344]	@ 0x158
 10002454:	ee77 7a87 	vadd.f32	s15, s15, s14
 10002458:	b130      	cbz	r0, 10002468 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x150>
@@ -3682,43 +3682,43 @@ Disassembly of section .text:
 100026dc:	eeba 7ae8 	vcvt.f32.s32	s14, s14, #15
 100026e0:	e6b6      	b.n	10002450 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x138>
 100026e2:	f930 0011 	ldrsh.w	r0, [r0, r1, lsl #1]
-100026e6:	ed94 6a4e 	vldr	s12, [r4, #312]	@ 0x138
-100026ea:	ee07 0a10 	vmov	s14, r0
-100026ee:	eeb8 7ac7 	vcvt.f32.s32	s14, s14
-100026f2:	ee27 7a06 	vmul.f32	s14, s14, s12
-100026f6:	eebd 7ac7 	vcvt.s32.f32	s14, s14
+100026e6:	ed94 7a4e 	vldr	s14, [r4, #312]	@ 0x138
+100026ea:	ee07 0a90 	vmov	s15, r0
+100026ee:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+100026f2:	ee67 7a87 	vmul.f32	s15, s15, s14
+100026f6:	eefd 7ae7 	vcvt.s32.f32	s15, s15
 100026fa:	3101      	adds	r1, #1
 100026fc:	f8c4 112c 	str.w	r1, [r4, #300]	@ 0x12c
-10002700:	ee17 1a10 	vmov	r1, s14
+10002700:	ee17 1a90 	vmov	r1, s15
 10002704:	b209      	sxth	r1, r1
-10002706:	ee07 1a10 	vmov	s14, r1
-1000270a:	eeba 7ae8 	vcvt.f32.s32	s14, s14, #15
+10002706:	ee07 1a90 	vmov	s15, r1
+1000270a:	eefa 7ae8 	vcvt.f32.s32	s15, s15, #15
 1000270e:	e691      	b.n	10002434 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x11c>
 10002710:	f930 0011 	ldrsh.w	r0, [r0, r1, lsl #1]
 10002714:	ed94 7a49 	vldr	s14, [r4, #292]	@ 0x124
-10002718:	ee07 0a90 	vmov	s15, r0
-1000271c:	eef8 7ae7 	vcvt.f32.s32	s15, s15
-10002720:	ee67 7a87 	vmul.f32	s15, s15, s14
-10002724:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+10002718:	ee06 0a90 	vmov	s13, r0
+1000271c:	eef8 6ae6 	vcvt.f32.s32	s13, s13
+10002720:	ee66 6a87 	vmul.f32	s13, s13, s14
+10002724:	eefd 6ae6 	vcvt.s32.f32	s13, s13
 10002728:	3101      	adds	r1, #1
 1000272a:	f8c4 1118 	str.w	r1, [r4, #280]	@ 0x118
-1000272e:	ee17 1a90 	vmov	r1, s15
+1000272e:	ee16 1a90 	vmov	r1, s13
 10002732:	b209      	sxth	r1, r1
-10002734:	ee07 1a90 	vmov	s15, r1
-10002738:	eefa 7ae8 	vcvt.f32.s32	s15, s15, #15
+10002734:	ee06 1a90 	vmov	s13, r1
+10002738:	eefa 6ae8 	vcvt.f32.s32	s13, s13, #15
 1000273c:	e66c      	b.n	10002418 <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0x100>
 1000273e:	f930 0011 	ldrsh.w	r0, [r0, r1, lsl #1]
-10002742:	ed94 7a44 	vldr	s14, [r4, #272]	@ 0x110
-10002746:	ee06 0a90 	vmov	s13, r0
-1000274a:	eef8 6ae6 	vcvt.f32.s32	s13, s13
-1000274e:	ee66 6a87 	vmul.f32	s13, s13, s14
-10002752:	eefd 6ae6 	vcvt.s32.f32	s13, s13
+10002742:	edd4 6a44 	vldr	s13, [r4, #272]	@ 0x110
+10002746:	ee07 0a10 	vmov	s14, r0
+1000274a:	eeb8 7ac7 	vcvt.f32.s32	s14, s14
+1000274e:	ee27 7a26 	vmul.f32	s14, s14, s13
+10002752:	eebd 7ac7 	vcvt.s32.f32	s14, s14
 10002756:	3101      	adds	r1, #1
 10002758:	f8c4 1104 	str.w	r1, [r4, #260]	@ 0x104
-1000275c:	ee16 1a90 	vmov	r1, s13
+1000275c:	ee17 1a10 	vmov	r1, s14
 10002760:	b209      	sxth	r1, r1
-10002762:	ee06 1a90 	vmov	s13, r1
-10002766:	eefa 6ae8 	vcvt.f32.s32	s13, s13, #15
+10002762:	ee07 1a10 	vmov	s14, r1
+10002766:	eeba 7ae8 	vcvt.f32.s32	s14, s14, #15
 1000276a:	e647      	b.n	100023fc <_ZN10SamplerApp13audioCallbackEP13AudioResponse+0xe4>
 1000276c:	f930 0011 	ldrsh.w	r0, [r0, r1, lsl #1]
 10002770:	edd4 6a3f 	vldr	s13, [r4, #252]	@ 0xfc

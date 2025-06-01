@@ -104,12 +104,12 @@ class SamplerApp : public AudioApp {
                 sumGroupA += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * velocityOfDefaultSample;
             }
 
-            for (int i = 0; i < 5; ++i) {
+            for (int i = 0; i < 6; ++i) {
                 sumGroupA += players[i].process() / 32768.0f;
             }
 
             float sumGroupB = 0.0f;
-            for (int i = 5; i < TOTAL_SAMPLE_PLAYERS; ++i) {
+            for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
                 sumGroupB += players[i].process() / 32768.0f;
             }
 
