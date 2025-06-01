@@ -160,6 +160,12 @@ bool onCommandCallback(const char* cmd) {
         return true;
     }
 
+    // This is the API version as we increase when we make new changes to the API
+    if (strncmp(cmd, "version", 7) == 0) {
+        webSerial->sendValue("1.0.0");
+        return true;
+    }
+
     return app->onCommandCallback(cmd);
 }
 
