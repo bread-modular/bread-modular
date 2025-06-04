@@ -4152,269 +4152,269 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
                 0x1001c74c                        __boot2_end__ = .
                 0x00000001                        ASSERT (((__boot2_end__ - __boot2_start__) <= 0x100), ERROR: Pico second stage bootloader must be no more than 256 bytes in size)
 
-.rodata         0x1001c750    0x124e8
+.rodata         0x1001c750    0x124e0
  *(EXCLUDE_FILE(*libm.a: *libc.a:*lib_a-mem*.o *libgcc.a:) .rodata*)
  .rodata._ZN7DelayFX7getNameEv.str1.4
-                0x1001c750      0xeb6 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001c750      0xeae CMakeFiles/sampler.dir/main.cpp.o
                                   0x6 (size before relaxing)
  .rodata._ZN7DelayFX16getParameterNameEh.str1.4
-                0x1001d606        0x1 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe        0x1 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN6NoopFX7getNameEv.str1.4
-                0x1001d606        0x5 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe        0x5 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN11MetalVerbFX7getNameEv.str1.4
-                0x1001d606        0xa CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe        0xa CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN8FilterFX7getNameEv.str1.4
-                0x1001d606        0xe CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe        0xe CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZN10SamplerApp21buttonPressedCallbackEbEUlvE_E9_M_invokeERKSt9_Any_data.str1.4
-                0x1001d606        0xe CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe        0xe CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZNSt17_Function_handlerIFvPhiEZN10SamplerApp17onCommandCallbackEPKcEUlS0_iE_E9_M_invokeERKSt9_Any_dataOS0_Oi.str1.4
-                0x1001d606       0xb0 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0xb0 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._Z9mount_lfsv.str1.4
-                0x1001d606       0xac CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0xac CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN12PolySynthApp17onCommandCallbackEPKc.str1.4
-                0x1001d606       0x68 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0x68 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN10SamplerApp17onCommandCallbackEPKc.str1.4
-                0x1001d606      0x18e CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe      0x18e CMakeFiles/sampler.dir/main.cpp.o
  .rodata._Z9read_filePKcPvjPj.str1.4
-                0x1001d606       0x1f CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0x1f CMakeFiles/sampler.dir/main.cpp.o
  .rodata._Z16create_directoryPKc.str1.4
-                0x1001d606       0x6c CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0x6c CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN2FS4initEv.str1.4
-                0x1001d606       0x4b CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0x4b CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN3DAC4initEm.str1.4
-                0x1001d606       0x32 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0x32 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZN12PolySynthApp11getInstanceEv.str1.4
-                0x1001d606       0x16 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0x16 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._Z6setAppa.str1.4
-                0x1001d606       0x14 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0x14 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._Z17onCommandCallbackPKc.str1.4
-                0x1001d606       0xa6 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0xa6 CMakeFiles/sampler.dir/main.cpp.o
  .rodata.main.str1.4
-                0x1001d606       0xb5 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0xb5 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._GLOBAL__sub_I_io_instance.str1.4
-                0x1001d606       0x11 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d5fe       0x11 CMakeFiles/sampler.dir/main.cpp.o
  .rodata.str1.4
-                0x1001d606       0x6d CMakeFiles/sampler.dir/main.cpp.o
- *fill*         0x1001d606        0x2 
+                0x1001d5fe       0x6d CMakeFiles/sampler.dir/main.cpp.o
+ *fill*         0x1001d5fe        0x2 
  .rodata.CSWTCH.353
-                0x1001d608       0x10 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d600       0x10 CMakeFiles/sampler.dir/main.cpp.o
  .rodata.CSWTCH.332
-                0x1001d618       0x10 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d610       0x10 CMakeFiles/sampler.dir/main.cpp.o
  .rodata.CSWTCH.317
-                0x1001d628       0x10 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d620       0x10 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZTV7DelayFX
-                0x1001d638       0x34 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d638                vtable for DelayFX
+                0x1001d630       0x34 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d630                vtable for DelayFX
  .rodata._ZTV6NoopFX
-                0x1001d66c       0x34 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d66c                vtable for NoopFX
+                0x1001d664       0x34 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d664                vtable for NoopFX
  .rodata._ZTV11MetalVerbFX
-                0x1001d6a0       0x34 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d6a0                vtable for MetalVerbFX
+                0x1001d698       0x34 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d698                vtable for MetalVerbFX
  .rodata._ZTV10SamplerApp
-                0x1001d6d4       0x3c CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d6d4                vtable for SamplerApp
+                0x1001d6cc       0x3c CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d6cc                vtable for SamplerApp
  .rodata._ZTV3Saw
-                0x1001d710       0x18 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d710                vtable for Saw
+                0x1001d708       0x18 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d708                vtable for Saw
  .rodata._ZTV3Tri
-                0x1001d728       0x18 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d728                vtable for Tri
+                0x1001d720       0x18 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d720                vtable for Tri
  .rodata._ZTV6Square
-                0x1001d740       0x18 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d740                vtable for Square
+                0x1001d738       0x18 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d738                vtable for Square
  .rodata._ZTV8Envelope
-                0x1001d758       0x24 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d758                vtable for Envelope
+                0x1001d750       0x24 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d750                vtable for Envelope
  .rodata._ZTV25AttackHoldReleaseEnvelope
-                0x1001d77c       0x24 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d77c                vtable for AttackHoldReleaseEnvelope
+                0x1001d774       0x24 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d774                vtable for AttackHoldReleaseEnvelope
  .rodata._ZTV8FilterFX
-                0x1001d7a0       0x34 CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d7a0                vtable for FilterFX
+                0x1001d798       0x34 CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d798                vtable for FilterFX
  .rodata._ZTV12PolySynthApp
-                0x1001d7d4       0x3c CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d7d4                vtable for PolySynthApp
+                0x1001d7cc       0x3c CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d7cc                vtable for PolySynthApp
  .rodata._ZTV7NoopApp
-                0x1001d810       0x3c CMakeFiles/sampler.dir/main.cpp.o
-                0x1001d810                vtable for NoopApp
+                0x1001d808       0x3c CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d808                vtable for NoopApp
  .rodata._ZL7s01_wav
-                0x1001d84c     0xa1ac CMakeFiles/sampler.dir/main.cpp.o
+                0x1001d844     0xa1ac CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZZ5crc32mPKvjE5table
-                0x100279f8       0x40 CMakeFiles/sampler.dir/main.cpp.o
-                0x100279f8                crc32(unsigned long, void const*, unsigned int)::table
+                0x100279f0       0x40 CMakeFiles/sampler.dir/main.cpp.o
+                0x100279f0                crc32(unsigned long, void const*, unsigned int)::table
  .rodata._ZL11i2s_program
-                0x10027a38        0x8 CMakeFiles/sampler.dir/main.cpp.o
+                0x10027a30        0x8 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZL24i2s_program_instructions
-                0x10027a40       0x10 CMakeFiles/sampler.dir/main.cpp.o
+                0x10027a38       0x10 CMakeFiles/sampler.dir/main.cpp.o
  .rodata._ZL16base64_dec_table
-                0x10027a50      0x100 CMakeFiles/sampler.dir/main.cpp.o
+                0x10027a48      0x100 CMakeFiles/sampler.dir/main.cpp.o
  .rodata.panic.str1.4
-                0x10027b50       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
+                0x10027b48       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_platform_panic/panic.c.o
  .rodata.spin_lock_claim_unused.str1.4
-                0x10027b50       0x1b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
+                0x10027b48       0x1b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_sync/sync.c.o
  .rodata.user_irq_claim_unused.str1.4
-                0x10027b50       0x1b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_irq/irq.c.o
+                0x10027b48       0x1b CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_irq/irq.c.o
  .rodata.timer_hardware_alarm_claim.str1.4
-                0x10027b50       0x22 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_timer/timer.c.o
+                0x10027b48       0x22 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/hardware_timer/timer.c.o
  .rodata.hard_assertion_failure.str1.4
-                0x10027b50        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime/runtime.c.o
+                0x10027b48        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_runtime/runtime.c.o
  .rodata.__wrap_malloc.str1.4
-                0x10027b50        0xe CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_malloc/malloc.c.o
+                0x10027b48        0xe CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_malloc/malloc.c.o
  .rodata.str1.4
-                0x10027b50       0x44 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b48       0x3c CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata.__bi_84
-                0x10027b50        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b48        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata.__bi_78
-                0x10027b5c        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b54        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata.__bi_60
-                0x10027b68        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b60        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata.__bi_54
-                0x10027b74        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b6c        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata.__bi_48
-                0x10027b80        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b78        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata.__bi_42
-                0x10027b8c        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b84        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata.__bi_34
-                0x10027b98        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b90        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata.__bi_26
-                0x10027ba4        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x10027b9c        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .rodata._ftoa.str1.4
-                0x10027bb0       0x15 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
+                0x10027ba8       0x15 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
  .rodata.pow10.0
-                0x10027bb0       0x50 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
+                0x10027ba8       0x50 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_printf/printf.c.o
  .rodata.__assert_func.str1.4
-                0x10027c00       0x43 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+                0x10027bf8       0x43 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_clib_interface/newlib_interface.c.o
  .rodata.crlf_str.0
-                0x10027c00        0x2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio/stdio.c.o
- *fill*         0x10027c02        0x2 
+                0x10027bf8        0x2 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio/stdio.c.o
+ *fill*         0x10027bfa        0x2 
  .rodata._resetd_driver
-                0x10027c04       0x20 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+                0x10027bfc       0x20 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
  .rodata.desc_ms_os_20
-                0x10027c24       0xa6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
- *fill*         0x10027cca        0x2 
+                0x10027c1c       0xa6 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+ *fill*         0x10027cc2        0x2 
  .rodata.desc_bos
-                0x10027ccc       0x21 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
-                0x10027ccc                desc_bos
+                0x10027cc4       0x21 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+                0x10027cc4                desc_bos
  .rodata.str1.4
-                0x10027ced       0x13 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
- *fill*         0x10027ced        0x3 
+                0x10027ce5       0x13 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+ *fill*         0x10027ce5        0x3 
  .rodata.__bi_197.0
-                0x10027cf0        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+                0x10027ce8        0xc CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
  .rodata.str1.4
-                0x10027cfc       0x2a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+                0x10027cf4       0x2a CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
  .rodata.usbd_desc_str
-                0x10027cfc       0x18 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+                0x10027cf4       0x18 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
  .rodata.usbd_desc_cfg
-                0x10027d14       0x54 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+                0x10027d0c       0x54 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
  .rodata.usbd_desc_device
-                0x10027d68       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+                0x10027d60       0x12 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
  .rodata.str1.4
-                0x10027d7a       0x14 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+                0x10027d72       0x14 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
  .rodata.str1.4
-                0x10027d7a       0x48 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
- *fill*         0x10027d7a        0x2 
+                0x10027d72       0x48 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+ *fill*         0x10027d72        0x2 
  .rodata._usbd_driver
-                0x10027d7c       0x40 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd.c.o
+                0x10027d74       0x40 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/lib/tinyusb/src/device/usbd.c.o
  .rodata.str1.4
-                0x10027dbc      0x53a liblfs.a(lfs.c.o)
- .rodata        0x10027dbc       0x14 liblfs.a(lfs.c.o)
- .rodata        0x10027dd0       0x40 liblfs.a(lfs_util.c.o)
+                0x10027db4      0x53a liblfs.a(lfs.c.o)
+ .rodata        0x10027db4       0x14 liblfs.a(lfs.c.o)
+ .rodata        0x10027dc8       0x40 liblfs.a(lfs_util.c.o)
  .rodata.__ssvfscanf_r.str1.4
-                0x10027e10        0x9 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-svfscanf.o)
+                0x10027e08        0x9 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-svfscanf.o)
  .rodata.basefix.0
-                0x10027e10       0x22 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-svfscanf.o)
+                0x10027e08       0x22 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-svfscanf.o)
  .rodata._strtod_l.str1.4
-                0x10027e32       0x15 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strtod.o)
- *fill*         0x10027e32        0x2 
+                0x10027e2a       0x15 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strtod.o)
+ *fill*         0x10027e2a        0x2 
  .rodata.fpinan.0
-                0x10027e34       0x14 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strtod.o)
- .rodata.fpi.1  0x10027e48       0x14 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strtod.o)
- *fill*         0x10027e5c        0x4 
+                0x10027e2c       0x14 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strtod.o)
+ .rodata.fpi.1  0x10027e40       0x14 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strtod.o)
+ *fill*         0x10027e54        0x4 
  .rodata.tinytens
-                0x10027e60       0x28 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strtod.o)
+                0x10027e58       0x28 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strtod.o)
  .rodata.str1.4
-                0x10027e88       0x4c /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-locale.o)
+                0x10027e80       0x4c /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-locale.o)
  .rodata._mbrtowc_r.str1.4
-                0x10027e88        0x1 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mbrtowc.o)
+                0x10027e80        0x1 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mbrtowc.o)
  .rodata._ctype_
-                0x10027e88      0x101 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-ctype_.o)
-                0x10027e88                _ctype_
+                0x10027e80      0x101 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-ctype_.o)
+                0x10027e80                _ctype_
  .rodata._jp2uc_l.str1.4
-                0x10027f89       0x12 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
- *fill*         0x10027f89        0x3 
- .rodata.d02f4  0x10027f8c     0x1a7c /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
- .rodata.b02cf  0x10029a08     0x172a /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
- *fill*         0x1002b132        0x2 
- .rodata.a8     0x1002b134       0x40 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
- .rodata.a7     0x1002b174       0xa2 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
- *fill*         0x1002b216        0x2 
- .rodata.a6     0x1002b218       0x70 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
- .rodata.a3     0x1002b288       0x5b /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
- *fill*         0x1002b2e3        0x1 
- .rodata.a2     0x1002b2e4       0xbc /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
- .rodata.a1     0x1002b3a0       0xbc /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+                0x10027f81       0x12 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+ *fill*         0x10027f81        0x3 
+ .rodata.d02f4  0x10027f84     0x1a7c /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+ .rodata.b02cf  0x10029a00     0x172a /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+ *fill*         0x1002b12a        0x2 
+ .rodata.a8     0x1002b12c       0x40 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+ .rodata.a7     0x1002b16c       0xa2 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+ *fill*         0x1002b20e        0x2 
+ .rodata.a6     0x1002b210       0x70 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+ .rodata.a3     0x1002b280       0x5b /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+ *fill*         0x1002b2db        0x1 
+ .rodata.a2     0x1002b2dc       0xbc /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
+ .rodata.a1     0x1002b398       0xbc /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-jp2uc.o)
  .rodata.categories
-                0x1002b45c     0x35dc /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-categories.o)
+                0x1002b454     0x35dc /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-categories.o)
  .rodata.__gethex.str1.4
-                0x1002ea38       0x81 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-gdtoa-gethex.o)
+                0x1002ea30       0x81 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-gdtoa-gethex.o)
  .rodata.__hexdig
-                0x1002ea38      0x100 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-gdtoa-gethex.o)
-                0x1002ea38                __hexdig
+                0x1002ea30      0x100 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-gdtoa-gethex.o)
+                0x1002ea30                __hexdig
  .rodata.__multadd.str1.4
-                0x1002eb38       0x76 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mprec.o)
- .rodata.p05.0  0x1002eb38        0xc /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mprec.o)
- *fill*         0x1002eb44        0x4 
+                0x1002eb30       0x76 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mprec.o)
+ .rodata.p05.0  0x1002eb30        0xc /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mprec.o)
+ *fill*         0x1002eb3c        0x4 
  .rodata.__mprec_bigtens
-                0x1002eb48       0x28 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mprec.o)
-                0x1002eb48                __mprec_bigtens
+                0x1002eb40       0x28 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mprec.o)
+                0x1002eb40                __mprec_bigtens
  .rodata.__mprec_tens
-                0x1002eb70       0xc8 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mprec.o)
-                0x1002eb70                __mprec_tens
+                0x1002eb68       0xc8 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-mprec.o)
+                0x1002eb68                __mprec_tens
  *(.srodata*)
-                0x1002ec38                        . = ALIGN (0x4)
+                0x1002ec30                        . = ALIGN (0x4)
  *(SORT_BY_ALIGNMENT(SORT_BY_NAME(.flashdata*)))
-                0x1002ec38                        . = ALIGN (0x4)
+                0x1002ec30                        . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x1002ec38                        __exidx_start = .
+                0x1002ec30                        __exidx_start = .
 
-.ARM.exidx      0x1002ec38        0x8
+.ARM.exidx      0x1002ec30        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x1002ec38        0x8 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcmp.o)
- .ARM.exidx     0x1002ec40        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcpy.o)
+ .ARM.exidx     0x1002ec30        0x8 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-strcmp.o)
+ .ARM.exidx     0x1002ec38        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/softfp/libg.a(libc_a-memcpy.o)
                                   0x8 (size before relaxing)
  .ARM.exidx.text.__udivmoddi4
-                0x1002ec40        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_udivmoddi4.o)
+                0x1002ec38        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v8-m.main+fp/softfp/libgcc.a(_udivmoddi4.o)
                                   0x8 (size before relaxing)
-                0x1002ec40                        __exidx_end = .
-                0x1002ec40                        . = ALIGN (0x4)
-                0x1002ec40                        __binary_info_start = .
+                0x1002ec38                        __exidx_end = .
+                0x1002ec38                        . = ALIGN (0x4)
+                0x1002ec38                        __binary_info_start = .
 
-.binary_info    0x1002ec40       0x24
+.binary_info    0x1002ec38       0x24
  *(.binary_info.keep.*)
  .binary_info.keep.__bi_ptr84
-                0x1002ec40        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x1002ec38        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .binary_info.keep.__bi_ptr78
-                0x1002ec44        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x1002ec3c        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .binary_info.keep.__bi_ptr60
-                0x1002ec48        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x1002ec40        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .binary_info.keep.__bi_ptr54
-                0x1002ec4c        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x1002ec44        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .binary_info.keep.__bi_ptr48
-                0x1002ec50        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x1002ec48        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .binary_info.keep.__bi_ptr42
-                0x1002ec54        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x1002ec4c        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .binary_info.keep.__bi_ptr34
-                0x1002ec58        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x1002ec50        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  .binary_info.keep.__bi_ptr26
-                0x1002ec5c        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+                0x1002ec54        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
  *(.binary_info.*)
  .binary_info.__bi_ptr197
-                0x1002ec60        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
-                0x1002ec64                        __binary_info_end = .
-                0x1002ec64                        . = ALIGN (0x4)
+                0x1002ec58        0x4 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+                0x1002ec5c                        __binary_info_end = .
+                0x1002ec5c                        . = ALIGN (0x4)
 
 .ram_vector_table
                 0x20000000      0x110
@@ -4428,7 +4428,7 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
                 0x20000110                        . = ALIGN (0x4)
  *(.uninitialized_data*)
 
-.data           0x20000110     0x1e54 load address 0x1002ec64
+.data           0x20000110     0x1e54 load address 0x1002ec5c
                 0x20000110                        __data_start__ = .
  *(vtable)
  *(.time_critical*)
@@ -4597,23 +4597,23 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
                 0x20001f64                        . = ALIGN (0x4)
 
 .tm_clone_table
-                0x20001f64        0x0 load address 0x10030ab8
+                0x20001f64        0x0 load address 0x10030ab0
  .tm_clone_table
                 0x20001f64        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v8-m.main+fp/softfp/crtbegin.o
  .tm_clone_table
                 0x20001f64        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v8-m.main+fp/softfp/crtend.o
 
-.igot.plt       0x20001f64        0x0 load address 0x10030ab8
+.igot.plt       0x20001f64        0x0 load address 0x10030ab0
  .igot.plt      0x20001f64        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v8-m.main+fp/softfp/crtbegin.o
 
-.tdata          0x20001f64        0x0 load address 0x10030ab8
+.tdata          0x20001f64        0x0 load address 0x10030ab0
                 0x20001f64                        . = ALIGN (0x4)
  *(.tdata .tdata.* .gnu.linkonce.td.*)
                 0x20001f64                        __tdata_end = .
                 0x20001f64                        PROVIDE (__data_end__ = .)
-                0x1002ec64                        __etext = LOADADDR (.data)
+                0x1002ec5c                        __etext = LOADADDR (.data)
 
-.tbss           0x20001f64        0x0 load address 0x10030ab8
+.tbss           0x20001f64        0x0 load address 0x10030ab0
                 0x20001f64                        . = ALIGN (0x4)
                 0x20001f64                        __bss_start__ = .
                 0x20001f64                        __tls_base = .
@@ -4621,7 +4621,7 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
  *(.tcommon)
                 0x20001f64                        __tls_end = .
 
-.bss            0x20001f68      0xfe8 load address 0x10030ab8
+.bss            0x20001f68      0xfe8 load address 0x10030ab0
                 0x20001f68                        . = ALIGN (0x4)
                 0x20001f68                        __tbss_end = .
  *(SORT_BY_ALIGNMENT(SORT_BY_NAME(.bss*)))
@@ -4814,26 +4814,26 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
  *fill*         0x20002f4e        0x2 
                 0x20002f50                        __bss_end__ = .
 
-.heap           0x20002f50      0x800 load address 0x10030ab8
+.heap           0x20002f50      0x800 load address 0x10030ab0
                 0x20002f50                        __end__ = .
                 0x20002f50                        end = __end__
  *(.heap*)
  .heap          0x20002f50      0x800 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
                 0x20080000                        __HeapLimit = (ORIGIN (RAM) + LENGTH (RAM))
 
-.scratch_x      0x20080000        0x0 load address 0x10030ab8
+.scratch_x      0x20080000        0x0 load address 0x10030ab0
                 0x20080000                        __scratch_x_start__ = .
  *(.scratch_x.*)
                 0x20080000                        . = ALIGN (0x4)
                 0x20080000                        __scratch_x_end__ = .
-                0x10030ab8                        __scratch_x_source__ = LOADADDR (.scratch_x)
+                0x10030ab0                        __scratch_x_source__ = LOADADDR (.scratch_x)
 
-.scratch_y      0x20081000        0x0 load address 0x10030ab8
+.scratch_y      0x20081000        0x0 load address 0x10030ab0
                 0x20081000                        __scratch_y_start__ = .
  *(.scratch_y.*)
                 0x20081000                        . = ALIGN (0x4)
                 0x20081000                        __scratch_y_end__ = .
-                0x10030ab8                        __scratch_y_source__ = LOADADDR (.scratch_y)
+                0x10030ab0                        __scratch_y_source__ = LOADADDR (.scratch_y)
 
 .stack1_dummy   0x20080000      0x800
  *(.stack1*)
@@ -4843,11 +4843,11 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
  *(.stack*)
  .stack         0x20081000      0x800 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
 
-.flash_end      0x10030ab8       0x14
+.flash_end      0x10030ab0       0x14
  *(.embedded_end_block*)
  .embedded_end_block
-                0x10030ab8       0x14 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
-                0x10030acc                        PROVIDE (__flash_binary_end = .)
+                0x10030ab0       0x14 CMakeFiles/sampler.dir/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2_common/pico_crt0/crt0.S.o
+                0x10030ac4                        PROVIDE (__flash_binary_end = .)
                 0x20080000                        __StackLimit = (ORIGIN (RAM) + LENGTH (RAM))
                 0x20081000                        __StackOneTop = (ORIGIN (SCRATCH_X) + LENGTH (SCRATCH_X))
                 0x20082000                        __StackTop = (ORIGIN (SCRATCH_Y) + LENGTH (SCRATCH_Y))
@@ -4966,8 +4966,8 @@ LOAD /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/1
 OUTPUT(sampler.elf elf32-littlearm)
 LOAD linker stubs
 
-.rel.dyn        0x10030acc        0x0
- .rel.iplt      0x10030acc        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v8-m.main+fp/softfp/crtbegin.o
+.rel.dyn        0x10030ac4        0x0
+ .rel.iplt      0x10030ac4        0x0 /Users/arunoda/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v8-m.main+fp/softfp/crtbegin.o
 
 .ARM.attributes
                 0x00000000       0x34

@@ -43,12 +43,20 @@ pico_sdk_init()
 add_executable(sampler main.cpp )
 pico_generate_pio_header(sampler ${CMAKE_CURRENT_LIST_DIR}/i2s.pio)
 
-pico_set_program_name(sampler "sampler")
+pico_set_program_name(sampler "16bit")
 pico_set_program_version(sampler "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
 pico_enable_stdio_uart(sampler 0)
 pico_enable_stdio_usb(sampler 1)
+
+# Configure USB device descriptors
+target_compile_definitions(sampler PRIVATE
+    USBD_VID=0x2E8A
+    USBD_PID=0x000A
+    USBD_MANUFACTURER="Bread Modular"
+    USBD_PRODUCT="16bit"
+)
 
 # Add external libraries
 add_library(lfs STATIC
