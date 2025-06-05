@@ -1,6 +1,9 @@
 #ifndef _16BIT_H
 #define _16BIT_H
 
+// following commented line is needed to define the platform
+// pico_cmake_set PICO_PLATFORM=rp2350
+
 // Define that we have 16MB of flash
 #define PICO_FLASH_SIZE_BYTES 16777216
 
