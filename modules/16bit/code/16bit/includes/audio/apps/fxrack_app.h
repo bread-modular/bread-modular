@@ -6,7 +6,6 @@
 #include "fs/fs.h"
 #include "psram.h"
 #include "audio/manager.h"
-#include "audio/samples/s01.h"
 #include "audio/mod/biquad.h"
 #include "audio/tools/sample_player.h"
 #include "api/web_serial.h"
@@ -27,62 +26,47 @@
 #define CONFIG_FX_DELAY 1
 #define CONFIG_FX_METALVERB 2
 
-class SamplerApp : public AudioApp {
+class FXRackApp : public AudioApp {
     private:
-        static SamplerApp* instance;
+        static FXRackApp* instance;
         FS *fs = FS::getInstance();
         IO *io = IO::getInstance();
         PSRAM *psram = PSRAM::getInstance();
         AudioManager *audioManager = AudioManager::getInstance();
         MIDI *midi = MIDI::getInstance();
         WebSerial* webSerial = WebSerial::getInstance();
-        Biquad lowpassFilter{Biquad::FilterType::LOWPASS};
-        Biquad highpassFilter{Biquad::FilterType::HIGHPASS};
+        Biquad lowpassFilterA{Biquad::FilterType::LOWPASS};
+        Biquad lowpassFilterB{Biquad::FilterType::LOWPASS};
         AudioFX* fx1 = new DelayFX;
         AudioFX* fx2 = new MetalVerbFX;
         AudioFX* fx3 = new NoopFX;
 
         uint16_t currentBPM = 120;
 
-        // Default sample
-        int16_t* defaultSample = (int16_t*)s01_wav;
-        uint32_t defaultSampleLen = s01_wav_len / 2;
-        uint32_t defaultSamplePlayhead = defaultSampleLen;
-        float velocityOfDefaultSample = 1.0f;
+        Config config{4, "/fxrack_config.dat"};
 
-        Config config{4, "/sampler_config.dat"};
-
-        // Uploadable samples
-        SamplePlayer players[TOTAL_SAMPLE_PLAYERS] = {
-            SamplePlayer(0), SamplePlayer(1), SamplePlayer(2), SamplePlayer(3), SamplePlayer(4), SamplePlayer(5),
-            SamplePlayer(6), SamplePlayer(7), SamplePlayer(8), SamplePlayer(9), SamplePlayer(10),
-            SamplePlayer(11)
-        };
 
     public:
-        SamplerApp() {
+        FXRackApp() {
 
         }
         
         static AudioApp* getInstance() {
             if (!instance) {
-                instance = new SamplerApp();
+                instance = new FXRackApp();
             }
             return instance;
         }
 
         void init() override {
-            audioManager->setAdcEnabled(false);
+            audioManager->setAdcEnabled(true);
             psram->freeall();
-            lowpassFilter.init(audioManager);
-            highpassFilter.init(audioManager);
+            lowpassFilterA.init(audioManager);
+            lowpassFilterB.init(audioManager);
             fx1->init(audioManager);
             fx2->init(audioManager);
             fx3->init(audioManager);
 
-            for (int i=0; i<TOTAL_SAMPLE_PLAYERS; i++) {
-                players[i].init();
-            }
 
             config.load();
             uint8_t fx1Value = config.get(CONFIG_FX1_INDEX, CONFIG_FX_DELAY);
@@ -96,28 +80,11 @@ class SamplerApp : public AudioApp {
         }
 
         void audioCallback(AudioInput *input, AudioOutput *output) override {
-            audioManager->startAudioLock();
+            float sumGroupA = input->left;
+            float sumGroupB = input->right;
 
-            // first 6 samples has FX support & others are just playing (no fx)
-            float sumGroupA = 0.0f;
-
-            if (defaultSamplePlayhead < defaultSampleLen) {
-                sumGroupA += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * velocityOfDefaultSample;
-            }
-
-            for (int i = 0; i < 6; ++i) {
-                sumGroupA += players[i].process() / 32768.0f;
-            }
-
-            float sumGroupB = 0.0f;
-            for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
-                sumGroupB += players[i].process() / 32768.0f;
-            }
-
-            audioManager->endAudioLock();
-
-            sumGroupA = lowpassFilter.process(sumGroupA);
-            sumGroupA = highpassFilter.process(sumGroupA);
+            sumGroupA = lowpassFilterA.process(sumGroupA);
+            sumGroupB = lowpassFilterB.process(sumGroupB);
 
             // Apply FX to group A
             sumGroupA = fx1->process(sumGroupA);
@@ -126,29 +93,12 @@ class SamplerApp : public AudioApp {
             // Apply FX to group B
             sumGroupB = fx3->process(sumGroupB);
 
-            float sampleSum = sumGroupB + sumGroupA;
-            sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
-
-            output->left = sampleSum;
-            output->right = sampleSum;
+            output->left = sumGroupA;
+            output->right = sumGroupB;
         }
 
         void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
-            uint8_t sampleToPlay = note % 12;
-            // Keep current playback method for sampleId 0
-            float velocityNorm = velocity / 127.0f;
-            float realVelocity = powf(velocityNorm, 2.0f);
-            if (sampleToPlay == 0) {
-                audioManager->startAudioLock();
-                defaultSamplePlayhead = 0;
-                velocityOfDefaultSample = realVelocity;
-                audioManager->endAudioLock();
-            } else if (sampleToPlay <= 11) {
-                // Use SamplePlayer for sampleId 1 to 11
-                audioManager->startAudioLock();
-                players[sampleToPlay].play(realVelocity);
-                audioManager->endAudioLock();
-            }
+            
         }
 
         void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {   
@@ -200,32 +150,18 @@ class SamplerApp : public AudioApp {
 
         void cv1UpdateCallback(uint16_t cv1) override {
             float cv1Norm = 1.0 - IO::normalizeCV(cv1);
-            float cutoff = 50.0f * powf(20000.0f / 50.0f, cv1Norm * cv1Norm);
-            lowpassFilter.setCutoff(cutoff);
+            float cutoff = 1000.0f * powf(20000.0f / 1000.0f, cv1Norm * cv1Norm);
+            lowpassFilterA.setCutoff(cutoff);
         }
 
         void cv2UpdateCallback(uint16_t cv2) override {
             float cv2Norm = IO::normalizeCV(cv2);
-            float cutoff = 20.0f * powf(20000.0f / 20.0f, cv2Norm);
-            highpassFilter.setCutoff(cutoff);
+            float cutoff = 50.0f * powf(20000.0f / 50.0f, cv2Norm * cv2Norm);
+            lowpassFilterB.setCutoff(cutoff);
         }
 
         void buttonPressedCallback(bool pressed) override {
-            if (pressed) {
-                io->setLED(true);
-                audioManager->stop([]() {
-                    printf("Audio stopped\n");
-                });
-            } else {
-                audioManager->start();
-                io->setLED(false);
-                
-                // Initialize streaming state
-                audioManager->startAudioLock();
-                defaultSamplePlayhead = 0;
-                velocityOfDefaultSample = 0.8f;
-                audioManager->endAudioLock();
-            }
+            
         }
 
         void bpmChangeCallback(int bpm) override {
@@ -274,33 +210,6 @@ class SamplerApp : public AudioApp {
         }
 
         bool onCommandCallback(const char* cmd) override {
-
-            // Parse: play-sample <sample-id>
-            if (strncmp(cmd, "play-sample", 11) == 0) {
-                int sampleId = -1;
-                if (!sscanf(cmd + 11, "%d", &sampleId)) {
-                    printf("Usage: play-sample <sample-id 0-11>\n");
-                    return true;
-                }   
-
-                if (sampleId < 0 || sampleId > 11) {
-                    printf("Usage: play-sample <sample-id 0-11>\n");
-                    return true;
-                }
-
-                audioManager->startAudioLock();
-                if (sampleId == 0) {
-                    defaultSamplePlayhead = 0;
-                    velocityOfDefaultSample = 0.8f;
-                } else {
-                    players[sampleId].play(0.8f);
-                }
-                audioManager->endAudioLock();
-
-                return true;
-            }
-
-
             // Parse: set-fx<fx-id> <fx-name>  
             if (strncmp(cmd, "set-fx", 6) == 0) {
                 uint8_t fxIndex = -1;
@@ -365,35 +274,6 @@ class SamplerApp : public AudioApp {
                 return true;
             }
 
-            // Parse: write-sample-base64 <sample-id> <original-size> <base64-length>
-            if (strncmp(cmd, "write-sample-base64 ", 20) == 0) {
-                int sampleId = -1, originalSize = -1, base64Size = -1;
-                if (!sscanf(cmd + 20, "%d %d %d", &sampleId, &originalSize, &base64Size)) {
-                    printf("Usage: write-sample-base64 <sample-id 0-11> <original-size> <base64-length>\n");
-                    return false;
-                }
-
-                if (!(sampleId >= 0 && sampleId <= 11 && originalSize > 0 && base64Size > 0)) {
-                    printf("Usage: write-sample-base64 <sample-id 0-11> <original-size> <base64-length>\n");
-                    return false;
-                }
-
-                bool accepted = webSerial->acceptBinary(originalSize, base64Size, [sampleId](uint8_t* data, int size) {
-                    if(SamplePlayer::saveSample(sampleId, data, size)) {
-                        printf("Sample %02d saved\n", sampleId);
-                    } else {
-                        printf("Failed to save sample %02d\n", sampleId);
-                    }
-                });
-
-                if (!accepted) {
-                    return false;
-                }
-
-                printf("Ready to receive %d Base64 chars for sample %02d (original %d bytes)\n", base64Size, sampleId, originalSize);
-                return true;
-            }
-
             return false;
         }
 
@@ -402,4 +282,4 @@ class SamplerApp : public AudioApp {
         }
 };
 
-SamplerApp* SamplerApp::instance = nullptr;
+FXRackApp* FXRackApp::instance = nullptr;

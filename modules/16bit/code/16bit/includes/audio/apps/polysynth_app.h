@@ -52,6 +52,7 @@ class PolySynthApp : public AudioApp {
 public:
 
     void init() override {
+        audioManager->setAdcEnabled(false);
         for (int i = 0; i < TOTAL_VOICES; i++) {
             Voice* oldVoice = voices[i];
             voices[i] = new Voice(
@@ -76,7 +77,7 @@ public:
         setWaveform(waveformIndex);
     }
 
-    void audioCallback(AudioResponse *response) override {
+    void audioCallback(AudioInput *input, AudioOutput *output) override {
         float sumVoice = 0.0f;
         for (int i = 0; i < TOTAL_VOICES; i++) {
             if (voices[i] != nullptr) {
@@ -92,11 +93,8 @@ public:
         float voiceWithFx = sumVoice;
         voiceWithFx = fx1->process(voiceWithFx);
 
-        sumVoice = std::clamp(sumVoice * 32768.0f, -32768.0f, 32767.0f);
-        voiceWithFx = std::clamp(voiceWithFx * 32768.0f, -32768.0f, 32767.0f);
-
-        response->left = voiceWithFx;
-        response->right = sumVoice;
+        output->left = voiceWithFx;
+        output->right = sumVoice;
     }
 
     // Update method for handling UI and other non-audio updates
