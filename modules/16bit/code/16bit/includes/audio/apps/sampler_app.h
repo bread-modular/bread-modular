@@ -127,7 +127,6 @@ class SamplerApp : public AudioApp {
             sumGroupB = fx3->process(sumGroupB);
 
             float sampleSum = sumGroupB + sumGroupA;
-            sampleSum = std::clamp(sampleSum * 32768.0f, -32768.0f, 32767.0f);
 
             output->left = sampleSum;
             output->right = sampleSum;
