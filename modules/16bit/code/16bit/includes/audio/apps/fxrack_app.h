@@ -70,8 +70,8 @@ class FXRackApp : public AudioApp {
 
             config.load();
             uint8_t fx1Value = config.get(CONFIG_FX1_INDEX, CONFIG_FX_DELAY);
-            uint8_t fx2Value = config.get(CONFIG_FX2_INDEX, CONFIG_FX_METALVERB);
-            uint8_t fx3Value = config.get(CONFIG_FX3_INDEX, CONFIG_FX_NOOP);
+            uint8_t fx2Value = config.get(CONFIG_FX2_INDEX, CONFIG_FX_NOOP);
+            uint8_t fx3Value = config.get(CONFIG_FX3_INDEX, CONFIG_FX_METALVERB);
 
             setFX(CONFIG_FX1_INDEX, fx1Value);
             setFX(CONFIG_FX2_INDEX, fx2Value);
