@@ -155,8 +155,8 @@ class FXRackApp : public AudioApp {
         }
 
         void cv2UpdateCallback(uint16_t cv2) override {
-            float cv2Norm = IO::normalizeCV(cv2);
-            float cutoff = 50.0f * powf(20000.0f / 50.0f, cv2Norm * cv2Norm);
+            float cv2Norm = 1.0 - IO::normalizeCV(cv2);
+            float cutoff = 1000.0f * powf(20000.0f / 1000.0f, cv2Norm * cv2Norm);
             lowpassFilterB.setCutoff(cutoff);
         }
 
