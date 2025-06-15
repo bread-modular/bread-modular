@@ -29,6 +29,10 @@ typedef void (*RealtimeCallback)(uint8_t realtimeType);
 class SimpleMIDI {
 public:
     void begin(long baudRate = 31250) {
+        // Since with the 2.0.0 release, we use a optocoupler (6N137)
+        // That will invert the MIDI UART data by 180 degres (phase flip)
+        // So, we need to tell the Serial library about it, so it can parse properly
+        PORTB.PIN3CTRL |= PORT_INVEN_bm;
         Serial.begin(baudRate);
     }
 
