@@ -29,6 +29,7 @@ typedef void (*RealtimeCallback)(uint8_t realtimeType);
 class SimpleMIDI {
 public:
     void begin(long baudRate = 31250) {
+        PORTB.PIN3CTRL |= PORT_INVEN_bm;
         Serial.begin(baudRate);
     }
 
