@@ -12,6 +12,7 @@
 #include "fs/config.h"
 
 #include "audio/apps/interfaces/audio_app.h"
+#include "audio/apps/fxrack_app.h"
 #include "audio/apps/sampler_app.h"
 #include "audio/apps/polysynth_app.h"
 #include "audio/apps/noop_app.h"
@@ -22,6 +23,7 @@
 #define CONFIG_APP_NOOP 0
 #define CONFIG_APP_SAMPLER 1
 #define CONFIG_APP_POLYSYNTH 2
+#define CONFIG_APP_FXRACK 3
 
 FS *fs = FS::getInstance();
 IO *io = IO::getInstance();
@@ -38,8 +40,8 @@ void onAudioStartCallback() {
     app->init();
 }
 
-void audioCallback(AudioResponse *response) {
-    app->audioCallback(response);
+void audioCallback(AudioInput *input, AudioOutput *output) {
+    app->audioCallback(input, output);
 }
 
 void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
@@ -83,6 +85,9 @@ void setApp(int8_t appIndex) {
         case CONFIG_APP_POLYSYNTH:
             newApp = PolySynthApp::getInstance();
             break;
+        case CONFIG_APP_FXRACK:
+            newApp = FXRackApp::getInstance();
+            break;
         default:
             break;
     }
@@ -124,6 +129,15 @@ bool onCommandCallback(const char* cmd) {
         return true;
     }
 
+    if (strncmp(cmd, "set-app fxrack", 13) == 0) {
+        // save will stop the audio & may crash, that's why we stop audio first
+        audioManager->stop();
+        mainConfig.set(CONFIG_APP_INDEX, CONFIG_APP_FXRACK);
+        mainConfig.save();
+        setApp(CONFIG_APP_FXRACK);
+        return true;
+    }
+
     if (strncmp(cmd, "get-app", 7) == 0) {
         int8_t appName = mainConfig.get(CONFIG_APP_INDEX, CONFIG_APP_POLYSYNTH);
         switch (appName) {
@@ -135,6 +149,9 @@ bool onCommandCallback(const char* cmd) {
                 break;
             case CONFIG_APP_POLYSYNTH:
                 webSerial->sendValue("polysynth");
+                break;
+            case CONFIG_APP_FXRACK:
+                webSerial->sendValue("fxrack");
                 break;
             default:
                 webSerial->sendValue("unknown");

@@ -5,10 +5,13 @@
 class NoopApp : public AudioApp {
     private:
         static NoopApp* instance;
+        AudioManager *audioManager = AudioManager::getInstance();
 public:
     // Core audio processing methods
-    void init() override {}
-    void audioCallback(AudioResponse *response) override {}
+    void init() override {
+        audioManager->setAdcEnabled(false);
+    }
+    void audioCallback(AudioInput *input, AudioOutput *output) override {}
 
     // Update method for handling UI and other non-audio updates
     void update() override {}

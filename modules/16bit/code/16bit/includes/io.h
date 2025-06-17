@@ -3,6 +3,7 @@
 #include <math.h>
 #include "pico/stdlib.h"
 #include "hardware/adc.h"
+#include "audio/manager.h"
 
 #define CV1_PIN 2
 #define CV2_PIN 3
@@ -35,6 +36,8 @@ class IO {
 
         bool buttonPressed = false;
         bool firstRun = true;
+
+        AudioManager* audioManager = AudioManager::getInstance();
 
         void (*buttonPressedCallback)(bool) = nullptr;
 
@@ -130,6 +133,7 @@ class IO {
             if (currentTime - lastReadTime >= 1) {
                 lastReadTime = currentTime;
                 
+                audioManager->startAdcLock();
                 // handle cv1 changes
                 adc_select_input(CV1_PIN);
                 uint16_t newCv1Value = adc_read();
@@ -144,6 +148,8 @@ class IO {
                 // handle cv2 changes
                 adc_select_input(CV2_PIN);
                 uint16_t newCv2Value = adc_read();
+                audioManager->endAdcLock();
+
                 if (firstRun || (abs(cv2Value - newCv2Value) > cv2DiffThreshold)) {
                     cv2Value = newCv2Value;
 

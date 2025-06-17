@@ -8,7 +8,7 @@ public:
     
     // Core audio processing methods
     virtual void init() = 0;
-    virtual void audioCallback(AudioResponse *response) = 0;
+    virtual void audioCallback(AudioInput *input, AudioOutput *output) = 0;
 
     // Update method for handling UI and other non-audio updates
     virtual void update() = 0;
