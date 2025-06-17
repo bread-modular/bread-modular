@@ -101,6 +101,9 @@ void sendMIDIRealtime(byte realtimeByte) {
   for (int i = 0; i < 7; i++) {
     midiSerialArray[i].write(realtimeByte);
   }
+
+  // This is for the channel 8
+  Serial.write(realtimeByte);
 }
 
 void setupGates() {
