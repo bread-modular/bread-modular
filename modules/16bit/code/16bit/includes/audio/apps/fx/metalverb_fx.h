@@ -33,6 +33,7 @@ public:
 
     virtual void init(AudioManager* audioManager) override {
         delay.init(audioManager);
+        delay.setBPM(120);
     }
 
     virtual float process(float input) override {
@@ -40,7 +41,8 @@ public:
     }
     
     virtual void setBPM(uint16_t bpm) override {
-        delay.setBPM(bpm);
+        // for metalverb, we don't need to change the sound based on the bpm
+        // so, we set it to 120 initially, and keep it that way
     }
     
     virtual void setParameter(uint8_t parameter, float value) override {
