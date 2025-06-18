@@ -10,6 +10,9 @@ class TestDummyE2E(unittest.TestCase):
         # This will throw if it fails, which is what we want for the test
         cls.connector.connect()
 
+        cls.midi = ConnectMIDI("M6")
+        cls.midi.connect()
+
     def test_001_serial_connect(self):
         # Just check that the connector is connected
         self.assertIsNotNone(self.connector.connection)
@@ -30,10 +33,8 @@ class TestDummyE2E(unittest.TestCase):
     def test_005_set_app_sampler(self):
         self.connector.send_command("set-app sampler")
         self.assertEqual(self.connector.send_and_receive("get-app"), Connect16bit.val("sampler"))
-  
-        midi = ConnectMIDI("M6")
-        midi.connect()
-        midi.send_midi_note(8, 60)
+     
+        self.midi.send_midi_note(8, 60)
     
 
 if __name__ == '__main__':
