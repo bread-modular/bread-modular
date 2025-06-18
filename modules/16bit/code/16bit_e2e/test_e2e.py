@@ -1,10 +1,10 @@
 import unittest
-from serial_connector import SerialConnector
+from connect_16bit import Connect16bit
 
 class TestDummyE2E(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.connector = SerialConnector()
+        cls.connector = Connect16bit()
         # This will throw if it fails, which is what we want for the test
         cls.connector.connect()
 
@@ -15,7 +15,7 @@ class TestDummyE2E(unittest.TestCase):
 
     def test_serial_version(self):
         version = self.connector.send_and_receive("version")
-        self.assertEqual(version, SerialConnector.val("1.2.0"))
+        self.assertEqual(version, Connect16bit.val("1.2.0"))
 
 if __name__ == '__main__':
     unittest.main() 

@@ -1,7 +1,7 @@
 import serial
 import serial.tools.list_ports
 
-class SerialConnector:
+class Connect16bit:
     def __init__(self):
         self.connection = None
 
@@ -41,9 +41,31 @@ class SerialConnector:
             command += '\n'
         self.connection.reset_input_buffer()
         self.connection.write(command.encode('utf-8'))
-        # Read until newline
-        response = self.connection.readline()
-        return response.decode('utf-8').rstrip('\r\n')
+
+        buffer = ''
+        # Read character by character
+        while True:
+            chunk = self.connection.read(1).decode('utf-8', errors='ignore')
+            if not chunk:
+                break
+            buffer += chunk
+            # Check for ::val:: at the start as soon as possible
+            if buffer.startswith('::val::'):
+                # Read until the second ::val::
+                while True:
+                    chunk = self.connection.read(1).decode('utf-8', errors='ignore')
+                    if not chunk:
+                        break
+                    buffer += chunk
+                    if buffer.count('::val::') >= 2:
+                        second_start = buffer.find('::val::', 7)
+                        if second_start != -1:
+                            return buffer[:second_start+7]
+                break
+            elif '\n' in chunk:
+                return buffer.rstrip('\r\n')
+        # Fallback: return whatever was read
+        return buffer.rstrip('\r\n')
 
     
     @staticmethod
