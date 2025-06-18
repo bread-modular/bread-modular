@@ -1,5 +1,7 @@
 import unittest
 from connect_16bit import Connect16bit
+from connect_midi import ConnectMIDI
+import time
 
 class TestDummyE2E(unittest.TestCase):
     @classmethod
@@ -28,6 +30,11 @@ class TestDummyE2E(unittest.TestCase):
     def test_005_set_app_sampler(self):
         self.connector.send_command("set-app sampler")
         self.assertEqual(self.connector.send_and_receive("get-app"), Connect16bit.val("sampler"))
+  
+        midi = ConnectMIDI("M6")
+        midi.connect()
+        midi.send_midi_note(8, 60)
+    
 
 if __name__ == '__main__':
     unittest.main() 
