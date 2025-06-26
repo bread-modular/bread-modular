@@ -106,7 +106,7 @@ public:
         float velocityNorm = velocity / 127.0f;
         float realVelocity = powf(velocityNorm, 2.0f);
     
-        if (++totalNotesOn > 0) {
+        if (++totalNotesOn == 1) { // Only set gate true on the first note
             fx1->setGate(true);
             io->setGate1(true);
         }
@@ -123,9 +123,10 @@ public:
     }
 
     void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
-        if (--totalNotesOn == 0) {
-            io->setGate1(false);
+        if (totalNotesOn > 0) --totalNotesOn;
+        if (totalNotesOn == 0) {
             fx1->setGate(false);
+            io->setGate1(false);
         }
 
         for (int i = 0; i < TOTAL_VOICES; i++) {
@@ -137,7 +138,7 @@ public:
 
     void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {
         float normalizedValue = value / 127.0f;
-        // printf("ccChangeCallback: %d %d %d %f\n", channel, cc, value, normalizedValue);
+    
         if (cc == 20) {
             fx1->setParameter(0, normalizedValue);
         }
