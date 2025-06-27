@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+Make sure bank selection persists
+Due to some EEPROM issues, sometimes MCC switch the bank to different values.
+This impacts a lot to the functionality.
+Now we fixed it with redundant EEPROM values.
+
 ## 1.0.0
 Simply rename as MCC 1.0.0
 
