@@ -25,7 +25,7 @@ public:
         // Trigger new envelope on rising edge
         if (gate && !lastGateState) {
             envelopeValue = 0;  // Start from silence
-            DAC0.DATA = envelopeValue;
+            setEnvelopeValue(envelopeValue);
 
             // Read CV1 for attack time
             int analogCV1 = analogRead(PIN_CV1);
@@ -45,7 +45,7 @@ public:
         if (state == ATTACK) {
             if (now - lastStepTime >= stepDelay) {
                 envelopeValue++;
-                DAC0.DATA = envelopeValue;
+                setEnvelopeValue(envelopeValue);
                 lastStepTime = now;
 
                 if (envelopeValue >= 255) {
@@ -68,7 +68,7 @@ public:
         if (state == RELEASE) {
             if (now - lastStepTime >= stepDelay) {
                 envelopeValue--;
-                DAC0.DATA = envelopeValue;
+                setEnvelopeValue(envelopeValue);
                 lastStepTime = now;
 
                 if (envelopeValue <= 0) {

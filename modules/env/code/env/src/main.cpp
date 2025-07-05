@@ -11,6 +11,10 @@
 #define ALGO_ATTACK_RELEASE 1
 #define ALGO_ATTACK_SUSTAIN_RELEASE 2
 
+#define GATE_MODE_MANUAL 0
+#define GATE_MODE_MIDI 1
+#define GATE_MODE_MIDI_VELOCITY 2
+
 // Create instances of our classes.
 EnvHoldRelease envHoldRelease;
 EnvAttackRelease envAttackRelease;
@@ -18,20 +22,16 @@ EnvAttackSustainRelease envAttackSustainRelease;
 EnvelopeGenerator *envelope;
 SimpleMIDI midi;
 
-ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 2, 500);
+ToggleMode gateMode(GATE_TOGGLE_PIN, 0, 3, 500);
 ToggleMode algoMode(ALGO_TOGGLE_PIN, 1, 3, 500);
 
 // Global modulation variables for MIDI CC values.
 int modCV1 = 0; // MIDI CC22 (affects hold time)
 int modCV2 = 0; // MIDI CC75 (affects release time)
+int modCV2VelocityBased = 0;
 
 // Global variable for MIDI gate (used only in MIDI mode).
 bool midiGate = false;
-
-void handleGateModeChange(byte newMode) {
-  bool isManualMode = newMode == 0;
-  digitalWrite(GATE_TOGGLE_LED, isManualMode ? LOW : HIGH);
-}
 
 void handleAlgoModeChange(byte newMode) {
   if (newMode == ALGO_HOLD_RELEASE) {
@@ -77,28 +77,36 @@ void setup() {
   
   // Initialize the toggle mode handler.
   gateMode.begin();
-  gateMode.registerModeChangeCallback(handleGateModeChange);
   algoMode.begin();
   algoMode.registerModeChangeCallback(handleAlgoModeChange);
 
   const byte currentAlgoMode = algoMode.getMode();
   handleAlgoModeChange(currentAlgoMode);
-
-  const byte currentGateMode = gateMode.getMode();
-  handleGateModeChange(currentGateMode);
 }
 
 void loop() {
   // --- Mode Toggle Handling ---
   gateMode.update();
   algoMode.update();
-  
-  // Determine current mode: true = Manual Mode, false = MIDI Mode.
-  bool isManualMode = gateMode.getMode() == 0;
 
-  // Getting the algo mode
-  const byte algoMode = gateMode.getMode();
-  
+  // --- GATE_TOGGLE_LED Handling ---
+  static unsigned long lastToggleTime = 0;
+  static bool ledState = false;
+  byte gateModeValue = gateMode.getMode();
+
+  if (gateModeValue == GATE_MODE_MANUAL) {
+    digitalWrite(GATE_TOGGLE_LED, LOW);
+  } else if (gateModeValue == GATE_MODE_MIDI) {
+    digitalWrite(GATE_TOGGLE_LED, HIGH);
+  } else if (gateModeValue == GATE_MODE_MIDI_VELOCITY) {
+    unsigned long now = millis();
+    if (now - lastToggleTime >= 500) {
+      ledState = !ledState;
+      digitalWrite(GATE_TOGGLE_LED, ledState ? HIGH : LOW);
+      lastToggleTime = now;
+    }
+  }
+
   // --- MIDI Handling ---
   // Process any available MIDI messages.
   while (midi.read()) {
@@ -117,9 +125,17 @@ void loop() {
         break;
       
       case MIDI_NOTE_ON:
-        if (d2 > 0) {
-          midiGate = true;
+        midiGate = true;
+        if (d2 == 0) {
+          midiGate = false; // If velocity is 0, treat as Note Off.
         }
+
+        if (gateMode.getMode() == GATE_MODE_MIDI_VELOCITY) {
+          modCV2VelocityBased = d2 / 3.0;
+        } else {
+          modCV2VelocityBased = modCV2;
+        }
+
         break;
       
       case MIDI_NOTE_OFF:
@@ -133,16 +149,12 @@ void loop() {
   
   // --- Gate Processing ---
   bool effectiveGate;
-  if (isManualMode) {
-    // In Manual Mode, use the physical gate input.
+  if (gateModeValue == GATE_MODE_MANUAL) {
     effectiveGate = digitalRead(PIN_GATE_IN);
   } else {
-    // In MIDI Mode, use the MIDI gate.
     effectiveGate = midiGate;
   }
-  
+
   // --- Envelope Processing ---
-  envelope->update(effectiveGate, modCV1, modCV2);
-  
-  // (Optional) Additional processing can be added here.
+  envelope->update(effectiveGate, modCV1, modCV2VelocityBased);
 }

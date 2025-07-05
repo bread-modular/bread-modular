@@ -25,7 +25,7 @@ public:
         // Trigger new envelope on rising edge
         if (gate && !lastGateState) {
             envelopeValue = 0;
-            DAC0.DATA = envelopeValue;
+            setEnvelopeValue(envelopeValue);
             setupAttack(modCV1, now);
         }
 
@@ -35,12 +35,12 @@ public:
         if (state == ATTACK) {
             if (now - lastStepTime >= stepDelay) {
                 envelopeValue++;
-                DAC0.DATA = envelopeValue;
+                setEnvelopeValue(envelopeValue);
                 lastStepTime = now;
 
                 if (envelopeValue >= 255) {
                     envelopeValue = 255;  // Clamp to max value
-                    DAC0.DATA = envelopeValue;
+                    setEnvelopeValue(envelopeValue);
                     
                     if (gate) {
                         state = SUSTAIN;
@@ -64,7 +64,7 @@ public:
         if (state == RELEASE) {
             if (now - lastStepTime >= stepDelay) {
                 envelopeValue--;
-                DAC0.DATA = envelopeValue;
+                setEnvelopeValue(envelopeValue);
                 lastStepTime = now;
 
                 if (envelopeValue <= 0) {

@@ -28,9 +28,7 @@ public:
         // Trigger a new envelope on rising edge.
         if (gate && !lastGateState) {
             envelopeValue = 255; // Instant attack: full amplitude.
-            
-            DAC0.DATA = envelopeValue;
-            
+            setEnvelopeValue(envelopeValue);            
 
             // Read analog CV1 and add modulation from modCV1.
             int analogCV1 = analogRead(PIN_CV1);
@@ -79,7 +77,7 @@ public:
             }
 
             envelopeValue--;
-            DAC0.DATA = envelopeValue;
+            setEnvelopeValue(envelopeValue);
             lastStepTime = now;
 
             if (envelopeValue == 0) {
