@@ -4594,6 +4594,16 @@
 		)
 		(uuid "9eed8653-63d4-4ee0-ae0c-c95a87e5c988")
 	)
+	(text "We use this pin to detect 16bit+ at runtime."
+		(exclude_from_sim no)
+		(at 262.89 165.608 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d61a4470-ed21-43d6-a55e-014d77dfbe78")
+	)
 	(text "12MHz Crystal"
 		(exclude_from_sim no)
 		(at 33.02 248.92 0)
@@ -5858,6 +5868,16 @@
 	)
 	(wire
 		(pts
+			(xy 229.87 165.1) (xy 240.03 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "577114ee-5f75-49ef-9db9-66a08a3410c2")
+	)
+	(wire
+		(pts
 			(xy 92.71 383.54) (xy 100.33 383.54)
 		)
 		(stroke
@@ -6745,6 +6765,16 @@
 			(type default)
 		)
 		(uuid "a834e14d-9edd-4874-82ba-cf7b4e74e864")
+	)
+	(wire
+		(pts
+			(xy 240.03 165.1) (xy 240.03 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9653310-e4c4-4320-aefe-ed3bb226afe1")
 	)
 	(wire
 		(pts
@@ -13579,6 +13609,71 @@
 			(project "RP2350_60QFN_minimal"
 				(path "/94683f5c-9cd9-448e-be96-9792537b5cb8"
 					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 240.03 167.64 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a21bbc3d-88ea-4fa0-9fed-021f919bcb69")
+		(property "Reference" "#PWR026"
+			(at 240.03 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 236.22 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 240.03 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 240.03 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 240.03 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "558bf23f-feb6-4e1e-a766-f9e6e18e4ee5")
+		)
+		(instances
+			(project "16bit+"
+				(path "/94683f5c-9cd9-448e-be96-9792537b5cb8"
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
