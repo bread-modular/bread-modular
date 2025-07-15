@@ -17,21 +17,24 @@ class ElabApp : public AudioApp {
         Config config{1, "/elab_config.dat"};
 
         Saw sawWaveform;
+        Saw subSawWaveform;
 public:
 
     void init() override {
         audioManager->setAdcEnabled(false);
         
         sawWaveform.setFrequency(110);
+        subSawWaveform.setFrequency(55);
 
         config.load();
     }
 
     void audioCallback(AudioInput *input, AudioOutput *output) override {
         float waveform = sawWaveform.getSample();
+        float subWaveform = subSawWaveform.getSample();
 
         output->left = waveform;
-        output->right = waveform;
+        output->right = waveform + subWaveform;
     }
 
     // Update method for handling UI and other non-audio updates
@@ -54,7 +57,15 @@ public:
     
     // Knobs and buttons
     void cv1UpdateCallback(uint16_t cv1) override {
-        float audioFrequency = MAX(20, IO::normalizeCV(cv1) * 5000);
+        float normalizedCV = IO::normalizeCV(cv1);
+        
+        // Map CV to musical notes (semitones)
+        // Assuming 5 octaves range (60 semitones) from C1 to C6
+        int semitone = (int)(normalizedCV * 60.0f);
+        float audioFrequency = 55.0f * powf(2.0f, semitone / 12.0f);
+        
+        sawWaveform.setFrequency(audioFrequency);
+        subSawWaveform.setFrequency(audioFrequency / 2.0f);
     }
 
     void cv2UpdateCallback(uint16_t cv2) override {
