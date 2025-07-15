@@ -18,6 +18,9 @@ class ElabApp : public AudioApp {
 
         Saw sawWaveform;
         Saw subSawWaveform;
+        float pulseFrequency = 1.0f;
+        uint32_t lastPulseTime = 0;
+        bool gateState = false;
 public:
 
     void init() override {
@@ -36,9 +39,18 @@ public:
         output->left = waveform;
         output->right = waveform + subWaveform;
     }
-
-    // Update method for handling UI and other non-audio updates
-    void update() override {}
+      
+    void update() override {
+        // Generate pulses on gate1 based on the CV2
+        uint32_t currentTime = to_ms_since_boot(get_absolute_time());
+        uint32_t pulseInterval = (uint32_t)(1000.0f / pulseFrequency); // Convert frequency to milliseconds
+        
+        if (currentTime - lastPulseTime >= pulseInterval) {
+            gateState = !gateState;
+            io->setGate1(gateState);
+            lastPulseTime = currentTime;
+        }
+    }
     
     // MIDI callback methods
     void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
@@ -69,7 +81,7 @@ public:
     }
 
     void cv2UpdateCallback(uint16_t cv2) override {
-        float pulseFrequncy = MAX(0.5, IO::normalizeCV(cv2) * 110.0);
+        pulseFrequency = MAX(0.5, IO::normalizeCV(cv2) * 20.0);
     }
 
     void buttonPressedCallback(bool pressed) override {
