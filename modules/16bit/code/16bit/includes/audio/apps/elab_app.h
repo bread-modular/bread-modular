@@ -73,7 +73,11 @@ public:
     }
 
     void buttonPressedCallback(bool pressed) override {
-        
+        if (pressed) {
+            io->setGate2(true);
+        } else {
+            io->setGate2(false);
+        }
     }
 
     
