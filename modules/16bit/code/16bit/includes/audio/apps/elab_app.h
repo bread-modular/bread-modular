@@ -81,7 +81,7 @@ public:
     }
 
     void cv2UpdateCallback(uint16_t cv2) override {
-        pulseFrequency = MAX(0.5, IO::normalizeCV(cv2) * 20.0);
+        pulseFrequency = MAX(0.5, IO::normalizeCV(cv2) * 30.0);
     }
 
     void buttonPressedCallback(bool pressed) override {
