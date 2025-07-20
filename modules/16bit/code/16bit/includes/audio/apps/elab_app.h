@@ -95,6 +95,14 @@ public:
     
     // System callback methods
     bool onCommandCallback(const char* cmd) override {
+        // Parse: bin<base64>
+        if (strncmp(cmd, "bin", 3) == 0) {
+            // Handle binary data
+            uint8_t binData[] = {10, 20, 30};
+            webSerial->sendBinary(binData, sizeof(binData));
+            return true;
+        }
+
         return false;
     }
 

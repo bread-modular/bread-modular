@@ -13,6 +13,8 @@
 #include <functional>
 
 #define WEB_SERIAL_BUFFER_SIZE (2 * 1024 * 1024) // 2MB per buffer
+// TODO: Implement a better way to initialize this buffer (may be from the psram)
+char binStoreBuffer[1024 * 2];
 
 // Return true if the command was handled, false if it was not
 typedef std::function<bool(const char*)> CommandCallback;
@@ -53,6 +55,15 @@ class WebSerial {
 
         void sendValue(const char* value) {
             printf("::val::%s::val::\n", value);
+        }
+
+        void sendBinary(uint8_t* data, int size) {
+            if (size > WEB_SERIAL_BUFFER_SIZE) {
+                printf("Error: Data size too large (%d > %d)\n", size, WEB_SERIAL_BUFFER_SIZE);
+                return;
+            }
+            base64_encode(data, size, binStoreBuffer, sizeof(binStoreBuffer));
+            printf("::bin::%s::bin::\n", binStoreBuffer);
         }
 
         void sendList(int* values, int length) {
