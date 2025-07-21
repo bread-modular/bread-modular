@@ -21,6 +21,17 @@ class ElabApp : public AudioApp {
         float pulseFrequency = 1.0f;
         uint32_t lastPulseTime = 0;
         bool gateState = false;
+
+        uint16_t sampleCounter = 0;
+        uint16_t sampleAt = (44100 / 1000) * 1; // sample at every 100ms
+        uint16_t sampleCount = 100;
+        // TODO: Allocate buffers using PSRAM
+        uint8_t* a1Samples = new uint8_t[1024];
+        uint8_t* a1FlushSamples = new uint8_t[1024];
+        uint16_t a1SampleIndex = 0;
+        bool flushNow = false;
+
+        bool sendData = false;
 public:
 
     void init() override {
@@ -36,6 +47,25 @@ public:
         float waveform = sawWaveform.getSample();
         float subWaveform = subSawWaveform.getSample();
 
+        // Maintain the sample counter
+        sampleCounter++;
+        if (sampleCounter > audioManager->getDac()->getSampleRate()) {
+            sampleCounter = 0;
+        }
+
+        if (sampleCounter % sampleAt == 0) {
+            // TODO: We need to sample the ADC here
+            a1Samples[a1SampleIndex] = (waveform + 1) / 2.0 * 255;
+            a1SampleIndex++;
+            if (a1SampleIndex > sampleCount) {
+                flushNow = true;
+                a1SampleIndex = 0;
+                uint8_t *tempBuffer = a1FlushSamples;
+                a1FlushSamples = a1Samples;
+                a1Samples = tempBuffer;
+            }
+        }
+
         output->left = waveform;
         output->right = waveform + subWaveform;
     }
@@ -49,6 +79,14 @@ public:
             gateState = !gateState;
             io->setGate1(gateState);
             lastPulseTime = currentTime;
+        }
+
+        if (flushNow) {
+            flushNow = false;
+            if (sendData) {
+                // Send the binary data
+                webSerial->sendBinary(a1FlushSamples, sampleCount);
+            }
         }
     }
     
@@ -95,11 +133,17 @@ public:
     
     // System callback methods
     bool onCommandCallback(const char* cmd) override {
-        // Parse: bin<base64>
-        if (strncmp(cmd, "bin", 3) == 0) {
+        // Parse: start-send
+        if (strncmp(cmd, "start-send", 11) == 0) {
             // Handle binary data
-            uint8_t binData[] = {10, 20, 30};
-            webSerial->sendBinary(binData, sizeof(binData));
+            sendData = true;
+            return true;
+        }
+
+        // Parse: stop-send
+        if (strncmp(cmd, "stop-send", 10) == 0) {
+            // Stop sending binary data
+            sendData = false;
             return true;
         }
 
