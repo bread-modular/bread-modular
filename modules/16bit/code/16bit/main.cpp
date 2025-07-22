@@ -16,6 +16,7 @@
 #include "audio/apps/sampler_app.h"
 #include "audio/apps/polysynth_app.h"
 #include "audio/apps/noop_app.h"
+#include "audio/apps/elab_app.h"
 
 #define SAMPLE_RATE 44100
 
@@ -24,6 +25,7 @@
 #define CONFIG_APP_SAMPLER 1
 #define CONFIG_APP_POLYSYNTH 2
 #define CONFIG_APP_FXRACK 3
+#define CONFIG_APP_ELAB 4
 
 FS *fs = FS::getInstance();
 IO *io = IO::getInstance();
@@ -88,6 +90,9 @@ void setApp(int8_t appIndex) {
         case CONFIG_APP_FXRACK:
             newApp = FXRackApp::getInstance();
             break;
+        case CONFIG_APP_ELAB:
+            newApp = ElabApp::getInstance();
+            break;
         default:
             break;
     }
@@ -138,6 +143,15 @@ bool onCommandCallback(const char* cmd) {
         return true;
     }
 
+    if (strncmp(cmd, "set-app elab", 12) == 0) {
+        // save will stop the audio & may crash, that's why we stop audio first
+        audioManager->stop();
+        mainConfig.set(CONFIG_APP_INDEX, CONFIG_APP_ELAB);
+        mainConfig.save();
+        setApp(CONFIG_APP_ELAB);
+        return true;
+    }
+
     if (strncmp(cmd, "get-app", 7) == 0) {
         int8_t appName = mainConfig.get(CONFIG_APP_INDEX, CONFIG_APP_POLYSYNTH);
         switch (appName) {
@@ -152,6 +166,9 @@ bool onCommandCallback(const char* cmd) {
                 break;
             case CONFIG_APP_FXRACK:
                 webSerial->sendValue("fxrack");
+                break;
+            case CONFIG_APP_ELAB:
+                webSerial->sendValue("elab");
                 break;
             default:
                 webSerial->sendValue("unknown");
@@ -217,6 +234,7 @@ int main() {
 
     mainConfig.load();
     int8_t selectedApp = mainConfig.get(CONFIG_APP_INDEX, CONFIG_APP_POLYSYNTH);
+
     setApp(selectedApp);
 
     while (true) {
