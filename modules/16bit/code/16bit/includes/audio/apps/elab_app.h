@@ -23,8 +23,8 @@ class ElabApp : public AudioApp {
         bool gateState = false;
 
         uint16_t sampleCounter = 0;
-        uint16_t sampleAt = (44100 / 1000) * 1; // sample at every 100ms
-        uint16_t sampleCount = 100;
+        uint16_t sampleAt = (44100 / 1000) * 0.1; // sample at every 0.1ms
+        uint16_t sampleCount = 500;
         // TODO: Allocate buffers using PSRAM
         uint8_t* a1Samples = new uint8_t[1024];
         uint8_t* a1FlushSamples = new uint8_t[1024];
@@ -35,7 +35,7 @@ class ElabApp : public AudioApp {
 public:
 
     void init() override {
-        audioManager->setAdcEnabled(false);
+        audioManager->setAdcEnabled(true);
         
         sawWaveform.setFrequency(110);
         subSawWaveform.setFrequency(55);
@@ -55,7 +55,7 @@ public:
 
         if (sampleCounter % sampleAt == 0) {
             // TODO: We need to sample the ADC here
-            a1Samples[a1SampleIndex] = (waveform + 1) / 2.0 * 255;
+            a1Samples[a1SampleIndex] = (input->left + 1) / 2.0 * 255;
             a1SampleIndex++;
             if (a1SampleIndex > sampleCount) {
                 flushNow = true;
