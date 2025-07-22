@@ -26,8 +26,8 @@ class ElabApp : public AudioApp {
         uint16_t sampleAt = (44100 / 1000) * 0.1; // sample at every 0.1ms
         uint16_t sampleCount = 500;
         // TODO: Allocate buffers using PSRAM
-        uint8_t* a1Samples = new uint8_t[1024];
-        uint8_t* a1FlushSamples = new uint8_t[1024];
+        uint8_t* a1Samples = new uint8_t[500];
+        uint8_t* a1FlushSamples = new uint8_t[500];
         uint16_t a1SampleIndex = 0;
         bool flushNow = false;
 
