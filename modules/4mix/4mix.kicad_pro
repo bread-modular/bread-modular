@@ -69,16 +69,19 @@
         "copper_edge_clearance": "error",
         "copper_sliver": "warning",
         "courtyards_overlap": "error",
+        "creepage": "error",
         "diff_pair_gap_out_of_range": "error",
         "diff_pair_uncoupled_length_too_long": "error",
         "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
         "footprint": "error",
+        "footprint_filters_mismatch": "ignore",
         "footprint_symbol_mismatch": "warning",
         "footprint_type_mismatch": "ignore",
         "hole_clearance": "error",
         "hole_near_hole": "error",
+        "hole_to_hole": "error",
         "holes_co_located": "warning",
         "invalid_outline": "error",
         "isolated_copper": "warning",
@@ -89,9 +92,11 @@
         "lib_footprint_mismatch": "warning",
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
+        "mirrored_text_on_front_layer": "warning",
         "missing_courtyard": "ignore",
         "missing_footprint": "warning",
         "net_conflict": "warning",
+        "nonmirrored_text_on_back_layer": "warning",
         "npth_inside_courtyard": "ignore",
         "padstack": "warning",
         "pth_inside_courtyard": "ignore",
@@ -103,10 +108,13 @@
         "solder_mask_bridge": "error",
         "starved_thermal": "error",
         "text_height": "warning",
+        "text_on_edge_cuts": "error",
         "text_thickness": "warning",
         "through_hole_pad_without_hole": "error",
         "too_many_vias": "error",
+        "track_angle": "error",
         "track_dangling": "warning",
+        "track_segment_length": "error",
         "track_width": "error",
         "tracks_crossing": "error",
         "unconnected_items": "error",
@@ -119,6 +127,7 @@
         "min_clearance": 0.2,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.5,
+        "min_groove_width": 0.0,
         "min_hole_clearance": 0.25,
         "min_hole_to_hole": 0.254,
         "min_microvia_diameter": 0.2,
@@ -136,10 +145,11 @@
       },
       "teardrop_options": [
         {
-          "td_onpadsmd": true,
+          "td_onpthpad": true,
           "td_onroundshapesonly": false,
+          "td_onsmdpad": true,
           "td_ontrackend": false,
-          "td_onviapad": true
+          "td_onvia": true
         }
       ],
       "teardrop_parameters": [
@@ -232,6 +242,7 @@
       "mfg": "",
       "mpn": ""
     },
+    "layer_pairs": [],
     "layer_presets": [],
     "viewports": []
   },
@@ -240,24 +251,7 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [
-      "label_dangling|4724400|3467100|ad5f7749-51eb-4261-b38c-65ee5e98f4a1|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab||",
-      "label_dangling|4724400|3568700|55afda25-4148-4977-8f55-05c583fb7f55|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab||",
-      "label_dangling|4851400|3467100|61a3afd4-d5e5-478e-9497-46ac52f9ccf0|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab||",
-      "label_dangling|4851400|3568700|81e34bbc-666b-4844-afa2-533e7276691c|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab||",
-      "label_dangling|5448300|3022600|1bbb8f02-08bf-4e83-aab2-fbdba6fa236e|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab||",
-      "label_dangling|5473700|3022600|04433f6b-f028-4792-b9ed-59bf451820b2|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab||",
-      "label_dangling|5499100|3022600|d72545a9-676e-4461-869e-2bf8e81333b8|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab||",
-      "pin_not_connected|1384300|939800|cc69a6ab-ae81-45e9-ad2d-ddbb28d0d5cc|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef|/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef|",
-      "pin_not_connected|5029200|800100|2d9d4f1c-4efe-49b9-a386-1e657bdd55c2|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|",
-      "pin_not_connected|5359400|850900|aabcba10-a6b7-49d1-89be-e3682ac9b518|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|",
-      "pin_not_connected|5448300|3060700|338d67d0-5075-4846-9a42-df97023972e2|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|",
-      "pin_not_connected|990600|635000|9c0ec4ad-a692-40e6-b51e-d9f788e07ec7|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef|/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef|",
-      "power_pin_not_driven|4572000|1854200|9560d098-04cd-4eda-8639-3f362a3efd44|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|",
-      "power_pin_not_driven|4572000|2120900|a02f588e-75ed-4815-b038-e1d5942abd88|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|",
-      "power_pin_not_driven|4622800|3162300|6c254bb6-4451-4975-a908-31fc168854cf|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|",
-      "power_pin_not_driven|5054600|381000|066d2e05-6b66-4c40-8d90-399a8569601c|00000000-0000-0000-0000-000000000000|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|/b63493d3-5f6d-47e3-845b-87e7090fc1ab|"
-    ],
+    "erc_exclusions": [],
     "meta": {
       "version": 0
     },
@@ -443,10 +437,15 @@
       "duplicate_sheet_names": "error",
       "endpoint_off_grid": "warning",
       "extra_units": "error",
+      "footprint_filter": "ignore",
+      "footprint_link_issues": "warning",
+      "four_way_junction": "ignore",
       "global_label_dangling": "warning",
       "hier_label_mismatch": "error",
       "label_dangling": "error",
+      "label_multiple_wires": "warning",
       "lib_symbol_issues": "warning",
+      "lib_symbol_mismatch": "warning",
       "missing_bidi_pin": "warning",
       "missing_input_pin": "warning",
       "missing_power_pin": "error",
@@ -459,9 +458,14 @@
       "pin_not_driven": "error",
       "pin_to_pin": "error",
       "power_pin_not_driven": "error",
+      "same_local_global_label": "warning",
+      "similar_label_and_power": "warning",
       "similar_labels": "warning",
+      "similar_power": "warning",
       "simulation_model_issue": "ignore",
+      "single_global_label": "ignore",
       "unannotated": "error",
+      "unconnected_wire_endpoint": "warning",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
       "wire_dangling": "error"
@@ -473,7 +477,7 @@
   },
   "meta": {
     "filename": "4mix.kicad_pro",
-    "version": 1
+    "version": 3
   },
   "net_settings": {
     "classes": [
@@ -488,6 +492,7 @@
         "microvia_drill": 0.1,
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
         "via_diameter": 0.6,
@@ -496,7 +501,7 @@
       }
     ],
     "meta": {
-      "version": 3
+      "version": 4
     },
     "net_colors": null,
     "netclass_assignments": null,
@@ -584,6 +589,7 @@
       ],
       "filter_string": "",
       "group_symbols": true,
+      "include_excluded_from_bom": false,
       "name": "",
       "sort_asc": true,
       "sort_field": "Reference"
@@ -626,6 +632,7 @@
     },
     "page_layout_descr_file": "",
     "plot_directory": "",
+    "space_save_all_events": true,
     "spice_current_sheet_as_root": false,
     "spice_external_command": "spice \"%I\"",
     "spice_model_current_sheet_as_root": true,
@@ -641,10 +648,6 @@
       "Root"
     ],
     [
-      "393550cb-40c9-4351-a1f3-230233b59078",
-      "SENDS"
-    ],
-    [
       "24708e82-002c-49b4-ad8d-d7b04b998c06",
       "SENDS1"
     ],
@@ -655,6 +658,10 @@
     [
       "1ae334da-fe90-433f-a798-500782e5ff21",
       "SENDS3"
+    ],
+    [
+      "b0650c6c-db61-4d87-8cd2-0093f4d71fd5",
+      "CHANNEL"
     ],
     [
       "d0b612c1-0c25-4058-bf92-38ae27a09cef",
