@@ -2068,17 +2068,6 @@
 		)
 		(uuid "633607bd-a09d-44dc-8b43-2e15fc3b69e0")
 	)
-	(text "This sits close to the summing amp\n"
-		(exclude_from_sim no)
-		(at 113.792 126.492 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "6485439d-f8ad-4490-9be2-b19d854773c2")
-	)
 	(text "# Sends Mix"
 		(exclude_from_sim no)
 		(at 248.666 24.384 0)
@@ -3208,16 +3197,6 @@
 			(type default)
 		)
 		(uuid "239bcbc9-a9f9-4950-a49d-f345e0e6cb3b")
-	)
-	(wire
-		(pts
-			(xy 99.06 121.92) (xy 111.76 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "23dc5983-89e5-4997-a4d8-2ca594f1a917")
 	)
 	(wire
 		(pts
@@ -4651,7 +4630,7 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 121.92) (xy 91.44 121.92)
+			(xy 85.09 121.92) (xy 111.76 121.92)
 		)
 		(stroke
 			(width 0)
@@ -13604,74 +13583,6 @@
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
 					(reference "#PWR022")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 95.25 121.92 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c90dee8e-b5ea-4797-8187-9cdfd0aab8c2")
-		(property "Reference" "R9"
-			(at 95.25 115.57 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "100"
-			(at 95.25 118.11 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 95.25 123.698 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 95.25 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 95.25 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "3c8bb9ea-457c-4070-b67d-11909ca82e9b")
-		)
-		(pin "1"
-			(uuid "741a7b49-e581-4f17-a2f6-30e441f389c8")
-		)
-		(instances
-			(project "4mix"
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
-					(reference "R9")
 					(unit 1)
 				)
 			)
