@@ -2380,6 +2380,12 @@
 		(uuid "54794ad4-1b91-4613-9ea7-67f775d9a902")
 	)
 	(junction
+		(at 525.78 137.16)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5576d8df-6634-4b75-92d3-68b1ec03d679")
+	)
+	(junction
 		(at 505.46 181.61)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2396,12 +2402,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "596154b6-2bd6-4ecb-bcc8-f78c5fbab88f")
-	)
-	(junction
-		(at 525.78 137.16)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5c9fab28-48d9-4409-b06f-474c0b5c66d8")
 	)
 	(junction
 		(at 313.69 182.88)
@@ -2468,6 +2468,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "88a1a5e0-0583-4903-899e-4726bd4bc503")
+	)
+	(junction
+		(at 537.21 146.05)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8a38515c-eb7e-4426-bef8-356f8b824f46")
 	)
 	(junction
 		(at 535.94 39.37)
@@ -2552,12 +2558,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b5e2264a-65ee-4049-9e90-55fb1388233f")
-	)
-	(junction
-		(at 525.78 146.05)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bfc2aa4d-f102-4233-a1f0-3281a7f1c823")
 	)
 	(junction
 		(at 64.77 383.54)
@@ -2998,6 +2998,16 @@
 			(type default)
 		)
 		(uuid "16b0686f-d71a-45b3-8a01-241b206ab47b")
+	)
+	(wire
+		(pts
+			(xy 537.21 137.16) (xy 537.21 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "177ff02f-ce76-4979-9c09-2cdef0e98c67")
 	)
 	(wire
 		(pts
@@ -3451,6 +3461,16 @@
 	)
 	(wire
 		(pts
+			(xy 525.78 130.81) (xy 525.78 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3662aefa-a588-4a5b-9b98-7182571cbdc4")
+	)
+	(wire
+		(pts
 			(xy 513.08 201.93) (xy 505.46 201.93)
 		)
 		(stroke
@@ -3781,7 +3801,7 @@
 	)
 	(wire
 		(pts
-			(xy 513.08 146.05) (xy 525.78 146.05)
+			(xy 513.08 146.05) (xy 527.05 146.05)
 		)
 		(stroke
 			(width 0)
@@ -3931,16 +3951,6 @@
 	)
 	(wire
 		(pts
-			(xy 525.78 137.16) (xy 525.78 146.05)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5eb4981a-2c55-4275-85a6-f51455aef22c")
-	)
-	(wire
-		(pts
 			(xy 85.09 121.92) (xy 85.09 138.43)
 		)
 		(stroke
@@ -4011,7 +4021,7 @@
 	)
 	(wire
 		(pts
-			(xy 546.1 146.05) (xy 543.56 146.05)
+			(xy 546.1 146.05) (xy 537.21 146.05)
 		)
 		(stroke
 			(width 0)
@@ -4408,16 +4418,6 @@
 			(type default)
 		)
 		(uuid "818edc94-252c-4dc8-a56a-7f8472d49503")
-	)
-	(wire
-		(pts
-			(xy 525.78 146.05) (xy 535.94 146.05)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "81bd1ef9-d2c4-4088-b076-3cafe0953d1e")
 	)
 	(wire
 		(pts
@@ -5051,6 +5051,16 @@
 	)
 	(wire
 		(pts
+			(xy 525.78 137.16) (xy 537.21 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b724657b-6d49-45e0-bcca-17a2cdb3a3c0")
+	)
+	(wire
+		(pts
 			(xy 267.97 171.45) (xy 273.05 171.45)
 		)
 		(stroke
@@ -5341,16 +5351,6 @@
 	)
 	(wire
 		(pts
-			(xy 525.78 130.81) (xy 525.78 137.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d4b7b785-45e9-48ef-8fa5-8868a73043ec")
-	)
-	(wire
-		(pts
 			(xy 284.48 81.28) (xy 284.48 69.85)
 		)
 		(stroke
@@ -5548,6 +5548,16 @@
 			(type default)
 		)
 		(uuid "e452762f-853e-45ff-83e0-0686712e659c")
+	)
+	(wire
+		(pts
+			(xy 537.21 146.05) (xy 534.67 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e4cd27e7-6f69-4ed5-8b01-e0cdb91a692a")
 	)
 	(wire
 		(pts
@@ -9387,7 +9397,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 525.78 129.8448 0)
 			(effects
 				(font
@@ -13737,7 +13747,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 539.75 146.05 90)
+		(at 530.86 146.05 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13746,7 +13756,7 @@
 		(fields_autoplaced yes)
 		(uuid "cf53f6ef-39cf-42b7-b9f1-37dbde6676d7")
 		(property "Reference" "R36"
-			(at 539.75 139.7 90)
+			(at 530.86 139.7 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13754,7 +13764,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 539.75 142.24 90)
+			(at 530.86 142.24 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13762,7 +13772,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 539.75 147.828 90)
+			(at 530.86 147.828 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13771,7 +13781,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 539.75 146.05 0)
+			(at 530.86 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13780,7 +13790,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 539.75 146.05 0)
+			(at 530.86 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
