@@ -4,7 +4,7 @@
     {
       "analysis": "TRAN",
       "commands": [
-        ".tran 10u 10m",
+        ".tran 10u 4m",
         ".kicad adjustpaths",
         ".save all",
         ".probe alli",
@@ -28,11 +28,6 @@
         {
           "color": "rgb(77, 175, 74)",
           "signal": "V(MIXOUT)",
-          "trace_type": 257
-        },
-        {
-          "color": "rgb(102, 194, 165)",
-          "signal": "V(SEND_B_OUT)",
           "trace_type": 257
         }
       ]

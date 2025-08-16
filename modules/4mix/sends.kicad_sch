@@ -1,12 +1,14 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "b7cfed52-5769-4127-92ae-5157be130fd3")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Device:R"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
 			)
@@ -125,10 +127,13 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Device:R_Potentiometer"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -194,12 +199,11 @@
 				)
 			)
 			(symbol "R_Potentiometer_0_1"
-				(polyline
-					(pts
-						(xy 2.54 0) (xy 1.524 0)
-					)
+				(rectangle
+					(start 1.016 2.54)
+					(end -1.016 -2.54)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -218,11 +222,12 @@
 						(type outline)
 					)
 				)
-				(rectangle
-					(start 1.016 2.54)
-					(end -1.016 -2.54)
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 1.524 0)
+					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -250,24 +255,6 @@
 					)
 				)
 				(pin passive line
-					(at 3.81 0 180)
-					(length 1.27)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
 					(at 0 -3.81 90)
 					(length 1.27)
 					(name "3"
@@ -285,7 +272,26 @@
 						)
 					)
 				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 1.27)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
 	)
 	(junction
@@ -523,7 +529,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6f82dad4-3d7e-43e2-85c2-8aaa3f8bdadf")
-		(property "Reference" "R52"
+		(property "Reference" "R50"
 			(at 97.79 113.03 90)
 			(effects
 				(font
@@ -586,10 +592,6 @@
 					(reference "R50")
 					(unit 1)
 				)
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/393550cb-40c9-4351-a1f3-230233b59078"
-					(reference "R48")
-					(unit 1)
-				)
 			)
 		)
 	)
@@ -603,7 +605,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "950534aa-da75-4111-a349-86c3144f5849")
-		(property "Reference" "R51"
+		(property "Reference" "R49"
 			(at 97.79 81.28 90)
 			(effects
 				(font
@@ -666,10 +668,6 @@
 					(reference "R49")
 					(unit 1)
 				)
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/393550cb-40c9-4351-a1f3-230233b59078"
-					(reference "R47")
-					(unit 1)
-				)
 			)
 		)
 	)
@@ -682,7 +680,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "966d8ac8-88f5-49a7-b75b-491d1c9c5dea")
-		(property "Reference" "RV13"
+		(property "Reference" "RV11"
 			(at 78.74 104.902 90)
 			(effects
 				(font
@@ -791,10 +789,6 @@
 					(reference "RV11")
 					(unit 1)
 				)
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/393550cb-40c9-4351-a1f3-230233b59078"
-					(reference "RV9")
-					(unit 1)
-				)
 			)
 		)
 	)
@@ -807,7 +801,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "dae671be-b78e-4235-854c-565b33b4a70e")
-		(property "Reference" "RV12"
+		(property "Reference" "RV10"
 			(at 78.74 73.152 90)
 			(effects
 				(font
@@ -914,10 +908,6 @@
 				)
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/24708e82-002c-49b4-ad8d-d7b04b998c06"
 					(reference "RV10")
-					(unit 1)
-				)
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/393550cb-40c9-4351-a1f3-230233b59078"
-					(reference "RV8")
 					(unit 1)
 				)
 			)

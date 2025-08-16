@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "5067c5b1-be33-4391-a5da-fb083386beca")
 	(paper "A4")
 	(lib_symbols
@@ -96,17 +96,17 @@
 						(type background)
 					)
 				)
-				(pin output line
-					(at 7.62 0 180)
+				(pin input line
+					(at -7.62 2.54 0)
 					(length 2.54)
-					(name "~"
+					(name "+"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "1"
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -132,17 +132,17 @@
 						)
 					)
 				)
-				(pin input line
-					(at -7.62 2.54 0)
+				(pin output line
+					(at 7.62 0 180)
 					(length 2.54)
-					(name "+"
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "3"
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -221,24 +221,6 @@
 			)
 			(symbol "MCP6002-xSN_3_1"
 				(pin power_in line
-					(at -2.54 -7.62 90)
-					(length 3.81)
-					(name "V-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
 					(at -2.54 7.62 270)
 					(length 3.81)
 					(name "V+"
@@ -256,10 +238,31 @@
 						)
 					)
 				)
+				(pin power_in line
+					(at -2.54 -7.62 90)
+					(length 3.81)
+					(name "V-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Device:C"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -332,7 +335,7 @@
 			(symbol "C_0_1"
 				(polyline
 					(pts
-						(xy -2.032 -0.762) (xy 2.032 -0.762)
+						(xy -2.032 0.762) (xy 2.032 0.762)
 					)
 					(stroke
 						(width 0.508)
@@ -344,7 +347,7 @@
 				)
 				(polyline
 					(pts
-						(xy -2.032 0.762) (xy 2.032 0.762)
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
 					)
 					(stroke
 						(width 0.508)
@@ -393,9 +396,12 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Device:R"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
 			)
@@ -514,10 +520,13 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Device:R_Potentiometer"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -583,12 +592,11 @@
 				)
 			)
 			(symbol "R_Potentiometer_0_1"
-				(polyline
-					(pts
-						(xy 2.54 0) (xy 1.524 0)
-					)
+				(rectangle
+					(start 1.016 2.54)
+					(end -1.016 -2.54)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -607,11 +615,12 @@
 						(type outline)
 					)
 				)
-				(rectangle
-					(start 1.016 2.54)
-					(end -1.016 -2.54)
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 1.524 0)
+					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -639,24 +648,6 @@
 					)
 				)
 				(pin passive line
-					(at 3.81 0 180)
-					(length 1.27)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
 					(at 0 -3.81 90)
 					(length 1.27)
 					(name "3"
@@ -674,12 +665,35 @@
 						)
 					)
 				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 1.27)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Diode:SS14"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -747,10 +761,10 @@
 			(symbol "SS14_0_1"
 				(polyline
 					(pts
-						(xy 1.27 0) (xy -1.27 0)
+						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -771,10 +785,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
+						(xy 1.27 0) (xy -1.27 0)
 					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -820,11 +834,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Diode:SS210"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -892,10 +911,10 @@
 			(symbol "SS210_0_1"
 				(polyline
 					(pts
-						(xy 1.27 0) (xy -1.27 0)
+						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -916,10 +935,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
+						(xy 1.27 0) (xy -1.27 0)
 					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -965,12 +984,17 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:+5V"
 			(power)
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0) hide)
+				(offset 0)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1042,7 +1066,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 2.54)
+						(xy 0 2.54) (xy 0.762 1.27)
 					)
 					(stroke
 						(width 0)
@@ -1054,7 +1078,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
+						(xy 0 0) (xy 0 2.54)
 					)
 					(stroke
 						(width 0)
@@ -1085,12 +1109,17 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:GND"
 			(power)
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0) hide)
+				(offset 0)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1181,6 +1210,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 	)
 	(junction
@@ -1806,7 +1836,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "08b3bb10-6c9c-4913-b1ea-923ceb361ebe")
-		(property "Reference" "U8"
+		(property "Reference" "U11"
 			(at 77.47 49.53 0)
 			(effects
 				(font
@@ -1912,7 +1942,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "U8")
+					(reference "U11")
 					(unit 1)
 				)
 			)
@@ -2013,7 +2043,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1930195c-508b-45fc-869c-e874223faa72")
-		(property "Reference" "#PWR027"
+		(property "Reference" "#PWR037"
 			(at 251.46 80.01 0)
 			(effects
 				(font
@@ -2064,7 +2094,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "#PWR027")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -2080,7 +2110,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "423ca228-16cd-4d0f-a5df-07645e7a4462")
-		(property "Reference" "C9"
+		(property "Reference" "C35"
 			(at 264.16 85.0899 0)
 			(effects
 				(font
@@ -2134,7 +2164,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "C9")
+					(reference "C35")
 					(unit 1)
 				)
 			)
@@ -2150,7 +2180,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4f64e72e-44da-4065-9cd8-e48ddc58a761")
-		(property "Reference" "U8"
+		(property "Reference" "U11"
 			(at 132.08 50.8 0)
 			(effects
 				(font
@@ -2256,7 +2286,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "U8")
+					(reference "U11")
 					(unit 2)
 				)
 			)
@@ -2272,7 +2302,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "512e6169-6b50-4693-b03f-e8851b9460a0")
-		(property "Reference" "R59"
+		(property "Reference" "R94"
 			(at 166.37 41.91 90)
 			(effects
 				(font
@@ -2324,7 +2354,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "R59")
+					(reference "R94")
 					(unit 1)
 				)
 			)
@@ -2340,7 +2370,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "51cb637a-7625-482f-8294-f05f72572b33")
-		(property "Reference" "R60"
+		(property "Reference" "R95"
 			(at 181.61 60.96 90)
 			(effects
 				(font
@@ -2392,7 +2422,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "R60")
+					(reference "R95")
 					(unit 1)
 				)
 			)
@@ -2493,7 +2523,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6369a8ae-f201-4380-9528-33334a13cf1d")
-		(property "Reference" "R58"
+		(property "Reference" "R93"
 			(at 132.08 70.104 90)
 			(effects
 				(font
@@ -2545,7 +2575,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "R58")
+					(reference "R93")
 					(unit 1)
 				)
 			)
@@ -2561,7 +2591,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6a09d517-072b-4269-9d0c-026b61cdcd8e")
-		(property "Reference" "R57"
+		(property "Reference" "R92"
 			(at 115.57 57.15 90)
 			(effects
 				(font
@@ -2613,7 +2643,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "R57")
+					(reference "R92")
 					(unit 1)
 				)
 			)
@@ -2628,7 +2658,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a59237f6-96d9-48d9-9164-a19a42f8a7bc")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR038"
 			(at 251.46 102.87 0)
 			(effects
 				(font
@@ -2678,7 +2708,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "#PWR028")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -2694,7 +2724,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ab83dfbd-7ec6-4a45-88fe-6ba0a3239e08")
-		(property "Reference" "R55"
+		(property "Reference" "R90"
 			(at 59.69 55.88 90)
 			(effects
 				(font
@@ -2746,7 +2776,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "R55")
+					(reference "R90")
 					(unit 1)
 				)
 			)
@@ -2960,7 +2990,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c4319e26-1b82-4a87-afdb-5b08ab318ca8")
-		(property "Reference" "U8"
+		(property "Reference" "U11"
 			(at 243.332 93.218 90)
 			(effects
 				(font
@@ -3068,7 +3098,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "U8")
+					(reference "U11")
 					(unit 3)
 				)
 			)
@@ -3084,7 +3114,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c9b68699-2360-40ea-8858-547c2577954d")
-		(property "Reference" "R56"
+		(property "Reference" "R91"
 			(at 77.47 67.31 90)
 			(effects
 				(font
@@ -3136,7 +3166,7 @@
 		(instances
 			(project "4mix"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/d0b612c1-0c25-4058-bf92-38ae27a09cef"
-					(reference "R56")
+					(reference "R91")
 					(unit 1)
 				)
 			)
