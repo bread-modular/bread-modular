@@ -1,17 +1,29 @@
+; Proper I2S slave implementation with BCK synchronization
+; 16-bit LSB format, follows external WS and BCK signals
 .program i2s
-.side_set 2; WS=1, BCK=0
-
-.define public BCK_CYCLES 2
 
 .wrap_target
-    set x 14        side 0b11
-loop_l:
-    out pins, 1     side 0b00
-    jmp x--, loop_l side 0b01
-    out pins, 1     side 0b00
-    set x 14        side 0b01
-loop_r:
-    out pins, 1     side 0b10
-    jmp x--, loop_r side 0b11
-    out pins, 1     side 0b10
+    ; Wait for WS to go high (left channel start)
+    wait 1 gpio 9   ; Wait for WS (pin 9) to go high
+    
+    ; Send 16 bits for left channel, synchronized to BCK falling edges
+    set x, 15       ; Set counter for 16 bits (0-15)
+left_loop:
+    wait 0 gpio 7   ; Wait for BCK (pin 7) to go low (falling edge)
+    out pins, 1     ; Output one bit on falling edge
+    in pins, 1      ; Read one bit from DATA pin
+    wait 1 gpio 7   ; Wait for BCK (pin 7) to go high (rising edge)
+    jmp x--, left_loop ; Decrement and loop for next bit
+    
+    ; Wait for WS to go low (right channel start)
+    wait 0 gpio 9   ; Wait for WS (pin 9) to go low
+    
+    ; Send 16 bits for right channel, synchronized to BCK falling edges
+    set x, 15       ; Set counter for 16 bits (0-15)
+right_loop:
+    wait 0 gpio 7   ; Wait for BCK (pin 7) to go low (falling edge)
+    out pins, 1     ; Output one bit on falling edge
+    in pins, 1      ; Read one bit from DATA pin
+    wait 1 gpio 7   ; Wait for BCK (pin 7) to go high (rising edge)
+    jmp x--, right_loop ; Decrement and loop for next bit
 .wrap

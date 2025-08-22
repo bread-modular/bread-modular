@@ -13,39 +13,42 @@
 // --- //
 
 #define i2s_wrap_target 0
-#define i2s_wrap 7
+#define i2s_wrap 13
 #define i2s_pio_version 1
-
-#define i2s_BCK_CYCLES 2
 
 static const uint16_t i2s_program_instructions[] = {
             //     .wrap_target
-    0xf82e, //  0: set    x, 14           side 3
-    0x6001, //  1: out    pins, 1         side 0
-    0x0841, //  2: jmp    x--, 1          side 1
-    0x6001, //  3: out    pins, 1         side 0
-    0xe82e, //  4: set    x, 14           side 1
-    0x7001, //  5: out    pins, 1         side 2
-    0x1845, //  6: jmp    x--, 5          side 3
-    0x7001, //  7: out    pins, 1         side 2
+    0x2089, //  0: wait   1 gpio, 9
+    0xe02f, //  1: set    x, 15
+    0x2007, //  2: wait   0 gpio, 7
+    0x6001, //  3: out    pins, 1
+    0x4001, //  4: in     pins, 1
+    0x2087, //  5: wait   1 gpio, 7
+    0x0042, //  6: jmp    x--, 2
+    0x2009, //  7: wait   0 gpio, 9
+    0xe02f, //  8: set    x, 15
+    0x2007, //  9: wait   0 gpio, 7
+    0x6001, // 10: out    pins, 1
+    0x4001, // 11: in     pins, 1
+    0x2087, // 12: wait   1 gpio, 7
+    0x0049, // 13: jmp    x--, 9
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
 static const struct pio_program i2s_program = {
     .instructions = i2s_program_instructions,
-    .length = 8,
+    .length = 14,
     .origin = -1,
     .pio_version = i2s_pio_version,
 #if PICO_PIO_VERSION > 0
-    .used_gpio_ranges = 0x0
+    .used_gpio_ranges = 0x1
 #endif
 };
 
 static inline pio_sm_config i2s_program_get_default_config(uint offset) {
     pio_sm_config c = pio_get_default_sm_config();
     sm_config_set_wrap(&c, offset + i2s_wrap_target, offset + i2s_wrap);
-    sm_config_set_sideset(&c, 2, false, false);
     return c;
 }
 #endif

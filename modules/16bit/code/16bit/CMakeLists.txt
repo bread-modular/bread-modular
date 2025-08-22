@@ -74,6 +74,8 @@ target_link_libraries(16bit
         hardware_pio
         pico_multicore
         hardware_adc
+        hardware_pwm
+        hardware_i2c
         lfs
         )
 

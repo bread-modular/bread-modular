@@ -10,10 +10,6 @@
 #include "hardware/adc.h"
 #include <functional>
 
-#define BCK_PIN 1
-#define A0 0
-#define A1 1
-
 typedef struct {
     float left;
     float right;
@@ -37,6 +33,13 @@ critical_section_t adcCS;
 class AudioManager;
 AudioManager* g_audio_manager_instance = nullptr;
 
+// This is a weird function which won't run ever.
+// But this will keep the loop intact otherwise the
+// i2s pio handler runs inproperly. (maybe the loop run very fast.)
+void loop_stabler() {
+    printf("This holds the loop.");
+}
+
 class AudioManager {
 private:
     // Create queues for communication between cores
@@ -52,7 +55,7 @@ private:
     
     // Private constructor for singleton pattern
     AudioManager() : 
-        dac(pio0, 0, BCK_PIN),
+        dac(pio0, 0),
         initialized(false) {
     }
     
@@ -65,32 +68,29 @@ private:
         // Access the singleton instance
         AudioManager* audio_mgr = AudioManager::getInstance();
 
-        adc_init();
-        adc_gpio_init(26 + A0);
-        adc_gpio_init(26 + A1);
-
         uint32_t delay_us = 1000000 / audio_mgr->dac.getSampleRate(); // Microseconds between samples
         absolute_time_t next_sample_time = get_absolute_time();
 
+        int32_t read_sample = 0;
+
         while (true) {
-            // Calculate next sample time
-            // next_sample_time = delayed_by_us(next_sample_time, delay_us);
+            // // IMPORTANT
+            // // This feels like this is useless.
+            // // But this will keep the loop runtime running too-fast
+            // // Otheriwse the pio put command goes out of sync and cause cracks and pops
+            // int ch = getchar_timeout_us(0);
+            // if (ch == 'r' || ch == 'R') {
+            //     printf("This won't do anything, but it will hold the loop");
+            //     loop_stabler();
+            // }
 
             AudioInput input;
 
             if (audio_mgr->adcEnabled) {
                 audio_mgr->startAdcLock();
-                adc_select_input(A0);
-                int16_t a0 = adc_read() - 2048;
-                float a0Norm = a0/2048.0f;
-
-                adc_select_input(A1);
-                int16_t a1 = adc_read() - 2048;
-                float a1Norm = a1/2048.0f;
+                input.left = read_sample & 0xFFFF; // Assuming left channel is lower 16 bits
+                input.right = (read_sample >> 16) & 0xFFFF; // Assuming right channel is upper 16 bits
                 audio_mgr->endAdcLock();
-
-                input.left = a0Norm;
-                input.right = a1Norm;
             }
 
             AudioOutput output;
@@ -112,8 +112,9 @@ private:
                 break;
             }
 
-            // Wait until it's time for the next sample
-            // sleep_until(next_sample_time);
+            // It's very important to read from the ADC.
+            // Otherwise the PIO loop will get blocked
+            read_sample = audio_mgr->dac.readStereo();
         }
     }
 
