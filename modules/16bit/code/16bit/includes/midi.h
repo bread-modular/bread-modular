@@ -5,7 +5,7 @@
 #include <functional>
 
 #define MIDI_RX_PIN 5
-#define MIDI_TX_PIN 4
+#define MIDI_TX_PIN 20
 #define MIDI_UART uart1
 
 // MIDI message types

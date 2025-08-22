@@ -10,8 +10,8 @@
 #define LED_PIN 13
 #define BUTTON_PIN 12
 
-#define GATE1_PIN 20
-#define GATE2_PIN 19
+#define GATE1_PIN 19
+#define GATE2_PIN 18
 typedef void (*CVUpdateCallback)(uint16_t);
 
 class IO;
