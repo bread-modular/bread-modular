@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+Introduce a new LDO (AP2112K-3.3) which has an EN functionality.
+So, we can implement the reset button without using additional components.
+
+Due the older design with a transitor, it won't be able to load mutiple MCUs.
+
 ## 1.1.0
 Change the push button to a better one.
 
