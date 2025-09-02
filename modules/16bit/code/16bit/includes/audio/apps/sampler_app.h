@@ -95,7 +95,7 @@ class SamplerApp : public AudioApp {
             
         }
 
-        void audioCallback(AudioInput *input, AudioOutput *output) override {
+        __attribute__((hot)) void audioCallback(AudioInput *input, AudioOutput *output) override {
             audioManager->startAudioLock();
 
             // first 6 samples has FX support & others are just playing (no fx)
@@ -132,7 +132,7 @@ class SamplerApp : public AudioApp {
             output->right = sampleSum;
         }
 
-        void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
+        __attribute__((cold, noinline)) void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {
             uint8_t sampleToPlay = note % 12;
             // Keep current playback method for sampleId 0
             float velocityNorm = velocity / 127.0f;
@@ -150,11 +150,11 @@ class SamplerApp : public AudioApp {
             }
         }
 
-        void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {   
+        __attribute__((cold, noinline)) void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {   
     
         }
 
-        void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {
+        __attribute__((cold, noinline)) void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {
             float valueNormalized = value / 127.0f;
             // Filter Controls
             if (cc == 71) {
@@ -197,19 +197,19 @@ class SamplerApp : public AudioApp {
             }
         }
 
-        void cv1UpdateCallback(uint16_t cv1) override {
+        __attribute__((cold, noinline)) void cv1UpdateCallback(uint16_t cv1) override {
             float cv1Norm = 1.0 - IO::normalizeCV(cv1);
             float cutoff = 50.0f * powf(20000.0f / 50.0f, cv1Norm * cv1Norm);
             lowpassFilter.setCutoff(cutoff);
         }
 
-        void cv2UpdateCallback(uint16_t cv2) override {
+        __attribute__((cold, noinline)) void cv2UpdateCallback(uint16_t cv2) override {
             float cv2Norm = IO::normalizeCV(cv2);
             float cutoff = 20.0f * powf(20000.0f / 20.0f, cv2Norm);
             highpassFilter.setCutoff(cutoff);
         }
 
-        void buttonPressedCallback(bool pressed) override {
+        __attribute__((cold, noinline)) void buttonPressedCallback(bool pressed) override {
             if (pressed) {
                 io->setLED(true);
                 audioManager->stop([]() {
@@ -227,7 +227,7 @@ class SamplerApp : public AudioApp {
             }
         }
 
-        void bpmChangeCallback(int bpm) override {
+        __attribute__((cold, noinline)) void bpmChangeCallback(int bpm) override {
             currentBPM = bpm;
             fx1->setBPM(bpm);
             fx2->setBPM(bpm);

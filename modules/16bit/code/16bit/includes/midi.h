@@ -3,6 +3,7 @@
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include <functional>
+#include <cmath>
 
 #define MIDI_RX_PIN 5
 #define MIDI_TX_PIN 4

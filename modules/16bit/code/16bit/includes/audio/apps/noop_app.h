@@ -3,39 +3,20 @@
 #include "audio/apps/interfaces/audio_app.h"
 
 class NoopApp : public AudioApp {
-    private:
-        static NoopApp* instance;
-        AudioManager *audioManager = AudioManager::getInstance();
+private:
+    static NoopApp* instance;
+    AudioManager *audioManager = AudioManager::getInstance();
 public:
-    // Core audio processing methods
-    void init() override {
-        audioManager->setAdcEnabled(false);
-    }
-    void audioCallback(AudioInput *input, AudioOutput *output) override {}
-
-    // Update method for handling UI and other non-audio updates
-    void update() override {}
-    
-    // MIDI callback methods
-    void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {}
-    void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override {}
-    void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override {}
-    void bpmChangeCallback(int bpm) override {}
-    
-    // Knobs and buttons
-    void cv1UpdateCallback(uint16_t cv1) override {}
-    void cv2UpdateCallback(uint16_t cv2) override {}
-    void buttonPressedCallback(bool pressed) override {}
-    
-    // System callback methods
-    bool onCommandCallback(const char* cmd) override { return false; }
-
-    static NoopApp* getInstance() {
-        if (!instance) {
-            instance = new NoopApp();
-        }
-        return instance;
-    }
+    void init() override;
+    void audioCallback(AudioInput *input, AudioOutput *output) override;
+    void update() override;
+    void noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) override;
+    void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override;
+    void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override;
+    void bpmChangeCallback(int bpm) override;
+    void cv1UpdateCallback(uint16_t cv1) override;
+    void cv2UpdateCallback(uint16_t cv2) override;
+    void buttonPressedCallback(bool pressed) override;
+    bool onCommandCallback(const char* cmd) override;
+    static NoopApp* getInstance();
 }; 
-
-NoopApp* NoopApp::instance = nullptr;
