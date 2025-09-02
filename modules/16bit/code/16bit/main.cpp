@@ -18,9 +18,12 @@
 #include "audio/apps/noop_app.h"
 #include "audio/apps/elab_app.h"
 
-// Pull ElabApp implementation into the same translation unit to avoid
+// Pull app implementations into the same translation unit to avoid
 // multiple-definition issues from headers that define globals.
 #include "src/audio/apps/elab_app.cpp"
+#include "src/audio/apps/polysynth_app.cpp"
+#include "src/audio/apps/fxrack_app.cpp"
+#include "src/audio/apps/noop_app.cpp"
 
 #define SAMPLE_RATE 44100
 
