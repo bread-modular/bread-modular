@@ -40,7 +40,9 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(16bit main.cpp )
+add_executable(16bit
+    main.cpp
+)
 pico_generate_pio_header(16bit ${CMAKE_CURRENT_LIST_DIR}/i2s.pio)
 
 # Read version from file main 16bit versiob file
@@ -85,6 +87,3 @@ target_include_directories(16bit PRIVATE
 )
 
 pico_add_extra_outputs(16bit)
-
-# Add WebSerial.cpp to the build if not already present
-

@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <algorithm>
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "pico/util/queue.h"
