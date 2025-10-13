@@ -1,0 +1,17 @@
+{
+  "idf.openOcdConfigs": [
+    "board/esp32s3-builtin.cfg"
+  ],
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32s3"
+  },
+  "clangd.path": "/Users/arunoda/.espressif/tools/esp-clang/esp-18.1.2_20240912/esp-clang/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=/Users/arunoda/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20241119/xtensa-esp-elf/bin/xtensa-esp32s3-elf-gcc",
+    "--compile-commands-dir=/Users/arunoda/data/learn/esp32/hello_world/build"
+  ],
+  "idf.port": "/dev/tty.usbmodem2101",
+  "idf.flashType": "UART",
+  "C_Cpp.errorSquiggles": "enabled"
+}
