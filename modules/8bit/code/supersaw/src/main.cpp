@@ -19,8 +19,6 @@
 #define MAX_FREQ 500 // Maximum frequency in Hz
 #define MIN_FREQ 20  // Minimum frequency in Hz
 #define OCTAVE_DIVIDER 2 // Divider for one octave down
-#define DETUNE_OFFSET_RANGE 16 // Midi note offset for CV1 detune
-
 
 // CV control parameters
 #define CV_THRESHOLD 5 // Threshold for CV value changes (0-1023)
@@ -231,14 +229,14 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
     float offset = 0;
     // If the pot is all the way to the left don't add any offset
     if(rawCV > 0) {
-      offset = map(rawCV, 0, 1023, -DETUNE_OFFSET_RANGE, DETUNE_OFFSET_RANGE);
+      offset = (float)(rawCV - 512.) / 512.0;
     }
     
     if (note > 65) {
       return;
     }
 
-    float rawFrequency = MIDI.midiToFrequency(note) * (1 + offset / DETUNE_OFFSET_RANGE);
+    float rawFrequency = MIDI.midiToFrequency(note) * (1.0 + offset);
     uint16_t frequency = (uint16_t)(rawFrequency < max_freq ? rawFrequency : max_freq);
     
     // Set the pending frequency to be applied at the next cycle
