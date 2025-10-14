@@ -1,4 +1,4 @@
-idf_component_register(SRCS "main.c" "src/bm_led.c" "src/bm_button.c"
+idf_component_register(SRCS "main.c" "src/bm_led.c" "src/bm_button.c" "src/bm_cv.c"
                        PRIV_REQUIRES spi_flash
-                       REQUIRES driver
+                       REQUIRES driver esp_adc
                        INCLUDE_DIRS "" "include")
