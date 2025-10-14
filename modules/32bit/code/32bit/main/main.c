@@ -1,3 +1,7 @@
+// NOTE: We currently run the processor at 160 Mhz.
+// It seems like, it gives more stability 
+// let's run it for now and change it if we need it
+
 #include "bm_audio.h"
 #include "bm_led.h"
 #include "bm_button.h"
