@@ -19,6 +19,8 @@
 #define MAX_FREQ 500 // Maximum frequency in Hz
 #define MIN_FREQ 20  // Minimum frequency in Hz
 #define OCTAVE_DIVIDER 2 // Divider for one octave down
+#define DETUNE_OFFSET_RANGE 16 // Midi note offset for CV1 detune
+
 
 // CV control parameters
 #define CV_THRESHOLD 5 // Threshold for CV value changes (0-1023)
@@ -218,17 +220,26 @@ ISR(TCB1_INT_vect) {
 
 // Callback functions for MIDI events
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+  static float max_freq = MIDI.midiToFrequency(65);
   digitalWrite(GATE_PIN, HIGH);
   
   // Only update frequency if in MIDI control mode
   if (midControlMode) {
+        // Set frequency based on MIDI note using SimpleMIDI's midiToFrequency function
+    // Allow CV1 to detune the osscilator
+    uint16_t rawCV = analogRead(PIN_CV1);
+    float offset = 0;
+    // If the pot is all the way to the left don't add any offset
+    if(rawCV > 0) {
+      offset = map(rawCV, 0, 1023, -DETUNE_OFFSET_RANGE, DETUNE_OFFSET_RANGE);
+    }
+    
     if (note > 65) {
       return;
     }
 
-    // Set frequency based on MIDI note using SimpleMIDI's midiToFrequency function
-    float rawFrequency = MIDI.midiToFrequency(note);
-    uint16_t frequency = (uint16_t)rawFrequency;
+    float rawFrequency = MIDI.midiToFrequency(note) * (1 + offset / DETUNE_OFFSET_RANGE);
+    uint16_t frequency = (uint16_t)(rawFrequency < max_freq ? rawFrequency : max_freq);
     
     // Set the pending frequency to be applied at the next cycle
     noInterrupts();
