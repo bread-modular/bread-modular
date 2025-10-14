@@ -18,7 +18,7 @@ static void IRAM_ATTR gpio_button_handler(void* args) {
     }
 }
 
-void task_button_check(void* args) {
+inline static void task_button_check(void* args) {
     uint32_t button_num = 0;
     while(1) {
         BaseType_t received = xQueueReceive(button_queue, &button_num, portMAX_DELAY);

@@ -3,9 +3,14 @@
 #include "bm_button.h"
 #include "bm_cv.h"
 #include "esp_log.h"
+#include "esp_heap_caps.h"
+#include <string.h>
+
+static uint16_t* delay_buffer = NULL;
 
 void on_button_press() {
     ESP_LOGI("button_press", "button_changed");
+    ESP_LOGI("button_press", "delay_buffer: %d", delay_buffer != NULL);
     if (bm_is_button_pressed()) {
         bm_set_led_state(true);
     } else {
@@ -13,14 +18,17 @@ void on_button_press() {
     }
 }
 
-static void audio_loop(size_t n_samples, uint16_t* input, uint16_t* output) {
+inline static void audio_loop(size_t n_samples, uint16_t* input, uint16_t* output) {
     for (int lc=0; lc<n_samples; lc++) {
         output[lc] = input[lc];
     }
+    memcpy(delay_buffer, output, n_samples * sizeof(uint16_t));
 }
 
 void app_main(void)
 {
+    delay_buffer = heap_caps_malloc(1024 * 1024, MALLOC_CAP_SPIRAM);
+
     bm_setup_led();
 
     bm_button_config_t button_config = {

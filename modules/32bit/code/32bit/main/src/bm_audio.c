@@ -3,6 +3,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/i2s_std.h"
+#include <string.h>
 
 #define BUFF_LEN 128
 
@@ -32,6 +33,7 @@ static void audio_task(void *arg)
         if (audio_loop != NULL) {
             audio_loop(n_samples, rxbuf, txbuf);
         }
+        // memcpy(txbuf, rxbuf, n);
 
         size_t written = 0;
         ESP_ERROR_CHECK(i2s_channel_write(tx_chan, txbuf, n, &written, portMAX_DELAY));
