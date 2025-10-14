@@ -4,11 +4,13 @@
 #include "bm_cv.h"
 #include "esp_log.h"
 #include "esp_heap_caps.h"
+#include <stdint.h>
 #include <string.h>
 
 static uint16_t* delay_buffer = NULL;
+static uint16_t static_delay_buffer[1024 * 2];
 
-void on_button_press() {
+static void on_button_press() {
     ESP_LOGI("button_press", "button_changed");
     ESP_LOGI("button_press", "delay_buffer: %d", delay_buffer != NULL);
     if (bm_is_button_pressed()) {
@@ -21,8 +23,9 @@ void on_button_press() {
 inline static void audio_loop(size_t n_samples, uint16_t* input, uint16_t* output) {
     for (int lc=0; lc<n_samples; lc++) {
         output[lc] = input[lc];
+        delay_buffer[lc] = input[lc];
     }
-    memcpy(delay_buffer, output, n_samples * sizeof(uint16_t));
+    memcpy(static_delay_buffer, output, n_samples * sizeof(uint16_t));
 }
 
 void app_main(void)

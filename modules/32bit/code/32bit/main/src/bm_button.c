@@ -9,7 +9,7 @@
 QueueHandle_t button_queue;
 bm_button_trigger_callback_t callback = NULL;
 
-static void IRAM_ATTR gpio_button_handler(void* args) {
+static void gpio_button_handler(void* args) {
     uint32_t button_num = 1;
     BaseType_t higherTask;
     xQueueSendFromISR(button_queue, &button_num, &higherTask);

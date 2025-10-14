@@ -3,8 +3,9 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/i2s_std.h"
-#include <string.h>
+#include "esp_log.h"
 
+#define LOG_TAG "bm_audio"
 #define BUFF_LEN 128
 
 static i2s_chan_handle_t tx_chan = NULL;
@@ -14,6 +15,10 @@ static uint16_t rxbuf[BUFF_LEN];
 static uint16_t txbuf[BUFF_LEN];
 
 static bm_audio_loop_t audio_loop = NULL;
+
+static void default_audio_loop(size_t n_samples, uint16_t* input, uint16_t* output) {
+    memcpy(output, input, n_samples * sizeof(uint16_t));
+}
 
 static void audio_task(void *arg)
 {
@@ -30,10 +35,7 @@ static void audio_task(void *arg)
                                          &n, portMAX_DELAY));
 
         size_t n_samples = n /  sizeof(uint16_t);
-        if (audio_loop != NULL) {
-            audio_loop(n_samples, rxbuf, txbuf);
-        }
-        // memcpy(txbuf, rxbuf, n);
+        audio_loop(n_samples, rxbuf, txbuf);
 
         size_t written = 0;
         ESP_ERROR_CHECK(i2s_channel_write(tx_chan, txbuf, n, &written, portMAX_DELAY));
@@ -41,7 +43,12 @@ static void audio_task(void *arg)
 }
 
 void bm_setup_audio(bm_audio_config_t config) {
-    audio_loop = config.audio_loop;
+    if (config.audio_loop == NULL) {
+        ESP_LOGW(LOG_TAG, "No audio_loop provided. assigning default io pipe.");
+        audio_loop = default_audio_loop;
+    } else {
+        audio_loop = config.audio_loop;
+    }
 
     // 1) setup es8388 
     bm_es8388_t es = {0};
@@ -91,6 +98,8 @@ void bm_setup_audio(bm_audio_config_t config) {
     ESP_ERROR_CHECK(i2s_channel_enable(tx_chan));
     ESP_ERROR_CHECK(i2s_channel_enable(rx_chan));
 
-    // 5) Run audio loop in core 1
-    xTaskCreatePinnedToCore(audio_task, "audio_task", 4096, NULL, 5, NULL, APP_CPU_NUM);
+    // 5) Run audio loop in core 1 at the highest priority to avoid underruns
+    const UBaseType_t audio_task_priority = configMAX_PRIORITIES - 1;
+    xTaskCreatePinnedToCore(audio_task, "audio_task", 4096, NULL,
+                            audio_task_priority, NULL, APP_CPU_NUM);
 }
