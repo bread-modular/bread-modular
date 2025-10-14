@@ -8,3 +8,7 @@ extern "C" {
 
 void bm_setup_led(void);
 void bm_set_led_state(bool on);
+
+#ifdef __cplusplus
+}
+#endif

@@ -1,6 +1,4 @@
-#include "freertos/FreeRTOS.h"
-#include "freertos/projdefs.h"
-#include "freertos/task.h"
+#include "bm_audio.h"
 #include "bm_led.h"
 #include "bm_button.h"
 #include "bm_cv.h"
@@ -12,6 +10,12 @@ void on_button_press() {
         bm_set_led_state(true);
     } else {
         bm_set_led_state(false);
+    }
+}
+
+static void audio_loop(size_t n_samples, uint16_t* input, uint16_t* output) {
+    for (int lc=0; lc<n_samples; lc++) {
+        output[lc] = input[lc];
     }
 }
 
@@ -27,8 +31,9 @@ void app_main(void)
 
     bm_setup_cv();
 
-    while (1) {
-        ESP_LOGI("main", "CV1:%f \t CV2:%f \t", bm_get_cv1_norm(), bm_get_cv2_norm());
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
+    bm_audio_config_t audio_config = {
+        .sample_rate = 44100,
+        .audio_loop = audio_loop
+    };
+    bm_setup_audio(audio_config);
 }

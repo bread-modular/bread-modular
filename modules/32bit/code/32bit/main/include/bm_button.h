@@ -22,3 +22,7 @@ typedef struct {
 
 void bm_setup_button(bm_button_config_t config);
 bool bm_is_button_pressed();
+
+#ifdef __cplusplus
+}
+#endif

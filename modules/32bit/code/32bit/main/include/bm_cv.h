@@ -10,3 +10,7 @@ int bm_get_cv2();
 
 float bm_get_cv1_norm();
 float bm_get_cv2_norm();
+
+#ifdef __cplusplus
+}
+#endif
