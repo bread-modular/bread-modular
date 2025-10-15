@@ -218,17 +218,26 @@ ISR(TCB1_INT_vect) {
 
 // Callback functions for MIDI events
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+  static float max_freq = MIDI.midiToFrequency(65);
   digitalWrite(GATE_PIN, HIGH);
   
   // Only update frequency if in MIDI control mode
   if (midControlMode) {
+        // Set frequency based on MIDI note using SimpleMIDI's midiToFrequency function
+    // Allow CV1 to detune the osscilator
+    uint16_t rawCV = analogRead(PIN_CV1);
+    float offset = 0;
+    // If the pot is all the way to the left don't add any offset
+    if(rawCV > 0) {
+      offset = (float)(rawCV - 512.) / 512.0;
+    }
+    
     if (note > 65) {
       return;
     }
 
-    // Set frequency based on MIDI note using SimpleMIDI's midiToFrequency function
-    float rawFrequency = MIDI.midiToFrequency(note);
-    uint16_t frequency = (uint16_t)rawFrequency;
+    float rawFrequency = MIDI.midiToFrequency(note) * (1.0 + offset);
+    uint16_t frequency = (uint16_t)(rawFrequency < max_freq ? rawFrequency : max_freq);
     
     // Set the pending frequency to be applied at the next cycle
     noInterrupts();
