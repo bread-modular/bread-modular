@@ -17,7 +17,7 @@ extern "C" {
  * @param[in]   input           Input samples as a pointer
  * @param[in]   output          Output samples as a pointer
  */
-typedef void (*bm_audio_loop_t)(size_t n_samples, uint16_t* input, uint16_t* output);
+typedef void (*bm_audio_loop_t)(size_t n_samples, int16_t* input, int16_t* output);
 
 typedef struct {
     bm_audio_loop_t audio_loop;

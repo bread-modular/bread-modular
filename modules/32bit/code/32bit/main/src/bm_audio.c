@@ -11,13 +11,13 @@
 static i2s_chan_handle_t tx_chan = NULL;
 static i2s_chan_handle_t rx_chan = NULL;
 
-static uint16_t rxbuf[BUFF_LEN];
-static uint16_t txbuf[BUFF_LEN];
+static int16_t rxbuf[BUFF_LEN];
+static int16_t txbuf[BUFF_LEN];
 
 static bm_audio_loop_t audio_loop = NULL;
 
-static void default_audio_loop(size_t n_samples, uint16_t* input, uint16_t* output) {
-    memcpy(output, input, n_samples * sizeof(uint16_t));
+static void default_audio_loop(size_t n_samples, int16_t* input, int16_t* output) {
+    memcpy(output, input, n_samples * sizeof(int16_t));
 }
 
 static void audio_task(void *arg)
@@ -31,10 +31,10 @@ static void audio_task(void *arg)
     for (;;) {
         // Read up to BUFF_LEN * 2 bytes (16-bit samples)
         ESP_ERROR_CHECK(i2s_channel_read(rx_chan, rxbuf,
-                                         BUFF_LEN * sizeof(uint16_t),
+                                         BUFF_LEN * sizeof(int16_t),
                                          &n, portMAX_DELAY));
 
-        size_t n_samples = n /  sizeof(uint16_t);
+        size_t n_samples = n /  sizeof(int16_t);
         audio_loop(n_samples, rxbuf, txbuf);
 
         size_t written = 0;
