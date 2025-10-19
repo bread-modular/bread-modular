@@ -39,14 +39,13 @@ static void on_button_press() {
 inline static void audio_loop(size_t n_samples, int16_t* input, int16_t* output) {
     for (int lc=0; lc<n_samples; lc += 2) {
         
-        delay_samples += (target_delay_samples - delay_samples) * 0.001f;
+        delay_samples += (target_delay_samples - delay_samples) * 0.0001f;
         
-        int16_t curr = input[lc];
-        int16_t prev = bm_ring_buffer_lookup(&buffer, delay_samples);
-        int32_t next = ((1 - feedback) * curr) + (feedback * prev);
+        float curr = bm_audio_norm(input[lc]);
+        float prev = bm_audio_norm(bm_ring_buffer_lookup(&buffer, delay_samples));
+        float next = ((1 - feedback) * curr) + (feedback * prev);
 
-        output[lc] = bm_audio_clamp(next);
-        // output[lc] = input[lc];
+        output[lc] = bm_audio_denorm(next);
 
         // buffering
         bm_ring_buffer_add(&buffer, output[lc]);
