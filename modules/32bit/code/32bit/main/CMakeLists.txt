@@ -1,4 +1,18 @@
-idf_component_register(SRCS "main.c" "src/bm_led.c" "src/bm_button.c" "src/bm_cv.c" "src/bm_es8388.c" "src/bm_audio.c"
-                       PRIV_REQUIRES spi_flash
-                       REQUIRES driver esp_adc
-                       INCLUDE_DIRS "" "include")
+idf_component_register(
+    SRCS
+        "main.c"
+        "src/bm_led.c"
+        "src/bm_button.c"
+        "src/bm_cv.c"
+        "src/bm_es8388.c"
+        "src/bm_audio.c"
+        "src/lib/bm_buffer.c"
+    PRIV_REQUIRES
+        spi_flash
+    REQUIRES
+        driver
+        esp_adc
+    INCLUDE_DIRS
+        ""
+        "include"
+)

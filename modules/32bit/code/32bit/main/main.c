@@ -2,24 +2,22 @@
 // It seems like, it gives more stability 
 // let's run it for now and change it if we need it
 
+#include "freertos/idf_additions.h"
+#include "freertos/projdefs.h"
+#include <stdint.h>
+#include <math.h>
 #include "bm_audio.h"
 #include "bm_led.h"
 #include "bm_button.h"
 #include "bm_cv.h"
+#include "lib/bm_buffer.h"
 #include "esp_log.h"
-#include "esp_heap_caps.h"
-#include "freertos/idf_additions.h"
-#include "freertos/projdefs.h"
-#include <stdint.h>
-#include <string.h>
-#include <math.h>
-#include <sys/cdefs.h>
 
 #define SAMPLE_BUFFER_LEN 44100 // 1 sec
 
 float feedback = 0.0;
 int16_t sample_buffer[SAMPLE_BUFFER_LEN];
-size_t next_buffer_index = 0;
+bm_ring_buffer_handler buffer;
 
 // even though, we don't go minus range, we do some smoothing 
 // so, (target_delay_samples - delay_samples) can go negative.
@@ -43,10 +41,7 @@ inline static void audio_loop(size_t n_samples, int16_t* input, int16_t* output)
 
         delay_samples += (target_delay_samples - delay_samples) * 0.001f;
 
-        int32_t prev_buffer_index = next_buffer_index - delay_samples;
-        prev_buffer_index = prev_buffer_index < 0 ? SAMPLE_BUFFER_LEN + prev_buffer_index: prev_buffer_index;
-        int16_t prev = sample_buffer[prev_buffer_index];
-        
+        int16_t prev = bm_ring_buffer_lookup(&buffer, delay_samples); 
         int32_t next = ((1 - feedback) * curr) + (feedback * prev);
 
         // clamping
@@ -56,8 +51,7 @@ inline static void audio_loop(size_t n_samples, int16_t* input, int16_t* output)
         output[lc] = (int16_t)next;
 
         // buffering
-        sample_buffer[next_buffer_index] = (int16_t)next;
-        next_buffer_index = (next_buffer_index + 1) % SAMPLE_BUFFER_LEN;
+        bm_ring_buffer_add(&buffer, output[lc]);
     }
 }
 
@@ -78,6 +72,12 @@ void app_main(void)
         .audio_loop = audio_loop
     };
     bm_setup_audio(audio_config);
+
+    bm_ring_buffer_config buffer_confg = {
+        .data = sample_buffer,
+        .size = SAMPLE_BUFFER_LEN
+    };
+    bm_init_ring_buffer(buffer_confg, &buffer);
 
     while (1) {
         feedback = fmin(bm_get_cv1_norm(), 0.99f);
