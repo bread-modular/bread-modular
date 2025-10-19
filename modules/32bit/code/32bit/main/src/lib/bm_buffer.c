@@ -12,10 +12,8 @@ void bm_ring_buffer_add(bm_ring_buffer_handler *handler, int16_t value) {
 }
 
 int16_t bm_ring_buffer_lookup(bm_ring_buffer_handler *handler, size_t history) {
-    int prev_buffer_index = handler->write_index - history;
-    if (prev_buffer_index < 0) {
-        prev_buffer_index = handler->size + prev_buffer_index;
-    }
+    size_t offset = history % handler->size;
+    size_t index = (handler->write_index + handler->size - offset) % handler->size;
 
-    return handler->data[prev_buffer_index];
+    return handler->data[index];
 }
