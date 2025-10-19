@@ -11,6 +11,7 @@
 #include "bm_button.h"
 #include "bm_cv.h"
 #include "lib/bm_buffer.h"
+#include "lib/bm_utils.h"
 #include "esp_log.h"
 
 #define SAMPLE_BUFFER_LEN 44100 // 1 sec
@@ -23,8 +24,8 @@ bm_ring_buffer_handler buffer;
 // so, (target_delay_samples - delay_samples) can go negative.
 // that's why we need signed ints otherwise, -1 becomes the largest int value
 // then array will go out of index.
-int target_delay_samples = 1;
-int delay_samples = 1;
+float target_delay_samples = 1;
+float delay_samples = 1;
 
 static void on_button_press() {
     ESP_LOGI("button_press", "button_changed");
@@ -37,18 +38,15 @@ static void on_button_press() {
 
 inline static void audio_loop(size_t n_samples, int16_t* input, int16_t* output) {
     for (int lc=0; lc<n_samples; lc += 2) {
-        int16_t curr = input[lc];
-
+        
         delay_samples += (target_delay_samples - delay_samples) * 0.001f;
-
-        int16_t prev = bm_ring_buffer_lookup(&buffer, delay_samples); 
+        
+        int16_t curr = input[lc];
+        int16_t prev = bm_ring_buffer_lookup(&buffer, delay_samples);
         int32_t next = ((1 - feedback) * curr) + (feedback * prev);
 
-        // clamping
-        next = next >  INT16_MAX? INT16_MAX : next;
-        next = next < INT16_MIN? INT16_MIN : next;
-
-        output[lc] = (int16_t)next;
+        output[lc] = bm_audio_clamp(next);
+        // output[lc] = input[lc];
 
         // buffering
         bm_ring_buffer_add(&buffer, output[lc]);
@@ -83,7 +81,7 @@ void app_main(void)
         feedback = fmin(bm_get_cv1_norm(), 0.99f);
         target_delay_samples = (bm_get_cv2_norm() * (SAMPLE_BUFFER_LEN - 1));
         target_delay_samples = target_delay_samples == 0? 1 : target_delay_samples;
-        ESP_LOGI("main", "feedback:%f, delay_samples:%d", feedback, delay_samples);
+        ESP_LOGI("main", "feedback:%f, delay_samples:%f", feedback, delay_samples);
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
