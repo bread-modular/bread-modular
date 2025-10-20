@@ -68,8 +68,8 @@ void bm_setup_audio(bm_audio_config_t config) {
 
     // 2 Allocate a full-duplex pair on I2S0 as master
     i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(I2S_NUM_0, I2S_ROLE_MASTER);
-    chan_cfg.dma_desc_num  = 2;     // e.g. 6–12 descriptors
-    chan_cfg.dma_frame_num = 1023;
+    chan_cfg.dma_desc_num  = 2; 
+    chan_cfg.dma_frame_num = 1023; 
     ESP_ERROR_CHECK(i2s_new_channel(&chan_cfg, &tx_chan, &rx_chan));  // full-duplex pair
     // (You could pass NULL for one side to do simplex.)
 
