@@ -22,6 +22,7 @@ int16_t sample_buffer[SAMPLE_BUFFER_LEN];
 bm_ring_buffer_handler buffer;
 
 bm_param mix;
+bm_param feedback;
 bm_param delay_samples;
 
 static void on_button_press() {
@@ -29,11 +30,19 @@ static void on_button_press() {
 }
 
 static void on_midi_cc_change(uint8_t channel, uint8_t control, uint8_t value) {
-    if (control == 20) {
-        bm_param_set(&delay_samples, ((float)value / 127.0) * SAMPLE_BUFFER_LEN);
+    if (control == BM_MCC_BANK_A_CV1) {
+        float param_value = ((float)value / 127.0) * SAMPLE_BUFFER_LEN;
+        param_value = fmax(param_value, 1.0f);
+        bm_param_set(&delay_samples, param_value);
+        return;
     }
 
-    if (control == 22) {
+    if (control == BM_MCC_BANK_A_CV2) {
+        bm_param_set(&feedback, (float)value / 127.0);
+        return;
+    }
+
+    if (control == BM_MCC_BANK_A_CV3) {
         bm_param_set(&mix, (float)value / 127.0);
         return;
     }
@@ -46,15 +55,18 @@ static void on_midi_bpm(uint16_t bpm) {
 inline static void audio_loop(size_t n_samples, int16_t* input, int16_t* output) {
     for (int lc=0; lc<n_samples; lc += 2) {    
         float curr = bm_audio_norm(input[lc]);
-        float prev = bm_audio_norm(bm_ring_buffer_lookup(&buffer, bm_param_get(&delay_samples)));
+        float delayed = bm_audio_norm(bm_ring_buffer_lookup(&buffer, bm_param_get(&delay_samples)));
 
         float mix_value = bm_param_get(&mix);
-        float next = ((1 - mix_value) * curr) + (mix_value * prev);
+        float feedback_value = bm_param_get(&feedback);
+ 
+        float next = ((1 - mix_value) * curr) + (mix_value * delayed);
 
         output[lc] = bm_audio_denorm(next);
 
         // buffering
-        bm_ring_buffer_add(&buffer, input[lc]);
+        int16_t next_delayed = bm_audio_denorm(curr + delayed * feedback_value);
+        bm_ring_buffer_add(&buffer, next_delayed);
     }
 }
 
@@ -77,6 +89,7 @@ void app_main(void)
 
     // setup state
     bm_param_init(&delay_samples, 0.0001f);
+    bm_param_init(&feedback, 0.01f);
     bm_param_init(&mix, 0.1f);
 
     bm_ring_buffer_config buffer_confg = {

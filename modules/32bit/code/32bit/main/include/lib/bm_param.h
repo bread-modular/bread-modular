@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-#define BM_PARAM_NO_SMOOTHING 0
+#define BM_PARAM_NO_SMOOTHING 0.0
 
 typedef struct {
     float value;

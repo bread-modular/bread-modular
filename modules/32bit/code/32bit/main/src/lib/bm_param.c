@@ -8,11 +8,14 @@ void bm_param_init(bm_param* param, float smoothing_factor) {
 
 void bm_param_set(bm_param *param, float target_value) {
     param->target_value = target_value;
+    if (param->smoothing_factor == BM_PARAM_NO_SMOOTHING) {
+        param->value = target_value;
+    }
 }
 
 float bm_param_get(bm_param *param) {
     if (param->smoothing_factor == BM_PARAM_NO_SMOOTHING) {
-        return param->target_value;
+        return param->value;
     }
 
     param->value += (param->target_value - param->value) * param->smoothing_factor;
