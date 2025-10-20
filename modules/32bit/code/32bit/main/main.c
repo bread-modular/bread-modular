@@ -43,6 +43,14 @@ static void on_midi_cc_change(uint8_t channel, uint8_t control, uint8_t value) {
     ESP_LOGI("midi", "cc_change: ch=%u control=%u value=%u", channel, control, value);
 }
 
+static void on_midi_realtime(uint8_t message) {
+    ESP_LOGI("midi", "realtime: 0x%02X", message);
+}
+
+static void on_midi_bpm(uint16_t bpm) {
+    ESP_LOGI("midi", "bpm: %u", bpm);
+}
+
 inline static void audio_loop(size_t n_samples, int16_t* input, int16_t* output) {
     for (int lc=0; lc<n_samples; lc += 2) {
         
@@ -85,7 +93,9 @@ void app_main(void)
     bm_midi_config_t midi_config = {
         .note_on = on_midi_note_on,
         .note_off = on_midi_note_off,
-        .cc_change = on_midi_cc_change
+        .cc_change = on_midi_cc_change,
+        // .realtime = on_midi_realtime,
+        .bpm = on_midi_bpm
     };
     bm_setup_midi(midi_config);
 
