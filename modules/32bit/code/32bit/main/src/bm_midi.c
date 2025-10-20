@@ -237,11 +237,11 @@ static void bm_midi_task(void *args) {
 void bm_setup_midi(bm_midi_config_t config) {
     static bool task_created = false;
 
-    note_on_callback = config.note_on;
-    note_off_callback = config.note_off;
-    cc_change_callback = config.cc_change;
-    realtime_callback = config.realtime;
-    bpm_callback = config.bpm;
+    note_on_callback = config.on_note_on;
+    note_off_callback = config.on_note_off;
+    cc_change_callback = config.on_cc_change;
+    realtime_callback = config.on_realtime;
+    bpm_callback = config.on_bpm;
     bpm_calc_enabled = (bpm_callback != NULL);
     bm_midi_reset_bpm_state();
 

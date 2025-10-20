@@ -91,11 +91,10 @@ void app_main(void)
     bm_init_ring_buffer(buffer_confg, &buffer);
 
     bm_midi_config_t midi_config = {
-        .note_on = on_midi_note_on,
-        .note_off = on_midi_note_off,
-        .cc_change = on_midi_cc_change,
-        // .realtime = on_midi_realtime,
-        .bpm = on_midi_bpm
+        .on_note_on = on_midi_note_on,
+        .on_note_off = on_midi_note_off,
+        .on_cc_change = on_midi_cc_change,
+        .on_bpm = on_midi_bpm
     };
     bm_setup_midi(midi_config);
 
