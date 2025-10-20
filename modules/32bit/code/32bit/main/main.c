@@ -16,7 +16,7 @@
 
 #define SAMPLE_BUFFER_LEN 44100 // 1 sec
 
-float feedback = 0.0;
+float mix = 0.0;
 int16_t sample_buffer[SAMPLE_BUFFER_LEN];
 bm_ring_buffer_handler buffer;
 
@@ -43,12 +43,13 @@ inline static void audio_loop(size_t n_samples, int16_t* input, int16_t* output)
         
         float curr = bm_audio_norm(input[lc]);
         float prev = bm_audio_norm(bm_ring_buffer_lookup(&buffer, delay_samples));
-        float next = ((1 - feedback) * curr) + (feedback * prev);
+
+        float next = ((1 - mix) * curr) + (mix * prev);
 
         output[lc] = bm_audio_denorm(next);
 
         // buffering
-        bm_ring_buffer_add(&buffer, output[lc]);
+        bm_ring_buffer_add(&buffer, input[lc]);
     }
 }
 
@@ -77,10 +78,10 @@ void app_main(void)
     bm_init_ring_buffer(buffer_confg, &buffer);
 
     while (1) {
-        feedback = fmin(bm_get_cv1_norm(), 0.99f);
+        mix = fmin(bm_get_cv1_norm(), 0.99f);
         target_delay_samples = (bm_get_cv2_norm() * (SAMPLE_BUFFER_LEN - 1));
         target_delay_samples = target_delay_samples == 0? 1 : target_delay_samples;
-        ESP_LOGI("main", "feedback:%f, delay_samples:%f", feedback, delay_samples);
+        // ESP_LOGI("main", "mix:%f, delay_samples:%f", mix, delay_samples);
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
