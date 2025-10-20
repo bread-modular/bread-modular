@@ -9,6 +9,7 @@ idf_component_register(
         "src/bm_midi.c"
         "src/lib/bm_buffer.c"
         "src/lib/bm_utils.c"
+        "src/lib/bm_param.c"
     PRIV_REQUIRES
         spi_flash
     REQUIRES
