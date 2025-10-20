@@ -6,6 +6,7 @@ idf_component_register(
         "src/bm_cv.c"
         "src/bm_es8388.c"
         "src/bm_audio.c"
+        "src/bm_midi.c"
         "src/lib/bm_buffer.c"
         "src/lib/bm_utils.c"
     PRIV_REQUIRES
