@@ -14,10 +14,11 @@
 #include "lib/bm_param.h"
 #include "esp_log.h"
 
-#define SAMPLE_BUFFER_LEN 44100 // 1 sec
+#define MAX_BUFFER_LEN 88200 // 2 sec
 
 int16_t* sample_buffer;
 bm_ring_buffer_handler buffer;
+float delay_range_in_samples;
 
 bm_param mix;
 bm_param feedback;
@@ -29,8 +30,9 @@ static void on_button_press() {
 
 static void on_midi_cc_change(uint8_t channel, uint8_t control, uint8_t value) {
     if (control == BM_MCC_BANK_A_CV1) {
-        float param_value = ((float)value / 127.0) * SAMPLE_BUFFER_LEN;
+        float param_value = ((float)value / 127.0) * delay_range_in_samples;
         param_value = fmax(param_value, 1.0f);
+        param_value = fmin(param_value, MAX_BUFFER_LEN);
         bm_param_set(&delay_samples, param_value);
         return;
     }
@@ -47,7 +49,11 @@ static void on_midi_cc_change(uint8_t channel, uint8_t control, uint8_t value) {
 }
 
 static void on_midi_bpm(uint16_t bpm) {
-    ESP_LOGI("midi", "bpm: %u", bpm);
+    float beats_per_sec = (float)bpm / 60.0f;
+    float samples_per_beat = 44100.0 / beats_per_sec;
+    delay_range_in_samples = samples_per_beat;
+
+    ESP_LOGI("midi", "bpm: %u, bps: %f, sb: %f, final:%f", bpm, beats_per_sec, samples_per_beat, delay_range_in_samples);
 }
 
 inline static void audio_loop(size_t n_samples, int16_t* input, int16_t* output) {
@@ -86,14 +92,16 @@ void app_main(void)
     bm_setup_midi(midi_config);
 
     // setup state
-    sample_buffer = (int16_t*) malloc_psram(SAMPLE_BUFFER_LEN * sizeof(int16_t));
+    sample_buffer = (int16_t*) malloc_psram(MAX_BUFFER_LEN * sizeof(int16_t));
+    // initialize the delay_range with the 120 BPM
+    on_midi_bpm(120);
     bm_param_init(&delay_samples, 0.0001f);
     bm_param_init(&feedback, 0.01f);
     bm_param_init(&mix, 0.1f);
 
     bm_ring_buffer_config buffer_confg = {
         .data = sample_buffer,
-        .size = SAMPLE_BUFFER_LEN
+        .size = MAX_BUFFER_LEN
     };
     bm_init_ring_buffer(buffer_confg, &buffer);
 
