@@ -101,6 +101,7 @@ void app_main(void)
     // setup audio
     bm_audio_config_t audio_config = {
         .sample_rate = 44100,
+        .buffer_size = 512,
         .audio_loop = audio_loop
     };
     bm_setup_audio(audio_config);

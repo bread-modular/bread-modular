@@ -22,6 +22,7 @@ typedef void (*bm_audio_loop_t)(size_t n_samples, int16_t* input, int16_t* outpu
 typedef struct {
     bm_audio_loop_t audio_loop;
     size_t sample_rate;
+    size_t buffer_size;
 } bm_audio_config_t;
 
 void bm_setup_audio(bm_audio_config_t config);
