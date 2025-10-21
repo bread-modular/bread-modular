@@ -1,5 +1,6 @@
-#include "lib/bm_utils.h"
 #include <math.h>
+#include "lib/bm_utils.h"
+#include "esp_heap_caps.h"
 
 int16_t bm_audio_clamp(int32_t value) {
     value = value >  INT16_MAX? INT16_MAX : value;
@@ -18,4 +19,12 @@ int16_t bm_audio_denorm(float value) {
     if (temp > INT16_MAX) temp = INT16_MAX;
     if (temp < INT16_MIN) temp = INT16_MIN;
     return (int16_t)temp;
+}
+
+void* malloc_psram(size_t size) {
+    return heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+}
+
+void free_psram(void *ptr) {
+    heap_caps_free(ptr);
 }

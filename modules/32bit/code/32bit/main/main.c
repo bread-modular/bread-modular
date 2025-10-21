@@ -2,8 +2,6 @@
 // It seems like, it gives more stability 
 // let's run it for now and change it if we need it
 
-#include "freertos/idf_additions.h"
-#include "freertos/projdefs.h"
 #include <stdint.h>
 #include <math.h>
 #include "bm_audio.h"
@@ -18,7 +16,7 @@
 
 #define SAMPLE_BUFFER_LEN 44100 // 1 sec
 
-int16_t sample_buffer[SAMPLE_BUFFER_LEN];
+int16_t* sample_buffer;
 bm_ring_buffer_handler buffer;
 
 bm_param mix;
@@ -88,6 +86,7 @@ void app_main(void)
     bm_setup_midi(midi_config);
 
     // setup state
+    sample_buffer = (int16_t*) malloc_psram(SAMPLE_BUFFER_LEN * sizeof(int16_t));
     bm_param_init(&delay_samples, 0.0001f);
     bm_param_init(&feedback, 0.01f);
     bm_param_init(&mix, 0.1f);
