@@ -25,6 +25,10 @@ typedef struct {
     size_t buffer_size;
 } bm_audio_config_t;
 
+extern size_t bm_audio_current_sample_rate;
+
+#define bmMS_TO_SAMPLES(ms) ((size_t)(((ms) * bm_audio_current_sample_rate) / 1000.0f))
+
 void bm_setup_audio(bm_audio_config_t config);
 
 #ifdef __cplusplus

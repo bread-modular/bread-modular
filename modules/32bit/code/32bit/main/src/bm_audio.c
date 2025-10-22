@@ -1,6 +1,7 @@
 #include "bm_audio.h"
 #include "bm_es8388.h"
 #include "freertos/FreeRTOS.h"
+#include "freertos/projdefs.h"
 #include "freertos/task.h"
 #include "driver/i2s_std.h"
 #include "esp_log.h"
@@ -15,6 +16,7 @@ static int16_t rxbuf[BUFF_LEN];
 static int16_t txbuf[BUFF_LEN];
 
 static bm_audio_loop_t audio_loop = NULL;
+size_t bm_audio_current_sample_rate = 44100;
 
 static void default_audio_loop(size_t n_samples, int16_t* input, int16_t* output) {
     memcpy(output, input, n_samples * sizeof(int16_t));
@@ -49,6 +51,8 @@ void bm_setup_audio(bm_audio_config_t config) {
     } else {
         audio_loop = config.audio_loop;
     }
+
+    bm_audio_current_sample_rate = config.sample_rate;
 
     // 1) setup es8388 
     bm_es8388_t es = {0};

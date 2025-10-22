@@ -14,8 +14,8 @@
 #include "lib/bm_param.h"
 #include "esp_log.h"
 
-#define MAX_BUFFER_LEN_LEFT (44100 * 2) // 2 sec
-#define MAX_BUFFER_LEN_RIGHT (44100 * 0.1) // 100 ms
+#define MAX_BUFFER_LEN_LEFT bmMS_TO_SAMPLES(2000)
+#define MAX_BUFFER_LEN_RIGHT bmMS_TO_SAMPLES(125)
 
 typedef struct {
     int16_t* data;
@@ -60,15 +60,16 @@ static void on_midi_cc_change(uint8_t channel, uint8_t control, uint8_t value) {
 
     // for right channel
     if (control == BM_MCC_BANK_A_CV3) {
-        float param_value = ((float)value / 127.0) * delay_right.delay_range_in_samples;
-        param_value = fmax(param_value, 1.0f);
-        param_value = fmin(param_value, MAX_BUFFER_LEN_RIGHT - 1);
-        bm_param_set(&delay_right.delay_samples, param_value);
+        float cc_norm = (float)value / 127.0f;
+        float delay_samples = bm_utils_map_range(cc_norm, 0.0, 1.0, bmMS_TO_SAMPLES(1), MAX_BUFFER_LEN_RIGHT -1);
+        bm_param_set(&delay_right.delay_samples, delay_samples);
         return;
     }
 
     if (control == BM_MCC_BANK_A_CV4) {
-        bm_param_set(&delay_right.feedback, (float)value / 127.0);
+        float cc_norm = (float)value / 127.0f;
+        float feedback = 0.5 + cc_norm * 0.5;
+        bm_param_set(&delay_right.feedback, feedback);
         return;
     }
 }
