@@ -31,7 +31,16 @@ delay_handler_t delay_left;
 delay_handler_t delay_right;
 
 static void on_button_press() {
-    bm_set_led_state(bm_is_button_pressed());
+    // Add the bypass option when the MODE button is pressed
+    if (bm_is_button_pressed()) {
+        bm_set_led_state(true);
+        bm_param_set(&delay_left.mix, 0.0);
+        bm_param_set(&delay_right.mix, 0.0);
+    } else {
+        bm_set_led_state(false);
+        bm_param_set(&delay_left.mix, 1.0);
+        bm_param_set(&delay_right.mix, 1.0);
+    }
 }
 
 static void on_midi_cc_change(uint8_t channel, uint8_t control, uint8_t value) {
