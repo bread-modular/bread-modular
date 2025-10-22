@@ -78,7 +78,7 @@ static void on_midi_bpm(uint16_t bpm) {
     // for the left channel
     float beats_per_sec = (float)bpm / 60.0f;
     float samples_per_beat = 44100.0 / beats_per_sec;
-    delay_left.delay_range_in_samples = samples_per_beat;
+    delay_left.delay_range_in_samples = samples_per_beat * 0.5; //1/2 a beat range
 
     // for the right channel (it's not BPM native)
     delay_right.delay_range_in_samples = MAX_BUFFER_LEN_RIGHT;
