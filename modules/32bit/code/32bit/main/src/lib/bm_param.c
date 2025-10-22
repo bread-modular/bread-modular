@@ -1,8 +1,8 @@
 #include "lib/bm_param.h"
 
-void bm_param_init(bm_param* param, float smoothing_factor) {
-    param->value = 0.0;
-    param->target_value = 0.0;
+void bm_param_init(bm_param* param, float default_value, float smoothing_factor) {
+    param->value = default_value;
+    param->target_value = default_value;
     param->smoothing_factor = smoothing_factor;
 }
 

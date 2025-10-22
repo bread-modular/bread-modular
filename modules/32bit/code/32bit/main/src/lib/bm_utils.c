@@ -21,8 +21,8 @@ int16_t bm_audio_denorm(float value) {
     return (int16_t)temp;
 }
 
-void* malloc_psram(size_t size) {
-    return heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+void* allocate_psram(size_t size) {
+    return heap_caps_calloc(1, size, MALLOC_CAP_SPIRAM);
 }
 
 void free_psram(void *ptr) {
