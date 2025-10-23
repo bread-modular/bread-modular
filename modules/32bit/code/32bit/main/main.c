@@ -15,7 +15,7 @@
 #include "esp_log.h"
 
 #define MAX_BUFFER_LEN_LEFT bmMS_TO_SAMPLES(2000)
-#define MAX_BUFFER_LEN_RIGHT bmMS_TO_SAMPLES(125)
+#define MAX_BUFFER_LEN_RIGHT bmMS_TO_SAMPLES(50)
 
 typedef struct {
     int16_t* data;
