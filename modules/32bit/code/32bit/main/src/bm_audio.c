@@ -18,7 +18,7 @@ static int16_t txbuf[BUFF_LEN];
 static bm_audio_loop_t audio_loop = NULL;
 size_t bm_audio_current_sample_rate = 44100;
 
-static void default_audio_loop(size_t n_samples, int16_t* input, int16_t* output) {
+static void default_audio_loop(size_t n_samples, const int16_t* input, int16_t* output) {
     memcpy(output, input, n_samples * sizeof(int16_t));
 }
 
