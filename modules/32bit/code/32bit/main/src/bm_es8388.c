@@ -163,8 +163,13 @@ esp_err_t bm_es8388_input_select(bm_es8388_t *es, insel_t sel) {
 
 esp_err_t bm_es8388_dac_mute(bm_es8388_t *es, bool mute) {
   uint8_t reg = 0;
-  if (bm_es8388_read_reg(es, ES8388_ADCCONTROL1, &reg) != ESP_OK) return ESP_FAIL;
-  return bm_es8388_write_reg(es, ES8388_DACCONTROL3, mute ? (reg | 0x04) : (reg & ~(0x04)));
+  if (bm_es8388_read_reg(es, ES8388_DACCONTROL3, &reg) != ESP_OK) return ESP_FAIL;
+  if (mute) {
+    reg |= 0x04;
+  } else {
+    reg &= ~(0x04);
+  }
+  return bm_es8388_write_reg(es, ES8388_DACCONTROL3, reg);
 }
 
 esp_err_t bm_es8388_set_output_volume(bm_es8388_t *es, uint8_t vol) {

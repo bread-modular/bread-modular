@@ -10,8 +10,12 @@ QueueHandle_t button_queue;
 bm_button_trigger_callback_t callback = NULL;
 
 static void gpio_button_handler(void* args) {
+    if (button_queue == NULL) {
+        return;
+    }
+
     uint32_t button_num = 1;
-    BaseType_t higherTask;
+    BaseType_t higherTask = pdFALSE;
     xQueueSendFromISR(button_queue, &button_num, &higherTask);
     if (higherTask == pdTRUE) {
         portYIELD_FROM_ISR();
@@ -52,12 +56,15 @@ void bm_setup_button(bm_button_config_t config) {
     gpio_config(&button_config);
 
     if (config.trigger_mode != BM_BUTTON_TRIGGER_DISABLED) {
-        gpio_install_isr_service(0);
-        gpio_isr_handler_add(BUTTON_PIN, gpio_button_handler, NULL);
-    
-        button_queue = xQueueCreate(10, sizeof(uint32_t));
+        if (button_queue == NULL) {
+            button_queue = xQueueCreate(10, sizeof(uint32_t));
+        }
+
         if (button_queue != NULL) {
-            // We need to attach this to the main loop() core and 
+            gpio_install_isr_service(0);
+            gpio_isr_handler_add(BUTTON_PIN, gpio_button_handler, NULL);
+
+            // We need to attach this to the main loop() core and
             // keep the other core FREE for the audio_loop
             BaseType_t core_id = xPortGetCoreID();
 
