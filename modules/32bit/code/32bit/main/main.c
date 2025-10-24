@@ -42,8 +42,8 @@ static void on_button_press() {
 void app_main(void)
 {
     // 0. load the app
-    // current_app = bm_load_app_fxrack();
-    current_app = bm_load_app_reverb();
+    current_app = bm_load_app_fxrack();
+    // current_app = bm_load_app_reverb();
 
     // 1. setup IO
     bm_button_config_t button_config = {

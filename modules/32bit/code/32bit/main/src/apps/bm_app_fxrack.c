@@ -12,7 +12,7 @@
 #define MAX_BUFFER_LEN_RIGHT bmMS_TO_SAMPLES(50)
 
 typedef struct {
-    int16_t* data;
+    float* data;
     bm_ring_buffer_handler_t buffer;
     float delay_range_in_samples;
 
@@ -86,7 +86,7 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
     for (int lc=0; lc<n_samples; lc += 2) {
         // 1. for the left channel
         float curr = bm_audio_norm(input[lc]);
-        float delayed = bm_audio_norm(bm_ring_buffer_lookup(&delay_left.buffer, bm_param_get(&delay_left.delay_samples)));
+        float delayed = bm_ring_buffer_lookup(&delay_left.buffer, bm_param_get(&delay_left.delay_samples));
 
         float mix_value = bm_param_get(&delay_left.mix);
         float feedback_value = bm_param_get(&delay_left.feedback);
@@ -95,12 +95,12 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
         output[lc] = bm_audio_denorm(next);
 
         // buffering
-        int16_t next_delayed = bm_audio_denorm(curr + delayed * feedback_value);
+        float next_delayed = curr + delayed * feedback_value;
         bm_ring_buffer_add(&delay_left.buffer, next_delayed);
 
         // 2. for the right channel
         curr = bm_audio_norm(input[lc + 1]);
-        delayed = bm_audio_norm(bm_ring_buffer_lookup(&delay_right.buffer, bm_param_get(&delay_right.delay_samples)));
+        delayed = bm_ring_buffer_lookup(&delay_right.buffer, bm_param_get(&delay_right.delay_samples));
 
         mix_value = bm_param_get(&delay_right.mix);
         feedback_value = bm_param_get(&delay_right.feedback);
@@ -109,7 +109,7 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
         output[lc + 1] = bm_audio_denorm(next);
 
         // buffering
-        next_delayed = bm_audio_denorm(curr + delayed * feedback_value);
+        next_delayed = curr + delayed * feedback_value;
         bm_ring_buffer_add(&delay_right.buffer, next_delayed);
     }
 }
@@ -117,7 +117,7 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
 static void init(bm_app_host_t host) {
     sample_rate = host.sample_rate;
 
-    delay_left.data = (int16_t*) allocate_psram(MAX_BUFFER_LEN_LEFT * sizeof(int16_t));
+    delay_left.data = (float*) allocate_psram(MAX_BUFFER_LEN_LEFT * sizeof(float));
     bm_param_init(&delay_left.delay_samples, 1.0, 0.0001f);
     bm_param_init(&delay_left.feedback, 0.0, 0.01f);
     bm_param_init(&delay_left.mix, 1.0, BM_PARAM_NO_SMOOTHING);
@@ -129,7 +129,7 @@ static void init(bm_app_host_t host) {
     bm_init_ring_buffer(buffer_confg_left, &delay_left.buffer);
     
     // 3. setup state for the right channel
-    delay_right.data = (int16_t*) allocate_psram(MAX_BUFFER_LEN_RIGHT * sizeof(int16_t));
+    delay_right.data = (float*) allocate_psram(MAX_BUFFER_LEN_RIGHT * sizeof(float));
     bm_param_init(&delay_right.delay_samples, 1.0, 0.0001f);
     bm_param_init(&delay_right.feedback, 0.0, 0.01f);
     bm_param_init(&delay_right.mix, 1.0, BM_PARAM_NO_SMOOTHING);

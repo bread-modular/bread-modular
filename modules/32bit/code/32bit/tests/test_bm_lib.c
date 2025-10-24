@@ -8,7 +8,7 @@
 #include "lib/bm_utils.h"
 
 static void test_ring_buffer_initialization(void) {
-    int16_t storage[4] = {0};
+    float storage[4] = {0};
     bm_ring_buffer_handler_t handler = {0};
     bm_ring_buffer_config_t config = {
         .data = storage,
@@ -23,7 +23,7 @@ static void test_ring_buffer_initialization(void) {
 }
 
 static void test_ring_buffer_add_and_lookup(void) {
-    int16_t storage[4] = {0};
+    float storage[4] = {0};
     bm_ring_buffer_handler_t handler = {0};
     bm_ring_buffer_config_t config = {
         .data = storage,
@@ -33,7 +33,7 @@ static void test_ring_buffer_add_and_lookup(void) {
     bm_init_ring_buffer(config, &handler);
 
     for (int i = 0; i < 6; ++i) {
-        bm_ring_buffer_add(&handler, (int16_t)((i + 1) * 10));
+        bm_ring_buffer_add(&handler, (float)((i + 1) * 10));
     }
 
     assert(handler.write_index == 2);
