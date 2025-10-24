@@ -17,13 +17,15 @@
 // 7. Add two knob configuration to this, pre-delay & decay/room size
 
 #define DATA_SIZE 100
-int16_t* data = NULL;
+float* data = NULL;
 int delay_index = 0;
 bm_param delay_max_len;
 float feedback = 0.7;
 
+bool bypassed = false;
+
 static void on_button_event(bool pressed) {
-   
+   bypassed = pressed;
 }
 
 static void on_midi_note_on(uint8_t channel, uint8_t control, uint8_t value) {
@@ -54,21 +56,27 @@ static void on_midi_bpm(uint16_t bpm) {
 
 inline static void process_audio(size_t n_samples, const int16_t* input, int16_t* output) {
     for (int lc=0; lc<n_samples; lc += 2) {
+        if (bypassed) {
+            output[lc] = input[lc];
+            output[lc+1] = input[lc+1];
+            continue;
+        }
+
         // 1. for the left channel
         float curr = bm_audio_norm(input[lc]);
-        float delayed = bm_audio_norm(data[delay_index]);
-        float next = curr + delayed;
+        float delayed = data[delay_index];
+        float next = curr + delayed * feedback;
 
-        data[delay_index] = bm_audio_denorm(curr + (next * feedback));
+        data[delay_index] = next;
         delay_index = (delay_index + 1) % (int)bm_param_get(&delay_max_len);
 
-        output[lc] = bm_audio_denorm(next);
+        output[lc] = bm_audio_denorm(delayed);
     }
 }
 
 static void init(bm_app_host_t host) {
     bm_param_init(&delay_max_len, DATA_SIZE, 0.001);
-    data = calloc(DATA_SIZE, sizeof(int16_t));
+    data = calloc(DATA_SIZE, sizeof(float));
 }
 
 static void destroy() {
