@@ -11,6 +11,7 @@ idf_component_register(
         "src/lib/bm_utils.c"
         "src/lib/bm_param.c"
         "src/apps/bm_app_fxrack.c"
+        "src/apps/bm_app_reverb.c"
     PRIV_REQUIRES
         spi_flash
     REQUIRES
