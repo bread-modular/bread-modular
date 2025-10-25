@@ -8,19 +8,21 @@
 #include <stdlib.h>
 
 // Tasks for Reverbs
-// 1. Build the Comb Filter
-// 2. Test with wheather we need configurable history or not
+// [x] 1. Build the Comb Filter
+// [x] 2. Test with wheather we need configurable history or not
 // 3. Build the all pass filter
 // 4. Same as for the history
 // 5. Build a reverb out of it
 // 6. Try to add pre-delay
 // 7. Add two knob configuration to this, pre-delay & decay/room size
 
-#define DATA_SIZE 100
+#define MAX_DATA_SIZE 100
 float* data = NULL;
 int delay_index = 0;
+
+bm_ring_buffer_handler_t delay_buffer;
 bm_param delay_max_len;
-float feedback = 0.7;
+bm_param feedback;
 
 bool bypassed = false;
 
@@ -38,14 +40,14 @@ static void on_midi_note_off(uint8_t channel, uint8_t control, uint8_t value) {
 
 static void on_midi_cc(uint8_t channel, uint8_t control, uint8_t value) {
     if (control == BM_MCC_BANK_A_CV1) {
-        float cc_norm = (float)value / 127.0;
-        float scaled = (cc_norm * (DATA_SIZE -10)) + 10;
+        float scaled = bm_utils_map_range((float)value, 0.0, 127.0, 10.0, MAX_DATA_SIZE - 1);
         bm_param_set(&delay_max_len, scaled);
         return;
     }
 
     if (control == BM_MCC_BANK_A_CV2) {
-        feedback = (float)value / 127.0;
+        float cc_norm = (float)value / 127.0;
+        bm_param_set(&feedback, cc_norm);
         return;
     }
 }
@@ -64,19 +66,23 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
 
         // 1. for the left channel
         float curr = bm_audio_norm(input[lc]);
-        float delayed = data[delay_index];
-        float next = curr + delayed * feedback;
+        float delayed = bm_ring_buffer_lookup(&delay_buffer, bm_param_get(&delay_max_len));
+        float next = curr + delayed * bm_param_get(&feedback);
 
-        data[delay_index] = next;
-        delay_index = (delay_index + 1) % (int)bm_param_get(&delay_max_len);
-
+        bm_ring_buffer_add(&delay_buffer, next);
         output[lc] = bm_audio_denorm(delayed);
     }
 }
 
 static void init(bm_app_host_t host) {
-    bm_param_init(&delay_max_len, DATA_SIZE, 0.001);
-    data = calloc(DATA_SIZE, sizeof(float));
+    bm_param_init(&delay_max_len, MAX_DATA_SIZE, 0.01);
+    bm_param_init(&feedback, 0.7, 0.1);
+    data = calloc(MAX_DATA_SIZE, sizeof(float));
+    bm_ring_buffer_config_t buffer_config = {
+        .data = data,
+        .size = MAX_DATA_SIZE
+    };
+    bm_init_ring_buffer(buffer_config, &delay_buffer);
 }
 
 static void destroy() {
