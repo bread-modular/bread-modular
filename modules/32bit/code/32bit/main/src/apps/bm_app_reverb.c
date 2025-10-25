@@ -42,6 +42,14 @@ void comb_filter_destroy(comb_filter_t* filter) {
     free(filter->data);
 }
 
+float comb_filter_process(comb_filter_t* filter, float input) {
+    float delayed = bm_ring_buffer_lookup(&filter->delay_buffer, bm_param_get(&filter->delay_length));
+    float next = input + delayed * bm_param_get(&filter->feedback);
+
+    bm_ring_buffer_add(&filter->delay_buffer, next);
+    return delayed;
+}
+
 comb_filter_t filter1;
 
 static void on_button_event(bool pressed) {
@@ -84,11 +92,8 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
 
         // 1. for the left channel
         float curr = bm_audio_norm(input[lc]);
-        float delayed = bm_ring_buffer_lookup(&filter1.delay_buffer, bm_param_get(&filter1.delay_length));
-        float next = curr + delayed * bm_param_get(&filter1.feedback);
-
-        bm_ring_buffer_add(&filter1.delay_buffer, next);
-        output[lc] = bm_audio_denorm(delayed);
+        float processed = comb_filter_process(&filter1, curr);
+        output[lc] = bm_audio_denorm(processed);
     }
 }
 
