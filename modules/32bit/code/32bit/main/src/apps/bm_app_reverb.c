@@ -18,6 +18,7 @@
 
 bool bypassed = false;
 
+// *** START COMB FILTER ***
 typedef struct {
     bm_ring_buffer_handler_t delay_buffer;
     bm_param delay_length;
@@ -50,6 +51,18 @@ float comb_filter_process(comb_filter_t* filter, float input) {
     return delayed;
 }
 
+void comb_filter_set_delay_length_cc(comb_filter_t* filter, uint8_t value) {
+    float scaled = bm_utils_map_range((float)value, 0.0, 127.0, 10.0, filter->max_delay_length - 1);
+    bm_param_set(&filter->delay_length, scaled);
+}
+
+void comb_filter_set_feedback_cc(comb_filter_t* filter, uint8_t value) {
+    float cc_norm = (float)value / 127.0;
+    bm_param_set(&filter->feedback, cc_norm);
+}
+
+// *** END COMB FILTER ***
+
 comb_filter_t filter1;
 
 static void on_button_event(bool pressed) {
@@ -66,14 +79,12 @@ static void on_midi_note_off(uint8_t channel, uint8_t control, uint8_t value) {
 
 static void on_midi_cc(uint8_t channel, uint8_t control, uint8_t value) {
     if (control == BM_MCC_BANK_A_CV1) {
-        float scaled = bm_utils_map_range((float)value, 0.0, 127.0, 10.0, filter1.max_delay_length - 1);
-        bm_param_set(&filter1.delay_length, scaled);
+        comb_filter_set_delay_length_cc(&filter1, value);
         return;
     }
 
     if (control == BM_MCC_BANK_A_CV2) {
-        float cc_norm = (float)value / 127.0;
-        bm_param_set(&filter1.feedback, cc_norm);
+        comb_filter_set_feedback_cc(&filter1, value);
         return;
     }
 }
