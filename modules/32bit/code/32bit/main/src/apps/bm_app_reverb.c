@@ -26,6 +26,22 @@ typedef struct {
     size_t max_delay_length;
 } comb_filter_t;
 
+void comb_filter_init(comb_filter_t* filter, size_t max_delay_length) {
+    filter->max_delay_length = max_delay_length;
+    bm_param_init(&filter->delay_length, 10, 0.01);
+    bm_param_init(&filter->feedback, 0.7, 0.1);
+    filter->data = calloc(filter->max_delay_length, sizeof(float));
+    bm_ring_buffer_config_t buffer_config = {
+        .data = filter->data,
+        .size = filter->max_delay_length
+    };
+    bm_init_ring_buffer(buffer_config, &filter->delay_buffer);
+}
+
+void comb_filter_destroy(comb_filter_t* filter) {
+    free(filter->data);
+}
+
 comb_filter_t filter1;
 
 static void on_button_event(bool pressed) {
@@ -77,19 +93,11 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
 }
 
 static void init(bm_app_host_t host) {
-    filter1.max_delay_length = 100;
-    bm_param_init(&filter1.delay_length, 10, 0.01);
-    bm_param_init(&filter1.feedback, 0.7, 0.1);
-    filter1.data = calloc(filter1.max_delay_length, sizeof(float));
-    bm_ring_buffer_config_t buffer_config = {
-        .data = filter1.data,
-        .size = filter1.max_delay_length
-    };
-    bm_init_ring_buffer(buffer_config, &filter1.delay_buffer);
+    comb_filter_init(&filter1, 100);
 }
 
 static void destroy() {
-    free(filter1.data);
+    comb_filter_destroy(&filter1);
 }
 
 bm_app_t bm_load_app_reverb() {
