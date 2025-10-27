@@ -7,6 +7,8 @@
 extern "C" {
 #endif
 
+#define bm_SAMPLE_RATE 44100
+
 /**
  * @brief The main audio_loop callback
  * @note  This is the main audio loop where it's runs on the core 1
@@ -21,13 +23,10 @@ typedef void (*bm_audio_loop_t)(size_t n_samples, const int16_t* input, int16_t*
 
 typedef struct {
     bm_audio_loop_t audio_loop;
-    size_t sample_rate;
     size_t buffer_size;
 } bm_audio_config_t;
 
-extern size_t bm_audio_current_sample_rate;
-
-#define bmMS_TO_SAMPLES(ms) ((size_t)(((ms) * 44100) / 1000.0f))
+#define bmMS_TO_SAMPLES(ms) ((size_t)(((ms) * bm_SAMPLE_RATE) / 1000.0f))
 
 void bm_setup_audio(bm_audio_config_t config);
 

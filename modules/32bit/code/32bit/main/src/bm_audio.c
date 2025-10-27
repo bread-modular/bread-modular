@@ -16,7 +16,6 @@ static int16_t rxbuf[BUFF_LEN];
 static int16_t txbuf[BUFF_LEN];
 
 static bm_audio_loop_t audio_loop = NULL;
-size_t bm_audio_current_sample_rate = 44100;
 
 static void default_audio_loop(size_t n_samples, const int16_t* input, int16_t* output) {
     memcpy(output, input, n_samples * sizeof(int16_t));
@@ -52,8 +51,6 @@ void bm_setup_audio(bm_audio_config_t config) {
         audio_loop = config.audio_loop;
     }
 
-    bm_audio_current_sample_rate = config.sample_rate;
-
     // 1) setup es8388 
     bm_es8388_t es = {0};
     // Create a dedicated bus for ES8388 (or use es8388_attach_on_bus if you already have a bus)
@@ -80,7 +77,7 @@ void bm_setup_audio(bm_audio_config_t config) {
     // 3) Configure std (Philips) mode for BOTH channels
     //    NOTE: In full-duplex std mode, TX and RX should use the same slot/clock cfg. :contentReference[oaicite:1]{index=1}
     i2s_std_config_t std_cfg = {
-        .clk_cfg  = I2S_STD_CLK_DEFAULT_CONFIG(config.sample_rate),
+        .clk_cfg  = I2S_STD_CLK_DEFAULT_CONFIG(bm_SAMPLE_RATE),
         .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(I2S_DATA_BIT_WIDTH_16BIT,
                                                         I2S_SLOT_MODE_STEREO),
         .gpio_cfg = {
