@@ -64,13 +64,40 @@ void comb_filter_set_feedback_cc(comb_filter_t* filter, uint8_t value) {
 
 // *** END COMB FILTER ***
 
-comb_filter_t filter1;
+// *** START ALL PASS FILTER ***
 
-#define MAX_DELAY_ALL_PASS bmMS_TO_SAMPLES(50)
-int delay_len = MAX_DELAY_ALL_PASS;
-float buff[MAX_DELAY_ALL_PASS];
-int delay_index = 0;
-float feedback = 0.7;
+typedef struct {
+    float* delay_buffer;
+    size_t delay_length;
+    int delay_index;
+    float feedback;
+} all_pass_filter_t;
+
+void all_pass_filter_init(all_pass_filter_t* filter, size_t delay_length, float feedback) {
+    filter->delay_index = 0;
+    filter->feedback = feedback;
+    filter->delay_length = delay_length;
+    filter->delay_buffer = calloc(filter->delay_length, sizeof(float));
+}
+
+void all_pass_filter_destroy(all_pass_filter_t* filter) {
+    free(filter->delay_buffer);
+}
+
+float all_pass_filter_process(all_pass_filter_t* filter, float input) {
+    float delayed = filter->delay_buffer[filter->delay_index];
+    float processed = delayed + input * -filter->feedback;
+
+    filter->delay_buffer[filter->delay_index] = input + processed * filter->feedback;
+    filter->delay_index = (filter->delay_index + 1) % filter->delay_length;
+
+    return processed;
+}
+
+// *** END ALL PASS FILTER ***
+
+comb_filter_t filter1;
+all_pass_filter_t allpass1;
 
 static void on_button_event(bool pressed) {
    bypassed = pressed;
@@ -87,13 +114,11 @@ static void on_midi_note_off(uint8_t channel, uint8_t control, uint8_t value) {
 static void on_midi_cc(uint8_t channel, uint8_t control, uint8_t value) {
     if (control == BM_MCC_BANK_A_CV1) {
         comb_filter_set_delay_length_cc(&filter1, value);
-        delay_len = ((value) / 127.0f) * MAX_DELAY_ALL_PASS;
         return;
     }
 
     if (control == BM_MCC_BANK_A_CV2) {
         comb_filter_set_feedback_cc(&filter1, value);
-        feedback = (value) / 127.0f;
         return;
     }
 }
@@ -112,10 +137,7 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
 
         float curr = bm_audio_norm(input[lc]);
 
-        float delayed = buff[delay_index];
-        float processed = delayed + curr * -feedback;
-        buff[delay_index] = curr + processed * feedback;
-        delay_index = (delay_index + 1) % delay_len;
+        float processed = all_pass_filter_process(&allpass1, curr);        
 
         output[lc] = bm_audio_denorm(processed);
 
@@ -128,10 +150,13 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
 
 static void init(bm_app_host_t host) {
     comb_filter_init(&filter1, bmMS_TO_SAMPLES(50));
+    all_pass_filter_init(&allpass1, bmMS_TO_SAMPLES(50), 0.7);
+    
 }
 
 static void destroy() {
     comb_filter_destroy(&filter1);
+    all_pass_filter_destroy(&allpass1);
 }
 
 bm_app_t bm_load_app_reverb() {
