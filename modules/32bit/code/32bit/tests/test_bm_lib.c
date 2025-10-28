@@ -7,6 +7,9 @@
 #include "lib/bm_param.h"
 #include "lib/bm_utils.h"
 
+void run_comb_filter_tests(void);
+void run_all_pass_filter_tests(void);
+
 static void test_ring_buffer_initialization(void) {
     float storage[4] = {0};
     bm_ring_buffer_handler_t handler = {0};
@@ -110,6 +113,8 @@ int main(void) {
     test_audio_clamp();
     test_audio_norm_denorm();
     test_map_range();
+    run_comb_filter_tests();
+    run_all_pass_filter_tests();
 
     puts("All unit tests passed.");
     return 0;

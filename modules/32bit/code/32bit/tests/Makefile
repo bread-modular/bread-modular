@@ -6,9 +6,11 @@ LIB_SOURCES = \
     ../main/src/lib/bm_buffer.c \
     ../main/src/lib/bm_param.c \
     ../main/src/lib/bm_utils.c \
+    ../main/src/audio/bm_comb_filter.c \
+    ../main/src/audio/bm_all_pass_filter.c \
     stubs/esp_heap_caps.c
 
-TEST_SOURCES = test_bm_lib.c
+TEST_SOURCES = test_bm_lib.c test_bm_comb_filter.c test_bm_all_pass_filter.c
 
 TARGET = run_tests
 
