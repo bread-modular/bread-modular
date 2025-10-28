@@ -10,6 +10,9 @@ idf_component_register(
         "src/lib/bm_buffer.c"
         "src/lib/bm_utils.c"
         "src/lib/bm_param.c"
+        "src/audio/bm_comb_filter.c"
+        "src/audio/bm_all_pass_filter.c"
+        "src/audio/bm_classic_reverb.c"
         "src/apps/bm_app_fxrack.c"
         "src/apps/bm_app_reverb.c"
     PRIV_REQUIRES
