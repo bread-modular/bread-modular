@@ -37,6 +37,10 @@ static void on_midi_bpm(uint16_t bpm) {
 
 }
 
+static void on_cv_change(uint8_t index, float value) {
+    
+}
+
 inline static void process_audio(size_t n_samples, const int16_t* input, int16_t* output) {
     for (int lc=0; lc<n_samples; lc += 2) {
         if (bypassed) {
@@ -69,9 +73,9 @@ bm_app_t bm_load_app_reverb() {
         .on_midi_note_off = on_midi_note_off,
         .on_midi_cc = on_midi_cc,
         .on_midi_bpm = on_midi_bpm,
+        .on_cv_change = on_cv_change,
         .destroy = destroy
     };
 
     return app;
 }
-

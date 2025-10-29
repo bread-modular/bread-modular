@@ -11,6 +11,10 @@
 #include "bm_app.h"
 #include "apps/bm_app_fxrack.h"
 #include "apps/bm_app_reverb.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/projdefs.h"
+#include "freertos/task.h"
+#include "esp_log.h"
 
 bm_app_t current_app;
 
@@ -34,6 +38,10 @@ static void on_midi_cc_change(uint8_t channel, uint8_t control, uint8_t value) {
     current_app.on_midi_cc(channel, control, value);
 }
 
+static void on_cv_change(uint8_t index, float value) {
+    current_app.on_cv_change(index, value);
+}
+
 static void on_button_press() {
     bool pressed = bm_is_button_pressed();
     current_app.on_button_event(pressed);
@@ -52,7 +60,10 @@ void app_main(void)
     };
     bm_setup_button(button_config);
     bm_setup_led();
-    bm_setup_cv();
+    bm_cv_config_t cv_config = {
+        .on_change = on_cv_change
+    };
+    bm_setup_cv(cv_config);
 
     bm_midi_config_t midi_config = {
         .on_note_on = on_midi_note_on_change,
