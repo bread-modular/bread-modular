@@ -1,14 +1,63 @@
 #include <assert.h>
 #include <math.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "lib/bm_buffer.h"
 #include "lib/bm_param.h"
 #include "lib/bm_utils.h"
+#include "test_harness.h"
 
 void run_comb_filter_tests(void);
 void run_all_pass_filter_tests(void);
+
+static const char *current_test_name = NULL;
+static size_t current_test_name_length = 0;
+
+static void handle_test_failure(int signal_number) {
+    if (current_test_name != NULL) {
+        const char prefix[] = "\n[  FAILED  ] ";
+        write(STDERR_FILENO, prefix, sizeof(prefix) - 1);
+        write(STDERR_FILENO, current_test_name, current_test_name_length);
+        write(STDERR_FILENO, "\n", 1);
+    }
+
+    raise(signal_number);
+}
+
+static void install_failure_handler(int signal_number) {
+    struct sigaction action;
+    memset(&action, 0, sizeof(action));
+    action.sa_handler = handle_test_failure;
+    sigemptyset(&action.sa_mask);
+    action.sa_flags = SA_RESETHAND;
+    sigaction(signal_number, &action, NULL);
+}
+
+void bm_test_install_failure_handlers(void) {
+    install_failure_handler(SIGABRT);
+    install_failure_handler(SIGSEGV);
+    install_failure_handler(SIGFPE);
+}
+
+void bm_test_start(const char *test_name) {
+    current_test_name = test_name;
+    current_test_name_length = strlen(test_name);
+    printf("[ RUN      ] %s\n", test_name);
+    fflush(stdout);
+}
+
+void bm_test_end(void) {
+    if (current_test_name != NULL) {
+        printf("[     OK  ] %s\n", current_test_name);
+        fflush(stdout);
+    }
+    current_test_name = NULL;
+    current_test_name_length = 0;
+}
 
 static void test_ring_buffer_initialization(void) {
     float storage[4] = {0};
@@ -106,13 +155,15 @@ static void test_map_range(void) {
 }
 
 int main(void) {
-    test_ring_buffer_initialization();
-    test_ring_buffer_add_and_lookup();
-    test_param_without_smoothing();
-    test_param_with_smoothing();
-    test_audio_clamp();
-    test_audio_norm_denorm();
-    test_map_range();
+    bm_test_install_failure_handlers();
+
+    BM_RUN_TEST(test_ring_buffer_initialization);
+    BM_RUN_TEST(test_ring_buffer_add_and_lookup);
+    BM_RUN_TEST(test_param_without_smoothing);
+    BM_RUN_TEST(test_param_with_smoothing);
+    BM_RUN_TEST(test_audio_clamp);
+    BM_RUN_TEST(test_audio_norm_denorm);
+    BM_RUN_TEST(test_map_range);
     run_comb_filter_tests();
     run_all_pass_filter_tests();
 

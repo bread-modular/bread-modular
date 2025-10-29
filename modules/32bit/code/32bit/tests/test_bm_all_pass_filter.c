@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include "audio/bm_all_pass_filter.h"
+#include "test_harness.h"
 
 static void assert_float_near(float actual, float expected, float epsilon) {
     assert(fabsf(actual - expected) <= epsilon);
@@ -50,6 +51,6 @@ static void test_all_pass_impulse_with_feedback(void) {
 }
 
 void run_all_pass_filter_tests(void) {
-    test_all_pass_impulse_no_feedback();
-    test_all_pass_impulse_with_feedback();
+    BM_RUN_TEST(test_all_pass_impulse_no_feedback);
+    BM_RUN_TEST(test_all_pass_impulse_with_feedback);
 }

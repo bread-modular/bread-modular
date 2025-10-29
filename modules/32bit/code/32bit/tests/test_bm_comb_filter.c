@@ -3,6 +3,7 @@
 
 #include "audio/bm_comb_filter.h"
 #include "lib/bm_param.h"
+#include "test_harness.h"
 
 static void assert_float_near(float actual, float expected, float epsilon) {
     assert(fabsf(actual - expected) <= epsilon);
@@ -94,7 +95,7 @@ static void test_comb_filter_impulse_with_feedback(void) {
 }
 
 void run_comb_filter_tests(void) {
-    test_comb_filter_setters();
-    test_comb_filter_impulse_no_feedback();
-    test_comb_filter_impulse_with_feedback();
+    BM_RUN_TEST(test_comb_filter_setters);
+    BM_RUN_TEST(test_comb_filter_impulse_no_feedback);
+    BM_RUN_TEST(test_comb_filter_impulse_with_feedback);
 }
