@@ -87,9 +87,9 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
         if (bypassed) {
             output[lc] = input[lc];
             output[lc+1] = input[lc+1];
-            return;
+            continue;
         }
-        
+
         // 1. for the left channel
         float curr = bm_audio_norm(input[lc]);
         float delayed = bm_comb_filter_process(&delay_left, curr);
