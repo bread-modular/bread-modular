@@ -13,6 +13,8 @@
 #define MAX_BUFFER_LEN_LEFT bmMS_TO_SAMPLES(2000)
 #define MAX_BUFFER_LEN_RIGHT bmMS_TO_SAMPLES(50)
 #define PIPE_DELAY_HOLD_THRESHOLD_US 200000
+#define PIPE_DELAY_STATE_NAMESPACE "fxrack"
+#define PIPE_DELAY_STATE_KEY "pipe_delay"
 
 static bm_comb_filter_t delay_left;
 static bm_classic_reverb_t reverb_left;
@@ -23,6 +25,7 @@ static bm_comb_filter_t delay_right;
 static size_t sample_rate;
 static bool pipe_delay = false;
 static int64_t button_press_start_us = -1;
+static const char *TAG = "bm_app_fxrack";
 
 static void on_button_event(bool pressed) {
     if (pressed) {
@@ -35,6 +38,9 @@ static void on_button_event(bool pressed) {
         button_press_start_us = -1;
         if (held_us >= PIPE_DELAY_HOLD_THRESHOLD_US) {
             pipe_delay = !pipe_delay;
+            if (!bm_save_bool(PIPE_DELAY_STATE_NAMESPACE, PIPE_DELAY_STATE_KEY, pipe_delay)) {
+                ESP_LOGW(TAG, "Failed to persist pipe delay state");
+            }
         }
     }
 
@@ -119,6 +125,11 @@ static void init(bm_app_host_t host) {
     sample_rate = host.sample_rate;
     pipe_delay = false;
     button_press_start_us = -1;
+    bool stored_pipe_delay = false;
+    if (bm_load_bool(PIPE_DELAY_STATE_NAMESPACE, PIPE_DELAY_STATE_KEY, &stored_pipe_delay)) {
+        pipe_delay = stored_pipe_delay;
+    }
+    bm_set_led_state(pipe_delay);
 
     // 1. setup delay for the left channel
     bm_comb_filter_init(&delay_left, MAX_BUFFER_LEN_LEFT, 0.0f);

@@ -21,6 +21,7 @@ idf_component_register(
         driver
         esp_adc
         esp_timer
+        nvs_flash
     INCLUDE_DIRS
         ""
         "include"
