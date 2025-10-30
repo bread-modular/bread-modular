@@ -9,6 +9,7 @@ idf_component_register(
         "src/bm_midi.c"
         "src/lib/bm_buffer.c"
         "src/lib/bm_utils.c"
+        "src/lib/bm_save.c"
         "src/lib/bm_param.c"
         "src/audio/bm_comb_filter.c"
         "src/audio/bm_all_pass_filter.c"

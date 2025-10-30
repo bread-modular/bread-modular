@@ -2,17 +2,17 @@
 #include "lib/bm_utils.h"
 #include "lib/bm_param.h"
 #include "bm_led.h"
+#include "bm_button.h"
 #include "bm_midi.h"
 #include "bm_audio.h"
 #include "audio/bm_comb_filter.h"
 #include "audio/bm_classic_reverb.h"
-#include <math.h>
 #include "esp_log.h"
-#include "esp_timer.h"
+#include "lib/bm_save.h"
 
 #define MAX_BUFFER_LEN_LEFT bmMS_TO_SAMPLES(2000)
 #define MAX_BUFFER_LEN_RIGHT bmMS_TO_SAMPLES(50)
-#define PIPE_DELAY_HOLD_THRESHOLD_US 200000
+#define PIPE_DELAY_HOLD_THRESHOLD_MS 200
 #define PIPE_DELAY_STATE_NAMESPACE "fxrack"
 #define PIPE_DELAY_STATE_KEY "pipe_delay"
 
@@ -24,23 +24,13 @@ static bm_comb_filter_t delay_right;
 
 static size_t sample_rate;
 static bool pipe_delay = false;
-static int64_t button_press_start_us = -1;
 static const char *TAG = "bm_app_fxrack";
 
 static void on_button_event(bool pressed) {
-    if (pressed) {
-        button_press_start_us = esp_timer_get_time();
-        return;
-    }
-
-    if (button_press_start_us >= 0) {
-        int64_t held_us = esp_timer_get_time() - button_press_start_us;
-        button_press_start_us = -1;
-        if (held_us >= PIPE_DELAY_HOLD_THRESHOLD_US) {
-            pipe_delay = !pipe_delay;
-            if (!bm_save_bool(PIPE_DELAY_STATE_NAMESPACE, PIPE_DELAY_STATE_KEY, pipe_delay)) {
-                ESP_LOGW(TAG, "Failed to persist pipe delay state");
-            }
+    if (bm_button_was_held(pressed, PIPE_DELAY_HOLD_THRESHOLD_MS)) {
+        pipe_delay = !pipe_delay;
+        if (!bm_save_bool(PIPE_DELAY_STATE_NAMESPACE, PIPE_DELAY_STATE_KEY, pipe_delay)) {
+            ESP_LOGW(TAG, "Failed to persist pipe delay state");
         }
     }
 
@@ -124,7 +114,6 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
 static void init(bm_app_host_t host) {
     sample_rate = host.sample_rate;
     pipe_delay = false;
-    button_press_start_us = -1;
     bool stored_pipe_delay = false;
     if (bm_load_bool(PIPE_DELAY_STATE_NAMESPACE, PIPE_DELAY_STATE_KEY, &stored_pipe_delay)) {
         pipe_delay = stored_pipe_delay;

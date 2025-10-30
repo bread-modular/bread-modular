@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,6 +23,7 @@ typedef struct {
 
 void bm_setup_button(bm_button_config_t config);
 bool bm_is_button_pressed();
+bool bm_button_was_held(bool pressed, uint32_t threshold_ms);
 
 #ifdef __cplusplus
 }

@@ -3,11 +3,13 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
+#include "esp_timer.h"
 
 #define BUTTON_PIN GPIO_NUM_8
 
 QueueHandle_t button_queue;
 bm_button_trigger_callback_t callback = NULL;
+static int64_t hold_start_timestamp_us = -1;
 
 static void gpio_button_handler(void* args) {
     uint32_t button_num = 1;
@@ -32,6 +34,7 @@ inline static void task_button_check(void* args) {
 
 void bm_setup_button(bm_button_config_t config) {
     callback = config.callback;
+    hold_start_timestamp_us = -1;
 
     gpio_config_t button_config = {
         .pin_bit_mask = (1ULL << BUTTON_PIN),
@@ -79,4 +82,21 @@ bool bm_is_button_pressed() {
     int state = gpio_get_level(BUTTON_PIN);
     // This pin is pull_up enabled. So, it's grounded when pressed.
     return state == 0;
+}
+
+bool bm_button_was_held(bool pressed, uint32_t threshold_ms) {
+    if (pressed) {
+        if (hold_start_timestamp_us < 0) {
+            hold_start_timestamp_us = esp_timer_get_time();
+        }
+        return false;
+    }
+
+    if (hold_start_timestamp_us < 0) {
+        return false;
+    }
+
+    int64_t held_duration_us = esp_timer_get_time() - hold_start_timestamp_us;
+    hold_start_timestamp_us = -1;
+    return held_duration_us >= ((int64_t)threshold_ms * 1000);
 }
