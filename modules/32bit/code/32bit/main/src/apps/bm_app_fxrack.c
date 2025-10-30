@@ -8,9 +8,11 @@
 #include "audio/bm_classic_reverb.h"
 #include <math.h>
 #include "esp_log.h"
+#include "esp_timer.h"
 
 #define MAX_BUFFER_LEN_LEFT bmMS_TO_SAMPLES(2000)
 #define MAX_BUFFER_LEN_RIGHT bmMS_TO_SAMPLES(50)
+#define PIPE_DELAY_HOLD_THRESHOLD_US 200000
 
 static bm_comb_filter_t delay_left;
 static bm_classic_reverb_t reverb_left;
@@ -19,17 +21,24 @@ static float reverb_mix;
 static bm_comb_filter_t delay_right;
 
 static size_t sample_rate;
-static bool bypassed = false;
+static bool pipe_delay = false;
+static int64_t button_press_start_us = -1;
 
 static void on_button_event(bool pressed) {
-    // Add the bypass option when the MODE button is pressed
     if (pressed) {
-        bypassed = true;
-    } else {
-        bypassed = false;
+        button_press_start_us = esp_timer_get_time();
+        return;
     }
 
-    bm_set_led_state(bypassed);
+    if (button_press_start_us >= 0) {
+        int64_t held_us = esp_timer_get_time() - button_press_start_us;
+        button_press_start_us = -1;
+        if (held_us >= PIPE_DELAY_HOLD_THRESHOLD_US) {
+            pipe_delay = !pipe_delay;
+        }
+    }
+
+    bm_set_led_state(pipe_delay);
 }
 
 static void on_midi_cc(uint8_t channel, uint8_t control, uint8_t value) {
@@ -84,17 +93,17 @@ static void on_midi_bpm(uint16_t bpm) {
 
 inline static void process_audio(size_t n_samples, const int16_t* input, int16_t* output) {
     for (int lc=0; lc<n_samples; lc += 2) {
-        if (bypassed) {
-            output[lc] = input[lc];
-            output[lc+1] = input[lc+1];
-            continue;
-        }
+        // if (bypassed) {
+        //     output[lc] = input[lc];
+        //     output[lc+1] = input[lc+1];
+        //     continue;
+        // }
 
         // 1. for the left channel
         float curr = bm_audio_norm(input[lc]);
         float delayed = bm_comb_filter_process(&delay_left, curr);
 
-        float reverb_input = curr + delayed;
+        float reverb_input = pipe_delay? curr + delayed : curr;
         float left_output = bm_classic_reverb_process(&reverb_left, reverb_input);
         output[lc] = bm_audio_denorm((1 - reverb_mix) * delayed + reverb_mix * left_output);
 
@@ -108,7 +117,8 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
 
 static void init(bm_app_host_t host) {
     sample_rate = host.sample_rate;
-    bypassed = false;
+    pipe_delay = false;
+    button_press_start_us = -1;
 
     // 1. setup delay for the left channel
     bm_comb_filter_init(&delay_left, MAX_BUFFER_LEN_LEFT, 0.0f);
