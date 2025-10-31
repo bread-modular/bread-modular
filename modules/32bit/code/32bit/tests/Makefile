@@ -11,7 +11,7 @@ LIB_SOURCES = \
     stubs/esp_heap_caps.c \
     stubs/esp_idf_stubs.c
 
-TEST_SOURCES = test_bm_lib.c test_bm_comb_filter.c test_bm_all_pass_filter.c test_bm_midi.c
+TEST_SOURCES = test_bm_lib.c test_bm_comb_filter.c test_bm_all_pass_filter.c test_bm_midi.c test_bm_cv.c
 
 TARGET = run_tests
 

@@ -85,6 +85,7 @@ typedef int BaseType_t;
 typedef unsigned int UBaseType_t;
 typedef void * TaskHandle_t;
 typedef void (*TaskFunction_t)(void *);
+typedef unsigned int TickType_t;
 
 #define pdPASS 1
 
@@ -104,10 +105,30 @@ BaseType_t xTaskCreatePinnedToCore(TaskFunction_t pxTaskCode,
 
 #define pdMS_TO_TICKS(x) (x)
 
+static TickType_t stub_tick_count = 0;
+TickType_t xTaskGetTickCount(void) { return stub_tick_count; }
+void vTaskDelay(TickType_t ticks) { stub_tick_count += ticks; }
+
 // ---- esp_timer.h ----
 static int64_t stub_current_time_us = 0;
 int64_t esp_timer_get_time(void) { return stub_current_time_us; }
 void stub_timer_set_time_us(int64_t t) { stub_current_time_us = t; }
 void stub_timer_advance_us(int64_t delta) { stub_current_time_us += delta; }
+
+// ---- esp_adc/adc_oneshot.h ----
+struct adc_oneshot_unit_t { int dummy; };
+static int stub_adc_values[16] = {0};
+
+void stub_adc_set_value(int channel, int value) { if (channel>=0 && channel<16) stub_adc_values[channel] = value; }
+
+esp_err_t adc_oneshot_new_unit(const void *init_config, struct adc_oneshot_unit_t **ret_handle) {
+    (void)init_config; static struct adc_oneshot_unit_t unit; *ret_handle = &unit; return ESP_OK;
+}
+esp_err_t adc_oneshot_config_channel(struct adc_oneshot_unit_t *handle, int channel, const void *config) {
+    (void)handle; (void)channel; (void)config; return ESP_OK;
+}
+esp_err_t adc_oneshot_read(struct adc_oneshot_unit_t *handle, int channel, int *out_raw) {
+    (void)handle; if (channel>=0 && channel<16 && out_raw) { *out_raw = stub_adc_values[channel]; return ESP_OK; } return 1;
+}
 
 
