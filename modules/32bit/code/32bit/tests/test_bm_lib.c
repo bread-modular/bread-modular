@@ -13,6 +13,7 @@
 
 void run_comb_filter_tests(void);
 void run_all_pass_filter_tests(void);
+void run_midi_tests(void);
 
 static const char *current_test_name = NULL;
 static size_t current_test_name_length = 0;
@@ -166,6 +167,7 @@ int main(void) {
     BM_RUN_TEST(test_map_range);
     run_comb_filter_tests();
     run_all_pass_filter_tests();
+    run_midi_tests();
 
     puts("All unit tests passed.");
     return 0;

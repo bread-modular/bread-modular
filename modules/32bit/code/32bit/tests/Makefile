@@ -8,9 +8,10 @@ LIB_SOURCES = \
     ../main/src/lib/bm_utils.c \
     ../main/src/audio/bm_comb_filter.c \
     ../main/src/audio/bm_all_pass_filter.c \
-    stubs/esp_heap_caps.c
+    stubs/esp_heap_caps.c \
+    stubs/esp_idf_stubs.c
 
-TEST_SOURCES = test_bm_lib.c test_bm_comb_filter.c test_bm_all_pass_filter.c
+TEST_SOURCES = test_bm_lib.c test_bm_comb_filter.c test_bm_all_pass_filter.c test_bm_midi.c
 
 TARGET = run_tests
 
