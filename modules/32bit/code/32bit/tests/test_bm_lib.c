@@ -17,13 +17,21 @@ void run_midi_tests(void);
 
 static const char *current_test_name = NULL;
 static size_t current_test_name_length = 0;
+static int total_tests_run = 0;
+static int verbose_output = 0; /* 0 = compact, 1 = verbose */
+
+#define COLOR_RED     "\x1b[31m"
+#define COLOR_GREEN   "\x1b[32m"
+#define COLOR_YELLOW  "\x1b[33m"
+#define COLOR_RESET   "\x1b[0m"
 
 static void handle_test_failure(int signal_number) {
     if (current_test_name != NULL) {
-        const char prefix[] = "\n[  FAILED  ] ";
-        write(STDERR_FILENO, prefix, sizeof(prefix) - 1);
+        const char prefix1[] = "\n" COLOR_RED "[  FAILED  ] ";
+        const char suffix[] = COLOR_RESET "\n";
+        write(STDERR_FILENO, prefix1, sizeof(prefix1) - 1);
         write(STDERR_FILENO, current_test_name, current_test_name_length);
-        write(STDERR_FILENO, "\n", 1);
+        write(STDERR_FILENO, suffix, sizeof(suffix) - 1);
     }
 
     raise(signal_number);
@@ -42,22 +50,34 @@ void bm_test_install_failure_handlers(void) {
     install_failure_handler(SIGABRT);
     install_failure_handler(SIGSEGV);
     install_failure_handler(SIGFPE);
+    const char *env = getenv("BM_TEST_VERBOSE");
+    if (env && (*env == '1' || *env == 'y' || *env == 'Y' || *env == 't' || *env == 'T')) {
+        verbose_output = 1;
+    }
+    printf(COLOR_YELLOW "== Bread Modular Unit Tests ==" COLOR_RESET "\n");
 }
 
 void bm_test_start(const char *test_name) {
     current_test_name = test_name;
     current_test_name_length = strlen(test_name);
-    printf("[ RUN      ] %s\n", test_name);
-    fflush(stdout);
+    if (verbose_output) {
+        printf("[ RUN      ] %s\n", test_name);
+        fflush(stdout);
+    }
 }
 
 void bm_test_end(void) {
     if (current_test_name != NULL) {
-        printf("[     OK  ] %s\n", current_test_name);
+        if (verbose_output) {
+            printf(COLOR_GREEN "[     OK  ]" COLOR_RESET " %s\n", current_test_name);
+        } else {
+            printf(COLOR_GREEN "[  PASS   ]" COLOR_RESET " %s\n", current_test_name);
+        }
         fflush(stdout);
     }
     current_test_name = NULL;
     current_test_name_length = 0;
+    total_tests_run++;
 }
 
 static void test_ring_buffer_initialization(void) {
@@ -169,6 +189,6 @@ int main(void) {
     run_all_pass_filter_tests();
     run_midi_tests();
 
-    puts("All unit tests passed.");
+    printf(COLOR_GREEN "All unit tests passed" COLOR_RESET " (%d tests).\n", total_tests_run);
     return 0;
 }
