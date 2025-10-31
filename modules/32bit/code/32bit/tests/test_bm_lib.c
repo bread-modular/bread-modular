@@ -15,6 +15,7 @@ void run_comb_filter_tests(void);
 void run_all_pass_filter_tests(void);
 void run_midi_tests(void);
 void run_cv_tests(void);
+void run_button_tests(void);
 
 static const char *current_test_name = NULL;
 static size_t current_test_name_length = 0;
@@ -190,6 +191,7 @@ int main(void) {
     run_all_pass_filter_tests();
     run_midi_tests();
     run_cv_tests();
+    run_button_tests();
 
     printf(COLOR_GREEN "All unit tests passed" COLOR_RESET " (%d tests).\n", total_tests_run);
     return 0;

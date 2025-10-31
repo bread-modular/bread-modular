@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 // ---- esp_err.h ----
 typedef int esp_err_t;
@@ -17,6 +18,28 @@ const char *esp_err_to_name(esp_err_t err) {
 typedef int gpio_num_t;
 #define GPIO_NUM_43 43
 #define GPIO_NUM_44 44
+#define GPIO_NUM_8 8
+typedef enum { GPIO_MODE_INPUT = 0, GPIO_MODE_OUTPUT = 1 } gpio_mode_t;
+typedef enum { GPIO_PULLUP_DISABLE = 0, GPIO_PULLUP_ENABLE = 1 } gpio_pullup_t;
+typedef enum { GPIO_PULLDOWN_DISABLE = 0, GPIO_PULLDOWN_ENABLE = 1 } gpio_pulldown_t;
+typedef enum { GPIO_INTR_DISABLE = 0, GPIO_INTR_ANYEDGE, GPIO_INTR_POSEDGE, GPIO_INTR_NEGEDGE } gpio_int_type_t;
+typedef struct {
+    uint64_t pin_bit_mask;
+    gpio_mode_t mode;
+    gpio_pullup_t pull_up_en;
+    gpio_pulldown_t pull_down_en;
+    gpio_int_type_t intr_type;
+} gpio_config_t;
+typedef void (*gpio_isr_t)(void*);
+static int stub_gpio_levels[64] = {0};
+static gpio_isr_t stub_gpio_isr[64] = {0};
+static void* stub_gpio_isr_arg[64] = {0};
+int gpio_config(const gpio_config_t *cfg) { (void)cfg; return 0; }
+int gpio_install_isr_service(int intr_alloc_flags) { (void)intr_alloc_flags; return 0; }
+int gpio_isr_handler_add(gpio_num_t gpio_num, gpio_isr_t isr_handler, void* args) { stub_gpio_isr[gpio_num]=isr_handler; stub_gpio_isr_arg[gpio_num]=args; return 0; }
+int gpio_get_level(gpio_num_t gpio_num) { return stub_gpio_levels[gpio_num]; }
+void stub_gpio_set_level(gpio_num_t gpio_num, int level) { stub_gpio_levels[gpio_num]=level; }
+void stub_gpio_trigger_isr(gpio_num_t gpio_num) { if (stub_gpio_isr[gpio_num]) stub_gpio_isr[gpio_num](stub_gpio_isr_arg[gpio_num]); }
 
 // ---- driver/uart.h ----
 typedef enum {
@@ -88,6 +111,8 @@ typedef void (*TaskFunction_t)(void *);
 typedef unsigned int TickType_t;
 
 #define pdPASS 1
+#define pdTRUE 1
+#define pdFALSE 0
 
 BaseType_t xPortGetCoreID(void) { return 0; }
 
@@ -129,6 +154,30 @@ esp_err_t adc_oneshot_config_channel(struct adc_oneshot_unit_t *handle, int chan
 }
 esp_err_t adc_oneshot_read(struct adc_oneshot_unit_t *handle, int channel, int *out_raw) {
     (void)handle; if (channel>=0 && channel<16 && out_raw) { *out_raw = stub_adc_values[channel]; return ESP_OK; } return 1;
+}
+
+// ---- freertos/queue.h ----
+typedef void* QueueHandle_t;
+typedef struct {
+    UBaseType_t item_size;
+    int has_value;
+    uint32_t value;
+} stub_queue_t;
+
+QueueHandle_t xQueueCreate(UBaseType_t uxQueueLength, UBaseType_t uxItemSize) {
+    (void)uxQueueLength; stub_queue_t *q = (stub_queue_t*)malloc(sizeof(stub_queue_t));
+    if (!q) return NULL; q->item_size = uxItemSize; q->has_value = 0; q->value = 0; return (QueueHandle_t)q;
+}
+
+BaseType_t xQueueSendFromISR(QueueHandle_t xQueue, const void * pvItemToQueue, BaseType_t *pxHigherPriorityTaskWoken) {
+    stub_queue_t *q = (stub_queue_t*)xQueue; (void)pxHigherPriorityTaskWoken; if (!q) return 0; 
+    uint32_t v = 0; memcpy(&v, pvItemToQueue, q->item_size);
+    q->value = v; q->has_value = 1; return 1; // pdTRUE
+}
+
+BaseType_t xQueueReceive(QueueHandle_t xQueue, void *pvBuffer, uint32_t xTicksToWait) {
+    (void)xTicksToWait; stub_queue_t *q = (stub_queue_t*)xQueue; if (!q || !q->has_value) return 0; // pdFALSE
+    memcpy(pvBuffer, &q->value, q->item_size); q->has_value = 0; return 1; // pdTRUE
 }
 
 

@@ -6,6 +6,8 @@ typedef void (*TaskFunction_t)(void *);
 typedef unsigned int TickType_t;
 
 #define pdPASS 1
+#define pdTRUE 1
+#define pdFALSE 0
 #define pdMS_TO_TICKS(x) (x)
 
 BaseType_t xPortGetCoreID(void);
