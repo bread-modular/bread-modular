@@ -2,8 +2,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "SimpleMIDI.h"
-#include "ModeHandler.h"
-#include "LEDToggler.h"
 #include "SoftwareSerial.h"
 #include "WaveTables.h"
 #include <avr/pgmspace.h>
@@ -29,14 +27,13 @@ constexpr uint16_t TCB_COMPARE_VALUE = TCB_CLOCK_HZ / LFO_SAMPLE_RATE_HZ;
 SimpleMIDI MIDI;
 // TODO: Change this to real serial port. (We need to update the schematic for that)
 SoftwareSerial logger(-1, LOGGER_PIN_TX);
-ModeHandler modes = ModeHandler(TOGGLE_PIN, 3, 300);
-LEDToggler ledToggler = LEDToggler(TOGGLE_LED, 300, false);
 
 volatile uint32_t phaseAccumulator = 0;
 volatile uint32_t phaseIncrement = 0;
 volatile uint8_t waveformIndexA = WaveTables::Sine;
 volatile uint8_t waveformIndexB = WaveTables::Sine;
 volatile uint8_t waveformBlend = 0;
+volatile uint8_t latestLfoSample = 0;
 
 uint32_t mapCvToFrequencyCurve(uint16_t cvValue) {
   uint32_t range = LFO_MAX_FREQ_MILLIHZ - LFO_MIN_FREQ_MILLIHZ;
@@ -129,6 +126,7 @@ ISR(TCB0_INT_vect) {
     sample = ((uint32_t)sampleA * weightA + (uint32_t)sampleB * weightB) >> 8;
   }
   DAC0.DATA = sample;
+  latestLfoSample = sample;
 
   // Clear the interrupt flag∫
   TCB0.INTFLAGS = TCB_CAPT_bm;
@@ -179,24 +177,24 @@ void setup() {
   // Timer related
   setupTimer();
   
-  // Modes
-  modes.begin();
+  // LED setup
   pinMode(TOGGLE_LED, OUTPUT);
+  analogWrite(TOGGLE_LED, 0);
 
   // Register MIDI callbacks
   MIDI.setNoteOnCallback(onNoteOn);
   MIDI.setNoteOffCallback(onNoteOff);
   MIDI.setControlChangeCallback(onControlChange);
 
-  logger.println("8Bit HelloWorld Started!");
+  logger.println("8Bit LFO Started!");
 }
 
 void loop() {
   // Process MIDI messages
   MIDI.update();
 
-  // Update the LED toggler
-  ledToggler.update();
+  // Update the LED
+  analogWrite(TOGGLE_LED, latestLfoSample / 2);
 
   // Update the LFO frequency based on CV1 every loop iteration
   uint16_t cv1 = analogRead(PIN_CV1);
@@ -205,18 +203,4 @@ void loop() {
 
   uint16_t cv2 = analogRead(PIN_CV2);
   updateWaveformMix(cv2);
-
-  // mode related code
-  if (modes.update()) {
-    byte newMode = modes.getMode();
-    logger.println("mode changed: " + String(newMode));
-
-    if (newMode == 0) {
-      ledToggler.startToggle(1);
-    } else if (newMode == 1) {
-      ledToggler.startToggle(2);
-    } else if (newMode == 2) {
-      ledToggler.startToggle(3);
-    }
-  }
 }
