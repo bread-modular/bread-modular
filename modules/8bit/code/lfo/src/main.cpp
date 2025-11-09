@@ -5,6 +5,7 @@
 #include "ModeHandler.h"
 #include "LEDToggler.h"
 #include "SoftwareSerial.h"
+#include "WaveTables.h"
 #include <avr/pgmspace.h>
 #include <util/atomic.h>
 
@@ -25,27 +26,7 @@ constexpr uint32_t LFO_MAX_FREQ_MILLIHZ = 20000; // 20 Hz
 constexpr uint32_t TCB_CLOCK_HZ = F_CPU / 2;
 constexpr uint16_t TCB_COMPARE_VALUE = TCB_CLOCK_HZ / LFO_SAMPLE_RATE_HZ;
 
-constexpr size_t LFO_TABLE_SIZE = 256;
 constexpr uint32_t LOG2_RATIO_Q16 = 500948; // log2(200) in Q16 format for log-style CV mapping
-const uint8_t SINE_TABLE[LFO_TABLE_SIZE] PROGMEM = {
-  128, 131, 134, 137, 140, 143, 146, 149, 152, 155, 158, 162, 165, 167, 170, 173,
-  176, 179, 182, 185, 188, 190, 193, 196, 198, 201, 203, 206, 208, 211, 213, 215,
-  218, 220, 222, 224, 226, 228, 230, 232, 234, 235, 237, 238, 240, 241, 243, 244,
-  245, 246, 248, 249, 250, 250, 251, 252, 253, 253, 254, 254, 254, 255, 255, 255,
-  255, 255, 255, 255, 254, 254, 254, 253, 253, 252, 251, 250, 250, 249, 248, 246,
-  245, 244, 243, 241, 240, 238, 237, 235, 234, 232, 230, 228, 226, 224, 222, 220,
-  218, 215, 213, 211, 208, 206, 203, 201, 198, 196, 193, 190, 188, 185, 182, 179,
-  176, 173, 170, 167, 165, 162, 158, 155, 152, 149, 146, 143, 140, 137, 134, 131,
-  128, 124, 121, 118, 115, 112, 109, 106, 103, 100,  97,  93,  90,  88,  85,  82,
-   79,  76,  73,  70,  67,  65,  62,  59,  57,  54,  52,  49,  47,  44,  42,  40,
-   37,  35,  33,  31,  29,  27,  25,  23,  21,  20,  18,  17,  15,  14,  12,  11,
-   10,   9,   7,   6,   5,   5,   4,   3,   2,   2,   1,   1,   1,   0,   0,   0,
-    0,   0,   0,   0,   1,   1,   1,   2,   2,   3,   4,   5,   5,   6,   7,   9,
-   10,  11,  12,  14,  15,  17,  18,  20,  21,  23,  25,  27,  29,  31,  33,  35,
-   37,  40,  42,  44,  47,  49,  52,  54,  57,  59,  62,  65,  67,  70,  73,  76,
-   79,  82,  85,  88,  90,  93,  97, 100, 103, 106, 109, 112, 115, 118, 121, 124
-};
-
 const uint16_t POW2_FRAC_Q16[256] PROGMEM = {
   65536,  65714,  65892,  66071,  66250,  66429,  66609,  66790,
   66971,  67153,  67335,  67517,  67700,  67884,  68068,  68252,
@@ -89,6 +70,9 @@ LEDToggler ledToggler = LEDToggler(TOGGLE_LED, 300, false);
 
 volatile uint32_t phaseAccumulator = 0;
 volatile uint32_t phaseIncrement = 0;
+volatile uint8_t waveformIndexA = WaveTables::Sine;
+volatile uint8_t waveformIndexB = WaveTables::Sine;
+volatile uint8_t waveformBlend = 0;
 
 uint32_t mapCvToFrequencyLog(uint16_t cvValue) {
   uint32_t exponentQ16 = ((uint32_t)cvValue * LOG2_RATIO_Q16) / 1023UL;
@@ -127,6 +111,30 @@ void updateLfoPhaseIncrement(uint32_t freqMilliHz) {
   }
 }
 
+void updateWaveformMix(uint16_t cvValue) {
+  const uint8_t maxIndex = WaveTables::kWaveformCount - 1;
+  const uint32_t scale = (uint32_t)maxIndex << 8;
+  uint32_t scaled = ((uint32_t)cvValue * scale) / 1023UL;
+  uint8_t segment = scaled >> 8;
+  uint8_t blend = scaled & 0xFF;
+
+  uint8_t wfA = segment;
+  uint8_t wfB;
+  if (segment >= maxIndex) {
+    wfA = maxIndex;
+    wfB = maxIndex;
+    blend = 0;
+  } else {
+    wfB = segment + 1;
+  }
+
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    waveformIndexA = wfA;
+    waveformIndexB = wfB;
+    waveformBlend = blend;
+  }
+}
+
 
 void setupTimer() {
     // Uses 20Mhz clock & divide it by 2
@@ -148,7 +156,18 @@ void setupTimer() {
 ISR(TCB0_INT_vect) {
   phaseAccumulator += phaseIncrement;
   uint8_t tableIndex = phaseAccumulator >> 24; // use the top 8 bits as the table index
-  uint8_t sample = pgm_read_byte(&SINE_TABLE[tableIndex]);
+  uint8_t wfA = waveformIndexA;
+  uint8_t wfB = waveformIndexB;
+  uint8_t blend = waveformBlend;
+
+  uint8_t sampleA = WaveTables::readSample(static_cast<WaveTables::Waveform>(wfA), tableIndex);
+  uint8_t sample = sampleA;
+  if (blend != 0 && wfA != wfB) {
+    uint8_t sampleB = WaveTables::readSample(static_cast<WaveTables::Waveform>(wfB), tableIndex);
+    uint16_t weightA = 256 - blend;
+    uint16_t weightB = blend;
+    sample = ((uint32_t)sampleA * weightA + (uint32_t)sampleB * weightB) >> 8;
+  }
   DAC0.DATA = sample;
 
   // Clear the interrupt flag∫
@@ -188,9 +207,11 @@ void setup() {
   DAC0.CTRLA = DAC_ENABLE_bm | DAC_OUTEN_bm;
   DAC0.DATA = 0;
 
-  // Prime the phase increment so the LFO starts immediately
-  uint16_t initialCv = analogRead(PIN_CV1);
-  updateLfoPhaseIncrement(mapCvToFrequencyLog(initialCv));
+  // Prime the phase increment and waveform so the LFO starts immediately
+  uint16_t initialCv1 = analogRead(PIN_CV1);
+  uint16_t initialCv2 = analogRead(PIN_CV2);
+  updateLfoPhaseIncrement(mapCvToFrequencyLog(initialCv1));
+  updateWaveformMix(initialCv2);
 
   // Setup MIDI
   MIDI.begin(31250);
@@ -221,6 +242,9 @@ void loop() {
   uint16_t cv1 = analogRead(PIN_CV1);
   uint32_t freqMilliHz = mapCvToFrequencyLog(cv1);
   updateLfoPhaseIncrement(freqMilliHz);
+
+  uint16_t cv2 = analogRead(PIN_CV2);
+  updateWaveformMix(cv2);
 
   // mode related code
   if (modes.update()) {
