@@ -27,15 +27,14 @@ static bool pipe_delay = false;
 static const char *TAG = "bm_app_fxrack";
 
 static void on_button_event(bool pressed) {
-    ESP_LOGI(TAG, "button pressed: %d", pressed);
-    // if (bm_button_was_held(pressed, PIPE_DELAY_HOLD_THRESHOLD_MS)) {
-    //     pipe_delay = !pipe_delay;
-    //     if (!bm_save_bool(PIPE_DELAY_STATE_NAMESPACE, PIPE_DELAY_STATE_KEY, pipe_delay)) {
-    //         ESP_LOGW(TAG, "Failed to persist pipe delay state");
-    //     }
-    // }
+    if (bm_button_was_held(pressed, PIPE_DELAY_HOLD_THRESHOLD_MS)) {
+        pipe_delay = !pipe_delay;
+        if (!bm_save_bool(PIPE_DELAY_STATE_NAMESPACE, PIPE_DELAY_STATE_KEY, pipe_delay)) {
+            ESP_LOGW(TAG, "Failed to persist pipe delay state");
+        }
+    }
 
-    // bm_set_led_state(pipe_delay);
+    bm_set_led_state(pipe_delay);
 }
 
 static void on_midi_cc(uint8_t channel, uint8_t control, uint8_t value) {
