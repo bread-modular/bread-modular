@@ -2,6 +2,7 @@
 // It seems like, it gives more stability 
 // let's run it for now and change it if we need it
 
+#include <stddef.h>
 #include <stdint.h>
 #include "bm_audio.h"
 #include "bm_button.h"
@@ -11,6 +12,7 @@
 #include "bm_app.h"
 #include "apps/bm_app_fxrack.h"
 #include "apps/bm_app_reverb.h"
+#include "bm_usb_serial.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/projdefs.h"
 #include "freertos/task.h"
@@ -45,6 +47,12 @@ static void on_cv_change(uint8_t index, float value) {
 static void on_button_press() {
     bool pressed = bm_is_button_pressed();
     current_app.on_button_event(pressed);
+}
+
+static void on_usb_serial_message(const char* message, size_t len) {
+    const char prefix[] = "recieved: ";
+    bm_usb_serial_send_message(prefix, sizeof(prefix));
+    bm_usb_serial_send_message(message, len);
 }
 
 void app_main(void)
@@ -88,4 +96,10 @@ void app_main(void)
         .audio_loop = audio_loop
     };
     bm_setup_audio(audio_config);
+
+    // 6. setup USB Serial listning
+    bm_usb_serial_config usb_serial_config = {
+        .on_message = on_usb_serial_message
+    };
+    bm_usb_serial_setup(usb_serial_config);
 }

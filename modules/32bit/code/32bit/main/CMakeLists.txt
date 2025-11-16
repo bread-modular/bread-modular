@@ -7,6 +7,7 @@ idf_component_register(
         "src/bm_es8388.c"
         "src/bm_audio.c"
         "src/bm_midi.c"
+        "src/bm_usb_serial.c"
         "src/lib/bm_buffer.c"
         "src/lib/bm_utils.c"
         "src/lib/bm_save.c"

@@ -1475,7 +1475,7 @@ build pico-sdk/src/rp2350/boot_stage2/bs2_default.bin | ${cmake_ninja_workdir}pi
 # Custom command for pico-sdk/src/rp2350/boot_stage2/bs2_default_padded_checksummed.S
 
 build pico-sdk/src/rp2350/boot_stage2/bs2_default_padded_checksummed.S | ${cmake_ninja_workdir}pico-sdk/src/rp2350/boot_stage2/bs2_default_padded_checksummed.S: CUSTOM_COMMAND pico-sdk/src/rp2350/boot_stage2/bs2_default.bin || pico-sdk/src/rp2350/boot_stage2/bs2_default.elf
-  COMMAND = cd /Users/arunoda/data/projects/bread-modular/modules/16bit/code/16bit/build/pico-sdk/src/rp2350/boot_stage2 && /opt/local/bin/python3.12 /Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2350/boot_stage2/pad_checksum -s 0xffffffff -a arm /Users/arunoda/data/projects/bread-modular/modules/16bit/code/16bit/build/pico-sdk/src/rp2350/boot_stage2/bs2_default.bin /Users/arunoda/data/projects/bread-modular/modules/16bit/code/16bit/build/pico-sdk/src/rp2350/boot_stage2/bs2_default_padded_checksummed.S
+  COMMAND = cd /Users/arunoda/data/projects/bread-modular/modules/16bit/code/16bit/build/pico-sdk/src/rp2350/boot_stage2 && /usr/bin/python3 /Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2350/boot_stage2/pad_checksum -s 0xffffffff -a arm /Users/arunoda/data/projects/bread-modular/modules/16bit/code/16bit/build/pico-sdk/src/rp2350/boot_stage2/bs2_default.bin /Users/arunoda/data/projects/bread-modular/modules/16bit/code/16bit/build/pico-sdk/src/rp2350/boot_stage2/bs2_default_padded_checksummed.S
   DESC = Generating bs2_default_padded_checksummed.S
   restat = 1
 
