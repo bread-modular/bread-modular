@@ -9,6 +9,7 @@
 #include "audio/bm_classic_reverb.h"
 #include "esp_log.h"
 #include "lib/bm_save.h"
+#include <stddef.h>
 
 #define MAX_BUFFER_LEN_LEFT bmMS_TO_SAMPLES(2000)
 #define MAX_BUFFER_LEN_RIGHT bmMS_TO_SAMPLES(50)
@@ -150,6 +151,10 @@ static void on_midi_note_off(uint8_t channel, uint8_t control, uint8_t value) {
     
 }
 
+static void on_usb_serial_message(const char* message, size_t len) {
+
+}
+
 static void destroy() {
     bm_comb_filter_destroy(&delay_left);
     bm_comb_filter_destroy(&delay_right);
@@ -167,7 +172,8 @@ bm_app_t bm_load_app_fxrack() {
         .on_midi_cc = on_midi_cc,
         .on_midi_bpm = on_midi_bpm,
         .on_cv_change = on_cv_change,
-        .destroy = destroy
+        .on_usb_serial_message = on_usb_serial_message,
+        .destroy = destroy,
     };
 
     return app;

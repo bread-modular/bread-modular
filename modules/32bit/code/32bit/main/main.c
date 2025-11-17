@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include "bm_audio.h"
 #include "bm_button.h"
 #include "bm_led.h"
@@ -50,10 +51,13 @@ static void on_button_press() {
     current_app.on_button_event(pressed);
 }
 
-static void on_usb_serial_message(const char* message, size_t len) {
-    const char prefix[] = "recieved: ";
-    bm_usb_serial_send_message(prefix, sizeof(prefix));
-    bm_usb_serial_send_message(message, len);
+static void on_usb_serial_message(const char* message, size_t len) {    
+    if (len == 12 && memcmp(message, "get-app-name", 12) == 0) {
+        const char* app_name = current_app.get_name();
+        bm_usb_serial_send_message_ln(app_name, strlen(app_name));
+    } else {
+        current_app.on_usb_serial_message(message, len);
+    }
 }
 
 void app_main(void)

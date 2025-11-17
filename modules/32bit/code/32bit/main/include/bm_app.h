@@ -23,6 +23,7 @@ typedef struct {
     void (*on_midi_cc)(uint8_t channel, uint8_t control, uint8_t value);
     void (*on_midi_bpm)(uint16_t bpm);
     void (*on_cv_change)(uint8_t cv_index, float value);
+    void (*on_usb_serial_message)(const char* message, size_t len);
 } bm_app_t;
 
 #ifdef __cplusplus

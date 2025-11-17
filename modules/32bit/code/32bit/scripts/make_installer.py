@@ -87,6 +87,31 @@ def run_idf_build(executable: str, project_root: Path, app_name: str = None) -> 
     print()
 
 
+def run_idf_fullclean(executable: str, project_root: Path) -> None:
+    """Run idf.py fullclean to clean the build directory."""
+    print_task(f"Cleaning build directory")
+    process = subprocess.Popen(
+        [executable, "fullclean"],
+        cwd=project_root,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        bufsize=1,
+    )
+    threads = [
+        threading.Thread(target=stream_subprocess_output, args=(process.stdout, "info"), daemon=True),
+        threading.Thread(target=stream_subprocess_output, args=(process.stderr, "error"), daemon=True),
+    ]
+    for thread in threads:
+        thread.start()
+    return_code = process.wait()
+    for thread in threads:
+        thread.join()
+    if return_code != 0:
+        raise subprocess.CalledProcessError(return_code, process.args)
+    print()
+
+
 def load_json(path: Path) -> dict:
     try:
         with path.open("r", encoding="utf-8") as handle:
@@ -268,6 +293,15 @@ def main() -> None:
         rel_output = release_dir.relative_to(project_root)
         print_success(f"  - {rel_output}")
     print()
+    
+    # Clean build directory
+    if not args.skip_build:
+        try:
+            run_idf_fullclean(args.idfpy, project_root)
+        except FileNotFoundError:
+            print(colorize("idf.py not found. Skipping clean step.", "error"))
+        except Exception as exc:
+            print(colorize(f"Warning: Failed to clean build directory: {exc}", "error"))
 
 
 if __name__ == "__main__":

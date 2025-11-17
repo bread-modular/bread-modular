@@ -4,6 +4,7 @@
 #include "bm_midi.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <sys/_intsup.h>
 
 bool bypassed = false;
 static bm_classic_reverb_t classic_reverb;
@@ -45,6 +46,10 @@ static void on_cv_change(uint8_t index, float value) {
     
 }
 
+static void on_usb_serial_message(const char* message, size_t len) {
+    
+}
+
 inline static void process_audio(size_t n_samples, const int16_t* input, int16_t* output) {
     for (int lc=0; lc<n_samples; lc += 2) {
         if (bypassed) {
@@ -59,6 +64,7 @@ inline static void process_audio(size_t n_samples, const int16_t* input, int16_t
         output[lc] = bm_audio_denorm(processed);
     }
 }
+
 
 static void init(bm_app_host_t host) {
     bm_classic_reverb_init(&classic_reverb);
@@ -78,6 +84,7 @@ bm_app_t bm_load_app_reverb() {
         .on_midi_note_off = on_midi_note_off,
         .on_midi_cc = on_midi_cc,
         .on_midi_bpm = on_midi_bpm,
+        .on_usb_serial_message = on_usb_serial_message,
         .on_cv_change = on_cv_change,
         .destroy = destroy
     };

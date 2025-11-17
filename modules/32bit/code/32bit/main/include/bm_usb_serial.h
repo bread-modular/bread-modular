@@ -16,6 +16,8 @@ void bm_usb_serial_setup(bm_usb_serial_config config);
 
 void bm_usb_serial_send_message(const char* message, size_t len);
 
+void bm_usb_serial_send_message_ln(const char* message, size_t len);
+
 #ifdef __cplusplus
 }
 #endif

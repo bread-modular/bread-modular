@@ -22,6 +22,12 @@ void bm_usb_serial_send_message(const char *message, size_t len) {
     usb_serial_jtag_write_bytes((const uint8_t *)message, len, pdMS_TO_TICKS(100));
 }
 
+void bm_usb_serial_send_message_ln(const char *message, size_t len) {
+    bm_usb_serial_send_message(message, len);
+    const char newline = '\n';
+    bm_usb_serial_send_message(&newline, 1);
+}
+
 static void bm_usb_serial_echo_task(void *arg) {
     (void)arg;
 
@@ -31,6 +37,11 @@ static void bm_usb_serial_echo_task(void *arg) {
         // Block for up to 1s waiting for data from the host
         int len = usb_serial_jtag_read_bytes(buffer, sizeof(buffer), pdMS_TO_TICKS(1000));
         if (len > 0) {
+            // Strip trailing whitespace (newline, carriage return, etc.)
+            while (len > 0 && (buffer[len - 1] == '\n' || buffer[len - 1] == '\r' || buffer[len - 1] == ' ' || buffer[len - 1] == '\t')) {
+                len--;
+            }
+            
             if (on_message_callback != NULL) {
                 on_message_callback(buffer, len);
             }
