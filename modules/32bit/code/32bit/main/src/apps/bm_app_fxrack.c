@@ -27,9 +27,6 @@ static size_t sample_rate;
 static bool pipe_delay = false;
 static const char *TAG = "bm_app_fxrack";
 
-static const char* get_name(void) {
-    return "fxrack";
-}
 
 static void on_button_event(bool pressed) {
     if (bm_button_was_held(pressed, PIPE_DELAY_HOLD_THRESHOLD_MS)) {
@@ -163,7 +160,6 @@ static void destroy() {
 
 bm_app_t bm_load_app_fxrack() {
     bm_app_t app = {
-        .get_name = get_name,
         .init = init,
         .process_audio = process_audio,
         .on_button_event = on_button_event,

@@ -10,6 +10,16 @@ if(NOT APP_NAME IN_LIST VALID_APPS)
     message(FATAL_ERROR "Invalid APP_NAME: ${APP_NAME}. Valid options are: ${VALID_APPS}")
 endif()
 
+# Read VERSION file (located at ../../../VERSION relative to main/CMakeLists.txt)
+set(VERSION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../../VERSION")
+if(EXISTS "${VERSION_FILE}")
+    file(READ "${VERSION_FILE}" VERSION_CONTENT)
+    string(STRIP "${VERSION_CONTENT}" FIRMWARE_VERSION)
+else()
+    set(FIRMWARE_VERSION "0.0.0")
+    message(WARNING "VERSION file not found at ${VERSION_FILE}, using default version 0.0.0")
+endif()
+
 # Set compile definition for the selected app
 set(APP_DEFINE "BM_APP_${APP_NAME}")
 string(TOUPPER "${APP_DEFINE}" APP_DEFINE)
@@ -45,5 +55,9 @@ idf_component_register(
         "include"
 )
 
-# Add compile definition after component registration
-target_compile_definitions(${COMPONENT_LIB} PRIVATE ${APP_DEFINE}=1)
+# Add compile definitions after component registration
+target_compile_definitions(${COMPONENT_LIB} PRIVATE 
+    ${APP_DEFINE}=1
+    FIRMWARE_NAME="${APP_NAME}"
+    FIRMWARE_VERSION="${FIRMWARE_VERSION}"
+)

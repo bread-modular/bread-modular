@@ -51,13 +51,21 @@ static void on_button_press() {
     current_app.on_button_event(pressed);
 }
 
-static void on_usb_serial_message(const char* message, size_t len) {    
-    if (len == 12 && memcmp(message, "get-app-name", 12) == 0) {
-        const char* app_name = current_app.get_name();
-        bm_usb_serial_send_message_ln(app_name, strlen(app_name));
-    } else {
-        current_app.on_usb_serial_message(message, len);
+static void on_usb_serial_message(const char* message, size_t len) {
+    // Check for get-firmware-name command
+    if (len == 17 && memcmp(message, "get-firmware-name", 17) == 0) {
+        bm_usb_serial_send_message_ln(FIRMWARE_NAME, strlen(FIRMWARE_NAME));
+        return;
     }
+    
+    // Check for get-firmware-version command
+    if (len == 20 && memcmp(message, "get-firmware-version", 20) == 0) {
+        bm_usb_serial_send_message_ln(FIRMWARE_VERSION, strlen(FIRMWARE_VERSION));
+        return;
+    }
+    
+    // Pass other messages to the app
+    current_app.on_usb_serial_message(message, len);
 }
 
 void app_main(void)
@@ -74,7 +82,7 @@ void app_main(void)
     abort();
     #endif
 
-    ESP_LOGI("main", "Starting app: %s", current_app.get_name());
+    ESP_LOGI("main", "Starting app: %s_%s", FIRMWARE_NAME, FIRMWARE_VERSION);
 
     // 1. setup IO
     bm_button_config_t button_config = {

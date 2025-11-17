@@ -9,10 +9,6 @@
 bool bypassed = false;
 static bm_classic_reverb_t classic_reverb;
 
-static const char* get_name(void) {
-    return "reverb";
-}
-
 static void on_button_event(bool pressed) {
    bypassed = pressed;
 }
@@ -76,7 +72,6 @@ static void destroy() {
 
 bm_app_t bm_load_app_reverb() {
     bm_app_t app = {
-        .get_name = get_name,
         .init = init,
         .process_audio = process_audio,
         .on_button_event = on_button_event,
