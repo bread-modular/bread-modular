@@ -4,6 +4,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "bm_audio.h"
 #include "bm_button.h"
 #include "bm_led.h"
@@ -57,9 +58,19 @@ static void on_usb_serial_message(const char* message, size_t len) {
 
 void app_main(void)
 {
-    // 0. load the app
+    // 0. load the app (selected at compile time via compile definitions)
+    // CMake defines BM_APP_FXRACK=1 or BM_APP_REVERB=1 based on APP_NAME
+    
+    #if defined(BM_APP_FXRACK) && BM_APP_FXRACK == 1
     current_app = bm_load_app_fxrack();
-    // current_app = bm_load_app_reverb();
+    #elif defined(BM_APP_REVERB) && BM_APP_REVERB == 1
+    current_app = bm_load_app_reverb();
+    #else
+    ESP_LOGE("main", "No app selected at compile time. Define BM_APP_FXRACK=1 or BM_APP_REVERB=1");
+    abort();
+    #endif
+
+    ESP_LOGI("main", "Starting app: %s", current_app.get_name());
 
     // 1. setup IO
     bm_button_config_t button_config = {

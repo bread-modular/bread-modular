@@ -1,3 +1,19 @@
+# App selection at compile time
+# Default to fxrack if not specified
+if(NOT DEFINED APP_NAME)
+    set(APP_NAME "fxrack")
+endif()
+
+# Validate app name
+set(VALID_APPS "fxrack" "reverb")
+if(NOT APP_NAME IN_LIST VALID_APPS)
+    message(FATAL_ERROR "Invalid APP_NAME: ${APP_NAME}. Valid options are: ${VALID_APPS}")
+endif()
+
+# Set compile definition for the selected app
+set(APP_DEFINE "BM_APP_${APP_NAME}")
+string(TOUPPER "${APP_DEFINE}" APP_DEFINE)
+
 idf_component_register(
     SRCS
         "main.c"
@@ -28,3 +44,6 @@ idf_component_register(
         ""
         "include"
 )
+
+# Add compile definition after component registration
+target_compile_definitions(${COMPONENT_LIB} PRIVATE ${APP_DEFINE}=1)

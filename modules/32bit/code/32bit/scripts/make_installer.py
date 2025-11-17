@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -57,10 +58,15 @@ def stream_subprocess_output(stream, tone: str) -> None:
         stream.close()
 
 
-def run_idf_build(executable: str, project_root: Path) -> None:
-    print_task(f"Running {executable} build")
+def run_idf_build(executable: str, project_root: Path, app_name: str = None) -> None:
+    build_cmd = [executable, "build"]
+    if app_name:
+        build_cmd.extend(["-D", f"APP_NAME={app_name}"])
+        print_task(f"Running {executable} build for app: {app_name}")
+    else:
+        print_task(f"Running {executable} build")
     process = subprocess.Popen(
-        [executable, "build"],
+        build_cmd,
         cwd=project_root,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -105,13 +111,16 @@ def copy_flash_files(build_dir: Path, entries: dict, output_dir: Path) -> list:
     return parts
 
 
-def build_manifest(project_info: dict, flasher_args: dict, parts: list) -> dict:
+def build_manifest(project_info: dict, flasher_args: dict, parts: list, app_name: str = None) -> dict:
     flash_settings = flasher_args.get("flash_settings", {})
     chip_raw = flasher_args.get("extra_esptool_args", {}).get("chip", "")
     chip_family = CHIP_FAMILY_MAP.get(chip_raw.lower(), chip_raw.upper())
 
+    # Use app_name directly, or fallback to project name if no app specified
+    manifest_name = app_name if app_name else project_info.get("project_name", "ESP32 Project")
+
     return {
-        "name": project_info.get("project_name", "ESP32 Project"),
+        "name": manifest_name,
         "version": project_info.get("project_version", "0.0.0"),
         "builds": [
             {
@@ -162,45 +171,103 @@ def read_version(project_root: Path) -> str:
     raise SystemExit(f"Unable to read version from {version_path}")
 
 
+def get_available_apps(project_root: Path) -> list:
+    """Detect available apps by reading CMakeLists.txt"""
+    cmake_path = project_root / "main" / "CMakeLists.txt"
+    if not cmake_path.exists():
+        raise SystemExit(f"CMakeLists.txt not found at {cmake_path}")
+    
+    try:
+        content = cmake_path.read_text(encoding="utf-8")
+        # Look for VALID_APPS definition: set(VALID_APPS "fxrack" "reverb")
+        match = re.search(r'set\(VALID_APPS\s+"([^"]+)"\s+"([^"]+)"', content)
+        if match:
+            return [match.group(1), match.group(2)]
+        else:
+            raise SystemExit(f"Could not find VALID_APPS definition in {cmake_path}")
+    except SystemExit:
+        raise
+    except Exception as exc:
+        raise SystemExit(f"Error reading CMakeLists.txt: {exc}")
+
+
+def build_and_package_app(
+    args: argparse.Namespace,
+    project_root: Path,
+    app_name: str,
+    version: str,
+    output_root: Path,
+    app_index: int,
+    total_apps: int,
+) -> Path:
+    """Build and package a single app firmware."""
+    build_dir = project_root / "build"
+    
+    # Build the firmware for this app
+    if not args.skip_build:
+        try:
+            print_task(f"Building app {app_index} of {total_apps}: {app_name}")
+            run_idf_build(args.idfpy, project_root, app_name)
+        except FileNotFoundError:
+            print(colorize("idf.py not found. Re-run from an ESP-IDF terminal or pass --skip-build.", "error"))
+            sys.exit(1)
+    
+    # Load build artifacts
+    flasher_args = load_json(build_dir / "flasher_args.json")
+    project_desc = load_json(build_dir / "project_description.json")
+    
+    # Create release directory for this app (without project prefix)
+    release_dir = output_root / f"{app_name}_{version}"
+    
+    if release_dir.exists():
+        shutil.rmtree(release_dir)
+    release_dir.mkdir(parents=True, exist_ok=True)
+    print_task(f"Preparing release folder for {app_name}: {release_dir.relative_to(project_root)}")
+    
+    project_desc["project_version"] = version
+    
+    parts = copy_flash_files(build_dir, flasher_args.get("flash_files", {}), release_dir)
+    manifest = build_manifest(project_desc, flasher_args, parts, app_name)
+    write_manifest(release_dir, manifest)
+    print()
+    
+    return release_dir
+
+
 def main() -> None:
     args = parse_args()
     script_dir = Path(__file__).resolve().parent
     project_root = script_dir.parent
-    build_dir = project_root / "build"
     output_root = args.output if args.output.is_absolute() else project_root / args.output
-
-    if not args.skip_build:
-        try:
-            run_idf_build(args.idfpy, project_root)
-        except FileNotFoundError:
-            print(colorize("idf.py not found. Re-run from an ESP-IDF terminal or pass --skip-build.", "error"))
-            sys.exit(1)
-    else:
-        print_task("Skipping build step")
-        print()
-
-    flasher_args = load_json(build_dir / "flasher_args.json")
-    project_desc = load_json(build_dir / "project_description.json")
-
-    project_name = project_root.name
-    version = read_version(project_root)
-    release_dir = output_root / f"{project_name}_{version}"
-
-    if release_dir.exists():
-        shutil.rmtree(release_dir)
-    release_dir.mkdir(parents=True, exist_ok=True)
-    print_task(f"Preparing release folder {release_dir.relative_to(project_root)}")
-
-    project_desc["project_name"] = project_name
-    project_desc["project_version"] = version
-
-    parts = copy_flash_files(build_dir, flasher_args.get("flash_files", {}), release_dir)
-    manifest = build_manifest(project_desc, flasher_args, parts)
-    write_manifest(release_dir, manifest)
+    
+    # Get available apps
+    apps = get_available_apps(project_root)
+    total_apps = len(apps)
+    print_task(f"Building {total_apps} app(s): {', '.join(apps)}")
     print()
-
-    rel_output = release_dir.relative_to(project_root)
-    print_success(f"\nRelease bundle ready at {rel_output}\n\n")
+    
+    version = read_version(project_root)
+    release_dirs = []
+    
+    # Build and package each app
+    for index, app_name in enumerate(apps, start=1):
+        try:
+            release_dir = build_and_package_app(
+                args, project_root, app_name, version, output_root, index, total_apps
+            )
+            release_dirs.append(release_dir)
+        except Exception as exc:
+            print(colorize(f"Failed to build app '{app_name}': {exc}", "error"))
+            if not args.skip_build:
+                raise
+    
+    # Summary
+    print()
+    print_success(f"\nSuccessfully built {len(release_dirs)} firmware(s):\n")
+    for release_dir in release_dirs:
+        rel_output = release_dir.relative_to(project_root)
+        print_success(f"  - {rel_output}")
+    print()
 
 
 if __name__ == "__main__":

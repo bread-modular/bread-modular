@@ -13,6 +13,7 @@ typedef struct {
 } bm_app_host_t;
 
 typedef struct {
+    const char* (*get_name)(void);
     void (*init)(bm_app_host_t host);
     void (*destroy)(void);
     void (*process_audio)(size_t n_samples, const int16_t *input, int16_t *output);

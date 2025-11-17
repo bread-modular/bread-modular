@@ -2,7 +2,38 @@
 
 This is the main firmware source code for the 32bit.
 
-## Building Firmwares
+## Multiple Apps
+
+This firmware supports multiple apps that can be selected at compile time. Each app becomes a separate firmware when building.
+
+### Defining Apps
+
+Apps are defined in `main/CMakeLists.txt` using the `VALID_APPS` variable:
+
+```cmake
+set(VALID_APPS "fxrack" "reverb")
+```
+
+To add a new app:
+1. Create the app implementation in `main/src/apps/bm_app_<name>.c`
+2. Create the app header in `main/include/apps/bm_app_<name>.h`
+3. Add the app source file to the `SRCS` list in `main/CMakeLists.txt`
+4. Add the app name to the `VALID_APPS` list
+5. Add the app loading logic in `main/main.c`
+
+### Selecting App During Development
+
+When developing, edit `main/CMakeLists.txt` and change the default `APP_NAME` value:
+
+```cmake
+if(NOT DEFINED APP_NAME)
+    set(APP_NAME "fxrack")  # Change this to "reverb" or any other app name
+endif()
+```
+
+Then build normally with `idf.py build`. The selected app will be compiled into the firmware.
+
+### Building Firmwares
 
 Run the following script in an esp-idf terminal.
 
@@ -10,7 +41,16 @@ Run the following script in an esp-idf terminal.
 python3 scripts/make_installer.py
 ```
 
-Then it will generate a set of packages in the `dist` directory. The version name is taken from `../../VERSION`.
+The script will:
+1. Detect all available apps from `main/CMakeLists.txt`
+2. Build a separate firmware for each app
+3. Package each firmware in its own directory in `dist/`
+
+For example, if you have `fxrack` and `reverb` apps, it will generate:
+- `dist/fxrack_<version>/`
+- `dist/reverb_<version>/`
+
+Each directory contains a complete firmware package with `manifest.json` and all required flash files. The version name is taken from `../../VERSION`.
 
 ## Uploading Firmwares
 
