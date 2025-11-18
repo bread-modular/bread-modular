@@ -18,6 +18,8 @@ void bm_usb_serial_send_message(const char* message, size_t len);
 
 void bm_usb_serial_send_message_ln(const char* message, size_t len);
 
+void bm_usb_serial_send_value(const char* message);
+
 #ifdef __cplusplus
 }
 #endif

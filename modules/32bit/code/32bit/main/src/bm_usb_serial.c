@@ -28,6 +28,14 @@ void bm_usb_serial_send_message_ln(const char *message, size_t len) {
     bm_usb_serial_send_message(&newline, 1);
 }
 
+void bm_usb_serial_send_value(const char* message) {
+    bm_usb_serial_send_message("::val::", 7);
+    if (message != NULL) {
+        bm_usb_serial_send_message(message, strlen(message));
+    }
+    bm_usb_serial_send_message_ln("::val::", 7);
+}
+
 static void bm_usb_serial_echo_task(void *arg) {
     (void)arg;
 

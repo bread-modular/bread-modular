@@ -54,13 +54,13 @@ static void on_button_press() {
 static void on_usb_serial_message(const char* message, size_t len) {
     // Check for get-firmware-name command
     if (len == 17 && memcmp(message, "get-firmware-name", 17) == 0) {
-        bm_usb_serial_send_message_ln(FIRMWARE_NAME, strlen(FIRMWARE_NAME));
+        bm_usb_serial_send_value(FIRMWARE_NAME);
         return;
     }
     
     // Check for get-firmware-version command
     if (len == 20 && memcmp(message, "get-firmware-version", 20) == 0) {
-        bm_usb_serial_send_message_ln(FIRMWARE_VERSION, strlen(FIRMWARE_VERSION));
+        bm_usb_serial_send_value(FIRMWARE_VERSION);
         return;
     }
     
