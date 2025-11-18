@@ -1,11 +1,11 @@
 # App selection at compile time
 # Default to fxrack if not specified
 if(NOT DEFINED APP_NAME)
-    set(APP_NAME "fxrack")
+    set(APP_NAME "pipe")
 endif()
 
 # Validate app name
-set(VALID_APPS "fxrack" "reverb")
+set(VALID_APPS "fxrack" "pipe")
 if(NOT APP_NAME IN_LIST VALID_APPS)
     message(FATAL_ERROR "Invalid APP_NAME: ${APP_NAME}. Valid options are: ${VALID_APPS}")
 endif()
@@ -42,7 +42,7 @@ idf_component_register(
         "src/audio/bm_all_pass_filter.c"
         "src/audio/bm_classic_reverb.c"
         "src/apps/bm_app_fxrack.c"
-        "src/apps/bm_app_reverb.c"
+        "src/apps/bm_app_pipe.c"
     PRIV_REQUIRES
         spi_flash
     REQUIRES

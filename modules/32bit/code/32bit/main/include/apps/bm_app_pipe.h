@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-bm_app_t bm_load_app_reverb();
+bm_app_t bm_load_app_pipe();
 
 #ifdef __cplusplus
 }

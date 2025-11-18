@@ -13,7 +13,7 @@
 #include "bm_midi.h"
 #include "bm_app.h"
 #include "apps/bm_app_fxrack.h"
-#include "apps/bm_app_reverb.h"
+#include "apps/bm_app_pipe.h"
 #include "bm_usb_serial.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/projdefs.h"
@@ -71,14 +71,14 @@ static void on_usb_serial_message(const char* message, size_t len) {
 void app_main(void)
 {
     // 0. load the app (selected at compile time via compile definitions)
-    // CMake defines BM_APP_FXRACK=1 or BM_APP_REVERB=1 based on APP_NAME
+    // CMake defines BM_APP_FXRACK=1 or BM_APP_PIPE=1 based on APP_NAME
     
     #if defined(BM_APP_FXRACK) && BM_APP_FXRACK == 1
     current_app = bm_load_app_fxrack();
-    #elif defined(BM_APP_REVERB) && BM_APP_REVERB == 1
-    current_app = bm_load_app_reverb();
+    #elif defined(BM_APP_PIPE) && BM_APP_PIPE == 1
+    current_app = bm_load_app_pipe();
     #else
-    ESP_LOGE("main", "No app selected at compile time. Define BM_APP_FXRACK=1 or BM_APP_REVERB=1");
+    ESP_LOGE("main", "No app selected at compile time. Define BM_APP_FXRACK=1 or BM_APP_PIPE=1");
     abort();
     #endif
 
