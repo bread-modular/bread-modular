@@ -1,7 +1,7 @@
 # App selection at compile time
 # Default to fxrack if not specified
 if(NOT DEFINED APP_NAME)
-    set(APP_NAME "pipe")
+    set(APP_NAME "fxrack")
 endif()
 
 # Validate app name
