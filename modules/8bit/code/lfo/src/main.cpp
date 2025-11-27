@@ -134,11 +134,11 @@ ISR(TCB0_INT_vect) {
 
 // Callback functions for MIDI events
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
-  digitalWrite(GATE_PIN, HIGH);
+  
 }
 
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
-  digitalWrite(GATE_PIN, LOW);
+  
 }
 
 void onControlChange(uint8_t channel, uint8_t control, uint8_t value) {
@@ -195,6 +195,9 @@ void loop() {
 
   // Update the LED
   analogWrite(TOGGLE_LED, latestLfoSample / 2);
+
+  // Write to the GATE
+  digitalWrite(GATE_PIN, latestLfoSample > 127);
 
   // Update the LFO frequency based on CV1 every loop iteration
   uint16_t cv1 = analogRead(PIN_CV1);
