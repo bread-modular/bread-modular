@@ -252,7 +252,7 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 DOXYGEN_DOT_EXECUTABLE:FILEPATH=DOXYGEN_DOT_EXECUTABLE-NOTFOUND
 
 //Doxygen documentation generation tool (https://www.doxygen.nl)
-DOXYGEN_EXECUTABLE:FILEPATH=/opt/local/bin/doxygen
+DOXYGEN_EXECUTABLE:FILEPATH=DOXYGEN_EXECUTABLE-NOTFOUND
 
 //Directory under which to collect all populated content
 FETCHCONTENT_BASE_DIR:PATH=/Users/arunoda/data/projects/bread-modular/modules/16bit/code/16bit/build/_deps
@@ -331,7 +331,7 @@ PICO_STDIO_UART:BOOL=ON
 PICO_STDIO_USB:BOOL=OFF
 
 //No help, variable specified on the command line.
-Python3_EXECUTABLE:UNINITIALIZED=/usr/bin/python3
+Python3_EXECUTABLE:UNINITIALIZED=/opt/homebrew/bin/python3
 
 //Value Computed by CMake
 pico_sdk_BINARY_DIR:STATIC=/Users/arunoda/data/projects/bread-modular/modules/16bit/code/16bit/build/pico-sdk
@@ -515,7 +515,7 @@ DOXYGEN_DOT_EXECUTABLE-ADVANCED:INTERNAL=1
 DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 FAMILY_MCUS:INTERNAL=RP2040
 //Details about finding Python3
-FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/usr/bin/python3][cfound components: Interpreter ][v3.9.6()]
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/opt/homebrew/bin/python3][cfound components: Interpreter ][v3.14.0()]
 PICO_32BIT:INTERNAL=1
 PICO_ARM:INTERNAL=1
 PICO_BOOT_STAGE2_DIR:INTERNAL=/Users/arunoda/.pico-sdk/sdk/2.1.1/src/rp2350/boot_stage2
@@ -545,10 +545,10 @@ PICO_TOOLS_DIR:INTERNAL=/Users/arunoda/.pico-sdk/sdk/2.1.1/tools
 _Python3_Compiler_REASON_FAILURE:INTERNAL=
 //Development reason failure
 _Python3_Development_REASON_FAILURE:INTERNAL=
-_Python3_EXECUTABLE:INTERNAL=/usr/bin/python3
+_Python3_EXECUTABLE:INTERNAL=/opt/homebrew/bin/python3
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;9;6;32;64;;;abi3;/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9;/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9;/Library/Python/3.9/site-packages;/Library/Python/3.9/site-packages
-_Python3_INTERPRETER_SIGNATURE:INTERNAL=e4651144cf83e5138c01a27471bec7d2
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;14;0;32;64;;;abi3;/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/lib/python3.14;/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/lib/python3.14;/opt/homebrew/lib/python3.14/site-packages;/opt/homebrew/lib/python3.14/site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=1dbb05109724246e27c88efbf73706a3
 //NumPy reason failure
 _Python3_NumPy_REASON_FAILURE:INTERNAL=
 

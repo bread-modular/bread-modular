@@ -13,6 +13,7 @@
 #include "audio/apps/interfaces/audio_app.h"
 
 #include "audio/apps/fx/delay_fx.h"
+#include "audio/apps/fx/rumble_fx.h"
 #include "audio/apps/fx/noop_fx.h"
 #include "audio/apps/fx/metalverb_fx.h"
 
@@ -38,7 +39,7 @@ class SamplerApp : public AudioApp {
         WebSerial* webSerial = WebSerial::getInstance();
         Biquad lowpassFilter{Biquad::FilterType::LOWPASS};
         Biquad highpassFilter{Biquad::FilterType::HIGHPASS};
-        AudioFX* fx1 = new DelayFX;
+        AudioFX* fx1 = new RumbleFX;
         AudioFX* fx2 = new MetalVerbFX;
         AudioFX* fx3 = new NoopFX;
 
@@ -89,7 +90,7 @@ class SamplerApp : public AudioApp {
             uint8_t fx2Value = config.get(CONFIG_FX2_INDEX, CONFIG_FX_METALVERB);
             uint8_t fx3Value = config.get(CONFIG_FX3_INDEX, CONFIG_FX_NOOP);
 
-            setFX(CONFIG_FX1_INDEX, fx1Value);
+            // setFX(CONFIG_FX1_INDEX, fx1Value);
             setFX(CONFIG_FX2_INDEX, fx2Value);
             setFX(CONFIG_FX3_INDEX, fx3Value);
             
@@ -108,6 +109,10 @@ class SamplerApp : public AudioApp {
             for (int i = 0; i < 6; ++i) {
                 sumGroupA += players[i].process() / 32768.0f;
             }
+            
+            // Sidechain gate for FX1 (Rumble)
+            // Trigger sidechain when the kick (default sample) is playing
+            fx1->setGate(defaultSamplePlayhead < defaultSampleLen);
 
             float sumGroupB = 0.0f;
             for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
