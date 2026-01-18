@@ -72,7 +72,7 @@ public:
         
         // 3. Distortion / Drive on the wet path
         if (drive > 0.0f) {
-            wet *= (1.0f + drive * 5.0f);
+            wet *= (1.0f + drive * 20.0f);
             // Soft clip
             if (wet > 1.0f) wet = 1.0f;
             if (wet < -1.0f) wet = -1.0f;
@@ -95,7 +95,7 @@ public:
 
         // 6. Mix
         float rumbleVol = parameterValues[2];
-        return dry + wet * rumbleVol;
+        return dry + wet * rumbleVol / 2.0f;
     }
     
     virtual void setBPM(uint16_t bpm) override {
@@ -116,9 +116,10 @@ public:
             }
             case 1: {
                 // Filter Cutoff
-                // Range 30Hz to 500Hz
+                // Range 500Hz to 30Hz
                 // Exponential mapping
-                float cutoff = 30.0f + 470.0f * (value * value);
+                float invertedValue = 1.0f - value;
+                float cutoff = 30.0f + 470.0f * (invertedValue * invertedValue);
                 lowpass.setCutoff(cutoff);
                 break;
             }
@@ -128,7 +129,7 @@ public:
             }
             case 3: {
                 // Drive handled in process
-                drive = value;
+                drive = value * value;
                 break;
             }
         }
