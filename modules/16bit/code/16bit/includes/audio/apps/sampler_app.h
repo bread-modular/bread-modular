@@ -27,6 +27,7 @@
 #define CONFIG_FX_NOOP 0
 #define CONFIG_FX_DELAY 1
 #define CONFIG_FX_METALVERB 2
+#define CONFIG_FX_RUMBLE 3
 
 class SamplerApp : public AudioApp {
     private:
@@ -86,11 +87,11 @@ class SamplerApp : public AudioApp {
             }
 
             config.load();
-            uint8_t fx1Value = config.get(CONFIG_FX1_INDEX, CONFIG_FX_DELAY);
+            uint8_t fx1Value = config.get(CONFIG_FX1_INDEX, CONFIG_FX_RUMBLE);
             uint8_t fx2Value = config.get(CONFIG_FX2_INDEX, CONFIG_FX_METALVERB);
             uint8_t fx3Value = config.get(CONFIG_FX3_INDEX, CONFIG_FX_NOOP);
 
-            // setFX(CONFIG_FX1_INDEX, fx1Value);
+            setFX(CONFIG_FX1_INDEX, fx1Value);
             setFX(CONFIG_FX2_INDEX, fx2Value);
             setFX(CONFIG_FX3_INDEX, fx3Value);
             
@@ -266,6 +267,9 @@ class SamplerApp : public AudioApp {
                 case CONFIG_FX_METALVERB:
                     newFx = new MetalVerbFX;
                     break;
+                case CONFIG_FX_RUMBLE:
+                    newFx = new RumbleFX;
+                    break;
                 default:
                     return;
             }
@@ -328,6 +332,8 @@ class SamplerApp : public AudioApp {
                     newFx = CONFIG_FX_DELAY;
                 } else if (strncmp(fxName, "metalverb", 9) == 0) {
                     newFx = CONFIG_FX_METALVERB;
+                } else if (strncmp(fxName, "rumble", 6) == 0) {
+                    newFx = CONFIG_FX_RUMBLE;
                 } else {
                     printf("No such fx found: %s\n", fxName);
                     return true;
@@ -365,6 +371,8 @@ class SamplerApp : public AudioApp {
                     webSerial->sendValue("delay");
                 } else if (fxValue == CONFIG_FX_METALVERB) {
                     webSerial->sendValue("metalverb");
+                } else if (fxValue == CONFIG_FX_RUMBLE) {
+                    webSerial->sendValue("rumble");
                 }
                 return true;
             }
