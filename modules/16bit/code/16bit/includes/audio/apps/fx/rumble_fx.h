@@ -9,6 +9,7 @@ class RumbleFX : public AudioFX {
 private:
     Delay delay{2000}; // Longer buffer for rumble
     Biquad lowpass{Biquad::FilterType::LOWPASS};
+    Biquad preFilter{Biquad::FilterType::LOWPASS}; // Remove click before delay
     float parameterValues[4];
     
     // Sidechain state
@@ -20,6 +21,8 @@ private:
     
     // Distortion
     float drive = 1.0f;
+    float crushPhase = 0.0f;
+    float crushLastSample = 0.0f;
 
 public:
     RumbleFX() {
@@ -60,6 +63,9 @@ public:
         lowpass.init(audioManager);
         lowpass.setCutoff(150.0f);
         lowpass.setResonance(0.707f);
+        
+        preFilter.init(audioManager);
+        preFilter.setCutoff(600.0f); // Remove high click, keep body
     }
 
     virtual float process(float input) override {
@@ -67,8 +73,11 @@ public:
         float dry = input;
 
         // 2. Rumble Generation
+        // Pre-filter: Remove click from the input going into the rumble
+        float wetInput = preFilter.process(input);
+        
         // We want the reverb/delay tail of the kick
-        float wet = delay.process(input);
+        float wet = delay.process(wetInput);
         
         // 3. Distortion / Drive on the wet path
         if (drive > 0.0f) {
@@ -76,6 +85,21 @@ public:
             // Soft clip
             if (wet > 1.0f) wet = 1.0f;
             if (wet < -1.0f) wet = -1.0f;
+            
+            // Downsampler (Bitcrusher effect)
+            if (drive > 0.1f) {
+                // Reduction factor scales with drive. 
+                // At drive=0.1 -> 1.0 (native). At drive=1.0 -> ~30x reduction
+                float reduction = 1.0f + (drive - 0.1f) * 30.0f;
+                
+                crushPhase += 1.0f;
+                if (crushPhase >= reduction) {
+                    crushPhase -= reduction;
+                    crushLastSample = wet;
+                } else {
+                    wet = crushLastSample;
+                }
+            }
         }
 
         // // 4. Lowpass Filter
