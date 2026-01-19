@@ -11,7 +11,7 @@ class Delay {
 public:
     // maxDelayMs: maximum delay buffer size (in milliseconds)
     Delay(float maxDelayMs)
-        : buffer(nullptr), maxDelay(0), maxDelayMs(maxDelayMs), delaySamples(1000), feedback(0.0f), wet(0.0f), writeIndex(0), sampleRate(44100) {
+        : buffer(nullptr), maxDelay(0), maxDelayMs(maxDelayMs), targetDelaySamples(1000.0f), feedback(0.0f), wet(0.0f), writeIndex(0), sampleRate(44100), currentDelaySamples(1000.0f) {
         // Buffer allocation is deferred to init()
     }
 
@@ -26,7 +26,8 @@ public:
 
         buffer = (float*)psram->alloc(maxDelay * sizeof(float));
         reset();
-        currentDelaySamples = (float)delaySamples;
+        targetDelaySamples = 1000.0f;
+        currentDelaySamples = targetDelaySamples;
         lowpassFilter.init(audioManager);
         lowpassFilter.setCutoff(lowpassCutoff);
     }
@@ -37,13 +38,9 @@ public:
         if (bpm > 0 && delayBeats > 0.0f) {
             float seconds = (60.0f * delayBeats) / bpm;
             size_t samples = MIN((size_t)(seconds * sampleRate), maxDelay);
-            if (fabs(currentDelaySamples - (float)samples) > 0.5f) {
-                pendingDelaySamples = (float)samples;
-                pendingUpdate = true;
-            } else {
-                setDelaySamples(samples);
-                pendingUpdate = false;
-            }
+            if (samples < 1) samples = 1;
+            // Update target immediately - smoothing happens in process()
+            targetDelaySamples = (float)samples;
         }
     }
 
@@ -72,23 +69,18 @@ public:
     void reset() {
         for (size_t i = 0; i < maxDelay; ++i) buffer[i] = 0;
         writeIndex = 0;
-        currentDelaySamples = (float)delaySamples;
+        currentDelaySamples = targetDelaySamples;
     }
 
-    // Process a single sample 
+    // Process a single sample
     float process(float input) {
         if (buffer == nullptr) return input;
 
         // Parameter smoothing for delay time
         const float smoothing = 0.005f; // 0.0 = no smoothing, 1.0 = instant
-        currentDelaySamples += smoothing * ((float)delaySamples - currentDelaySamples);
+        currentDelaySamples += smoothing * (targetDelaySamples - currentDelaySamples);
         // Smoothing for wet parameter
         currentWet += smoothing * (wet - currentWet);
-        // If smoothing is finished and a pending update exists, apply it
-        if (pendingUpdate && fabs(currentDelaySamples - (float)delaySamples) < 0.5f) {
-            setDelaySamples((size_t)pendingDelaySamples);
-            pendingUpdate = false;
-        }
         if (pendingWetUpdate && fabs(currentWet - wet) < 0.01f) {
             wet = pendingWet;
             pendingWetUpdate = false;
@@ -102,12 +94,12 @@ public:
         
         buffer[writeIndex] = fbSample;
         writeIndex = (writeIndex + 1) % maxDelay;
-        
+
         // If delay is 0, return input
-        if (delaySamples == 0) {
+        if (currentDelaySamples < 1.0f) {
             return input;
         }
-        
+
         // Wet/dry mix
         float out = input * MAX(0.9f, 1.0f - currentWet) + filteredDelayed * currentWet;
         return out;
@@ -121,29 +113,22 @@ public:
 
     // Set BPM and update delay if using beat-based delay
     void setBPM(uint16_t bpm) {
-        this->bpm = bpm;
-        setDelayBeats(delayBeats);
+        if (bpm > 0) {
+            this->bpm = bpm;
+            setDelayBeats(delayBeats);
+        }
     }
 
 private:
-    // Set the delay time in samples (should be <= maxDelay)
-    void setDelaySamples(size_t samples) {
-        if (samples < 1) samples = 1;
-        if (samples > maxDelay) samples = maxDelay;
-        delaySamples = samples;
-    }
-    
     float* buffer;
     size_t maxDelay;
     float maxDelayMs;
-    size_t delaySamples;
+    float targetDelaySamples = 1000.0f; // Target delay time (smoothed in process())
     float feedback;
     float wet;
     size_t writeIndex;
     uint32_t sampleRate;
-    float currentDelaySamples;
-    float pendingDelaySamples = 0.0f;
-    bool pendingUpdate = false;
+    float currentDelaySamples; // Smoothed current delay time
     float currentWet = 0.0f;
     float pendingWet = 0.0f;
     bool pendingWetUpdate = false;

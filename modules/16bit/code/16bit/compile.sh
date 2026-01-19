@@ -1,0 +1,1 @@
+~/.pico-sdk/ninja/v1.12.1/ninja -C ./build
