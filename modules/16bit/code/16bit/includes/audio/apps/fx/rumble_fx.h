@@ -29,7 +29,7 @@ public:
         // Default param values
         parameterValues[0] = 0.5f; // Decay
         parameterValues[1] = 0.3f; // Cutoff (low)
-        parameterValues[2] = 0.8f; // Volume
+        parameterValues[2] = 0.0f; // Volume
         parameterValues[3] = 0.0f; // Drive
     }
     
