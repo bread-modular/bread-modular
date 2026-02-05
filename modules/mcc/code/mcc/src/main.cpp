@@ -87,12 +87,21 @@ void loop() {
   static unsigned long lastForceSend = 0;
 
   unsigned long now = millis();
-  bool forceSend = false;
+
+  // Force send all CC values every 1 second
   if (now - lastForceSend >= 1000) {
     lastForceSend = now;
-    forceSend = true;
+    lastCv1 = analogRead(AI_PIN) / 8;
+    lastCv2 = analogRead(AI_PIN + 1) / 8;
+    lastCv3 = analogRead(AI_PIN + 2) / 8;
+    lastCv4 = analogRead(AI_PIN + 3) / 8;
+    midi.sendControlChange(1, baseCcValue, lastCv1);
+    midi.sendControlChange(1, baseCcValue + 1, lastCv2);
+    midi.sendControlChange(1, baseCcValue + 2, lastCv3);
+    midi.sendControlChange(1, baseCcValue + 3, lastCv4);
   }
 
+  // Send CC on value change (checked every 10ms)
   if (now - lastCheck >= 10) {
     lastCheck = now;
     uint8_t cv1 = analogRead(AI_PIN) / 8;
@@ -100,19 +109,19 @@ void loop() {
     uint8_t cv3 = analogRead(AI_PIN + 2) / 8;
     uint8_t cv4 = analogRead(AI_PIN + 3) / 8;
 
-    if (forceSend || cv1 != lastCv1) {
+    if (cv1 != lastCv1) {
       midi.sendControlChange(1, baseCcValue, cv1);
       lastCv1 = cv1;
     }
-    if (forceSend || cv2 != lastCv2) {
+    if (cv2 != lastCv2) {
       midi.sendControlChange(1, baseCcValue + 1, cv2);
       lastCv2 = cv2;
     }
-    if (forceSend || cv3 != lastCv3) {
+    if (cv3 != lastCv3) {
       midi.sendControlChange(1, baseCcValue + 2, cv3);
       lastCv3 = cv3;
     }
-    if (forceSend || cv4 != lastCv4) {
+    if (cv4 != lastCv4) {
       midi.sendControlChange(1, baseCcValue + 3, cv4);
       lastCv4 = cv4;
     }
