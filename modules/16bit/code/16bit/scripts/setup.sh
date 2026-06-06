@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+PROJECT_ROOT="$(dirname -- "$SCRIPT_DIR")"
 BREADMODULAR_HOME="${BREADMODULAR_HOME:-$HOME/.breadmodular}"
 
 PICO_SDK_VERSION="${PICO_SDK_VERSION:-2.1.1}"
@@ -127,4 +128,4 @@ ENV_FILE="$PROJECT_ROOT/.pico-sdk-env"
 log "Bread Modular tools ready: $BREADMODULAR_HOME"
 log "Pico SDK ready: $PICO_SDK_PATH"
 log "Environment file written: $ENV_FILE"
-log "Run ./build.sh to build the firmware."
+log "Run ./scripts/build.sh to build the firmware."

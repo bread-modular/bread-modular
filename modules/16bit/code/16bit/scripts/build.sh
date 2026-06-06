@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+PROJECT_ROOT="$(dirname -- "$SCRIPT_DIR")"
 DEFAULT_PICO_SDK_VERSION="2.1.1"
 BREADMODULAR_HOME="${BREADMODULAR_HOME:-$HOME/.breadmodular}"
 
@@ -31,14 +32,14 @@ if [ -d "$BREADMODULAR_HOME/bin" ]; then
 fi
 
 if [ ! -f "$PICO_SDK_PATH/pico_sdk_init.cmake" ]; then
-    die "Pico SDK not found at $PICO_SDK_PATH. Run ./setup.sh first."
+    die "Pico SDK not found at $PICO_SDK_PATH. Run ./scripts/setup.sh first."
 fi
 
 if [ -n "${PICO_TOOLCHAIN_PATH:-}" ]; then
     export PATH="$PICO_TOOLCHAIN_PATH/bin:$PATH"
 fi
 
-command -v "$CMAKE_BIN" >/dev/null 2>&1 || die "CMake not found. Run ./setup.sh first or set CMAKE_BIN=/path/to/cmake."
+command -v "$CMAKE_BIN" >/dev/null 2>&1 || die "CMake not found. Run ./scripts/setup.sh first or set CMAKE_BIN=/path/to/cmake."
 
 if ! command -v arm-none-eabi-gcc >/dev/null 2>&1 && [ -z "${PICO_COMPILER:-}" ] && [ -z "${CMAKE_C_COMPILER:-}" ]; then
     log "Warning: arm-none-eabi-gcc was not found in PATH; CMake may fail unless a Pico-compatible toolchain is configured."

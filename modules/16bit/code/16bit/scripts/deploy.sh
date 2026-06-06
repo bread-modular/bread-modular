@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+PROJECT_ROOT="$(dirname -- "$SCRIPT_DIR")"
 BREADMODULAR_HOME="${BREADMODULAR_HOME:-$HOME/.breadmodular}"
 BUILD_DIR="${BUILD_DIR:-$PROJECT_ROOT/.build}"
 BUILD_TARGET="${BUILD_TARGET:-16bit}"
@@ -9,7 +10,7 @@ PICO_VOLUME_NAMES="${PICO_VOLUME_NAMES:-RPI-RP2 RP2350}"
 
 usage() {
     cat <<EOF
-Usage: ./deploy.sh [firmware.uf2]
+Usage: ./scripts/deploy.sh [firmware.uf2]
 
 Environment overrides:
   BUILD_DIR=/path/to/build          Build directory. Default: .build
@@ -79,7 +80,12 @@ find_pico_volume() {
     done
 
     if [ "${#matches[@]}" -eq 0 ]; then
-        printf 'ERROR: No Pico bootloader volume found that is readable and contains INDEX.HTM. Looked for: %s\n' "$PICO_VOLUME_NAMES" >&2
+        printf '\n' >&2
+        printf '  ⚠️  No Pico bootloader volume detected.\n' >&2
+        printf '\n' >&2
+        printf '  Hold BOOT then RESET on your Pico.\n' >&2
+        printf '  You will see the "RP2350" directory — then run this script again.\n' >&2
+        printf '\n' >&2
         return 1
     fi
 
@@ -101,9 +107,9 @@ fi
 log "Found Pico bootloader volume: $PICO_VOLUME_PATH"
 
 if [ "$DEPLOY_BUILD" != "0" ]; then
-    [ -x "$PROJECT_ROOT/build.sh" ] || die "build.sh is missing or not executable."
+    [ -x "$PROJECT_ROOT/scripts/build.sh" ] || die "build.sh is missing or not executable."
     log "Building firmware before deploy"
-    "$PROJECT_ROOT/build.sh"
+    "$PROJECT_ROOT/scripts/build.sh"
 fi
 
 case "$UF2_PATH" in
@@ -111,7 +117,7 @@ case "$UF2_PATH" in
     *) die "Firmware must be a .uf2 file: $UF2_PATH" ;;
 esac
 
-[ -f "$UF2_PATH" ] || die "UF2 firmware not found: $UF2_PATH. Run ./build.sh first or pass a .uf2 path."
+[ -f "$UF2_PATH" ] || die "UF2 firmware not found: $UF2_PATH. Run ./scripts/build.sh first or pass a .uf2 path."
 [ -d "$PICO_VOLUME_PATH" ] || die "Pico volume disappeared before upload: $PICO_VOLUME_PATH"
 [ -w "$PICO_VOLUME_PATH" ] || die "Pico volume is not writable: $PICO_VOLUME_PATH"
 
