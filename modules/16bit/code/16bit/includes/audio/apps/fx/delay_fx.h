@@ -27,7 +27,7 @@ public:
             case 0: return "Delay Beats";
             case 1: return "Feedback";
             case 2: return "Wet/Dry";
-            case 3: return "Lowpass Cutoff";
+            case 3: return "Filter Cutoff";
         }
 
         return "";
@@ -35,6 +35,7 @@ public:
 
     virtual void init(AudioManager* audioManager) override {
         delay.init(audioManager);
+        delay.setFilterType(Biquad::HIGHPASS);
     }
 
     virtual float process(float input) override {
@@ -61,9 +62,14 @@ public:
             case 1: delay.setFeedback(value); break;
             case 2: delay.setWet(value); break;
             case 3: {
-                float oneMinusValueNormalized = 1.0 - value;
-                float cutoff = 100.0f * powf(20000.0f / 100.0f, oneMinusValueNormalized * oneMinusValueNormalized);
-                delay.setLowpassCutoff(cutoff);
+                if (value <= 0.0f) {
+                    delay.setFilterType(Biquad::LOWPASS);
+                    delay.setLowpassCutoff(20000.0f);
+                } else {
+                    delay.setFilterType(Biquad::HIGHPASS);
+                    float cutoff = 100.0f * powf(20000.0f / 100.0f, value * value);
+                    delay.setLowpassCutoff(cutoff);
+                }
                 break;
             }
         }

@@ -28,8 +28,8 @@ public:
         reset();
         targetDelaySamples = 1000.0f;
         currentDelaySamples = targetDelaySamples;
-        lowpassFilter.init(audioManager);
-        lowpassFilter.setCutoff(lowpassCutoff);
+        feedbackFilter.init(audioManager);
+        feedbackFilter.setCutoff(filterCutoff);
     }
 
     // Set delay in beats (fractional allowed, e.g., 0.5 = eighth note)
@@ -88,8 +88,8 @@ public:
         size_t readIndex = (writeIndex + maxDelay - (size_t)currentDelaySamples) % maxDelay;
         float delayed = buffer[readIndex];
         
-        // Apply lowpass filter to delayed sample before feedback
-        float filteredDelayed = lowpassFilter.process(delayed);
+        // Apply feedback filter to delayed sample before feedback
+        float filteredDelayed = feedbackFilter.process(delayed);
         float fbSample = input + filteredDelayed * feedback;
         
         buffer[writeIndex] = fbSample;
@@ -105,10 +105,15 @@ public:
         return out;
     }
 
-    // Set the lowpass filter cutoff frequency (Hz)
+    // Set the feedback filter cutoff frequency (Hz)
     void setLowpassCutoff(float freq) {
-        lowpassCutoff = freq;
-        lowpassFilter.setCutoff(freq);
+        filterCutoff = freq;
+        feedbackFilter.setCutoff(freq);
+    }
+
+    // Set the feedback filter type (LOWPASS or HIGHPASS)
+    void setFilterType(Biquad::FilterType type) {
+        feedbackFilter.setType(type);
     }
 
     // Set BPM and update delay if using beat-based delay
@@ -132,8 +137,8 @@ private:
     float currentWet = 0.0f;
     float pendingWet = 0.0f;
     bool pendingWetUpdate = false;
-    Biquad lowpassFilter = Biquad(Biquad::FilterType::LOWPASS);
-    float lowpassCutoff = 20000.0f;
+    Biquad feedbackFilter = Biquad(Biquad::FilterType::LOWPASS);
+    float filterCutoff = 20000.0f;
     uint16_t bpm = 0;
     float delayBeats = 0.0f;
     PSRAM *psram = PSRAM::getInstance();

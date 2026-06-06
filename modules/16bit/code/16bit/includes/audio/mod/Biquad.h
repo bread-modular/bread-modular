@@ -34,6 +34,11 @@ public:
         updateCoeffs();
     }
 
+    void setType(FilterType t) {
+        type = t;
+        updateCoeffs();
+    }
+
     float process(float input) {
         float out = a0 * input + a1 * z1 + a2 * z2 - b1 * y1 - b2 * y2;
         z2 = z1;
