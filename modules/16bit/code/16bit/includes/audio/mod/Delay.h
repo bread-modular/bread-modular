@@ -116,6 +116,11 @@ public:
         feedbackFilter.setType(type);
     }
 
+    // Set the feedback filter resonance (Q factor)
+    void setResonance(float q) {
+        feedbackFilter.setResonance(q);
+    }
+
     // Set BPM and update delay if using beat-based delay
     void setBPM(uint16_t bpm) {
         if (bpm > 0) {
