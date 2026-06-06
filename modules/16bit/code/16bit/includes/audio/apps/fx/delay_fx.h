@@ -65,10 +65,18 @@ public:
                 if (value <= 0.0f) {
                     delay.setFilterType(Biquad::LOWPASS);
                     delay.setLowpassCutoff(20000.0f);
+                    delay.setResonance(0.7f);
                 } else {
                     delay.setFilterType(Biquad::HIGHPASS);
                     float cutoff = 100.0f * powf(20000.0f / 100.0f, value * value);
                     delay.setLowpassCutoff(cutoff);
+                    if (cutoff <= 500.0f) {
+                        delay.setResonance(0.7f);
+                    } else {
+                        float t = (cutoff - 500.0f) / (20000.0f - 500.0f);
+                        float q = 1.2f + t * 0.8f;
+                        delay.setResonance(q);
+                    }
                 }
                 break;
             }
