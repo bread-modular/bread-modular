@@ -18,6 +18,7 @@ Environment overrides:
   DEPLOY_BUILD=0                    Skip building before upload
   PICO_VOLUME=/Volumes/RPI-RP2      Explicit Pico bootloader volume
   PICO_VOLUME_NAMES="RPI-RP2 RP2350" Bootloader volume names to detect
+  PICOTOOL_BIN=/path/to/picotool    Path to picotool for auto-reset deploy
 EOF
 }
 
@@ -51,6 +52,35 @@ fi
 if [ -d "$BREADMODULAR_HOME/bin" ]; then
     export PATH="$BREADMODULAR_HOME/bin:$PATH"
 fi
+
+find_picotool() {
+    if [ -n "${PICOTOOL_BIN:-}" ]; then
+        if [ -x "$PICOTOOL_BIN" ]; then
+            printf '%s\n' "$PICOTOOL_BIN"
+            return 0
+        fi
+        printf 'WARNING: PICOTOOL_BIN does not exist or is not executable: %s\n' "$PICOTOOL_BIN" >&2
+    fi
+
+    local breadmodular_tool
+    breadmodular_tool="$BREADMODULAR_HOME/picotool/2.2.0-a4/picotool/picotool"
+    if [ -x "$breadmodular_tool" ]; then
+        printf '%s\n' "$breadmodular_tool"
+        return 0
+    fi
+
+    return 1
+}
+
+deploy_with_picotool() {
+    local picotool_bin uf2
+    picotool_bin="$1"
+    uf2="$2"
+
+    log "Using picotool for auto-reset deploy: $picotool_bin"
+    "$picotool_bin" load -f "$uf2"
+    log "Upload complete. The Pico will reboot automatically."
+}
 
 find_pico_volume() {
     if [ -n "${PICO_VOLUME:-}" ]; then
@@ -99,12 +129,28 @@ find_pico_volume() {
     printf '%s\n' "${matches[0]}"
 }
 
-PICO_VOLUME_PATH="$(find_pico_volume || true)"
-if [ -z "$PICO_VOLUME_PATH" ]; then
-    die "No Pico bootloader volume found that is readable and contains INDEX.HTM. Hold BOOTSEL while plugging in the Pico, then rerun. Looked for: $PICO_VOLUME_NAMES"
-fi
+deploy_with_volume() {
+    local uf2 pico_volume
+    uf2="$1"
+    pico_volume="$2"
 
-log "Found Pico bootloader volume: $PICO_VOLUME_PATH"
+    log "Found Pico bootloader volume: $pico_volume"
+
+    case "$uf2" in
+        *.uf2) ;;
+        *) die "Firmware must be a .uf2 file: $uf2" ;;
+    esac
+
+    [ -f "$uf2" ] || die "UF2 firmware not found: $uf2. Run ./scripts/build.sh first or pass a .uf2 path."
+    [ -d "$pico_volume" ] || die "Pico volume disappeared before upload: $pico_volume"
+    [ -w "$pico_volume" ] || die "Pico volume is not writable: $pico_volume"
+
+    log "Uploading $(basename -- "$uf2") to $pico_volume"
+    cp "$uf2" "$pico_volume/"
+    sync
+
+    log "Upload complete. The Pico should reboot automatically."
+}
 
 if [ "$DEPLOY_BUILD" != "0" ]; then
     [ -x "$PROJECT_ROOT/scripts/build.sh" ] || die "build.sh is missing or not executable."
@@ -112,17 +158,10 @@ if [ "$DEPLOY_BUILD" != "0" ]; then
     "$PROJECT_ROOT/scripts/build.sh"
 fi
 
-case "$UF2_PATH" in
-    *.uf2) ;;
-    *) die "Firmware must be a .uf2 file: $UF2_PATH" ;;
-esac
+PICOTOOL_PATH="$(find_picotool || true)"
 
-[ -f "$UF2_PATH" ] || die "UF2 firmware not found: $UF2_PATH. Run ./scripts/build.sh first or pass a .uf2 path."
-[ -d "$PICO_VOLUME_PATH" ] || die "Pico volume disappeared before upload: $PICO_VOLUME_PATH"
-[ -w "$PICO_VOLUME_PATH" ] || die "Pico volume is not writable: $PICO_VOLUME_PATH"
+if [ -z "$PICOTOOL_PATH" ]; then
+    die "picotool not found. Run ./scripts/setup.sh first."
+fi
 
-log "Uploading $(basename -- "$UF2_PATH") to $PICO_VOLUME_PATH"
-cp "$UF2_PATH" "$PICO_VOLUME_PATH/"
-sync
-
-log "Upload complete. The Pico should reboot automatically."
+deploy_with_picotool "$PICOTOOL_PATH" "$UF2_PATH"

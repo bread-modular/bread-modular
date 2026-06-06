@@ -20,6 +20,16 @@ CMAKE_DOWNLOAD_DIR="${CMAKE_DOWNLOAD_DIR:-$BREADMODULAR_HOME/downloads}"
 CMAKE_ROOT="${CMAKE_ROOT:-$BREADMODULAR_HOME/cmake}"
 CMAKE_INSTALL_DIR="${CMAKE_INSTALL_DIR:-$CMAKE_ROOT/$CMAKE_PACKAGE}"
 CMAKE_BIN_DIR="${CMAKE_BIN_DIR:-$BREADMODULAR_HOME/bin}"
+
+PICOTOOL_VERSION="${PICOTOOL_VERSION:-2.2.0-a4}"
+PICOTOOL_PACKAGE="${PICOTOOL_PACKAGE:-picotool-${PICOTOOL_VERSION}-mac}"
+PICOTOOL_ARCHIVE="${PICOTOOL_ARCHIVE:-${PICOTOOL_PACKAGE}.zip}"
+PICOTOOL_URL="${PICOTOOL_URL:-https://github.com/raspberrypi/pico-sdk-tools/releases/download/v2.2.0-3/${PICOTOOL_ARCHIVE}}"
+PICOTOOL_DOWNLOAD_DIR="${PICOTOOL_DOWNLOAD_DIR:-$BREADMODULAR_HOME/downloads}"
+PICOTOOL_ROOT="${PICOTOOL_ROOT:-$BREADMODULAR_HOME/picotool}"
+PICOTOOL_INSTALL_DIR="${PICOTOOL_INSTALL_DIR:-$PICOTOOL_ROOT/$PICOTOOL_VERSION}"
+PICOTOOL_BIN="${PICOTOOL_BIN:-$PICOTOOL_INSTALL_DIR/picotool/picotool}"
+
 if [ -z "${CMAKE_SHA256+x}" ]; then
     if [ "$CMAKE_VERSION" = "$DEFAULT_CMAKE_VERSION" ] && [ "$CMAKE_ARCHIVE" = "$CMAKE_PACKAGE.tar.gz" ]; then
         CMAKE_SHA256="$DEFAULT_CMAKE_SHA256"
@@ -84,6 +94,37 @@ install_cmake() {
     log "CMake ready: $cmake_bin"
 }
 
+install_picotool() {
+    local archive_path="$PICOTOOL_DOWNLOAD_DIR/$PICOTOOL_ARCHIVE"
+    local picotool_bin="$PICOTOOL_INSTALL_DIR/picotool/picotool"
+
+    need curl
+    need unzip
+
+    mkdir -p "$PICOTOOL_DOWNLOAD_DIR" "$PICOTOOL_ROOT"
+
+    if [ ! -f "$archive_path" ]; then
+        log "Downloading picotool $PICOTOOL_VERSION from $PICOTOOL_URL"
+        curl -fL --retry 3 --retry-delay 2 -o "$archive_path.tmp" "$PICOTOOL_URL"
+        mv "$archive_path.tmp" "$archive_path"
+    else
+        log "Using cached picotool archive: $archive_path"
+    fi
+
+    if [ ! -x "$picotool_bin" ]; then
+        log "Installing picotool $PICOTOOL_VERSION to $PICOTOOL_INSTALL_DIR"
+        rm -rf "$PICOTOOL_INSTALL_DIR"
+        unzip -q "$archive_path" -d "$PICOTOOL_INSTALL_DIR"
+        xattr -dr com.apple.quarantine "$PICOTOOL_INSTALL_DIR" 2>/dev/null || true
+    else
+        log "picotool already installed: $PICOTOOL_INSTALL_DIR"
+    fi
+
+    [ -x "$picotool_bin" ] || die "picotool install failed: $picotool_bin was not found"
+
+    log "picotool ready: $picotool_bin"
+}
+
 need git
 
 if git -C "$PROJECT_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1 && \
@@ -116,6 +157,7 @@ git -C "$PICO_SDK_PATH" submodule sync
 git -C "$PICO_SDK_PATH" submodule update --init
 
 install_cmake
+install_picotool
 
 ENV_FILE="$PROJECT_ROOT/.pico-sdk-env"
 {
@@ -123,6 +165,7 @@ ENV_FILE="$PROJECT_ROOT/.pico-sdk-env"
     printf 'export PICO_SDK_PATH=%q\n' "$PICO_SDK_PATH"
     printf 'export PICO_SDK_VERSION=%q\n' "$PICO_SDK_VERSION"
     printf 'export CMAKE_BIN=%q\n' "$CMAKE_BIN_DIR/cmake"
+    printf 'export PICOTOOL_BIN=%q\n' "$PICOTOOL_BIN"
 } > "$ENV_FILE"
 
 log "Bread Modular tools ready: $BREADMODULAR_HOME"
