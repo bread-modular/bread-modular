@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <MIDI.h>
+#include "MIDI.h"
 #include "tones.h"
 #include "utils.h"
 
