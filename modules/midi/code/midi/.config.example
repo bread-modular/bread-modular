@@ -1,0 +1,13 @@
+# Compile-time configuration for the MIDI firmware.
+# Copy this file to `.config` and edit the values.
+#
+# Each KEY=VALUE line is passed to the compiler as -DKEY=VALUE.
+# Lines starting with # are ignored.
+#
+# MIDI_CHAN_START — the first (1-indexed) incoming MIDI channel the firmware
+# responds to. The firmware always listens to an 8-channel window:
+#   MIDI_CHAN_START=1  → channels 1-8  (default)
+#   MIDI_CHAN_START=9  → channels 9-16
+#
+# Uncomment and set to change the default:
+# MIDI_CHAN_START=9
