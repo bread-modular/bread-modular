@@ -1,6 +1,6 @@
 ## 32bit firmwares
 
-This is the main firmware source code for the 32bit.
+This is the main firmware source code for the 32bit (ESP32-S3).
 
 ## Multiple Apps
 
@@ -11,7 +11,7 @@ This firmware supports multiple apps that can be selected at compile time. Each 
 Apps are defined in `main/CMakeLists.txt` using the `VALID_APPS` variable:
 
 ```cmake
-set(VALID_APPS "fxrack" "reverb")
+set(VALID_APPS "fxrack" "pipe")
 ```
 
 To add a new app:
@@ -31,26 +31,87 @@ if(NOT DEFINED APP_NAME)
 endif()
 ```
 
-Then build normally with `idf.py build`. The selected app will be compiled into the firmware.
+Then build normally with `./compile.sh`. The selected app will be compiled into the firmware.
 
-### Building Firmwares
+## Build / Flash scripts — no PlatformIO / VSCode
 
-Run the following script in an esp-idf terminal.
+Compile, flash and package this firmware on any Mac using **ESP-IDF** (via the
+official Espressif toolchain). No PlatformIO, no VSCode, no Homebrew (beyond the
+base `git`/`python3`/`cmake`/`ninja` prerequisites).
+
+### Project layout
 
 ```
-python3 scripts/make_installer.py
+32bit/
+├── main/                  ← the ESP-IDF firmware source
+├── scripts/make_installer.py  ← builds all apps + packages for the web installer
+├── setup.sh               ← symlink → opt/esp32-tools/setup.sh
+├── compile.sh             ← symlink → opt/esp32-tools/compile.sh
+├── flash.sh               ← symlink → opt/esp32-tools/flash.sh
+├── package.sh             ← symlink → opt/esp32-tools/package.sh
+└── README.md
 ```
 
-The script will:
-1. Detect all available apps from `main/CMakeLists.txt`
-2. Build a separate firmware for each app
-3. Package each firmware in its own directory in `dist/`
+> **Edit files under `main/`.** The build/flash/package scripts live in
+> `opt/esp32-tools/` (shared across Bread Modular modules) and are symlinked
+> into this project, exactly like the ATtiny1616 modules share
+> `opt/attiny1616-tools/`.
 
-For example, if you have `fxrack` and `reverb` apps, it will generate:
+### One-time setup (new Mac)
+
+```bash
+./setup.sh
+```
+
+This checks for `git`, `python3`, `cmake`, `ninja` (missing ones → `brew install`),
+clones **ESP-IDF v5.5.1** (esp32s3 target) into `~/esp/esp-idf` with submodules,
+and runs `install.sh esp32s3` to download the Xtensa toolchain (~1.5 GB total).
+Re-running is safe.
+
+Override the defaults with environment variables if needed:
+
+```bash
+IDF_VERSION=v5.5.1 IDF_DIR=$HOME/esp/esp-idf IDF_TARGET=esp32s3 ./setup.sh
+```
+
+### Compile
+
+```bash
+./compile.sh          # build the default app (fxrack)
+./compile.sh pipe     # build a specific app
+APP_NAME=pipe ./compile.sh
+```
+
+### Flash (USB / UART)
+
+```bash
+./flash.sh                        # build+flash default app, auto-pick serial port
+./flash.sh pipe                   # build+flash a specific app
+./flash.sh /dev/cu.usbmodemXXXX   # explicit port
+./flash.sh pipe /dev/cu.usbmodemXXXX
+```
+
+The ESP32-S3 is flashed over USB (native USB-Serial/JTAG or a USB-UART bridge).
+`./flash.sh` lists serial ports and lets you pick one when more than one is found.
+
+### Package (build ALL apps for the web installer)
+
+```bash
+./package.sh              # build every app + package into dist/<app>_<version>/
+./package.sh --skip-build # only package existing build artifacts
+```
+
+This runs `scripts/make_installer.py`, which:
+1. Detects all apps from `main/CMakeLists.txt` (`VALID_APPS`)
+2. Builds a separate firmware for each app
+3. Packages each firmware in its own directory in `dist/`
+
+For example, with `fxrack` and `pipe` apps it generates:
 - `dist/fxrack_<version>/`
-- `dist/reverb_<version>/`
+- `dist/pipe_<version>/`
 
-Each directory contains a complete firmware package with `manifest.json` and all required flash files. The version name is taken from `../../VERSION`.
+Each directory contains a complete firmware package with `manifest.json` and all
+required flash files. The version name is taken from `../../VERSION`.
 
 ## Uploading Firmwares
 

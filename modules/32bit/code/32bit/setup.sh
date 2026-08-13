@@ -1,0 +1,1 @@
+../../../../opt/esp32-tools/setup.sh
