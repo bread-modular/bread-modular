@@ -76,5 +76,24 @@ for b in d.get("detected_ports", []):
 fi
 
 echo "==> Uploading to $PORT (programmer: $PROGRAMMER)"
-arduino-cli upload --fqbn "$FQBN" --port "$PORT" --programmer "$PROGRAMMER" "$SCRIPT_DIR/midi/"
+# Auto-detect the sketch directory: find the single .ino file under $SCRIPT_DIR
+# and use its parent directory as the sketch dir. Hidden dirs (e.g. .pio, .git)
+# are skipped so build artifacts / vendored examples are ignored.
+SKETCH_INO=()
+while IFS= read -r f; do
+  [[ -n "$f" ]] && SKETCH_INO+=("$f")
+done < <(find "$SCRIPT_DIR" -name '.*' -prune -o -type f -name '*.ino' -print 2>/dev/null)
+
+if [[ ${#SKETCH_INO[@]} -eq 0 ]]; then
+  echo "Error: no .ino sketch found under $SCRIPT_DIR" >&2
+  exit 1
+elif [[ ${#SKETCH_INO[@]} -gt 1 ]]; then
+  echo "Error: multiple .ino sketches found under $SCRIPT_DIR (expected exactly one):" >&2
+  printf '  %s\n' "${SKETCH_INO[@]}" >&2
+  exit 1
+fi
+
+SKETCH_DIR="$(dirname "${SKETCH_INO[0]}")"
+
+arduino-cli upload --fqbn "$FQBN" --port "$PORT" --programmer "$PROGRAMMER" "$SKETCH_DIR"
 echo "✅ Flash complete."
