@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <avr/io.h>
 #include <util/delay.h>
-#include <SimpleMIDI.h>
+#include "SimpleMIDI.h"
 
 #define NOISE_TONE_PIN PIN_PA7
 
