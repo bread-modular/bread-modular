@@ -1,1 +1,1 @@
-/Users/arunoda/data/projects/bread-modular/opt/attiny1616-tools/setup.sh
+../../../../opt/attiny1616-tools/setup.sh
