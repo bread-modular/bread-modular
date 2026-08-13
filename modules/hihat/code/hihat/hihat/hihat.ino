@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <SimpleMIDI.h>
+#include "SimpleMIDI.h"
 
 #define GATE_PIN PIN_PA5
 #define OPEN_HAT_PIN PIN_PA7

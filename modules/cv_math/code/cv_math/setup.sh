@@ -1,0 +1,1 @@
+../../../../opt/attiny1616-tools/setup.sh
