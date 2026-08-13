@@ -95,5 +95,23 @@ fi
 
 SKETCH_DIR="$(dirname "${SKETCH_INO[0]}")"
 
-arduino-cli upload --fqbn "$FQBN" --port "$PORT" --programmer "$PROGRAMMER" "$SKETCH_DIR"
+# Load compile-time defines from an optional .config file (KEY=VALUE lines).
+# Each entry becomes -DKEY=VALUE passed to the compiler, e.g. MIDI_CHAN_START=9.
+EXTRA_FLAGS=""
+if [[ -f "$SCRIPT_DIR/.config" ]]; then
+  while IFS='=' read -r key val; do
+    key="${key//[[:space:]]/}"
+    val="${val//[[:space:]]/}"
+    [[ -z "$key" || "$key" == \#* ]] && continue
+    EXTRA_FLAGS+=" -D${key}=${val}"
+  done < "$SCRIPT_DIR/.config"
+fi
+
+UPLOAD_ARGS=(upload --fqbn "$FQBN" --port "$PORT" --programmer "$PROGRAMMER")
+if [[ -n "$EXTRA_FLAGS" ]]; then
+  UPLOAD_ARGS+=(--build-property "build.extra_flags=$EXTRA_FLAGS")
+fi
+UPLOAD_ARGS+=("$SKETCH_DIR")
+
+arduino-cli "${UPLOAD_ARGS[@]}"
 echo "✅ Flash complete."
