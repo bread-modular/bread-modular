@@ -52,13 +52,41 @@ Sketch uses 3885 bytes (23%) of program storage space. Maximum is 16384 bytes.
 Global variables use 471 bytes (22%) of dynamic memory ... Maximum is 2048 bytes.
 ```
 
+## MIDI channel window (compile-time config)
+
+The firmware listens to an **8-channel window** of incoming MIDI channels and
+maps them to the 8 gate/IMIDI outputs. By default that window is **channels
+1-8**. You can shift the window at compile time **without editing the code** by
+adding a `.config` file in the project root.
+
+`.config` is a simple `KEY=VALUE` file (one per line, `#` for comments). Each
+entry is passed to the compiler as a `-D` define:
+
+```
+# .config
+MIDI_CHAN_START=9
+```
+
+| `MIDI_CHAN_START` | Responds to channels |
+|-------------------|----------------------|
+| `1` (default)     | 1-8                  |
+| `9`               | 9-16                 |
+
+Then rebuild (and re-flash) as usual:
+
+```bash
+./compile.sh        # or ./flash.sh
+```
+
+> Copy `.config.example` → `.config` as a starting point. When no `.config`
+> file is present, the firmware defaults to channels 1-8.
+
 ## Flash
 
 ```bash
 ./flash.sh                      # list serial ports and pick one
 ./flash.sh /dev/cu.usbserial-XXXX   # or explicit port
 ```
-
 The build target is `megaTinyCore:megaavr:atxy6:chip=1616,clock=20internal`
 (20 MHz internal oscillator), uploaded with the `jtag2updi` programmer
 (avrdude @ 115200 baud) by default.

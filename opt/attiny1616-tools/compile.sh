@@ -35,4 +35,22 @@ fi
 
 SKETCH_DIR="$(dirname "${SKETCH_INO[0]}")"
 
-arduino-cli compile --fqbn "$FQBN" "$SKETCH_DIR"
+# Load compile-time defines from an optional .config file (KEY=VALUE lines).
+# Each entry becomes -DKEY=VALUE passed to the compiler, e.g. MIDI_CHAN_START=9.
+EXTRA_FLAGS=""
+if [[ -f "$SCRIPT_DIR/.config" ]]; then
+  while IFS='=' read -r key val; do
+    key="${key//[[:space:]]/}"
+    val="${val//[[:space:]]/}"
+    [[ -z "$key" || "$key" == \#* ]] && continue
+    EXTRA_FLAGS+=" -D${key}=${val}"
+  done < "$SCRIPT_DIR/.config"
+fi
+
+COMPILE_ARGS=(compile --fqbn "$FQBN")
+if [[ -n "$EXTRA_FLAGS" ]]; then
+  COMPILE_ARGS+=(--build-property "build.extra_flags=$EXTRA_FLAGS")
+fi
+COMPILE_ARGS+=("$SKETCH_DIR")
+
+arduino-cli "${COMPILE_ARGS[@]}"

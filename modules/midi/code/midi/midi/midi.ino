@@ -22,6 +22,15 @@
 #include "SimpleMIDI.h"
 #include <SoftwareSerial.h>
 
+// Compile-time MIDI channel start (1-indexed).
+// Default: respond to incoming MIDI channels 1-8.
+// Override via a .config file (e.g. MIDI_CHAN_START=9 → channels 9-16).
+#ifndef MIDI_CHAN_START
+#define MIDI_CHAN_START 1
+#endif
+
+#define MIDI_CHAN_OFFSET (MIDI_CHAN_START - 1)
+
 #define PIN_RX 6 // PB3
 #define PIN_TX 7 // PB2
 
@@ -80,6 +89,16 @@ int getGatePin(int id) {
   }
 }
 
+// Map an incoming MIDI channel (0-15) to a local output/gate index (0-7),
+// or -1 if the channel is outside the configured range.
+int getOutputIndex(byte channel) {
+  int idx = (int)channel - MIDI_CHAN_OFFSET;
+  if (idx < 0 || idx > 7) {
+    return -1;
+  }
+  return idx;
+}
+
 void sendMIDI(byte channel, byte status, byte data1, byte data2) {
   if (channel == 7) {
     Serial.write(status); // Send the status byte
@@ -129,27 +148,42 @@ void setupIMIDI() {
 }
 
 void handleNoteOn(byte channel, byte note, byte velocity) {
-  int gatePin = getGatePin(channel);
+  int idx = getOutputIndex(channel);
+  if (idx == -1) {
+    return;
+  }
+
+  int gatePin = getGatePin(idx);
   if (gatePin != -1) {
     digitalWrite(gatePin, HIGH);
   }
   
-  sendMIDI(channel, 0x90, note, velocity);
+  sendMIDI(idx, 0x90, note, velocity);
 }
 
 // Callback for Note Off messages
 void handleNoteOff(byte channel, byte note, byte velocity) {
-  int gatePin = getGatePin(channel);
+  int idx = getOutputIndex(channel);
+  if (idx == -1) {
+    return;
+  }
+
+  int gatePin = getGatePin(idx);
   if (gatePin != -1) {
     digitalWrite(gatePin, LOW);
   }
 
-  sendMIDI(channel, 0x80, note, velocity);
+  sendMIDI(idx, 0x80, note, velocity);
 }
 
 // Callback for handling CC messages
 void handleControlChange(byte channel, byte controller, byte value) {
-  sendMIDI(channel, 0xB0, controller, value);
+  int idx = getOutputIndex(channel);
+  if (idx == -1) {
+    return;
+  }
+
+  sendMIDI(idx, 0xB0, controller, value);
 }
 
 void handleRealtime(byte realtimeType) {
