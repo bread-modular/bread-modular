@@ -75,7 +75,6 @@ for b in d.get("detected_ports", []):
   fi
 fi
 
-echo "==> Uploading to $PORT (programmer: $PROGRAMMER)"
 # Auto-detect the sketch directory: find the single .ino file under $SCRIPT_DIR
 # and use its parent directory as the sketch dir. Hidden dirs (e.g. .pio, .git)
 # are skipped so build artifacts / vendored examples are ignored.
@@ -107,11 +106,22 @@ if [[ -f "$SCRIPT_DIR/.config" ]]; then
   done < "$SCRIPT_DIR/.config"
 fi
 
-UPLOAD_ARGS=(upload --fqbn "$FQBN" --port "$PORT" --programmer "$PROGRAMMER")
-if [[ -n "$EXTRA_FLAGS" ]]; then
-  UPLOAD_ARGS+=(--build-property "build.extra_flags=$EXTRA_FLAGS")
-fi
-UPLOAD_ARGS+=("$SKETCH_DIR")
+# arduino-cli >= 1.x: `upload` no longer compiles — it only flashes pre-built
+# binaries. Compile first (where --build-property belongs) into a temp build
+# dir, then upload from that dir via --input-dir.
+BUILD_DIR="$(mktemp -d "${TMPDIR:-/tmp}/attiny1616-build.XXXXXX")"
+trap 'rm -rf "$BUILD_DIR"' EXIT
 
-arduino-cli "${UPLOAD_ARGS[@]}"
+echo "==> Compiling $SKETCH_DIR ..."
+COMPILE_ARGS=(compile --fqbn "$FQBN" --build-path "$BUILD_DIR")
+if [[ -n "$EXTRA_FLAGS" ]]; then
+  COMPILE_ARGS+=(--build-property "build.extra_flags=$EXTRA_FLAGS")
+fi
+COMPILE_ARGS+=("$SKETCH_DIR")
+arduino-cli "${COMPILE_ARGS[@]}"
+
+echo "==> Uploading to $PORT (programmer: $PROGRAMMER)"
+arduino-cli upload --fqbn "$FQBN" --port "$PORT" --programmer "$PROGRAMMER" \
+  --input-dir "$BUILD_DIR"
+
 echo "✅ Flash complete."
