@@ -1,43 +1,110 @@
-# 8-bit LFO
+# ATtiny1616 LFO Firmware — no PlatformIO / VSCode
 
-This is an LFO firmware for the 8-bit module. It offers an LFO range from 0.1 Hz to 20 Hz with morphing waveform support.
+Compile and flash this firmware on any Mac using **arduino-cli + megaTinyCore**.
+No PlatformIO, no VSCode, no Homebrew required.
 
-## Controls
+## What this is
 
-### CV Inputs
+A **low-frequency oscillator (LFO)** for the **ATtiny1616** (microchip megaAVR
+0-series).
 
-#### CV1 (Rate)
+- Outputs a 1 kHz-sampled waveform on the 8-bit DAC (`PA6`) using a TCB timer
+  interrupt and a phase accumulator.
+- Six `PROGMEM` wave tables (sine, triangle, saw, complex1, complex2, random) in
+  `WaveTables.cpp` / `WaveTables.h`.
+- **CV1** sets the LFO frequency (0.1 Hz – 20 Hz, curved mapping); **CV2** blends
+  between two adjacent wave tables.
+- A gate output (`PA7`) and an LED (`PA5`) follow the LFO level.
+- Receives MIDI over the hardware UART (parsed by the local `SimpleMIDI` library).
 
-- **Function**: Sets the LFO frequency.
-- **Range**: 0.1 Hz to 20 Hz; the firmware clamps anything outside this span.
+## Project layout
 
-#### CV2 (Waveform Morph)
-
-- **Function**: Selects and blends LFO waveforms including sine, triangle, saw, Custom 1, Custom 2, and random.
-- **Behavior**: When CV2 is at minimum the waveform is pure sine, and when CV2 is at maximum it becomes random.
-- **Always Active**: Waveform changes are applied continuously, so you can sweep CV2 for evolving modulation shapes.
-
-## Outputs
-
-### AUDIO
-
-- **Function**: Outputs the LFO waveform as an analog voltage signal.
-- **Range**: 0-255 (8-bit resolution), corresponding to 0V to VREF (4.34V).
-- **Behavior**: Continuously outputs the current LFO waveform sample at 1 kHz sample rate. The waveform follows the selected shape (sine, triangle, saw, etc.) and morphing settings controlled by CV2.
-
-### GATE
-
-- **Function**: Outputs a digital gate signal based on the LFO waveform level.
-- **Behavior**: Goes HIGH when the LFO sample value is above 127 (midpoint), and LOW when it's at or below 127. This creates a gate signal that pulses at the LFO frequency, useful for triggering envelopes, sequencers, or other gate-driven modules.
-
-## Clang/clangd Support
-
-Semantic highlighting and navigation provided by `clangd` require a `compile_commands.json` file. PlatformIO does not generate this automatically, but you can derive it from the metadata stored in `.pio/build/<env>/idedata.json`.
-
-To (re)generate the database:
-
-```bash
-python3 tools/gen_compile_commands.py
+```
+lfo/
+├── lfo/                 ← Arduino sketch (THE source to edit)
+│   ├── lfo.ino          ← main firmware
+│   ├── WaveTables.cpp   ← wave table data (PROGMEM)
+│   ├── WaveTables.h     ← wave table declarations
+│   ├── SimpleMIDI.h     ← MIDI parser library (header-only)
+│   ├── ModeHandler.h    ← mode-toggle helper (header-only)
+│   └── LEDToggler.h     ← LED helper (header-only)
+├── setup.sh             ← symlink → opt/attiny1616-tools/setup.sh
+├── compile.sh           ← symlink → opt/attiny1616-tools/compile.sh
+├── flash.sh             ← symlink → opt/attiny1616-tools/flash.sh
+└── README.md
 ```
 
-The script defaults to the `ATtiny1616` environment and scans both `src/` and `lib/` for translation units. If you add more environments or move source files, rerun the command (or specify `--env` / `--sources`) so `clangd` stays in sync with the project.
+> **Edit `lfo/lfo.ino` and `lfo/WaveTables.*`.** The build/flash scripts live in
+> `opt/attiny1616-tools/` (shared across Bread Modular modules) and are symlinked
+> into this project.
+
+## One-time setup (new Mac)
+
+```bash
+./setup.sh
+```
+
+This installs `arduino-cli` into `~/bin`, registers the megaTinyCore board
+index, and downloads the megaTinyCore core + `avr-gcc` + `avrdude` (~60 MB).
+Re-running is safe. It also adds `~/bin` to `~/.zshrc` / `~/.bash_profile`.
+
+## Compile
+
+```bash
+./compile.sh
+```
+
+Expected output (ATtiny1616: 16 KB flash, 2 KB RAM):
+
+```
+Sketch uses 8260 bytes (50%) of program storage space. Maximum is 16384 bytes.
+Global variables use 332 bytes (16%) of dynamic memory ... Maximum is 2048 bytes.
+```
+
+## Flash
+
+```bash
+./flash.sh                      # list serial ports and pick one
+./flash.sh /dev/cu.usbserial-XXXX   # or explicit port
+```
+
+The build target is `megaTinyCore:megaavr:atxy6:chip=1616,clock=20internal`
+(20 MHz internal oscillator), uploaded with the `jtag2updi` programmer
+(avrdude @ 115200 baud) by default.
+
+### Flashing hardware (UPDI)
+
+The ATtiny1616 is programmed over **UPDI** (single-wire). This project uses the
+**Bread Modular UPDIProgrammer** — a dedicated board that runs the
+[`jtag2updi`](https://github.com/ElTangas/jtag2updi) firmware on an ATtiny1616
+and shows up as a USB-serial port.
+
+- Connect the programmer's UPDI lead to the **UPDI pin (PA0)** of the target
+- Connect **GND** (and 5 V if you want the programmer to power the chip)
+
+The `jtag2updi` programmer speaks avrdude's `jtag2updi` protocol. The
+`serialupdi` (pymcuprog bit-bang) protocol does **not** work with this board.
+
+### Choosing the programmer
+
+Override via the `PROGRAMMER` env var:
+
+```bash
+PROGRAMMER=jtag2updi      ./flash.sh   # default — Bread Modular UPDIProgrammer
+PROGRAMMER=serialupdi     ./flash.sh   # plain USB-serial + 4.7 kΩ resistor
+PROGRAMMER=serialupdi57k  ./flash.sh   # serialupdi @ 57600 baud (CH340 adapters)
+```
+
+## Manual commands (reference)
+
+```bash
+arduino-cli compile --fqbn megaTinyCore:megaavr:atxy6:chip=1616,clock=20internal lfo/
+arduino-cli upload  --fqbn megaTinyCore:megaavr:atxy6:chip=1616,clock=20internal \
+                    --port /dev/cu.usbserial-A5069RR4 --programmer jtag2updi lfo/
+```
+
+## Notes
+
+- **20 MHz internal** clock (`F_CPU = 20000000L`).
+- `SoftwareSerial` is provided by the megaTinyCore core (no external lib needed).
+- `arduino-cli` keeps its config/data under `~/Library/Arduino15`.
