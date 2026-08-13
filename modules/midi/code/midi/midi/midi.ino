@@ -19,7 +19,7 @@
   16 - PA3
 */
 
-#include <SimpleMIDI.h>
+#include "SimpleMIDI.h"
 #include <SoftwareSerial.h>
 
 #define PIN_RX 6 // PB3
