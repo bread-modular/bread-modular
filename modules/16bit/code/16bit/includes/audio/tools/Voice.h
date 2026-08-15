@@ -47,9 +47,12 @@ class Voice {
 
         void changeGenerators(AudioGenerator* generators[]) {
             uint16_t freq = MIDI::midiNoteToFrequency(currentNote);
+            // Configure the incoming generator *before* publishing the pointer
+            // so the audio core never observes an uninitialized generator.
             for (uint8_t i = 0; i < totalGenerators; ++i) {
+                generators[i]->reset();
+                generators[i]->setFrequency(freq);
                 this->generators[i] = generators[i];
-                this->generators[i]->setFrequency(freq);
             }
         }
 

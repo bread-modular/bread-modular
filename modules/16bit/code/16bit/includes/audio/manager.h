@@ -198,4 +198,14 @@ public:
         multicore_reset_core1();
         multicore_launch_core1(core1_main);
     }
+
+    // Relaunch Core1 WITHOUT invoking the onAudioStartCallback (which would
+    // re-run app->init() and tear down/re-create all voices). Used when the
+    // audio engine must be stopped briefly (e.g. a flash write) but app state
+    // must be preserved.
+    void restart() {
+        running = true;
+        multicore_reset_core1();
+        multicore_launch_core1(core1_main);
+    }
 };
