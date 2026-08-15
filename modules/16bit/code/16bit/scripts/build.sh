@@ -9,6 +9,8 @@ BREADMODULAR_HOME="${BREADMODULAR_HOME:-$HOME/.breadmodular}"
 PICO_SDK_VERSION="${PICO_SDK_VERSION:-$DEFAULT_PICO_SDK_VERSION}"
 PICO_SDK_ROOT="${PICO_SDK_ROOT:-$BREADMODULAR_HOME/pico-sdk}"
 PICO_SDK_PATH="${PICO_SDK_PATH:-$PICO_SDK_ROOT/sdk/$PICO_SDK_VERSION}"
+TOOLCHAIN_VERSION="${TOOLCHAIN_VERSION:-14_2_Rel1}"
+PICO_TOOLCHAIN_PATH="${PICO_TOOLCHAIN_PATH:-$BREADMODULAR_HOME/toolchain/$TOOLCHAIN_VERSION}"
 BUILD_DIR="${BUILD_DIR:-$PROJECT_ROOT/.build}"
 BUILD_TARGET="${BUILD_TARGET:-16bit}"
 LOCAL_CMAKE_BIN="$BREADMODULAR_HOME/bin/cmake"
@@ -33,6 +35,10 @@ fi
 
 if [ ! -f "$PICO_SDK_PATH/pico_sdk_init.cmake" ]; then
     die "Pico SDK not found at $PICO_SDK_PATH. Run ./scripts/setup.sh first."
+fi
+
+if [ ! -x "$PICO_TOOLCHAIN_PATH/bin/arm-none-eabi-gcc" ]; then
+    die "ARM toolchain not found at $PICO_TOOLCHAIN_PATH. Run ./scripts/setup.sh first."
 fi
 
 if [ -n "${PICO_TOOLCHAIN_PATH:-}" ]; then
@@ -67,6 +73,26 @@ fi
 if [ -n "${EXTRA_CMAKE_ARGS:-}" ]; then
     # shellcheck disable=SC2206
     CMAKE_CONFIGURE_ARGS+=($EXTRA_CMAKE_ARGS)
+fi
+
+# Resolve APP_NAME for local development. Precedence:
+#   1. -DAPP_NAME=<x> passed on the command line (explicit)
+#   2. APP_NAME=<x> in $PROJECT_ROOT/.config (local, uncommitted)
+#   3. CMakeLists.txt default (polysynth)
+CONFIG_FILE="$PROJECT_ROOT/.config"
+app_from_cli=0
+for arg in "$@"; do
+    case "$arg" in
+        -DAPP_NAME=*|APP_NAME=*) app_from_cli=1; break ;;
+    esac
+done
+
+if [ "$app_from_cli" -eq 0 ] && [ -f "$CONFIG_FILE" ]; then
+    cfg_app="$(sed -n 's/^[[:space:]]*APP_NAME[[:space:]]*=[[:space:]]*\([^[:space:]#]*\).*/\1/p' "$CONFIG_FILE" | tail -n 1)"
+    if [ -n "$cfg_app" ]; then
+        log "Using app '$cfg_app' from $CONFIG_FILE"
+        set -- "$@" "-DAPP_NAME=$cfg_app"
+    fi
 fi
 
 CMAKE_CONFIGURE_ARGS+=("$@")

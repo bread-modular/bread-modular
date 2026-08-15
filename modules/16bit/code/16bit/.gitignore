@@ -2,8 +2,14 @@
 build/
 .build/
 
+# Packaged per-app firmware (scripts/package.sh)
+dist/
+
 # Project-local generated environment file
 .pico-sdk-env
+
+# Local app selection (see .config.example). Not committed.
+.config
 
 # Legacy local tool caches (current scripts use ~/.breadmodular)
 .pico-sdk/

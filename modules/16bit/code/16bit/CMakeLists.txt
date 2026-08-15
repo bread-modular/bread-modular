@@ -9,20 +9,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Initialise pico_sdk from installed location
 # (note this can come from environment, CMake cache etc)
 
-# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 2.1.1)
-set(toolchainVersion 14_2_Rel1)
-set(picotoolVersion 2.1.1)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
-# ====================================================================================
+# SDK and toolchain paths are provided by scripts/build.sh via -DPICO_SDK_PATH and
+# -DPICO_TOOLCHAIN_PATH (both installed under ~/.breadmodular by scripts/setup.sh).
+# The build is fully self-contained and does NOT depend on ~/.pico-sdk.
+
 # 16bit board script will set the flash size to 16MB in the runtime
 set(PICO_BOARD 16bit)
 set(PICO_BOARD_HEADER_DIRS ${CMAKE_CURRENT_LIST_DIR}/includes/boards)
@@ -37,6 +27,24 @@ project(16bit C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
+
+# ---------------------------------------------------------------------------
+# App selection at compile time (one app per firmware, like the 32bit module)
+# The firmware compiles a SINGLE app into the binary; scripts/package.sh builds
+# one firmware per app. Default to polysynth if not specified.
+# ---------------------------------------------------------------------------
+if(NOT DEFINED APP_NAME)
+    set(APP_NAME "polysynth")
+endif()
+
+set(VALID_APPS "noop" "sampler" "polysynth" "fxrack" "elab")
+if(NOT APP_NAME IN_LIST VALID_APPS)
+    message(FATAL_ERROR "Invalid APP_NAME: ${APP_NAME}. Valid options are: ${VALID_APPS}")
+endif()
+
+# BM_APP_<NAME>=1 compile definition + FIRMWARE_NAME used by main.cpp
+set(APP_DEFINE "BM_APP_${APP_NAME}")
+string(TOUPPER "${APP_DEFINE}" APP_DEFINE)
 
 # Add executable. Default name is the project name, version 0.1
 
@@ -62,6 +70,8 @@ target_compile_definitions(16bit PRIVATE
     USBD_PID=0x000A
     USBD_MANUFACTURER="Bread Modular"
     USBD_PRODUCT="16bit"
+    ${APP_DEFINE}=1
+    FIRMWARE_NAME="${APP_NAME}"
 )
 
 # Add external libraries

@@ -12,27 +12,40 @@
 #include "fs/config.h"
 
 #include "audio/apps/interfaces/audio_app.h"
-#include "audio/apps/fxrack_app.h"
-#include "audio/apps/sampler_app.h"
-#include "audio/apps/polysynth_app.h"
-#include "audio/apps/noop_app.h"
-#include "audio/apps/elab_app.h"
 
-// Pull app implementations into the same translation unit to avoid
-// multiple-definition issues from headers that define globals.
-#include "src/audio/apps/elab_app.cpp"
-#include "src/audio/apps/polysynth_app.cpp"
-#include "src/audio/apps/fxrack_app.cpp"
+// Only the selected app's header is pulled in (and its implementation below).
+// This keeps app-specific assets out of the binary — e.g. the sampler's
+// baked-in sample bank (s01.h) is only compiled for the sampler firmware.
+#if defined(BM_APP_NOOP)
+#include "audio/apps/noop_app.h"
+#elif defined(BM_APP_SAMPLER)
+#include "audio/apps/sampler_app.h"
+#elif defined(BM_APP_POLYSYNTH)
+#include "audio/apps/polysynth_app.h"
+#elif defined(BM_APP_FXRACK)
+#include "audio/apps/fxrack_app.h"
+#elif defined(BM_APP_ELAB)
+#include "audio/apps/elab_app.h"
+#else
+#error "No app selected at compile time. Set APP_NAME to one of: noop, sampler, polysynth, fxrack, elab"
+#endif
+
+// Pull the selected app's implementation into the same translation unit to
+// avoid multiple-definition issues from headers that define globals.
+// Only ONE app's implementation is compiled per firmware.
+#if defined(BM_APP_NOOP)
 #include "src/audio/apps/noop_app.cpp"
+#elif defined(BM_APP_SAMPLER)
+// SamplerApp is header-only — its implementation lives in sampler_app.h.
+#elif defined(BM_APP_POLYSYNTH)
+#include "src/audio/apps/polysynth_app.cpp"
+#elif defined(BM_APP_FXRACK)
+#include "src/audio/apps/fxrack_app.cpp"
+#elif defined(BM_APP_ELAB)
+#include "src/audio/apps/elab_app.cpp"
+#endif
 
 #define SAMPLE_RATE 44100
-
-#define CONFIG_APP_INDEX 0
-#define CONFIG_APP_NOOP 0
-#define CONFIG_APP_SAMPLER 1
-#define CONFIG_APP_POLYSYNTH 2
-#define CONFIG_APP_FXRACK 3
-#define CONFIG_APP_ELAB 4
 
 FS *fs = FS::getInstance();
 IO *io = IO::getInstance();
@@ -40,9 +53,25 @@ PSRAM *psram = PSRAM::getInstance();
 AudioManager *audioManager = AudioManager::getInstance();
 MIDI *midi = MIDI::getInstance();
 WebSerial* webSerial = WebSerial::getInstance();
-Config mainConfig(1, "/main_config.ini");
 
-AudioApp* app = PolySynthApp::getInstance();
+AudioApp* app = nullptr;
+
+// App selection is fixed at compile time (one app per firmware).
+void loadApp() {
+    #if defined(BM_APP_NOOP)
+    app = NoopApp::getInstance();
+    #elif defined(BM_APP_SAMPLER)
+    app = SamplerApp::getInstance();
+    #elif defined(BM_APP_POLYSYNTH)
+    app = PolySynthApp::getInstance();
+    #elif defined(BM_APP_FXRACK)
+    app = FXRackApp::getInstance();
+    #elif defined(BM_APP_ELAB)
+    app = ElabApp::getInstance();
+    #else
+    #error "No app selected at compile time."
+    #endif
+}
 
 void onAudioStartCallback() {
     psram->freeall();
@@ -81,107 +110,20 @@ void bpmChangeCallback(int bpm) {
     app->bpmChangeCallback(bpm);
 }
 
-void setApp(int8_t appIndex) {
-    AudioApp* newApp = nullptr;
-
-    switch (appIndex) {
-        case CONFIG_APP_NOOP:
-            newApp = NoopApp::getInstance();
-            break;
-        case CONFIG_APP_SAMPLER:
-            newApp = SamplerApp::getInstance();
-            break;
-        case CONFIG_APP_POLYSYNTH:
-            newApp = PolySynthApp::getInstance();
-            break;
-        case CONFIG_APP_FXRACK:
-            newApp = FXRackApp::getInstance();
-            break;
-        case CONFIG_APP_ELAB:
-            newApp = ElabApp::getInstance();
-            break;
-        default:
-            break;
-    }
-
-    if (newApp == nullptr) {
-        return;
-    }
-
-    audioManager->stop();
-    app = newApp;
-    audioManager->start();
-}
-
 bool onCommandCallback(const char* cmd) {
-    if (strncmp(cmd, "set-app noop", 12) == 0) {
-        // save will stop the audio & may crash, that's why we stop audio first
-        audioManager->stop();
-        mainConfig.set(CONFIG_APP_INDEX, CONFIG_APP_NOOP);
-        mainConfig.save(); 
-        setApp(CONFIG_APP_NOOP);
-        return true;
-    }
-
-    if (strncmp(cmd, "set-app sampler", 15) == 0) {
-        // save will stop the audio & may crash, that's why we stop audio first
-        audioManager->stop();
-        mainConfig.set(CONFIG_APP_INDEX, CONFIG_APP_SAMPLER);
-        mainConfig.save();
-        setApp(CONFIG_APP_SAMPLER);
-        return true;
-    }
-
-    if (strncmp(cmd, "set-app polysynth", 18) == 0) {
-        // save will stop the audio & may crash, that's why we stop audio first
-        audioManager->stop();
-        mainConfig.set(CONFIG_APP_INDEX, CONFIG_APP_POLYSYNTH);
-        mainConfig.save();
-        setApp(CONFIG_APP_POLYSYNTH);
-        return true;
-    }
-
-    if (strncmp(cmd, "set-app fxrack", 13) == 0) {
-        // save will stop the audio & may crash, that's why we stop audio first
-        audioManager->stop();
-        mainConfig.set(CONFIG_APP_INDEX, CONFIG_APP_FXRACK);
-        mainConfig.save();
-        setApp(CONFIG_APP_FXRACK);
-        return true;
-    }
-
-    if (strncmp(cmd, "set-app elab", 12) == 0) {
-        // save will stop the audio & may crash, that's why we stop audio first
-        audioManager->stop();
-        mainConfig.set(CONFIG_APP_INDEX, CONFIG_APP_ELAB);
-        mainConfig.save();
-        setApp(CONFIG_APP_ELAB);
+    // Backward-compatible app handling. This firmware ships a SINGLE app
+    // (selected at compile time), so:
+    //   - "set-app <name>" is a no-op unless <name> is the compiled-in app
+    //   - "get-app" returns only the current (compiled-in) app name
+    if (strncmp(cmd, "set-app ", 8) == 0) {
+        if (strcmp(cmd + 8, FIRMWARE_NAME) != 0) {
+            printf("set-app: '%s' not available (this firmware runs '%s')\n", cmd + 8, FIRMWARE_NAME);
+        }
         return true;
     }
 
     if (strncmp(cmd, "get-app", 7) == 0) {
-        int8_t appName = mainConfig.get(CONFIG_APP_INDEX, CONFIG_APP_POLYSYNTH);
-        switch (appName) {
-            case CONFIG_APP_NOOP:
-                webSerial->sendValue("noop");
-                break;
-            case CONFIG_APP_SAMPLER:
-                webSerial->sendValue("sampler");
-                break;
-            case CONFIG_APP_POLYSYNTH:
-                webSerial->sendValue("polysynth");
-                break;
-            case CONFIG_APP_FXRACK:
-                webSerial->sendValue("fxrack");
-                break;
-            case CONFIG_APP_ELAB:
-                webSerial->sendValue("elab");
-                break;
-            default:
-                webSerial->sendValue("unknown");
-                break;
-        }
-
+        webSerial->sendValue(FIRMWARE_NAME);
         return true;
     }
 
@@ -213,6 +155,10 @@ bool onCommandCallback(const char* cmd) {
 int main() {
     stdio_init_all();
 
+    // Load the app selected at compile time. Must happen before audio init,
+    // which triggers onAudioStartCallback -> app->init().
+    loadApp();
+
     psram->init();
 
     // Initialize the filesystem
@@ -231,18 +177,13 @@ int main() {
     audioManager->setOnAudioStartCallback(onAudioStartCallback);
     audioManager->setAudioCallback(audioCallback);
     audioManager->init(SAMPLE_RATE);
-    
+
     // Set up BPM calculation and print BPM when it changes
     midi->calculateBPM(bpmChangeCallback);
     midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);
     midi->setNoteOffCallback(noteOffCallback);
     midi->init();
-
-    mainConfig.load();
-    int8_t selectedApp = mainConfig.get(CONFIG_APP_INDEX, CONFIG_APP_POLYSYNTH);
-
-    setApp(selectedApp);
 
     while (true) {
         io->update();
