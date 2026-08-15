@@ -271,6 +271,7 @@ ENV_FILE="$PROJECT_ROOT/.pico-sdk-env"
     printf 'export CMAKE_BIN=%q\n' "$CMAKE_BIN_DIR/cmake"
     printf 'export NINJA_BIN=%q\n' "$NINJA_BIN"
     printf 'export PICOTOOL_BIN=%q\n' "$PICOTOOL_BIN"
+    printf 'export PICOTOOL_INSTALL_DIR=%q\n' "$PICOTOOL_INSTALL_DIR"
 } > "$ENV_FILE"
 
 log "Bread Modular tools ready: $BREADMODULAR_HOME"

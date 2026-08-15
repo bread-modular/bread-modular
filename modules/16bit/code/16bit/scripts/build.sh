@@ -11,6 +11,8 @@ PICO_SDK_ROOT="${PICO_SDK_ROOT:-$BREADMODULAR_HOME/pico-sdk}"
 PICO_SDK_PATH="${PICO_SDK_PATH:-$PICO_SDK_ROOT/sdk/$PICO_SDK_VERSION}"
 TOOLCHAIN_VERSION="${TOOLCHAIN_VERSION:-14_2_Rel1}"
 PICO_TOOLCHAIN_PATH="${PICO_TOOLCHAIN_PATH:-$BREADMODULAR_HOME/toolchain/$TOOLCHAIN_VERSION}"
+PICOTOOL_VERSION="${PICOTOOL_VERSION:-2.2.0-a4}"
+PICOTOOL_INSTALL_DIR="${PICOTOOL_INSTALL_DIR:-$BREADMODULAR_HOME/picotool/$PICOTOOL_VERSION}"
 BUILD_DIR="${BUILD_DIR:-$PROJECT_ROOT/.build}"
 BUILD_TARGET="${BUILD_TARGET:-16bit}"
 LOCAL_CMAKE_BIN="$BREADMODULAR_HOME/bin/cmake"
@@ -73,6 +75,14 @@ fi
 if [ -n "${EXTRA_CMAKE_ARGS:-}" ]; then
     # shellcheck disable=SC2206
     CMAKE_CONFIGURE_ARGS+=($EXTRA_CMAKE_ARGS)
+fi
+
+# Reuse the prebuilt picotool installed by scripts/setup.sh. The pico-sdk looks
+# for a CMake config package; without this hint it can't find the installed
+# binary and instead downloads + builds picotool from source on every fresh
+# build. v2.2.0-a4 is version-compatible with the SDK's required 2.1.1.
+if [ -f "$PICOTOOL_INSTALL_DIR/picotool/picotoolConfig.cmake" ]; then
+    CMAKE_CONFIGURE_ARGS+=(-Dpicotool_DIR="$PICOTOOL_INSTALL_DIR/picotool")
 fi
 
 # Resolve APP_NAME for local development. Precedence:
