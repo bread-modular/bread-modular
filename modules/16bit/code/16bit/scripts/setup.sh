@@ -10,6 +10,12 @@ PICO_SDK_REPO="${PICO_SDK_REPO:-https://github.com/raspberrypi/pico-sdk.git}"
 PICO_SDK_ROOT="${PICO_SDK_ROOT:-$BREADMODULAR_HOME/pico-sdk}"
 PICO_SDK_PATH="${PICO_SDK_PATH:-$PICO_SDK_ROOT/sdk/$PICO_SDK_VERSION}"
 
+# SDK submodules this firmware actually needs. tinyusb provides USB serial.
+# btstack / cyw43-driver / lwip / mbedtls are for Bluetooth & WiFi and are
+# NOT used by the 16bit firmware, so we skip them to keep setup fast and
+# avoid their (sometimes force-pushed) upstream repos.
+SDK_SUBMODULES=(lib/tinyusb)
+
 DEFAULT_CMAKE_VERSION="4.3.3"
 DEFAULT_CMAKE_SHA256="5221a13450c7a0219a2a0d1b6c9085eb06489721fafd8488ccebc1584175d2fb"
 CMAKE_VERSION="${CMAKE_VERSION:-$DEFAULT_CMAKE_VERSION}"
@@ -29,6 +35,20 @@ PICOTOOL_DOWNLOAD_DIR="${PICOTOOL_DOWNLOAD_DIR:-$BREADMODULAR_HOME/downloads}"
 PICOTOOL_ROOT="${PICOTOOL_ROOT:-$BREADMODULAR_HOME/picotool}"
 PICOTOOL_INSTALL_DIR="${PICOTOOL_INSTALL_DIR:-$PICOTOOL_ROOT/$PICOTOOL_VERSION}"
 PICOTOOL_BIN="${PICOTOOL_BIN:-$PICOTOOL_INSTALL_DIR/picotool/picotool}"
+
+DEFAULT_TOOLCHAIN_VERSION="14_2_Rel1"
+DEFAULT_TOOLCHAIN_GNU_VERSION="14.2.rel1"
+TOOLCHAIN_VERSION="${TOOLCHAIN_VERSION:-$DEFAULT_TOOLCHAIN_VERSION}"
+TOOLCHAIN_GNU_VERSION="${TOOLCHAIN_GNU_VERSION:-$DEFAULT_TOOLCHAIN_GNU_VERSION}"
+TOOLCHAIN_ROOT="${TOOLCHAIN_ROOT:-$BREADMODULAR_HOME/toolchain}"
+TOOLCHAIN_DIR="${TOOLCHAIN_DIR:-$TOOLCHAIN_ROOT/$TOOLCHAIN_VERSION}"
+TOOLCHAIN_DOWNLOAD_DIR="${TOOLCHAIN_DOWNLOAD_DIR:-$BREADMODULAR_HOME/downloads}"
+
+NINJA_VERSION="${NINJA_VERSION:-1.12.1}"
+NINJA_ARCHIVE="${NINJA_ARCHIVE:-ninja-mac.zip}"
+NINJA_URL="${NINJA_URL:-https://github.com/ninja-build/ninja/releases/download/v${NINJA_VERSION}/${NINJA_ARCHIVE}}"
+NINJA_DOWNLOAD_DIR="${NINJA_DOWNLOAD_DIR:-$BREADMODULAR_HOME/downloads}"
+NINJA_BIN="${NINJA_BIN:-$BREADMODULAR_HOME/bin/ninja}"
 
 if [ -z "${CMAKE_SHA256+x}" ]; then
     if [ "$CMAKE_VERSION" = "$DEFAULT_CMAKE_VERSION" ] && [ "$CMAKE_ARCHIVE" = "$CMAKE_PACKAGE.tar.gz" ]; then
@@ -125,8 +145,79 @@ install_picotool() {
     log "picotool ready: $picotool_bin"
 }
 
+install_toolchain() {
+    local arch
+    arch="$(uname -m)"
+    case "$arch" in
+        arm64)  arch="arm64" ;;
+        x86_64) arch="x86_64" ;;
+        *) die "Unsupported architecture for ARM toolchain: $arch (expected arm64 or x86_64)" ;;
+    esac
+
+    local pkg="arm-gnu-toolchain-${TOOLCHAIN_GNU_VERSION}-darwin-${arch}-arm-none-eabi"
+    local archive="${pkg}.tar.xz"
+    local url="${TOOLCHAIN_URL:-https://developer.arm.com/-/media/Files/downloads/gnu/${TOOLCHAIN_GNU_VERSION}/binrel/${archive}}"
+
+    need curl
+    need tar
+
+    if [ -x "$TOOLCHAIN_DIR/bin/arm-none-eabi-gcc" ]; then
+        log "ARM toolchain already installed: $TOOLCHAIN_DIR"
+        return 0
+    fi
+
+    mkdir -p "$TOOLCHAIN_DOWNLOAD_DIR" "$TOOLCHAIN_ROOT"
+
+    local archive_path="$TOOLCHAIN_DOWNLOAD_DIR/$archive"
+    if [ ! -f "$archive_path" ]; then
+        log "Downloading ARM GNU toolchain ${TOOLCHAIN_GNU_VERSION} (large, ~130MB)..."
+        curl -fL --retry 3 --retry-delay 2 -o "$archive_path.tmp" "$url"
+        mv "$archive_path.tmp" "$archive_path"
+    else
+        log "Using cached toolchain archive: $archive_path"
+    fi
+
+    log "Extracting toolchain to $TOOLCHAIN_DIR"
+    rm -rf "$TOOLCHAIN_DIR" "$TOOLCHAIN_ROOT/$pkg"
+    tar -xf "$archive_path" -C "$TOOLCHAIN_ROOT"
+    mv "$TOOLCHAIN_ROOT/$pkg" "$TOOLCHAIN_DIR"
+    xattr -dr com.apple.quarantine "$TOOLCHAIN_DIR" 2>/dev/null || true
+
+    [ -x "$TOOLCHAIN_DIR/bin/arm-none-eabi-gcc" ] || die "Toolchain install failed: $TOOLCHAIN_DIR/bin/arm-none-eabi-gcc not found"
+    log "ARM toolchain ready: $TOOLCHAIN_DIR"
+}
+
+install_ninja() {
+    need curl
+    need unzip
+
+    if [ -x "$NINJA_BIN" ]; then
+        log "ninja already installed: $NINJA_BIN"
+        return 0
+    fi
+
+    mkdir -p "$NINJA_DOWNLOAD_DIR" "$(dirname -- "$NINJA_BIN")"
+
+    local archive_path="$NINJA_DOWNLOAD_DIR/$NINJA_ARCHIVE"
+    if [ ! -f "$archive_path" ]; then
+        log "Downloading ninja $NINJA_VERSION from $NINJA_URL"
+        curl -fL --retry 3 --retry-delay 2 -o "$archive_path.tmp" "$NINJA_URL"
+        mv "$archive_path.tmp" "$archive_path"
+    else
+        log "Using cached ninja archive: $archive_path"
+    fi
+
+    log "Installing ninja $NINJA_VERSION to $NINJA_BIN"
+    unzip -qo "$archive_path" -d "$(dirname -- "$NINJA_BIN")"
+    xattr -dr com.apple.quarantine "$NINJA_BIN" 2>/dev/null || true
+
+    [ -x "$NINJA_BIN" ] || die "ninja install failed: $NINJA_BIN not found"
+    log "ninja ready: $NINJA_BIN"
+}
+
 need git
 
+# --- Project submodule (lib/lfs, littlefs) ---
 if git -C "$PROJECT_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1 && \
    git -C "$PROJECT_ROOT" ls-files --stage -- lib/lfs | grep -q '^160000 '; then
     log "Downloading project submodule: lib/lfs"
@@ -134,37 +225,51 @@ if git -C "$PROJECT_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1 && \
     git -C "$PROJECT_ROOT" submodule update --init --recursive -- lib/lfs
 fi
 
+# --- Pico SDK ---
 mkdir -p "$(dirname -- "$PICO_SDK_PATH")"
 
 if [ -d "$PICO_SDK_PATH/.git" ]; then
-    log "Updating Pico SDK at $PICO_SDK_PATH"
+    log "Pico SDK checkout found at $PICO_SDK_PATH"
     git -C "$PICO_SDK_PATH" remote set-url origin "$PICO_SDK_REPO"
-    git -C "$PICO_SDK_PATH" fetch --tags --force origin
+
+    # Fetch only the pinned tag/commit (shallow) if we don't already have it.
+    if ! git -C "$PICO_SDK_PATH" rev-parse --verify -q "$PICO_SDK_VERSION^{commit}" >/dev/null 2>&1; then
+        log "Fetching SDK version $PICO_SDK_VERSION (shallow)"
+        git -C "$PICO_SDK_PATH" fetch --depth 1 origin "tag/$PICO_SDK_VERSION" 2>/dev/null \
+            || git -C "$PICO_SDK_PATH" fetch --depth 1 origin "$PICO_SDK_VERSION"
+    fi
 else
     if [ -e "$PICO_SDK_PATH" ]; then
         die "$PICO_SDK_PATH exists but is not a git checkout. Move it aside or set PICO_SDK_PATH."
     fi
 
-    log "Downloading Pico SDK $PICO_SDK_VERSION from $PICO_SDK_REPO"
+    log "Downloading Pico SDK $PICO_SDK_VERSION (shallow)"
     git clone --branch "$PICO_SDK_VERSION" --depth 1 "$PICO_SDK_REPO" "$PICO_SDK_PATH"
 fi
 
 log "Checking out SDK version $PICO_SDK_VERSION"
 git -C "$PICO_SDK_PATH" checkout --detach "$PICO_SDK_VERSION"
 
-log "Downloading SDK submodules"
-git -C "$PICO_SDK_PATH" submodule sync
-git -C "$PICO_SDK_PATH" submodule update --init
+# --- SDK submodules (only the ones this firmware needs) ---
+for sub in "${SDK_SUBMODULES[@]}"; do
+    log "Fetching SDK submodule: $sub (shallow)"
+    git -C "$PICO_SDK_PATH" submodule sync -- "$sub"
+    git -C "$PICO_SDK_PATH" submodule update --init --depth 1 -- "$sub"
+done
 
 install_cmake
 install_picotool
+install_toolchain
+install_ninja
 
 ENV_FILE="$PROJECT_ROOT/.pico-sdk-env"
 {
     printf 'export BREADMODULAR_HOME=%q\n' "$BREADMODULAR_HOME"
     printf 'export PICO_SDK_PATH=%q\n' "$PICO_SDK_PATH"
     printf 'export PICO_SDK_VERSION=%q\n' "$PICO_SDK_VERSION"
+    printf 'export PICO_TOOLCHAIN_PATH=%q\n' "$TOOLCHAIN_DIR"
     printf 'export CMAKE_BIN=%q\n' "$CMAKE_BIN_DIR/cmake"
+    printf 'export NINJA_BIN=%q\n' "$NINJA_BIN"
     printf 'export PICOTOOL_BIN=%q\n' "$PICOTOOL_BIN"
 } > "$ENV_FILE"
 

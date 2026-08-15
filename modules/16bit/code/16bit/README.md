@@ -1,36 +1,103 @@
-# 16bit PolySynth
+# 16bit Module Firmware (RP2350)
 
-This is a 6-voice poly-synth built with the 16bit framework. It has four waveform types, which you can select by pressing the MODE button. The available waveforms are:
+Firmware for the Bread Modular **16bit** module (Raspberry Pi RP2350).
 
-1. Saw
-2. Triangle
-3. Square
-4. Sine
+The codebase contains **multiple apps**, but each firmware build compiles **one
+app at a time** (same model as the 32bit module). `scripts/package.sh` builds a
+separate firmware per app.
 
-> The MODE LED will blink according to the number of the selected waveform.
+## Apps
 
-## MIDI Support
+| App         | Description                                  |
+|-------------|----------------------------------------------|
+| `noop`      | Minimal app (no audio processing)            |
+| `sampler`   | 12-voice sample player with per-sample FX    |
+| `polysynth` | 9-voice poly-synth (Saw / Tri / Square / Sine) |
+| `fxrack`    | Multi-FX rack over sample players            |
+| `elab`      | Envelope lab (A1/A2 CV/audio scoping)        |
 
-You can send notes via MIDI. Multiple notes can be played simultaneously, up to 6 voices at once. If you send more than 6 notes, only the most recent notes will be played.
+The selected app is fixed at **compile time** and reported over serial via
+`get-app`. Each app owns its own baked-in assets and config file, so each
+firmware only carries the code and data it actually needs (e.g. the sampler's
+sample bank is only compiled into the `sampler` firmware).
 
-## CV Controls (Envelope Handling)
+## Setup
 
-You can control the amp envelope via CV1 and CV2. If CVs are not provided, you can use the potentiometers to control the CV values. If CVs are supplied, the potentiometers act as gain controls for those CVs.
+```sh
+./scripts/setup.sh
+```
 
-This synth uses an ATTACK, HOLD, RELEASE envelope. The envelope maintains the total volume after the ATTACK stage until the gate is turned off (i.e., a key release event). Essentially, HOLD is equivalent to DECAY=0 and SUSTAIN=1 in a traditional ADSR envelope. The CV controls are as follows:
+Installs everything under `~/.breadmodular` — no dependency on `~/.pico-sdk` or
+the VSCode Pico extension. Works on a fresh machine with just `setup.sh`:
 
-* CV1 - Controls the Attack (1ms to 500ms)
-* CV2 - Controls the Release (10ms to 1000ms)
+| Tool               | Installed to                                   |
+|--------------------|------------------------------------------------|
+| Pico SDK 2.1.1     | `~/.breadmodular/pico-sdk/sdk/2.1.1`           |
+| ARM GCC 14.2       | `~/.breadmodular/toolchain/14_2_Rel1`          |
+| CMake              | `~/.breadmodular/cmake` (symlinked to `bin`)   |
+| ninja              | `~/.breadmodular/bin/ninja`                    |
+| picotool           | `~/.breadmodular/picotool`                     |
 
-## Audio Output
+Re-running is idempotent (skips installed tools and uses cached downloads).
 
-* A1 - Merged waveform of all voices processed through the envelope.
-* A2 - Merged waveforms of all voices without envelope or gate processing. This output contains the waveforms of all voices at all times.
+## Build
 
-## Gate Output
+```sh
+# Set the app you're working on (local, gitignored)
+cp .config.example .config
+# edit .config -> APP_NAME=sampler
 
-Gate 1 (G1) outputs the combined gate of all key events. It will stay HIGH as long as at least one MIDI note is ON.
+# Build the app from .config (default: polysynth if no .config)
+./scripts/build.sh
 
-Gate 2 (G2) is not connected.
+# Or override .config for a single build
+./scripts/build.sh -DAPP_NAME=elab
 
+# Build all apps and package each .uf2 under dist/<app>_<version>/
+./scripts/package.sh
+```
 
+The app is resolved in this order: `-DAPP_NAME=<x>` on the command line →
+`.config` → `polysynth` (CMake default).
+
+## Flash / Deploy
+
+```sh
+# Build + auto-flash the app from .config (uses picotool)
+./scripts/deploy.sh
+
+# Or flash an already-built .uf2
+./scripts/deploy.sh dist/sampler_1.6.0/16bit.uf2
+```
+
+`deploy.sh` builds via `build.sh`, so it picks up the same `.config` app
+selection.
+
+You can also just drag-drop any packaged `.uf2` onto the RP2350 bootloader
+volume.
+
+## Flash layout
+
+The board is 16 MB total, partitioned as **2 MB firmware + 14 MB filesystem**
+(`PICO_FLASH_SIZE_BYTES`). Because each app is its own firmware, each app can
+use the full 2 MB firmware region for its own baked-in resources, and the split
+can be tuned per app if needed.
+
+## Serial API
+
+All commands are sent as newline-terminated text over USB serial. Responses are
+framed as `::val::<value>::val::` (or `::list::…::list::` / `::bin::…::bin::`).
+
+| Command            | Response                                            |
+|--------------------|-----------------------------------------------------|
+| `whoami`           | `16bit`                                             |
+| `get-app`          | Current app name (the compiled-in app)              |
+| `set-app <name>`   | No-op unless `<name>` is the compiled-in app        |
+| `version`          | Firmware version                                    |
+| `ping`             | `pong` + LED blink                                  |
+| `psram-usage`      | Bytes of PSRAM in use                               |
+
+> `get-app` now returns only the current (compiled-in) app name, and
+> `set-app` only accepts that app — runtime app switching was removed in favor
+> of one-firmware-per-app. These commands remain backward compatible with the
+> previous multi-app firmware.
