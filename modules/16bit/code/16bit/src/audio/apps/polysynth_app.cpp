@@ -5,6 +5,18 @@ PolySynthApp* PolySynthApp::instance = nullptr;
 
 void PolySynthApp::init() {
     audioManager->setAdcEnabled(false);
+
+    // Initialize every waveform generator with the real DAC sample rate.
+    // Voices are created pointing at the saw generators (which Voice::init()
+    // also initializes), but the tri/square generators are only swapped in
+    // later by setWaveform(). If they are not initialized here they keep the
+    // default 48000 Hz and play out of tune (the DAC runs at 44100 Hz).
+    for (int i = 0; i < TOTAL_VOICES; i++) {
+        sawGenerators[i].init(audioManager);
+        triGenerators[i].init(audioManager);
+        squareGenerators[i].init(audioManager);
+    }
+
     for (int i = 0; i < TOTAL_VOICES; i++) {
         Voice* oldVoice = voices[i];
         voices[i] = new Voice(
@@ -153,10 +165,15 @@ bool PolySynthApp::onCommandCallback(const char* cmd) {
             return false;
         }
 
+        // config.save() writes to flash, which cannot happen while the audio
+        // core is executing from flash (XIP) — so the core must be stopped
+        // first. Apply the waveform in place (no full re-init) and then
+        // relaunch the core with restart(), which preserves all voice state.
         audioManager->stop();
         config.set(CONFIG_WAVEFORM_INDEX, waveformIndex);
         config.save();
-        audioManager->start();
+        setWaveform(waveformIndex);
+        audioManager->restart();
 
         return true;
     }
