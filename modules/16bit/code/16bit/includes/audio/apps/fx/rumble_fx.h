@@ -24,10 +24,15 @@
 // makeup gain below restores it to an audible rumble. Parameter 2 ("Rumble
 // Vol") sets the final noise level.
 //
-// Step 4: Parameter 1 ("Decay") sets the amount of amplitude decay over the
-// (fixed) one-beat burst. Decay = 0 leaves the burst at full level (no decay);
-// increasing it makes the amplitude fall, approaching 0 by the end of the beat.
-// The envelope is applied to the raw noise before the low-pass filter.
+// Step 4: Parameter 1 ("Decay") sets how much the amplitude falls, over a
+// window of 0..1/2 beat. Decay = 0 keeps the burst at full level (no decay);
+// increasing it makes the amplitude fall to ~0 by half a beat. A short fade-in
+// AND fade-out is always applied around the burst, regardless of decay, so the
+// noise never pops. The envelope runs on the raw noise before the low-pass.
+//
+// Step 5: Parameter 3 ("Saturate") drives the rumble through a soft clipper.
+// 0 = no saturation at all (exact pass-through); higher values add a warm,
+// compressed, overdriven character to the noise burst.
 class RumbleFX : public AudioFX {
 
 private:
@@ -40,8 +45,8 @@ private:
     uint32_t sampleRate = 48000;
     uint16_t bpm = 120;
     uint32_t beatSamples = 24000; // samples in one beat (recomputed on setBPM)
-    uint32_t releaseSamples = 240; // short fade at the end to avoid a click
-    uint32_t noiseRemaining = 0;   // samples left in the current burst
+    uint32_t fadeSamples = 441;   // short fade on both ends (~10 ms) to avoid pops
+    uint32_t noiseRemaining = 0;  // samples left in the current burst
 
     bool gateState = false;
 
@@ -73,8 +78,8 @@ private:
             beatSamples = (uint32_t)((60.0f * (float)sampleRate) / (float)bpm + 0.5f);
         }
 
-        // ~5 ms release to keep the burst from clicking when it stops.
-        releaseSamples = sampleRate / 200;
+        // ~10 ms fade on both ends of the burst to keep it click-free.
+        fadeSamples = sampleRate / 100;
     }
 
     void applyCutoff() {
@@ -91,13 +96,28 @@ private:
         lp4.setResonance(2.56292f);
     }
 
+    // Soft-clipping saturator. param3 = 0 is an exact pass-through; higher
+    // values pre-boost then soft-limit, adding warm odd-harmonic saturation.
+    float saturate(float x) {
+        float d = parameterValues[3];
+        if (d <= 0.0f) {
+            return x;
+        }
+
+        float boost = 1.0f + d * 6.0f;        // pre-gain (1..7)
+        float y = x * boost;
+        float wet = y / (1.0f + fabsf(y));    // soft clip, bounded to +/-1
+
+        return x * (1.0f - d) + wet * d;      // blend so d=0 is pass-through
+    }
+
 public:
     RumbleFX() {
         // Default param values
         parameterValues[0] = 0.5f; // Cutoff (100..180 Hz)
-        parameterValues[1] = 0.7f; // Decay (0..1 beat)
+        parameterValues[1] = 0.7f; // Decay (0..1/2 beat)
         parameterValues[2] = 0.5f; // Rumble Vol
-        parameterValues[3] = 0.0f; // Drive (unused for now)
+        parameterValues[3] = 0.0f; // Saturate (0 = off)
         updateTiming();
         applyCutoff();
     }
@@ -115,7 +135,7 @@ public:
             case 0: return "Cutoff";
             case 1: return "Decay";
             case 2: return "Rumble Vol";
-            case 3: return "Drive";
+            case 3: return "Saturate";
         }
 
         return "";
@@ -136,25 +156,19 @@ public:
 
         if (noiseRemaining > 0) {
             --noiseRemaining;
+            uint32_t elapsed = beatSamples - noiseRemaining; // 1..beatSamples
 
-            // Decay envelope. Decay = 0 keeps the burst at full level across the
-            // whole beat (no decay). Increasing it makes the amplitude fall
-            // faster, approaching 0 by the end of the beat. env is applied to
-            // the raw noise BEFORE the low-pass filter.
-            uint32_t elapsed = beatSamples - noiseRemaining;
-            float position = (float)elapsed / (float)beatSamples;
+            // Decay envelope over 0..1/2 beat. Decay=0 leaves level at 1
+            // (no decay); higher values fall to ~0 by half a beat. Applied to
+            // the raw noise BEFORE the low-pass.
+            float halfBeat = (float)beatSamples * 0.5f;
+            float position = (float)elapsed / halfBeat;
             if (position > 1.0f) {
                 position = 1.0f;
             }
             float env = expf(-5.0f * parameterValues[1] * position);
 
-            // Linear fade over the last few samples to avoid a click on stop.
-            float gain = 1.0f;
-            if (noiseRemaining < releaseSamples) {
-                gain = (float)noiseRemaining / (float)releaseSamples;
-            }
-
-            noise = nextNoise() * (env * gain);
+            noise = nextNoise() * env;
 
             // Frame the white noise with the 48 dB/oct ("4x") low-pass.
             noise = lp1.process(noise);
@@ -164,10 +178,32 @@ public:
 
             // Restore the level lost to the narrow-band filtering.
             noise *= makeupGain;
+
+            // Saturator (0 = off).
+            noise = saturate(noise);
+
+            // Edge fades applied to the FILTER OUTPUT, not the input. A low-pass
+            // holds energy in its internal state even after the input reaches 0,
+            // so fading the input alone still leaves a residual that jumps -> a
+            // click. Fading the output guarantees it ramps to exactly 0 on both
+            // ends. Always on, regardless of decay, so the noise never pops.
+            float attack = (float)elapsed / (float)fadeSamples;
+            if (attack > 1.0f) {
+                attack = 1.0f;
+            }
+            float release = 1.0f;
+            if (noiseRemaining < fadeSamples) {
+                release = (float)noiseRemaining / (float)fadeSamples;
+            }
+
+            noise *= attack * release;
+
+            // Final Rumble Vol.
+            noise *= parameterValues[2];
         }
 
-        // Dry pass-through + filtered noise burst at Rumble Vol.
-        return input + noise * parameterValues[2];
+        // Dry pass-through + saturated noise burst.
+        return input + noise;
     }
 
     virtual void setBPM(uint16_t newBpm) override {
