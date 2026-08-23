@@ -31,7 +31,8 @@
 // knob rises. Short fades are always applied (on the filter output) so the
 // noise never pops. The envelope runs on the raw noise before the low-pass.
 //
-// Step 5: Parameter 3 ("Saturate") drives the rumble through a soft clipper.
+// Step 5: Parameter 3 ("Saturate") drives the rumble through an Ableton-style
+// "Bass Shaper" sigmoid (smooth S-curve). 0 = no saturation (exact pass-through).
 // 0 = no saturation at all (exact pass-through); higher values add a warm,
 // compressed, overdriven character to the noise burst.
 class RumbleFX : public AudioFX {
@@ -97,19 +98,22 @@ private:
         lp4.setResonance(2.56292f);
     }
 
-    // Soft-clipping saturator. param3 = 0 is an exact pass-through; higher
-    // values pre-boost then soft-limit, adding warm odd-harmonic saturation.
+    // Bass-shaper saturator (Ableton Saturator "Bass Shaper" curve): a smooth
+    // S-curve (sigmoid) — flat at the extremes, steep through the origin.
+    // param3 = 0 is an exact pass-through. The drive (how hard the signal is
+    // pushed into the curve) and the dry/wet mix both grow with the knob, so a
+    // low value saturates just a little and only mixes in a little, while high
+    // means a hard, fully-mixed saturation.
     float saturate(float x) {
         float d = parameterValues[3];
         if (d <= 0.0f) {
             return x;
         }
 
-        float boost = 1.0f + d * 6.0f;        // pre-gain (1..7)
-        float y = x * boost;
-        float wet = y / (1.0f + fabsf(y));    // soft clip, bounded to +/-1
+        float drive = 1.0f + d * 4.0f;        // pre-gain into the curve (1..5)
+        float wet = tanhf(x * drive);         // symmetric sigmoid, bounded +/-1
 
-        return x * (1.0f - d) + wet * d;      // blend so d=0 is pass-through
+        return x * (1.0f - d) + wet * d;      // mix grows with the knob
     }
 
 public:
