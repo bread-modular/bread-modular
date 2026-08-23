@@ -1,38 +1,58 @@
 #pragma once
 
 #include "audio/apps/interfaces/audio_fx.h"
-#include "audio/mod/Delay.h"
-#include "audio/mod/biquad.h"
 
+// Rumble FX — white-noise burst on kick, rebuilt step by step.
+//
+// Step 2: Every time the kick (default sample) triggers (rising edge of the
+// gate), play a one-beat burst of white noise. The dry signal passes through
+// untouched; the noise is added on top. Parameter 2 ("Rumble Vol") controls the
+// noise volume.
 class RumbleFX : public AudioFX {
 
 private:
-    Delay delay{2000}; // Longer buffer for rumble
-    Biquad lowpass{Biquad::FilterType::LOWPASS};
-    Biquad preFilter{Biquad::FilterType::LOWPASS}; // Remove click before delay
     float parameterValues[4];
-    
-    // Sidechain state
+
+    // White noise PRNG (xorshift32) — generated on the fly, no flash needed.
+    uint32_t noiseState = 0x9E3779B9;
+
+    // Timing
+    uint32_t sampleRate = 48000;
+    uint16_t bpm = 120;
+    uint32_t beatSamples = 24000; // samples in one beat (recomputed on setBPM)
+    uint32_t releaseSamples = 240; // short fade at the end to avoid a click
+    uint32_t noiseRemaining = 0;   // samples left in the current burst
+
     bool gateState = false;
-    bool lastGateState = false;
-    float currentGain = 1.0f;
-    float attack = 0.001f; // ~2ms at 48kHz (used if we want smoothed attack, unused in trigger mode)
-    float release = 0.0005f; // ~100ms at 48kHz
-    
-    // Distortion
-    float drive = 1.0f;
-    float crushPhase = 0.0f;
-    float crushLastSample = 0.0f;
+
+    float nextNoise() {
+        noiseState ^= noiseState << 13;
+        noiseState ^= noiseState >> 17;
+        noiseState ^= noiseState << 5;
+
+        // Map the 32-bit value to [-1.0, 1.0)
+        return (float)((int32_t)noiseState) / 2147483648.0f;
+    }
+
+    void updateTiming() {
+        if (bpm > 0 && sampleRate > 0) {
+            beatSamples = (uint32_t)((60.0f * (float)sampleRate) / (float)bpm + 0.5f);
+        }
+
+        // ~5 ms release to keep the burst from clicking when it stops.
+        releaseSamples = sampleRate / 200;
+    }
 
 public:
     RumbleFX() {
         // Default param values
-        parameterValues[0] = 0.5f; // Decay
-        parameterValues[1] = 0.3f; // Cutoff (low)
-        parameterValues[2] = 0.0f; // Volume
-        parameterValues[3] = 0.0f; // Drive
+        parameterValues[0] = 0.5f; // Decay (unused for now)
+        parameterValues[1] = 0.3f; // Rumble Color (unused for now)
+        parameterValues[2] = 0.5f; // Rumble Vol
+        parameterValues[3] = 0.0f; // Drive (unused for now)
+        updateTiming();
     }
-    
+
     virtual const char* getName() override {
         return "Rumble";
     }
@@ -53,110 +73,40 @@ public:
     }
 
     virtual void init(AudioManager* audioManager) override {
-        delay.init(audioManager);
-        delay.setBPM(120); // Default, will be updated
-        delay.setDelayBeats(0.25f); // 1/4 note delay for rumble rhythm usually works well, or 1/8
-        delay.setWet(1.0f); // 1.0 = Return wet only (we mix dry manually)
-        delay.setFeedback(0.7f); // Default feedback
-        delay.setLowpassCutoff(20000.0f); // Open internal delay filter
-        
-        lowpass.init(audioManager);
-        lowpass.setCutoff(150.0f);
-        lowpass.setResonance(0.707f);
-        
-        preFilter.init(audioManager);
-        preFilter.setCutoff(600.0f); // Remove high click, keep body
+        sampleRate = audioManager->getDac()->getSampleRate();
+        updateTiming();
     }
 
     virtual float process(float input) override {
-        // 1. Dry signal passes through
-        float dry = input;
+        float noise = 0.0f;
 
-        // 2. Rumble Generation
-        // Pre-filter: Remove click from the input going into the rumble
-        float wetInput = preFilter.process(input);
-        
-        // We want the reverb/delay tail of the kick
-        float wet = delay.process(wetInput);
-        
-        // 3. Distortion / Drive on the wet path
-        if (drive > 0.0f) {
-            wet *= (1.0f + drive * 20.0f);
-            // Soft clip
-            if (wet > 1.0f) wet = 1.0f;
-            if (wet < -1.0f) wet = -1.0f;
-            
-            // Downsampler (Bitcrusher effect)
-            if (drive > 0.1f) {
-                // Reduction factor scales with drive. 
-                // At drive=0.1 -> 1.0 (native). At drive=1.0 -> ~30x reduction
-                float reduction = 1.0f + (drive - 0.1f) * 30.0f;
-                
-                crushPhase += 1.0f;
-                if (crushPhase >= reduction) {
-                    crushPhase -= reduction;
-                    crushLastSample = wet;
-                } else {
-                    wet = crushLastSample;
-                }
+        if (noiseRemaining > 0) {
+            --noiseRemaining;
+
+            // Linear fade over the last few samples to avoid a click on stop.
+            float gain = 1.0f;
+            if (noiseRemaining < releaseSamples) {
+                gain = (float)noiseRemaining / (float)releaseSamples;
             }
+
+            noise = nextNoise() * gain;
         }
 
-        // // 4. Lowpass Filter
-        wet = lowpass.process(wet);
-
-        // 5. Sidechain ducking
-        // Trigger Mode: Detect rising edge of gate (0->1) to instant duck
-        if (gateState && !lastGateState) {
-            currentGain = 0.0f;
-        }
-        lastGateState = gateState;
-        
-        // Always recover gain towards 1.0
-        currentGain += (1.0f - currentGain) * release;
-        
-        wet *= currentGain;
-
-        // 6. Mix
-        float rumbleVol = parameterValues[2];
-        return dry + wet * rumbleVol / 2.0f;
+        // Dry pass-through + white-noise burst at Rumble Vol.
+        return input + noise * parameterValues[2];
     }
-    
-    virtual void setBPM(uint16_t bpm) override {
-        delay.setBPM(bpm);
+
+    virtual void setBPM(uint16_t newBpm) override {
+        bpm = newBpm;
+        updateTiming();
     }
-    
+
     virtual void setParameter(uint8_t parameter, float value) override {
         if (parameter >= getParameterCount()) {
             return;
         }
 
         parameterValues[parameter] = value;
-        switch (parameter) {
-            case 0: {
-                // Decay controls feedback
-                delay.setFeedback(0.5f + value * 0.45f);
-                break;
-            }
-            case 1: {
-                // Filter Cutoff
-                // Range 500Hz to 30Hz
-                // Exponential mapping
-                float invertedValue = 1.0f - value;
-                float cutoff = 30.0f + 470.0f * (invertedValue * invertedValue);
-                lowpass.setCutoff(cutoff);
-                break;
-            }
-            case 2: { 
-                 // Rumble Volume handled in process
-                 break; 
-            }
-            case 3: {
-                // Drive handled in process
-                drive = value * value;
-                break;
-            }
-        }
     }
 
     virtual float getParameter(uint8_t parameter) override {
@@ -168,6 +118,11 @@ public:
     }
 
     virtual void setGate(bool gate) override {
+        // Trigger a one-beat noise burst on the rising edge (kick hit).
+        if (gate && !gateState) {
+            noiseRemaining = beatSamples;
+        }
+
         gateState = gate;
     }
 };
