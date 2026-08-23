@@ -50,6 +50,7 @@ class SamplerApp : public AudioApp {
         int16_t* defaultSample = (int16_t*)s01_wav;
         uint32_t defaultSampleLen = s01_wav_len / 2;
         uint32_t defaultSamplePlayhead = defaultSampleLen;
+        uint32_t lastKickPlayhead = defaultSampleLen;
         float velocityOfDefaultSample = 1.0f;
 
         Config config{4, "/sampler_config.dat"};
@@ -103,6 +104,13 @@ class SamplerApp : public AudioApp {
             // first 6 samples has FX support & others are just playing (no fx)
             float sumGroupA = 0.0f;
 
+            // Detect a fresh kick onset (the default sample was just retriggered).
+            // We sample the playhead BEFORE it advances, so an onset is a reset
+            // to 0 (either from idle, or a retrigger while still playing).
+            uint32_t playheadOnEntry = defaultSamplePlayhead;
+            bool kickOnset = (playheadOnEntry == 0 && lastKickPlayhead != 0);
+            lastKickPlayhead = playheadOnEntry;
+
             if (defaultSamplePlayhead < defaultSampleLen) {
                 sumGroupA += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * velocityOfDefaultSample;
             }
@@ -111,9 +119,10 @@ class SamplerApp : public AudioApp {
                 sumGroupA += players[i].process() / 32768.0f;
             }
             
-            // Sidechain gate for FX1 (Rumble)
-            // Trigger sidechain when the kick (default sample) is playing
-            fx1->setGate(defaultSamplePlayhead < defaultSampleLen);
+            // Kick-onset pulse for FX1 (Rumble).
+            // This is a one-sample trigger (not a level): the FX retriggers its
+            // one-beat noise burst on every fresh kick hit.
+            fx1->setGate(kickOnset);
 
             float sumGroupB = 0.0f;
             for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
