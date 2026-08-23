@@ -1,0 +1,119 @@
+// Implementation split from header.
+#include "audio/apps/bass_app.h"
+
+#include <cmath>
+
+BassApp* BassApp::instance = nullptr;
+
+void BassApp::init() {
+    audioManager->setAdcEnabled(false);
+
+    bassDsp.init(audioManager->getDac()->getSampleRate());
+    bassDsp.setReleaseMs(RELEASE_MS);
+    bassDsp.setSustainLevel(SUSTAIN_LEVEL);
+    bassDsp.setPitchDrop(PITCH_DROP);
+
+    // Sensible defaults; CV1/CV2 are applied as soon as io->update() reads them.
+    bassDsp.setAttackMs(BassDsp::cvToMs(0.5f));  // ~500 ms
+    bassDsp.setDecayMs(BassDsp::cvToMs(0.5f));   // ~500 ms
+    bassDsp.setShape(0.5f);
+    bassDsp.setWarp(0.3f);
+    bassDsp.setCutoff(0.6f);
+    bassDsp.setResonance(0.4f);
+}
+
+__attribute__((hot))
+void BassApp::audioCallback(AudioInput *input, AudioOutput *output) {
+    float s = bassDsp.process();
+    output->left = s;
+    output->right = s;
+}
+
+void BassApp::update() {}
+
+__attribute__((cold, noinline))
+void BassApp::noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
+    // Velocity -> amplitude (no volume knob). Squared curve for a musical feel.
+    float velocityNorm = velocity / 127.0f;
+    float realVelocity = velocityNorm * velocityNorm;
+
+    float freq = 440.0f * powf(2.0f, (note - 69) / 12.0f);
+    bassDsp.setVelocity(realVelocity);
+    bassDsp.noteOn(freq);
+
+    currentNote = note;
+    io->setGate1(true);
+}
+
+__attribute__((cold, noinline))
+void BassApp::noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
+    if (note != currentNote) {
+        return;
+    }
+    currentNote = -1;
+    bassDsp.noteOff();
+    io->setGate1(false);
+}
+
+__attribute__((cold, noinline))
+void BassApp::ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
+    float n = value / 127.0f;
+    switch (cc) {
+        case 20: bassDsp.setShape(n);      break; // MCC bank A CV1 -> SHAPE
+        case 21: bassDsp.setWarp(n);       break; // MCC bank A CV2 -> WARP
+        case 22: bassDsp.setCutoff(n);     break; // MCC bank A CV3 -> CUTOFF
+        case 23: bassDsp.setResonance(n);  break; // MCC bank A CV4 -> RESONANCE
+        default: break;
+    }
+}
+
+void BassApp::bpmChangeCallback(int bpm) {}
+
+__attribute__((cold, noinline))
+void BassApp::cv1UpdateCallback(uint16_t cv1) {
+    // CV1 -> attack time
+    bassDsp.setAttackMs(BassDsp::cvToMs(IO::normalizeCV(cv1)));
+}
+
+__attribute__((cold, noinline))
+void BassApp::cv2UpdateCallback(uint16_t cv2) {
+    // CV2 -> decay time
+    bassDsp.setDecayMs(BassDsp::cvToMs(IO::normalizeCV(cv2)));
+}
+
+__attribute__((cold, noinline))
+void BassApp::buttonPressedCallback(bool pressed) {}
+
+bool BassApp::onCommandCallback(const char* cmd) {
+    if (strncmp(cmd, "get-bass-params", 15) == 0) {
+        // Report the live DSP state for debugging / testing over serial.
+        char buf[32];
+        snprintf(buf, sizeof(buf), "attack_ms=%d", (int)bassDsp.attackMs());
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "decay_ms=%d", (int)bassDsp.decayMs());
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "release_ms=%d", (int)bassDsp.releaseMs());
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "sustain=%d", (int)(bassDsp.sustainLevel() * 100));
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "shape=%d", (int)(bassDsp.shape() * 127));
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "warp=%d", (int)(bassDsp.warp() * 127));
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "cutoff=%d", (int)(bassDsp.cutoff() * 127));
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "reso=%d", (int)(bassDsp.resonance() * 127));
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "env=%d", (int)(bassDsp.envLevel() * 127));
+        webSerial->sendValue(buf);
+        return true;
+    }
+    return false;
+}
+
+BassApp* BassApp::getInstance() {
+    if (!instance) {
+        instance = new BassApp();
+    }
+    return instance;
+}

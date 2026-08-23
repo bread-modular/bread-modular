@@ -37,7 +37,7 @@ if(NOT DEFINED APP_NAME)
     set(APP_NAME "polysynth")
 endif()
 
-set(VALID_APPS "noop" "sampler" "polysynth" "fxrack" "elab")
+set(VALID_APPS "noop" "sampler" "polysynth" "fxrack" "elab" "bass")
 if(NOT APP_NAME IN_LIST VALID_APPS)
     message(FATAL_ERROR "Invalid APP_NAME: ${APP_NAME}. Valid options are: ${VALID_APPS}")
 endif()
