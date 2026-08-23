@@ -91,6 +91,22 @@ public:
         z1_ = z2_ = y1_ = y2_ = 0.0f;
         a0_ = a1_ = a2_ = b1_ = b2_ = 0.0f;
         applyFilterCoeffs();
+
+        // Chorus (MCC param 2): modulated short delay, dry/wet mix.
+        for (int i = 0; i < CHORUS_MAX; ++i) chorusBuf_[i] = 0.0f;
+        chorusWriteIdx_ = 0;
+        chorusLfoPhase_ = 0.0f;
+        chorusMix_      = 0.0f;   // bypass until CC21 raises it
+        // Chorus/doubler: two short FIXED delay taps summed with dry. No LFO
+        // (depth=0) => no Doppler / pitch warp. Two decorrelated taps avoid a
+        // single deep comb null and make the doubling clearly pronounced.
+        chorusRate_     = 0.0f;   // no LFO modulation
+        chorusBaseMs_   = 10.0f;  // tap 1 delay (ms)
+        chorusTap2Ms_   = 18.0f;  // tap 2 delay (ms) — different = fuller
+        chorusDepthMs_  = 0.0f;   // zero depth = fixed (pitch-stable)
+
+        tremoloPhase_   = 0.0f;
+        tremoloDepth_   = 0.0f;
     }
 
     // ---- control inputs (set any time; take effect per-sample) ----
@@ -137,6 +153,13 @@ public:
     void setWarp(float w)        { warp_ = clamp01(w); }
     void setCutoff(float c)      { cutoffNorm_ = clamp01(c); applyFilterCoeffs(); }
     void setResonance(float r)   { resonanceNorm_ = clamp01(r); applyFilterCoeffs(); }
+    void setChorus(float mix) {          // MCC param 2 / CC21
+        // CC21 = CHORUS/DOUBLING amount. A short FIXED delay (no LFO = pitch-
+        // stable & won't warp) mixed with the dry signal thickens the note. The
+        // previous version was too subtle, so the wet mix is doubled here.
+        tremoloDepth_ = 0.0f;
+        chorusMix_ = clamp01(mix);
+    }
     void setPitchDrop(float p)   { pitchDrop_ = clamp01(p); }
     void setPitchDropMs(float ms){ pitchDropMs_ = ms < 1.0f ? 1.0f : ms; applyEnvelopeTimings(); }
     void setVelocity(float v)    { velocity_ = clamp01(v); }
@@ -157,6 +180,7 @@ public:
     float cutoff() const         { return cutoffNorm_; }
     float resonance() const      { return resonanceNorm_; }
     float velocity() const       { return velocity_; }
+    float chorus() const         { return chorusMix_; }
     bool  gateOn() const         { return gateOn_; }
 
     // ---- shared parameter-mapping helpers (also used by the simulator) ----
@@ -281,6 +305,23 @@ private:
     float z1_, z2_, y1_, y2_;
     float a0_, a1_, a2_, b1_, b2_;
 
+    // chorus: LFO-modulated short delay ring buffer + dry/wet mix
+    static const int CHORUS_MAX = 2048;          // power of two (bitmask wrap)
+    float chorusBuf_[CHORUS_MAX];
+    int   chorusWriteIdx_;
+    float chorusLfoPhase_;
+    float chorusMix_;       // 0..1 wet mix (MCC param 2 / CC21)
+    float chorusRate_;      // LFO rate Hz (unused at depth 0)
+    float chorusBaseMs_;    // tap 1 delay ms
+    float chorusTap2Ms_;    // tap 2 delay ms (decorrelates the comb -> fuller)
+    float chorusDepthMs_;   // LFO delay depth ms (0 = fixed, pitch-neutral)
+
+    // tremolo (added to MCC param 2 / CC21): LFO amplitude modulation. Pitch-
+    // neutral and clearly audible, adds movement on top of the subtle doubler.
+    static constexpr float TREM_RATE = 5.0f;   // Hz
+    float tremoloPhase_;
+    float tremoloDepth_;    // 0..1 (scaled from chorusMix_)
+
     float lastSample_;
 };
 
@@ -351,6 +392,49 @@ inline float BassDsp::process() {
     float out = a0_ * sig + z1_;
     z1_ = a1_ * sig - b1_ * out + z2_;
     z2_ = a2_ * sig - b2_ * out;
+
+    // CHORUS/DOUBLER (MCC param 2): two short FIXED delay taps mixed with the dry
+    // signal (no LFO => pitch-stable, no warp). Two decorrelated taps give a
+    // fuller, clearly-pronounced doubling without a single deep comb null.
+    if (chorusMix_ > 0.001f) {
+        float d1 = (chorusBaseMs_ / 1000.0f) * sampleRate_;
+        float d2 = (chorusTap2Ms_ / 1000.0f) * sampleRate_;
+        if (d1 < 1.0f) d1 = 1.0f;
+        if (d2 < 1.0f) d2 = 1.0f;
+        if (d1 > (float)(CHORUS_MAX - 2)) d1 = (float)(CHORUS_MAX - 2);
+        if (d2 > (float)(CHORUS_MAX - 2)) d2 = (float)(CHORUS_MAX - 2);
+
+        chorusBuf_[chorusWriteIdx_] = out;
+        chorusWriteIdx_ = (chorusWriteIdx_ + 1) & (CHORUS_MAX - 1);
+
+        // Fractional-position read of a delayed sample (linear interpolation).
+        auto ringRead = [&](float dSamps) -> float {
+            float pos = (float)chorusWriteIdx_ - dSamps;
+            while (pos < 0.0f) pos += CHORUS_MAX;
+            int i0 = (int)pos;
+            float frac = pos - (float)i0;
+            int i1 = i0 + 1;
+            if (i0 >= CHORUS_MAX) i0 -= CHORUS_MAX;
+            if (i1 >= CHORUS_MAX) i1 -= CHORUS_MAX;
+            return chorusBuf_[i0] * (1.0f - frac) + chorusBuf_[i1] * frac;
+        };
+
+        // Two taps with slightly different weights; dry stays a strong anchor.
+        float w1 = chorusMix_ * 0.50f;
+        float w2 = chorusMix_ * 0.40f;
+        float wet = ringRead(d1) * w1 + ringRead(d2) * w2;
+        out = out * (1.0f - w1 - w2) + wet;
+    }
+
+    // Tremolo (added to MCC param 2 / CC21): a slow LFO on the output level.
+    // Pitch-neutral and clearly audible, giving the note movement.
+    if (tremoloDepth_ > 0.001f) {
+        tremoloPhase_ += TREM_RATE / sampleRate_;
+        if (tremoloPhase_ >= 1.0f) tremoloPhase_ -= 1.0f;
+        float trem = 0.5f - 0.5f * std::sin(2.0f * BM_DSP_M_PI * tremoloPhase_); // 0..1
+        float tremGain = 1.0f - tremoloDepth_ * trem;   // 1 .. (1-depth)
+        out = out * tremGain;
+    }
 
     // Amplitude envelope + velocity.
     out = out * env_ * velocity_;

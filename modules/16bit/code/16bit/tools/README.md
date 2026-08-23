@@ -66,6 +66,10 @@ g++ -std=c++17 -O2 -Wall -Wextra -I includes -o tools/sim_bass tools/sim_bass.cp
    crossing and the filter state is reset, so the amplitude reset lands on a
    near-zero signal. No one-sample discontinuity/click, and the note still
    re-articulates promptly.
+8. **MCC param 2 (chorus/doubler)** — raising the wet mix blends a short fixed
+   delay with dry: the output stays pitch-stable (fundamental ~note, no warble,
+   no comb null) but is clearly thickened, so the effect is audible without
+   detuning.
 
 ## Run all 16bit DSP self-tests
 
@@ -97,5 +101,10 @@ The simulator shares these with the actual app wiring:
 - MIDI gate -> sustain = hold at peak while the note is on; on note-off the
   envelope decays (CV2) to silence -> short hi-hat when CV2 is low, real,
   audible decay when CV2 is high
-- MCC bank A (CC 20..23) -> SHAPE / WARP / CUTOFF / RESONANCE
+- MCC bank A (CC 20..23) ->
+  - CC20 BODY = SHAPE (harmonics) + WARP (drive) combined (they were too subtle
+    apart, so one param now drives both together)
+  - CC21 CHORUS/DOUBLER (two tap FIXED delays mixed with dry — pitch-stable, no
+    warp; two decorrelated taps give a clearly-pronounced doubling)
+  - CC22 CUTOFF, CC23 RESONANCE
 - velocity -> amplitude

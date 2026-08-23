@@ -15,7 +15,9 @@
 //   MIDI gate       -> sustain = hold at peak while the note is on; on note-off
 //                      the envelope decays (CV2) to silence -> short hi-hat when
 //                      CV2 is low, real audible decay when CV2 is high.
-//   MCC bank A      -> CC20 SHAPE, CC21 WARP, CC22 CUTOFF, CC23 RESONANCE
+//   MCC bank A      -> CC20 BODY (SHAPE + WARP combined), CC21 CHORUS/DOUBLER
+//                      (two-tap fixed delay, pitch-stable, clearly pronounced),
+//                      CC22 CUTOFF, CC23 RESONANCE
 //   MIDI velocity   -> amplitude (no volume knob)
 class BassApp : public AudioApp {
 private:
