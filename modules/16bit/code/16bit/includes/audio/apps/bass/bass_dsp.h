@@ -9,21 +9,29 @@
 // Model: a monophonic Pulsar-23 "BASS" style voice in its percussion (PRC)
 // mode:
 //
-//   DCO (shape-morphing oscillator) --(pitch drop)--> WARP (tanh drive)
-//        -> resonant low-pass filter -> amp envelope (A/D/S with gate sustain)
+//   DCO (shape-morphing oscillator) --(fixed pitch drop)--> WARP (tanh drive)
+//        -> resonant low-pass filter -> amp envelope (A -> HOLD(gate) -> RELEASE)
 //        -> velocity scaling -> out
 //
+// The amplitude envelope is modeled directly on the 16bit polysynth's
+// AttackHoldReleaseEnvelope: it ATTACKs to the peak, then HOLDS at the peak
+// while the MIDI gate is held (that is the "sustain"), and then RELEASES
+// (decays) to silence on note-off. This is what makes "no sustain" behave like
+// a short hi-hat/pluck (release quickly + short decay) and gives a real,
+// audible decay (a full 1.0 -> 0.0 swing) instead of a barely-perceptible drop
+// to a sustained level.
+//
 // Control mapping (wired by bass_app):
-//   CV1          -> attack time
-//   CV2          -> decay time
-//   MIDI gate    -> sustain level (held while note is on)
+//   CV1          -> attack time   (BassDsp::cvToAttackMs)
+//   CV2          -> decay/release time (BassDsp::cvToDecayMs)
+//   MIDI gate    -> sustain = hold at peak while the note is on
 //   MCC bank A   -> SHAPE, WARP, CUTOFF, RESONANCE  (CC 20..23)
 //   MIDI velocity-> amplitude (no volume knob)
 //
-// Envelope scope: A/D/S/R shape ONLY the amplitude. Pitch stays at the MIDI
-// note (a short fixed percussive pitch-drop is decoupled from decay unless
-// setPitchDropMs is overridden) and the filter is set by CUTOFF/RESONANCE.
-// Like the 32bit polysynth, the envelope must never modulate pitch or filter.
+// Envelope scope: A/H/R shape ONLY amplitude. Pitch stays at the MIDI note (a
+// short fixed percussive pitch-drop is decoupled from decay) and the filter is
+// set by CUTOFF/RESONANCE. Like the polysynth, the envelope never modulates
+// pitch or filter.
 
 #include <cmath>
 
@@ -36,9 +44,8 @@ public:
     enum Phase {
         IDLE    = 0,
         ATTACK  = 1,
-        DECAY   = 2,
-        SUSTAIN = 3,
-        RELEASE = 4
+        HOLD    = 2,   // gate-sustain: held at peak while the note is on
+        RELEASE = 3    // post-gate decay to silence (CV2)
     };
 
     BassDsp() { reset(); }
@@ -54,21 +61,19 @@ public:
     void reset() {
         phase_        = IDLE;
         env_          = 0.0f;
-        envReleased_  = 0.0f; // value to release from
         oscPhase_     = 0.0f; // oscillator phase (0..1)
         phaseInc_     = 0.0f;
         pitchEnv_     = 0.0f;
         pitchEnvStep_ = 0.0f;
         currentFreq_  = 0.0f;
         lastSample_   = 0.0f;
+        gateOn_       = false;
 
         freq_         = 440.0f;
         velocity_     = 0.5f;
 
         attackMs_     = 20.0f;
-        decayMs_      = 200.0f;
-        releaseMs_    = 150.0f;
-        sustainLevel_ = 0.7f;
+        decayMs_      = 200.0f;   // post-gate decay/release time (CV2)
 
         shape_        = 0.5f;
         warp_         = 0.3f;
@@ -78,7 +83,7 @@ public:
         pitchDropMs_  = 30.0f;  // fixed glide time (ms), decoupled from decay
 
         sampleRate_   = 44100.0f;
-        attackInc_ = decayInc_ = releaseInc_ = 0.0f;
+        attackCoeff_ = releaseInc_ = 0.0f;
 
         z1_ = z2_ = y1_ = y2_ = 0.0f;
         a0_ = a1_ = a2_ = b1_ = b2_ = 0.0f;
@@ -90,25 +95,28 @@ public:
     // Note-on / gate rises: start a new attack.
     void noteOn(float freqHz) {
         freq_ = freqHz;
+        gateOn_ = true;
         phase_ = ATTACK;
         env_ = 0.0f;
-        // Percussive pitch drop: start high, glide to the note over decay time.
+        // Percussive pitch drop: start high, glide to the note over a FIXED
+        // short time (pitchDropMs_) — independent of the decay/release time, so
+        // CV2 only ever shapes the amplitude envelope.
         pitchEnv_ = 1.0f;
         applyEnvelopeTimings();
     }
 
-    // Note-off / gate falls: release to silence from the current level.
+    // Note-off / gate falls: release (decay) to silence from the current level.
     void noteOff() {
+        gateOn_ = false;
         if (phase_ == IDLE) return;
+        if (phase_ == RELEASE && env_ <= 0.0f) return;
         phase_ = RELEASE;
-        envReleased_ = env_;
-        applyEnvelopeTimings();
+        computeReleaseInc();
     }
 
-    void setAttackMs(float ms)  { attackMs_ = ms; applyEnvelopeTimings(); }
-    void setDecayMs(float ms)   { decayMs_ = ms;  applyEnvelopeTimings(); }
-    void setReleaseMs(float ms) { releaseMs_ = ms; applyEnvelopeTimings(); }
-    void setSustainLevel(float s) { sustainLevel_ = clamp01(s); applyEnvelopeTimings(); }
+    void setAttackMs(float ms)   { attackMs_ = ms; applyEnvelopeTimings(); }
+    void setDecayMs(float ms)    { decayMs_ = ms; applyEnvelopeTimings();
+                                   if (phase_ == RELEASE) computeReleaseInc(); }
 
     void setShape(float s)       { shape_ = clamp01(s); }
     void setWarp(float w)        { warp_ = clamp01(w); }
@@ -127,22 +135,28 @@ public:
     float currentFreq() const    { return currentFreq_; }
     float lastSample() const     { return lastSample_; }
     float sampleRate() const     { return sampleRate_; }
-    float sustainLevel() const   { return sustainLevel_; }
     float attackMs() const       { return attackMs_; }
     float decayMs() const        { return decayMs_; }
-    float releaseMs() const      { return releaseMs_; }
     float shape() const          { return shape_; }
     float warp() const           { return warp_; }
     float cutoff() const         { return cutoffNorm_; }
     float resonance() const      { return resonanceNorm_; }
     float velocity() const       { return velocity_; }
+    bool  gateOn() const         { return gateOn_; }
 
     // ---- shared parameter-mapping helpers (also used by the simulator) ----
-    // Map a normalized control (0..1) to a time in ms (1 .. 2000), with more
-    // resolution at the fast end (quadratic) so low CVs give snappy envelopes.
-    static float cvToMs(float n) {
+    // Match the 16bit polysynth's musical mappings exactly:
+    //   CV1 -> attack   = max(1,  norm * 500)  ms   (1 .. 500 ms)
+    //   CV2 -> decay    = max(10, norm * 1000) ms   (10 .. 1000 ms)
+    static float cvToAttackMs(float n) {
         n = clamp01(n);
-        return 1.0f + n * n * 1999.0f;
+        float ms = n * 500.0f;
+        return ms < 1.0f ? 1.0f : ms;
+    }
+    static float cvToDecayMs(float n) {
+        n = clamp01(n);
+        float ms = n * 1000.0f;
+        return ms < 10.0f ? 10.0f : ms;
     }
     // Map a normalized cutoff control to Hz (35 Hz .. 9000 Hz, exponential).
     static float cutoffHz(float n) {
@@ -161,30 +175,33 @@ private:
 
     void applyEnvelopeTimings() {
         if (sampleRate_ <= 0.0f) sampleRate_ = 44100.0f;
-        float at = attackMs_  < 0.5f ? 0.5f : attackMs_;
-        float dt = decayMs_   < 0.5f ? 0.5f : decayMs_;
-        float rt = releaseMs_ < 0.5f ? 0.5f : releaseMs_;
-        if (rt < 0.5f) rt = 0.5f;
-
-        float attackSamps  = (at / 1000.0f) * sampleRate_;
-        float decaySamps   = (dt / 1000.0f) * sampleRate_;
-        float releaseSamps = (rt / 1000.0f) * sampleRate_;
-
-        attackInc_  = attackSamps  > 0.0f ? 1.0f / attackSamps  : 1.0f;
-        // Decay goes from 1.0 down to sustain level.
-        float dRange = 1.0f - sustainLevel_;
-        if (dRange < 0.0001f) dRange = 0.0001f;
-        decayInc_   = decaySamps   > 0.0f ? dRange / decaySamps   : 1.0f;
-        // Release goes from the held level (envReleased_) down to 0.
-        releaseInc_ = (releaseSamps > 0.0f) ? (envReleased_ / releaseSamps) : 1.0f;
+        float at = attackMs_ < 0.5f ? 0.5f : attackMs_;
+        float attackSamps = (at / 1000.0f) * sampleRate_;
+        // Front-loaded (fast) exponential attack: env reaches ~90% of peak in
+        // attackMs, so the bass HITS quickly instead of swelling linearly. This
+        // is what makes CV1 feel like a percussive attack rather than a slow
+        // fade-in, matching how a real bass/drum punch in.
+        attackCoeff_ = attackSamps > 0.0f
+            ? (1.0f - std::exp(-std::log(10.0f) / attackSamps))
+            : 1.0f;
 
         // Pitch-drop envelope: a FIXED short percussive glide, INDEPENDENT of
         // decay. CV2/decay must only shape the amplitude envelope — it must not
         // change the pitch (or, through a moving fundamental, the perceived
-        // filter action). This mirrors the 32bit polysynth where the envelope
-        // only modulates amplitude.
+        // filter action). This mirrors the 16bit polysynth.
         float pds = (pitchDropMs_ / 1000.0f) * sampleRate_;
         pitchEnvStep_ = (pds > 0.0f) ? (1.0f / pds) : 1.0f;
+    }
+
+    // Linear post-gate decay (release) from the CURRENT envelope level to 0,
+    // over the CV2 decay time. Called on note-off (and re-evaluated if decayMs
+    // changes while releasing).
+    void computeReleaseInc() {
+        float dt = decayMs_ < 0.5f ? 0.5f : decayMs_;
+        float relSamps = (dt / 1000.0f) * sampleRate_;
+        if (relSamps > 0.0f && env_ > 0.0f) releaseInc_ = env_ / relSamps;
+        else if (relSamps > 0.0f) releaseInc_ = 1.0f / relSamps;
+        else releaseInc_ = 1.0f;
     }
 
     void applyFilterCoeffs() {
@@ -224,12 +241,11 @@ private:
     float sampleRate_;
     float freq_;
     float velocity_;
+    bool  gateOn_;
 
-    float attackMs_, decayMs_, releaseMs_;
-    float sustainLevel_;
-    float attackInc_, decayInc_, releaseInc_;
+    float attackMs_, decayMs_;
+    float attackCoeff_, releaseInc_;
     float env_;
-    float envReleased_;
     int   phase_;
 
     float shape_, warp_, cutoffNorm_, resonanceNorm_, pitchDrop_;
@@ -264,18 +280,14 @@ inline float BassDsp::process() {
         if (pitchEnv_ < 0.0f) pitchEnv_ = 0.0f;
     }
 
-    // Advance the amplitude envelope state machine.
+    // Advance the amplitude envelope state machine (A -> HOLD(gate) -> RELEASE).
     switch (phase_) {
         case ATTACK:
-            env_ += attackInc_;
-            if (env_ >= 1.0f) { env_ = 1.0f; phase_ = DECAY; }
+            env_ += attackCoeff_ * (1.0f - env_);
+            if (env_ >= 0.98f) { env_ = 1.0f; phase_ = HOLD; }
             break;
-        case DECAY:
-            env_ -= decayInc_;
-            if (env_ <= sustainLevel_) { env_ = sustainLevel_; phase_ = SUSTAIN; }
-            break;
-        case SUSTAIN:
-            env_ = sustainLevel_;
+        case HOLD:
+            env_ = 1.0f;   // gate-sustain: held at peak while the note is on
             break;
         case RELEASE:
             env_ -= releaseInc_;

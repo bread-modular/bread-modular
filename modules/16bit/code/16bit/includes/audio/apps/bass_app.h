@@ -9,10 +9,12 @@
 
 // Pulsar-23 BASS-inspired monophonic bass synth (percussion mode).
 //
-// Control mapping:
-//   CV1             -> attack time   (BassDsp::cvToMs)
-//   CV2             -> decay time    (BassDsp::cvToMs)
-//   MIDI gate       -> sustain level (held while note is on)
+// Control mapping (mimics the 16bit polysynth's musical envelope values):
+//   CV1             -> attack time    (BassDsp::cvToAttackMs, 1..500 ms)
+//   CV2             -> decay time     (BassDsp::cvToDecayMs, 10..1000 ms)
+//   MIDI gate       -> sustain = hold at peak while the note is on; on note-off
+//                      the envelope decays (CV2) to silence -> short hi-hat when
+//                      CV2 is low, real audible decay when CV2 is high.
 //   MCC bank A      -> CC20 SHAPE, CC21 WARP, CC22 CUTOFF, CC23 RESONANCE
 //   MIDI velocity   -> amplitude (no volume knob)
 class BassApp : public AudioApp {
@@ -25,17 +27,9 @@ private:
     // Monophonic percussion bass voice.
     BassDsp bassDsp;
 
-    // Fixed release time (ms). CV1/CV2 map to attack/decay; release is a
-    // musical default because the user asked for A/D from CV and release is
-    // not a control on this module.
-    static constexpr float RELEASE_MS = 150.0f;
-    // Sustain level is constant: the MIDI gate is what holds the note, so a
-    // held gate sustains at this level (the Pulsar-23 "envelope sustain" that
-    // turns a drum channel into a drone).
-    static constexpr float SUSTAIN_LEVEL = 0.7f;
-    // Percussive pitch-drop amount (bass-drum "thump"). Fraction of a
-    // full octave the oscillator starts above the note, gliding down over
-    // the decay time.
+    // Percussive pitch-drop amount (bass-drum "thump"). Fraction of a full
+    // octave the oscillator starts above the note; the glide time is a FIXED
+    // 30ms inside BassDsp (decoupled from CV2/decay).
     static constexpr float PITCH_DROP = 0.5f;
 
     int8_t currentNote = -1;

@@ -9,13 +9,11 @@ void BassApp::init() {
     audioManager->setAdcEnabled(false);
 
     bassDsp.init(audioManager->getDac()->getSampleRate());
-    bassDsp.setReleaseMs(RELEASE_MS);
-    bassDsp.setSustainLevel(SUSTAIN_LEVEL);
     bassDsp.setPitchDrop(PITCH_DROP);
 
     // Sensible defaults; CV1/CV2 are applied as soon as io->update() reads them.
-    bassDsp.setAttackMs(BassDsp::cvToMs(0.5f));  // ~500 ms
-    bassDsp.setDecayMs(BassDsp::cvToMs(0.5f));   // ~500 ms
+    bassDsp.setAttackMs(BassDsp::cvToAttackMs(0.5f));  // ~250 ms (1..500)
+    bassDsp.setDecayMs(BassDsp::cvToDecayMs(0.5f));    // ~500 ms (10..1000)
     bassDsp.setShape(0.5f);
     bassDsp.setWarp(0.3f);
     bassDsp.setCutoff(0.6f);
@@ -71,14 +69,14 @@ void BassApp::bpmChangeCallback(int bpm) {}
 
 __attribute__((cold, noinline))
 void BassApp::cv1UpdateCallback(uint16_t cv1) {
-    // CV1 -> attack time
-    bassDsp.setAttackMs(BassDsp::cvToMs(IO::normalizeCV(cv1)));
+    // CV1 -> attack time (polysynth-style, 1..500 ms)
+    bassDsp.setAttackMs(BassDsp::cvToAttackMs(IO::normalizeCV(cv1)));
 }
 
 __attribute__((cold, noinline))
 void BassApp::cv2UpdateCallback(uint16_t cv2) {
-    // CV2 -> decay time
-    bassDsp.setDecayMs(BassDsp::cvToMs(IO::normalizeCV(cv2)));
+    // CV2 -> decay/release time (polysynth-style, 10..1000 ms)
+    bassDsp.setDecayMs(BassDsp::cvToDecayMs(IO::normalizeCV(cv2)));
 }
 
 __attribute__((cold, noinline))
@@ -92,10 +90,6 @@ bool BassApp::onCommandCallback(const char* cmd) {
         webSerial->sendValue(buf);
         snprintf(buf, sizeof(buf), "decay_ms=%d", (int)bassDsp.decayMs());
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "release_ms=%d", (int)bassDsp.releaseMs());
-        webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "sustain=%d", (int)(bassDsp.sustainLevel() * 100));
-        webSerial->sendValue(buf);
         snprintf(buf, sizeof(buf), "shape=%d", (int)(bassDsp.shape() * 127));
         webSerial->sendValue(buf);
         snprintf(buf, sizeof(buf), "warp=%d", (int)(bassDsp.warp() * 127));
@@ -103,8 +97,6 @@ bool BassApp::onCommandCallback(const char* cmd) {
         snprintf(buf, sizeof(buf), "cutoff=%d", (int)(bassDsp.cutoff() * 127));
         webSerial->sendValue(buf);
         snprintf(buf, sizeof(buf), "reso=%d", (int)(bassDsp.resonance() * 127));
-        webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "env=%d", (int)(bassDsp.envLevel() * 127));
         webSerial->sendValue(buf);
         return true;
     }

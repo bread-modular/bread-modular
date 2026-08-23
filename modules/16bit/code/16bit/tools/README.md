@@ -42,19 +42,25 @@ g++ -std=c++17 -O2 -Wall -Wextra -I includes -o tools/sim_bass tools/sim_bass.cp
 
 ## What the tests assert
 
-1. **Envelope A/D/S times** — attack time matches CV1, decay settles on the
-   sustain level, the gate *holds* sustain while the note is on, and release
-   completes in the set time. Also verifies the rendered fundamental equals
-   the MIDI note frequency.
+1. **Envelope A -> HOLD(gate) -> RELEASE/decay** — attack time matches CV1, the
+   gate *holds* at the peak while the note is on (the sustain), and the
+   post-gate decay falls to silence over the CV2 decay time (a full 1.0 -> 0.0
+   swing, so it's audible). Also verifies the rendered fundamental equals the
+   MIDI note frequency.
 2. **Velocity -> amplitude** — no volume knob; the output amplitude follows a
    squared velocity curve.
-3. **Param mapping helpers** — `cvToMs`, `cutoffHz`, `resonanceQ` bounds.
+3. **Param mapping helpers** — `cvToAttackMs` (1..500), `cvToDecayMs`
+   (10..1000), `cutoffHz`, `resonanceQ` bounds.
 4. **MCC bank A params** — SHAPE changes high-frequency energy; CUTOFF
    attenuates a bright source.
 5. **CV2/decay neutrality** — decay shapes ONLY the amplitude envelope; it does
    not change the steady-state pitch (or, by extension, the perceived filter),
    even with a nonzero percussive pitch-drop present. This pins the design rule
    that the envelope never modulates pitch/filter.
+6. **Attack feel** — the attack is a front-loaded exponential ramp (env hits ~90%
+   of peak in the set `attackMs`, 10% within a few ms), so it HITS percussively
+   instead of swelling linearly. The rendered 90%-peak output attack matches the
+   set figure even through a resonant filter.
 
 ## Run all 16bit DSP self-tests
 
@@ -81,7 +87,10 @@ pattern.
 3. Run it with `./scripts/test.sh` — it is discovered automatically.
 
 The simulator shares these with the actual app wiring:
-- CV1 -> attack, CV2 -> decay (`BassDsp::cvToMs`)
-- MIDI gate -> sustain (held while note is on)
+- CV1 -> attack     (`BassDsp::cvToAttackMs`, 1..500 ms)
+- CV2 -> decay      (`BassDsp::cvToDecayMs`, 10..1000 ms) — post-gate decay
+- MIDI gate -> sustain = hold at peak while the note is on; on note-off the
+  envelope decays (CV2) to silence -> short hi-hat when CV2 is low, real,
+  audible decay when CV2 is high
 - MCC bank A (CC 20..23) -> SHAPE / WARP / CUTOFF / RESONANCE
 - velocity -> amplitude

@@ -23,6 +23,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <algorithm>
 #include <vector>
 #include <string>
 
@@ -157,22 +158,18 @@ static bool writeWav(const std::string& path, const std::vector<float>& samples,
 // Test 1: envelope ADSR timings + pitch (white-box + black-box).
 // ---------------------------------------------------------------------------
 static void testEnvelopeAndPitch() {
-    printf("\n[Test 1] Envelope A/D/S times + fundamental frequency\n");
+    printf("\n[Test 1] Envelope A -> HOLD(gate) -> RELEASE/decay + pitch\n");
     const float SR = 44100.0f;
     const float noteHz = 110.0f;        // A2
     const float attackMs = 40.0f;
-    const float decayMs = 400.0f;
-    const float releaseMs = 120.0f;
-    const float sustain = 0.7f;
+    const float decayMs = 400.0f;       // post-gate decay (to 0) — the \"decay\"
     const int noteOn = 2000;            // just to let it start cleanly
-    const int noteOff = (int)((2000 + 1200) / 1000.0f * SR - 1); // gate held ~1.2s
-    const int total = (int)((2000 + 1200 + 300) / 1000.0f * SR);
+    const int noteOff = (int)((2000 + 600) / 1000.0f * SR);  // gate held 600ms
+    const int total = (int)((2000 + 600 + 500) / 1000.0f * SR);
 
     Voice v;
     v.dsp.setAttackMs(attackMs);
     v.dsp.setDecayMs(decayMs);
-    v.dsp.setReleaseMs(releaseMs);
-    v.dsp.setSustainLevel(sustain);
     v.dsp.setPitchDrop(0.0f);           // no pitch drop for a clean freq test
     v.dsp.setShape(0.0f);               // pure sine -> clean zero crossings
     v.dsp.setWarp(0.0f);
@@ -180,37 +177,32 @@ static void testEnvelopeAndPitch() {
     v.dsp.setResonance(0.0f);
     v.render(noteHz, 1.0f, total, noteOn, noteOff);
 
-    // --- white-box: attack time ---
-    int atkSample = firstEnvAt(v.env, noteOn, 0.999f);
-    CHECK(atkSample >= 0, "attack reaches peak");
+    // --- white-box: attack time (exponential: env reaches ~90% at attackMs) ---
+    int atkSample = firstEnvAt(v.env, noteOn, 0.90f);
+    CHECK(atkSample >= 0, "attack reaches 90%");
     float atkMs = (atkSample - noteOn) / SR * 1000.0f;
-    CHECK_NEAR(atkMs, attackMs, attackMs * 0.2 + 3.0, "attack time ~= set attack ms");
+    CHECK_NEAR(atkMs, attackMs, attackMs * 0.25 + 3.0, "attack time ~= set attack ms (90% point)");
 
-    // --- white-box: decay settling on sustain ---
-    int decayEnd = firstEnvAt(v.env, noteOn, sustain);
-    CHECK(decayEnd >= 0, "decay settles on sustain level");
-    // After decay, while gate held, envelope must HOLD (not fall to 0).
-    int sustainWindow = (noteOff + noteOn) / 2;
-    CHECK(v.env[sustainWindow] <= sustain + 0.02 && v.env[sustainWindow] >= sustain - 0.02,
-          "gate holds sustain level while note is on");
+    // --- white-box: gate-sustain (HOLD at peak while note on) ---
+    int holdWindow = noteOff - (int)(0.05f * SR);
+    CHECK(holdWindow > atkSample, "hold window after attack");
+    CHECK(v.env[holdWindow] > 0.98f, "gate sustains at peak while note is on");
 
-    // --- white-box: release ---
-    int relEnd = lastEnvAbove(v.env, noteOff, 0.001f);
-    CHECK(relEnd > noteOff, "release completes");
+    // --- white-box: post-gate decay (release) falls to ~0 over decayMs ---
+    int relEnd = lastEnvAbove(v.env, noteOff, 0.02f);
+    CHECK(relEnd > noteOff, "release/decay completes");
     float relMs = (relEnd - noteOff) / SR * 1000.0f;
-    CHECK_NEAR(relMs, releaseMs, releaseMs * 0.3 + 5.0, "release time ~= set release ms");
+    CHECK_NEAR(relMs, decayMs, decayMs * 0.3 + 5.0, "post-gate decay time ~= set decay ms");
 
-    // --- black-box: fundamental frequency (steady sustain region) ---
-    int measFrom = sustainWindow - (int)(0.2f * SR);
-    int measTo   = sustainWindow + (int)(0.2f * SR);
+    // --- black-box: fundamental frequency in the hold region ---
+    int measFrom = holdWindow - (int)(0.15f * SR);
+    int measTo   = holdWindow;
     float freq = estimateFreq(v.out, measFrom, measTo, SR);
     CHECK_NEAR(freq, noteHz, noteHz * 0.06, "steady-state fundamental = note frequency");
 
-    // --- black-box: peak amplitude in sustain reflects sustain*velocity ---
-    float peakSust = peakAmplitude(v.out, sustainWindow - (int)(0.05f*SR),
-                                   sustainWindow + (int)(0.05f*SR));
-    CHECK(peakSust > 0.15f && peakSust <= 0.85f,
-          "sustain amplitude within expected band");
+    // --- black-box: hold amplitude reflects full-scale envelope (vel=1, env=1) ---
+    float peakHold = peakAmplitude(v.out, measFrom, measTo);
+    CHECK(peakHold > 0.15f && peakHold <= 1.0f, "hold amplitude within expected band");
 }
 
 // ---------------------------------------------------------------------------
@@ -223,14 +215,11 @@ static void testVelocityScaling() {
     const int noteOn = 2000;
     const int noteOff = -1;             // never released; render a sustained tone
     const int total = (int)(0.5f * SR);
-    const float sustain = 0.7f;
 
     auto peakFor = [&](uint8_t midiVel) -> float {
         Voice v;
         v.dsp.setAttackMs(5.0f);
         v.dsp.setDecayMs(20.0f);
-        v.dsp.setReleaseMs(50.0f);
-        v.dsp.setSustainLevel(sustain);
         v.dsp.setPitchDrop(0.0f);
         v.dsp.setShape(0.0f);
         v.dsp.setCutoff(1.0f);
@@ -258,8 +247,10 @@ static void testVelocityScaling() {
 // ---------------------------------------------------------------------------
 static void testParamMapping() {
     printf("\n[Test 3] Parameter mapping helpers\n");
-    CHECK_NEAR(BassDsp::cvToMs(0.0f), 1.0f, 0.01, "cvToMs(0) = 1 ms (snappy)");
-    CHECK_NEAR(BassDsp::cvToMs(1.0f), 2000.0f, 0.01, "cvToMs(1) = 2000 ms");
+    CHECK_NEAR(BassDsp::cvToAttackMs(0.0f), 1.0f, 0.01, "cvToAttackMs(0) = 1 ms (snappy)");
+    CHECK_NEAR(BassDsp::cvToAttackMs(1.0f), 500.0f, 0.01, "cvToAttackMs(1) = 500 ms");
+    CHECK_NEAR(BassDsp::cvToDecayMs(0.0f), 10.0f, 0.01, "cvToDecayMs(0) = 10 ms");
+    CHECK_NEAR(BassDsp::cvToDecayMs(1.0f), 1000.0f, 0.01, "cvToDecayMs(1) = 1000 ms");
     CHECK_NEAR(BassDsp::cutoffHz(0.0f), 35.0f, 0.01, "cutoffHz(0) = 35 Hz");
     CHECK_NEAR(BassDsp::cutoffHz(1.0f), 9000.0f, 1.0, "cutoffHz(1) = 9000 Hz");
     CHECK_NEAR(BassDsp::resonanceQ(0.0f), 0.5f, 0.01, "resonanceQ(0) = 0.5");
@@ -284,8 +275,6 @@ static void testMccTimbre() {
         Voice v;
         v.dsp.setAttackMs(2.0f);
         v.dsp.setDecayMs(20.0f);
-        v.dsp.setReleaseMs(50.0f);
-        v.dsp.setSustainLevel(0.7f);
         v.dsp.setPitchDrop(0.0f);
         v.dsp.setShape(shape);
         v.dsp.setWarp(0.0f);
@@ -306,8 +295,6 @@ static void testMccTimbre() {
         Voice v;
         v.dsp.setAttackMs(2.0f);
         v.dsp.setDecayMs(20.0f);
-        v.dsp.setReleaseMs(50.0f);
-        v.dsp.setSustainLevel(0.7f);
         v.dsp.setPitchDrop(0.0f);
         v.dsp.setShape(1.0f);          // saw is brighter / richer in harmonics
         v.dsp.setWarp(0.0f);
@@ -343,8 +330,6 @@ static void testDecayNeutrality() {
         Voice v;
         v.dsp.setAttackMs(5.0f);
         v.dsp.setDecayMs(decayMs);
-        v.dsp.setReleaseMs(100.0f);
-        v.dsp.setSustainLevel(0.7f);
         v.dsp.setPitchDrop(0.5f);      // nonzero percussive pitch drop
         v.dsp.setShape(0.0f);
         v.dsp.setWarp(0.0f);
@@ -365,6 +350,67 @@ static void testDecayNeutrality() {
 // ---------------------------------------------------------------------------
 // Demo / wav-dump: render a few notes and write the "audio out".
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Test 6: the OUTPUT (audible) attack should match the set figure.
+// The amplitude envelope ramps 0 -> 1 linearly over attackMs, but the signal
+// passes through the resonant low-pass whose state starts at zero, which can
+// make the sound rise slower than the envelope number. This measures the
+// rendered output's peak-envelope 10% and 90% times vs the set attack.
+// ---------------------------------------------------------------------------
+static void testOutputAttack() {
+    printf("\n[Test 6] OUTPUT attack matches the set figure\n");
+    const float SR = 44100.0f;
+    const float noteHz = 110.0f;
+    const int noteOn = 2000;
+    const int noteOff = -1;              // sustained, no release
+    const float attackMs = 100.0f;
+    const int total = (int)(0.6f * SR);
+
+    auto measureAttack = [&](float cutoff, float resonance) -> float {
+        Voice v;
+        v.dsp.setAttackMs(attackMs);
+        v.dsp.setDecayMs(300.0f);
+        v.dsp.setPitchDrop(0.0f);
+        v.dsp.setShape(0.0f);
+        v.dsp.setWarp(0.0f);
+        v.dsp.setCutoff(cutoff);
+        v.dsp.setResonance(resonance);
+        v.render(noteHz, 1.0f, total, noteOn, noteOff);
+
+        // output amplitude envelope = running peak of |out| in a small window
+        const int win = 64;
+        std::vector<float> env(total, 0.0f);
+        for (int i = 0; i < total; ++i) {
+            float m = 0.0f;
+            for (int j = std::max(0, i - win); j <= i; ++j)
+                m = std::max(m, std::fabs(v.out[j]));
+            env[i] = m;
+        }
+        int holdFrom = noteOn + (int)(0.3f * SR);
+        float peak = peakAmplitude(env, holdFrom, total);
+        if (peak <= 0.0f) return -1.0f;
+        int t10 = -1, t90 = -1;
+        for (int i = noteOn; i < total; ++i) {
+            if (t10 < 0 && env[i] >= 0.10f * peak) t10 = i;
+            if (t90 < 0 && env[i] >= 0.90f * peak) t90 = i;
+        }
+        float t10ms = (t10 < 0) ? -1.0f : (t10 - noteOn) / SR * 1000.0f;
+        float t90ms = (t90 < 0) ? -1.0f : (t90 - noteOn) / SR * 1000.0f;
+        printf("    cutoff=%.2f reso=%.2f peak=%.3f  10%%@%.1fms 90%%@%.1fms (10-90=%.1fms) set=%.0fms\n",
+               cutoff, resonance, peak, t10ms, t90ms, t90ms - t10ms, attackMs);
+        return t90ms;
+    };
+
+    float open   = measureAttack(1.0f, 0.0f);
+    float closed = measureAttack(0.25f, 3.0f);
+    CHECK(open   > 0.0f && open   <= attackMs * 1.3f,
+          "open-filter output attack near set value");
+    CHECK(closed > 0.0f && closed <= attackMs * 3.0f,
+          "closed/resonant filter does not blow up attack");
+    CHECK(closed <= open * 2.5f,
+          "filter does not dramatically lengthen the 90% attack");
+}
+
 static void writeDemoWav() {
     const float SR = 44100.0f;
     const std::vector<float> notes = { 55.0f /*A1*/, 82.41f /*E2*/, 110.0f /*A2*/ };
@@ -374,8 +420,6 @@ static void writeDemoWav() {
     Voice v;
     v.dsp.setAttackMs(5.0f);
     v.dsp.setDecayMs(150.0f);
-    v.dsp.setReleaseMs(100.0f);
-    v.dsp.setSustainLevel(0.7f);
     v.dsp.setPitchDrop(0.5f);
     v.dsp.setShape(0.7f);
     v.dsp.setWarp(0.3f);
@@ -391,8 +435,6 @@ static void writeDemoWav() {
         voice.dsp.init(SR);
         voice.dsp.setAttackMs(5.0f);
         voice.dsp.setDecayMs(150.0f);
-        voice.dsp.setReleaseMs(100.0f);
-        voice.dsp.setSustainLevel(0.7f);
         voice.dsp.setPitchDrop(0.5f);
         voice.dsp.setShape(0.7f);
         voice.dsp.setWarp(0.3f);
@@ -429,6 +471,7 @@ int main(int argc, char** argv) {
     testParamMapping();
     testMccTimbre();
     testDecayNeutrality();
+    testOutputAttack();
 
     if (wantWav) writeDemoWav();
 
