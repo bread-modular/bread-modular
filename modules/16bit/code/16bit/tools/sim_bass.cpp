@@ -411,6 +411,54 @@ static void testOutputAttack() {
           "filter does not dramatically lengthen the 90% attack");
 }
 
+// ---------------------------------------------------------------------------
+// Test 7: mono retrigger while a note is still sounding should NOT pop.
+// The previous behaviour hard-reset the envelope to 0 mid-sustain (a big
+// one-sample jump). The fix defers the re-attack to the next oscillator zero
+// crossing and resets the filter state, so the amplitude reset lands on a
+// near-zero signal -> no pop.
+// ---------------------------------------------------------------------------
+static void testRetrigger() {
+    printf("\n[Test 7] Mono retrigger does not pop\n");
+    const float SR = 44100.0f;
+    const int noteOnA = 2000;
+    const int noteOnB = noteOnA + (int)(0.30f * SR);  // retrigger mid-sustain
+    const int total = (int)(0.60f * SR);
+
+    BassDsp dsp;
+    dsp.init(SR);
+    dsp.setAttackMs(5.0f);
+    dsp.setDecayMs(200.0f);
+    dsp.setPitchDrop(0.0f);          // isolate the envelope reset from pitch drop
+    dsp.setShape(0.0f);
+    dsp.setWarp(0.0f);
+    dsp.setCutoff(1.0f);             // open filter: transparent at 110Hz
+    dsp.setResonance(0.0f);
+    dsp.setVelocity(1.0f);
+
+    std::vector<float> out(total, 0.0f);
+    for (int i = 0; i < total; ++i) {
+        if (i == noteOnA) dsp.noteOn(110.0f);
+        if (i == noteOnB) dsp.noteOn(220.0f);
+        out[i] = dsp.process();
+    }
+
+    // Max single-sample jump around the retrigger. A pop = a large step; with
+    // the anti-click the re-attack coincides with a near-zero signal.
+    int from = noteOnB - (int)(0.005f * SR);
+    int to   = noteOnB + (int)(0.02f * SR);
+    float maxJump = 0.0f;
+    for (int i = from + 1; i < to; ++i)
+        maxJump = std::max(maxJump, std::fabs(out[i] - out[i - 1]));
+    CHECK(maxJump < 0.5f, "no large one-sample jump at retrigger (anti-click)");
+
+    // The retrigger must still re-articulate: amplitude recovers shortly after.
+    int recFrom = noteOnB + (int)(0.05f * SR);
+    int recTo   = noteOnB + (int)(0.15f * SR);
+    float rec = peakAmplitude(out, recFrom, recTo);
+    CHECK(rec > 0.3f, "note re-articulates after retrigger (fast attack)");
+}
+
 static void writeDemoWav() {
     const float SR = 44100.0f;
     const std::vector<float> notes = { 55.0f /*A1*/, 82.41f /*E2*/, 110.0f /*A2*/ };
@@ -472,6 +520,7 @@ int main(int argc, char** argv) {
     testMccTimbre();
     testDecayNeutrality();
     testOutputAttack();
+    testRetrigger();
 
     if (wantWav) writeDemoWav();
 

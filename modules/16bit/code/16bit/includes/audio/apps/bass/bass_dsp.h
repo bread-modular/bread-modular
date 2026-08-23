@@ -85,6 +85,9 @@ public:
         sampleRate_   = 44100.0f;
         attackCoeff_ = releaseInc_ = 0.0f;
 
+        pendingTrigger_ = false;
+        lastOsc_        = 0.0f;
+
         z1_ = z2_ = y1_ = y2_ = 0.0f;
         a0_ = a1_ = a2_ = b1_ = b2_ = 0.0f;
         applyFilterCoeffs();
@@ -92,26 +95,38 @@ public:
 
     // ---- control inputs (set any time; take effect per-sample) ----
 
-    // Note-on / gate rises: start a new attack.
+    // Note-on / gate rises: start a new note. If the previous note is still
+    // sounding, wait for the next oscillator zero crossing (anti-click) instead
+    // of hard-resetting the envelope, which is what caused the retrigger pop.
     void noteOn(float freqHz) {
         freq_ = freqHz;
         gateOn_ = true;
-        phase_ = ATTACK;
-        env_ = 0.0f;
-        // Percussive pitch drop: start high, glide to the note over a FIXED
-        // short time (pitchDropMs_) — independent of the decay/release time, so
-        // CV2 only ever shapes the amplitude envelope.
-        pitchEnv_ = 1.0f;
-        applyEnvelopeTimings();
+        if (phase_ == IDLE) {
+            beginAttack();          // fresh note: start attack immediately
+        } else {
+            pendingTrigger_ = true; // retrigger at the next zero crossing
+        }
     }
 
     // Note-off / gate falls: release (decay) to silence from the current level.
     void noteOff() {
+        pendingTrigger_ = false;
         gateOn_ = false;
         if (phase_ == IDLE) return;
         if (phase_ == RELEASE && env_ <= 0.0f) return;
         phase_ = RELEASE;
         computeReleaseInc();
+    }
+
+    // Restart a note from silence. Also resets the filter state so the output
+    // starts at exactly zero — no click even when retriggering against a long
+    // sustain. Used on a fresh trigger and on a zero-crossing retrigger.
+    void beginAttack() {
+        phase_ = ATTACK;
+        env_ = 0.0f;
+        pitchEnv_ = 1.0f;            // restart the percussive pitch drop
+        z1_ = z2_ = y1_ = y2_ = 0.0f;
+        applyEnvelopeTimings();
     }
 
     void setAttackMs(float ms)   { attackMs_ = ms; applyEnvelopeTimings(); }
@@ -256,6 +271,12 @@ private:
     float phaseInc_;
     float currentFreq_;
 
+    // Mono retrigger anti-click: a new note may arrive while the previous one is
+    // still sounding; we defer the re-attack to the next oscillator zero crossing
+    // so the amplitude reset lands on a near-zero signal (no pop).
+    bool  pendingTrigger_;
+    float lastOsc_;      // previous oscillator sample (for zero-crossing detect)
+
     // biquad filter state + coeffs
     float z1_, z2_, y1_, y2_;
     float a0_, a1_, a2_, b1_, b2_;
@@ -280,6 +301,22 @@ inline float BassDsp::process() {
         if (pitchEnv_ < 0.0f) pitchEnv_ = 0.0f;
     }
 
+    // Oscillator output for this sample; also drives the zero-crossing retrigger
+    // detector below.
+    float sig = oscillator();
+
+    // Mono anti-click: if a new note arrived while the previous one is still
+    // sounding, wait for the oscillator to cross zero, then re-attack and reset
+    // the filter state so the amplitude reset lands on a near-zero signal and
+    // doesn't pop (same as the 16bit polysynth's triggerAtZero, extended to the
+    // LPF which sits before the amp envelope).
+    if (pendingTrigger_) {
+        bool crossed = (lastOsc_ < 0.0f && sig >= 0.0f) ||
+                       (lastOsc_ >= 0.0f && sig < 0.0f);
+        if (crossed) { pendingTrigger_ = false; beginAttack(); }
+    }
+    lastOsc_ = sig;
+
     // Advance the amplitude envelope state machine (A -> HOLD(gate) -> RELEASE).
     switch (phase_) {
         case ATTACK:
@@ -300,7 +337,7 @@ inline float BassDsp::process() {
     }
 
     // Signal chain: oscillator -> warp (tanh drive) -> LPF -> amp env -> vel.
-    float sig = oscillator();
+    // (sig was computed above, before the envelope advance)
 
     // WARP: tanh saturation, normalized so warp=0 is ~linear.
     float drive = 1.0f + warp_ * 4.0f;            // 1..5

@@ -61,6 +61,11 @@ g++ -std=c++17 -O2 -Wall -Wextra -I includes -o tools/sim_bass tools/sim_bass.cp
    of peak in the set `attackMs`, 10% within a few ms), so it HITS percussively
    instead of swelling linearly. The rendered 90%-peak output attack matches the
    set figure even through a resonant filter.
+7. **Mono retrigger (no pop)** — if a note re-triggers while the previous note is
+   still sustaining, the re-attack is deferred to the next oscillator zero
+   crossing and the filter state is reset, so the amplitude reset lands on a
+   near-zero signal. No one-sample discontinuity/click, and the note still
+   re-articulates promptly.
 
 ## Run all 16bit DSP self-tests
 
