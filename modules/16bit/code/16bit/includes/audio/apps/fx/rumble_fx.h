@@ -24,10 +24,11 @@
 // makeup gain below restores it to an audible rumble. Parameter 2 ("Rumble
 // Vol") sets the final noise level.
 //
-// Step 4: Parameter 1 ("Decay") sets how much the amplitude falls, over a
-// window of 0..1/2 beat. Decay = 0 keeps the burst at full level (no decay);
-// increasing it makes the amplitude fall to ~0 by half a beat. A short fade-in
-// AND fade-out is always applied around the burst, regardless of decay, so the
+// Step 4: Parameter 1 ("Decay") shapes the amplitude over the burst. From 0 to
+// 0.5 it is a clean exponential decay; from 0.5 to 1.0 the decay is reduced
+// toward 0 while a sine LFO tremolo fades in, so at 1.0 the whole beat is a
+// pure LFO wobble. The LFO deepens and speeds up (to 3 sine waves/beat) as the
+// knob rises. Short fades are always applied (on the filter output) so the
 // noise never pops. The envelope runs on the raw noise before the low-pass.
 //
 // Step 5: Parameter 3 ("Saturate") drives the rumble through a soft clipper.
@@ -158,15 +159,43 @@ public:
             --noiseRemaining;
             uint32_t elapsed = beatSamples - noiseRemaining; // 1..beatSamples
 
-            // Decay envelope over 0..1/2 beat. Decay=0 leaves level at 1
-            // (no decay); higher values fall to ~0 by half a beat. Applied to
-            // the raw noise BEFORE the low-pass.
+            // Envelope over the burst, applied to the raw noise BEFORE the
+            // low-pass.
+            //
+            // Positions 0..0.5 of the decay parameter give a clean exponential
+            // decay (the "nice" look). Past 0.5 the decay plateaus and an LFO
+            // tremolo fades in instead, getting deeper as the parameter rises.
             float halfBeat = (float)beatSamples * 0.5f;
             float position = (float)elapsed / halfBeat;
             if (position > 1.0f) {
                 position = 1.0f;
             }
-            float env = expf(-5.0f * parameterValues[1] * position);
+
+            // Decay/tremolo blend:
+            //   0..0.5 -> clean exponential decay, no LFO (the "nice" look).
+            //   0.5..1  -> the decay is REDUCED toward 0 while a sine LFO
+            //              tremolo fades in; at 1.0 the whole beat is a pure
+            //              LFO wobble (no decay).
+            float p = parameterValues[1];
+            float decayAmt, tremolo;
+            if (p <= 0.5f) {
+                decayAmt = p;              // 0..0.5
+                tremolo = 0.0f;
+            } else {
+                decayAmt = 1.0f - p;       // 0.5 -> 0
+                tremolo = (p - 0.5f) * 2.0f; // 0 -> 1
+            }
+
+            float decayEnv = expf(-5.0f * decayAmt * position);
+
+            // LFO tremolo over the one-beat burst. Centred at 0.5, swinging 0..1.
+            // The sine-wave count scales with the knob: 0 waves at decay=0.5,
+            // up to 3 waves per beat at decay=1.0.
+            float lfoPos = (float)elapsed / (float)beatSamples;
+            float cycles = tremolo * 3.0f;
+            float lfoEnv = 0.5f + 0.5f * sinf(lfoPos * 6.28318530718f * cycles);
+
+            float env = (1.0f - tremolo) * decayEnv + tremolo * lfoEnv;
 
             noise = nextNoise() * env;
 
