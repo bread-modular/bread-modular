@@ -26,10 +26,10 @@
 #include "audio/apps/fxrack_app.h"
 #elif defined(BM_APP_ELAB)
 #include "audio/apps/elab_app.h"
-#elif defined(BM_APP_BASS)
+#elif defined(BM_APP_MONOSYNTH)
 #include "audio/apps/bass_app.h"
 #else
-#error "No app selected at compile time. Set APP_NAME to one of: noop, sampler, polysynth, fxrack, elab, bass"
+#error "No app selected at compile time. Set APP_NAME to one of: noop, sampler, polysynth, fxrack, elab, monosynth"
 #endif
 
 // Pull the selected app's implementation into the same translation unit to
@@ -45,7 +45,7 @@
 #include "src/audio/apps/fxrack_app.cpp"
 #elif defined(BM_APP_ELAB)
 #include "src/audio/apps/elab_app.cpp"
-#elif defined(BM_APP_BASS)
+#elif defined(BM_APP_MONOSYNTH)
 #include "src/audio/apps/bass_app.cpp"
 #endif
 
@@ -72,7 +72,7 @@ void loadApp() {
     app = FXRackApp::getInstance();
     #elif defined(BM_APP_ELAB)
     app = ElabApp::getInstance();
-    #elif defined(BM_APP_BASS)
+    #elif defined(BM_APP_MONOSYNTH)
     app = BassApp::getInstance();
     #else
     #error "No app selected at compile time."
