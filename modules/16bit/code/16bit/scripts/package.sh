@@ -8,7 +8,7 @@ BUILD_DIR="${BUILD_DIR:-$PROJECT_ROOT/.build}"
 DIST_DIR="${DIST_DIR:-$PROJECT_ROOT/dist}"
 
 # Keep in sync with VALID_APPS in CMakeLists.txt
-VALID_APPS=(noop sampler polysynth fxrack elab bass)
+VALID_APPS=(noop sampler polysynth fxrack elab monosynth)
 
 VERSION_FILE="$PROJECT_ROOT/../../VERSION"
 if [ -f "$VERSION_FILE" ]; then
