@@ -25,7 +25,10 @@
 //   CV1          -> attack time   (BassDsp::cvToAttackMs)
 //   CV2          -> decay/release time (BassDsp::cvToDecayMs)
 //   MIDI gate    -> sustain = hold at peak while the note is on
-//   MCC bank A   -> SHAPE, WARP, CUTOFF, RESONANCE  (CC 20..23)
+//   MCC bank A   -> BODY(SHAPE+WARP), UNISON(1-4 voices on lower half knob,
+//                   detune spread on upper half), RESONANCE, CUTOFF(inv taper,
+//                   usable-range compressed)
+//                   (CC 20..23 — see bass/bank_a_map.h for the contract)
 //   MIDI velocity-> amplitude (no volume knob)
 //
 // Envelope scope: A/H/R shape ONLY amplitude. Pitch stays at the MIDI note (a
@@ -61,7 +64,6 @@ public:
     void reset() {
         phase_        = IDLE;
         env_          = 0.0f;
-        oscPhase_     = 0.0f; // oscillator phase (0..1)
         phaseInc_     = 0.0f;
         pitchEnv_     = 0.0f;
         pitchEnvStep_ = 0.0f;
@@ -92,21 +94,15 @@ public:
         a0_ = a1_ = a2_ = b1_ = b2_ = 0.0f;
         applyFilterCoeffs();
 
-        // Chorus (MCC param 2): modulated short delay, dry/wet mix.
-        for (int i = 0; i < CHORUS_MAX; ++i) chorusBuf_[i] = 0.0f;
-        chorusWriteIdx_ = 0;
-        chorusLfoPhase_ = 0.0f;
-        chorusMix_      = 0.0f;   // bypass until CC21 raises it
-        // Chorus/doubler: two short FIXED delay taps summed with dry. No LFO
-        // (depth=0) => no Doppler / pitch warp. Two decorrelated taps avoid a
-        // single deep comb null and make the doubling clearly pronounced.
-        chorusRate_     = 0.0f;   // no LFO modulation
-        chorusBaseMs_   = 10.0f;  // tap 1 delay (ms)
-        chorusTap2Ms_   = 18.0f;  // tap 2 delay (ms) — different = fuller
-        chorusDepthMs_  = 0.0f;   // zero depth = fixed (pitch-stable)
-
-        tremoloPhase_   = 0.0f;
-        tremoloDepth_   = 0.0f;
+        // UNISON (MCC param 2 / CC21): up to 4 phase-offset detuned voices.
+        for (int v = 0; v < MAX_UNISON; ++v) {
+            uniPhase_[v] = unisonPhaseSeed(v); // decorrelated start phases
+            uniRatio_[v] = 1.0f;
+        }
+        uniVoices_          = 1;
+        uniGain_            = 1.0f;
+        uniHalfSpreadSemis_ = 0.0f;
+        unisonNorm_         = 0.0f;
     }
 
     // ---- control inputs (set any time; take effect per-sample) ----
@@ -153,12 +149,17 @@ public:
     void setWarp(float w)        { warp_ = clamp01(w); }
     void setCutoff(float c)      { cutoffNorm_ = clamp01(c); applyFilterCoeffs(); }
     void setResonance(float r)   { resonanceNorm_ = clamp01(r); applyFilterCoeffs(); }
-    void setChorus(float mix) {          // MCC param 2 / CC21
-        // CC21 = CHORUS/DOUBLING amount. A short FIXED delay (no LFO = pitch-
-        // stable & won't warp) mixed with the dry signal thickens the note. The
-        // previous version was too subtle, so the wet mix is doubled here.
-        tremoloDepth_ = 0.0f;
-        chorusMix_ = clamp01(mix);
+    void setUnison(float n) {            // MCC param 2 / CC21
+        // CC21 = UNISON.
+        //   knob 0.00..0.50 -> voice count steps up 1 -> 4 (steps ~1/6, 1/3, 1/2)
+        //   knob 0.50..1.00 -> detune spread widens, count stays at 4
+        unisonNorm_ = clamp01(n);
+        int voices = 1 + (int)(unisonNorm_ * 6.0f);
+        if (voices > MAX_UNISON) voices = MAX_UNISON;
+        uniVoices_ = voices;
+        float dNorm = clamp01((unisonNorm_ - 0.5f) * 2.0f); // upper half only
+        uniHalfSpreadSemis_ = dNorm * 0.25f;   // max +/-0.25 semitone outer pair
+        applyUnisonRatios();
     }
     void setPitchDrop(float p)   { pitchDrop_ = clamp01(p); }
     void setPitchDropMs(float ms){ pitchDropMs_ = ms < 1.0f ? 1.0f : ms; applyEnvelopeTimings(); }
@@ -180,7 +181,9 @@ public:
     float cutoff() const         { return cutoffNorm_; }
     float resonance() const      { return resonanceNorm_; }
     float velocity() const       { return velocity_; }
-    float chorus() const         { return chorusMix_; }
+    float unison() const             { return unisonNorm_; }
+    int   unisonVoiceCount() const   { return uniVoices_; }
+    float unisonHalfSpreadSemis() const { return uniHalfSpreadSemis_; }
     bool  gateOn() const         { return gateOn_; }
 
     // ---- shared parameter-mapping helpers (also used by the simulator) ----
@@ -259,9 +262,9 @@ private:
         b2_ = (1.0f - alpha) * norm;
     }
 
-    // Oscillator: phase-accumulate a waveform morphing sine->tri->saw by shape_.
-    float oscillator() {
-        float p = oscPhase_; // 0..1
+    // Waveform morphing sine->tri->saw by shape_, evaluated at an arbitrary
+    // phase. Each unison voice evaluates this at its own running phase.
+    float waveformAt(float p) const {
         float sine = std::sin(2.0f * BM_DSP_M_PI * p);
         float tri  = 2.0f * std::fabs(2.0f * p - 1.0f) - 1.0f;
         float saw  = 2.0f * p - 1.0f;
@@ -291,8 +294,7 @@ private:
     float pitchEnv_, pitchEnvStep_;
     float pitchDropMs_;   // fixed glide time (ms), not tied to decay
 
-    float oscPhase_;     // oscillator phase 0..1
-    float phaseInc_;
+    float phaseInc_;     // center frequency increment (cycles/sample)
     float currentFreq_;
 
     // Mono retrigger anti-click: a new note may arrive while the previous one is
@@ -305,22 +307,44 @@ private:
     float z1_, z2_, y1_, y2_;
     float a0_, a1_, a2_, b1_, b2_;
 
-    // chorus: LFO-modulated short delay ring buffer + dry/wet mix
-    static const int CHORUS_MAX = 2048;          // power of two (bitmask wrap)
-    float chorusBuf_[CHORUS_MAX];
-    int   chorusWriteIdx_;
-    float chorusLfoPhase_;
-    float chorusMix_;       // 0..1 wet mix (MCC param 2 / CC21)
-    float chorusRate_;      // LFO rate Hz (unused at depth 0)
-    float chorusBaseMs_;    // tap 1 delay ms
-    float chorusTap2Ms_;    // tap 2 delay ms (decorrelates the comb -> fuller)
-    float chorusDepthMs_;   // LFO delay depth ms (0 = fixed, pitch-neutral)
+    // UNISON (MCC param 2 / CC21): up to MAX_UNISON phase-offset copies of the
+    // DCO summed into one thick voice. Voice count rises over the lower half of
+    // the knob; the upper half widens a symmetric detune spread around the note.
+    static const int MAX_UNISON = 4;
+    float uniPhase_[MAX_UNISON];   // free-running phases 0..1
+    float uniRatio_[MAX_UNISON];   // per-voice frequency ratio from detune
+    float uniGain_;                // loudness compensation (1/sqrt(N))
+    int   uniVoices_;              // active voice count 1..MAX_UNISON
+    float uniHalfSpreadSemis_;     // half detune spread in semitones
+    float unisonNorm_;             // raw CC21 knob 0..1
 
-    // tremolo (added to MCC param 2 / CC21): LFO amplitude modulation. Pitch-
-    // neutral and clearly audible, adds movement on top of the subtle doubler.
-    static constexpr float TREM_RATE = 5.0f;   // Hz
-    float tremoloPhase_;
-    float tremoloDepth_;    // 0..1 (scaled from chorusMix_)
+    // Decorrelated starting phases so stacked identical waveforms don't sum
+    // into one louder copy of the same waveform.
+    static float unisonPhaseSeed(int v) {
+        switch (v) {
+            case 1:  return 0.27f;
+            case 2:  return 0.53f;
+            case 3:  return 0.81f;
+            default: return 0.00f;
+        }
+    }
+
+    // Mirror-symmetric detune offsets around the note (units of halfSpread) so
+    // the fundamental stays centered while the stack thickens.
+    void applyUnisonRatios() {
+        float off[MAX_UNISON];
+        switch (uniVoices_) {
+            case 1:  off[0] = 0.0f; break;
+            case 2:  off[0] = -1.0f; off[1] = 1.0f; break;
+            case 3:  off[0] = -1.0f; off[1] = 0.0f; off[2] = 1.0f; break;
+            default: off[0] = -1.0f; off[1] = -1.0f / 3.0f;
+                     off[2] = 1.0f / 3.0f; off[3] = 1.0f; break;
+        }
+        for (int v = 0; v < uniVoices_; ++v) {
+            uniRatio_[v] = std::exp2((off[v] * uniHalfSpreadSemis_) / 12.0f);
+        }
+        uniGain_ = 1.0f / std::sqrt((float)uniVoices_);
+    }
 
     float lastSample_;
 };
@@ -328,13 +352,11 @@ private:
 // process() lives out of line to keep the header tidy; it's still header-only
 // (inline-free) but defined unconditionally when included.
 inline float BassDsp::process() {
-    // Advance oscillator phase with (possibly pitch-dropped) frequency.
+    // Center frequency with (possibly pitch-dropped) frequency.
     float freqMult = 1.0f + pitchDrop_ * pitchEnv_;
     float freqNow  = freq_ * freqMult;
     currentFreq_   = freqNow;
     phaseInc_      = freqNow / sampleRate_;
-    oscPhase_     += phaseInc_;
-    if (oscPhase_ >= 1.0f) oscPhase_ -= 1.0f;
 
     // Advance the pitch-drop envelope toward 0.
     if (pitchEnv_ > 0.0f) {
@@ -342,9 +364,17 @@ inline float BassDsp::process() {
         if (pitchEnv_ < 0.0f) pitchEnv_ = 0.0f;
     }
 
-    // Oscillator output for this sample; also drives the zero-crossing retrigger
+    // Unison stack output: every active voice free-runs its own phase (offset
+    // at init, drifting apart through its detune ratio); waveforms are summed
+    // with loudness compensation. Also drives the zero-crossing retrigger
     // detector below.
-    float sig = oscillator();
+    float sig = 0.0f;
+    for (int v = 0; v < uniVoices_; ++v) {
+        uniPhase_[v] += phaseInc_ * uniRatio_[v];
+        if (uniPhase_[v] >= 1.0f) uniPhase_[v] -= std::floor(uniPhase_[v]);
+        sig += waveformAt(uniPhase_[v]);
+    }
+    sig *= uniGain_;
 
     // Mono anti-click: if a new note arrived while the previous one is still
     // sounding, wait for the oscillator to cross zero, then re-attack and reset
@@ -392,49 +422,6 @@ inline float BassDsp::process() {
     float out = a0_ * sig + z1_;
     z1_ = a1_ * sig - b1_ * out + z2_;
     z2_ = a2_ * sig - b2_ * out;
-
-    // CHORUS/DOUBLER (MCC param 2): two short FIXED delay taps mixed with the dry
-    // signal (no LFO => pitch-stable, no warp). Two decorrelated taps give a
-    // fuller, clearly-pronounced doubling without a single deep comb null.
-    if (chorusMix_ > 0.001f) {
-        float d1 = (chorusBaseMs_ / 1000.0f) * sampleRate_;
-        float d2 = (chorusTap2Ms_ / 1000.0f) * sampleRate_;
-        if (d1 < 1.0f) d1 = 1.0f;
-        if (d2 < 1.0f) d2 = 1.0f;
-        if (d1 > (float)(CHORUS_MAX - 2)) d1 = (float)(CHORUS_MAX - 2);
-        if (d2 > (float)(CHORUS_MAX - 2)) d2 = (float)(CHORUS_MAX - 2);
-
-        chorusBuf_[chorusWriteIdx_] = out;
-        chorusWriteIdx_ = (chorusWriteIdx_ + 1) & (CHORUS_MAX - 1);
-
-        // Fractional-position read of a delayed sample (linear interpolation).
-        auto ringRead = [&](float dSamps) -> float {
-            float pos = (float)chorusWriteIdx_ - dSamps;
-            while (pos < 0.0f) pos += CHORUS_MAX;
-            int i0 = (int)pos;
-            float frac = pos - (float)i0;
-            int i1 = i0 + 1;
-            if (i0 >= CHORUS_MAX) i0 -= CHORUS_MAX;
-            if (i1 >= CHORUS_MAX) i1 -= CHORUS_MAX;
-            return chorusBuf_[i0] * (1.0f - frac) + chorusBuf_[i1] * frac;
-        };
-
-        // Two taps with slightly different weights; dry stays a strong anchor.
-        float w1 = chorusMix_ * 0.50f;
-        float w2 = chorusMix_ * 0.40f;
-        float wet = ringRead(d1) * w1 + ringRead(d2) * w2;
-        out = out * (1.0f - w1 - w2) + wet;
-    }
-
-    // Tremolo (added to MCC param 2 / CC21): a slow LFO on the output level.
-    // Pitch-neutral and clearly audible, giving the note movement.
-    if (tremoloDepth_ > 0.001f) {
-        tremoloPhase_ += TREM_RATE / sampleRate_;
-        if (tremoloPhase_ >= 1.0f) tremoloPhase_ -= 1.0f;
-        float trem = 0.5f - 0.5f * std::sin(2.0f * BM_DSP_M_PI * tremoloPhase_); // 0..1
-        float tremGain = 1.0f - tremoloDepth_ * trem;   // 1 .. (1-depth)
-        out = out * tremGain;
-    }
 
     // Amplitude envelope + velocity.
     out = out * env_ * velocity_;
