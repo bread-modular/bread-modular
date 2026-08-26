@@ -1,43 +1,43 @@
-# Host simulation + tests for the 16bit "bass" app
+# Host simulation + tests for the 16bit "monosynth" app
 
-This folder lets you exercise the **bass** app's DSP **without running it on
+This folder lets you exercise the **monosynth** app's DSP **without running it on
 the RP2350 firmware**, so you can get the audio out, analyse it, and test it.
 
 ## Why it's faithful
 
-The firmware app (`src/audio/apps/bass_app.cpp`) is only pico/IO/MIDI glue.
+The firmware app (`src/audio/apps/monosynth_app.cpp`) is only pico/IO/MIDI glue.
 All of the actual synthesis lives in a **pico-free** header,
-`includes/audio/apps/bass/bass_dsp.h`, which compiles on both the firmware and
-here on the host. So `sim_bass.cpp` runs the *exact* DSP math the hardware
+`includes/audio/apps/monosynth/monosynth_dsp.h`, which compiles on both the firmware and
+here on the host. So `sim_monosynth.cpp` runs the *exact* DSP math the hardware
 runs — nothing is re-implemented in the simulator.
 
 ## Files
 
 | file                    | purpose                                                       |
 |-------------------------|---------------------------------------------------------------|
-| `bass_dsp.h`            | shared DSP core (in `includes/audio/apps/bass/`) — used by firmware AND the sim |
-| `sim_bass.cpp`          | host simulator: renders a WAV, analyses it, runs self-tests   |
-| `analyze_bass_wav.py`   | Python analysis of the rendered WAV (FFT, envelope, freq)     |
-| `run_bass_sim.sh`       | one-shot build + run                                          |
+| `monosynth_dsp.h`            | shared DSP core (in `includes/audio/apps/monosynth/`) — used by firmware AND the sim |
+| `sim_monosynth.cpp`          | host simulator: renders a WAV, analyses it, runs self-tests   |
+| `analyze_monosynth_wav.py`   | Python analysis of the rendered WAV (FFT, envelope, freq)     |
+| `run_monosynth_sim.sh`       | one-shot build + run                                          |
 
 ## Build & run
 
 ```sh
 # build + run the self-tests (exit code reflects pass/fail)
-./tools/run_bass_sim.sh
+./tools/run_monosynth_sim.sh
 
-# also write bass_sim.wav (the "audio out") for a DAW/audiophile
-./tools/run_bass_sim.sh --wav
+# also write monosynth_sim.wav (the "audio out") for a DAW/audiophile
+./tools/run_monosynth_sim.sh --wav
 
 # analyse the rendered audio
-python3 tools/analyze_bass_wav.py bass_sim.wav
+python3 tools/analyze_monosynth_wav.py monosynth_sim.wav
 ```
 
 Equivalent manual build (from the project root `code/16bit`):
 
 ```sh
-g++ -std=c++17 -O2 -Wall -Wextra -I includes -o tools/sim_bass tools/sim_bass.cpp
-./tools/sim_bass --wav
+g++ -std=c++17 -O2 -Wall -Wextra -I includes -o tools/sim_monosynth tools/sim_monosynth.cpp
+./tools/sim_monosynth --wav
 ```
 
 ## What the tests assert
@@ -96,8 +96,8 @@ pattern.
 3. Run it with `./scripts/test.sh` — it is discovered automatically.
 
 The simulator shares these with the actual app wiring:
-- CV1 -> attack     (`BassDsp::cvToAttackMs`, 1..500 ms)
-- CV2 -> decay      (`BassDsp::cvToDecayMs`, 10..1000 ms) — post-gate decay
+- CV1 -> attack     (`MonosynthDsp::cvToAttackMs`, 1..500 ms)
+- CV2 -> decay      (`MonosynthDsp::cvToDecayMs`, 10..1000 ms) — post-gate decay
 - MIDI gate -> sustain = hold at peak while the note is on; on note-off the
   envelope decays (CV2) to silence -> short hi-hat when CV2 is low, real,
   audible decay when CV2 is high

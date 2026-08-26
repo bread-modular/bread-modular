@@ -15,7 +15,7 @@ separate firmware per app.
 | `polysynth` | 9-voice poly-synth (Saw / Tri / Square / Sine) |
 | `fxrack`    | Multi-FX rack over sample players            |
 | `elab`      | Envelope lab (A1/A2 CV/audio scoping)        |
-| `bass`      | Pulsar-23-inspired mono bass synth (percussion mode) |
+| `monosynth` | Pulsar-23-inspired mono bass synth (percussion mode) |
 
 The selected app is fixed at **compile time** and reported over serial via
 `get-app`. Each app owns its own baked-in assets and config file, so each
