@@ -5,14 +5,14 @@
 #include "api/web_serial.h"
 #include "audio/manager.h"
 #include "audio/apps/interfaces/audio_app.h"
-#include "audio/apps/bass/bass_dsp.h"
+#include "audio/apps/monosynth/monosynth_dsp.h"
 #include "audio/apps/monosynth/motion_recorder.h"
 
 // Pulsar-23 BASS-inspired monophonic bass synth (percussion mode).
 //
 // Control mapping (mimics the 16bit polysynth's musical envelope values):
-//   CV1             -> attack time    (BassDsp::cvToAttackMs, 1..500 ms)
-//   CV2             -> decay time     (BassDsp::cvToDecayMs, 10..1000 ms)
+//   CV1             -> attack time    (MonosynthDsp::cvToAttackMs, 1..500 ms)
+//   CV2             -> decay time     (MonosynthDsp::cvToDecayMs, 10..1000 ms)
 //   MIDI gate       -> sustain = hold at peak while the note is on; on note-off
 //                      the envelope decays (CV2) to silence -> short hi-hat when
 //                      CV2 is low, real audible decay when CV2 is high.
@@ -20,7 +20,7 @@
 //                      (lower half knob: 1 -> 4 voices; upper half: detune),
 //                      CC22 RESONANCE, CC23 CUTOFF — same placement as the
 //                      polysynth's FilterFX, with the same inverted cutoff
-//                      taper (CW = closed). See bass/bank_a_map.h.
+//                      taper (CW = closed). See monosynth/bank_a_map.h.
 //   MIDI velocity   -> amplitude (no volume knob)
 class MonosynthApp : public AudioApp {
 private:
@@ -31,11 +31,11 @@ private:
     MotionRecorder recorder;
 
     // Monophonic percussion bass voice.
-    BassDsp bassDsp;
+    MonosynthDsp monosynthDsp;
 
     // Percussive pitch-drop amount (bass-drum "thump"). Fraction of a full
     // octave the oscillator starts above the note; the glide time is a FIXED
-    // 30ms inside BassDsp (decoupled from CV2/decay).
+    // 30ms inside MonosynthDsp (decoupled from CV2/decay).
     static constexpr float PITCH_DROP = 0.5f;
 
     int8_t currentNote = -1;
