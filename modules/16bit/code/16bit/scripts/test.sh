@@ -6,7 +6,7 @@
 # RP2350 SDK — and returns a non-zero exit code if any of its assertions fail.
 #
 # This is the reusable pattern for "testing a 16bit app without the firmware":
-#   1. Keep the app's DSP in a pico-free header (e.g. includes/audio/apps/bass/bass_dsp.h).
+#   1. Keep the app's DSP in a pico-free header (e.g. includes/audio/apps/monosynth/monosynth_dsp.h).
 #   2. Add tools/<name>_sim.cpp that includes that header, renders audio, and
 #      runs assertions (white-box dsp state + black-box rendered-audio checks).
 #   3. This script discovers it automatically.

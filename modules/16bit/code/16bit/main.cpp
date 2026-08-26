@@ -27,7 +27,7 @@
 #elif defined(BM_APP_ELAB)
 #include "audio/apps/elab_app.h"
 #elif defined(BM_APP_MONOSYNTH)
-#include "audio/apps/bass_app.h"
+#include "audio/apps/monosynth_app.h"
 #else
 #error "No app selected at compile time. Set APP_NAME to one of: noop, sampler, polysynth, fxrack, elab, monosynth"
 #endif
@@ -46,7 +46,7 @@
 #elif defined(BM_APP_ELAB)
 #include "src/audio/apps/elab_app.cpp"
 #elif defined(BM_APP_MONOSYNTH)
-#include "src/audio/apps/bass_app.cpp"
+#include "src/audio/apps/monosynth_app.cpp"
 #endif
 
 #define SAMPLE_RATE 44100
@@ -73,7 +73,7 @@ void loadApp() {
     #elif defined(BM_APP_ELAB)
     app = ElabApp::getInstance();
     #elif defined(BM_APP_MONOSYNTH)
-    app = BassApp::getInstance();
+    app = MonosynthApp::getInstance();
     #else
     #error "No app selected at compile time."
     #endif
