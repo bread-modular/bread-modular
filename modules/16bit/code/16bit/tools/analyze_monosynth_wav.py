@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-analyze_bass_wav.py — analyse the "audio out" produced by the 16bit bass sim.
+analyze_monosynth_wav.py — analyse the "audio out" produced by the 16bit monosynth sim.
 
-This is the host-side analysis companion to tools/sim_bass.cpp. It reads the
-WAV the simulator writes (bass_sim.wav by default) and reports:
+This is the host-side analysis companion to tools/sim_monosynth.cpp. It reads the
+WAV the simulator writes (monosynth_sim.wav by default) and reports:
   * envelope timing (attack / decay / sustain / release), measured from the
     actual rendered audio,
   * the fundamental frequency (via zero-crossings on the steady sustain),
@@ -11,7 +11,7 @@ WAV the simulator writes (bass_sim.wav by default) and reports:
     dsp_saturator_sim.py).
 
 Usage:
-    python3 analyze_bass_wav.py [path.wav]
+    python3 analyze_monosynth_wav.py [path.wav]
 """
 import sys
 import math
@@ -32,7 +32,7 @@ def read_wav(path):
         if cid == b"data":
             body = data[pos + 8: pos + 8 + size]
             fmt = None
-            # Rely on the comment in sim_bass.cpp: 16-bit mono PCM.
+            # Rely on the comment in sim_monosynth.cpp: 16-bit mono PCM.
             nsamp = size // 2
             samples = struct.unpack("<%dh" % nsamp, body[:nsamp * 2])
             return [s / 32767.0 for s in samples]
@@ -95,7 +95,7 @@ def freq_zero_crossing(samples, from_i, to_i):
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else "bass_sim.wav"
+    path = sys.argv[1] if len(sys.argv) > 1 else "monosynth_sim.wav"
     samples = read_wav(path)
     env = envelope(samples)
     peak = max(env) or 1.0
@@ -122,7 +122,7 @@ def main():
     bh = band_energy(seg, 4000, 15000)
     tot = bl + bm + bh or 1e-12
 
-    print("=== bass_sim.wav analysis ===")
+    print("=== monosynth_sim.wav analysis ===")
     print("  samples          : %d  (~%.3f s)" % (len(samples), len(samples) / SR))
     print("  peak amplitude   : %.3f" % peak)
     print("  attack (90%% peak): %.1f ms" % (atk * 1000.0))
