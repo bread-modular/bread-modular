@@ -15,9 +15,11 @@
 //   MIDI gate       -> sustain = hold at peak while the note is on; on note-off
 //                      the envelope decays (CV2) to silence -> short hi-hat when
 //                      CV2 is low, real audible decay when CV2 is high.
-//   MCC bank A      -> CC20 BODY (SHAPE + WARP combined), CC21 CHORUS/DOUBLER
-//                      (two-tap fixed delay, pitch-stable, clearly pronounced),
-//                      CC22 CUTOFF, CC23 RESONANCE
+//   MCC bank A      -> CC20 BODY (SHAPE + WARP combined), CC21 UNISON
+//                      (lower half knob: 1 -> 4 voices; upper half: detune),
+//                      CC22 RESONANCE, CC23 CUTOFF — same placement as the
+//                      polysynth's FilterFX, with the same inverted cutoff
+//                      taper (CW = closed). See bass/bank_a_map.h.
 //   MIDI velocity   -> amplitude (no volume knob)
 class BassApp : public AudioApp {
 private:

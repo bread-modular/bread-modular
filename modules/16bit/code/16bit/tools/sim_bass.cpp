@@ -18,6 +18,7 @@
 //     module's output.
 
 #include "audio/apps/bass/bass_dsp.h"
+#include "audio/apps/bass/bank_a_map.h"
 
 #include <cmath>
 #include <cstdio>
@@ -460,29 +461,52 @@ static void testRetrigger() {
 }
 
 // ---------------------------------------------------------------------------
-// Test 8: CHORUS (MCC param 2 / CC21) must change the output. It's an
-// LFO-modulated short delay mixed with the dry signal, so a high mix should
-// produce a meaningfully different waveform from the dry tone.
+// Test 8: UNISON (MCC param 2 / CC21). Lower half of the knob steps the voice
+// count 1 -> 4; the upper half widens the detune spread. Must thicken the
+// tone while keeping the fundamental at the note.
 // ---------------------------------------------------------------------------
-static void testChorus() {
-    printf("\n[Test 8] MCC param 2 (chorus / doubler) changes the output\n");
+static void testUnison() {
+    printf("\n[Test 8] MCC param 2 (unison count + detune)\n");
     const float SR = 44100.0f;
     const float noteHz = 220.0f;
     const int noteOn = 2000;
     const int total = (int)(0.8f * SR);
 
-    auto render = [&](float mix) {
+    // --- voice-count mapping over the lower half of travel ---
+    BassDsp probe;
+    probe.init(SR);
+    CHECK(probe.unisonVoiceCount() == 1, "unison knob 0 -> 1 voice (dry)");
+    probe.setUnison(0.17f);
+    CHECK(probe.unisonVoiceCount() == 2, "knob ~1/6 -> 2 voices");
+    probe.setUnison(0.34f);
+    CHECK(probe.unisonVoiceCount() == 3, "knob ~1/3 -> 3 voices");
+    probe.setUnison(0.50f);
+    CHECK(probe.unisonVoiceCount() == 4, "knob 0.50 -> 4 voices");
+    probe.setUnison(1.00f);
+    CHECK(probe.unisonVoiceCount() == 4, "knob past 0.50 keeps 4 voices");
+
+    // --- detune only engages above mid-travel ---
+    CHECK_NEAR(probe.unisonHalfSpreadSemis(), 0.25f, 1e-5f,
+               "full CW = max spread (+/-0.25 semitone)");
+    probe.setUnison(0.75f);
+    CHECK_NEAR(probe.unisonHalfSpreadSemis(), 0.125f, 1e-5f,
+               "upper half opens detune spread progressively");
+    probe.setUnison(0.40f);
+    CHECK_NEAR(probe.unisonHalfSpreadSemis(), 0.0f, 1e-6f,
+               "detune stays 0 below half travel");
+
+    auto render = [&](float unison) {
         BassDsp dsp;
         dsp.init(SR);
         dsp.setAttackMs(5.0f);
         dsp.setDecayMs(300.0f);
         dsp.setPitchDrop(0.0f);
-        dsp.setShape(0.0f);
+        dsp.setShape(0.6f);              // saw-ish: stacking clearly audible
         dsp.setWarp(0.0f);
         dsp.setCutoff(1.0f);
         dsp.setResonance(0.0f);
         dsp.setVelocity(1.0f);
-        dsp.setChorus(mix);
+        dsp.setUnison(unison);
         std::vector<float> out(total, 0.0f);
         for (int i = 0; i < total; ++i) {
             if (i == noteOn) dsp.noteOn(noteHz);
@@ -491,43 +515,109 @@ static void testChorus() {
         return out;
     };
 
-    auto dry = render(0.0f);
-    auto wet = render(0.9f);
+    auto single = render(0.0f);          // 1 voice
+    auto stack  = render(1.0f);          // 4 voices + max detune
 
-    // Compare a stable mid-section (well after attack) — the chorus should add a
-    // modulated delayed copy, producing a real difference from the dry signal.
+    // Unison must change the timbre meaningfully vs the single voice.
     int from = noteOn + (int)(0.2f * SR);
     double diff = 0.0; int n = 0;
-    for (int i = from; i < total; ++i) { double d = dry[i] - wet[i]; diff += d * d; ++n; }
-    double rms = std::sqrt(diff / (double)n);
-    CHECK(rms > 0.02, "CC21 effect changes the output (chorus/doubler present)");
-
-    // The effect must NOT wildly detune: a badly-tuned modulated delay sweeps the
-    // pitch hard. Measure the wet output's fundamental across slices and require it
-    // stays near the note.
-    float minF = 1e9f, maxF = -1e9f;
-    int win = (int)(0.05f * SR);
-    for (int s = noteOn + (int)(0.1f * SR); s + win <= total; s += win) {
-        float f = estimateFreq(wet, s, s + win, SR);
-        if (f > 1.0f) { minF = std::min(minF, f); maxF = std::max(maxF, f); }
+    for (int i = from; i < total; ++i) {
+        double d = single[i] - stack[i];
+        diff += d * d;
+        ++n;
     }
-    printf("    chorus detune: minF=%.1fHz maxF=%.1fHz (note=%.1fHz, dev=%.1f%%/%.1f%%)\n",
-           minF, maxF, noteHz, (minF - noteHz) / noteHz * 100.0f, (maxF - noteHz) / noteHz * 100.0f);
-    CHECK(minF > noteHz * 0.96f && maxF < noteHz * 1.04f,
-          "effect does not wildly detune (pitch stays ~note)");
+    double rms = std::sqrt(diff / (double)n);
+    CHECK(rms > 0.02, "CC21 unison changes the output vs single voice");
 
-    // Doubling present: the wet output should be meaningfully louder/fuller than
-    // dry (it adds the delayed copy), and clearly distinguishable, while staying
-    // in tune. Compare the peak of the wet vs dry over the stable section.
+    // The stack must stay in tune. NOTE: a zero-crossing estimator misreads
+    // multi-voice phase-offset waveforms (it locks onto sub-periods between
+    // individual crossings), so find the true fundamental with a direct DFT
+    // peak scan around the note instead. Max spread (+/-0.25 semitone ~ 1.5%)
+    // keeps the peak well inside +/-2%.
+    auto dftPeakHz = [&](const std::vector<float>& x) {
+        const double TWO_PI = 6.283185307179586;
+        int s = noteOn + (int)(0.2f * SR);
+        double bestMag = -1.0;
+        float bestF = noteHz;
+        for (float f = noteHz * 0.92f; f <= noteHz * 1.08f; f += 0.5f) {
+            double re = 0.0, im = 0.0;
+            for (int i = s; i < total; ++i) {
+                double ang = TWO_PI * (double)f * ((double)(i - s) / SR);
+                re += (double)x[i] * std::cos(ang);
+                im -= (double)x[i] * std::sin(ang);
+            }
+            double mag = std::sqrt(re * re + im * im);
+            if (mag > bestMag) { bestMag = mag; bestF = f; }
+        }
+        return bestF;
+    };
+    float peakF = dftPeakHz(stack);
+    printf("    unison stack spectral peak: %.1fHz (note=%.1fHz, dev=%.2f%%)\n",
+           peakF, noteHz, (peakF - noteHz) / noteHz * 100.0f);
+    CHECK(peakF > noteHz * 0.98f && peakF < noteHz * 1.02f,
+          "stack stays in tune (DFT peak ~note)");
+
+    // Level stays present and gain-compensated (no collapse, no blow-up).
     int cmpFrom = noteOn + (int)(0.15f * SR);
-    int cmpTo = total - (int)(0.05f * SR);
-    float wetPeak = peakAmplitude(wet, cmpFrom, cmpTo);
-    float dryPeak = peakAmplitude(dry, cmpFrom, cmpTo);
-    CHECK(wetPeak > 0.05f, "doubling keeps a present output level (not nulled)");
+    int cmpTo   = total - (int)(0.05f * SR);
+    float peakS = peakAmplitude(stack, cmpFrom, cmpTo);
+    float peakD = peakAmplitude(single, cmpFrom, cmpTo);
+    printf("    peak single=%.3f stack=%.3f\n", peakD, peakS);
+    CHECK(peakS > 0.05f, "unison keeps a present output level");
+    CHECK(peakS < peakD * 2.0f, "unison does not blow up the level (gain comp)");
+}
 
-    // Bypass at mix=0 must be (near) identical: reapplying only the dry gain.
-    // A subtle check: effect at 0 runs the same DSP path up to the modulation mix.
-    CHECK(true, "effect mix 0 leaves the dry signal (structure verified)");
+// Test 9: Bank A CC routing matches the polysynth's FilterFX placement —
+// the muscle-memory contract locked in bass/bank_a_map.h (shared with
+// src/audio/apps/bass_app.cpp, so this tests the exact firmware routing).
+static void testBankAMapping() {
+    printf("\n[Test 9] MCC bank A app-level mapping = polysynth parity\n");
+    const float SR = 44100.0f;
+
+    BassDsp dsp;
+    dsp.init(SR);
+
+    // CV1/CC20 -> BODY: SHAPE and WARP move together (nothing else touched).
+    CHECK(bass_bank_a::apply(dsp, bass_bank_a::kBodyCc, 100),
+          "CC20 consumed by bank A");
+    CHECK_NEAR(dsp.shape(), 100.0f / 127.0f, 1e-4f, "CC20 -> shape");
+    CHECK_NEAR(dsp.warp(),  100.0f / 127.0f, 1e-4f, "CC20 -> warp (raised with shape)");
+
+    // CV2/CC21 -> UNISON amount (count on lower half, detune on upper half).
+    CHECK(bass_bank_a::apply(dsp, bass_bank_a::kUnisonCc, 50),
+          "CC21 consumed by bank A");
+    CHECK_NEAR(dsp.unison(), 50.0f / 127.0f, 1e-4f, "CC21 -> unison norm");
+    CHECK(dsp.unisonVoiceCount() == 3, "CC21 mid -> 3 voices (count ramp)");
+
+    // CV3/CC22 -> RESONANCE (polysynth FilterFX param-2 slot).
+    CHECK(bass_bank_a::apply(dsp, bass_bank_a::kResonanceCc, 90),
+          "CC22 consumed by bank A");
+    CHECK_NEAR(dsp.resonance(), 90.0f / 127.0f, 1e-4f,
+               "CC22 -> resonance (polysynth param-2 placement)");
+
+    // CV4/CC23 -> CUTOFF with INVERTED taper (CW = more closed). Monosynth
+    // only: the sweep is compressed so a full CV turn ends at the usable floor
+    // (~norm 0.25 / ~140 Hz) — lower settings sound identical on this DSP.
+    // Fully CCW is still wide open.
+    CHECK(bass_bank_a::apply(dsp, bass_bank_a::kCutoffCc, 127),
+          "CC23 consumed by bank A");
+    CHECK_NEAR(dsp.cutoff(), bass_bank_a::kCutoffFloorNorm, 1e-6f,
+               "CC23 max -> parks at usable floor (dead range removed)");
+    bass_bank_a::apply(dsp, bass_bank_a::kCutoffCc, 64);
+    CHECK_NEAR(dsp.cutoff(),
+               bass_bank_a::kCutoffFloorNorm +
+                   (63.0f / 127.0f) * (1.0f - bass_bank_a::kCutoffFloorNorm),
+               1e-4f, "CC23 mid -> inverted midpoint within usable range");
+    bass_bank_a::apply(dsp, bass_bank_a::kCutoffCc, 0);
+    CHECK_NEAR(dsp.cutoff(), 1.0f, 1e-6f, "CC23 min -> cutoff OPEN (CCW = open)");
+
+    // Out-of-bank CCs are not consumed and leave the voice untouched.
+    const float resoBefore = dsp.resonance();
+    const float cutBefore  = dsp.cutoff();
+    CHECK(!bass_bank_a::apply(dsp, 24, 100), "unknown CC (24) not consumed");
+    CHECK(!bass_bank_a::apply(dsp, 74, 100), "non-bank CC (74) not consumed");
+    CHECK_NEAR(dsp.resonance(), resoBefore, 1e-6f, "unknown CC leaves resonance untouched");
+    CHECK_NEAR(dsp.cutoff(), cutBefore, 1e-6f, "unknown CC leaves cutoff untouched");
 }
 
 static void writeDemoWav() {
@@ -592,7 +682,8 @@ int main(int argc, char** argv) {
     testDecayNeutrality();
     testOutputAttack();
     testRetrigger();
-    testChorus();
+    testUnison();
+    testBankAMapping();
 
     if (wantWav) writeDemoWav();
 

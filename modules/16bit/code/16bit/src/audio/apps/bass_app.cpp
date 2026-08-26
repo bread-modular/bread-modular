@@ -1,5 +1,6 @@
 // Implementation split from header.
 #include "audio/apps/bass_app.h"
+#include "audio/apps/bass/bank_a_map.h"
 
 #include <cmath>
 
@@ -55,17 +56,9 @@ void BassApp::noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) {
 
 __attribute__((cold, noinline))
 void BassApp::ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) {
-    float n = value / 127.0f;
-    switch (cc) {
-        // MCC bank A CV1 -> BODY = SHAPE (harmonics) + WARP (drive) combined:
-        // raising it increases BOTH effects together (they felt too subtle apart).
-        case 20: bassDsp.setShape(n); bassDsp.setWarp(n);   break;
-        // MCC bank A CV2 -> CHORUS amount (modulated delay wet/dry mix).
-        case 21: bassDsp.setChorus(n);                      break;
-        case 22: bassDsp.setCutoff(n);                      break; // -> CUTOFF
-        case 23: bassDsp.setResonance(n);                   break; // -> RESONANCE
-        default: break;
-    }
+    // Bank A routing lives in bass/bank_a_map.h (shared with the host sim so
+    // the polysynth-parity knob placement stays tested and in sync).
+    bass_bank_a::apply(bassDsp, cc, value);
 }
 
 void BassApp::bpmChangeCallback(int bpm) {}
@@ -101,7 +94,9 @@ bool BassApp::onCommandCallback(const char* cmd) {
         webSerial->sendValue(buf);
         snprintf(buf, sizeof(buf), "reso=%d", (int)(bassDsp.resonance() * 127));
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "chorus=%d", (int)(bassDsp.chorus() * 127));
+        snprintf(buf, sizeof(buf), "unison=%d", (int)(bassDsp.unison() * 127));
+        webSerial->sendValue(buf);
+        snprintf(buf, sizeof(buf), "uni_voices=%d", bassDsp.unisonVoiceCount());
         webSerial->sendValue(buf);
         return true;
     }
