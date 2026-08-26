@@ -4,6 +4,7 @@
 #include <avr/interrupt.h>
 #include "SimpleMIDI.h"
 #include "CrashSynth.h"
+#include "CvRecorder.h"
 
 // ----------------------------------------------------------------------------
 // 8-bit module — TR-808-style synthesized crash/cymbal.
@@ -14,12 +15,18 @@
 //     is used as the SUSTAIN length.
 //   * CV1 → metallic pitch/brightness (colour), CV2 → hiss/metal balance.
 //   * Note data is ignored: every note fires the same crash.
+//   * CV MOTION RECORDER: click MODE (PA4) once — LED blinks while a 4-bar
+//     CV1/CV2 take is recorded on the MIDI-clock grid; after 4 bars the LED
+//     goes solid and the take loops back (knobs ignored). Click MODE again to
+//     return to normal live-CV mode.
 // ----------------------------------------------------------------------------
 
 #define GATE_PIN PIN_PA7
 #define LOGGER_PIN_TX PIN_PB4
 #define PIN_CV1 PIN_PA1
 #define PIN_CV2 PIN_PA2
+#define MODE_BUTTON_PIN PIN_PA4   // click = cycle live/record/playback
+#define MODE_LED_PIN PIN_PA5      // blink = recording, solid = looping
 
 #define CV_THRESHOLD 5          // ADC deadband (0-1023) to avoid jitter
 #define TIMER_FREQ 10000000UL   // 20MHz / CLKDIV2
@@ -27,9 +34,28 @@
 SimpleMIDI MIDI;
 SoftwareSerial logger(-1, LOGGER_PIN_TX);
 CrashSynth synth;
+CvRecorder recorder(MODE_BUTTON_PIN, MODE_LED_PIN);
 
 uint16_t lastCV1 = 0xFFFF;      // force first CV1 read to apply
 uint16_t lastCV2 = 0xFFFF;      // force first CV2 read to apply
+uint16_t liveCV1 = 512;         // current effective CV values (recorder input)
+uint16_t liveCV2 = 512;
+
+// Playback consumer: push a recorded CV pair into the synth colours.
+void applyColour(uint16_t cv1, uint16_t cv2) {
+    synth.setColor1(cv1);
+    synth.setColor2(cv2);
+}
+
+// MIDI clock tick: advance the 4-bar playhead — record or replay.
+void onMidiClock() {
+    recorder.onClock(liveCV1, liveCV2, applyColour);
+}
+
+// MIDI Start: rewind the loop to bar 1.
+void onMidiStart() {
+    recorder.onStart();
+}
 
 void setupTimer() {
     // TCB0 runs at TIMER_FREQ (10 MHz) and fires CRASH_SAMPLE_RATE times/sec,
@@ -93,23 +119,38 @@ void setup() {
     MIDI.setNoteOnCallback(onNoteOn);
     MIDI.setNoteOffCallback(onNoteOff);
 
+    // CV motion recorder (MODE button + LED) and clock callbacks.
+    recorder.begin();
+    MIDI.setClockCallback(onMidiClock);
+    MIDI.setStartCallback(onMidiStart);
+
     logger.println("8Bit Crash Started!");
 }
 
 void loop() {
     MIDI.update();
+    recorder.update();
 
-    // CV1 -> metallic pitch/brightness (colour).
-    uint16_t cv1 = analogRead(PIN_CV1);
-    if (abs((int)cv1 - (int)lastCV1) > CV_THRESHOLD) {
-        lastCV1 = cv1;
-        synth.setColor1(cv1);
-    }
+    // Read the CVs continuously so liveCV1/2 are always current (the recorder
+    // snapshots them each clock tick while recording). Applying them to the
+    // synth is gated: during PLAYBACK the recorded 4-bar loop owns the colours
+    // and knob moves don't matter; in LIVE and RECORDING the knobs drive the
+    // sound directly (so you hear exactly what you record).
+    if (!recorder.isPlayingBack()) {
+        // CV1 -> metallic pitch/brightness (colour).
+        uint16_t cv1 = analogRead(PIN_CV1);
+        if (abs((int)cv1 - (int)lastCV1) > CV_THRESHOLD) {
+            lastCV1 = cv1;
+            liveCV1 = cv1;
+            synth.setColor1(cv1);
+        }
 
-    // CV2 -> hiss/metal balance (colour).
-    uint16_t cv2 = analogRead(PIN_CV2);
-    if (abs((int)cv2 - (int)lastCV2) > CV_THRESHOLD) {
-        lastCV2 = cv2;
-        synth.setColor2(cv2);
+        // CV2 -> hiss/metal balance (colour).
+        uint16_t cv2 = analogRead(PIN_CV2);
+        if (abs((int)cv2 - (int)lastCV2) > CV_THRESHOLD) {
+            lastCV2 = cv2;
+            liveCV2 = cv2;
+            synth.setColor2(cv2);
+        }
     }
 }

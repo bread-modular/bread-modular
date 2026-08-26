@@ -8,6 +8,12 @@
 #define MIDI_NOTE_ON       0x90
 #define MIDI_CONTROL_CHANGE 0xB0
 
+// System real-time messages (single byte, no data, can appear anywhere).
+#define MIDI_TIMING_CLOCK  0xF8   // 24 pulses per quarter note (PPQN)
+#define MIDI_START         0xFA
+#define MIDI_CONTINUE      0xFB
+#define MIDI_STOP          0xFC
+
 // MIDI frequency conversion constants
 #define A4_FREQ 440.0
 #define A4_MIDI_NOTE 69
@@ -16,6 +22,7 @@
 typedef void (*NoteOnCallback)(uint8_t channel, uint8_t note, uint8_t velocity);
 typedef void (*NoteOffCallback)(uint8_t channel, uint8_t note, uint8_t velocity);
 typedef void (*ControlChangeCallback)(uint8_t channel, uint8_t controller, uint8_t value);
+typedef void (*VoidCallback)();
 
 class SimpleMIDI {
 public:
@@ -26,6 +33,20 @@ public:
     bool read() {
         if (Serial.available() >= 1) {
             uint8_t byte = Serial.read();
+
+            // System real-time messages (0xF8..0xFF) are single bytes with no
+            // data. They may interleave anywhere (even mid-message) and must
+            // NOT disturb running status or the data-byte index.
+            if (byte >= 0xF8) {
+                if (byte == MIDI_TIMING_CLOCK && clockCallback) {
+                    clockCallback();
+                } else if (byte == MIDI_START && startCallback) {
+                    startCallback();
+                } else if (byte == MIDI_STOP && stopCallback) {
+                    stopCallback();
+                }
+                return false;
+            }
 
             if (byte & 0x80) { // Status byte
                 status = byte;
@@ -58,6 +79,19 @@ public:
 
     void setControlChangeCallback(ControlChangeCallback callback) {
         controlChangeCallback = callback;
+    }
+
+    // Register callbacks for system real-time (clock/sync) messages.
+    void setClockCallback(VoidCallback callback) {
+        clockCallback = callback;
+    }
+
+    void setStartCallback(VoidCallback callback) {
+        startCallback = callback;
+    }
+
+    void setStopCallback(VoidCallback callback) {
+        stopCallback = callback;
     }
 
     // Process MIDI messages and trigger appropriate callbacks
@@ -113,6 +147,9 @@ private:
     NoteOnCallback noteOnCallback = nullptr;
     NoteOffCallback noteOffCallback = nullptr;
     ControlChangeCallback controlChangeCallback = nullptr;
+    VoidCallback clockCallback = nullptr;
+    VoidCallback startCallback = nullptr;
+    VoidCallback stopCallback = nullptr;
 
     bool parseMessage() {
         messageType = status & 0xF0; // High nibble for message type
