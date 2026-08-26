@@ -17,6 +17,43 @@ generated in real time in a timer interrupt.
   the same crash.
 - **CV1** → metallic pitch/brightness (colour). **CV2** → hiss/metal balance
   (tonality). Turning these changes the crash's colour while it plays.
+- **CV motion recorder**: click **MODE** once to record a 4-bar CV1/CV2 take on
+  the MIDI-clock grid (LED blinks); it then loops back automatically (LED
+  solid). Click **MODE** again to go back to normal live CV (see below).
+
+## CV Motion Recorder (click MODE, synced to MIDI clock)
+
+The module listens for **MIDI timing clock** (24 PPQN → 96 ticks/bar) and keeps
+a 384-tick (= 4-bar) playhead. Two 384-byte buffers store one 8-bit sample of
+each CV per tick — only **768 bytes of SRAM**.
+
+The MODE button cycles through three states:
+
+```
+LIVE --click--> RECORDING --(384 ticks = 4 bars)--> PLAYBACK
+  ^                                                    |
+  +----------------------- click ----------------------+
+```
+
+- **LIVE** — stock behaviour: the knobs drive the colour directly. LED off.
+- **Click MODE** → **RECORDING** — LED BLINKS. Every clock tick snapshots the
+  live CV1/CV2 into RAM at the playhead. The knobs still drive the sound while
+  recording, so you hear exactly what you record. The take always lasts a full
+  4 bars from the press.
+- **After 4 bars** → **PLAYBACK** (automatic) — LED SOLID ON. Every clock tick
+  replays the stored CV pair at the playhead — your knob moves loop in sync
+  forever, and manual CV changes no longer matter.
+- **Click MODE again** → back to LIVE (knobs take over immediately).
+- Clicking during RECORDING aborts & discards the partial take (returns to
+  LIVE) — nothing half-recorded gets looped.
+- **MIDI Start (0xFA)** rewinds the playhead to bar 1 while recording or
+  looping; Stop freezes it until the next tick.
+- Requires a running MIDI clock — without it there is nothing to record or
+  replay against.
+
+`SimpleMIDI.h` was extended to pass system real-time messages (clock/start/
+stop) through without disturbing note parsing.
+
 
 ## How the sound is made
 
@@ -41,7 +78,8 @@ crash/
 ├── crash/                  ← Arduino sketch (THE source to edit)
 │   ├── crash.ino           ← main firmware (MIDI, CV, DAC, timer)
 │   ├── CrashSynth.h        ← synthesized crash engine
-│   └── SimpleMIDI.h        ← MIDI parser library (header-only)
+│   ├── CvRecorder.h        ← 4-bar MIDI-clock-synced CV motion recorder
+│   └── SimpleMIDI.h        ← MIDI parser library (header-only, clock-aware)
 ├── setup.sh                ← symlink → opt/attiny1616-tools/setup.sh
 ├── compile.sh              ← symlink → opt/attiny1616-tools/compile.sh
 ├── flash.sh                ← symlink → opt/attiny1616-tools/flash.sh
@@ -74,6 +112,30 @@ crash/
 Build target: `megaTinyCore:megaavr:atxy6:chip=1616,clock=20internal`
 (20 MHz internal oscillator), uploaded with the `jtag2updi` programmer by
 default. See the `supersaw/README.md` for the full flashing / programmer notes.
+
+## Test without hardware (host simulator)
+
+`CvRecorder.h`, `SimpleMIDI.h` and `CrashSynth.h` are plain C++ headers, so
+they can be compiled and exercised **on the host** against a tiny Arduino API
+shim (`sim/Arduino.h`: fake `millis()`, GPIO and a `Serial` byte pipe you can
+inject MIDI into). No arduino-cli, no module needed:
+
+```bash
+./sim.sh                        # build + run all self-tests
+```
+
+The suite (`sim/test_cv_recorder.cpp`) covers:
+
+- **Recorder state machine** — LIVE → RECORDING → PLAYBACK → LIVE; a take is
+  exactly 384 clock ticks then auto-loops; recorded CV pairs replay sample-by-
+  sample with correct ordering/wrapping (8-bit round-trip); abort mid-take
+  discards; MIDI Start rewinds; LED off/blinking/solid per state.
+- **Button debouncing** — contact bounce within the window never double-triggers.
+- **SimpleMIDI parsing** — note-on/off/CC; real-time bytes (clock/start/stop)
+  interleaved *inside* a message must not corrupt it (running-status regression).
+- **CrashSynth smoke test** — silent when idle, loud on trigger, decays after.
+
+Exit code is the failure count, so it's CI-friendly.
 
 ## Tuning the sound
 
