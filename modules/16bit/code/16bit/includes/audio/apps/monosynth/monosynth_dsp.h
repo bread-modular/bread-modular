@@ -1,9 +1,9 @@
 #pragma once
-// bass_dsp.h — pico-free DSP core for the 16bit "bass" app.
+// monosynth_dsp.h — pico-free DSP core for the 16bit monosynth app.
 //
 // This header is intentionally dependency-free (only <cmath>) so it can be
-// compiled BOTH by the RP2350 firmware (see bass_app.cpp) and by the host
-// simulation / tests (see tools/sim_bass.cpp). That way the exact math that
+// compiled BOTH by the RP2350 firmware (see monosynth_app.cpp) and by the host
+// simulation / tests (see tools/sim_monosynth.cpp). That way the exact math that
 // runs on the hardware is the same code that the simulator and tests exercise.
 //
 // Model: a monophonic Pulsar-23 "BASS" style voice in its percussion (PRC)
@@ -21,14 +21,14 @@
 // audible decay (a full 1.0 -> 0.0 swing) instead of a barely-perceptible drop
 // to a sustained level.
 //
-// Control mapping (wired by bass_app):
-//   CV1          -> attack time   (BassDsp::cvToAttackMs)
-//   CV2          -> decay/release time (BassDsp::cvToDecayMs)
+// Control mapping (wired by monosynth_app):
+//   CV1          -> attack time   (MonosynthDsp::cvToAttackMs)
+//   CV2          -> decay/release time (MonosynthDsp::cvToDecayMs)
 //   MIDI gate    -> sustain = hold at peak while the note is on
 //   MCC bank A   -> BODY(SHAPE+WARP), UNISON(1-4 voices on lower half knob,
 //                   detune spread on upper half), RESONANCE, CUTOFF(inv taper,
 //                   usable-range compressed)
-//                   (CC 20..23 — see bass/bank_a_map.h for the contract)
+//                   (CC 20..23 — see monosynth/bank_a_map.h for the contract)
 //   MIDI velocity-> amplitude (no volume knob)
 //
 // Envelope scope: A/H/R shape ONLY amplitude. Pitch stays at the MIDI note (a
@@ -42,7 +42,7 @@
 #define BM_DSP_M_PI 3.14159265358979323846
 #endif
 
-class BassDsp {
+class MonosynthDsp {
 public:
     enum Phase {
         IDLE    = 0,
@@ -51,7 +51,7 @@ public:
         RELEASE = 3    // post-gate decay to silence (CV2)
     };
 
-    BassDsp() { reset(); }
+    MonosynthDsp() { reset(); }
 
     // Initialize (must be called once with the real sample rate, e.g. 44100).
     void init(float sampleRate) {
@@ -351,7 +351,7 @@ private:
 
 // process() lives out of line to keep the header tidy; it's still header-only
 // (inline-free) but defined unconditionally when included.
-inline float BassDsp::process() {
+inline float MonosynthDsp::process() {
     // Center frequency with (possibly pitch-dropped) frequency.
     float freqMult = 1.0f + pitchDrop_ * pitchEnv_;
     float freqNow  = freq_ * freqMult;

@@ -1,15 +1,15 @@
-// sim_bass.cpp — host-only simulation + analysis + tests for the 16bit "bass"
-// app, WITHOUT running on hardware.
+// sim_monosynth.cpp — host-only simulation + analysis + tests for the 16bit
+// monosynth app, WITHOUT running on hardware.
 //
-// It includes the SAME pico-free DSP core (bass_dsp.h) that the firmware app
+// It includes the SAME pico-free DSP core (monosynth_dsp.h) that the firmware app
 // uses, so the simulator and the tests exercise the exact math that runs on the
 // RP2350 — only the firmware's pico/IO/MIDI glue is absent.
 //
 // Usage:
-//   Build:  g++ -std=c++17 -O2 -I includes -o tools/sim_bass tools/sim_bass.cpp
+//   Build:  g++ -std=c++17 -O2 -I includes -o tools/sim_monosynth tools/sim_monosynth.cpp
 //           (run from code/16bit)
-//   Run:    ./tools/sim_bass            # run self-tests (exit non-zero on fail)
-//           ./tools/sim_bass --wav      # also write bass_sim.wav for inspection
+//   Run:    ./tools/sim_monosynth            # run self-tests (exit non-zero on fail)
+//           ./tools/sim_monosynth --wav      # also write monosynth_sim.wav for inspection
 //
 // The self-tests analyse both:
 //   - white-box envelope state (dsp.phase()/envLevel()/...), and
@@ -17,8 +17,8 @@
 //     segment timing, velocity scaling) exactly as if we had captured the
 //     module's output.
 
-#include "audio/apps/bass/bass_dsp.h"
-#include "audio/apps/bass/bank_a_map.h"
+#include "audio/apps/monosynth/monosynth_dsp.h"
+#include "audio/apps/monosynth/bank_a_map.h"
 
 #include <cmath>
 #include <cstdio>
@@ -53,7 +53,7 @@ static int checks = 0;
 // (white-box) captured from the DSP as each sample is produced.
 // ---------------------------------------------------------------------------
 struct Voice {
-    BassDsp dsp;
+    MonosynthDsp dsp;
     std::vector<float> out;
     std::vector<float> env;
 
@@ -226,7 +226,7 @@ static void testVelocityScaling() {
         v.dsp.setCutoff(1.0f);
         v.dsp.setResonance(0.0f);
         float vel = (midiVel / 127.0f);
-        vel = vel * vel;                // same squared curve as bass_app
+        vel = vel * vel;                // same squared curve as monosynth_app
         v.render(noteHz, vel, total, noteOn, noteOff);
 
         // measure late in the sustain, after filter transient settles
@@ -248,14 +248,14 @@ static void testVelocityScaling() {
 // ---------------------------------------------------------------------------
 static void testParamMapping() {
     printf("\n[Test 3] Parameter mapping helpers\n");
-    CHECK_NEAR(BassDsp::cvToAttackMs(0.0f), 1.0f, 0.01, "cvToAttackMs(0) = 1 ms (snappy)");
-    CHECK_NEAR(BassDsp::cvToAttackMs(1.0f), 500.0f, 0.01, "cvToAttackMs(1) = 500 ms");
-    CHECK_NEAR(BassDsp::cvToDecayMs(0.0f), 10.0f, 0.01, "cvToDecayMs(0) = 10 ms");
-    CHECK_NEAR(BassDsp::cvToDecayMs(1.0f), 1000.0f, 0.01, "cvToDecayMs(1) = 1000 ms");
-    CHECK_NEAR(BassDsp::cutoffHz(0.0f), 35.0f, 0.01, "cutoffHz(0) = 35 Hz");
-    CHECK_NEAR(BassDsp::cutoffHz(1.0f), 9000.0f, 1.0, "cutoffHz(1) = 9000 Hz");
-    CHECK_NEAR(BassDsp::resonanceQ(0.0f), 0.5f, 0.01, "resonanceQ(0) = 0.5");
-    CHECK_NEAR(BassDsp::resonanceQ(1.0f), 12.0f, 0.05, "resonanceQ(1) = 12");
+    CHECK_NEAR(MonosynthDsp::cvToAttackMs(0.0f), 1.0f, 0.01, "cvToAttackMs(0) = 1 ms (snappy)");
+    CHECK_NEAR(MonosynthDsp::cvToAttackMs(1.0f), 500.0f, 0.01, "cvToAttackMs(1) = 500 ms");
+    CHECK_NEAR(MonosynthDsp::cvToDecayMs(0.0f), 10.0f, 0.01, "cvToDecayMs(0) = 10 ms");
+    CHECK_NEAR(MonosynthDsp::cvToDecayMs(1.0f), 1000.0f, 0.01, "cvToDecayMs(1) = 1000 ms");
+    CHECK_NEAR(MonosynthDsp::cutoffHz(0.0f), 35.0f, 0.01, "cutoffHz(0) = 35 Hz");
+    CHECK_NEAR(MonosynthDsp::cutoffHz(1.0f), 9000.0f, 1.0, "cutoffHz(1) = 9000 Hz");
+    CHECK_NEAR(MonosynthDsp::resonanceQ(0.0f), 0.5f, 0.01, "resonanceQ(0) = 0.5");
+    CHECK_NEAR(MonosynthDsp::resonanceQ(1.0f), 12.0f, 0.05, "resonanceQ(1) = 12");
 }
 
 // ---------------------------------------------------------------------------
@@ -313,7 +313,7 @@ static void testMccTimbre() {
 // ---------------------------------------------------------------------------
 // Test 5: CV2/decay must ONLY shape the amplitude envelope (polysynth-like).
 // It must not change the pitch or the filter, even though the bass voice has a
-// percussive pitch-drop. (This regression test pins the fix to bass_dsp.h.)
+// percussive pitch-drop. (This regression test pins the fix to monosynth_dsp.h.)
 // ---------------------------------------------------------------------------
 static void testDecayNeutrality() {
     printf("\n[Test 5] CV2/decay only shapes amplitude (pitch & filter stay put)\n");
@@ -426,7 +426,7 @@ static void testRetrigger() {
     const int noteOnB = noteOnA + (int)(0.30f * SR);  // retrigger mid-sustain
     const int total = (int)(0.60f * SR);
 
-    BassDsp dsp;
+    MonosynthDsp dsp;
     dsp.init(SR);
     dsp.setAttackMs(5.0f);
     dsp.setDecayMs(200.0f);
@@ -473,7 +473,7 @@ static void testUnison() {
     const int total = (int)(0.8f * SR);
 
     // --- voice-count mapping over the lower half of travel ---
-    BassDsp probe;
+    MonosynthDsp probe;
     probe.init(SR);
     CHECK(probe.unisonVoiceCount() == 1, "unison knob 0 -> 1 voice (dry)");
     probe.setUnison(0.17f);
@@ -496,7 +496,7 @@ static void testUnison() {
                "detune stays 0 below half travel");
 
     auto render = [&](float unison) {
-        BassDsp dsp;
+        MonosynthDsp dsp;
         dsp.init(SR);
         dsp.setAttackMs(5.0f);
         dsp.setDecayMs(300.0f);
@@ -568,29 +568,29 @@ static void testUnison() {
 }
 
 // Test 9: Bank A CC routing matches the polysynth's FilterFX placement —
-// the muscle-memory contract locked in bass/bank_a_map.h (shared with
+// the muscle-memory contract locked in monosynth/bank_a_map.h (shared with
 // src/audio/apps/monosynth_app.cpp, so this tests the exact firmware routing).
 static void testBankAMapping() {
     printf("\n[Test 9] MCC bank A app-level mapping = polysynth parity\n");
     const float SR = 44100.0f;
 
-    BassDsp dsp;
+    MonosynthDsp dsp;
     dsp.init(SR);
 
     // CV1/CC20 -> BODY: SHAPE and WARP move together (nothing else touched).
-    CHECK(bass_bank_a::apply(dsp, bass_bank_a::kBodyCc, 100),
+    CHECK(monosynth_bank_a::apply(dsp, monosynth_bank_a::kBodyCc, 100),
           "CC20 consumed by bank A");
     CHECK_NEAR(dsp.shape(), 100.0f / 127.0f, 1e-4f, "CC20 -> shape");
     CHECK_NEAR(dsp.warp(),  100.0f / 127.0f, 1e-4f, "CC20 -> warp (raised with shape)");
 
     // CV2/CC21 -> UNISON amount (count on lower half, detune on upper half).
-    CHECK(bass_bank_a::apply(dsp, bass_bank_a::kUnisonCc, 50),
+    CHECK(monosynth_bank_a::apply(dsp, monosynth_bank_a::kUnisonCc, 50),
           "CC21 consumed by bank A");
     CHECK_NEAR(dsp.unison(), 50.0f / 127.0f, 1e-4f, "CC21 -> unison norm");
     CHECK(dsp.unisonVoiceCount() == 3, "CC21 mid -> 3 voices (count ramp)");
 
     // CV3/CC22 -> RESONANCE (polysynth FilterFX param-2 slot).
-    CHECK(bass_bank_a::apply(dsp, bass_bank_a::kResonanceCc, 90),
+    CHECK(monosynth_bank_a::apply(dsp, monosynth_bank_a::kResonanceCc, 90),
           "CC22 consumed by bank A");
     CHECK_NEAR(dsp.resonance(), 90.0f / 127.0f, 1e-4f,
                "CC22 -> resonance (polysynth param-2 placement)");
@@ -599,23 +599,23 @@ static void testBankAMapping() {
     // only: the sweep is compressed so a full CV turn ends at the usable floor
     // (~norm 0.25 / ~140 Hz) — lower settings sound identical on this DSP.
     // Fully CCW is still wide open.
-    CHECK(bass_bank_a::apply(dsp, bass_bank_a::kCutoffCc, 127),
+    CHECK(monosynth_bank_a::apply(dsp, monosynth_bank_a::kCutoffCc, 127),
           "CC23 consumed by bank A");
-    CHECK_NEAR(dsp.cutoff(), bass_bank_a::kCutoffFloorNorm, 1e-6f,
+    CHECK_NEAR(dsp.cutoff(), monosynth_bank_a::kCutoffFloorNorm, 1e-6f,
                "CC23 max -> parks at usable floor (dead range removed)");
-    bass_bank_a::apply(dsp, bass_bank_a::kCutoffCc, 64);
+    monosynth_bank_a::apply(dsp, monosynth_bank_a::kCutoffCc, 64);
     CHECK_NEAR(dsp.cutoff(),
-               bass_bank_a::kCutoffFloorNorm +
-                   (63.0f / 127.0f) * (1.0f - bass_bank_a::kCutoffFloorNorm),
+               monosynth_bank_a::kCutoffFloorNorm +
+                   (63.0f / 127.0f) * (1.0f - monosynth_bank_a::kCutoffFloorNorm),
                1e-4f, "CC23 mid -> inverted midpoint within usable range");
-    bass_bank_a::apply(dsp, bass_bank_a::kCutoffCc, 0);
+    monosynth_bank_a::apply(dsp, monosynth_bank_a::kCutoffCc, 0);
     CHECK_NEAR(dsp.cutoff(), 1.0f, 1e-6f, "CC23 min -> cutoff OPEN (CCW = open)");
 
     // Out-of-bank CCs are not consumed and leave the voice untouched.
     const float resoBefore = dsp.resonance();
     const float cutBefore  = dsp.cutoff();
-    CHECK(!bass_bank_a::apply(dsp, 24, 100), "unknown CC (24) not consumed");
-    CHECK(!bass_bank_a::apply(dsp, 74, 100), "non-bank CC (74) not consumed");
+    CHECK(!monosynth_bank_a::apply(dsp, 24, 100), "unknown CC (24) not consumed");
+    CHECK(!monosynth_bank_a::apply(dsp, 74, 100), "non-bank CC (74) not consumed");
     CHECK_NEAR(dsp.resonance(), resoBefore, 1e-6f, "unknown CC leaves resonance untouched");
     CHECK_NEAR(dsp.cutoff(), cutBefore, 1e-6f, "unknown CC leaves cutoff untouched");
 }
@@ -658,10 +658,10 @@ static void writeDemoWav() {
         cursor = noteOff + (int)(0.1f * SR);
     }
 
-    if (writeWav("bass_sim.wav", mix, SR)) {
-        printf("\n[demo] wrote bass_sim.wav (%zu samples @ %.0f Hz)\n", mix.size(), SR);
+    if (writeWav("monosynth_sim.wav", mix, SR)) {
+        printf("\n[demo] wrote monosynth_sim.wav (%zu samples @ %.0f Hz)\n", mix.size(), SR);
     } else {
-        printf("\n[demo] ERROR: could not write bass_sim.wav\n");
+        printf("\n[demo] ERROR: could not write monosynth_sim.wav\n");
     }
 }
 
@@ -671,7 +671,7 @@ int main(int argc, char** argv) {
         if (std::strcmp(argv[i], "--wav") == 0) wantWav = true;
     }
 
-    printf("=== 16bit 'bass' DSP simulator / tests ===\n");
+    printf("=== 16bit 'monosynth' DSP simulator / tests ===\n");
     printf("sample rate: %.0f Hz, voice: Pulsar-23 BASS (percussion mode)\n",
            44100.0f);
 
