@@ -116,6 +116,10 @@ void bpmChangeCallback(int bpm) {
     app->bpmChangeCallback(bpm);
 }
 
+void midiRealtimeCallback(uint8_t realtimeType) {
+    app->realtimeCallback(realtimeType);
+}
+
 bool onCommandCallback(const char* cmd) {
     // Backward-compatible app handling. This firmware ships a SINGLE app
     // (selected at compile time), so:
@@ -184,8 +188,10 @@ int main() {
     audioManager->setAudioCallback(audioCallback);
     audioManager->init(SAMPLE_RATE);
 
-    // Set up BPM calculation and print BPM when it changes
+    // Set up BPM calculation and print BPM when it changes. The realtime
+    // callback also carries MIDI timing clock/start messages to clocked apps.
     midi->calculateBPM(bpmChangeCallback);
+    midi->setRealtimeCallback(midiRealtimeCallback);
     midi->setControlChangeCallback(ccChangeCallback);
     midi->setNoteOnCallback(noteOnCallback);
     midi->setNoteOffCallback(noteOffCallback);

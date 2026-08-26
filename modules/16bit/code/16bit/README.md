@@ -17,6 +17,20 @@ separate firmware per app.
 | `elab`      | Envelope lab (A1/A2 CV/audio scoping)        |
 | `monosynth` | Pulsar-23-inspired mono bass synth (percussion mode) |
 
+### Monosynth motion recorder
+
+The monosynth has the same MODE/LED workflow as the 8bit CV recorder:
+
+- Click **MODE** (board button, GPIO12) to cycle `LIVE -> RECORDING -> PLAYBACK`.
+- While recording, the LED (GPIO13) blinks and each MIDI clock pulse records the
+  raw 16bit CV1/CV2 values plus MCC Bank A `CC20..CC23`.
+- A take is four bars of 4/4 (`24 PPQN`, 384 clock frames). On completion the
+  LED becomes solid and the frame loop drives the attack, decay, and Bank A
+  parameters; MODE aborts an incomplete take or stops playback.
+- MIDI **Start** rewinds the active take/loop. The recorder requires a running
+  MIDI clock and stores the take in RAM only; it never writes the filesystem or
+  flash.
+
 The selected app is fixed at **compile time** and reported over serial via
 `get-app`. Each app owns its own baked-in assets and config file, so each
 firmware only carries the code and data it actually needs (e.g. the sampler's

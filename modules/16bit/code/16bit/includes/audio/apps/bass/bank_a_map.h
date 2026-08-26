@@ -1,7 +1,7 @@
 #pragma once
 // bank_a_map.h — MCC Bank A -> BassDsp parameter mapping for the 16bit "bass"
 // (monosynth) app. Pico-free like bass_dsp.h so the firmware app
-// (src/audio/apps/bass_app.cpp) and the host sim/tests (tools/sim_bass.cpp)
+// (src/audio/apps/monosynth_app.cpp) and the host sim/tests (tools/sim_bass.cpp)
 // share ONE source of truth for the routing.
 //
 // Placement contract: it mirrors the 16bit polysynth's FilterFX Bank A layout

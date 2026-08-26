@@ -569,7 +569,7 @@ static void testUnison() {
 
 // Test 9: Bank A CC routing matches the polysynth's FilterFX placement —
 // the muscle-memory contract locked in bass/bank_a_map.h (shared with
-// src/audio/apps/bass_app.cpp, so this tests the exact firmware routing).
+// src/audio/apps/monosynth_app.cpp, so this tests the exact firmware routing).
 static void testBankAMapping() {
     printf("\n[Test 9] MCC bank A app-level mapping = polysynth parity\n");
     const float SR = 44100.0f;
