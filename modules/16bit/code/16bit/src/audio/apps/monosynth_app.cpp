@@ -1,6 +1,6 @@
 // Implementation split from header.
 #include "audio/apps/monosynth_app.h"
-#include "audio/apps/bass/bank_a_map.h"
+#include "audio/apps/monosynth/bank_a_map.h"
 
 #include <cmath>
 #include <cstdio>
@@ -17,32 +17,32 @@ MonosynthApp* MonosynthApp::instance = nullptr;
 void MonosynthApp::init() {
     audioManager->setAdcEnabled(false);
 
-    bassDsp.init(audioManager->getDac()->getSampleRate());
-    bassDsp.setPitchDrop(PITCH_DROP);
+    monosynthDsp.init(audioManager->getDac()->getSampleRate());
+    monosynthDsp.setPitchDrop(PITCH_DROP);
 
     // Sensible defaults; CV1/CV2 are applied as soon as io->update() reads them.
-    bassDsp.setAttackMs(BassDsp::cvToAttackMs(0.5f));  // ~250 ms (1..500)
-    bassDsp.setDecayMs(BassDsp::cvToDecayMs(0.5f));    // ~500 ms (10..1000)
-    bassDsp.setShape(0.5f);
-    bassDsp.setWarp(0.3f);
-    bassDsp.setCutoff(0.6f);
-    bassDsp.setResonance(0.4f);
+    monosynthDsp.setAttackMs(MonosynthDsp::cvToAttackMs(0.5f));  // ~250 ms (1..500)
+    monosynthDsp.setDecayMs(MonosynthDsp::cvToDecayMs(0.5f));    // ~500 ms (10..1000)
+    monosynthDsp.setShape(0.5f);
+    monosynthDsp.setWarp(0.3f);
+    monosynthDsp.setCutoff(0.6f);
+    monosynthDsp.setResonance(0.4f);
 
     // The recorder is intentionally volatile: it owns only RAM buffers and
     // never calls FS/Config. Seed the current MCC state so a take that does not
     // move a CC still starts playback with the same musical settings.
     recorder.setLedCallback(&MonosynthApp::setRecorderLed);
     recorder.begin(time_us_32() / 1000);
-    recorder.setCurrentCc(bass_bank_a::kBodyCc, 64);
-    recorder.setCurrentCc(bass_bank_a::kUnisonCc, 0);
-    recorder.setCurrentCc(bass_bank_a::kResonanceCc, 51);
-    recorder.setCurrentCc(bass_bank_a::kCutoffCc, 68);
+    recorder.setCurrentCc(monosynth_bank_a::kBodyCc, 64);
+    recorder.setCurrentCc(monosynth_bank_a::kUnisonCc, 0);
+    recorder.setCurrentCc(monosynth_bank_a::kResonanceCc, 51);
+    recorder.setCurrentCc(monosynth_bank_a::kCutoffCc, 68);
 }
 
 __attribute__((hot))
 void MonosynthApp::audioCallback(AudioInput *input, AudioOutput *output) {
     (void)input;
-    float s = bassDsp.process();
+    float s = monosynthDsp.process();
     output->left = s;
     output->right = s;
 }
@@ -60,8 +60,8 @@ void MonosynthApp::noteOnCallback(uint8_t channel, uint8_t note, uint8_t velocit
     float realVelocity = velocityNorm * velocityNorm;
 
     float freq = 440.0f * powf(2.0f, (note - 69) / 12.0f);
-    bassDsp.setVelocity(realVelocity);
-    bassDsp.noteOn(freq);
+    monosynthDsp.setVelocity(realVelocity);
+    monosynthDsp.noteOn(freq);
 
     currentNote = note;
     io->setGate1(true);
@@ -75,7 +75,7 @@ void MonosynthApp::noteOffCallback(uint8_t channel, uint8_t note, uint8_t veloci
         return;
     }
     currentNote = -1;
-    bassDsp.noteOff();
+    monosynthDsp.noteOff();
     io->setGate1(false);
 }
 
@@ -89,7 +89,7 @@ void MonosynthApp::ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) 
     if (recorder.isPlayingBack()) {
         return;
     }
-    if (bass_bank_a::apply(bassDsp, cc, value)) {
+    if (monosynth_bank_a::apply(monosynthDsp, cc, value)) {
         recorder.setCurrentCc(cc, value);
     }
 }
@@ -118,9 +118,9 @@ void MonosynthApp::realtimeCallback(uint8_t realtimeType) {
 
 void MonosynthApp::applyLiveCv(uint16_t cv1, uint16_t cv2) {
     // CV1 -> attack time (polysynth-style, 1..500 ms)
-    bassDsp.setAttackMs(BassDsp::cvToAttackMs(IO::normalizeCV(cv1)));
+    monosynthDsp.setAttackMs(MonosynthDsp::cvToAttackMs(IO::normalizeCV(cv1)));
     // CV2 -> decay/release time (polysynth-style, 10..1000 ms)
-    bassDsp.setDecayMs(BassDsp::cvToDecayMs(IO::normalizeCV(cv2)));
+    monosynthDsp.setDecayMs(MonosynthDsp::cvToDecayMs(IO::normalizeCV(cv2)));
 }
 
 void MonosynthApp::setRecorderLed(bool on) {
@@ -137,13 +137,13 @@ void MonosynthApp::applyRecordedFrame(void* context,
     }
 
     self->applyLiveCv(cv1, cv2);
-    bass_bank_a::apply(self->bassDsp, bass_bank_a::kBodyCc,
+    monosynth_bank_a::apply(self->monosynthDsp, monosynth_bank_a::kBodyCc,
                        bankAValues[0]);
-    bass_bank_a::apply(self->bassDsp, bass_bank_a::kUnisonCc,
+    monosynth_bank_a::apply(self->monosynthDsp, monosynth_bank_a::kUnisonCc,
                        bankAValues[1]);
-    bass_bank_a::apply(self->bassDsp, bass_bank_a::kResonanceCc,
+    monosynth_bank_a::apply(self->monosynthDsp, monosynth_bank_a::kResonanceCc,
                        bankAValues[2]);
-    bass_bank_a::apply(self->bassDsp, bass_bank_a::kCutoffCc,
+    monosynth_bank_a::apply(self->monosynthDsp, monosynth_bank_a::kCutoffCc,
                        bankAValues[3]);
 }
 
@@ -173,36 +173,36 @@ void MonosynthApp::buttonPressedCallback(bool pressed) {
     if (pressed && before == MotionRecorder::STATE_PLAYBACK &&
         recorder.isLive()) {
         applyLiveCv(io->getCV1(), io->getCV2());
-        bass_bank_a::apply(bassDsp, bass_bank_a::kBodyCc,
-                           recorder.getCurrentCc(bass_bank_a::kBodyCc));
-        bass_bank_a::apply(bassDsp, bass_bank_a::kUnisonCc,
-                           recorder.getCurrentCc(bass_bank_a::kUnisonCc));
-        bass_bank_a::apply(bassDsp, bass_bank_a::kResonanceCc,
-                           recorder.getCurrentCc(bass_bank_a::kResonanceCc));
-        bass_bank_a::apply(bassDsp, bass_bank_a::kCutoffCc,
-                           recorder.getCurrentCc(bass_bank_a::kCutoffCc));
+        monosynth_bank_a::apply(monosynthDsp, monosynth_bank_a::kBodyCc,
+                           recorder.getCurrentCc(monosynth_bank_a::kBodyCc));
+        monosynth_bank_a::apply(monosynthDsp, monosynth_bank_a::kUnisonCc,
+                           recorder.getCurrentCc(monosynth_bank_a::kUnisonCc));
+        monosynth_bank_a::apply(monosynthDsp, monosynth_bank_a::kResonanceCc,
+                           recorder.getCurrentCc(monosynth_bank_a::kResonanceCc));
+        monosynth_bank_a::apply(monosynthDsp, monosynth_bank_a::kCutoffCc,
+                           recorder.getCurrentCc(monosynth_bank_a::kCutoffCc));
     }
 }
 
 bool MonosynthApp::onCommandCallback(const char* cmd) {
-    if (strncmp(cmd, "get-bass-params", 15) == 0) {
+    if (strncmp(cmd, "get-monosynth-params", 20) == 0) {
         // Report the live DSP state for debugging / testing over serial.
         char buf[32];
-        snprintf(buf, sizeof(buf), "attack_ms=%d", (int)bassDsp.attackMs());
+        snprintf(buf, sizeof(buf), "attack_ms=%d", (int)monosynthDsp.attackMs());
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "decay_ms=%d", (int)bassDsp.decayMs());
+        snprintf(buf, sizeof(buf), "decay_ms=%d", (int)monosynthDsp.decayMs());
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "shape=%d", (int)(bassDsp.shape() * 127));
+        snprintf(buf, sizeof(buf), "shape=%d", (int)(monosynthDsp.shape() * 127));
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "warp=%d", (int)(bassDsp.warp() * 127));
+        snprintf(buf, sizeof(buf), "warp=%d", (int)(monosynthDsp.warp() * 127));
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "cutoff=%d", (int)(bassDsp.cutoff() * 127));
+        snprintf(buf, sizeof(buf), "cutoff=%d", (int)(monosynthDsp.cutoff() * 127));
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "reso=%d", (int)(bassDsp.resonance() * 127));
+        snprintf(buf, sizeof(buf), "reso=%d", (int)(monosynthDsp.resonance() * 127));
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "unison=%d", (int)(bassDsp.unison() * 127));
+        snprintf(buf, sizeof(buf), "unison=%d", (int)(monosynthDsp.unison() * 127));
         webSerial->sendValue(buf);
-        snprintf(buf, sizeof(buf), "uni_voices=%d", bassDsp.unisonVoiceCount());
+        snprintf(buf, sizeof(buf), "uni_voices=%d", monosynthDsp.unisonVoiceCount());
         webSerial->sendValue(buf);
         return true;
     }
