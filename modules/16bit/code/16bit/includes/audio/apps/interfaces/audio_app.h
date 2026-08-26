@@ -18,6 +18,10 @@ public:
     virtual void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) = 0;
     virtual void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) = 0;
     virtual void bpmChangeCallback(int bpm) = 0;
+
+    // MIDI system real-time messages (clock/start/stop). Most apps do not
+    // need them, so this is optional; clock-synchronised apps can override it.
+    virtual void realtimeCallback(uint8_t realtimeType) { (void)realtimeType; }
     
     // Knobs and buttons
     virtual void cv1UpdateCallback(uint16_t cv1) = 0;

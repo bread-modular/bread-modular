@@ -6,6 +6,7 @@
 #include "audio/manager.h"
 #include "audio/apps/interfaces/audio_app.h"
 #include "audio/apps/bass/bass_dsp.h"
+#include "audio/apps/monosynth/motion_recorder.h"
 
 // Pulsar-23 BASS-inspired monophonic bass synth (percussion mode).
 //
@@ -21,12 +22,13 @@
 //                      polysynth's FilterFX, with the same inverted cutoff
 //                      taper (CW = closed). See bass/bank_a_map.h.
 //   MIDI velocity   -> amplitude (no volume knob)
-class BassApp : public AudioApp {
+class MonosynthApp : public AudioApp {
 private:
-    static BassApp* instance;
+    static MonosynthApp* instance;
     IO *io = IO::getInstance();
     WebSerial *webSerial = WebSerial::getInstance();
     AudioManager *audioManager = AudioManager::getInstance();
+    MotionRecorder recorder;
 
     // Monophonic percussion bass voice.
     BassDsp bassDsp;
@@ -38,6 +40,13 @@ private:
 
     int8_t currentNote = -1;
 
+    void applyLiveCv(uint16_t cv1, uint16_t cv2);
+    static void setRecorderLed(bool on);
+    static void applyRecordedFrame(void* context,
+                                    uint16_t cv1,
+                                    uint16_t cv2,
+                                    const uint8_t* bankAValues);
+
 public:
     void init() override;
     void audioCallback(AudioInput *input, AudioOutput *output) override;
@@ -46,9 +55,10 @@ public:
     void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override;
     void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override;
     void bpmChangeCallback(int bpm) override;
+    void realtimeCallback(uint8_t realtimeType) override;
     void cv1UpdateCallback(uint16_t cv1) override;
     void cv2UpdateCallback(uint16_t cv2) override;
     void buttonPressedCallback(bool pressed) override;
     bool onCommandCallback(const char* cmd) override;
-    static BassApp* getInstance();
+    static MonosynthApp* getInstance();
 };
