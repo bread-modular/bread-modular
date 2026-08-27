@@ -15,8 +15,14 @@ generated in real time in a timer interrupt.
   a long (1-bar) note only gives a short, punchy crash (~1/4 of it).
 - **Velocity → volume** (loudness). **Note data is ignored** — every note fires
   the same crash.
-- **CV1** → metallic pitch/brightness (colour). **CV2** → hiss/metal balance
-  (tonality). Turning these changes the crash's colour while it plays.
+- **CV1** → **brightness** of the whole voice: metallic pitch *and* the
+  noise/filter cutoffs — so it stays clearly audible even at max CV2 (it
+  sweeps the noise from dark rumble to bright sizzle). **CV2** → hiss/metal
+  balance, capped so the metallic ring never fully dies: max CV2 is a real
+  crash (bright noise over a metallic shimmer), not plain noise.
+- **Smooth CV moves**: all colour parameters slew toward their targets
+  (per-sample in the ISR for the mix/filters, per-ms glide for the pitch) —
+  no zipper noise or clicks when sweeping the knobs or replaying recorded CV.
 - **CV motion recorder**: click **MODE** once to record a 4-bar CV1/CV2 take on
   the MIDI-clock grid (LED blinks); it then loops back automatically (LED
   solid). Click **MODE** again to go back to normal live CV (see below).
@@ -62,12 +68,20 @@ The classic 808 crash is bright metallic noise. `CrashSynth.h` builds it from:
 - **6 inharmonic square oscillators** (`METAL_RATIOS`) → the clangy, tonal
   ring of a cymbal.
 - **16-bit xorshift LFSR** → the "sizzle"/hiss noise.
-- **CV2 (hissAmount)** mixes between the two: `0` = pure tonal ring,
-  `255` = pure sizzle.
-- **CV1 (baseFreq, 80–1200 Hz)** sets the metallic partial base frequency.
+- **Noise low-pass** (CV1) → noise brightness, from dark rumble to white
+  sizzle. This keeps CV1 audible when CV2 is at maximum.
+- **Mix high-pass** (CV1) → the 808 cymbal trick: removes the low "clunk"
+  and leaves the shimmer (~160 Hz – 2 kHz).
+- **CV2 (hiss)** mixes metal ↔ noise, capped at `HISS_MAX` (216) so the metal
+  always keeps ~15 % of its weight: `0` = pure tonal ring, max = crash (noise
+  + metallic ring), never pure noise.
+- **CV1** also sets the metallic partial base frequency (80–1200 Hz).
+- **Smoothing**: hiss + filter coefficients slew ±1 per sample in `render()`;
+  the base frequency glides exponentially in `update()` (1 step/ms,
+  phase-continuous). No zipper noise, no clicks.
 - **Envelope** = short, self-decaying ring: it rings out on its own (no infinite
   sustain). A held note lets it reach its full short length; a short tap decays
-  fast.`
+  fast.
 
 Sample clock = `CRASH_SAMPLE_RATE` (22 kHz) via TCB0, CLKDIV2 (10 MHz).
 
@@ -134,14 +148,24 @@ The suite (`sim/test_cv_recorder.cpp`) covers:
 - **SimpleMIDI parsing** — note-on/off/CC; real-time bytes (clock/start/stop)
   interleaved *inside* a message must not corrupt it (running-status regression).
 - **CrashSynth smoke test** — silent when idle, loud on trigger, decays after.
+- **CrashSynth CV behaviour** — CV1 pitch glides monotonically (not instantly);
+  CV2 hiss slews per sample and is capped at `HISS_MAX` (metal floor); CV1
+  stays clearly audible at max CV2 (bright-vs-dark noise delta ≈ 7×).
 
 Exit code is the failure count, so it's CI-friendly.
 
 ## Tuning the sound
 
 - `METAL_RATIOS` in `CrashSynth.h` → change the inharmonic metallic partials.
+- `HISS_MAX` → how much metallic ring survives at max CV2 (lower = more ring;
+  216 ≈ 15 % metal).
+- `HP_COEFF_MIN/MAX` → mix high-pass range for CV1 (higher coeff = brighter).
+- `NOISE_COEFF_MIN/MAX` → noise low-pass range for CV1 (higher coeff =
+  brighter noise).
 - The envelope decay shifts (`>> 12` held / `>> 9` release) and the `volume`
   mapping in `trigger()` → ring length / loudness. Raise the shift to shorten,
   lower it to lengthen.
+- The CV1 pitch glide rate (the `>> 4` step in `update()`) → raise the shift
+  for a slower glide, lower it for a snappier one.
 - `CRASH_SAMPLE_RATE` → sample clock (lower = duller + cheaper, higher =
   brighter + heavier CPU).
