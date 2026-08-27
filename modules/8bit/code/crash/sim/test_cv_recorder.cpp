@@ -16,6 +16,11 @@
 //        even when interleaved INSIDE a message (the running-status bug)
 //   3. CrashSynth smoke test (host-rendered DSP)
 //      * silent when idle, loud right after a hit, decays afterwards
+//   4. CrashSynth CV behaviour
+//      * CV1 pitch glides smoothly (monotonic, not instant) to its target
+//      * CV2 hiss slews per-sample and is CAPPED below 255 (metal floor —
+//      *   max CV2 is a crash, not pure noise)
+//      * CV1 stays clearly audible at max CV2 (dark vs bright noise differ)
 //
 // Run via ./sim.sh
 // ============================================================================
@@ -415,6 +420,88 @@ static void test_crash_synth_smoke() {
     CHECK(sumSq > tailSq * 100);         // and far less energetic overall
 }
 
+// Mean |sample-to-sample delta| — a cheap brightness proxy: bright noise has
+// far more high-frequency energy (larger consecutive-sample jumps) than dark.
+static long measureMeanAbsDiff(CrashSynth& s, int settle, int n) {
+    for (int i = 0; i < settle; ++i) s.render();   // let the slews converge
+    long sum = 0;
+    uint8_t prev = s.render();
+    for (int i = 0; i < n; ++i) {
+        uint8_t cur = s.render();
+        sum += labs((long)cur - (long)prev);
+        prev = cur;
+    }
+    return sum / n;
+}
+
+static void test_crash_cv1_pitch_glide() {
+    printf("[10] CrashSynth: CV1 pitch glides smoothly (no zipper jumps)\n");
+    resetWorld();
+    CrashSynth synth;
+    synth.begin();
+
+    // CV1 -> min: after enough update() steps the smooth freq reaches 80 Hz.
+    synth.setColor1(0);
+    for (int i = 0; i < 300; ++i) { advanceMs(1); synth.update(); }
+    CHECK(synth.getSmoothFreq() == 80);
+
+    // CV1 -> max: must NOT jump instantly...
+    synth.setColor1(1023);
+    CHECK(synth.getSmoothFreq() < 1200);
+
+    // ...but glide there monotonically.
+    bool monotonic = true;
+    uint16_t prev = synth.getSmoothFreq();
+    for (int i = 0; i < 2000 && synth.getSmoothFreq() != 1200; ++i) {
+        advanceMs(1); synth.update();
+        uint16_t f = synth.getSmoothFreq();
+        if (f < prev) monotonic = false;
+        prev = f;
+    }
+    CHECK(synth.getSmoothFreq() == 1200);
+    CHECK(monotonic);
+}
+
+static void test_crash_cv2_slew_and_metal_floor() {
+    printf("[11] CrashSynth: CV2 hiss slews per-sample and keeps a metal floor\n");
+    resetWorld();
+    CrashSynth synth;
+    synth.begin();
+
+    // CV2 -> max. The hiss must slew (1 step per rendered sample)...
+    synth.setColor2(1023);
+    synth.trigger(127);
+    uint8_t before = synth.getSmoothHiss();
+    synth.render();
+    CHECK(synth.getSmoothHiss() == before + 1);      // gradual, not instant
+
+    // ...and converge to HISS_MAX, never 255: the metallic ring always
+    // survives, so max CV2 is a crash (noise + ring), not pure noise.
+    for (int i = 0; i < 400; ++i) synth.render();
+    CHECK(synth.getSmoothHiss() == HISS_MAX);
+    CHECK(HISS_MAX < 255);
+}
+
+static void test_crash_cv1_audible_at_max_cv2() {
+    printf("[12] CrashSynth: CV1 stays clearly audible in the crash area\n");
+    resetWorld();
+    CrashSynth synth;
+    synth.begin();
+    synth.setColor2(1023);                 // crash area: noise-dominant
+
+    synth.setColor1(0);                    // dark
+    synth.trigger(127);
+    long madDark = measureMeanAbsDiff(synth, 400, 2000);
+
+    synth.setColor1(1023);                 // bright
+    synth.trigger(127);
+    long madBright = measureMeanAbsDiff(synth, 400, 2000);
+
+    printf("    mean|delta| dark=%ld bright=%ld\n", madDark, madBright);
+    CHECK(madDark > 0);
+    CHECK(madBright > madDark * 2);        // brightness sweep is obvious
+}
+
 int main() {
     test_recorder_lifecycle();
     test_recorder_full_loop_content();
@@ -425,6 +512,9 @@ int main() {
     test_simplemidi_parsing();
     test_simplemidi_realtime_interleave();
     test_crash_synth_smoke();
+    test_crash_cv1_pitch_glide();
+    test_crash_cv2_slew_and_metal_floor();
+    test_crash_cv1_audible_at_max_cv2();
 
     printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

@@ -10,10 +10,13 @@
 // 8-bit module — TR-808-style synthesized crash/cymbal.
 //
 //   * Fully synthesized (no samples): inharmonic metallic oscillators + LFSR
-//     noise, shaped by an envelope, rendered directly to the 8-bit DAC (PA6).
+//     noise, shaped by CV1-controlled filters and an envelope, rendered
+//     directly to the 8-bit DAC (PA6).
 //   * MIDI note-on triggers the crash. The GATE length (note-on .. note-off)
 //     is used as the SUSTAIN length.
-//   * CV1 → metallic pitch/brightness (colour), CV2 → hiss/metal balance.
+//   * CV1 → brightness (metallic pitch + noise/filter cutoffs — stays audible
+//     even at max CV2), CV2 → hiss/metal balance (capped, so max = crash with
+//     a metallic ring, never plain noise). All CV moves are slew-smoothed.
 //   * Note data is ignored: every note fires the same crash.
 //   * CV MOTION RECORDER: click MODE (PA4) once — LED blinks while a 4-bar
 //     CV1/CV2 take is recorded on the MIDI-clock grid; after 4 bars the LED
@@ -130,6 +133,7 @@ void setup() {
 void loop() {
     MIDI.update();
     recorder.update();
+    synth.update();   // glides the CV1 metallic pitch toward its target
 
     // Read the CVs continuously so liveCV1/2 are always current (the recorder
     // snapshots them each clock tick while recording). Applying them to the
@@ -137,7 +141,7 @@ void loop() {
     // and knob moves don't matter; in LIVE and RECORDING the knobs drive the
     // sound directly (so you hear exactly what you record).
     if (!recorder.isPlayingBack()) {
-        // CV1 -> metallic pitch/brightness (colour).
+        // CV1 -> brightness: metallic pitch + noise/filter cutoffs.
         uint16_t cv1 = analogRead(PIN_CV1);
         if (abs((int)cv1 - (int)lastCV1) > CV_THRESHOLD) {
             lastCV1 = cv1;
@@ -145,7 +149,7 @@ void loop() {
             synth.setColor1(cv1);
         }
 
-        // CV2 -> hiss/metal balance (colour).
+        // CV2 -> hiss/metal balance (capped: metal always rings through).
         uint16_t cv2 = analogRead(PIN_CV2);
         if (abs((int)cv2 - (int)lastCV2) > CV_THRESHOLD) {
             lastCV2 = cv2;
