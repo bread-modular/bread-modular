@@ -39,8 +39,8 @@ SoftwareSerial logger(-1, LOGGER_PIN_TX);
 CrashSynth synth;
 CvRecorder recorder(MODE_BUTTON_PIN, MODE_LED_PIN);
 
-uint16_t lastCV1 = 0xFFFF;      // force first CV1 read to apply
-uint16_t lastCV2 = 0xFFFF;      // force first CV2 read to apply
+uint16_t lastCV1 = 512;         // previous raw ADC reading (deadband ref);
+uint16_t lastCV2 = 512;         // initialised to the real knobs in setup()
 uint16_t liveCV1 = 512;         // current effective CV values (recorder input)
 uint16_t liveCV2 = 512;
 
@@ -126,6 +126,21 @@ void setup() {
     recorder.begin();
     MIDI.setClockCallback(onMidiClock);
     MIDI.setStartCallback(onMidiStart);
+
+    // POWER-ON CV SYNC: read the knobs once and push the readings straight
+    // into the voice, so the very first MIDI hit already uses the panel
+    // colours instead of CrashSynth's built-in defaults. (Previously this was
+    // left to a `lastCV = 0xFFFF` sentinel in loop(), which is broken on AVR:
+    // int is 16-bit there, so (int)0xFFFF wraps to -1 and the forced first
+    // apply silently fails for any knob reading below ~CV_THRESHOLD counts.)
+    // Each channel is read twice with the first conversion discarded — the
+    // ADC's initial conversion after the reference settles can be inaccurate.
+    (void)analogRead(PIN_CV1);                    // throwaway warm-up read
+    (void)analogRead(PIN_CV2);
+    liveCV1 = lastCV1 = analogRead(PIN_CV1);      // real knob positions
+    liveCV2 = lastCV2 = analogRead(PIN_CV2);
+    synth.setColor1(liveCV1);
+    synth.setColor2(liveCV2);
 
     logger.println("8Bit Crash Started!");
 }
