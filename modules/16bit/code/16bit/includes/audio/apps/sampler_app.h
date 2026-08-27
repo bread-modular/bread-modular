@@ -115,14 +115,21 @@ class SamplerApp : public AudioApp {
                 sumGroupA += (defaultSample[defaultSamplePlayhead++] / 32768.0f) * velocityOfDefaultSample;
             }
 
+            // Uploaded samples also retrigger the rumble: consume their onset
+            // flags (set by SamplePlayer::play) alongside the default sample's.
+            bool uploadedOnset = false;
             for (int i = 0; i < 6; ++i) {
                 sumGroupA += players[i].process() / 32768.0f;
+                if (players[i].consumeOnset()) {
+                    uploadedOnset = true;
+                }
             }
             
             // Kick-onset pulse for FX1 (Rumble).
             // This is a one-sample trigger (not a level): the FX retriggers its
-            // one-beat noise burst on every fresh kick hit.
-            fx1->setGate(kickOnset);
+            // one-beat noise burst on every fresh kick hit — from the flash
+            // default sample OR any uploaded sample in group A.
+            fx1->setGate(kickOnset || uploadedOnset);
 
             float sumGroupB = 0.0f;
             for (int i = 6; i < TOTAL_SAMPLE_PLAYERS; ++i) {
@@ -132,11 +139,15 @@ class SamplerApp : public AudioApp {
             audioManager->endAudioLock();
 
             sumGroupA = lowpassFilter.process(sumGroupA);
-            sumGroupA = highpassFilter.process(sumGroupA);
 
             // Apply FX to group A
             sumGroupA = fx1->process(sumGroupA);
             sumGroupA = fx2->process(sumGroupA);
+
+            // End-of-chain highpass (CV2). Runs AFTER the FX so it also shapes
+            // the rumble noise burst generated inside FX1 — previously the
+            // highpass ran pre-FX and the rumble bypassed it completely.
+            sumGroupA = highpassFilter.process(sumGroupA);
 
             // Apply FX to group B
             sumGroupB = fx3->process(sumGroupB);
