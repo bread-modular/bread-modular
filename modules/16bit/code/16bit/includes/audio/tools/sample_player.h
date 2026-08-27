@@ -40,6 +40,7 @@ public:
     void play(float v) {
         playhead = 22;
         velocity = v;
+        onsetPending = true;
     }
 
     int16_t process() {
@@ -50,10 +51,24 @@ public:
         return 0;
     }
 
+    // Returns true once for each fresh play() trigger, so the audio callback
+    // can detect onsets (e.g. to retrigger the Rumble FX noise burst) without
+    // exposing the playhead. Safe to call from the audio thread: play() is
+    // always invoked under the audio lock, same as process().
+    bool consumeOnset() {
+        if (onsetPending) {
+            onsetPending = false;
+            return true;
+        }
+
+        return false;
+    }
+
 private:
     uint8_t sampleId;
     size_t playhead = 0;
     int16_t* data = nullptr;
     size_t length = 0;
     float velocity = 1.0f;
+    bool onsetPending = false;
 };
