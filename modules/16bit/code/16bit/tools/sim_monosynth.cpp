@@ -620,6 +620,78 @@ static void testBankAMapping() {
     CHECK_NEAR(dsp.cutoff(), cutBefore, 1e-6f, "unknown CC leaves cutoff untouched");
 }
 
+// ---------------------------------------------------------------------------
+// Test 10: release progress must survive per-tick decay updates.
+// During motion-recorder playback, applyRecordedFrame -> applyLiveCv ->
+// setDecayMs runs on EVERY MIDI clock tick (~20 ms at 120 BPM, 24 PPQN). The
+// old setDecayMs recomputed the release increment from the CURRENT env level
+// over the FULL decay time, so each tick restarted the release: a linear
+// decay-to-zero in decayMs became an exponential tail ~3x longer (audible as
+// "a note randomly plays longer" while the monosynth is under the recorder).
+// ---------------------------------------------------------------------------
+static void testReleaseProgressPreserved() {
+    printf("\n[Test 10] Release progress preserved under per-tick decay updates (recorder playback)\n");
+    const float SR = 44100.0f;
+    const int tickSamples = (int)(0.020f * SR); // 24 PPQN MIDI clock @ ~120 BPM
+
+    // (a) Recorder replay: the SAME decay value re-applied every clock tick
+    // during the release must not stretch the tail.
+    {
+        MonosynthDsp dsp;
+        dsp.init(SR);
+        dsp.setAttackMs(5.0f);
+        dsp.setDecayMs(500.0f);
+        dsp.noteOn(110.0f);
+        for (int i = 0; i < (int)(0.1f * SR); ++i) dsp.process(); // reach HOLD
+        CHECK_NEAR(dsp.envLevel(), 1.0f, 1e-4f, "note held at peak before release");
+        dsp.noteOff();
+
+        int releasedAt = -1;
+        for (int i = 0; i < (int)(1.5f * SR); ++i) {
+            if (i % tickSamples == 0) dsp.setDecayMs(500.0f); // recorder frame
+            dsp.process();
+            if (dsp.envLevel() <= 0.0f) { releasedAt = i; break; }
+        }
+        CHECK(releasedAt > 0, "release completes under per-tick recorder updates");
+        if (releasedAt > 0) {
+            float ms = releasedAt / SR * 1000.0f;
+            printf("    released in %.1f ms (set 500 ms)\n", ms);
+            CHECK(ms <= 500.0f * 1.15f,
+                  "release length ~= set decay, not stretched by recorder ticks");
+        }
+    }
+
+    // (b) A genuine mid-release decay change rescales the slope instead of
+    // restarting: 400 ms decay, after 100 ms of release switch to 800 ms ->
+    // remaining 75% decays at the new slope => ~700 ms total (a restart-style
+    // recompute would give ~900 ms).
+    {
+        MonosynthDsp dsp;
+        dsp.init(SR);
+        dsp.setAttackMs(5.0f);
+        dsp.setDecayMs(400.0f);
+        dsp.noteOn(110.0f);
+        for (int i = 0; i < (int)(0.1f * SR); ++i) dsp.process(); // reach HOLD
+        dsp.noteOff();
+        for (int i = 0; i < (int)(0.1f * SR); ++i) dsp.process(); // 100 ms of release
+        CHECK_NEAR(dsp.envLevel(), 0.75f, 0.02f, "env at 75% after 100 ms of a 400 ms release");
+        dsp.setDecayMs(800.0f);
+
+        int releasedAt = -1;
+        for (int i = 0; i < (int)(1.5f * SR); ++i) {
+            dsp.process();
+            if (dsp.envLevel() <= 0.0f) { releasedAt = i; break; }
+        }
+        CHECK(releasedAt > 0, "release completes after mid-release decay change");
+        if (releasedAt > 0) {
+            float totalMs = 100.0f + releasedAt / SR * 1000.0f;
+            printf("    total release %.1f ms (expect ~700 ms: 100 + 0.75*800)\n", totalMs);
+            CHECK_NEAR(totalMs, 700.0f, 60.0f,
+                       "mid-release decay change preserves progress (no restart)");
+        }
+    }
+}
+
 static void writeDemoWav() {
     const float SR = 44100.0f;
     const std::vector<float> notes = { 55.0f /*A1*/, 82.41f /*E2*/, 110.0f /*A2*/ };
@@ -684,6 +756,7 @@ int main(int argc, char** argv) {
     testRetrigger();
     testUnison();
     testBankAMapping();
+    testReleaseProgressPreserved();
 
     if (wantWav) writeDemoWav();
 

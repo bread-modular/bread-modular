@@ -142,8 +142,25 @@ public:
     }
 
     void setAttackMs(float ms)   { attackMs_ = ms; applyEnvelopeTimings(); }
-    void setDecayMs(float ms)    { decayMs_ = ms; applyEnvelopeTimings();
-                                   if (phase_ == RELEASE) computeReleaseInc(); }
+
+    // Set the post-gate decay/release time (CV2). Mid-release updates must be
+    // PROGRESS-PRESERVING: the old behaviour recomputed releaseInc_ from the
+    // CURRENT env level over the full decay time, so each call restarted the
+    // release. Under the motion recorder this runs on every MIDI clock tick
+    // (24 PPQN), which stretched releases into an exponential tail ~3x longer
+    // than the set decay ("note randomly plays longer" during playback).
+    void setDecayMs(float ms) {
+        if (ms == decayMs_) return;   // recorder re-applies identical values per tick
+        float oldRelSamps = releaseSamplesFor(decayMs_);
+        decayMs_ = ms;
+        applyEnvelopeTimings();
+        if (phase_ == RELEASE) {
+            // Keep releaseInc_ = <level at release start> / relSamps. Scaling
+            // by the old/new ratio changes the slope (new decay time) without
+            // restarting the progress already made.
+            releaseInc_ *= oldRelSamps / releaseSamplesFor(decayMs_);
+        }
+    }
 
     void setShape(float s)       { shape_ = clamp01(s); }
     void setWarp(float w)        { warp_ = clamp01(w); }
@@ -235,12 +252,22 @@ private:
         pitchEnvStep_ = (pds > 0.0f) ? (1.0f / pds) : 1.0f;
     }
 
+    // Decay time (ms) -> release length in samples (0.5 ms floor).
+    static float releaseSamplesFor(float decayMs, float sampleRate) {
+        float dt = decayMs < 0.5f ? 0.5f : decayMs;
+        return (dt / 1000.0f) * sampleRate;
+    }
+    float releaseSamplesFor(float decayMs) const {
+        float sr = sampleRate_ > 0.0f ? sampleRate_ : 44100.0f;
+        return releaseSamplesFor(decayMs, sr);
+    }
+
     // Linear post-gate decay (release) from the CURRENT envelope level to 0,
-    // over the CV2 decay time. Called on note-off (and re-evaluated if decayMs
-    // changes while releasing).
+    // over the CV2 decay time. Called on note-off. Mid-release decayMs changes
+    // do NOT call this — setDecayMs rescales releaseInc_ instead, so the
+    // release progress is never restarted (see setDecayMs comment).
     void computeReleaseInc() {
-        float dt = decayMs_ < 0.5f ? 0.5f : decayMs_;
-        float relSamps = (dt / 1000.0f) * sampleRate_;
+        float relSamps = releaseSamplesFor(decayMs_);
         if (relSamps > 0.0f && env_ > 0.0f) releaseInc_ = env_ / relSamps;
         else if (relSamps > 0.0f) releaseInc_ = 1.0f / relSamps;
         else releaseInc_ = 1.0f;
