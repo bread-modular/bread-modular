@@ -14,6 +14,7 @@
 #include "audio/tools/Voice.h"
 #include "fs/config.h"
 #include "audio/apps/fx/filter_fx.h"
+#include "audio/apps/motion_recorder.h"
 
 #define TOTAL_VOICES 9
 
@@ -34,6 +35,7 @@ private:
     Square squareGenerators[TOTAL_VOICES];
     AudioFX* fx1 = new FilterFX();
     Config config{1, "/polysynth_config.dat"};
+    MotionRecorder recorder;
 
     Voice* voices[TOTAL_VOICES];
 
@@ -48,6 +50,13 @@ private:
         return nullptr;
     }
 
+    void applyLiveCv(uint16_t cv1, uint16_t cv2);
+    static void setRecorderLed(bool on);
+    static void applyRecordedFrame(void* context,
+                                    uint16_t cv1,
+                                    uint16_t cv2,
+                                    const uint8_t* bankAValues);
+
 public:
     void init() override;
     void audioCallback(AudioInput *input, AudioOutput *output) override;
@@ -56,6 +65,7 @@ public:
     void noteOffCallback(uint8_t channel, uint8_t note, uint8_t velocity) override;
     void ccChangeCallback(uint8_t channel, uint8_t cc, uint8_t value) override;
     void bpmChangeCallback(int bpm) override;
+    void realtimeCallback(uint8_t realtimeType) override;
     void cv1UpdateCallback(uint16_t cv1) override;
     void cv2UpdateCallback(uint16_t cv2) override;
     void buttonPressedCallback(bool pressed) override;

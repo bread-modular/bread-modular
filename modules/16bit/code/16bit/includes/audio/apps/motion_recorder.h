@@ -2,8 +2,7 @@
 
 #include <stdint.h>
 
-// MotionRecorder — MIDI-clock-synchronised, RAM-only automation recorder for
-// the 16bit monosynth.
+// MotionRecorder — MIDI-clock-synchronised, RAM-only automation recorder.
 //
 // One take is four bars of 4/4 at MIDI's 24 PPQN: 384 frames. CV samples are
 // kept as uint16_t values (the RP2350 IO currently supplies 12-bit ADC values),
@@ -15,6 +14,9 @@
 // LED callback and forwards the debounced button edge from IO. This keeps the
 // state machine host-testable and makes it impossible for a recording to touch
 // the filesystem or flash.
+//
+// Shared by every 16bit app that drives its MODE button this way (currently
+// monosynth and polysynth); apps own what the recorded values mean.
 class MotionRecorder {
 public:
     static constexpr uint16_t MIDI_PPQN = 24;
@@ -97,7 +99,7 @@ public:
     uint16_t getTick() const { return tick_; }
 
     // Keep the latest live MCC Bank A values. Values received outside CC20..23
-    // are ignored because they are not parameters owned by the monosynth bank.
+    // are ignored because they are not parameters owned by MCC Bank A.
     void setCurrentCc(uint8_t cc, uint8_t value) {
         int index = ccIndex(cc);
         if (index >= 0) {
