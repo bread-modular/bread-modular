@@ -1,7 +1,8 @@
-# Host simulation + tests for the 16bit "monosynth" app
+# Host simulation + tests for the 16bit firmware
 
-This folder lets you exercise the **monosynth** app's DSP **without running it on
-the RP2350 firmware**, so you can get the audio out, analyse it, and test it.
+This folder lets you exercise the **16bit apps** (DSP, and the shared motion
+recorder state machine) **without running them on the RP2350 firmware**, so you
+can get audio or state machines out, analyse it, and test it.
 
 ## Why it's faithful
 
@@ -17,6 +18,7 @@ runs — nothing is re-implemented in the simulator.
 |-------------------------|---------------------------------------------------------------|
 | `monosynth_dsp.h`            | shared DSP core (in `includes/audio/apps/monosynth/`) — used by firmware AND the sim |
 | `sim_monosynth.cpp`          | host simulator: renders a WAV, analyses it, runs self-tests   |
+| `sim_motion_recorder.cpp`    | host self-tests for the shared MIDI-clock motion recorder (monosynth & polysynth MODE button) |
 | `analyze_monosynth_wav.py`   | Python analysis of the rendered WAV (FFT, envelope, freq)     |
 | `run_monosynth_sim.sh`       | one-shot build + run                                          |
 

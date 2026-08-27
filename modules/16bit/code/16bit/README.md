@@ -17,19 +17,34 @@ separate firmware per app.
 | `elab`      | Envelope lab (A1/A2 CV/audio scoping)        |
 | `monosynth` | Pulsar-23-inspired mono bass synth (percussion mode) |
 
-### Monosynth motion recorder
+### Motion recorder (monosynth & polysynth)
 
-The monosynth has the same MODE/LED workflow as the 8bit CV recorder:
+Both synth apps share the same MODE/LED workflow (also used by the 8bit CV
+recorder). The state machine lives in the shared pico-free header
+`includes/audio/apps/motion_recorder.h`, and `tools/sim_motion_recorder.cpp`
+runs its self-tests on the host.
 
 - Click **MODE** (board button, GPIO12) to cycle `LIVE -> RECORDING -> PLAYBACK`.
 - While recording, the LED (GPIO13) blinks and each MIDI clock pulse records the
   raw 16bit CV1/CV2 values plus MCC Bank A `CC20..CC23`.
 - A take is four bars of 4/4 (`24 PPQN`, 384 clock frames). On completion the
-  LED becomes solid and the frame loop drives the attack, decay, and Bank A
-  parameters; MODE aborts an incomplete take or stops playback.
+  LED becomes solid and the frame loop drives the recorded parameters; MODE
+  aborts an incomplete take or stops playback.
 - MIDI **Start** rewinds the active take/loop. The recorder requires a running
   MIDI clock and stores the take in RAM only; it never writes the filesystem or
   flash.
+
+Each app owns what a frame means:
+
+| app        | CV1 / CV2                                                     | MCC Bank A `CC20..CC23`                                        |
+|------------|---------------------------------------------------------------|----------------------------------------------------------------|
+| monosynth  | attack / decay times                                          | BODY, CHORUS, CUTOFF, RESONANCE                                 |
+| polysynth  | amp-envelope attack (1..500 ms) / release (10..1000 ms)        | env attack-release time, filter-env depth, resonance, cutoff    |
+
+While a polysynth take plays back, each frame updates all nine voices'
+amp-envelope times plus the FilterFX parameters, so automation sweeps envelopes
+and the filter together; incoming Bank A CCs are ignored until you stop
+playback.
 
 The selected app is fixed at **compile time** and reported over serial via
 `get-app`. Each app owns its own baked-in assets and config file, so each

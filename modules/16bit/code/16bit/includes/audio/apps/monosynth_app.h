@@ -6,7 +6,7 @@
 #include "audio/manager.h"
 #include "audio/apps/interfaces/audio_app.h"
 #include "audio/apps/monosynth/monosynth_dsp.h"
-#include "audio/apps/monosynth/motion_recorder.h"
+#include "audio/apps/motion_recorder.h"
 
 // Pulsar-23 BASS-inspired monophonic bass synth (percussion mode).
 //

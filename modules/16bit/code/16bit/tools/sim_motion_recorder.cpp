@@ -1,8 +1,8 @@
-// Host self-tests for the 16bit monosynth's RAM-only CV/MCC motion recorder.
-// This exercises the same clocked state machine used by the firmware without
-// requiring Pico SDK or hardware.
+// Host self-tests for the 16bit RAM-only CV/MCC motion recorder shared by the
+// polysynth and monosynth apps. This exercises the same clocked state machine
+// used by the firmware without requiring Pico SDK or hardware.
 
-#include "audio/apps/monosynth/motion_recorder.h"
+#include "audio/apps/motion_recorder.h"
 
 #include <cstdio>
 #include <vector>
