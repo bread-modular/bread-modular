@@ -3,7 +3,7 @@
  * ------------------------------
  * Re-exports everything modules can build on top of:
  *
- *   import { BreadModule, AnalogStarter } from "../../lib";
+ *   import { BreadModule, AnalogStarter, RV09Pot, MCP6002, SMADiode } from "../../lib";
  *
  * or import pieces directly:
  *
@@ -12,3 +12,6 @@
 export * from "./constants";
 export * from "./module-frame";
 export * from "./analog-starter";
+export * from "./rv09-pot";
+export * from "./mcp6002";
+export * from "./sma-diode";
