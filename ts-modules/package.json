@@ -1,0 +1,20 @@
+{
+  "name": "bread-modular-tscircuit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bread Modular 'blank' module recreated with tscircuit (TypeScript/React for electronics)",
+  "scripts": {
+    "build": "tsci build blank.circuit.tsx",
+    "sch": "tsci export blank.circuit.tsx -f schematic-svg -o out/blank-schematic.svg",
+    "pcb": "tsci export blank.circuit.tsx -f pcb-svg -o out/blank-pcb.svg",
+    "assembly": "tsci export blank.circuit.tsx -f assembly-svg -o out/blank-assembly.svg",
+    "gerbers": "tsci export blank.circuit.tsx -f gerbers -o out/fabrication",
+    "netlist": "tsci export blank.circuit.tsx -f readable-netlist -o out/netlist.txt",
+    "kicad": "tsci export blank.circuit.tsx -f kicad_zip -o out/kicad",
+    "render": "npm run sch && npm run pcb"
+  },
+  "dependencies": {
+    "bun": "^1.4.0",
+    "tscircuit": "^0.0.2462"
+  }
+}
