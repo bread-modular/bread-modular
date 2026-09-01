@@ -14,6 +14,9 @@ ts-modules/
 │   ├── constants.ts        # standard board size, net & pin-count constants
 │   ├── module-frame.tsx    # BreadModule: board, power rails, bus connectors, silkscreen
 │   ├── analog-starter.tsx  # schematic-only starter parts (R1/R2, C1, RV1, U2A/U2B)
+│   ├── rv09-pot.tsx        # RV09Pot + RV09Footprint (Alpha 9mm vertical pot)
+│   ├── mcp6002.tsx         # MCP6002: dual op-amp as one SOIC-8 (JLC C7377)
+│   ├── sma-diode.tsx       # SMADiode (SS14 = C2480, SS210 = C14996)
 │   └── index.ts
 └── src/
     └── blank/             # one directory per module
