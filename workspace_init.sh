@@ -79,4 +79,18 @@ for path in $BUILD_SUBMODULES; do
     fi
 done
 
+# ---------------------------------------------------------------------------
+# Install npm modules preferring local cache (ts-modules).
+# A fresh worktree lacks node_modules (gitignored), so copy the already-
+# installed tree from the original checkout, then let npm fill any gaps
+# from its local cache via --prefer-offline.
+# ---------------------------------------------------------------------------
+log "Installing npm modules..."
+if [ -d "$ORIGINAL_DIR/ts-modules/node_modules" ]; then
+    echo "Found local node_modules cache, copying..."
+    cp -r "$ORIGINAL_DIR/ts-modules/node_modules" ts-modules/ 2>/dev/null || true
+fi
+(cd ts-modules && npm install --prefer-offline --no-audit --no-fund) ||
+    warn "npm install failed — tscircuit builds may not work."
+
 log "Submodule initialization complete."
