@@ -145,6 +145,31 @@ for m in $MODULES; do
     mv -f "$out_abs/bom.csv" "$out_abs/${m}-bom.csv"
     unzip -o -j "$out_abs/${m}_jlcpcb.zip" pick_and_place.csv -d "$out_abs" >/dev/null
     mv -f "$out_abs/pick_and_place.csv" "$out_abs/${m}-pick-and-place.csv"
+
+    # Resistors & capacitors are stuffed on-site: blank their JLCPCB part # so
+    # the assembler picks a part from footprint + value. ICs (U*), the LED (D*)
+    # and the switch (SW*) keep their explicit part numbers. POTs (RV*) are
+    # already blank (no resolved LCSC part) and stay untouched.
+    python3 - "$out_abs/${m}-bom.csv" <<'PY'
+import sys, csv
+path = sys.argv[1]
+with open(path, newline="") as fh:
+    rows = list(csv.reader(fh))
+if not rows:
+    sys.exit(0)
+hdr = rows[0]
+if "JLCPCB Part #" not in hdr:
+    sys.exit(0)
+part_idx = hdr.index("JLCPCB Part #")
+for row in rows[1:]:
+    des = row[0] if row else ""
+    # R<digit> = resistor, C<digit> = capacitor (RV<digit> = pot -> untouched)
+    if len(des) >= 2 and des[0] in ("R", "C") and des[1].isdigit():
+        if part_idx < len(row):
+            row[part_idx] = ""
+with open(path, "w", newline="") as fh:
+    csv.writer(fh).writerows(rows)
+PY
   fi
 
   echo "==> [$m] Done -> $out/"
