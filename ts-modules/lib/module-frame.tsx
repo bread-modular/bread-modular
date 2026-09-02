@@ -68,6 +68,8 @@ const PowerRail = (props: {
       <pinheader
         name={props.name}
         pinCount={POWER_PIN_COUNT}
+        doNotPlace
+        bomDisabled
         pcbX={props.x}
         pcbY={props.y}
         pcbStyle={{ silkscreenTextVisibility: "hidden" }}
@@ -94,6 +96,8 @@ const BusConnector = (props: {
     name={props.name}
     pinCount={BUS_PIN_COUNT}
     gender="female"
+    doNotPlace
+    bomDisabled
     pcbX={props.x}
     pcbY={props.y}
     pcbRotation={-90}
