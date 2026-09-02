@@ -70,7 +70,8 @@ export const ATTINY1616 = (props: {
   <chip
     name={props.name ?? "U1"}
     footprint={<VQFN20_ATtiny1616 />}
-    /* 20MHz, 16kB Flash, 2kB SRAM (no LCSC part # in the original BOM) */
+    /* 20MHz, 16kB Flash, 2kB SRAM — JLCPCB part C507118 */
+    supplierPartNumbers={{ jlcpcb: ["C507118"] }}
     pinLabels={{
       pin1: "PA2",
       pin2: "PA3", // unused

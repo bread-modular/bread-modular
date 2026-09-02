@@ -169,14 +169,16 @@ export default () => (
     <trace name="R1-pa0" from=".R1 > .pin1" to=".U2 > .PA0" />
 
     {/* ============ MODE button: SW1 pulls PA4 to GND ============ */}
-    <chip name="SW1" footprint={<TactSwitchFootprint />} schX={-2.5} schY={6.5} pcbX={-9.525} pcbY={-10.795} />
+    {/* SW1 = K2-1808SN-A4SW-01 tact switch, JLCPCB C92589 */}
+    <chip name="SW1" footprint={<TactSwitchFootprint />} supplierPartNumbers={{ jlcpcb: ["C92589"] }} schX={-2.5} schY={6.5} pcbX={-9.525} pcbY={-10.795} />
     <trace name="SW1-gnd" from=".SW1 > .pin1" to={NET_GND} width="0.3mm" />
     <trace name="SW1-mode" from=".SW1 > .pin2" to="net.SW_MODE" />
     <trace name="U2-pa4-mode" from=".U2 > .PA4" to="net.SW_MODE" />
 
     {/* ============ LED: PA5 -> D1 -> R6 330 -> GND ============ */}
     <trace name="U2-pa5-led" from=".U2 > .PA5" to="net.LED_A" />
-    <led name="D1" footprint="0603" schX={-1} schY={5.5} pcbX={-10.9475} pcbY={-5.08} />
+    {/* D1 = red LED, JLCPCB C2286 */}
+    <led name="D1" footprint="0603" supplierPartNumbers={{ jlcpcb: ["C2286"] }} schX={-1} schY={5.5} pcbX={-10.9475} pcbY={-5.08} />
     <trace name="D1-anode" from=".D1 > .anode" to="net.LED_A" />
     <trace name="D1-cathode" from=".D1 > .cathode" to=".R6 > .pin1" />
     <resistor
@@ -204,6 +206,21 @@ export default () => (
     <trace name="OUTPUT1-audio-3" from=".OUTPUT1 > .pin3" to="net.AUDIO_OUT" />
     <trace name="OUTPUT1-gate-4" from=".OUTPUT1 > .pin4" to="net.GATE_OUT" />
     <trace name="OUTPUT1-gate-5" from=".OUTPUT1 > .pin5" to="net.GATE_OUT" />
+
+    {/* ============ Keep traces ~1mm clear of the bottom GND rail ============
+        The bottom power rail (GND1) sits at the bottom edge; the autorouter was
+        hugging it. Define a keepout band on BOTH layers around the rail pads +
+        1mm margin so unrelated traces don't run through it. Traces that must
+        reach the rail (net.GND fanout) are still routed by the autorouter. */}
+    <keepout
+      shape="rect"
+      pcbX={-1.27}
+      pcbY={-21.59}
+      width={13.66}
+      height={3.5}
+      layers={["top", "bottom"]}
+      excludeRefs={[".GND1", ".RV1"]}
+    />
 
     {/* ============ Bottom-side GND pour (like a KiCad B.Cu GND zone) ============ */}
     <copperpour name="GND-pour" connectsTo={NET_GND} layer="bottom" />
