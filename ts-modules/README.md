@@ -69,6 +69,42 @@ export default () => (
 );
 ```
 
+## JLCPCB fabrication rules (`lib/constants.ts`)
+
+Every module inherits JLCPCB-safe manufacturing tolerances automatically —
+`<BreadModule>` spreads `JLCPCB_FAB_BOARD_PROPS` onto the board, which feeds
+tscircuit's routing-tolerance props (`minTraceWidth`, `minViaHoleDiameter`,
+`minViaPadDiameter`, the `min*Clearance` family and
+`autorouter.traceClearance`). The tscircuit defaults (0.2/0.3mm vias,
+0.1mm clearance) are **below** JLCPCB's spec sheet and get flagged or
+fabricated out of spec on standard 2-layer orders.
+
+| Constant | Value | Why |
+|---|---|---|
+| `JLCPCB_VIA_HOLE_DIAMETER` | 0.3 mm | Via drill (default 0.2 is at JLCPCB's absolute limit) |
+| `JLCPCB_VIA_PAD_DIAMETER` | 0.5 mm | Via pad — 0.1 mm annular ring (JLCPCB min 0.075 mm) |
+| `JLCPCB_TRACE_CLEARANCE` | 0.15 mm | Copper-to-copper spacing (JLCPCB 2-layer spec ≥ 0.127 mm) |
+| `JLCPCB_MIN_TRACE_WIDTH` | 0.15 mm | Thinnest trace (spec ≥ 0.127 mm) |
+| `JLCPCB_PAD_EDGE_CLEARANCE` | 0.15 mm | Trace/pad edge to pad edge |
+| `JLCPCB_VIA_EDGE_CLEARANCE` | 0.15 mm | Via edge to trace/pad edge |
+| `JLCPCB_VIA_HOLE_EDGE_CLEARANCE` | 0.2 mm | Drill edge to drill edge |
+
+Rules of thumb when designing modules:
+
+- **Don't override these per module.** They live in `lib/constants.ts` so
+  every board ships JLCPCB-clean. If a trace can't route with 0.15 mm
+  clearance, move the components apart rather than lowering the constants.
+- Never place vias manually — if you must, keep the 0.3/0.5 mm size and
+  ≥ 0.15 mm copper clearance from other nets.
+- `<platedhole>` mounting holes (4 mm pad / 3.2 mm drill) and PTH connector
+  drills (1.0 mm pins, 1.1 × 2.3 mm slots) are already JLCPCB-standard.
+- After layout changes, re-check the gerbers: the drill file should list
+  `T13C0.300000` for vias and `F_Cu.gbr` should flash vias with the 0.5 mm
+  aperture; `tsci build` runs DRC (0 errors expected).
+- Reference audit: `src/drive/AUDIT.md` documents the gerber-level checks
+  (annular ring, spacing histogram, via-in-pad distance) used to validate
+  these values.
+
 ## Building
 
 ```bash
