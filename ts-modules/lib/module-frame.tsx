@@ -23,7 +23,7 @@
  * Coordinates are computed from the board size (tscircuit's pcbY points up,
  * board is centered at 0,0), so non-standard board sizes scale correctly.
  */
-import { POWER_PIN_COUNT, BUS_PIN_COUNT } from "./constants";
+import { BUS_PIN_COUNT, JLCPCB_FAB_BOARD_PROPS, POWER_PIN_COUNT } from "./constants";
 
 export interface BreadModuleProps {
   /** Module name shown on the silkscreen (top center + bottom-right). */
@@ -132,7 +132,12 @@ export const BreadModule = (props: BreadModuleProps) => {
   const showEdgeLabels = edgeLabels && (leftConnector || rightConnector);
 
   return (
-    <board width={`${width}mm`} height={`${height}mm`} pcbStyle={{ silkscreenFontSize: 1 }}>
+    <board
+      width={`${width}mm`}
+      height={`${height}mm`}
+      pcbStyle={{ silkscreenFontSize: 1 }}
+      {...JLCPCB_FAB_BOARD_PROPS}
+    >
       {/* ---- Module bus connectors (left/right edges, vertical, pin 1 at top) ---- */}
       {leftConnector && (
         <BusConnector name="INPUT1" x={-connX} y={railY} schX={-6} schY={7} />
