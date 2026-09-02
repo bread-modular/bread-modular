@@ -95,3 +95,48 @@ src = src.replace(/var spaceWidthRatio = [0-9.]+;/, `var spaceWidthRatio = ${adv
 
 fs.writeFileSync(distPath, src);
 console.log(`patched ${distPath} (${Object.keys(data.glyphs).length} KiCad glyphs)`);
+
+// ---------------------------------------------------------------------------
+// KiCad bold-title stroke: tscircuit computes silkscreen text stroke as
+// fontSize * strokeWidthRatio (0.15 after the patch above). KiCad uses 0.15
+// for 1mm text but 0.2 for the 2mm bold module title (0.4mm stroke), so make
+// the ratio size-aware inside the tscircuit CLI bundle:
+//   - gerber aperture: getApertureConfigFromPcbSilkscreenText
+//   - text layout (SVG stroke + gerber cursor offset): getAlphabetLayout
+// Idempotent + non-fatal (upstream refactors shouldn't break builds).
+const cliPath = path.join(root, 'node_modules', '@tscircuit', 'cli',
+  'dist', 'cli', 'main.js');
+if (fs.existsSync(cliPath)) {
+  let cli = fs.readFileSync(cliPath, 'utf8');
+  const GOOD = 'elm.font_size > 1.5 ? 0.2 : 0.15';
+  const ORIGINAL =
+    '      diameter: elm.font_size * strokeWidthRatio\n' +
+    '    };\n' +
+    '  }\n' +
+    '  throw new Error(`Provide font_size for: ${elm}`);\n' +
+    '}, getApertureConfigFromPcbCopperText';
+  const PATCHED =
+    `      diameter: elm.font_size * (${GOOD})\n` +
+    '    };\n' +
+    '  }\n' +
+    '  throw new Error(`Provide font_size for: ${elm}`);\n' +
+    '}, getApertureConfigFromPcbCopperText';
+  let cliPatched = cli.includes(GOOD);
+  // repair a previously (buggy) patched file: bare `font_size` -> `elm.font_size`
+  cli = cli.replace(
+    'diameter: elm.font_size * (font_size > 1.5 ? 0.2 : 0.15)',
+    `diameter: elm.font_size * (${GOOD})`);
+  if (!cliPatched && cli.includes(ORIGINAL)) {
+    cli = cli.replace(ORIGINAL, PATCHED);
+    cli = cli.replace(
+      'const strokeWidth = fontSize * textMetrics.strokeWidthRatio;',
+      'const strokeWidth = fontSize * (fontSize > 1.5 ? 0.2 : 0.15);');
+  }
+  if (cli.includes(GOOD) && !cli.includes('(font_size > 1.5')) {
+    fs.writeFileSync(cliPath, cli);
+    cliPatched = true;
+  }
+  console.log(cliPatched
+    ? `patched ${cliPath} (size-aware silkscreen stroke: 0.4mm @ 2mm text)`
+    : `warn: could not patch ${cliPath} (upstream changed?)`);
+}
