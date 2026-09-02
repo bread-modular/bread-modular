@@ -397,7 +397,7 @@ export const BreadModule = (props: BreadModuleProps) => {
       <silkscreentext
         text={name}
         pcbX={0}
-        pcbY={halfH - 8.2}
+        pcbY={halfH - 7.2}
         anchorAlignment="bottom_center"
         fontSize={2}
       />

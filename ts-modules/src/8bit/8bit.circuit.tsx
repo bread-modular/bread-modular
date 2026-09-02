@@ -187,7 +187,7 @@ export default () => (
       footprint="0402"
       schX={0.5}
       schY={5.5}
-      pcbX={-8.13}
+      pcbX={-7.13}
       pcbY={-5.08}
       pcbStyle={{ silkscreenTextVisibility: "hidden" }}
     />
@@ -233,6 +233,6 @@ export default () => (
     <silkscreentext text="MODE" pcbX={-9.525} pcbY={-8.7} fontSize={1} />
     {/* R6's auto-placed ref collides with RV2's CV1 caption — hide it and
         print it to the right of the body instead */}
-    <silkscreentext text="R6" pcbX={-6.7} pcbY={-4.85} fontSize={1} />
+    <silkscreentext text="R6" pcbX={-6.7} pcbY={-6.85} fontSize={1} />
   </BreadModule>
 );
