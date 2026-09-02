@@ -204,7 +204,7 @@ export const BreadModule = (props: BreadModuleProps) => {
       <silkscreentext
         text={name}
         pcbX={-4.445}
-        pcbY={halfH - 8.128}
+        pcbY={halfH - 7}
         anchorAlignment="bottom_left"
         fontSize={2}
       />
@@ -213,15 +213,15 @@ export const BreadModule = (props: BreadModuleProps) => {
         <>
           <silkscreentext
             text="BREAD"
-            pcbX={-(halfW - 1.27)}
-            pcbY={-(halfH - 2.88)}
+            pcbX={-(halfW - 1.77)}
+            pcbY={-(halfH - 3.88)}
             anchorAlignment="bottom_left"
             fontSize={1}
           />
           <silkscreentext
             text="MODULAR"
-            pcbX={-(halfW - 1.27)}
-            pcbY={-(halfH - 1.27)}
+            pcbX={-(halfW - 1.77)}
+            pcbY={-(halfH - 2.27)}
             anchorAlignment="bottom_left"
             fontSize={1}
           />
@@ -231,16 +231,16 @@ export const BreadModule = (props: BreadModuleProps) => {
       {/* Name + version, bottom-right */}
       <silkscreentext
         text={name}
-        pcbX={halfW - 1.143}
-        pcbY={-(halfH - 2.88)}
+        pcbX={halfW - 1.643}
+        pcbY={-(halfH - 3.88)}
         anchorAlignment="bottom_right"
         fontSize={1}
       />
       {version && (
         <silkscreentext
           text={version}
-          pcbX={halfW - 1.143}
-          pcbY={-(halfH - 1.27)}
+          pcbX={halfW - 1.643}
+          pcbY={-(halfH - 2.27)}
           anchorAlignment="bottom_right"
           fontSize={1}
         />
