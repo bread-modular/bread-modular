@@ -43,3 +43,10 @@ modules/*/code/*/sim/test_*
 
 # ts-circuit module build outputs
 ts-modules/src/*/out/
+
+# Nudge Tool runtime state (backups + run state)
+tools/nudge-state/
+
+# Python bytecode
+__pycache__/
+*.pyc
