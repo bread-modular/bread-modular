@@ -1,0 +1,510 @@
+#!/usr/bin/env python3
+"""
+nudge — a reusable, agent-friendly CLI that auto-resolves tscircuit autorouter
+DRC errors for Bread Modular `ts-modules` by "nudging" whitelisted component
+PCB placements (pcbX/pcbY), with a per-module whitelist so only intended parts
+ever move. Replaces the throwaway tools/nudge-sweep.sh / nudge-sweep2.sh.
+
+Commands:
+  plan     --module <m>    Parse errors, list implicated components + proposed
+                           moves. No edits. Machine-readable with --json.
+  run      --module <m>    Run the search; leave the best layout applied
+                           (unless --no-apply).
+  apply    --module <m>    Re-apply the best layout recorded in the state file.
+  restore  --module <m>    Restore the original .circuit.tsx from the backup.
+  status   --module <m>    Current error count + classification (no edits).
+
+Global options:
+  --module <name>        Module dir under ts-modules/src/  (default "8bit")
+  --config <path>        Override config (default ts-modules/src/<m>/<m>.nudge.json)
+  --strategy <s>         greedy (default) | grid | random
+  --max-iters <n>        Max full autoroute builds (default from config: 60)
+  --time-budget <sec>    Wall-clock budget (default from config: 900)
+  --step <mm>            Override per-axis step (default from config)
+  --no-apply             Search but do not leave the file modified (run only)
+  --json                 Machine-readable output (for agents)
+  --verbose              Print per-candidate score lines
+
+Python 3 stdlib only. It shells out to `tsci`/`node` exactly like build.sh.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+LIB = Path(__file__).resolve().parent / "nudge-lib"
+sys.path.insert(0, str(LIB))
+
+from classify import analyze, is_solved  # noqa: E402
+from edit import format_number, load_positions, splice  # noqa: E402
+import search  # noqa: E402
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+TS_MODULES = REPO_ROOT / "ts-modules"
+STATE_ROOT = REPO_ROOT / "tools" / "nudge-state"
+
+EXIT_OK = 0
+EXIT_UNSOLVED = 2
+EXIT_ERROR = 3
+
+
+class NudgeError(Exception):
+    """Mapped to a non-zero exit code by main()."""
+
+
+# ---------------------------------------------------------------------------
+# Paths & config
+# ---------------------------------------------------------------------------
+
+def resolve_module(module: str):
+    mod_dir = TS_MODULES / "src" / module
+    tsx = mod_dir / f"{module}.circuit.tsx"
+    config_path = mod_dir / f"{module}.nudge.json"
+    dist_circuit = TS_MODULES / "dist" / "src" / module / module / "circuit.json"
+    state_dir = STATE_ROOT / module
+    if not tsx.exists():
+        raise NudgeError(f"no entry file {tsx} (expected src/<m>/<m>.circuit.tsx)")
+    return {
+        "module": module,
+        "mod_dir": mod_dir,
+        "tsx": tsx,
+        "config_path": config_path,
+        "dist_circuit": dist_circuit,
+        "state_dir": state_dir,
+    }
+
+
+def load_config(config_path: Path):
+    if not config_path.exists():
+        raise NudgeError(f"no config file {config_path} — write the per-module whitelist first")
+    cfg = json.loads(config_path.read_text())
+    components = cfg.get("components", {})
+    never = set(cfg.get("neverMove", []))
+    overlap = set(components) & never
+    if overlap:
+        raise NudgeError(f"names in both `components` and `neverMove`: {sorted(overlap)}")
+    cfg["entry"] = cfg.get("entry", f"{cfg.get('module', '?')}.circuit.tsx")
+    return cfg
+
+
+def apply_overrides(cfg, args):
+    """Apply CLI flag overrides onto a working copy of the config."""
+    cfg = json.loads(json.dumps(cfg))  # deep copy
+    search_cfg = cfg.setdefault("search", {})
+    if args.strategy:
+        search_cfg["strategy"] = args.strategy
+    if args.max_iters is not None:
+        search_cfg["maxIterations"] = args.max_iters
+    if args.time_budget is not None:
+        search_cfg["timeBudgetSec"] = args.time_budget
+    if args.step is not None:
+        for name in cfg.get("components", {}):
+            cfg["components"][name]["step"] = args.step
+    return cfg
+
+
+# ---------------------------------------------------------------------------
+# Build + classify
+# ---------------------------------------------------------------------------
+
+def _bust_cache_and_artifacts(module: str):
+    shutil.rmtree(TS_MODULES / ".tscircuit" / "cache", ignore_errors=True)
+    for suffix in (".routed.json", ".sig"):
+        f = TS_MODULES / "src" / module / f"{module}{suffix}"
+        if f.exists():
+            f.unlink()
+
+
+def build_and_classify(paths, cfg):
+    """rm cache + full `tsci build <entry>` + classify. Returns analysis dict."""
+    module = paths["module"]
+    entry = cfg.get("entry", f"{module}.circuit.tsx")
+    timeout = cfg.get("build", {}).get("timeoutSec", 180)
+
+    _bust_cache_and_artifacts(module)
+
+    env = os.environ.copy()
+    env["PATH"] = str(TS_MODULES / "node_modules" / ".bin") + os.pathsep + env.get("PATH", "")
+    try:
+        proc = subprocess.run(
+            ["tsci", "build", entry],
+            cwd=str(paths["mod_dir"]),
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired:
+        raise NudgeError(f"tsci build timed out after {timeout}s")
+
+    if proc.returncode != 0:
+        raise NudgeError(f"tsci build failed (rc={proc.returncode}):\n{proc.stderr[-2000:]}")
+
+    if not paths["dist_circuit"].exists():
+        raise NudgeError(f"build produced no circuit.json at {paths['dist_circuit']}")
+
+    elements = json.loads(paths["dist_circuit"].read_text())
+    return analyze(elements)
+
+
+# ---------------------------------------------------------------------------
+# Backup / state
+# ---------------------------------------------------------------------------
+
+def _sha256(b: bytes) -> str:
+    return hashlib.sha256(b).hexdigest()
+
+
+def ensure_backup(paths):
+    """Return (current_file_bytes, sha256_of_backup). Creates original.tsx on
+    first mutation; the backup's hash is what `restore` verifies against."""
+    state_dir = paths["state_dir"]
+    state_dir.mkdir(parents=True, exist_ok=True)
+    orig = state_dir / "original.tsx"
+    content = paths["tsx"].read_bytes()
+    if not orig.exists():
+        orig.write_bytes(content)
+    return content, _sha256(orig.read_bytes())
+
+
+def load_state(paths):
+    sf = paths["state_dir"] / "state.json"
+    if not sf.exists():
+        return None
+    return json.loads(sf.read_text())
+
+
+def write_state(paths, state):
+    paths["state_dir"].mkdir(parents=True, exist_ok=True)
+    (paths["state_dir"] / "state.json").write_text(json.dumps(state, indent=2) + "\n")
+
+
+# ---------------------------------------------------------------------------
+# plan / status
+# ---------------------------------------------------------------------------
+
+def _analysis_report(analysis):
+    return {
+        "score": list(analysis["score"]),
+        "solved": is_solved(analysis["score"]),
+        "broken": analysis["broken"],
+        "classes": analysis["classes"],
+        "types": analysis["types"],
+        "implicated": analysis["implicated"],
+    }
+
+
+def cmd_plan(paths, cfg, args):
+    analysis = build_and_classify(paths, cfg)
+    whitelist = cfg.get("components", {})
+    implicated_whitelisted = {
+        n: c for n, c in analysis["implicated"].items() if n in whitelist
+    }
+    proposed = []
+    for name in sorted(implicated_whitelisted):
+        comp = whitelist[name]
+        step = comp.get("step", 0.4)
+        for axis in comp.get("axes", ["x", "y"]):
+            s = step.get(axis, step) if isinstance(step, dict) else step
+            proposed.append({"component": name, "axis": axis,
+                             "moves": [f"{axis}+{format_number(s)}", f"{axis}-{format_number(s)}"]})
+
+    report = _analysis_report(analysis)
+    report["proposed_moves"] = proposed
+
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(f"module: {paths['module']}")
+        print(f"score : {tuple(analysis['score'])}  solved={is_solved(analysis['score'])}")
+        print(f"classes: {analysis['classes']}")
+        if analysis["broken"]:
+            print("!! BROKEN build (pcb_missing_footprint_error) — source bug, not placement")
+        if proposed:
+            print("implicated (whitelisted) components + proposed moves:")
+            for p in proposed:
+                print(f"  {p['component']:>5}  {p['axis']}  {', '.join(p['moves'])}")
+        else:
+            print("no whitelisted components implicated")
+    return EXIT_OK
+
+
+def cmd_status(paths, cfg, args):
+    analysis = build_and_classify(paths, cfg)
+    state = load_state(paths)
+    report = _analysis_report(analysis)
+    if state:
+        report["best_score"] = state.get("score")
+
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(f"module: {paths['module']}")
+        print(f"score : {tuple(analysis['score'])}  solved={is_solved(analysis['score'])}")
+        print(f"classes: {analysis['classes']}")
+        if analysis["types"]:
+            print("error types:")
+            for t, n in sorted(analysis["types"].items()):
+                print(f"  {n:4d}  {t}")
+        if state and state.get("score") is not None:
+            print(f"best recorded score: {tuple(state['score'])}")
+    return EXIT_OK if is_solved(analysis["score"]) else EXIT_UNSOLVED
+
+
+# ---------------------------------------------------------------------------
+# run
+# ---------------------------------------------------------------------------
+
+def cmd_run(paths, cfg, args):
+    strategy = args.strategy or cfg.get("search", {}).get("strategy", "greedy")
+    if strategy not in ("greedy", "grid", "random"):
+        raise NudgeError(f"unknown strategy {strategy!r}")
+
+    original_content, original_sha = ensure_backup(paths)
+    content, positions = load_positions(paths["tsx"])
+
+    # Verify every whitelisted component resolves in the source.
+    missing = [n for n in cfg.get("components", {}) if n not in positions]
+    if missing:
+        raise NudgeError(f"whitelisted component(s) not found in source: {missing}")
+
+    def write(b: bytes):
+        paths["tsx"].write_bytes(b)
+
+    def build_score():
+        return build_and_classify(paths, cfg)
+
+    def relocate():
+        return load_positions(paths["tsx"])[1]
+
+    try:
+        initial_analysis = build_score()
+
+        log = []
+        result = search.run_search(
+            cfg,
+            content,
+            positions,
+            initial_analysis,
+            write,
+            build_score,
+            relocate,
+            splice,
+            strategy=strategy,
+            max_iters=args.max_iters,
+            time_budget=args.time_budget,
+            verbose=args.verbose,
+            log=log,
+        )
+
+        best_content = result["best_content"]
+        best_analysis = result["best_analysis"]
+        solved = result["solved"]
+    except BaseException:
+        # On any failure (build crash, interrupt), restore the original so the
+        # repo is never left with a half-applied candidate layout.
+        try:
+            paths["tsx"].write_bytes(original_content)
+        except Exception:
+            pass
+        raise
+
+    # The file currently holds best_content (the search committed it). Compute
+    # deltas vs the *pristine* backup (original.tsx), not the run-start file,
+    # so `apply`/`restore`/reporting always reflect the net displacement from
+    # the committed layout.
+    best_positions = load_positions(paths["tsx"])[1]
+    backup_positions = load_positions(paths["state_dir"] / "original.tsx")[1]
+    deltas = {}
+    for name in backup_positions:
+        if name not in best_positions:
+            continue
+        for axis in ("pcbX", "pcbY"):
+            o = backup_positions[name][axis]["value"]
+            b = best_positions[name][axis]["value"]
+            if round(b - o, 4) != 0.0:
+                deltas.setdefault(name, {})[axis] = round(b - o, 4)
+
+    applied = False
+    if solved and not args.no_apply:
+        write(best_content)  # already the committed layout; make it canonical
+        applied = True
+    else:
+        # solved --no-apply, or unsolved: never leave a partial/unsolved layout.
+        write(original_content)
+        applied = False
+
+    # Persist state (best layout + score + log) for `apply` / `status`.
+    state = {
+        "module": paths["module"],
+        "original_sha256": original_sha,
+        "score": list(best_analysis["score"]),
+        "strategy": strategy,
+        "builds": result["builds"],
+        "iterations": result["iterations"],
+        "deltas": deltas,
+        "best": {
+            name: {axis: best_positions[name][axis]["value"] for axis in ("pcbX", "pcbY")}
+            for name in best_positions
+        },
+        "applied": applied,
+        "log": log,
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }
+    write_state(paths, state)
+
+    report = {
+        "solved": solved,
+        "score": list(best_analysis["score"]),
+        "strategy": strategy,
+        "builds": result["builds"],
+        "iterations": result["iterations"],
+        "applied": applied,
+        "deltas": deltas,
+        "log": log,
+    }
+
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(f"module: {paths['module']}  strategy: {strategy}")
+        print(f"baseline score: {tuple(initial_analysis['score'])}")
+        print(f"final score   : {tuple(best_analysis['score'])}")
+        print(f"builds: {result['builds']}  iterations: {result['iterations']}")
+        if solved:
+            if applied:
+                print("SOLVED — best layout applied")
+            else:
+                print("SOLVED — best layout NOT applied (--no-apply)")
+        else:
+            print("NOT SOLVED within budget — original layout restored")
+        if deltas:
+            print("layout deltas (mm):")
+            for name in sorted(deltas):
+                d = deltas[name]
+                print(f"  {name:>5}  " + "  ".join(f"{k}={format_number(v)}" for k, v in d.items()))
+
+    return EXIT_OK if solved else EXIT_UNSOLVED
+
+
+# ---------------------------------------------------------------------------
+# apply / restore
+# ---------------------------------------------------------------------------
+
+def cmd_apply(paths, cfg, args):
+    state = load_state(paths)
+    if not state:
+        raise NudgeError(f"no state file — run `nudge run --module {paths['module']}` first")
+    best = state.get("best", {})
+    if not best:
+        raise NudgeError("state file has no recorded best layout")
+
+    content, positions = load_positions(paths["tsx"])
+    for name, axes in best.items():
+        if name not in positions:
+            raise NudgeError(f"state references component {name!r} not present in source")
+        for axis, value in axes.items():
+            content = splice(content, positions, name, axis, value)
+    paths["tsx"].write_bytes(content)
+
+    out = {"module": paths["module"], "applied": True, "best": best}
+    if args.json:
+        print(json.dumps(out, indent=2))
+    else:
+        print(f"re-applied best layout for {paths['module']} ({len(best)} component(s))")
+    return EXIT_OK
+
+
+def cmd_restore(paths, cfg, args):
+    state_dir = paths["state_dir"]
+    orig = state_dir / "original.tsx"
+    if not orig.exists():
+        raise NudgeError(f"no backup at {orig} — nothing to restore")
+    orig_content = orig.read_bytes()
+    paths["tsx"].write_bytes(orig_content)
+    digest = _sha256(orig_content)
+
+    state = load_state(paths)
+    expected = state.get("original_sha256") if state else None
+    verified = (expected is None) or (expected == digest)
+
+    out = {"module": paths["module"], "restored": True, "sha256": digest,
+           "hash_verified": verified}
+    if args.json:
+        print(json.dumps(out, indent=2))
+    else:
+        print(f"restored {paths['tsx']} from backup (sha256 {digest[:12]}…"
+              f"{' — verified' if verified else ' — HASH MISMATCH!'})")
+    return EXIT_OK if verified else EXIT_ERROR
+
+
+# ---------------------------------------------------------------------------
+# CLI wiring
+# ---------------------------------------------------------------------------
+
+def build_parser():
+    p = argparse.ArgumentParser(
+        prog="nudge", description="Resolve tscircuit autorouter DRC errors by nudging "
+        "whitelisted component PCB placements.")
+    sub = p.add_subparsers(dest="command", required=True)
+
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--module", default="8bit", help="module dir under ts-modules/src/")
+    common.add_argument("--config", help="override config path")
+    common.add_argument("--strategy", choices=["greedy", "grid", "random"], help="search strategy")
+    common.add_argument("--max-iters", type=int, help="max full autoroute builds")
+    common.add_argument("--time-budget", type=float, help="wall-clock budget (seconds)")
+    common.add_argument("--step", type=float, help="override per-axis step (mm)")
+    common.add_argument("--json", action="store_true", help="machine-readable output")
+    common.add_argument("--verbose", action="store_true", help="per-candidate score lines")
+
+    sp = sub.add_parser("plan", parents=[common], help="diagnose errors + propose moves")
+    sp.add_argument("--no-apply", action="store_true", help=argparse.SUPPRESS)  # accepted, no-op
+
+    sp = sub.add_parser("run", parents=[common], help="search + apply best layout")
+    sp.add_argument("--no-apply", action="store_true", help="search but revert file at end")
+
+    sub.add_parser("apply", parents=[common], help="re-apply best layout from state")
+    sub.add_parser("restore", parents=[common], help="restore original .circuit.tsx")
+    sub.add_parser("status", parents=[common], help="current error count + classification")
+    return p
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+
+    try:
+        paths = resolve_module(args.module)
+        cfg_path = Path(args.config) if args.config else paths["config_path"]
+        cfg = load_config(cfg_path)
+        cfg = apply_overrides(cfg, args)
+
+        if args.command == "plan":
+            return cmd_plan(paths, cfg, args)
+        if args.command == "status":
+            return cmd_status(paths, cfg, args)
+        if args.command == "run":
+            return cmd_run(paths, cfg, args)
+        if args.command == "apply":
+            return cmd_apply(paths, cfg, args)
+        if args.command == "restore":
+            return cmd_restore(paths, cfg, args)
+        return EXIT_ERROR
+    except NudgeError as e:
+        print(f"nudge: error: {e}", file=sys.stderr)
+        return EXIT_ERROR
+    except KeyboardInterrupt:
+        print("nudge: interrupted", file=sys.stderr)
+        return 130
+
+
+if __name__ == "__main__":
+    sys.exit(main())
