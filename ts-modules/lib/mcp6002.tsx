@@ -17,7 +17,68 @@
  *   <MCP6002 name="U1" pcbX={0} pcbY={17.15} />
  *
  * Wire it with: .VDD -> VSUPPLY, .VSS -> GND, .IN1P/.IN2P -> VMID.
+ *
+ * FOOTPRINT: the land pattern below is the EXACT EasyEDA/JLCPCB footprint for
+ * C7377 (imported via `tsci import --jlcpcb --use-exact-footprint C7377`).
+ * It is defined explicitly because the generic "soic8" footprinter string
+ * does not match C7377 (copper IoU only ~0.756). The original KiCad used
+ * Package_SO:SOIC-8-1EP, but the real C7377 part has NO exposed pad, so the
+ * plain 8-pin pill land pattern is correct for assembly.
+ *
+ * NOTE on orientation: C7377's land pattern is inherently "portrait" (pin rows
+ * run along X). To leave the existing PCB layout untouched we define it here
+ * in the SAME left/right orientation the module layouts were built around
+ * (pins 1-4 down the -X side, pins 5-8 up the +X side) — tscircuit normalizes
+ * rotation when computing the supplier-footprint copper IoU, so this still
+ * matches the C7377 part for pick-and-place. The generic "soic8" pads were
+ * both the wrong size AND too short (0.6x1.0 @ +-2.15mm); these are the real
+ * C7377 pads (0.588x1.8 @ +-2.6mm).
  */
+const MCP6002_C7377_FOOTPRINT = () => (
+  <footprint>
+    {/* -X side (left): pins 1-4, 1.27mm pitch along Y */}
+    <smtpad shape="pill" portHints={["pin1"]} pcbX={-2.6} pcbY={1.905} width={1.8} height={0.588} radius={0.294} />
+    <smtpad shape="pill" portHints={["pin2"]} pcbX={-2.6} pcbY={0.635} width={1.8} height={0.588} radius={0.294} />
+    <smtpad shape="pill" portHints={["pin3"]} pcbX={-2.6} pcbY={-0.635} width={1.8} height={0.588} radius={0.294} />
+    <smtpad shape="pill" portHints={["pin4"]} pcbX={-2.6} pcbY={-1.905} width={1.8} height={0.588} radius={0.294} />
+    {/* +X side (right): pins 5-8, 1.27mm pitch along Y */}
+    <smtpad shape="pill" portHints={["pin5"]} pcbX={2.6} pcbY={-1.905} width={1.8} height={0.588} radius={0.294} />
+    <smtpad shape="pill" portHints={["pin6"]} pcbX={2.6} pcbY={-0.635} width={1.8} height={0.588} radius={0.294} />
+    <smtpad shape="pill" portHints={["pin7"]} pcbX={2.6} pcbY={0.635} width={1.8} height={0.588} radius={0.294} />
+    <smtpad shape="pill" portHints={["pin8"]} pcbX={2.6} pcbY={1.905} width={1.8} height={0.588} radius={0.294} />
+    {/* Pin-1 indicator (top-left) */}
+    <silkscreencircle pcbX={-2.2} pcbY={1.86} radius={0.15} />
+    {/* Body outline (rotated C7377 silk to match the left/right layout) */}
+    <silkscreenpath route={[{ x: -1.521409, y: -2.526208 }, { x: -1.521409, y: 2.526208 }]} />
+    <silkscreenpath route={[{ x: 1.521409, y: -2.526208 }, { x: 1.521409, y: 2.526208 }]} />
+    <silkscreenpath route={[{ x: -0.435381, y: -2.526208 }, { x: -1.521409, y: -2.526208 }]} />
+    <silkscreenpath route={[{ x: 0.448894, y: -2.526208 }, { x: 1.521409, y: -2.526208 }]} />
+    <silkscreenpath route={[{ x: -0.435381, y: -2.526208 }, { x: 0.448894, y: -2.526208 }]} />
+    <silkscreenpath route={[{ x: -1.521409, y: -2.06756 }, { x: -1.521409, y: -2.526208 }]} />
+    <silkscreenpath route={[{ x: -1.521409, y: -0.79756 }, { x: -1.521409, y: -1.74244 }]} />
+    <silkscreenpath route={[{ x: -1.521409, y: 0.47244 }, { x: -1.521409, y: -0.47244 }]} />
+    <silkscreenpath route={[{ x: -1.521409, y: 1.74244 }, { x: -1.521409, y: 0.79756 }]} />
+    <silkscreenpath route={[{ x: -1.521409, y: 2.526208 }, { x: -1.521409, y: 2.06756 }]} />
+    <silkscreenpath route={[{ x: 1.521409, y: 2.526208 }, { x: 1.521409, y: -2.526208 }]} />
+    <silkscreenpath route={[{ x: 1.521409, y: -2.06756 }, { x: 1.521409, y: -2.526208 }]} />
+    <silkscreenpath route={[{ x: 1.521409, y: -0.79756 }, { x: 1.521409, y: -1.74244 }]} />
+    <silkscreenpath route={[{ x: 1.521409, y: 0.47244 }, { x: 1.521409, y: -0.47244 }]} />
+    <silkscreenpath route={[{ x: 1.521409, y: 1.74244 }, { x: 1.521409, y: 0.79756 }]} />
+    <silkscreenpath route={[{ x: 1.521409, y: 2.526208 }, { x: 1.521409, y: 2.06756 }]} />
+    {/* Reference designator */}
+    <silkscreentext text="{NAME}" pcbX={4.2004} pcbY={0.0127} anchorAlignment="center" fontSize={1} />
+    {/* Courtyard */}
+    <courtyardoutline
+      outline={[
+        { x: -3.806, y: -2.7646 },
+        { x: 3.4504, y: -2.7646 },
+        { x: 3.4504, y: 2.79 },
+        { x: -3.806, y: 2.79 },
+        { x: -3.806, y: -2.7646 },
+      ]}
+    />
+  </footprint>
+);
 
 /** MCP6002-xSN — dual op-amp, SOIC-8 (one chip, like the KiCad originals). */
 export const MCP6002 = (props: {
@@ -29,7 +90,7 @@ export const MCP6002 = (props: {
 }) => (
   <chip
     name={props.name ?? "U1"}
-    footprint="soic8"
+    footprint={<MCP6002_C7377_FOOTPRINT />}
     supplierPartNumbers={{ jlcpcb: ["C7377"] }} // MCP6002T-I/SN, SOIC-8
     pinLabels={{
       pin1: "OUT1",
