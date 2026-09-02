@@ -9,6 +9,9 @@
  *   - 2 x 4mm plated mounting holes (3.2mm drill), top / bottom center
  *   - Silkscreen: NAME (top), BREAD/MODULAR (bottom-left), name + version
  *     (bottom-right), INPUT/OUTPUT edge labels
+ *   - Bus pin-function labels (MIDI / CV1 / ... per socket pin) via the
+ *     inputLabels / outputLabels props — the frame aligns them to the
+ *     actual connector pads so modules don't hand-place them
  *
  * Silkscreen text defaults to a 1mm font (pcbStyle.silkscreenFontSize) — the
  * same size the KiCad originals use for every reference designator and label,
@@ -24,6 +27,122 @@
  * board is centered at 0,0), so non-standard board sizes scale correctly.
  */
 import { BUS_PIN_COUNT, JLCPCB_FAB_BOARD_PROPS, POWER_PIN_COUNT } from "./constants";
+
+/** A bus pin-function label entry: a string, or a falsy value to skip the pin. */
+export type BusLabel = string | false | null | undefined;
+
+/** Bus connector pin pitch (1x05 header, 2.54mm). */
+const BUS_PITCH = 2.54;
+
+/** Silkscreen inset from a bus connector's center line to the label column. */
+const BUS_LABEL_INSET = 6.2;
+
+/** Horizontal extent + edge tick of the OUTPUT label separator dashes. */
+const BUS_DASH = { x1: 6.858, x2: 3.175, x3: 2.413 };
+
+/**
+ * Y of bus pin i (0-based) for a connector centered at railY — pin 1 at
+ * the top (the connectors are rotated -90°), pins descending at 2.54mm.
+ */
+const busPinY = (railY: number, i: number) => railY + ((BUS_PIN_COUNT - 1) / 2 - i) * BUS_PITCH;
+
+/**
+ * Render the per-pin function labels of a bus connector. Labels aligned to
+ * the actual pad positions (computed from the board geometry) instead of
+ * hand-copied KiCad coordinates — the frame owns placement so every module
+ * gets clean, consistent bus labeling.
+ *
+ * NOTE: written out as static slots (no Array.map) — same reason as the
+ * PowerRail traces: tscircuit elements + React keys don't mix well.
+ */
+const BusGroupLabel = (props: {
+  text: string;
+  x: number;
+  y: number;
+  rotation?: number;
+  side: "left" | "right";
+  halfW: number;
+  dashY?: number | null;
+}) => (
+  <>
+    <silkscreentext
+      text={props.text}
+      pcbX={props.x}
+      pcbY={props.y}
+      pcbRotation={props.rotation}
+      fontSize={1}
+    />
+    {/* Separator dashes between label groups (OUTPUT side only — the KiCad
+        originals flank the vertical label column with them) */}
+    {props.side === "right" && typeof props.dashY === "number" && (
+      <>
+        <silkscreenline
+          x1={props.halfW - BUS_DASH.x1}
+          y1={props.dashY}
+          x2={props.halfW - BUS_DASH.x2}
+          y2={props.dashY}
+          strokeWidth={0.1}
+        />
+        <silkscreenline
+          x1={props.halfW - BUS_DASH.x2}
+          y1={props.dashY}
+          x2={props.halfW - BUS_DASH.x3}
+          y2={props.dashY}
+          strokeWidth={0.1}
+        />
+      </>
+    )}
+  </>
+);
+
+const BusPinLabels = (props: {
+  labels: BusLabel[];
+  railY: number;
+  halfW: number;
+  side: "left" | "right";
+}) => {
+  // Group consecutive identical labels so shared functions (e.g. AUDIO on
+  // two pins) print once, centered between their pins — KiCad-style.
+  const groups: { text: string; first: number; last: number }[] = [];
+  props.labels.forEach((label, i) => {
+    if (!label) return;
+    const lastGroup = groups[groups.length - 1];
+    if (lastGroup && lastGroup.text === label) lastGroup.last = i;
+    else groups.push({ text: label, first: i, last: i });
+  });
+
+  const x =
+    props.side === "left" ? -(props.halfW - BUS_LABEL_INSET) : props.halfW - BUS_LABEL_INSET;
+  // Right-side labels are vertical (rotated 90°, KiCad-style) EXCEPT the top
+  // one, which prints horizontally — mirroring the INPUT side (e.g. MIDI).
+  const rotationFor = (isFirst: boolean) => (props.side === "right" && !isFirst ? 90 : undefined);
+  const groupY = (g: (typeof groups)[number]) =>
+    (busPinY(props.railY, g.first) + busPinY(props.railY, g.last)) / 2;
+  const dashY = (a?: (typeof groups)[number], b?: (typeof groups)[number]) =>
+    a && b ? (busPinY(props.railY, a.last) + busPinY(props.railY, b.first)) / 2 : null;
+
+  const [g0, g1, g2, g3, g4] = groups;
+
+  return (
+    <>
+      {g0 && (
+        <BusGroupLabel text={g0.text} x={x} y={groupY(g0)} rotation={rotationFor(true)} side={props.side} halfW={props.halfW} dashY={dashY(g0, g1)} />
+      )}
+      {g1 && (
+        <BusGroupLabel text={g1.text} x={x} y={groupY(g1)} rotation={rotationFor(false)} side={props.side} halfW={props.halfW} dashY={dashY(g1, g2)} />
+      )}
+      {g2 && (
+        <BusGroupLabel text={g2.text} x={x} y={groupY(g2)} rotation={rotationFor(false)} side={props.side} halfW={props.halfW} dashY={dashY(g2, g3)} />
+      )}
+      {g3 && (
+        <BusGroupLabel text={g3.text} x={x} y={groupY(g3)} rotation={rotationFor(false)} side={props.side} halfW={props.halfW} dashY={dashY(g3, g4)} />
+      )}
+      {g4 && (
+        <BusGroupLabel text={g4.text} x={x} y={groupY(g4)} rotation={rotationFor(false)} side={props.side} halfW={props.halfW} dashY={dashY(g4, groups[5])} />
+      )}
+    </>
+  );
+};
 
 export interface BreadModuleProps {
   /** Module name shown on the silkscreen (top center + bottom-right). */
@@ -46,6 +165,21 @@ export interface BreadModuleProps {
   edgeLabels?: boolean;
   /** Brand block (BREAD / MODULAR, bottom-left). Default: on. */
   brand?: boolean;
+  /**
+   * Pin-function labels for the INPUT1 bus (pins 1..5, top to bottom),
+   * e.g. ["MIDI","CV1","CV2","TX","U"]. Rendered horizontally, one per
+   * pin, aligned to the actual socket pads. Consecutive identical entries
+   * are grouped and the text is centered between their pins (like the
+   * KiCad originals). Use false/null/undefined to leave a pin unlabeled.
+   */
+  inputLabels?: BusLabel[];
+  /**
+   * Pin-function labels for the OUTPUT1 bus (pins 1..5, top to bottom),
+   * e.g. ["MIDI","AUDIO","AUDIO","GATE","GATE"]. The top label prints
+   * horizontally (like the INPUT side); the rest are vertical (rotated 90°
+   * like the KiCad originals) with a small separator dash between groups.
+   */
+  outputLabels?: BusLabel[];
   /** Autorouter effort level passed to the board (e.g. "10x" for dense
    *  layouts — higher effort places vias with proper clearances). */
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x";
@@ -151,6 +285,8 @@ export const BreadModule = (props: BreadModuleProps) => {
     mountingHoles = true,
     edgeLabels = true,
     brand = true,
+    inputLabels,
+    outputLabels,
   } = props;
 
   const halfW = width / 2;
@@ -223,6 +359,14 @@ export const BreadModule = (props: BreadModuleProps) => {
       {/* ---- Module specific circuitry ---- */}
       {props.children}
 
+      {/* ---- Bus pin-function labels (aligned to the connector pads) ---- */}
+      {inputLabels && leftConnector && (
+        <BusPinLabels labels={inputLabels} railY={railY} halfW={halfW} side="left" />
+      )}
+      {outputLabels && rightConnector && (
+        <BusPinLabels labels={outputLabels} railY={railY} halfW={halfW} side="right" />
+      )}
+
       {/* ---- Silkscreen ---- */}
       {showEdgeLabels && (
         <>
@@ -247,12 +391,14 @@ export const BreadModule = (props: BreadModuleProps) => {
         </>
       )}
 
-      {/* NAME: 2mm, below the power rails (matches the KiCad 2mm bold title) */}
+      {/* NAME: 2mm, below the power rails (matches the KiCad 2mm bold title).
+          Center-anchored on the board's vertical axis so any name is centered;
+          y sits ~1.2mm below the top-center mounting hole ring. */}
       <silkscreentext
         text={name}
-        pcbX={-4.445}
-        pcbY={halfH - 7}
-        anchorAlignment="bottom_left"
+        pcbX={0}
+        pcbY={halfH - 8.2}
+        anchorAlignment="bottom_center"
         fontSize={2}
       />
 

@@ -25,6 +25,7 @@
  * U2/SW1/LED in the middle, RV1 LOWPASS + power divider at the bottom.
  */
 import {
+  ATTINY1616,
   BreadModule,
   MCP6002,
   NET_GND,
@@ -34,112 +35,9 @@ import {
 } from "../../lib";
 
 /* ------------------------------------------------------------------ */
-/* U2 — ATtiny1616-M, VQFN-20 3x3mm P0.4mm EP 1.7x1.7mm                */
-/* (KiCad Package_DFN_QFN:VQFN-20-1EP_3x3mm_P0.4mm_EP1.7x1.7mm;        */
-/*  Microchip VQFN pad numbering: 1=PA2 ... 20=PA1, 21=EP=GND)         */
+/* U2 — ATtiny1616 lives in the shared lib (lib/attiny1616.tsx) so      */
+/* other modules can reuse the exact footprint + pin mapping.           */
 /* ------------------------------------------------------------------ */
-const VQFN20_ATtiny1616 = () => (
-  <footprint>
-    {/* Left side, pins 1-5 (0.4mm pitch, 0.8 x 0.2mm pads) */}
-    <smtpad shape="rect" portHints={["pin1"]} pcbX={-1.45} pcbY={0.8} width={0.8} height={0.2} />
-    <smtpad shape="rect" portHints={["pin2"]} pcbX={-1.45} pcbY={0.4} width={0.8} height={0.2} />
-    <smtpad shape="rect" portHints={["pin3"]} pcbX={-1.45} pcbY={0} width={0.8} height={0.2} />
-    <smtpad shape="rect" portHints={["pin4"]} pcbX={-1.45} pcbY={-0.4} width={0.8} height={0.2} />
-    <smtpad shape="rect" portHints={["pin5"]} pcbX={-1.45} pcbY={-0.8} width={0.8} height={0.2} />
-    {/* Bottom side, pins 6-10 */}
-    <smtpad shape="rect" portHints={["pin6"]} pcbX={-0.8} pcbY={-1.45} width={0.2} height={0.8} />
-    <smtpad shape="rect" portHints={["pin7"]} pcbX={-0.4} pcbY={-1.45} width={0.2} height={0.8} />
-    <smtpad shape="rect" portHints={["pin8"]} pcbX={0} pcbY={-1.45} width={0.2} height={0.8} />
-    <smtpad shape="rect" portHints={["pin9"]} pcbX={0.4} pcbY={-1.45} width={0.2} height={0.8} />
-    <smtpad shape="rect" portHints={["pin10"]} pcbX={0.8} pcbY={-1.45} width={0.2} height={0.8} />
-    {/* Right side, pins 11-15 */}
-    <smtpad shape="rect" portHints={["pin11"]} pcbX={1.45} pcbY={-0.8} width={0.8} height={0.2} />
-    <smtpad shape="rect" portHints={["pin12"]} pcbX={1.45} pcbY={-0.4} width={0.8} height={0.2} />
-    <smtpad shape="rect" portHints={["pin13"]} pcbX={1.45} pcbY={0} width={0.8} height={0.2} />
-    <smtpad shape="rect" portHints={["pin14"]} pcbX={1.45} pcbY={0.4} width={0.8} height={0.2} />
-    <smtpad shape="rect" portHints={["pin15"]} pcbX={1.45} pcbY={0.8} width={0.8} height={0.2} />
-    {/* Top side, pins 16-20 */}
-    <smtpad shape="rect" portHints={["pin16"]} pcbX={0.8} pcbY={1.45} width={0.2} height={0.8} />
-    <smtpad shape="rect" portHints={["pin17"]} pcbX={0.4} pcbY={1.45} width={0.2} height={0.8} />
-    <smtpad shape="rect" portHints={["pin18"]} pcbX={0} pcbY={1.45} width={0.2} height={0.8} />
-    <smtpad shape="rect" portHints={["pin19"]} pcbX={-0.4} pcbY={1.45} width={0.2} height={0.8} />
-    <smtpad shape="rect" portHints={["pin20"]} pcbX={-0.8} pcbY={1.45} width={0.2} height={0.8} />
-    {/* Exposed pad (pin 21) + via-in-pad. The EP is fenced in by the QFN
-        pads (0.2mm gaps — even a 0.15mm trace can't legally escape: a
-        mid-gap run leaves only ~0.09mm clearance), so — like a classic
-        QFN layout — GND drops through this via onto the bottom pour.
-        No PCB trace is declared to the EP. */}
-    <smtpad shape="rect" portHints={["pin21"]} pcbX={0} pcbY={0} width={1.7} height={1.7} />
-    <platedhole portHints={["pin21"]} pcbX={0} pcbY={0} holeDiameter="0.3mm" outerDiameter="0.5mm" />
-    {/* Corner silkscreen brackets + pin-1 mark (KiCad F.SilkS, 0.12mm) */}
-    <silkscreenline x1={1.61} y1={1.61} x2={1.61} y2={1.16} strokeWidth={0.12} />
-    <silkscreenline x1={1.16} y1={1.61} x2={1.61} y2={1.61} strokeWidth={0.12} />
-    {/* pin-1 corner (shorter brackets) */}
-    <silkscreenline x1={-1.16} y1={1.61} x2={-1.31} y2={1.61} strokeWidth={0.12} />
-    <silkscreenline x1={-1.61} y1={1.16} x2={-1.61} y2={1.37} strokeWidth={0.12} />
-    <silkscreenline x1={1.61} y1={-1.61} x2={1.61} y2={-1.16} strokeWidth={0.12} />
-    <silkscreenline x1={1.16} y1={-1.61} x2={1.61} y2={-1.61} strokeWidth={0.12} />
-    <silkscreenline x1={-1.16} y1={-1.61} x2={-1.61} y2={-1.61} strokeWidth={0.12} />
-    <silkscreenline x1={-1.61} y1={-1.61} x2={-1.61} y2={-1.16} strokeWidth={0.12} />
-    <courtyardrect pcbX={0} pcbY={0} width={4.2} height={4.2} />
-  </footprint>
-);
-
-const ATTINY1616 = (props: { schX?: number; schY?: number; pcbX: number; pcbY: number; pcbRotation?: number }) => (
-  <chip
-    name="U2"
-    footprint={<VQFN20_ATtiny1616 />}
-    /* 20MHz, 16kB Flash, 2kB SRAM (no LCSC part # in the original BOM) */
-    pinLabels={{
-      pin1: "PA2", // BUFF_CV2 in
-      pin2: "PA3", // unused
-      pin3: "GND",
-      pin4: "VCC",
-      pin5: "PA4", // MODE button in
-      pin6: "PA5", // LED out
-      pin7: "PA6", // audio PWM out
-      pin8: "PA7", // gate out
-      pin9: "PB5", // unused
-      pin10: "PB4", // unused
-      pin11: "PB3", // MIDI RX
-      pin12: "PB2", // MIDI TX
-      pin13: "PB1", // unused
-      pin14: "PB0", // unused
-      pin15: "PC0", // unused
-      pin16: "PC1", // unused
-      pin17: "PC2", // unused
-      pin18: "PC3", // unused
-      pin19: "PA0", // ~{RESET}/UPDI via R1
-      pin20: "PA1", // BUFF_CV1 in
-      pin21: "EP", // exposed pad -> GND
-    }}
-    pinAttributes={{
-      VCC: { requiresPower: true, providesPower: true },
-      GND: { requiresGround: true, providesGround: true },
-      PA3: { doNotConnect: true },
-      PB5: { doNotConnect: true },
-      PB4: { doNotConnect: true },
-      PB1: { doNotConnect: true },
-      PB0: { doNotConnect: true },
-      PC0: { doNotConnect: true },
-      PC1: { doNotConnect: true },
-      PC2: { doNotConnect: true },
-      PC3: { doNotConnect: true },
-    }}
-    schPinArrangement={{
-      leftSide: { direction: "top-to-bottom", pins: ["VCC", "GND", "EP", "PA0", "PA4", "PA5"] },
-      rightSide: {
-        direction: "top-to-bottom",
-        pins: ["PA2", "PA1", "PA6", "PA7", "PB3", "PB2", "PA3", "PB5", "PB4", "PB1", "PB0", "PC0", "PC1", "PC2", "PC3"],
-      },
-    }}
-    schX={props.schX}
-    schY={props.schY}
-    pcbX={props.pcbX}
-    pcbY={props.pcbY}
-    pcbRotation={props.pcbRotation}
-  />
-);
 
 /* ------------------------------------------------------------------ */
 /* SW1 — K2-1808SN-A4SW-01 SMD tact switch (BreadModular_MISC          */
@@ -162,9 +60,17 @@ const TactSwitchFootprint = () => (
 );
 
 export default () => (
-  <BreadModule name="8BIT" version="1.1.0" autorouterEffortLevel="100x">
+  <BreadModule
+    name="8BIT"
+    version="1.1.0"
+    autorouterEffortLevel="100x"
+    // Bus pin-function labels live in the frame now — it aligns them to the
+    // actual socket pads (grouped functions print centered between pins).
+    inputLabels={["MIDI", "CV1", "CV2", "TX", "U"]}
+    outputLabels={["MIDI", "AUDIO", "AUDIO", "GATE", "GATE"]}
+  >
     {/* ============ U2: ATtiny1616 MCU (VQFN-20, rotated 90° like KiCad) ============ */}
-    <ATTINY1616 schX={0} schY={0.5} pcbX={-3.5} pcbY={-7.83} pcbRotation={90} />
+    <ATTINY1616 name="U2" schX={0} schY={0.5} pcbX={-3.5} pcbY={-7.83} pcbRotation={90} />
 
     {/* ============ U1 / U3: MCP6002 dual op-amps ============ */}
     {/* U1 (right): A = audio out buffer, B = gate buffer */}
@@ -194,10 +100,12 @@ export default () => (
     <trace name="C4-gnd" from=".C4 > .pin2" to={NET_GND} width="0.3mm" />
 
     {/* ============ Audio out: PA6 -> RV1 -> C2 -> U1A follower -> R2 ============ */}
-    <RV09Pot name="RV1" resistance="50k" schX={3} schY={-4} pcbX={6.858} pcbY={-12.407} pinAttributes={{ pin2: { doNotConnect: true } }} />
+    {/* RV1 raised 1.4mm so the LOWPASS caption clears the GND rail pads;
+        C2 nudged 0.5mm left — micro-nudge sweep found this DRC-clean spot */}
+    <RV09Pot name="RV1" resistance="50k" label="LOWPASS" schX={3} schY={-4} pcbX={6.858} pcbY={-11.007} pinAttributes={{ pin2: { doNotConnect: true } }} />
     <trace name="U2-pa6-rv1" from=".U2 > .PA6" to=".RV1 > .pin1" />
     <trace name="RV1-wiper-u1a-in" from=".RV1 > .pin3" to="net.U1A_IN" />
-    <capacitor name="C2" capacitance="100nF" footprint="0402" schX={4.5} schY={-5.5} pcbX={-0.9} pcbY={-15.748} />
+    <capacitor name="C2" capacitance="100nF" footprint="0402" schX={4.5} schY={-5.5} pcbX={-1.4} pcbY={-15.748} />
     <trace name="C2-vmid" from=".C2 > .pin1" to={NET_VMID} width="0.3mm" />
     <trace name="C2-u1a-in" from=".C2 > .pin2" to="net.U1A_IN" />
     <trace name="U1-in1p" from=".U1 > .IN1P" to="net.U1A_IN" />
@@ -225,7 +133,9 @@ export default () => (
     <trace name="R7-cv1" from=".R7 > .pin2" to="net.CV1" />
     <trace name="U3-out1" from=".U3 > .OUT1" to="net.U3A_OUT" />
     <trace name="U3-in1m" from=".U3 > .IN1M" to="net.U3A_OUT" />
-    <RV09Pot name="RV2" resistance="1M" schX={-6} schY={-4} pcbX={-6.985} pcbY={4.1} />
+    {/* RV2/RV3 sit 1.5mm higher than the KiCad original so the CV1/CV2
+        captions (printed below the pin row) clear the pads + D1/R6 refs. */}
+    <RV09Pot name="RV2" resistance="1M" label="CV1" schX={-6} schY={-4} pcbX={-6.985} pcbY={5.6} />
     <trace name="RV2-u3a-out" from=".RV2 > .pin2" to="net.U3A_OUT" />
     <trace name="RV2-wiper-buffcv1" from=".RV2 > .pin3" to="net.BUFF_CV1" />
     <trace name="U2-pa1-buffcv1" from=".U2 > .PA1" to="net.BUFF_CV1" />
@@ -238,7 +148,7 @@ export default () => (
     <trace name="R8-cv2" from=".R8 > .pin2" to="net.CV2" />
     <trace name="U3-out2" from=".U3 > .OUT2" to="net.U3B_OUT" />
     <trace name="U3-in2m" from=".U3 > .IN2M" to="net.U3B_OUT" />
-    <RV09Pot name="RV3" resistance="1M" schX={-1.5} schY={-4} pcbX={6.985} pcbY={4.1} />
+    <RV09Pot name="RV3" resistance="1M" label="CV2" schX={-1.5} schY={-4} pcbX={6.985} pcbY={5.6} />
     <trace name="RV3-u3b-out" from=".RV3 > .pin2" to="net.U3B_OUT" />
     <trace name="RV3-wiper-buffcv2" from=".RV3 > .pin3" to="net.BUFF_CV2" />
     <trace name="U2-pa2-buffcv2" from=".U2 > .PA2" to="net.BUFF_CV2" />
@@ -252,7 +162,9 @@ export default () => (
 
     {/* ============ UPDI programming: INPUT1.5 -> R1 4.7k -> PA0 ============ */}
     <trace name="INPUT1-udpi" from=".INPUT1 > .pin5" to="net.UDPI" />
-    <resistor name="R1" resistance="4.7k" footprint="0402" schX={-4.5} schY={5.5} pcbX={-12.2} pcbY={10.5} />
+    {/* R1 moved up (10.5 -> 14.5): RV2's courtyard grew when the pot moved
+        up to make room for its CV1 caption */}
+    <resistor name="R1" resistance="4.7k" footprint="0402" schX={-4.5} schY={5.5} pcbX={-12.2} pcbY={14.5} />
     <trace name="R1-udpi" from=".R1 > .pin2" to="net.UDPI" />
     <trace name="R1-pa0" from=".R1 > .pin1" to=".U2 > .PA0" />
 
@@ -267,7 +179,16 @@ export default () => (
     <led name="D1" footprint="0603" schX={-1} schY={5.5} pcbX={-10.9475} pcbY={-5.08} />
     <trace name="D1-anode" from=".D1 > .anode" to="net.LED_A" />
     <trace name="D1-cathode" from=".D1 > .cathode" to=".R6 > .pin1" />
-    <resistor name="R6" resistance="330" footprint="0402" schX={0.5} schY={5.5} pcbX={-8.13} pcbY={-5.08} />
+    <resistor
+      name="R6"
+      resistance="330"
+      footprint="0402"
+      schX={0.5}
+      schY={5.5}
+      pcbX={-8.13}
+      pcbY={-5.08}
+      pcbStyle={{ silkscreenTextVisibility: "hidden" }}
+    />
     <trace name="R6-gnd" from=".R6 > .pin2" to={NET_GND} width="0.3mm" />
 
     {/* ============ Power to the op-amps + MCU ============ */}
@@ -288,25 +209,13 @@ export default () => (
     <copperpour name="GND-pour" connectsTo={NET_GND} layer="bottom" />
 
 
-    {/* ========= Bus pin-function labels (same spots as the KiCad board) ========= */}
-    {/* INPUT side: MIDI / CV1 / CV2 / TX / U (UPDI) — horizontal, 1mm font */}
-    <silkscreentext text="MIDI" pcbX={-9.779} pcbY={28.575} fontSize={1} />
-    <silkscreentext text="CV1" pcbX={-9.779} pcbY={26.035} fontSize={1} />
-    <silkscreentext text="CV2" pcbX={-9.779} pcbY={23.368} fontSize={1} />
-    <silkscreentext text="TX" pcbX={-9.779} pcbY={20.828} fontSize={1} />
-    <silkscreentext text="U" pcbX={-9.779} pcbY={18.288} fontSize={1} />
-    {/* OUTPUT side: MIDI horizontal; AUDIO / GATE vertical (rot 90 like KiCad) */}
-    <silkscreentext text="MIDI" pcbX={9.779} pcbY={28.448} fontSize={1} />
-    <silkscreentext text="AUDIO" pcbX={9.525} pcbY={25.4} pcbRotation={90} fontSize={1} />
-    <silkscreentext text="GATE" pcbX={9.652} pcbY={20.193} pcbRotation={90} fontSize={1} />
-    {/* Decorative dashes flanking the vertical labels (KiCad F.SilkS gr_lines) */}
-    <silkscreenline x1={8.382} y1={27.94} x2={12.065} y2={27.94} strokeWidth={0.1} />
-    <silkscreenline x1={8.382} y1={22.86} x2={12.065} y2={22.86} strokeWidth={0.1} />
-    <silkscreenline x1={12.065} y1={22.86} x2={12.827} y2={22.86} strokeWidth={0.1} />
-    {/* Knob + button labels (KiCad gr_text positions) */}
-    <silkscreentext text="CV1" pcbX={-6.985} pcbY={-3.175} fontSize={1} />
-    <silkscreentext text="CV2" pcbX={6.985} pcbY={-3.175} fontSize={1} />
-    <silkscreentext text="LOWPASS" pcbX={6.985} pcbY={-19.685} fontSize={1} />
-    <silkscreentext text="MODE" pcbX={-11.684} pcbY={-8.255} fontSize={1} />
+    {/* ========= Bus pin-function labels are placed by the frame
+         (inputLabels / outputLabels props above) ========= */}
+    {/* Knob + button labels (caption under each pot comes from RV09Pot's
+        label prop; MODE sits centered on top of the SW1 button) */}
+    <silkscreentext text="MODE" pcbX={-9.525} pcbY={-8.7} fontSize={1} />
+    {/* R6's auto-placed ref collides with RV2's CV1 caption — hide it and
+        print it to the right of the body instead */}
+    <silkscreentext text="R6" pcbX={-6.7} pcbY={-4.85} fontSize={1} />
   </BreadModule>
 );
