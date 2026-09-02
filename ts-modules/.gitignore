@@ -1,7 +1,3 @@
 node_modules/
 dist/
-# Keep the autorouter cache in git: it stores the auto-routed PCB traces keyed
-# by layout hash (routes:core@<version>:srj:<hash>). With it committed, fresh
-# clones / CI reuse the saved routes instead of re-running the autorouter.
-.tscircuit/*
-!.tscircuit/cache/
+.tscircuit/

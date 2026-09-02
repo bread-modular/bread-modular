@@ -129,25 +129,6 @@ Each build produces, inside `src/<module>/out/`:
 > appear in the BOM/PnP without a JLCPCB part # — delete those rows before
 > ordering assembly for a board with real parts.
 
-### Reusing the auto-routed board (`.tscircuit/cache`)
-
-`tsci build` runs the PCB autorouter and caches the routed traces in
-`ts-modules/.tscircuit/cache/`, keyed by `routes:core@<version>:srj:<hash>` of
-the layout (SimpleRouteJson). Because `out/` and `dist/` are gitignored, a
-fresh clone or CI machine would otherwise re-run the autorouter every build.
-
-To keep that work, the autorouter cache **is committed to git** (`ts-modules/.gitignore`
-tracks `.tscircuit/cache/` but still ignores the rest of `.tscircuit/`). On any clone/machine,
-building an *unchanged* layout hits the cache and reuses the saved traces instead of re-routing.
-
-Rules of thumb:
-
-- Commit your `.tscircuit/cache/` after a build so the routed board is preserved.
-- If you change a module's layout, its `srj` hash changes → a new cache entry is
-  generated (old ones stay in git but are ignored). Commit the new cache files.
-- To force a fresh route (e.g. after a tricky DRC hit), `rm -rf .tscircuit/cache/ && ./build.sh <module>`,
-  then commit the regenerated cache.
-
 ### Adding a new module
 
 1. `mkdir src/<name>` and create `src/<name>/<name>.circuit.tsx`
