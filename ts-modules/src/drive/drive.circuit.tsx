@@ -116,5 +116,36 @@ export default () => (
     <trace from=".OUTPUT1 > .pin3" to="net.AUDIO_OUT_DIRTY" />
     <trace from=".OUTPUT1 > .pin4" to="net.AUDIO_OUT_CLEAN" />
     <trace from=".OUTPUT1 > .pin5" to="net.AUDIO_OUT_CLEAN" />
+
+    {/* ========= Bus pin-function labels (same spots as the KiCad original) ========= */}
+    {/* INPUT side: pins 1-2 AUDIO, pins 3-5 MULT — rotated 90° like the KiCad board */}
+    <silkscreentext
+      text="AUDIO"
+      pcbX={-7.186}
+      pcbY={29.177}
+      fontSize={1}
+    />
+    <silkscreentext
+      text="MULT"
+      pcbX={-8.984}
+      pcbY={22.86}
+      pcbRotation={90}
+      fontSize={1}
+    />
+    {/* OUTPUT side: pins 1-3 DIRTY, pins 4-5 CLEAN ("CLEN" in the KiCad original) */}
+    <silkscreentext
+      text="DIRTY"
+      pcbX={8.415}
+      pcbY={26.67}
+      pcbRotation={90}
+      fontSize={1}
+    />
+    <silkscreentext
+      text="CLEN"
+      pcbX={8.415}
+      pcbY={20.193}
+      pcbRotation={90}
+      fontSize={1}
+    />
   </BreadModule>
 );

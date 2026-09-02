@@ -38,6 +38,24 @@ Every module starts from the same skeleton, `<BreadModule>`:
 | INPUT/OUTPUT edge labels | on | `edgeLabels={false}` |
 | BREAD/MODULAR brand block | on | `brand={false}` |
 
+Silkscreen conventions (matching the KiCad originals):
+
+- Global silkscreen font is **1 mm** (`pcbStyle.silkscreenFontSize` on the board) —
+  every auto reference designator and label shares one size, like KiCad.
+- **KiCad font**: `scripts/kicad-font/` contains the "KiCad Font: Sans" glyph
+  geometry, extracted from KiCad itself and patched into
+  `@tscircuit/alphabet` (the font tscircuit's gerber writer uses) — so the
+  fabricated silkscreen matches the KiCad originals letter-for-letter.
+  `build.sh` re-applies the patch (idempotent) before every build;
+  `npm install` re-applies it via the `postinstall` hook. To regenerate the
+  glyph data: `python3 scripts/kicad-font/extract-glyphs.py > kicad-alphabet.json`
+  (needs `pcbnew` python from KiCad).
+- Pot labels: `<RV09Pot>` prints the designator + resistance (e.g. `RV2 500k`)
+  inside the pot body, and an optional knob label (`label="GAIN"`) below the pins.
+- Add bus pin-function labels (e.g. `AUDIO` / `MULT` / `DIRTY` / `CLEN`) as
+  module-specific `<silkscreentext>` next to the connectors, rotated 90° where
+  the KiCad board has them vertical.
+
 A new module is then just:
 
 ```tsx
