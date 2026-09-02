@@ -123,11 +123,43 @@ Each build produces, inside `src/<module>/out/`:
 | `<m>_jlcpcb.zip` | **JLCPCB fabrication package** (gerbers, drill, plus `bom.csv` & `pick_and_place.csv` inside) |
 | `<m>-bom.csv` | BOM extracted for JLCPCB's separate BOM upload |
 | `<m>-pick-and-place.csv` | Placement (CPL) file for JLCPCB's assembly upload |
-| `circuit JSON + DRC` | From `tsci build` (in `src/<module>/dist/`) |
+| `circuit JSON + DRC` | From `tsci build` (in `dist/src/<module>/<module>/circuit.json`) |
 
 > Note: schematic-only `doNotPlace` parts (like the blank's R1/R2/C1/RV1/U2)
 > appear in the BOM/PnP without a JLCPCB part # — delete those rows before
 > ordering assembly for a board with real parts.
+
+### Reusing the auto-routed board
+
+`tsci build` re-runs the PCB autorouter every time, so `build.sh` keeps the routed
+board as a **git-tracked artifact** and only re-routes when the layout actually changes:
+
+- `src/<m>/<m>.routed.json` — the full routed circuit (PCB traces included)
+- `src/<m>/<m>.sig` — a placement + netlist signature
+
+`build.sh` builds to `dist/src/<m>/<m>/circuit.json`, then:
+
+- **Placement/netlist unchanged** → the saved routing (`pcb_trace` / `pcb_via`) is
+  **merged onto the freshly-eval'd circuit** and reused; only the fab outputs
+  (SVG / gerbers / BOM / CPL) are regenerated. **The autorouter does not run,**
+  and since the fresh eval supplies the current silkscreen/annotations, text
+  edits render correctly in the output.
+- **Placement / footprint / board-size / net changed** → the signature differs, so
+  `tsci build` re-routes and the `m.routed.json` + `m.sig` are refreshed.
+
+The signature deliberately **ignores silkscreen and schematic annotations**, so
+changes like editing a NAME/value text or a label reuse the same routed board
+instead of re-routing.
+
+To force a fresh route for a module, delete its artifact first:
+
+```bash
+rm -f src/<m>/<m>.routed.json src/<m>/<m>.sig
+./build.sh <m>
+```
+
+The end-to-end behaviour is covered by `test/e2e-routing-reuse.sh`
+(route → reuse → silkscreen-change reuse → placement-change re-route).
 
 ### Adding a new module
 
