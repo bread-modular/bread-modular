@@ -57,27 +57,31 @@ const PowerRail = (props: {
   y: number;
   schX: number;
   schY: number;
-}) => (
-  <>
-    <pinheader
-      name={props.name}
-      pinCount={POWER_PIN_COUNT}
-      pcbX={props.x}
-      pcbY={props.y}
-      pcbStyle={{ silkscreenTextVisibility: "hidden" }}
-      schX={props.schX}
-      schY={props.schY}
-    />
-    {Array.from({ length: POWER_PIN_COUNT }, (_, i) => (
-      <trace
-        key={`${props.name}-${i + 1}`}
-        from={`.${props.name} > .${i + 1}`}
-        to={props.net}
-        width="0.5mm"
+}) => {
+  // NOTE: traces are written out explicitly rather than Array.from(...).map() —
+  // passing `key` to a tscircuit <trace> triggers React's "`key` is not a prop"
+  // warning (the trace component reads props.key), while a React array without
+  // keys triggers "each child in a list should have a unique key". Static
+  // sibling elements avoid both. POWER_PIN_COUNT is fixed at 5 for this frame.
+  return (
+    <>
+      <pinheader
+        name={props.name}
+        pinCount={POWER_PIN_COUNT}
+        pcbX={props.x}
+        pcbY={props.y}
+        pcbStyle={{ silkscreenTextVisibility: "hidden" }}
+        schX={props.schX}
+        schY={props.schY}
       />
-    ))}
-  </>
-);
+      <trace name={`${props.name}-1`} from={`.${props.name} > .1`} to={props.net} width="0.5mm" />
+      <trace name={`${props.name}-2`} from={`.${props.name} > .2`} to={props.net} width="0.5mm" />
+      <trace name={`${props.name}-3`} from={`.${props.name} > .3`} to={props.net} width="0.5mm" />
+      <trace name={`${props.name}-4`} from={`.${props.name} > .4`} to={props.net} width="0.5mm" />
+      <trace name={`${props.name}-5`} from={`.${props.name} > .5`} to={props.net} width="0.5mm" />
+    </>
+  );
+};
 
 const BusConnector = (props: {
   name: string;

@@ -94,6 +94,11 @@ export const RV09Pot = (props: {
   schY?: number;
   pcbX: number;
   pcbY: number;
+  /**
+   * Optional per-pin attributes forwarded to the <potentiometer>, e.g.
+   * `{ pin1: { doNotConnect: true } }` to mark an intentionally-unused end.
+   */
+  pinAttributes?: Record<string, { doNotConnect?: boolean }>;
 }) => (
   <>
     <potentiometer
@@ -105,6 +110,7 @@ export const RV09Pot = (props: {
       schY={props.schY}
       pcbX={props.pcbX}
       pcbY={props.pcbY}
+      pinAttributes={props.pinAttributes}
     />
     {/* Designator + resistance value, inside the body (like KiCad) */}
     <silkscreentext

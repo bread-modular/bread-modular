@@ -41,6 +41,10 @@ export const MCP6002 = (props: {
       pin7: "OUT2",
       pin8: "VDD", // V+ (V_SUPPLY)
     }}
+    pinAttributes={{
+      VDD: { requiresPower: true, providesPower: true },
+      VSS: { requiresGround: true, providesGround: true },
+    }}
     schPinArrangement={{
       leftSide: { direction: "top-to-bottom", pins: ["OUT1", "IN1M", "IN1P", "VSS"] },
       rightSide: { direction: "bottom-to-top", pins: ["IN2P", "IN2M", "OUT2", "VDD"] },
