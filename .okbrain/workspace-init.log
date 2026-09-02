@@ -4,7 +4,7 @@
 ==> Skipping KiCad submodule: opt/Panelization.pretty
 ==> Build submodules to initialize:modules/16bit/code/16bit/lib/lfs
 ==> Copying local copy of 'modules/16bit/code/16bit/lib/lfs' from original repo (fast path)
-Cloning into '/home/arunoda/.okbrain/workspaces/bread-modular-kicad/023/modules/16bit/code/16bit/lib/lfs'...
+Cloning into '/home/arunoda/.okbrain/workspaces/bread-modular-kicad/024/modules/16bit/code/16bit/lib/lfs'...
 Submodule path 'modules/16bit/code/16bit/lib/lfs': checked out '8ed63b27be79ab59ee1cd15a950ddd64e7a602f7'
 ==> Installing npm modules...
 Found local node_modules cache, copying...
@@ -55,5 +55,10 @@ npm WARN   node_modules/circuit-json-to-gltf/node_modules/jscad-electronics
 npm WARN     jscad-electronics@"^0.0.146" from circuit-json-to-gltf@0.0.118
 npm WARN     node_modules/circuit-json-to-gltf
 
-up to date in 271ms
+> bread-modular-tscircuit@1.0.0 postinstall
+> node ../scripts/kicad-font/apply-kicad-font-patch.mjs .
+
+patched /home/arunoda/.okbrain/workspaces/bread-modular-kicad/024/ts-modules/node_modules/@tscircuit/alphabet/dist/index.js (83 KiCad glyphs)
+
+up to date in 902ms
 ==> Submodule initialization complete.

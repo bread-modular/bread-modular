@@ -81,7 +81,8 @@ export const RV09Footprint = () => (
  *     body outline, at the same offsets the KiCad RV09 footprints use
  *     (ref at +1.27mm above the origin, value 0.381mm below it).
  *   - Optional knob label (e.g. "GAIN", "OD1") printed below the pin row —
- *     1mm font, bottom-anchored, same offset the KiCad originals use.
+ *     1mm font, bottom-anchored, offset compensated for tscircuit's
+ *     bottom-anchor rendering so the ink lands where KiCad puts it.
  */
 export const RV09Pot = (props: {
   name: string;
@@ -122,7 +123,11 @@ export const RV09Pot = (props: {
       <silkscreentext
         text={props.label}
         pcbX={props.pcbX - 0.026}
-        pcbY={props.pcbY - 9.642}
+        // -8.956 (not KiCad's literal -9.642 offset): tscircuit renders
+        // bottom-anchored silkscreen text ~0.664*fontSize lower than KiCad's
+        // justify-bottom, so the anchor is raised 0.686mm to land the ink at
+        // the exact KiCad position (gap pin-row -> caption = 1.63mm).
+        pcbY={props.pcbY - 8.956}
         anchorAlignment="bottom_center"
         fontSize={1}
       />

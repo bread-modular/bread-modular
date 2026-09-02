@@ -147,5 +147,11 @@ export default () => (
       pcbRotation={90}
       fontSize={1}
     />
+    {/* Decorative dashes flanking the vertical labels (KiCad F.SilkS gr_lines,
+        0.1mm wide — converted from the KiCad board coordinates) */}
+    <silkscreenline x1={-9.017} y1={18.288} x2={-9.017} y2={20.828} strokeWidth={0.1} />
+    <silkscreenline x1={-9.017} y1={24.765} x2={-9.017} y2={27.432} strokeWidth={0.1} />
+    <silkscreenline x1={8.382} y1={23.368} x2={8.382} y2={24.638} strokeWidth={0.1} />
+    <silkscreenline x1={8.382} y1={28.702} x2={8.382} y2={29.972} strokeWidth={0.1} />
   </BreadModule>
 );
