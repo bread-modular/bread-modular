@@ -13,6 +13,11 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$DIR"
 export PATH="$DIR/node_modules/.bin:$PATH"
 
+# Apply the KiCad silkscreen-font patch to node_modules (idempotent; no-op if
+# already patched). tscircuit only ships its own stroke font, but the gerber
+# silkscreen must match the KiCad originals — see scripts/kicad-font/.
+node ../scripts/kicad-font/apply-kicad-font-patch.mjs . >/dev/null 2>&1 || true
+
 if [ $# -ge 1 ]; then
   MODULES="$*"
 else

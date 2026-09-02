@@ -8,7 +8,8 @@
     "build:blank": "./build.sh blank",
     "sch": "./build.sh blank",
     "pcb": "./build.sh blank",
-    "render": "./build.sh"
+    "render": "./build.sh",
+    "postinstall": "node ../scripts/kicad-font/apply-kicad-font-patch.mjs ."
   },
   "dependencies": {
     "bun": "^1.4.0",

@@ -75,8 +75,13 @@ export const RV09Footprint = () => (
 );
 
 /**
- * RV09 pot + a silkscreen knob label (e.g. "GAIN", "OD1") placed below the
- * pin row — same offset the KiCad originals use.
+ * RV09 pot + silkscreen labels, matching the KiCad originals:
+ *
+ *   - Reference (e.g. "RV2") + resistance ("500k") printed INSIDE the pot
+ *     body outline, at the same offsets the KiCad RV09 footprints use
+ *     (ref at +1.27mm above the origin, value 0.381mm below it).
+ *   - Optional knob label (e.g. "GAIN", "OD1") printed below the pin row —
+ *     1mm font, bottom-anchored, same offset the KiCad originals use.
  */
 export const RV09Pot = (props: {
   name: string;
@@ -100,12 +105,26 @@ export const RV09Pot = (props: {
       pcbX={props.pcbX}
       pcbY={props.pcbY}
     />
+    {/* Designator + resistance value, inside the body (like KiCad) */}
+    <silkscreentext
+      text={props.name}
+      pcbX={props.pcbX - 0.254}
+      pcbY={props.pcbY + 1.27}
+      fontSize={1}
+    />
+    <silkscreentext
+      text={props.resistance}
+      pcbX={props.pcbX - 0.127}
+      pcbY={props.pcbY - 0.381}
+      fontSize={1}
+    />
     {props.label && (
       <silkscreentext
         text={props.label}
-        pcbX={props.pcbX - 0.13}
-        pcbY={props.pcbY - 9.63}
-        fontSize={1.2}
+        pcbX={props.pcbX - 0.026}
+        pcbY={props.pcbY - 9.642}
+        anchorAlignment="bottom_center"
+        fontSize={1}
       />
     )}
   </>

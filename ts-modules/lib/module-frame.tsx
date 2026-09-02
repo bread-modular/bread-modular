@@ -10,6 +10,10 @@
  *   - Silkscreen: NAME (top), BREAD/MODULAR (bottom-left), name + version
  *     (bottom-right), INPUT/OUTPUT edge labels
  *
+ * Silkscreen text defaults to a 1mm font (pcbStyle.silkscreenFontSize) — the
+ * same size the KiCad originals use for every reference designator and label,
+ * so auto-placed refs (R1, C1, U1, D1...) and custom silkscreen text share
+ * one size instead of the footprinter per-footprint default.
  * Everything except the board can be turned off via props:
  *
  *   <BreadModule name="NAME" version="0.0.0">
@@ -120,7 +124,7 @@ export const BreadModule = (props: BreadModuleProps) => {
   const showEdgeLabels = edgeLabels && (leftConnector || rightConnector);
 
   return (
-    <board width={`${width}mm`} height={`${height}mm`}>
+    <board width={`${width}mm`} height={`${height}mm`} pcbStyle={{ silkscreenFontSize: 1 }}>
       {/* ---- Module bus connectors (left/right edges, vertical, pin 1 at top) ---- */}
       {leftConnector && (
         <BusConnector name="INPUT1" x={-connX} y={railY} schX={-6} schY={7} />
@@ -196,10 +200,10 @@ export const BreadModule = (props: BreadModuleProps) => {
         </>
       )}
 
-      {/* NAME: 2mm, below the power rails */}
+      {/* NAME: 2mm, below the power rails (matches the KiCad 2mm bold title) */}
       <silkscreentext
         text={name}
-        pcbX={-3.81}
+        pcbX={-4.445}
         pcbY={halfH - 8.128}
         anchorAlignment="bottom_left"
         fontSize={2}
