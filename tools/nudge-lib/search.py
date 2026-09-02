@@ -123,6 +123,11 @@ def run_search(
 ):
     """Run the nudge search and return a result dict.
 
+    `max_iters` is a hard cap on the TOTAL number of full autoroute builds
+    performed by the search (across all phases: scoped descent + fallback),
+    not merely the number of committed passes. `time_budget` is an independent
+    wall-clock cap checked before each build.
+
     Callbacks (supplied by the CLI):
       write(content_bytes)          write bytes to the .circuit.tsx file
       build_score()                 rm cache + tsci build + classify -> analysis
@@ -193,6 +198,9 @@ def run_search(
         nonlocal builds
         best_candidate = None  # (score, name, axis, delta, new_value, new_content, analysis)
         for (name, axis, delta) in moves:
+            if builds >= max_iters:
+                note(f"[search] build budget exhausted ({max_iters} builds) — stopping")
+                break
             if time.time() - start > time_budget:
                 note("[search] time budget exceeded (mid-pass)")
                 break
@@ -219,7 +227,7 @@ def run_search(
         return best_candidate
 
     # Phase 1: scoped (implicated) steepest descent.
-    while passes < max_scoped_passes and not is_solved(best_analysis["score"]):
+    while builds < max_iters and passes < max_scoped_passes and not is_solved(best_analysis["score"]):
         if time.time() - start > time_budget:
             note("[search] time budget exceeded")
             break
@@ -245,7 +253,7 @@ def run_search(
     # Phase 2 (fallback): if still not solved, one full-whitelist pass
     # (implicated first, then the rest) so the search can escape a scoped local
     # minimum where the true culprit is not directly implicated by the errors.
-    if not is_solved(best_analysis["score"]) and time.time() - start <= time_budget:
+    if not is_solved(best_analysis["score"]) and builds < max_iters and time.time() - start <= time_budget:
         moves = list(gen_candidate_moves(
             config, best_positions, best_analysis.get("implicated"), displacement, strategy, rng, full=True))
         note(f"[search] fallback: full-whitelist pass ({len(moves)} candidates)")

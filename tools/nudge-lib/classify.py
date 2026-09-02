@@ -11,11 +11,16 @@ the plan's classes. The lexicographic objective is:
 where
   - router_failed is 0/1 (a `pcb_autorouting_error` / `pcb_autorouting_skipped_*`
     sentinel means the autorouter bailed entirely),
-  - n_clearance counts CLEARANCE + PLACEMENT errors (the real placement target),
-  - n_incomplete counts `not_connected_error` (tie-break only).
+  - n_clearance counts CLEARANCE + PLACEMENT + UNKNOWN errors (the real placement
+    target; UNKNOWN is folded in so an unrecognized error type can never yield a
+    clean score),
+  - n_incomplete counts incomplete-routing errors (tie-break only:
+    `pcb_port_not_connected_error` / `pcb_trace_missing_error`).
 
-"0 DRC errors" == score == (0, 0, 0). `BROKEN` (`pcb_missing_footprint_error`)
-is a source bug, not a placement bug, and must short-circuit a run.
+"0 DRC errors" == score == (0, 0, 0) AND no `BROKEN` errors. `BROKEN` (e.g.
+`pcb_missing_footprint_error`, any `source_*`/`schematic_*` bug) is a source bug,
+not a placement bug, and must short-circuit a run. Unknown error types are never
+silently excluded — they are counted and fail closed.
 
 Stdlib only. Importable (no side effects) and runnable as a self-test:
     python3 classify.py <circuit.json>        # print the classification summary
@@ -32,6 +37,12 @@ import sys
 # Error-type -> class tables (plan section 6)
 # ---------------------------------------------------------------------------
 
+# Complete mapping of every `*_error` type in the installed circuit-json error
+# union (circuit-json@0.0.479 declares exactly 30), so the classifier never has
+# to guess. Any type NOT present here and not prefix-matched falls through to
+# "unknown", which `analyze()` folds into the score so it can never be reported
+# as solved. `check_coverage()` cross-checks this table against the schema.
+
 CLEARANCE = {
     "pcb_trace_error",
     "pcb_pad_trace_clearance_error",
@@ -41,24 +52,56 @@ CLEARANCE = {
 }
 
 PLACEMENT = {
-    "courtyard_overlap_error",
     "pcb_courtyard_overlap_error",
     "pcb_footprint_overlap_error",
-    "placement_error",
+    "pcb_placement_error",
+    "pcb_packing_error",                 # deprecated alias of pcb_placement_error
+    "pcb_panelization_placement_error",  # deprecated alias of pcb_packing_error
+    "pcb_component_outside_board_error",
+    "pcb_component_not_on_board_edge_error",
 }
 
 ROUTER_FAIL = {
     "pcb_autorouting_error",
-    "pcb_autorouting_skipped_trace_length_violations",
-    "pcb_autorouting_skipped_placement_errors",
 }
 
-INCOMPLETE = {"not_connected_error"}
+INCOMPLETE = {
+    "pcb_port_not_connected_error",
+    "pcb_trace_missing_error",
+    "pcb_port_not_matched_error",        # deprecated alias of pcb_trace_missing_error
+    "source_trace_not_connected_error",
+}
 
-BROKEN = {"pcb_missing_footprint_error"}
+BROKEN = {
+    "pcb_missing_footprint_error",
+    "circuit_json_footprint_load_error",
+    "external_footprint_load_error",
+    "pcb_component_invalid_layer_error",
+    "schematic_error",
+    "schematic_layout_error",
+    "source_component_misconfigured_error",
+    "source_failed_to_create_component_error",
+    "source_i2c_misconfigured_error",
+    "source_invalid_component_property_error",
+    "source_missing_property_error",
+    "source_pin_must_be_connected_error",
+    "simulation_unknown_experiment_error",
+}
 
-# `pcb_autorouting_skipped_*` is prefix-matched (there are several variants).
+# `pcb_autorouting_skipped_*` is prefix-matched (forward-compat: the installed
+# circuit-json@0.0.479 autorouter emits `pcb_autorouting_skipped_placement_errors_`
+# and `pcb_autorouting_skipped_trace_length_violations_` but they are not literal
+# members of the error union in this version).
 ROUTER_FAIL_PREFIX = "pcb_autorouting_skipped_"
+
+# Authoritative set of explicitly-mapped error types, used by check_coverage().
+KNOWN_ERROR_TYPES = frozenset(
+    CLEARANCE | PLACEMENT | ROUTER_FAIL | INCOMPLETE | BROKEN
+)
+AUTOROUTING_SKIPPED_TYPES = frozenset({
+    "pcb_autorouting_skipped_placement_errors_",
+    "pcb_autorouting_skipped_trace_length_violations_",
+})
 
 # A designator reference inside a DRC message looks like `.R6`, `.D3`, `.RV1`.
 # Lowercase `.pin6` / `.anode` / `.cathode` are port names and are excluded by
@@ -97,6 +140,7 @@ def build_indexes(elements):
         "source_trace": {},       # source_trace_id    -> {name, connected_source_port_ids}
         "pcb_trace": {},          # pcb_trace_id       -> source_trace_id
         "pcb_smtpad": {},         # pcb_smtpad_id      -> {pcb_component_id, pcb_port_id}
+        "pcb_plated_hole": {},    # pcb_plated_hole_id -> pcb_component_id
         "names": set(),           # all source_component names
     }
     for e in elements:
@@ -129,6 +173,8 @@ def build_indexes(elements):
                 "pcb_component_id": e.get("pcb_component_id"),
                 "pcb_port_id": e.get("pcb_port_id"),
             }
+        elif t == "pcb_plated_hole":
+            idx["pcb_plated_hole"][e.get("pcb_plated_hole_id")] = e.get("pcb_component_id")
     return idx
 
 
@@ -202,6 +248,13 @@ def extract_components(err, idx):
             pad = idx["pcb_smtpad"].get(sid)
             if pad:
                 n = _component_name(idx, pad.get("pcb_component_id"))
+                if n:
+                    names.add(n)
+    for field in ("pcb_plated_hole_ids", "pcb_plated_hole_id"):
+        for hid in _as_list(err.get(field)):
+            cid = idx["pcb_plated_hole"].get(hid)
+            if cid:
+                n = _component_name(idx, cid)
                 if n:
                     names.add(n)
 
@@ -293,7 +346,7 @@ def analyze(elements):
 
     score = (
         1 if classes["router_fail"] > 0 else 0,
-        classes["clearance"] + classes["placement"],
+        classes["clearance"] + classes["placement"] + classes["unknown"],
         classes["incomplete"],
     )
     return {
@@ -307,8 +360,32 @@ def analyze(elements):
     }
 
 
-def is_solved(score) -> bool:
-    return tuple(score) == (0, 0, 0)
+def is_solved(analysis) -> bool:
+    """Fail-closed solved check. Accepts an `analyze()` result dict or a bare
+    (router_failed, n_clearance, n_incomplete) score tuple.
+
+    True only when there are no router-fail, clearance, placement, incomplete,
+    OR unknown errors, and no `broken` (source-bug) errors. Unknown error types
+    are folded into the score's middle component by `analyze()`, so an unknown
+    type can never yield a clean score; `broken` is checked explicitly here.
+    """
+    if isinstance(analysis, dict):
+        return not analysis.get("broken") and tuple(analysis.get("score", (1, 0, 0))) == (0, 0, 0)
+    return tuple(analysis) == (0, 0, 0)
+
+
+def check_coverage():
+    """Return a list of error-type names that classify as unknown/None.
+
+    Empty list == every known error type maps to a real class. This is the
+    fail-loud self-check: if a new `*_error` type is added to the installed
+    circuit-json schema without a mapping here, it appears in this list.
+    """
+    problems = []
+    for t in sorted(KNOWN_ERROR_TYPES | AUTOROUTING_SKIPPED_TYPES):
+        if classify_type(t) in (None, "unknown"):
+            problems.append(t)
+    return problems
 
 
 # ---------------------------------------------------------------------------
@@ -339,29 +416,51 @@ def _self_test():
          "connected_source_port_ids": ["sp_D1_cathode", "sp_R6_pin1"]},
         {"type": "pcb_trace", "pcb_trace_id": "pt_1", "source_trace_id": "st_1"},
         {"type": "pcb_trace", "pcb_trace_id": "pt_2", "source_trace_id": "st_2"},
-        # errors
+        # errors — current circuit-json@0.0.479 types (not the obsolete names)
         {"type": "pcb_pad_trace_clearance_error", "pcb_trace_id": "pt_1",
          "message": "Pad ... and trace ... too close"},
         {"type": "pcb_trace_error", "pcb_port_ids": ["pp_D1_cathode"],
          "message": "trace overlaps pcb_smtpad pcb_port[.D1 > .cathode]"},
-        {"type": "not_connected_error", "message": "net U2-pa6-rv1 failed to route"},
+        {"type": "pcb_port_not_connected_error", "pcb_port_ids": ["pp_U2_pa6"],
+         "pcb_component_ids": ["pc_U2"], "message": "net U2-pa6-rv1 failed to route"},
+        {"type": "pcb_trace_missing_error", "source_trace_id": "st_2",
+         "message": "no pcb trace for net D1-cathode"},
         {"type": "pcb_autorouting_error", "message": "Unexpected numItems value: 0"},
         {"type": "pcb_missing_footprint_error", "message": "No footprint for .R6"},
+        {"type": "pcb_placement_error", "pcb_component_ids": ["pc_RV1"],
+         "message": "placement blocks routing"},
+        {"type": "pcb_component_outside_board_error", "pcb_component_id": "pc_D1",
+         "message": "component outside board"},
         {"type": "pcb_component_missing_courtyard_warning", "message": "ignored (warning)"},
     ]
     r = analyze(elems)
-    assert r["score"] == (1, 2, 1), r["score"]
+    assert r["score"] == (1, 4, 2), r["score"]
     assert r["broken"] is True
     assert r["classes"]["router_fail"] == 1
     assert r["classes"]["clearance"] == 2
-    assert r["classes"]["incomplete"] == 1
+    assert r["classes"]["placement"] == 2
+    assert r["classes"]["incomplete"] == 2
     assert r["classes"]["broken"] == 1
     assert r["classes"]["unknown"] == 0
     assert set(r["implicated"]) == {"U2", "RV1", "D1", "R6"}, r["implicated"]
+    assert is_solved(r) is False
+
+    # Fail-closed: an unrecognized *_error type must never be silently dropped
+    # or reported as a clean score.
+    unknown_r = analyze([{"type": "pcb_brand_new_error", "message": "unknown type"}])
+    assert unknown_r["classes"]["unknown"] == 1, unknown_r["classes"]
+    assert unknown_r["score"] == (0, 1, 0), unknown_r["score"]
+    assert is_solved(unknown_r) is False
+
+    # Coverage self-check: every known error type maps to a real class.
+    uncovered = check_coverage()
+    assert not uncovered, f"unmapped error types: {uncovered}"
+
     print("self-test PASSED")
     print("score =", r["score"], "| broken =", r["broken"])
     print("classes =", r["classes"])
     print("implicated =", r["implicated"])
+    print(f"coverage = {len(KNOWN_ERROR_TYPES)} + {len(AUTOROUTING_SKIPPED_TYPES)} types, all mapped")
 
 
 def main(argv):
@@ -379,7 +478,7 @@ def main(argv):
     print("classes   =", r["classes"])
     print("types     =", r["types"])
     print("implicated=", dict(sorted(r["implicated"].items())))
-    return 0 if is_solved(r["score"]) else 1
+    return 0 if is_solved(r) else 1
 
 
 if __name__ == "__main__":

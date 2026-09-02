@@ -66,6 +66,27 @@ def splice(content: bytes, positions: dict, name: str, axis: str, new_value: flo
     return content[: span["start"]] + new_raw + content[span["end"]:]
 
 
+def splice_many(content: bytes, positions: dict, edits) -> bytes:
+    """Apply multiple absolute-position edits in descending byte-offset order.
+
+    `edits` is an iterable of (name, axis, new_value) tuples. A splice changes
+    the file length only at and after its own offset, so applying edits from the
+    highest byte offset down to the lowest keeps every later (lower-offset) span
+    valid against the single `positions` snapshot — no re-location is needed and
+    there is no stale-span drift even when format_number() changes the token
+    width.
+    """
+    ordered = []
+    for name, axis, value in edits:
+        span = positions[name][axis]
+        ordered.append((span["start"], name, axis, value))
+    ordered.sort(key=lambda t: t[0], reverse=True)
+    out = content
+    for _, name, axis, value in ordered:
+        out = splice(out, positions, name, axis, value)
+    return out
+
+
 def nudge(content: bytes, positions: dict, name: str, axis: str, delta: float) -> bytes:
     """Apply a relative nudge (+/- step) to one axis of one component."""
     new_value = round(positions[name][axis]["value"] + delta, 4)
