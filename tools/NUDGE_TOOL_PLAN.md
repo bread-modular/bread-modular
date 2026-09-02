@@ -59,6 +59,11 @@ resolved through `source_component_id`. `pcb_smtpad` resolves via
 
 ### 2.3 Real error shapes (from tscircuit package + corpus)
 
+> Historical note: this table records the type names observed during ground-truth
+> gathering. Some (`not_connected_error`, `placement_error`, `courtyard_overlap_error`)
+> are **legacy names** no longer emitted by the installed `circuit-json@0.0.479`;
+> §6 is the authoritative, up-to-date mapping.
+
 | `type` | class | nudgeable | example message |
 |---|---|---|---|
 | `pcb_trace_error` | clearance/overlap | ✅ | `PCB trace trace[...] overlaps with pcb_smtpad "pcb_port[.D3 > .cathode]" (accidental contact)` |
@@ -263,19 +268,32 @@ source_trace:     id -> {name, connected_source_port_ids[]}
 pcb_trace:        id -> source_trace_id
 ```
 
-**Classifier** (map `type` → class):
+**Classifier** (map `type` → class). The mapping is complete for the installed
+circuit-json error union (circuit-json@0.0.479 declares exactly 30 `*_error`
+types) and is cross-checked against the schema by `classify.check_coverage()`:
 
 ```python
 CLEARANCE   = {"pcb_trace_error", "pcb_pad_trace_clearance_error",
                "pcb_pad_pad_clearance_error", "pcb_via_clearance_error",
                "pcb_via_trace_clearance_error"}
-PLACEMENT   = {"courtyard_overlap_error", "pcb_courtyard_overlap_error",
-               "pcb_footprint_overlap_error", "placement_error"}
-ROUTER_FAIL = {"pcb_autorouting_error", "pcb_autorouting_skipped_trace_length_violations",
-               "pcb_autorouting_skipped_placement_errors"}  # prefix-match "pcb_autorouting_skipped_"
-INCOMPLETE  = {"not_connected_error"}
-BROKEN      = {"pcb_missing_footprint_error"}
-# anything else with 'error' in type -> unknown (warn, don't count)
+PLACEMENT   = {"pcb_courtyard_overlap_error", "pcb_footprint_overlap_error",
+               "pcb_placement_error", "pcb_packing_error",
+               "pcb_panelization_placement_error",
+               "pcb_component_outside_board_error",
+               "pcb_component_not_on_board_edge_error"}
+ROUTER_FAIL = {"pcb_autorouting_error"}  # + prefix-match "pcb_autorouting_skipped_"
+INCOMPLETE  = {"pcb_port_not_connected_error", "pcb_trace_missing_error",
+               "pcb_port_not_matched_error", "source_trace_not_connected_error"}
+BROKEN      = {"pcb_missing_footprint_error", "circuit_json_footprint_load_error",
+               "external_footprint_load_error", "pcb_component_invalid_layer_error",
+               "schematic_error", "schematic_layout_error",
+               "source_component_misconfigured_error", "source_failed_to_create_component_error",
+               "source_i2c_misconfigured_error", "source_invalid_component_property_error",
+               "source_missing_property_error", "source_pin_must_be_connected_error",
+               "simulation_unknown_experiment_error"}
+# anything else with 'error' in type -> "unknown" — COUNTED and folded into the
+# score's clearance term, so an unrecognized error type can never report solved
+# (fail-closed). There is no silent exclusion.
 ```
 
 **Extract implicated component names** from each clearance/placement error, in
@@ -314,13 +332,16 @@ RV1 y  implicated by 1 clearance error
 
 ```
 score = (router_failed,  # 0/1 — a pcb_autorouting_error / *_skipped_* sentinel present
-         n_clearance,    # clearance + placement errors (the real target)
-         n_incomplete)   # not_connected_error count (tie-break only)
+         n_clearance,    # clearance + placement + UNKNOWN errors (the real target;
+                         # unknown is folded in so it can never yield a clean score)
+         n_incomplete)   # incomplete-routing count (tie-break only:
+                         # pcb_port_not_connected_error / pcb_trace_missing_error)
 ```
 
 "0 DRC errors" is **only** true when `router_failed == 0 and n_clearance == 0 and
-n_incomplete == 0`. `BROKEN` (`pcb_missing_footprint_error`) short-circuits the run
-with a hard error — nudging cannot fix it.
+n_incomplete == 0` **and** there are no `BROKEN` errors. `BROKEN` (e.g.
+`pcb_missing_footprint_error`, any `source_*`/`schematic_*` bug) short-circuits the
+run with a hard error — nudging cannot fix it.
 
 **Candidate set** for one iteration (greedy default):
 - Start from the components implicated by the current errors; if none are
@@ -350,7 +371,11 @@ iteration and keep the best — avoids the O(|components| × axes) build cost of
 exhaustive neighborhood.
 
 **Bounding:**
-- `--max-iters` (default 60) — hard cap on full autoroute builds.
+- `--max-iters` (default 60) — hard cap on the TOTAL number of full autoroute builds
+  performed by the search (across scoped descent **and** the grid/random fallback),
+  not merely the number of committed passes. The one-time baseline build and the
+  final confirmation build sit *outside* this cap, so a `run` may perform up to
+  `max-iters + 2` full builds in total.
 - `--time-budget` (default 900s) — wall-clock cap; checked before starting each
   new build. With ~60s builds, 900s ≈ 12–15 builds; document this explicitly so
   agents set a realistic budget.
@@ -373,30 +398,46 @@ exhaustive neighborhood.
 - **The `--routing-disabled` fast path cannot evaluate candidates** (verified: it
   emits zero `*_error` entries). Its only role is an optional pre-check that the
   source still evals before spending 60s on a full build.
-- Before a run, also `rm -f src/<m>/<m>.routed.json src/<m>/<m>.sig` so a stale
-  routing artifact never shadows the result if someone later invokes `build.sh`.
+- Before a run, `run` also busts the autorouter cache (`ts-modules/.tscircuit/cache`,
+  gitignored) so every candidate gets a fresh route. **`src/<m>/<m>.routed.json` and
+  `src/<m>/<m>.sig` are git-tracked routed-board artifacts owned by `build.sh` — the
+  nudge tool NEVER deletes or rewrites them.** `tsci build <entry>` (the only build
+  command the tool uses) does not read them, so they need not be touched at all.
+  Read-only commands (`plan`/`status`) do not bust the cache either: they build
+  read-only and must not mutate any build artifact, tracked or otherwise.
 
 ---
 
 ## 9. Safety, rollback & verification
 
-- **Backup:** on first mutation, copy `src/<m>/<m>.circuit.tsx` to a sibling
-  backup inside the repo-adjacent state dir `tools/nudge-state/<m>/original.tsx`
-  (gitignored), plus record its SHA-256. `restore` copies it back and verifies
-  the hash.
-- **State file:** `tools/nudge-state/<m>/state.json` records the original hash,
-  the best layout found (component → {pcbX,pcbY} delta), the best score, and the
-  run log. `apply` replays the best deltas; `restore` reverts to original.
+- **Backup:** `run` backs up the CURRENT content of `src/<m>/<m>.circuit.tsx` to
+  `tools/nudge-state/<m>/original.tsx` (gitignored) **on every run** (always
+  refreshed, never a stale first-mutation copy), and records its SHA-256. `restore`
+  copies it back and **rejects** the restore if the backup's hash no longer matches
+  the recorded `original_sha256` (stale/tampered backup). `apply` refuses to touch
+  any `neverMove` or non-whitelisted component name, and validates the current
+  source hash against the recorded `original_sha256`/`applied_sha256` before
+  splicing.
+- **Rollback:** the mutation in `run` is wrapped in `try/finally` with `SIGINT`/
+  `SIGTERM` handlers; on any failure path (exception, `KeyboardInterrupt`, signal,
+  non-zero exit) the source is restored byte-for-byte. `apply` splices multiple
+  coordinates in descending byte-offset order (via `edit.splice_many`) so a change
+  in token width can never drift a later span.
+- **State file:** `tools/nudge-state/<m>/state.json` records `original_sha256`,
+  `applied_sha256`, the best layout found (`best` holds **only whitelisted
+  components** — never `neverMove` names), the best score, `solved`, and the run
+  log. `apply` re-applies the recorded best layout (refusing unsolved/stale state);
+  `restore` reverts to the backup.
 - **Never leave the repo dirty:** the only tracked file that changes is
   `src/<m>/<m>.circuit.tsx`. `--no-apply` reverts it at the end; otherwise the
   tool leaves the *best* layout applied and reports the exact diff. `dist/`,
   `.tscircuit/`, and the state dir are all gitignored, so no build artifacts leak
   into `git status`.
-- **Verification:** after `run`, `status --module <m>` re-builds once and reports
-  the classified error table. "Verified DRC-clean" is asserted only when
-  `score == (0,0,0)` from a fresh full build. `run` exits non-zero if it cannot
-  reach zero within budget (so agents can detect failure instead of trusting a
-  "best so far").
+- **Verification:** before `run` declares success, it rebuilds the final applied
+  candidate at least once (a fresh full build) and only marks `solved` if that
+  confirmation build is also `score == (0,0,0)` (guards against a stale-cache false
+  clean). `run` exits non-zero if it cannot reach zero within budget (so agents can
+  detect failure instead of trusting a "best so far").
 - **Determinism:** a config change that reorders or re-scales candidates can
   change results; the run log in the state file records every candidate + score
   for reproducibility.

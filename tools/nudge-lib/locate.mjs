@@ -4,9 +4,10 @@
  *
  * Parses a `.circuit.tsx` file with the TypeScript compiler (resolved from
  * `ts-modules/node_modules`), walks the JSX tree, and for every element that
- * carries BOTH a string-literal `name` attribute and numeric-literal
- * `pcbX`/`pcbY` attributes it records the *numeric value* and the *byte span*
- * of the numeric token in the UTF-8 source.
+ * carries a string-literal `name` attribute and at least one numeric-literal
+ * `pcbX`/`pcbY` attribute it records the *numeric value* and the *byte span*
+ * of the numeric token in the UTF-8 source. Partial coordinates (only one of
+ * `pcbX`/`pcbY`) are recorded; duplicate names warn and keep the first.
  *
  * Byte spans (not UTF-16 offsets) are emitted so the Python editor can splice
  * `source_bytes[start:end]` directly — this keeps round-trips byte-identical
@@ -49,12 +50,19 @@ function byteOffset(utf16Index) {
 /** Return {value, raw, start, end} (byte offsets) for a numeric JSX expression. */
 function numericSpan(node) {
   if (!node) return null;
-  if (ts.isNumericLiteral(node) || ts.isPrefixUnaryExpression(node)) {
-    const start = node.getStart(sf);
-    const end = node.getEnd();
+  // Unwrap parenthesized expressions, e.g. pcbX={(-4.11)}.
+  let n = node;
+  while (n && ts.isParenthesizedExpression(n)) {
+    n = n.expression;
+  }
+  if (n && (ts.isNumericLiteral(n) || ts.isPrefixUnaryExpression(n))) {
+    const start = n.getStart(sf);
+    const end = n.getEnd();
     const raw = sourceText.slice(start, end);
     return {
-      value: Number.parseFloat(raw),
+      // Strip numeric separators (4_000 -> 4000) before parsing so a
+      // separator is never silently truncated by parseFloat.
+      value: Number.parseFloat(raw.replace(/_/g, "")),
       raw,
       start: byteOffset(start),
       end: byteOffset(end),
@@ -89,10 +97,24 @@ function visit(node) {
   if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
     const attrs = readAttributes(node);
     if (attrs.name && attrs.name.kind === "string") {
-      const x = attrs.pcbX ? numericSpan(attrs.pcbX.node) : null;
-      const y = attrs.pcbY ? numericSpan(attrs.pcbY.node) : null;
-      if (x && y) {
-        result[attrs.name.value] = { pcbX: x, pcbY: y };
+      const entry = {};
+      if (attrs.pcbX) {
+        const x = numericSpan(attrs.pcbX.node);
+        if (x) entry.pcbX = x;
+      }
+      if (attrs.pcbY) {
+        const y = numericSpan(attrs.pcbY.node);
+        if (y) entry.pcbY = y;
+      }
+      const name = attrs.name.value;
+      // Record a component if it carries at least one coordinate (partial
+      // coordinates are supported; the caller decides which axes to touch).
+      if (Object.keys(entry).length > 0) {
+        if (Object.prototype.hasOwnProperty.call(result, name)) {
+          console.error(`locate: warning: duplicate component name "${name}" — keeping first occurrence`);
+        } else {
+          result[name] = entry;
+        }
       }
     }
   }

@@ -33,8 +33,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
+import re
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -44,7 +47,7 @@ LIB = Path(__file__).resolve().parent / "nudge-lib"
 sys.path.insert(0, str(LIB))
 
 from classify import analyze, is_solved  # noqa: E402
-from edit import format_number, load_positions, splice  # noqa: E402
+from edit import format_number, load_positions, splice, splice_many  # noqa: E402
 import search  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -64,13 +67,29 @@ class NudgeError(Exception):
 # Paths & config
 # ---------------------------------------------------------------------------
 
-def resolve_module(module: str):
-    mod_dir = TS_MODULES / "src" / module
+# Bare names only — no path separators, no `..`, no absolute paths. `module` is
+# a directory name (no dots); `entry` is a filename (dots allowed for ".tsx").
+_MODULE_RE = re.compile(r"^[A-Za-z0-9_-]+$")
+_ENTRY_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
+
+
+def resolve_module(module: str, require_tsx: bool = True):
+    if not isinstance(module, str) or not _MODULE_RE.match(module):
+        raise NudgeError(
+            f"invalid --module {module!r}: must be a bare directory name "
+            f"(letters, digits, '-', '_') under ts-modules/src/")
+    src_root = (TS_MODULES / "src").resolve()
+    mod_dir = (TS_MODULES / "src" / module).resolve()
+    try:
+        mod_dir.relative_to(src_root)
+    except ValueError:
+        raise NudgeError(
+            f"--module {module!r} resolves outside ts-modules/src/ (symlink escape?)")
     tsx = mod_dir / f"{module}.circuit.tsx"
     config_path = mod_dir / f"{module}.nudge.json"
     dist_circuit = TS_MODULES / "dist" / "src" / module / module / "circuit.json"
     state_dir = STATE_ROOT / module
-    if not tsx.exists():
+    if require_tsx and not tsx.exists():
         raise NudgeError(f"no entry file {tsx} (expected src/<m>/<m>.circuit.tsx)")
     return {
         "module": module,
@@ -86,12 +105,85 @@ def load_config(config_path: Path):
     if not config_path.exists():
         raise NudgeError(f"no config file {config_path} — write the per-module whitelist first")
     cfg = json.loads(config_path.read_text())
+    cfg["entry"] = cfg.get("entry", f"{cfg.get('module', '?')}.circuit.tsx")
+    return cfg
+
+
+def _check_positive(v, what):
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        raise NudgeError(f"{what} must be a number, got {v!r}")
+    if not math.isfinite(v) or v <= 0:
+        raise NudgeError(f"{what} must be a finite positive number, got {v!r}")
+
+
+def _check_positive_int(v, what):
+    if isinstance(v, bool) or not isinstance(v, int):
+        raise NudgeError(f"{what} must be an integer, got {v!r}")
+    if v <= 0:
+        raise NudgeError(f"{what} must be a positive integer, got {v!r}")
+
+
+def _check_step(step, what):
+    if isinstance(step, dict):
+        for axis in ("x", "y"):
+            if axis in step:
+                _check_positive(step[axis], f"{what}.{axis}")
+    else:
+        _check_positive(step, what)
+
+
+def validate_config(cfg):
+    """Reject configs that could make the tool unsafe or non-deterministic."""
+    entry = cfg.get("entry", "")
+    if (not isinstance(entry, str) or not _ENTRY_RE.match(entry)
+            or ".." in entry or entry in (".", "..")):
+        raise NudgeError(
+            f"config `entry` {entry!r} must be a bare filename "
+            f"(no path separators, no '..')")
+
     components = cfg.get("components", {})
+    if not isinstance(components, dict):
+        raise NudgeError("config `components` must be an object")
     never = set(cfg.get("neverMove", []))
     overlap = set(components) & never
     if overlap:
         raise NudgeError(f"names in both `components` and `neverMove`: {sorted(overlap)}")
-    cfg["entry"] = cfg.get("entry", f"{cfg.get('module', '?')}.circuit.tsx")
+
+    for name, comp in components.items():
+        if not isinstance(comp, dict):
+            raise NudgeError(f"component {name!r} must be an object")
+        axes = comp.get("axes", ["x", "y"])
+        if (not isinstance(axes, list) or not axes
+                or any(a not in ("x", "y") for a in axes)):
+            raise NudgeError(f"component {name!r} `axes` must be a non-empty list of 'x'/'y'")
+        if len(set(axes)) != len(axes):
+            raise NudgeError(f"component {name!r} `axes` must not repeat an axis")
+        if "step" in comp:
+            _check_step(comp["step"], f"{name}.step")
+        if "range" in comp:
+            _check_positive(comp["range"], f"{name}.range")
+
+    step_defaults = cfg.get("stepDefaults")
+    if step_defaults is not None:
+        if not isinstance(step_defaults, dict):
+            raise NudgeError("config `stepDefaults` must be an object")
+        for axis, v in step_defaults.items():
+            if axis not in ("x", "y"):
+                raise NudgeError(f"config `stepDefaults` axis must be 'x'/'y', got {axis!r}")
+            _check_positive(v, f"stepDefaults.{axis}")
+
+    build = cfg.get("build", {})
+    if "timeoutSec" in build:
+        _check_positive(build["timeoutSec"], "build.timeoutSec")
+
+    search_cfg = cfg.get("search", {})
+    if "maxIterations" in search_cfg:
+        _check_positive_int(search_cfg["maxIterations"], "search.maxIterations")
+    if "timeBudgetSec" in search_cfg:
+        _check_positive(search_cfg["timeBudgetSec"], "search.timeBudgetSec")
+    if "randomK" in search_cfg:
+        _check_positive_int(search_cfg["randomK"], "search.randomK")
+
     return cfg
 
 
@@ -115,24 +207,34 @@ def apply_overrides(cfg, args):
 # Build + classify
 # ---------------------------------------------------------------------------
 
-def _bust_cache_and_artifacts(module: str):
+def _bust_cache(module: str):
+    """Remove the autorouter cache (gitignored) so `tsci build` re-routes fresh.
+
+    Deliberately does NOT touch `src/<m>/<m>.routed.json` / `<m>.sig`: those are
+    git-tracked routed-board artifacts owned by build.sh (not by this tool or by
+    `tsci build`), so deleting them corrupts the repo. The cache is the only
+    build artifact this tool owns.
+    """
     shutil.rmtree(TS_MODULES / ".tscircuit" / "cache", ignore_errors=True)
-    for suffix in (".routed.json", ".sig"):
-        f = TS_MODULES / "src" / module / f"{module}{suffix}"
-        if f.exists():
-            f.unlink()
 
 
-def build_and_classify(paths, cfg):
-    """rm cache + full `tsci build <entry>` + classify. Returns analysis dict."""
+def build_and_classify(paths, cfg, bust_cache: bool = False):
+    """Optionally rm cache + full `tsci build <entry>` + classify.
+
+    `bust_cache=True` is used only by `run` (which owns the cache and needs a
+    fresh autoroute per candidate). `plan`/`status` pass False so they never
+    mutate any build artifact, tracked or otherwise.
+    """
     module = paths["module"]
     entry = cfg.get("entry", f"{module}.circuit.tsx")
     timeout = cfg.get("build", {}).get("timeoutSec", 180)
 
-    _bust_cache_and_artifacts(module)
+    if bust_cache:
+        _bust_cache(module)
 
     env = os.environ.copy()
     env["PATH"] = str(TS_MODULES / "node_modules" / ".bin") + os.pathsep + env.get("PATH", "")
+    start_ts = time.time()
     try:
         proc = subprocess.run(
             ["tsci", "build", entry],
@@ -148,10 +250,15 @@ def build_and_classify(paths, cfg):
     if proc.returncode != 0:
         raise NudgeError(f"tsci build failed (rc={proc.returncode}):\n{proc.stderr[-2000:]}")
 
-    if not paths["dist_circuit"].exists():
-        raise NudgeError(f"build produced no circuit.json at {paths['dist_circuit']}")
+    dist = paths["dist_circuit"]
+    if not dist.exists():
+        raise NudgeError(f"build produced no circuit.json at {dist}")
+    # Freshness check: the build must have (re)written the circuit.json we read,
+    # otherwise we would classify a stale artifact and misreport the score.
+    if dist.stat().st_mtime < start_ts - 5:
+        raise NudgeError(f"circuit.json at {dist} is stale — build did not refresh it")
 
-    elements = json.loads(paths["dist_circuit"].read_text())
+    elements = json.loads(dist.read_text())
     return analyze(elements)
 
 
@@ -164,15 +271,19 @@ def _sha256(b: bytes) -> str:
 
 
 def ensure_backup(paths):
-    """Return (current_file_bytes, sha256_of_backup). Creates original.tsx on
-    first mutation; the backup's hash is what `restore` verifies against."""
+    """Back up the CURRENT file content and return (content, sha256).
+
+    Always refreshes `original.tsx` to the current bytes so the backup exactly
+    matches what this run starts from. This means `restore` returns to the
+    pre-run state (never a stale backup from an earlier, possibly-buggy run),
+    and `apply`/`restore` can verify hashes against the recorded state.
+    """
     state_dir = paths["state_dir"]
     state_dir.mkdir(parents=True, exist_ok=True)
     orig = state_dir / "original.tsx"
     content = paths["tsx"].read_bytes()
-    if not orig.exists():
-        orig.write_bytes(content)
-    return content, _sha256(orig.read_bytes())
+    orig.write_bytes(content)
+    return content, _sha256(content)
 
 
 def load_state(paths):
@@ -194,7 +305,7 @@ def write_state(paths, state):
 def _analysis_report(analysis):
     return {
         "score": list(analysis["score"]),
-        "solved": is_solved(analysis["score"]),
+        "solved": is_solved(analysis),
         "broken": analysis["broken"],
         "classes": analysis["classes"],
         "types": analysis["types"],
@@ -224,7 +335,7 @@ def cmd_plan(paths, cfg, args):
         print(json.dumps(report, indent=2))
     else:
         print(f"module: {paths['module']}")
-        print(f"score : {tuple(analysis['score'])}  solved={is_solved(analysis['score'])}")
+        print(f"score : {tuple(analysis['score'])}  solved={is_solved(analysis)}")
         print(f"classes: {analysis['classes']}")
         if analysis["broken"]:
             print("!! BROKEN build (pcb_missing_footprint_error) — source bug, not placement")
@@ -248,7 +359,7 @@ def cmd_status(paths, cfg, args):
         print(json.dumps(report, indent=2))
     else:
         print(f"module: {paths['module']}")
-        print(f"score : {tuple(analysis['score'])}  solved={is_solved(analysis['score'])}")
+        print(f"score : {tuple(analysis['score'])}  solved={is_solved(analysis)}")
         print(f"classes: {analysis['classes']}")
         if analysis["types"]:
             print("error types:")
@@ -256,7 +367,7 @@ def cmd_status(paths, cfg, args):
                 print(f"  {n:4d}  {t}")
         if state and state.get("score") is not None:
             print(f"best recorded score: {tuple(state['score'])}")
-    return EXIT_OK if is_solved(analysis["score"]) else EXIT_UNSOLVED
+    return EXIT_OK if is_solved(analysis) else EXIT_UNSOLVED
 
 
 # ---------------------------------------------------------------------------
@@ -271,19 +382,39 @@ def cmd_run(paths, cfg, args):
     original_content, original_sha = ensure_backup(paths)
     content, positions = load_positions(paths["tsx"])
 
-    # Verify every whitelisted component resolves in the source.
-    missing = [n for n in cfg.get("components", {}) if n not in positions]
+    whitelist = cfg.get("components", {})
+    # Verify every whitelisted component resolves in the source with every axis
+    # it is allowed to move (protects against partial coordinates in the TSX).
+    missing = [n for n in whitelist if n not in positions]
     if missing:
         raise NudgeError(f"whitelisted component(s) not found in source: {missing}")
+    bad_axes = []
+    for n, comp in whitelist.items():
+        for axis in comp.get("axes", ["x", "y"]):
+            pcb_axis = "pcbX" if axis == "x" else "pcbY"
+            if pcb_axis not in positions[n]:
+                bad_axes.append(f"{n}.{axis}")
+    if bad_axes:
+        raise NudgeError(f"whitelisted component(s) missing requested coordinates: {bad_axes}")
 
     def write(b: bytes):
         paths["tsx"].write_bytes(b)
 
     def build_score():
-        return build_and_classify(paths, cfg)
+        return build_and_classify(paths, cfg, bust_cache=True)
 
     def relocate():
         return load_positions(paths["tsx"])[1]
+
+    committed = False
+
+    def _on_signal(signum, frame):
+        raise KeyboardInterrupt
+
+    prev_handlers = {}
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        prev_handlers[sig] = signal.getsignal(sig)
+        signal.signal(sig, _on_signal)
 
     try:
         initial_analysis = build_score()
@@ -308,52 +439,75 @@ def cmd_run(paths, cfg, args):
         best_content = result["best_content"]
         best_analysis = result["best_analysis"]
         solved = result["solved"]
-    except BaseException:
-        # On any failure (build crash, interrupt), restore the original so the
-        # repo is never left with a half-applied candidate layout.
-        try:
-            paths["tsx"].write_bytes(original_content)
-        except Exception:
-            pass
-        raise
 
-    # The file currently holds best_content (the search committed it). Compute
-    # deltas vs the *pristine* backup (original.tsx), not the run-start file,
-    # so `apply`/`restore`/reporting always reflect the net displacement from
-    # the committed layout.
-    best_positions = load_positions(paths["tsx"])[1]
-    backup_positions = load_positions(paths["state_dir"] / "original.tsx")[1]
-    deltas = {}
-    for name in backup_positions:
-        if name not in best_positions:
-            continue
-        for axis in ("pcbX", "pcbY"):
-            o = backup_positions[name][axis]["value"]
-            b = best_positions[name][axis]["value"]
-            if round(b - o, 4) != 0.0:
-                deltas.setdefault(name, {})[axis] = round(b - o, 4)
+        # The file currently holds best_content (the search committed it). Compute
+        # deltas vs the pristine backup, restricted to the whitelist.
+        best_positions = load_positions(paths["tsx"])[1]
+        backup_positions = load_positions(paths["state_dir"] / "original.tsx")[1]
+        deltas = {}
+        for name in whitelist:
+            if name not in backup_positions or name not in best_positions:
+                continue
+            for axis in ("pcbX", "pcbY"):
+                if axis not in backup_positions[name] or axis not in best_positions[name]:
+                    continue
+                o = backup_positions[name][axis]["value"]
+                b = best_positions[name][axis]["value"]
+                if round(b - o, 4) != 0.0:
+                    deltas.setdefault(name, {})[axis] = round(b - o, 4)
 
-    applied = False
-    if solved and not args.no_apply:
-        write(best_content)  # already the committed layout; make it canonical
-        applied = True
-    else:
-        # solved --no-apply, or unsolved: never leave a partial/unsolved layout.
-        write(original_content)
         applied = False
+        if solved and not args.no_apply:
+            write(best_content)
+            # Verification: rebuild the final applied candidate at least once
+            # before declaring success (guards against a stale-cache false clean).
+            confirm = build_score()
+            if not is_solved(confirm):
+                solved = False
+                best_analysis = confirm
+                write(original_content)
+            else:
+                best_analysis = confirm
+                write(best_content)
+                applied = True
+        else:
+            # solved --no-apply, or unsolved: never leave a partial/unsolved layout.
+            write(original_content)
+
+        committed = True
+    finally:
+        for sig, h in prev_handlers.items():
+            signal.signal(sig, h)
+        if not committed:
+            # Restore the source byte-for-byte on ANY failure path: exception,
+            # KeyboardInterrupt, SIGINT/SIGTERM. Never leave the repo dirty.
+            try:
+                paths["tsx"].write_bytes(original_content)
+            except Exception:
+                pass
+
+    applied_sha = _sha256(paths["tsx"].read_bytes())
 
     # Persist state (best layout + score + log) for `apply` / `status`.
+    # `best` holds ONLY whitelisted components — never `neverMove` names.
     state = {
         "module": paths["module"],
         "original_sha256": original_sha,
+        "applied_sha256": applied_sha,
         "score": list(best_analysis["score"]),
+        "solved": solved,
         "strategy": strategy,
         "builds": result["builds"],
         "iterations": result["iterations"],
         "deltas": deltas,
         "best": {
-            name: {axis: best_positions[name][axis]["value"] for axis in ("pcbX", "pcbY")}
-            for name in best_positions
+            name: {
+                axis: best_positions[name][axis]["value"]
+                for axis in ("pcbX", "pcbY")
+                if axis in best_positions[name]
+            }
+            for name in whitelist
+            if name in best_positions
         },
         "applied": applied,
         "log": log,
@@ -403,16 +557,41 @@ def cmd_apply(paths, cfg, args):
     state = load_state(paths)
     if not state:
         raise NudgeError(f"no state file — run `nudge run --module {paths['module']}` first")
+    if not state.get("solved"):
+        raise NudgeError("state records an unsolved layout — refusing to apply; run `nudge run` first")
     best = state.get("best", {})
     if not best:
         raise NudgeError("state file has no recorded best layout")
 
+    # Validate the current source hash so we never splice onto an unknown base.
+    current_sha = _sha256(paths["tsx"].read_bytes())
+    known = {state.get("original_sha256"), state.get("applied_sha256")}
+    known.discard(None)
+    if known and current_sha not in known:
+        raise NudgeError(
+            "source file has changed since the run recorded it — "
+            "run `nudge restore` then `nudge apply`, or re-run `nudge run`")
+
+    # The whitelist is authoritative: never touch a `neverMove` or non-whitelisted
+    # component, even if a stale/hand-edited state file lists it.
+    whitelist = cfg.get("components", {})
+    never = set(cfg.get("neverMove", []))
+    for name in best:
+        if name in never:
+            raise NudgeError(f"state references neverMove component {name!r} — refusing to touch it")
+        if name not in whitelist:
+            raise NudgeError(f"state references non-whitelisted component {name!r} — refusing to touch it")
+
     content, positions = load_positions(paths["tsx"])
-    for name, axes in best.items():
+    for name in best:
         if name not in positions:
             raise NudgeError(f"state references component {name!r} not present in source")
-        for axis, value in axes.items():
-            content = splice(content, positions, name, axis, value)
+
+    # Splice in descending byte-offset order so earlier splices never invalidate
+    # the spans of later (lower-offset) edits, even when format_number() changes
+    # the token width.
+    edits = [(name, axis, value) for name, axes in best.items() for axis, value in axes.items()]
+    content = splice_many(content, positions, edits)
     paths["tsx"].write_bytes(content)
 
     out = {"module": paths["module"], "applied": True, "best": best}
@@ -423,27 +602,29 @@ def cmd_apply(paths, cfg, args):
     return EXIT_OK
 
 
-def cmd_restore(paths, cfg, args):
+def cmd_restore(paths, args):
     state_dir = paths["state_dir"]
     orig = state_dir / "original.tsx"
     if not orig.exists():
         raise NudgeError(f"no backup at {orig} — nothing to restore")
     orig_content = orig.read_bytes()
-    paths["tsx"].write_bytes(orig_content)
     digest = _sha256(orig_content)
 
     state = load_state(paths)
     expected = state.get("original_sha256") if state else None
-    verified = (expected is None) or (expected == digest)
+    if expected is not None and expected != digest:
+        raise NudgeError(
+            f"backup hash mismatch (backup {digest[:12]}… != recorded {expected[:12]}…) — "
+            f"refusing to restore a stale/tampered backup")
 
+    paths["tsx"].write_bytes(orig_content)
     out = {"module": paths["module"], "restored": True, "sha256": digest,
-           "hash_verified": verified}
+           "hash_verified": expected is not None}
     if args.json:
         print(json.dumps(out, indent=2))
     else:
-        print(f"restored {paths['tsx']} from backup (sha256 {digest[:12]}…"
-              f"{' — verified' if verified else ' — HASH MISMATCH!'})")
-    return EXIT_OK if verified else EXIT_ERROR
+        print(f"restored {paths['tsx']} from backup (sha256 {digest[:12]}… — verified)")
+    return EXIT_OK
 
 
 # ---------------------------------------------------------------------------
@@ -481,11 +662,24 @@ def build_parser():
 def main(argv=None):
     args = build_parser().parse_args(argv)
 
+    def _err(msg, code=EXIT_ERROR):
+        if args.json:
+            print(json.dumps({"ok": False, "error": msg}))
+        else:
+            print(f"nudge: error: {msg}", file=sys.stderr)
+        return code
+
     try:
+        # `restore` must work even with no config or a missing/broken source file.
+        if args.command == "restore":
+            paths = resolve_module(args.module, require_tsx=False)
+            return cmd_restore(paths, args)
+
         paths = resolve_module(args.module)
         cfg_path = Path(args.config) if args.config else paths["config_path"]
         cfg = load_config(cfg_path)
         cfg = apply_overrides(cfg, args)
+        validate_config(cfg)
 
         if args.command == "plan":
             return cmd_plan(paths, cfg, args)
@@ -495,15 +689,15 @@ def main(argv=None):
             return cmd_run(paths, cfg, args)
         if args.command == "apply":
             return cmd_apply(paths, cfg, args)
-        if args.command == "restore":
-            return cmd_restore(paths, cfg, args)
         return EXIT_ERROR
     except NudgeError as e:
-        print(f"nudge: error: {e}", file=sys.stderr)
-        return EXIT_ERROR
+        return _err(str(e))
+    except RuntimeError as e:
+        # search.run_search raises RuntimeError for a BROKEN build (a known,
+        # expected "cannot nudge" condition) — surface it as a clean CLI error.
+        return _err(str(e))
     except KeyboardInterrupt:
-        print("nudge: interrupted", file=sys.stderr)
-        return 130
+        return _err("interrupted", code=130)
 
 
 if __name__ == "__main__":
