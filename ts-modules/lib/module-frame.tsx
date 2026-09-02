@@ -46,9 +46,40 @@ export interface BreadModuleProps {
   edgeLabels?: boolean;
   /** Brand block (BREAD / MODULAR, bottom-left). Default: on. */
   brand?: boolean;
+  /** Autorouter effort level passed to the board (e.g. "10x" for dense
+   *  layouts — higher effort places vias with proper clearances). */
+  autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x";
+  /** Autorouter engine/preset passed to the board (e.g. "krt", "auto"). */
+  autorouter?: string;
   /** Module-specific circuitry (schematic + PCB) placed inside the board. */
   children?: React.ReactNode;
 }
+
+/**
+ * Power rail connector footprint (5x PTH, 2.54mm pitch, 1mm drills).
+ * Pads replicate tscircuit's auto pinheader exactly (1.5mm round, pin1
+ * square-marked) but WITHOUT an auto-generated 13.7mm-wide courtyard —
+ * the KiCad `BreadModular_MISC:Power_Connector` original has no F.CrtYd,
+ * so tight layouts (e.g. 8bit's RV1 next to the GND rail) don't trip the
+ * "courtyards overlap" placement check.
+ */
+const PowerRailFootprint = () => (
+  <footprint>
+    <platedhole
+      portHints={["pin1", "1"]}
+      pcbX={-5.08}
+      pcbY={0}
+      holeDiameter="1mm"
+      rectPad
+      rectPadWidth="1.5mm"
+      rectPadHeight="1.5mm"
+    />
+    <platedhole portHints={["pin2", "2"]} pcbX={-2.54} pcbY={0} holeDiameter="1mm" outerDiameter="1.5mm" />
+    <platedhole portHints={["pin3", "3"]} pcbX={0} pcbY={0} holeDiameter="1mm" outerDiameter="1.5mm" />
+    <platedhole portHints={["pin4", "4"]} pcbX={2.54} pcbY={0} holeDiameter="1mm" outerDiameter="1.5mm" />
+    <platedhole portHints={["pin5", "5"]} pcbX={5.08} pcbY={0} holeDiameter="1mm" outerDiameter="1.5mm" />
+  </footprint>
+);
 
 const PowerRail = (props: {
   name: string;
@@ -70,6 +101,7 @@ const PowerRail = (props: {
         pinCount={POWER_PIN_COUNT}
         doNotPlace
         bomDisabled
+        footprint={<PowerRailFootprint />}
         pcbX={props.x}
         pcbY={props.y}
         pcbStyle={{ silkscreenTextVisibility: "hidden" }}
@@ -137,6 +169,8 @@ export const BreadModule = (props: BreadModuleProps) => {
       height={`${height}mm`}
       pcbStyle={{ silkscreenFontSize: 1 }}
       {...JLCPCB_FAB_BOARD_PROPS}
+      {...(props.autorouterEffortLevel ? { autorouterEffortLevel: props.autorouterEffortLevel } : {})}
+      {...(props.autorouter ? { autorouter: props.autorouter } : {})}
     >
       {/* ---- Module bus connectors (left/right edges, vertical, pin 1 at top) ---- */}
       {leftConnector && (
