@@ -134,7 +134,7 @@ export const RV09Pot = (props: {
         // justify-bottom, so the anchor is raised 0.686mm to land the ink at
         // the exact KiCad position, then lowered ~0.35mm for a clear gap to
         // the pin-row pads above.
-        pcbY={props.pcbY - 9.3}
+        pcbY={props.pcbY - 8.8}
         anchorAlignment="bottom_center"
         fontSize={1}
       />
