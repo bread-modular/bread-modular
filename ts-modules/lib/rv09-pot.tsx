@@ -129,11 +129,12 @@ export const RV09Pot = (props: {
       <silkscreentext
         text={props.label}
         pcbX={props.pcbX - 0.026}
-        // -8.956 (not KiCad's literal -9.642 offset): tscircuit renders
+        // -9.3 (not KiCad's literal -9.642 offset): tscircuit renders
         // bottom-anchored silkscreen text ~0.664*fontSize lower than KiCad's
         // justify-bottom, so the anchor is raised 0.686mm to land the ink at
-        // the exact KiCad position (gap pin-row -> caption = 1.63mm).
-        pcbY={props.pcbY - 8.956}
+        // the exact KiCad position, then lowered ~0.35mm for a clear gap to
+        // the pin-row pads above.
+        pcbY={props.pcbY - 9.3}
         anchorAlignment="bottom_center"
         fontSize={1}
       />
