@@ -32,11 +32,29 @@ Every module starts from the same skeleton, `<BreadModule>`:
 |---|---|---|
 | Standard board 30.48 × 68.58 mm | on | `width` / `height` (mm) to resize |
 | Top/bottom power rails (`V_SUPPLY1`/`GND1`, 0.5mm copper bus) | on | `powerRails={false}` |
+| Power-rail guard keepouts (13.66 × 3.5mm band around each rail, both layers) | on | `powerRails={false}` |
 | Left/right bus connectors (`INPUT1`/`OUTPUT1`, 1×05 female) | on | `leftConnector={false}` / `rightConnector={false}` |
 | 4mm plated mounting holes (top/bottom center) | on | `mountingHoles={false}` |
 | `NAME` + version silkscreen | on | `name` / `version` props (empty `version` hides it) |
 | INPUT/OUTPUT edge labels | on | `edgeLabels={false}` |
 | BREAD/MODULAR brand block | on | `brand={false}` |
+
+**Power rails & guard keepouts** — each rail's 5 pins are bused by the frame
+with pre-routed `pcbStraightLine` traces (a straight 0.5mm copper chain through
+the pad centers) plus a single autorouted tap from the middle pin into the net.
+Each rail is wrapped in a `keepout` band (rail pads + ~1mm margin, both copper
+layers) so unrelated traces don't hug the rail / board edge. Two gotchas baked
+into this design (see `PowerRail` / `PowerRailKeepout` in `module-frame.tsx`):
+
+- The autorouter treats keepouts as hard obstacles for ALL traces —
+  `excludeRefs` only helps at DRC-check time, never at route time. That's why
+  the pin-to-pin bus is pre-routed: already-connected spanning-tree edges are
+  skipped by the router, so the rail connects *inside* its own band instead of
+  arcing over the keepout edge.
+- If a module has a part whose traces legitimately cross a band (e.g. a pot
+  just above the GND rail), allow it with
+  `railKeepoutExcludeRefs={{ bottom: ["RV1"] }}` — excluded refs' traces pass
+  DRC through the band (8bit uses this for RV1).
 
 Silkscreen conventions (matching the KiCad originals):
 

@@ -187,6 +187,13 @@ export interface BreadModuleProps {
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x";
   /** Autorouter engine/preset passed to the board (e.g. "krt", "auto"). */
   autorouter?: string;
+  /**
+   * Extra refs whose traces may cross the power-rail guard keepouts (each
+   * rail is wrapped in a 13.66 x 3.5mm keepout on both layers). Use for
+   * parts whose traces legitimately have to reach across a band, e.g.
+   * `{ bottom: ["RV1"] }` for a pot sitting just above the GND rail.
+   */
+  railKeepoutExcludeRefs?: { top?: string[]; bottom?: string[] };
   /** Module-specific circuitry (schematic + PCB) placed inside the board. */
   children?: React.ReactNode;
 }
@@ -226,10 +233,20 @@ const PowerRail = (props: {
   schY: number;
 }) => {
   // NOTE: traces are written out explicitly rather than Array.from(...).map() —
-  // passing `key` to a tscircuit <trace> triggers React's "`key` is not a prop"
+  // passing `key` to a tscircuit <trace> triggers React's "key is not a prop"
   // warning (the trace component reads props.key), while a React array without
   // keys triggers "each child in a list should have a unique key". Static
   // sibling elements avoid both. POWER_PIN_COUNT is fixed at 5 for this frame.
+  //
+  // The pins are bused with pcbStraightLine traces (a pre-routed 0.5mm copper
+  // chain straight through the pad centers) + ONE autorouted tap from the
+  // middle pin into the net. Keep it this way: the rail sits inside the guard
+  // keepout below, and the autorouter treats keepouts as hard obstacles for
+  // ALL traces (excludeRefs only helps at DRC time, not route time) — with
+  // plain per-pin net traces the router chains the pads by ugly "bumps"
+  // arcing over the keepout edge. Pre-routed traces are respected by the
+  // autorouter (already-connected spanning-tree edges are skipped), so the
+  // pin-to-pin bus stays inside the band where it belongs.
   return (
     <>
       <pinheader
@@ -244,14 +261,35 @@ const PowerRail = (props: {
         schX={props.schX}
         schY={props.schY}
       />
-      <trace name={`${props.name}-1`} from={`.${props.name} > .1`} to={props.net} width="0.5mm" />
-      <trace name={`${props.name}-2`} from={`.${props.name} > .2`} to={props.net} width="0.5mm" />
-      <trace name={`${props.name}-3`} from={`.${props.name} > .3`} to={props.net} width="0.5mm" />
-      <trace name={`${props.name}-4`} from={`.${props.name} > .4`} to={props.net} width="0.5mm" />
-      <trace name={`${props.name}-5`} from={`.${props.name} > .5`} to={props.net} width="0.5mm" />
+      <trace name={`${props.name}-1-2`} from={`.${props.name} > .1`} to={`.${props.name} > .2`} width="0.5mm" pcbStraightLine />
+      <trace name={`${props.name}-2-3`} from={`.${props.name} > .2`} to={`.${props.name} > .3`} width="0.5mm" pcbStraightLine />
+      <trace name={`${props.name}-3-4`} from={`.${props.name} > .3`} to={`.${props.name} > .4`} width="0.5mm" pcbStraightLine />
+      <trace name={`${props.name}-4-5`} from={`.${props.name} > .4`} to={`.${props.name} > .5`} width="0.5mm" pcbStraightLine />
+      <trace name={`${props.name}-tap`} from={`.${props.name} > .3`} to={props.net} width="0.5mm" />
     </>
   );
 };
+
+/**
+ * Guard band around a power rail (both copper layers): the rail pads + ~1mm
+ * margin, so unrelated traces don't hug the rail / the module's board edge.
+ * `excludeRefs` lists components whose CONNECTED traces are still allowed
+ * through (tscircuit DRC skips keepout overlaps for traces touching pads of
+ * excluded refs) — the rail itself is always excluded.
+ */
+const PowerRailKeepout = (props: { name: string; y: number; excludeRefs?: string[] }) => (
+  <keepout
+    shape="rect"
+    pcbX={-1.27}
+    pcbY={props.y}
+    width={13.66}
+    height={3.5}
+    layers={["top", "bottom"]}
+    // NOTE: selectors need the "." prefix to match a ref NAME (a bare string
+    // would match the component TYPE, e.g. "pinheader").
+    excludeRefs={[`.${props.name}`, ...(props.excludeRefs ?? []).map((r) => (r.startsWith(".") ? r : `.${r}`))]}
+  />
+);
 
 const BusConnector = (props: {
   name: string;
@@ -289,6 +327,7 @@ export const BreadModule = (props: BreadModuleProps) => {
     brand = true,
     inputLabels,
     outputLabels,
+    railKeepoutExcludeRefs,
   } = props;
 
   const halfW = width / 2;
@@ -360,6 +399,15 @@ export const BreadModule = (props: BreadModuleProps) => {
 
       {/* ---- Module specific circuitry ---- */}
       {props.children}
+
+      {/* ---- Power-rail guard keepouts (rendered after children so any
+          module-supplied excludeRefs resolve against placed parts) ---- */}
+      {powerRails && (
+        <>
+          <PowerRailKeepout name="V_SUPPLY1" y={railY} excludeRefs={railKeepoutExcludeRefs?.top} />
+          <PowerRailKeepout name="GND1" y={gndY} excludeRefs={railKeepoutExcludeRefs?.bottom} />
+        </>
+      )}
 
       {/* ---- Bus pin-function labels (aligned to the connector pads) ---- */}
       {inputLabels && leftConnector && (
