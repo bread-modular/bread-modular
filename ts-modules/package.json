@@ -11,8 +11,6 @@
     "render": "./build.sh",
     "test:routing": "./test/e2e-routing-reuse.sh",
     "ui": "./ui.sh",
-    "silk": "./silkscreen-editor/silk.sh dev",
-    "silk:inventory": "./silkscreen-editor/silk.sh run inventory",
     "postinstall": "node ../scripts/kicad-font/apply-kicad-font-patch.mjs ."
   },
   "dependencies": {
