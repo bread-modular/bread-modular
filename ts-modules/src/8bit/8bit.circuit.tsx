@@ -107,9 +107,10 @@ export default () => (
     {/* ============ Audio out: PA6 -> RV1 -> C2 -> U1A follower -> R2 ============ */}
     {/* RV1 raised 1.4mm so the LOWPASS caption clears the GND rail pads;
         C2 nudged 0.5mm left — micro-nudge sweep found this DRC-clean spot */}
-    <RV09Pot name="RV1" resistance="50k" label="LOWPASS" schX={3} schY={-4} pcbX={6.858} pcbY={-11.007} pinAttributes={{ pin2: { doNotConnect: true } }} />
+    {/* KiCad pad roles: pad1=PA6 side, pad2=wiper -> U1A_IN, pad3 NC */}
+    <RV09Pot name="RV1" resistance="50k" label="LOWPASS" schX={3} schY={-4} pcbX={6.858} pcbY={-10.507} pinAttributes={{ pin3: { doNotConnect: true } }} />
     <trace name="U2-pa6-rv1" from=".U2 > .PA6" to=".RV1 > .pin1" />
-    <trace name="RV1-wiper-u1a-in" from=".RV1 > .pin3" to="net.U1A_IN" />
+    <trace name="RV1-wiper-u1a-in" from=".RV1 > .pin2" to="net.U1A_IN" />
     <capacitor
       name="C2"
       capacitance="100nF"
@@ -150,8 +151,10 @@ export default () => (
     {/* RV2/RV3 sit 1.5mm higher than the KiCad original so the CV1/CV2
         captions (printed below the pin row) clear the pads + D1/R6 refs. */}
     <RV09Pot name="RV2" resistance="1M" label="CV1" schX={-6} schY={-4} pcbX={-6.985} pcbY={5.6} />
-    <trace name="RV2-u3a-out" from=".RV2 > .pin2" to="net.U3A_OUT" />
-    <trace name="RV2-wiper-buffcv1" from=".RV2 > .pin3" to="net.BUFF_CV1" />
+    {/* KiCad pad roles: pad1=GND (attenuator cold end), pad2=wiper -> BUFF_CV1, pad3=U3A_OUT */}
+    <trace name="RV2-gnd" from=".RV2 > .pin1" to={NET_GND} width="0.3mm" />
+    <trace name="RV2-u3a-out" from=".RV2 > .pin3" to="net.U3A_OUT" />
+    <trace name="RV2-wiper-buffcv1" from=".RV2 > .pin2" to="net.BUFF_CV1" />
     <trace name="U2-pa1-buffcv1" from=".U2 > .PA1" to="net.BUFF_CV1" />
 
     {/* ============ CV2 chain: INPUT1.3 -> U3B follower -> RV3 -> PA2 ============ */}
@@ -163,8 +166,10 @@ export default () => (
     <trace name="U3-out2" from=".U3 > .OUT2" to="net.U3B_OUT" />
     <trace name="U3-in2m" from=".U3 > .IN2M" to="net.U3B_OUT" />
     <RV09Pot name="RV3" resistance="1M" label="CV2" schX={-1.5} schY={-4} pcbX={6.985} pcbY={5.6} />
-    <trace name="RV3-u3b-out" from=".RV3 > .pin2" to="net.U3B_OUT" />
-    <trace name="RV3-wiper-buffcv2" from=".RV3 > .pin3" to="net.BUFF_CV2" />
+    {/* KiCad pad roles: pad1=GND (attenuator cold end), pad2=wiper -> BUFF_CV2, pad3=U3B_OUT */}
+    <trace name="RV3-gnd" from=".RV3 > .pin1" to={NET_GND} width="0.3mm" />
+    <trace name="RV3-u3b-out" from=".RV3 > .pin3" to="net.U3B_OUT" />
+    <trace name="RV3-wiper-buffcv2" from=".RV3 > .pin2" to="net.BUFF_CV2" />
     <trace name="U2-pa2-buffcv2" from=".U2 > .PA2" to="net.BUFF_CV2" />
 
     {/* ============ MIDI in / THRU: bus pins 1, U2 PB3 (RX) / PB2 (TX) ============ */}
