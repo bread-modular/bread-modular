@@ -2,21 +2,204 @@
   "version": 1,
   "board": "8bit",
   "completed": [
-    "S1"
+    "S1",
+    "S2"
   ],
-  "blocked": null,
-  "blockedSections": [],
+  "blocked": "S2",
+  "blockedSections": [
+    "S1",
+    "S2"
+  ],
   "sections": {
     "S1": {
       "status": "done",
-      "ms": 64967,
+      "ms": 4606,
       "attempts": 1,
       "bisectDepth": 0,
-      "effort": 100,
+      "effort": 20,
       "timeoutMs": 600000,
       "deferredConns": [
-        "source_net_8"
+        "source_net_0"
       ]
+    },
+    "S2": {
+      "status": "blocked",
+      "ms": 600004,
+      "attempts": 1,
+      "bisectDepth": 0
     }
-  }
+  },
+  "finalDrc": {
+    "ok": false,
+    "errors": [
+      {
+        "type": "pcb_trace_error",
+        "message": "PCB trace trace[.INPUT1 > port.1, .U2 > port.pin11] is too close to trace[.U3 > port.pin4, .U1 > port.pin4] (gap: 0.126mm)",
+        "at": {
+          "x": -4.506931076955031,
+          "y": 8.39143107695503
+        }
+      },
+      {
+        "type": "pcb_trace_error",
+        "message": "PCB trace trace[.INPUT1 > port.1, .U2 > port.pin11] overlaps with pcb_smtpad \"pcb_port[.U2 > .PB2]\" (accidental contact)",
+        "at": {
+          "x": -2.6,
+          "y": -6.28
+        }
+      },
+      {
+        "type": "pcb_trace_error",
+        "message": "PCB trace trace[.INPUT1 > port.1, .U2 > port.pin11] overlaps with trace[.INPUT1 > port.4, .U2 > port.pin12] (accidental contact)",
+        "at": {
+          "x": -2.666,
+          "y": -6.2780000000000005
+        }
+      },
+      {
+        "type": "pcb_trace_error",
+        "message": "PCB trace trace[.U3 > port.pin6, .RV3 > port.3] overlaps with trace[.U3 > port.pin4, .U1 > port.pin4] (accidental contact)",
+        "at": {
+          "x": 5.219553927115342,
+          "y": 8.964233562107434
+        }
+      },
+      {
+        "type": "pcb_trace_error",
+        "message": "PCB trace trace[.U3 > port.pin6, .RV3 > port.3] overlaps with trace[.C3 > port.neg, .RV3 > port.1] (accidental contact)",
+        "at": {
+          "x": 5.860311772704841,
+          "y": 8.36524492637555
+        }
+      },
+      {
+        "type": "pcb_trace_error",
+        "message": "PCB trace trace[.U3 > port.pin6, .RV3 > port.3] is too close to trace[.U2 > port.pin8, .U1 > port.pin5] (gap: 0.136mm)",
+        "at": {
+          "x": 6.624779750713156,
+          "y": 5.996779750713156
+        }
+      },
+      {
+        "type": "pcb_trace_error",
+        "message": "PCB trace trace[.U3 > port.pin5, .INPUT1 > port.3] is too close to trace[.INPUT1 > port.4, .U2 > port.pin12] (gap: 0.040mm)",
+        "at": {
+          "x": -3.5862753282822517,
+          "y": 17.746701767433734
+        }
+      }
+    ]
+  },
+  "blockedRect": {
+    "minX": -14.4,
+    "maxX": 14.5,
+    "minY": 7.94,
+    "maxY": 26.13
+  },
+  "blockedConnections": [
+    "source_trace_11",
+    "source_trace_12",
+    "source_trace_22",
+    "source_net_2",
+    "source_trace_21",
+    "source_trace_23",
+    "source_trace_24",
+    "source_net_3",
+    "source_trace_25",
+    "source_trace_26",
+    "source_trace_27",
+    "source_net_4",
+    "source_trace_31",
+    "source_trace_32",
+    "source_trace_33",
+    "source_net_7",
+    "source_trace_5",
+    "source_trace_6",
+    "source_trace_7",
+    "source_trace_8",
+    "source_trace_9",
+    "source_trace_13",
+    "source_trace_15",
+    "source_trace_17",
+    "source_trace_19",
+    "source_trace_41",
+    "source_trace_51",
+    "source_trace_63",
+    "source_trace_69",
+    "source_trace_71",
+    "source_trace_73",
+    "source_trace_75",
+    "source_net_1",
+    "source_trace_66",
+    "source_trace_67",
+    "source_net_19",
+    "source_trace_68",
+    "source_trace_62",
+    "source_trace_20",
+    "source_trace_43",
+    "source_trace_44",
+    "source_net_11",
+    "source_trace_53",
+    "source_trace_54",
+    "source_net_14",
+    "source_trace_64",
+    "source_trace_65",
+    "source_net_18",
+    "source_trace_29",
+    "source_trace_30",
+    "source_net_6",
+    "source_trace_58",
+    "source_trace_59",
+    "source_net_16"
+  ],
+  "implicatedRefs": [
+    "source_net_0",
+    "source_net_5",
+    "source_net_8",
+    "source_net_9",
+    "source_net_10",
+    "source_net_12",
+    "source_net_13",
+    "source_net_15",
+    "source_net_16",
+    "source_net_17",
+    "source_trace_0",
+    "source_trace_1",
+    "source_trace_2",
+    "source_trace_3",
+    "source_trace_4",
+    "source_trace_10",
+    "source_trace_14",
+    "source_trace_16",
+    "source_trace_18",
+    "source_trace_37"
+  ],
+  "errorClass": "TIMEOUT",
+  "drcErrors": [
+    {
+      "type": "pcb_pad_trace_clearance_error",
+      "message": "Pad pcb_plated_hole[#pcb_plated_hole_30] and trace trace[.INPUT1 > port.4, .U2 > port.pin12] are too close (clearance: 0.126mm, minimum: 0.15mm)",
+      "at": {
+        "x": -7.265,
+        "y": 7.605
+      }
+    },
+    {
+      "type": "pcb_pad_trace_clearance_error",
+      "message": "Pad pcb_port[.U2 > .PA4] and trace trace[.R8 > port.anode, .U2 > port.pin4] are too close (clearance: 0.129mm, minimum: 0.15mm)",
+      "at": {
+        "x": -2.385,
+        "y": 2.0275000000000007
+      }
+    },
+    {
+      "type": "pcb_pad_trace_clearance_error",
+      "message": "Pad pcb_port[.U2 > .PA5] and trace trace[.R8 > port.anode, .U2 > port.pin4] are too close (clearance: 0.129mm, minimum: 0.15mm)",
+      "at": {
+        "x": -2.385,
+        "y": 2.0275000000000007
+      }
+    }
+  ],
+  "suggestion": "move components in S1 rect apart or widen the rect; see drcErrors"
 }
