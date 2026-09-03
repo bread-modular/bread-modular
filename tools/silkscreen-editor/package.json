@@ -1,0 +1,22 @@
+{
+  "name": "@bread-modular/silkscreen-editor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Silkscreen text editor for Bread Modular tscircuit PCBs (dev tool — renders board outline + silkscreen only, never routes)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5175 --strictPort",
+    "inventory": "bun server/inventory-cli.ts",
+    "typecheck": "tsc --noEmit || true"
+  },
+  "dependencies": {
+    "@tscircuit/eval": "file:../../ts-modules/node_modules/@tscircuit/eval",
+    "circuit-to-svg": "file:../../ts-modules/node_modules/circuit-to-svg",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "ts-morph": "^24.0.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
