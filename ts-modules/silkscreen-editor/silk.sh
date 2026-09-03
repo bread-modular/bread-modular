@@ -88,15 +88,17 @@ case "$CMD" in
       echo "usage: ./silk.sh dev <path-to.circuit.tsx>" >&2
       exit 2
     }
-    mapfile -t REST < <(strip_entry "$@")
-    exec bun run dev "${REST[@]}" ;;               # ./silk.sh dev <entry>
+    REST=()
+    while IFS= read -r line; do REST+=("$line"); done < <(strip_entry "$@")
+    exec bun run dev ${REST[@]+"${REST[@]}"} ;;               # ./silk.sh dev <entry>
   run)
     maybe_claim_entry "$@" || {
       echo "usage: ./silk.sh run <script> <path-to.circuit.tsx>" >&2
       exit 2
     }
-    mapfile -t REST < <(strip_entry "$@")
-    exec bun run "${REST[@]}" ;;                   # ./silk.sh run inventory <entry>
+    REST=()
+    while IFS= read -r line; do REST+=("$line"); done < <(strip_entry "$@")
+    exec bun run ${REST[@]+"${REST[@]}"} ;;                   # ./silk.sh run inventory <entry>
   install)
     exec bun install ;;
   "")
