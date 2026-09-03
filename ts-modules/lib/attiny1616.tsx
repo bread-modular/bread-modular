@@ -47,9 +47,11 @@ const VQFN20_ATtiny1616 = () => (
     {/* Corner silkscreen brackets + pin-1 mark (KiCad F.SilkS, 0.12mm) */}
     <silkscreenline x1={1.61} y1={1.61} x2={1.61} y2={1.16} strokeWidth={0.12} />
     <silkscreenline x1={1.16} y1={1.61} x2={1.61} y2={1.61} strokeWidth={0.12} />
-    {/* pin-1 corner (shorter brackets) */}
-    <silkscreenline x1={-1.16} y1={1.61} x2={-1.31} y2={1.61} strokeWidth={0.12} />
-    <silkscreenline x1={-1.61} y1={1.16} x2={-1.61} y2={1.37} strokeWidth={0.12} />
+    {/* pin-1 corner — bold filled dot (the old 0.12mm "shorter brackets" at the
+        top-left corner were far too thin/faint to read on the board). The filled
+        square renders as a solid G36/G37 region in the F_SilkScreen gerber. Pin 1
+        for this VQFN is the top-left, so the dot sits at that corner. */}
+    <silkscreenrect pcbX={-1.35} pcbY={1.35} width={0.5} height={0.5} filled />
     <silkscreenline x1={1.61} y1={-1.61} x2={1.61} y2={-1.16} strokeWidth={0.12} />
     <silkscreenline x1={1.16} y1={-1.61} x2={1.61} y2={-1.61} strokeWidth={0.12} />
     <silkscreenline x1={-1.16} y1={-1.61} x2={-1.61} y2={-1.61} strokeWidth={0.12} />

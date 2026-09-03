@@ -46,8 +46,12 @@ const MCP6002_C7377_FOOTPRINT = () => (
     <smtpad shape="pill" portHints={["pin6"]} pcbX={2.6} pcbY={-0.635} width={1.8} height={0.588} radius={0.294} />
     <smtpad shape="pill" portHints={["pin7"]} pcbX={2.6} pcbY={0.635} width={1.8} height={0.588} radius={0.294} />
     <smtpad shape="pill" portHints={["pin8"]} pcbX={2.6} pcbY={1.905} width={1.8} height={0.588} radius={0.294} />
-    {/* Pin-1 indicator (top-left) */}
-    <silkscreencircle pcbX={-2.2} pcbY={1.86} radius={0.15} />
+    {/* Pin-1 indicator (top-left) — bold filled dot.
+        NOTE: the old silkscreencircle (pcbX=-2.2 pcbY=1.86) sat ON the pin-1 pad
+        (pad spans y 1.611..2.199), so it was clipped by the mask/silk clip and never
+        printed. This filled square sits ABOVE pin 1 (off the pad) and renders as a
+        solid G36/G37 region in the F_SilkScreen gerber, so it's clearly visible. */}
+    <silkscreenrect pcbX={-2.6} pcbY={2.55} width={0.45} height={0.45} filled />
     {/* Body outline (rotated C7377 silk to match the left/right layout) */}
     <silkscreenpath route={[{ x: -1.521409, y: -2.526208 }, { x: -1.521409, y: 2.526208 }]} />
     <silkscreenpath route={[{ x: 1.521409, y: -2.526208 }, { x: 1.521409, y: 2.526208 }]} />
