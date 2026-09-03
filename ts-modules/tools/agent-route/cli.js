@@ -8,12 +8,14 @@
 //   agent-route run <board> ...                    OWNED BY ANOTHER CHAT (stub, exit 2)
 //   agent-route retry-section <board> S..          OWNED BY ANOTHER CHAT (stub, exit 2)
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { loadScanFromCircuitJson, runRoutingDisabledEval } from "./lib/scan.js";
 import { buildPlan, validatePlan, scorePlan } from "./lib/plan.js";
 import { sigForSection, verifySectionSig } from "./lib/sig.js";
 import {
   OVERLAP,
+  ROUTER_PARAMS,
   SRC_DIR,
   distCircuit,
   planPath,
@@ -26,6 +28,7 @@ import {
 const args = process.argv.slice(2);
 const jsonOut = args.includes("--json");
 const pos = args.filter((a) => !a.startsWith("--"));
+const DIR = dirname(fileURLToPath(import.meta.url));
 
 function emit(obj, text) {
   if (jsonOut) console.log(JSON.stringify(obj, null, 2));
@@ -114,6 +117,16 @@ function cmdPlanValidate(board) {
 }
 
 // --- status ---------------------------------------------------------------
+// Timing/params for a section live in status.json sections[id] (written by
+// `run`/`retry-section`); `status` verifies each sig with THAT invocation's
+// routerParams so a custom --effort/--timeout-ms run verifies as valid.
+function routerParamsFor(statusJson, id) {
+  const t = statusJson?.sections?.[id];
+  if (t && typeof t.effort === "number" && typeof t.timeoutMs === "number") {
+    return { ...ROUTER_PARAMS, effort: t.effort, timeoutMs: t.timeoutMs };
+  }
+  return ROUTER_PARAMS;
+}
 function cmdStatus(board) {
   let scan = null;
   try {
@@ -136,7 +149,7 @@ function cmdStatus(board) {
     for (const s of plan.sections) {
       const sigFile = join(sectionDir(board), `${s.id}.${s.name}.agent-route.sig`);
       const stored = existsSync(sigFile) ? readFileSync(sigFile, "utf8").trim() : null;
-      const v = verifySectionSig(scan, s, stored);
+      const v = verifySectionSig(scan, s, stored, { routerParams: routerParamsFor(statusJson, s.id) });
       const routeFile = join(sectionDir(board), `${s.id}.${s.name}.agent-route.json`);
       sigs[s.id] = {
         status: s.status,
@@ -236,8 +249,10 @@ else if (cmd === "plan") cmdPlan(needBoard());
 else if (cmd === "status") cmdStatus(needBoard());
 else if (cmd === "drc") await cmdDrc(needBoard());
 else if (cmd === "run" || cmd === "retry-section") {
-  const msg = `'${cmd}' is owned by another chat — not implemented yet`;
-  if (jsonOut) console.log(JSON.stringify({ ok: false, error: msg }));
-  else console.error(`error: ${msg}`);
-  process.exit(2);
+  // Owned by the routing chat (./run.js). Pass through the raw args after the
+  // command so flags/positionals keep their parsing in one place.
+  const { spawnSync } = await import("node:child_process");
+  const raw = process.argv.slice(2);
+  const r = spawnSync(process.execPath, [join(DIR, "run.js"), ...raw], { stdio: "inherit" });
+  process.exit(r.status ?? 2);
 } else fail(`unknown command '${cmd}' (try: plan, status, drc)`);

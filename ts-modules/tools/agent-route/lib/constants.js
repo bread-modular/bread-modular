@@ -27,6 +27,9 @@ export const VERSIONS = {
 
 export const PLAN_VERSION = 1;
 
+// Subcircuit id used by getSimpleRouteJsonFromCircuitJson (routing chat).
+export const SUBCIRCUIT_ID = "subcircuit_source_group_0";
+
 // Clearance defaults (mm). Rect = cluster bbox + MARGIN; adjacent rects
 // overlap by >= OVERLAP (>= 2x max trace pitch per design §4.2).
 export const MARGIN = 2.0;
@@ -36,6 +39,11 @@ export const ROUTER_PARAMS = {
   router: "capacity-autorouter",
   overlapMarginMm: OVERLAP,
   sectionMarginMm: MARGIN,
+  // Effort/timeout are the `run` invocation defaults. Runs that override them
+  // via --effort/--timeout-ms stamp the ACTUAL values into section sigs (and
+  // `status` must verify with those same values — see status.json sections[]).
+  effort: 10,
+  timeoutMs: 120000,
 };
 
 export const TSMODULES_DIR = tsModulesDir;
