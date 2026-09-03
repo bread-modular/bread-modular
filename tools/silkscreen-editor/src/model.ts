@@ -12,8 +12,8 @@ export type AnchorAlignment =
   | "bottom_left"
   | "bottom_center"
   | "bottom_right"
-  | "middle_left"
-  | "middle_right";
+  | "center_left"
+  | "center_right";
 
 export type SilkItem = {
   fingerprint: string;
@@ -42,6 +42,12 @@ export type SilkItem = {
   originY?: number;
   /** session-only: compiled text before local edits */
   originText?: string;
+  /** session-only: compiled rotation/anchor/fontSize before local edits */
+  originRotation?: number;
+  originAnchor?: AnchorAlignment;
+  originFontSize?: number;
+  /** session-only: compiled visibility before local edits (ghosts = true) */
+  originHidden?: boolean;
 };
 
 export function fingerprintOf(
@@ -86,8 +92,22 @@ export function ordinalOf(items: SilkItem[], item: SilkItem): number {
 /** snap a mm coordinate to the 0.05 mm editor grid (plan §4) */
 export const SNAP_MM = 0.05;
 export function snapMm(v: number): number {
-  return Math.round(v / SNAP_MM) * SNAP_MM;
+  // re-round to 3dp — 0.05-grid math accumulates float noise (e.g. -8.200000000000001)
+  return Math.round(Math.round(v / SNAP_MM) * SNAP_MM * 1000) / 1000;
 }
+
+/** the 9-point anchor alignment enum (tscircuit silkscreentext prop) */
+export const ANCHOR_OPTIONS: AnchorAlignment[] = [
+  "top_left",
+  "top_center",
+  "top_right",
+  "center_left",
+  "center",
+  "center_right",
+  "bottom_left",
+  "bottom_center",
+  "bottom_right",
+];
 
 /** drag/move delta vs the compiled position, snapped */
 export function movedTo(item: SilkItem, x: number, y: number): { x: number; y: number } {

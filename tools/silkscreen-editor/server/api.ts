@@ -84,29 +84,54 @@ function verifyOutcome(
         Math.abs(it.x - exp.x!) < tol &&
         Math.abs(it.y - exp.y!) < tol,
     );
-    if (matched) {
+    if (!matched) {
       return {
-        ok: true,
-        detail: `position confirmed (${matched.x.toFixed(3)}, ${matched.y.toFixed(3)})`,
-        matchedItem: matched,
+        ok: false,
+        detail: `no fresh item at (${exp.x!.toFixed(3)}, ${exp.y!.toFixed(3)}) for "${exp.text}"`,
       };
     }
-    return {
-      ok: false,
-      detail: `no fresh item at (${exp.x!.toFixed(3)}, ${exp.y!.toFixed(3)}) for "${exp.text}"`,
-    };
+    return verifyStyle(matched, exp);
   }
 
   if (exp.hidden === false) {
-    // show: un-hiding restores visibility; nothing to verify beyond compile ok
-    return { ok: true, detail: "show applied (compile ok)" };
+    // show: the text must be back in the fresh compile
+    const back = freshItems.find((it) =>
+      it.kind === exp.kind &&
+      it.text === exp.text &&
+      (exp.kind === "label" || it.ref === exp.ref),
+    );
+    if (!back) {
+      return { ok: false, detail: `text "${exp.text}" still absent after show` };
+    }
+    return { ok: true, detail: "confirmed present in fresh compile", matchedItem: back };
   }
 
-  // text-only edits etc: verify by text match
+  // text-only / style-only edits: verify by text match, then style fields
   const matched = freshItems.find((it) => sameOwner(it));
-  return matched
-    ? { ok: true, detail: "confirmed in fresh compile", matchedItem: matched }
-    : { ok: false, detail: `no fresh item matches "${exp.text}"` };
+  if (!matched) {
+    return { ok: false, detail: `no fresh item matches "${exp.text}"` };
+  }
+  return verifyStyle(matched, exp);
+}
+
+/** rotation/anchor/fontSize expectations against a fresh item (when set). */
+function verifyStyle(
+  it: any,
+  exp: NonNullable<EditOutcome["expect"]>,
+): { ok: boolean; detail: string; matchedItem?: any } {
+  const styleChecks: [string, number | string | undefined, number | string | undefined, number][] = [
+    ["rotation", exp.rotation, it.rotation, 0.01],
+    ["fontSize", exp.fontSize, it.fontSize, 0.001],
+  ];
+  for (const [name, want, got, tol] of styleChecks) {
+    if (want !== undefined && Math.abs(Number(got) - Number(want)) > tol) {
+      return { ok: false, detail: `${name} mismatch: expected ${want}, fresh compile has ${got}` };
+    }
+  }
+  if (exp.anchor !== undefined && it.anchor !== exp.anchor) {
+    return { ok: false, detail: `anchor mismatch: expected "${exp.anchor}", fresh compile has "${it.anchor}"` };
+  }
+  return { ok: true, detail: "confirmed in fresh compile", matchedItem: it };
 }
 
 /** per-module in-flight lock (edits mutate real source files) */
@@ -193,8 +218,23 @@ async function handleApply(req: any, res: any): Promise<void> {
         error: "ref edits require the owning component ref name",
       });
     }
-    if (e.ops?.hidden === undefined && e.ops?.x === undefined && e.ops?.y === undefined && e.ops?.text === undefined) {
+    if (e.ops?.hidden === undefined && e.ops?.x === undefined && e.ops?.y === undefined && e.ops?.text === undefined && e.ops?.rotation === undefined && e.ops?.anchor === undefined && e.ops?.fontSize === undefined) {
       return json(res, 400, { ok: false, error: "edit has no ops" });
+    }
+    if (e.ops?.rotation !== undefined && !Number.isFinite(Number(e.ops.rotation))) {
+      return json(res, 400, { ok: false, error: "ops.rotation must be a finite number (degrees)" });
+    }
+    if (e.ops?.fontSize !== undefined && !Number.isFinite(Number(e.ops.fontSize))) {
+      return json(res, 400, { ok: false, error: "ops.fontSize must be a finite number (mm)" });
+    }
+    if (e.ops?.anchor !== undefined) {
+      const anchors = new Set([
+        "center", "top_left", "top_center", "top_right",
+        "center_left", "center_right", "bottom_left", "bottom_center", "bottom_right",
+      ]);
+      if (typeof e.ops.anchor !== "string" || !anchors.has(e.ops.anchor)) {
+        return json(res, 400, { ok: false, error: `ops.anchor must be one of: ${[...anchors].join(", ")}` });
+      }
     }
   }
 

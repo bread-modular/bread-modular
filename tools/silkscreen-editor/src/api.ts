@@ -39,6 +39,9 @@ export type ApplyEdit = {
     y?: number;
     text?: string;
     hidden?: boolean;
+    rotation?: number;
+    anchor?: string;
+    fontSize?: number;
   };
   componentCenter?: { x: number; y: number };
   componentRotation?: number;
