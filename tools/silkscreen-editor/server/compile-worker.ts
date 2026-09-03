@@ -22,7 +22,7 @@
  * Protocol: argv --module <name> --out <result.json>. The parent reads the
  * result FILE (not stdout) so stray eval logs can never corrupt the payload.
  */
-import { writeFileSync } from "node:fs";
+import { writeFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
@@ -114,6 +114,10 @@ async function main() {
     center: boardElem?.center ?? { x: 0, y: 0 },
   };
 
+  // mtime snapshot — the /api/apply write-back refuses to save if the source
+  // changed on disk since this compile (plan §8 "Concurrent edits").
+  const entryMtimeMs = statSync(entry).mtimeMs;
+
   writeFileSync(
     outPath,
     JSON.stringify(
@@ -121,6 +125,8 @@ async function main() {
         ok: true,
         module: moduleName,
         entry,
+        sourcePath: entry,
+        entryMtimeMs,
         board,
         frameLabels,
         items,

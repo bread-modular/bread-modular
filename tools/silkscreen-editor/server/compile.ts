@@ -16,6 +16,10 @@ export type CompileResult = {
   error?: string;
   module?: string;
   entry?: string;
+  /** absolute path of the .circuit.tsx — shown in the UI before write-back */
+  sourcePath?: string;
+  /** source mtime at compile time; /api/apply refuses stale saves */
+  entryMtimeMs?: number;
   board?: { width: number; height: number; center: { x: number; y: number } };
   frameLabels?: {
     name?: string;
