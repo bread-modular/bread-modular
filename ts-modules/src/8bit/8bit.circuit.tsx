@@ -68,6 +68,9 @@ export default () => (
     // actual socket pads (grouped functions print centered between pins).
     inputLabels={["MIDI", "CV1", "CV2", "TX", "U"]}
     outputLabels={["MIDI", "AUDIO", "AUDIO", "GATE", "GATE"]}
+    // The frame wraps both power rails in guard keepouts; RV1 (LOWPASS) sits
+    // just above the bottom band, so its traces stay allowed to cross it.
+    railKeepoutExcludeRefs={{ bottom: ["RV1"] }}
   >
     {/* ============ U2: ATtiny1616 MCU (VQFN-20, rotated 90° like KiCad) ============ */}
     <ATTINY1616 name="U2" schX={0} schY={0.5} pcbX={-3.5} pcbY={-7.83} pcbRotation={90} />
@@ -78,7 +81,7 @@ export default () => (
         column); its ref designator is off (it printed over that column). */}
     <MCP6002 name="U1" schX={5.5} schY={2} pcbX={3.9} pcbY={17.145} showRef={false} />
     {/* U3 (left): A = CV1 buffer, B = CV2 buffer (ref designator off) */}
-    <MCP6002 name="U3" schX={-5.5} schY={2} pcbX={-4.11} pcbY={17.145} showRef={false} />
+    <MCP6002 name="U3" schX={-5.5} schY={2} pcbX={-3.71} pcbY={17.145} showRef={false} />
 
     {/* ============ Power: VMID divider (R4/R5) + decoupling ============ */}
     <resistor name="R4" resistance="1k" footprint="0402" schX={-3} schY={-6.5} pcbX={-5.709} pcbY={-17.526} />
@@ -154,7 +157,7 @@ export default () => (
     {/* ============ CV2 chain: INPUT1.3 -> U3B follower -> RV3 -> PA2 ============ */}
     <trace name="INPUT1-cv2" from=".INPUT1 > .pin3" to="net.CV2" />
     <trace name="U3-in2p" from=".U3 > .IN2P" to="net.CV2" />
-    <resistor name="R8" resistance="100k" footprint="0402" schX={-6.5} schY={4.5} pcbX={-0.76} pcbY={13.335} />
+    <resistor name="R8" resistance="100k" footprint="0402" schX={-6.5} schY={4.5} pcbX={-1.16} pcbY={13.335} />
     <trace name="R8-vsup" from=".R8 > .pin1" to={NET_VSUPPLY} width="0.3mm" />
     <trace name="R8-cv2" from=".R8 > .pin2" to="net.CV2" />
     <trace name="U3-out2" from=".U3 > .OUT2" to="net.U3B_OUT" />
@@ -227,22 +230,11 @@ export default () => (
     <trace name="OUTPUT1-gate-4" from=".OUTPUT1 > .pin4" to="net.GATE_OUT" />
     <trace name="OUTPUT1-gate-5" from=".OUTPUT1 > .pin5" to="net.GATE_OUT" />
 
-    {/* ============ Keep traces ~1mm clear of the bottom GND rail ============
-        The bottom power rail (GND1) sits at the bottom edge; the autorouter was
-        hugging it. Define a keepout band on BOTH layers around the rail pads +
-        1mm margin so unrelated traces don't run through it. Traces that must
-        reach the rail (net.GND fanout) are still routed by the autorouter. */}
-    <keepout
-      shape="rect"
-      pcbX={-1.27}
-      pcbY={-21.59}
-      width={13.66}
-      height={3.5}
-      layers={["top", "bottom"]}
-      excludeRefs={[".GND1", ".RV1"]}
-    />
-
-    {/* ============ Bottom-side GND pour (like a KiCad B.Cu GND zone) ============ */}
+    {/* ============ Guard bands around the power rails ============
+        Both rails are guarded by the frame now (PowerRailKeepout:
+        rail pads + 1mm margin on both layers, unrelated traces kept out,
+        rail's own pre-routed pin bus inside). The bottom GND band allows
+        RV1's traces through via railKeepoutExcludeRefs above. */}
     <copperpour name="GND-pour" connectsTo={NET_GND} layer="bottom" />
 
 
