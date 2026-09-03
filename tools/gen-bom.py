@@ -23,8 +23,12 @@ USAGE
   - <bom.csv>              the tscircuit-produced BOM (empty Footprint column)
   - <out-bom.csv>          optional output path (default: overwrite <bom.csv> in place)
 
-All other columns (Designator / Comment / Value / JLCPCB Part #) are preserved
-exactly as tscircuit produced them — only the Footprint column is filled.
+Besides the Footprint column, the Comment/Value of capacitors are corrected:
+tscircuit's BOM exporter re-derives the value through formatSiUnit(), which
+drops the 'F' unit and prints a micro sign (e.g. "100uF" -> "100µ", which
+mojibakes to "碌" in some viewers). This tool re-emits the exact
+display_capacitance string from the circuit. All other columns
+(Designator / Value / JLCPCB Part #) are otherwise preserved.
 
 The resolver produces KiCad-compatible names that match the original KiCad BOMs
 (modules/<name>/production/bom.csv).
@@ -132,6 +136,10 @@ def load_circuit(circuit_path):
                 "name": e.get("name", ""),
                 "ftype": e.get("ftype", ""),
                 "supplier_parts": parts,
+                # tscircuit's BOM exporter re-derives the value via formatSiUnit()
+                # (drops the 'F', prints a micro sign) so "100uF" becomes "100µ".
+                # The circuit still carries the exact display string — use it.
+                "display_capacitance": e.get("display_capacitance"),
             }
 
     # cad_component -> footprinter string (keyed by source_component_id)
@@ -149,6 +157,7 @@ def load_circuit(circuit_path):
             "ftype": info["ftype"],
             "footprinter_string": info.get("footprinter_string"),
             "supplier_parts": info["supplier_parts"],
+            "display_capacitance": info.get("display_capacitance"),
         }
     return by_name
 
@@ -193,11 +202,44 @@ def fill_footprints(circuit_path, bom_path, out_path=None):
             row[fp_idx] = footprint
             filled += 1
 
+    # Fix capacitor Comment/Value cells. tscircuit's BOM exporter emits the value
+    # through formatSiUnit(), which (a) drops the 'F' unit and (b) prints the
+    # micro sign 'µ' for sub-milli values — so "100uF" ends up as "100µ", which
+    # mojibakes (e.g. to "碌") in some viewers and is missing the unit. Re-emit
+    # the exact display_capacitance string from the circuit ("100uF") instead,
+    # matching the KiCad originals. Footprints / JLCPCB part numbers are untouched.
+    com_idx = header.index("Comment") if "Comment" in header else None
+    val_idx = header.index("Value") if "Value" in header else None
+    cap_fixed = 0
+    if com_idx is not None or val_idx is not None:
+        for row in rows[1:]:
+            if not row or not row[des_idx].strip():
+                continue
+            info = by_name.get(row[des_idx].strip())
+            if not info or info.get("ftype") != "simple_capacitor":
+                continue
+            disp = info.get("display_capacitance")
+            if not disp:
+                continue
+            wrote = False
+            for idx in (com_idx, val_idx):
+                if idx is None:
+                    continue
+                # Grow the row if the column index is past its end.
+                while len(row) <= idx:
+                    row.append("")
+                if row[idx].strip() != disp:
+                    row[idx] = disp
+                    wrote = True
+            if wrote:
+                cap_fixed += 1
+
     out = out_path or bom_path
     with open(out, "w", newline="", encoding="utf-8") as fh:
         csv.writer(fh).writerows(rows)
 
-    print(f"==> gen-bom: {filled}/{len(rows) - 1} Footprint cells filled -> {out}")
+    print(f"==> gen-bom: {filled}/{len(rows) - 1} Footprint cells filled, "
+          f"{cap_fixed} capacitor values corrected -> {out}")
     return 0
 
 
