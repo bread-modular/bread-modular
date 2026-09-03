@@ -218,9 +218,10 @@ export function BoardCanvas({
             const abs = isDragging
               ? mapper.mmToPx(drag!.curX, drag!.curY)
               : mapper.mmToPx(item.x, item.y);
-            // mmToPx is in svg-unit space scaled to the rendered width; the
-            // overlay covers exactly the svg box, so subtract its origin.
-            const px = { px: abs.px - svgBox.x, py: abs.py - svgBox.y };
+            // mmToPx is svg-element-relative and the overlay's origin is the
+            // svg element's origin (the overlay covers the svg box exactly),
+            // so no offset conversion is needed here.
+            const px = { px: abs.px, py: abs.py };
             const isSel = selected === item.fingerprint;
             const cls = [
               "handle",
@@ -293,8 +294,8 @@ export function BoardCanvas({
           {selectedItem && mapper && !drag && (
             <ItemPanel
               item={selectedItem}
-              px={mapper.mmToPx(selectedItem.x, selectedItem.y).px - svgBox.x}
-              py={mapper.mmToPx(selectedItem.x, selectedItem.y).py - svgBox.y}
+              px={mapper.mmToPx(selectedItem.x, selectedItem.y).px}
+              py={mapper.mmToPx(selectedItem.x, selectedItem.y).py}
               overlayW={svgBox.w}
               overlayH={svgBox.h}
               onClose={() => onSelect(null)}
