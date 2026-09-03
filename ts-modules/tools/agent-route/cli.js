@@ -5,8 +5,8 @@
 //   agent-route plan validate <board> [--json]     re-check a hand-edited plan
 //   agent-route status <board> [--json]            section states + sig validity + timings
 //   agent-route drc <board> [--json]               full-board runAllChecks gate
-//   agent-route run <board> ...                    OWNED BY ANOTHER CHAT (stub, exit 2)
-//   agent-route retry-section <board> S..          OWNED BY ANOTHER CHAT (stub, exit 2)
+//   agent-route run <board> ...                    route pending sections (./run.js, real)
+//   agent-route retry-section <board> S..          re-route one section (./run.js, real)
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -240,8 +240,9 @@ usage:
   agent-route plan validate <board> [--json]    re-check a hand-edited plan
   agent-route status <board> [--json]           section states + sig validity
   agent-route drc <board> [--json]              full-board DRC gate
-  agent-route run <board>                       (another chat owns it — stub)
-  agent-route retry-section <board> S..         (another chat owns it — stub)`);
+  agent-route run <board> [--keep-going] [--no-bisect] [--json]
+                          [--timeout-ms N] [--effort N] [--max-bisect-depth N]
+  agent-route retry-section <board> S.. [--json] [--timeout-ms N] [--effort N]`);
   process.exit(0);
 }
 if (cmd === "plan" && sub === "validate") cmdPlanValidate(needBoard());

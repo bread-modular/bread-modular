@@ -35,6 +35,7 @@ import {
   solveWithDeadline,
   stitchSrj,
   stripConnectivityErrors,
+  stripFarMissingConnections,
   summarizeDrc,
   toLockRecords,
 } from "./route-lib.js";
@@ -171,7 +172,12 @@ export async function retrySection(board, sectionId, opts = {}) {
   }
   const merged = mergeLockedRecords(fresh, [...lockedCircuitRecords, ...records]);
   const scoped = filterCircuitToRect(merged, section.rect, MARGIN);
-  const real = stripConnectivityErrors(await checks.runAllRoutingChecks(scoped));
+  const real = stripFarMissingConnections(
+    stripConnectivityErrors(await checks.runAllRoutingChecks(scoped)),
+    merged,
+    section.rect,
+    MARGIN,
+  );
   if (real.length > 0) {
     console.error(`DRC_CLEARANCE: ${real.length} DRC error(s) in retried ${sectionId} — last-good kept`);
     for (const e of summarizeDrc(real, 10)) console.error(`   - ${e.type}: ${e.message}`);

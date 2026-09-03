@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "board": "drive",
+  "completed": [
+    "S1",
+    "S3",
+    "S2"
+  ],
+  "blocked": null,
+  "blockedSections": [
+    "S2"
+  ],
+  "sections": {
+    "S1": {
+      "status": "done",
+      "ms": 497,
+      "attempts": 1,
+      "bisectDepth": 0,
+      "effort": 20,
+      "timeoutMs": 600000
+    },
+    "S2": {
+      "status": "done",
+      "ms": 20019,
+      "attempts": 1,
+      "bisectDepth": 0,
+      "effort": 20,
+      "timeoutMs": 600000
+    },
+    "S3": {
+      "status": "done",
+      "ms": 356,
+      "attempts": 1,
+      "bisectDepth": 0,
+      "effort": 20,
+      "timeoutMs": 600000
+    }
+  },
+  "blockedRect": {
+    "minX": -14.6,
+    "maxX": 13.43,
+    "minY": -8.856,
+    "maxY": 26.13
+  },
+  "blockedConnections": [
+    "source_trace_22",
+    "source_trace_23",
+    "source_trace_24",
+    "source_trace_25",
+    "source_trace_26",
+    "source_trace_27",
+    "source_trace_28",
+    "source_trace_30",
+    "source_trace_31",
+    "source_trace_32",
+    "source_trace_33",
+    "source_trace_36",
+    "source_trace_37",
+    "source_trace_40",
+    "source_trace_41",
+    "source_trace_43",
+    "source_trace_44",
+    "source_net_0",
+    "source_net_2",
+    "source_net_3",
+    "source_net_4",
+    "source_net_5",
+    "source_trace_0",
+    "source_trace_1",
+    "source_trace_2",
+    "source_trace_3",
+    "source_trace_4",
+    "source_trace_10",
+    "source_trace_14",
+    "source_trace_16",
+    "source_trace_20",
+    "source_trace_21",
+    "source_trace_47",
+    "source_trace_48",
+    "source_trace_49",
+    "source_trace_50",
+    "source_trace_42",
+    "source_trace_51",
+    "source_trace_52",
+    "source_trace_11",
+    "source_trace_12",
+    "source_trace_18",
+    "source_trace_19"
+  ],
+  "implicatedRefs": [
+    "source_trace_22",
+    "source_trace_23",
+    "source_trace_24",
+    "source_trace_25",
+    "source_trace_26",
+    "source_trace_27",
+    "source_trace_28",
+    "source_trace_30",
+    "source_trace_31",
+    "source_trace_32",
+    "source_trace_33",
+    "source_trace_36",
+    "source_trace_37",
+    "source_trace_40",
+    "source_trace_41",
+    "source_trace_43",
+    "source_trace_44",
+    "source_net_0",
+    "source_net_2",
+    "source_net_3"
+  ],
+  "errorClass": "DRC_CLEARANCE",
+  "drcErrors": [
+    {
+      "type": "pcb_trace_error",
+      "message": "PCB trace trace[.D6 > port.neg, .RV2 > port.3] overlaps with pcb_keepout \"pcb_keepout[#pcb_keepout_1]\" (accidental contact)",
+      "at": {
+        "x": -2.5999999999999996,
+        "y": -23.34
+      }
+    }
+  ],
+  "suggestion": "move components in S2 rect apart or widen the rect; see drcErrors",
+  "finalDrc": {
+    "ok": true,
+    "errors": []
+  },
+  "routedJson": "src/drive/drive.routed.json"
+}

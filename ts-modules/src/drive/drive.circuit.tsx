@@ -33,8 +33,8 @@ import {
 export default () => (
   <BreadModule name="DRIVE" version="1.0.0">
     {/* ============ Power: VMID divider + decoupling (R1, R2, C1) ============ */}
-    <resistor name="R1" resistance="1k" footprint="0402" schX={0} schY={3} schRotation={-90} pcbX={-12.6} pcbY={15.5} />
-    <resistor name="R2" resistance="1k" footprint="0402" schX={0} schY={-1} schRotation={-90} pcbX={-10.3} pcbY={15.5} />
+    <resistor name="R1" resistance="1k" footprint="0402" schX={0} schY={3} schRotation={-90} pcbX={-13.1} pcbY={15.5} />
+    <resistor name="R2" resistance="1k" footprint="0402" schX={0} schY={-1} schRotation={-90} pcbX={-10.8} pcbY={15} />
     <capacitor name="C1" capacitance="0.1uF" footprint="0402" schX={4} schY={3} schRotation={-90} pcbX={3.5} pcbY={21.5} />
     <trace name="R1-vsup" from=".R1 > .pin1" to={NET_VSUPPLY} width="0.3mm" />
     <trace name="R1-vmid" from=".R1 > .pin2" to={NET_VMID} width="0.3mm" />

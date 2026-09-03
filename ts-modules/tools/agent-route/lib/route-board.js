@@ -43,6 +43,7 @@ import {
   srjConnPoints,
   stitchSrj,
   stripConnectivityErrors,
+  stripFarMissingConnections,
   summarizeDrc,
   toLockRecords,
 } from "./route-lib.js";
@@ -667,7 +668,12 @@ async function finishSection({
   const merged = mergeLockedRecords(fresh, records);
   const scoped = filterCircuitToRect(merged, section.rect, MARGIN);
   const errors = await checks.runAllRoutingChecks(scoped);
-  const real = stripConnectivityErrors(errors);
+  const real = stripFarMissingConnections(
+    stripConnectivityErrors(errors),
+    merged,
+    section.rect,
+    MARGIN,
+  );
   if (real.length > 0) {
     return {
       ok: false,
@@ -806,7 +812,9 @@ async function finalizeBoard({ board, fresh, lockedCircuitRecords, checks, out, 
   writeFileSync(rp + ".sig", sig + "\n");
   out(`✅ [${board}] DRC-clean — promoted ${board}.routed.json (${lockedCircuitRecords.length} locked traces)`);
   status.finalDrc = { ok: true, errors: [] };
-  status.routedJson = rp;
+  // Repo-relative path: absolute workspace paths go stale across checkouts
+  // (status.json is committed; a prior run left a /home/.../068/... path).
+  status.routedJson = join("src", board, `${board}.routed.json`);
   writeJsonAtomic(statusPath(board), status, true);
   return 0;
 }

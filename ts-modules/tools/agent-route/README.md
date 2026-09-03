@@ -1,8 +1,8 @@
 # agent-route — agent-native section autorouter CLI
 
 Implements design `docs/agent-router-design.md` §4.1 (SCAN), §4.2 + §5 (PLAN),
-§4.7 (CLI), §6 (DRC gate). The routing chat owns `run` / `retry-section`
-(they are stubs here, exit 2).
+§4.3–§4.6 (ROUTE/stitch/lock/fail-stop via `run.js` + `lib/route-*.js`),
+§4.7 (CLI), §6 (DRC gate).
 
 ## Usage
 
@@ -11,8 +11,9 @@ Implements design `docs/agent-router-design.md` §4.1 (SCAN), §4.2 + §5 (PLAN)
 ./tools/agent-route/agent-route plan validate <board> [--json]   # re-check a hand-edited plan
 ./tools/agent-route/agent-route status <board> [--json]          # section states + sig validity + timings
 ./tools/agent-route/agent-route drc <board> [--json]             # full-board runAllChecks gate
-./tools/agent-route/agent-route run <board>                      # stub (another chat) — exit 2
-./tools/agent-route/agent-route retry-section <board> S3         # stub (another chat) — exit 2
+./tools/agent-route/agent-route run <board> [--keep-going] [--no-bisect] [--json]
+                                          [--timeout-ms N] [--effort N] [--max-bisect-depth N]
+./tools/agent-route/agent-route retry-section <board> S3 [--json] [--timeout-ms N] [--effort N]
 ```
 
 All commands are non-interactive; `--json` switches human text to JSON.

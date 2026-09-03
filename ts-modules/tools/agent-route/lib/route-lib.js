@@ -88,6 +88,19 @@ export function resolveScanConn(scanConn, scan, circuitJson) {
       }
     }
   }
+  // Net expansion: a scan conn names only first>last ports, but fragments can
+  // chain through MIDDLE ports of the same connectivity net (e.g. drive's
+  // INPUT1.2>INPUT1.5 daisy chain .2-.3-.4-.5: only .2/.5 are named, and
+  // bus-connector pins have no scan pads so the middle ports never match).
+  // Include every port sharing an endpoint's connectivity key. Safe: scan
+  // emits exactly one conn per net, so expansion stays within this conn's net.
+  const keyOf = (pid) => portsById.get(pid)?.subcircuit_connectivity_map_key;
+  const keys = new Set([...portIds].map(keyOf).filter(Boolean));
+  if (keys.size > 0) {
+    for (const [pid, p] of portsById) {
+      if (keys.has(p.subcircuit_connectivity_map_key)) portIds.add(pid);
+    }
+  }
 
   const srjNames = new Set();
   const fragPorts = new Map(); // source_trace_id -> { ports: Set, nets: [...] }
@@ -367,6 +380,66 @@ export function filterCircuitToRect(circuitJson, rect, margin) {
 
 export function stripConnectivityErrors(errors) {
   return (errors ?? []).filter((e) => !CONNECTIVITY_TYPES.has(e.type));
+}
+
+/**
+ * Strip FALSE "missing a connection to smtpad[...]" errors from a SECTION
+ * gate (rect ∪ margin scope) whose implicated pad belongs to a component
+ * OUTSIDE the grown rect.
+ *
+ * Why: the gate scopes circuit-json to rect ∪ margin, which drops the
+ * section's own far branches (e.g. drive S3 routes OUT2-star fragments whose
+ * R4/U1 joins sit ~20mm outside the rect). The checker then sees in-scope
+ * copper that cannot join the far pad and reports "missing connection" —
+ * even though the join exists, just outside scope. Real opens (pad inside
+ * scope, copper not reaching it) are KEPT. Whole-board connectivity is still
+ * enforced by the final gate (zero-error before promotion).
+ *
+ * Pad identity is parsed from the message: missing a connection to
+ * smtpad[.REF > .PIN]. Unparseable messages are kept (fail-closed).
+ */
+export function stripFarMissingConnections(errors, circuitJson, rect, margin) {
+  const scope = {
+    minX: rect.minX - margin,
+    maxX: rect.maxX + margin,
+    minY: rect.minY - margin,
+    maxY: rect.maxY + margin,
+  };
+  // Pad-precision lookup: smtpad[.REF > .PIN] -> pcb_port x/y via
+  // source_component (by name) -> source_port (by pin_number/name) ->
+  // pcb_port (by source_port_id). Pad-exact (not component centre) so a
+  // large part straddling the scope boundary still gates its in-scope pads.
+  const compByName = new Map(
+    (circuitJson ?? []).filter((e) => e.type === "source_component").map((e) => [e.name, e.source_component_id]),
+  );
+  const srcPortsByComp = new Map();
+  for (const e of circuitJson ?? []) {
+    if (e.type !== "source_port") continue;
+    if (!srcPortsByComp.has(e.source_component_id)) srcPortsByComp.set(e.source_component_id, []);
+    srcPortsByComp.get(e.source_component_id).push(e);
+  }
+  const pcbPortBySrc = new Map(
+    (circuitJson ?? []).filter((e) => e.type === "pcb_port").map((e) => [e.source_port_id, e]),
+  );
+  const padPos = (ref, pin) => {
+    const cid = compByName.get(ref);
+    if (!cid) return null;
+    const cands = srcPortsByComp.get(cid) ?? [];
+    // The checker names pads by port NAME (e.g. OUT2); scan strings use pin
+    // numbers (e.g. U1.7). Accept either.
+    const sp = cands.find((p) => String(p.pin_number ?? "") === pin || String(p.name ?? "") === pin) ?? null;
+    if (!sp) return null;
+    const pp = pcbPortBySrc.get(sp.source_port_id);
+    if (!pp || typeof pp.x !== "number") return null;
+    return pp;
+  };
+  return (errors ?? []).filter((e) => {
+    const m = /missing a connection to smtpad\[\.?(.+?) > \.?(.+?)\]/.exec(String(e.message ?? ""));
+    if (!m) return true; // not a missing-connection error, or unparseable: keep
+    const pos = padPos(m[1], m[2]);
+    if (!pos) return true; // unresolvable pad: keep (fail-closed)
+    return pointInRect(pos, scope); // keep iff the pad itself is in scope
+  });
 }
 
 /** Classify a routing failure into the §4.5 errorClass taxonomy. */
