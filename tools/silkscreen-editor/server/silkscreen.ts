@@ -59,6 +59,13 @@ export type SilkItem = {
   layer: "top" | "bottom";
   /** true ⇒ frame-computed position (module-frame / bus labels) — do not drag */
   readonly: boolean;
+  /**
+   * ref items only: owning pcb_component center (mm) + ccw rotation — needed
+   * by the write-back to convert a target board position into the component-
+   * local pcbSx silkscreentext offset (text_pos = center + R(rot)·local).
+   */
+  componentCenter?: { x: number; y: number };
+  componentRotation?: number;
   /** editor-side flags; always false in freshly compiled inventory */
   hidden: boolean;
   dirty: boolean;
@@ -211,12 +218,27 @@ export function itemsFromCircuitJson(
   );
 
   const items: SilkItem[] = [];
+  // pcb_component center/rotation for ref write-back math (plan §5.2)
+  const pcbComponents = new Map<
+    string,
+    { center?: { x: number; y: number }; rotation?: number }
+  >();
+  for (const e of circuitJson) {
+    if (e?.type === "pcb_component")
+      pcbComponents.set(e.pcb_component_id, {
+        center: e.center,
+        rotation: e.rotation,
+      });
+  }
   for (const e of circuitJson) {
     if (e?.type !== "pcb_silkscreen_text") continue;
     const x = e.anchor_position?.x ?? 0;
     const y = e.anchor_position?.y ?? 0;
     const text = String(e.text ?? "");
     const kind: "label" | "ref" = e.pcb_component_id ? "ref" : "label";
+    const owning = e.pcb_component_id
+      ? pcbComponents.get(e.pcb_component_id)
+      : undefined;
 
     let readonly = false;
     if (kind === "label") {
@@ -247,6 +269,15 @@ export function itemsFromCircuitJson(
       fontSize: e.font_size ?? 1,
       layer: e.layer === "bottom" ? "bottom" : "top",
       readonly,
+      ...(kind === "ref" && owning?.center
+        ? {
+            componentCenter: {
+              x: owning.center.x,
+              y: owning.center.y,
+            },
+            componentRotation: owning.rotation ?? 0,
+          }
+        : {}),
       hidden: false,
       dirty: false,
     });

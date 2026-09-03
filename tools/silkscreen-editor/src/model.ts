@@ -27,8 +27,21 @@ export type SilkItem = {
   fontSize: number;
   layer: "top" | "bottom";
   readonly: boolean;
+  /**
+   * ref items only: owning component geometry — echoed back on /api/apply so
+   * the server can convert a target board position into the component-local
+   * pcbSx silkscreentext offset (text_pos = center + R(rot)·local).
+   */
+  componentCenter?: { x: number; y: number };
+  componentRotation?: number;
+  /** editor-side flags; always false in freshly compiled inventory */
   hidden: boolean;
   dirty: boolean;
+  /** session-only: compiled position before local edits (for diff display) */
+  originX?: number;
+  originY?: number;
+  /** session-only: compiled text before local edits */
+  originText?: string;
 };
 
 export function fingerprintOf(
@@ -54,4 +67,29 @@ export function groupItems(items: SilkItem[]): {
 /** stable, collision-free key for React lists */
 export function itemKey(item: SilkItem, ordinal: number): string {
   return `${ordinal}:${item.fingerprint}`;
+}
+
+/**
+ * Ordinal of an item within its fingerprint collision group (plan §3.2) —
+ * sent with each edit so the server can disambiguate identical candidates by
+ * document order, the same rule it uses to locate them.
+ */
+export function ordinalOf(items: SilkItem[], item: SilkItem): number {
+  let ordinal = 0;
+  for (const it of items) {
+    if (it === item) return ordinal;
+    if (it.fingerprint === item.fingerprint) ordinal++;
+  }
+  return 0;
+}
+
+/** snap a mm coordinate to the 0.05 mm editor grid (plan §4) */
+export const SNAP_MM = 0.05;
+export function snapMm(v: number): number {
+  return Math.round(v / SNAP_MM) * SNAP_MM;
+}
+
+/** drag/move delta vs the compiled position, snapped */
+export function movedTo(item: SilkItem, x: number, y: number): { x: number; y: number } {
+  return { x: snapMm(x), y: snapMm(y) };
 }
