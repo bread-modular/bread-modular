@@ -6,7 +6,7 @@ board outline + silkscreen — never traces, vias, pads or courtyards — and ne
 routes (every compile runs the eval with `routingDisabled: true`, mirroring
 `tsci build --routing-disabled`).
 
-Status: **M1 (headless inventory CLI) + M2 (static silkscreen-only viewer)**.
+Status: **M1 (inventory CLI) + M2 (viewer) + M3 (interactive editing) + M4 (source write-back)**. M5 polish (ref-designator extras, multi-module polish) remains.
 
 ## Quickstart
 
@@ -24,13 +24,14 @@ Status: **M1 (headless inventory CLI) + M2 (static silkscreen-only viewer)**.
 the KiCad silkscreen-font patch (idempotent), installs this package's deps on
 first run, then executes `bun run <script>` inside this package.
 
-## API (vite middleware, read-only in M2)
+## API (vite middleware)
 
 | Endpoint | Result |
 |---|---|
 | `GET /api/modules` | `{ ok, modules: string[] }` — dirs under `ts-modules/src/` with a `<m>.circuit.tsx` |
 | `GET /api/inventory?module=8bit` | `{ ok, module, items, counts, board, frameLabels }` |
 | `GET /api/compile?module=8bit` | same + `svg` (silkscreen-only underlay) |
+| `POST /api/apply` | M4 write-back (see below) |
 
 ### Item shape (M1 inventory)
 
@@ -100,13 +101,42 @@ server/
   compile.ts         spawn wrapper (used by API + CLI)
   silkscreen.ts      circuit-json filter + item adapter + frame-label parse
   inventory-cli.ts   M1 CLI
-  api.ts             vite middleware plugin
+  api.ts             vite middleware plugin (+ POST /api/apply write-back)
+  patch.ts           M4 ts-morph TSX patch engine
 src/
-  App.tsx            module picker + layout
-  components/BoardCanvas.tsx   underlay svg + read-only handles overlay
+  App.tsx            module picker + layout + save flow
+  components/BoardCanvas.tsx   underlay svg + handles overlay + drag/nudge
+  components/ItemPanel.tsx     floating control panel for the selected item
   components/ItemList.tsx      Labels / Ref designators side panel
   api.ts model.ts transform.ts styles.css
 ```
 
-Next milestones (see the plan): M3 interactive editing (drag/hide/edit in
-memory), M4 ts-morph write-back to the `.circuit.tsx`, M5 ref-designator flow.
+## Editing (M3)
+
+- Click a handle (or a side-panel row) to select — a floating panel opens with
+  editable text, position x/y in mm, rotation, anchor (9-point), fontSize and a
+  visible/hidden toggle. Frame-owned labels (`🔒`) render read-only.
+- Drag a handle to move it (px ⇄ mm via the board transform; the item's mm
+  position updates live; the footprint itself never moves). Arrow keys nudge
+  0.1 mm (Shift = 0.5 mm). The component footprint NEVER moves — only text.
+- Edits are session-local (`✳` markers, per-item reset / reset all).
+
+## Write-back (M4)
+
+`Save` → confirm modal → `POST /api/apply` patches the module's `.circuit.tsx`
+with ts-morph (never string search), then recompiles and verifies every edit in
+the fresh circuit json; ANY failure restores the original bytes.
+
+| Edit | Source patch |
+|---|---|
+| Move a custom `<silkscreentext>` | set `pcbX`/`pcbY` literals |
+| Rotate / re-anchor / resize it | set `pcbRotation` / `anchorAlignment` / `fontSize` literals |
+| Edit its text | set the `text` literal |
+| Hide (label or ref) | add/merge `pcbStyle={{ silkscreenTextVisibility: "hidden" }}` |
+| Show again | remove the visibility prop (and empty `pcbStyle`) |
+| Move a ref designator | merge `pcbSx={{ "& silkscreentext": { pcbX, pcbY } }}` on the owning component (component-local offset = R(−θ)·(target − center)) |
+
+Ref renames and rotation/anchor/fontSize of auto refs are refused (netlist
+identity / frame-owned). Computed (non-literal) attributes are never touched.
+Afterwards run `./build.sh <module>` to regenerate gerbers/SVGs — the build's
+placement signature excludes silkscreen, so routing is reused untouched.

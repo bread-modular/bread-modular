@@ -38,8 +38,8 @@ export type AnchorAlignment =
   | "bottom_left"
   | "bottom_center"
   | "bottom_right"
-  | "middle_left"
-  | "middle_right";
+  | "center_left"
+  | "center_right";
 
 export type SilkItem = {
   /** stable across recompiles (ids are NOT stable): kind|text|x|y|layer */

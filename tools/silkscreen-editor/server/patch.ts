@@ -6,6 +6,8 @@
  *
  *   custom <silkscreentext> move   set pcbX/pcbY numeric literals
  *   custom <silkscreentext> text   set the text attribute literal
+ *   custom <silkscreentext> style  set pcbRotation / anchorAlignment /
+ *                                  fontSize literals (runtime-verified props)
  *   hide (label or ref)            add/merge pcbStyle={{ silkscreenTextVisibility: "hidden" }}
  *   show (label or ref)            remove the silkscreenTextVisibility property
  *                                  (and the pcbStyle attr entirely if it empties)
@@ -52,6 +54,12 @@ export type SilkEditOp = {
   text?: string;
   /** true ⇒ hide, false ⇒ show */
   hidden?: boolean;
+  /** new CCW rotation in degrees (custom labels only) */
+  rotation?: number;
+  /** new 9-point anchor alignment (custom labels only) */
+  anchor?: string;
+  /** new font size in mm (custom labels only) */
+  fontSize?: number;
 };
 
 export type SilkEdit = {
@@ -84,6 +92,9 @@ export type EditOutcome = {
     x?: number;
     y?: number;
     hidden?: boolean;
+    rotation?: number;
+    anchor?: string;
+    fontSize?: number;
     layer: string;
   };
   reason?: string;
@@ -368,11 +379,27 @@ function applyEditToNodes(nodes: SourceNodes, edit: SilkEdit): EditOutcome {
     x: edit.ops.x,
     y: edit.ops.y,
     hidden: edit.ops.hidden,
+    rotation: edit.ops.rotation,
+    anchor: edit.ops.anchor,
+    fontSize: edit.ops.fontSize,
     layer: edit.layer,
   };
 
   if (edit.kind === "ref" && edit.ops.text !== undefined && edit.ops.text !== edit.text) {
     return { ...base, reason: "renaming a ref designator changes netlist identity — not supported (M5)" };
+  }
+  if (
+    edit.kind === "ref" &&
+    (edit.ops.rotation !== undefined ||
+      edit.ops.anchor !== undefined ||
+      edit.ops.fontSize !== undefined)
+  ) {
+    return {
+      ...base,
+      reason:
+        "ref designators support move + hide only — rotation/anchor/fontSize of an auto ref are owned by the component/frame, not patchable",
+      expect,
+    };
   }
 
   const located =
@@ -448,6 +475,45 @@ function applyEditToNodes(nodes: SourceNodes, edit: SilkEdit): EditOutcome {
         setNumericAttr(el, "pcbX", targetX);
         setNumericAttr(el, "pcbY", targetY);
         changes.push(`moved to (${fmtNum(targetX)}, ${fmtNum(targetY)})`);
+      }
+    }
+
+    // --- rotation / anchor / font size (labels only — runtime-verified props) ---
+    if (
+      edit.ops.rotation !== undefined ||
+      edit.ops.anchor !== undefined ||
+      edit.ops.fontSize !== undefined
+    ) {
+      // computed-attribute guard: only literal-initialized attrs are rewritten
+      for (const [a2, name, kind] of [
+        [attr(el, "pcbRotation"), "pcbRotation", "number"],
+        [attr(el, "anchorAlignment"), "anchorAlignment", "string"],
+        [attr(el, "fontSize"), "fontSize", "number"],
+      ] as const) {
+        if (!a2) continue; // absent attr — free to add
+        const lit =
+          kind === "number"
+            ? numericLiteralValue(a2.getInitializer())
+            : stringLiteralValue(a2.getInitializer());
+        if (lit === undefined) {
+          return {
+            ...base,
+            reason: `${name} is computed (not a literal) — refusing to patch`,
+            expect,
+          };
+        }
+      }
+      if (edit.ops.rotation !== undefined) {
+        setNumericAttr(el, "pcbRotation", edit.ops.rotation);
+        changes.push(`rotation → ${fmtNum(edit.ops.rotation)}°`);
+      }
+      if (edit.ops.anchor !== undefined) {
+        setStringAttr(el, "anchorAlignment", edit.ops.anchor);
+        changes.push(`anchorAlignment → "${edit.ops.anchor}"`);
+      }
+      if (edit.ops.fontSize !== undefined) {
+        setNumericAttr(el, "fontSize", edit.ops.fontSize);
+        changes.push(`fontSize → ${fmtNum(edit.ops.fontSize)}`);
       }
     }
 

@@ -71,6 +71,22 @@ export function App() {
               originY: patch.y !== undefined ? (it.originY ?? it.y) : it.originY,
               originText:
                 patch.text !== undefined ? (it.originText ?? it.text) : it.originText,
+              originRotation:
+                patch.rotation !== undefined
+                  ? (it.originRotation ?? it.rotation)
+                  : it.originRotation,
+              originAnchor:
+                patch.anchor !== undefined
+                  ? (it.originAnchor ?? it.anchor)
+                  : it.originAnchor,
+              originFontSize:
+                patch.fontSize !== undefined
+                  ? (it.originFontSize ?? it.fontSize)
+                  : it.originFontSize,
+              originHidden:
+                patch.hidden !== undefined
+                  ? (it.originHidden ?? it.hidden)
+                  : it.originHidden,
               dirty: true,
             }
           : it,
@@ -97,6 +113,16 @@ export function App() {
     patchItem(fingerprint, { text });
   };
 
+  /** style edits (rotation/anchor/fontSize) — custom labels only */
+  const onEditProp = (
+    fingerprint: string,
+    patch: Partial<Pick<SilkItem, "rotation" | "anchor" | "fontSize">>,
+  ) => {
+    const item = items.find((i) => i.fingerprint === fingerprint);
+    if (!item || item.readonly || item.kind !== "label") return;
+    patchItem(fingerprint, patch);
+  };
+
   const resetItem = (fingerprint: string) => {
     const item = items.find((i) => i.fingerprint === fingerprint);
     if (!item) return;
@@ -108,11 +134,18 @@ export function App() {
               x: it.originX ?? it.x,
               y: it.originY ?? it.y,
               text: it.originText ?? it.text,
-              hidden: false,
+              rotation: it.originRotation ?? it.rotation,
+              anchor: it.originAnchor ?? it.anchor,
+              fontSize: it.originFontSize ?? it.fontSize,
+              hidden: it.originHidden ?? false,
               dirty: false,
               originX: undefined,
               originY: undefined,
               originText: undefined,
+              originRotation: undefined,
+              originAnchor: undefined,
+              originFontSize: undefined,
+              originHidden: undefined,
             }
           : it,
       ),
@@ -133,11 +166,18 @@ export function App() {
                   x: it.originX ?? it.x,
                   y: it.originY ?? it.y,
                   text: it.originText ?? it.text,
-                  hidden: false,
+                  rotation: it.originRotation ?? it.rotation,
+                  anchor: it.originAnchor ?? it.anchor,
+                  fontSize: it.originFontSize ?? it.fontSize,
+                  hidden: it.originHidden ?? false,
                   dirty: false,
                   originX: undefined,
                   originY: undefined,
                   originText: undefined,
+                  originRotation: undefined,
+                  originAnchor: undefined,
+                  originFontSize: undefined,
+                  originHidden: undefined,
                 }
               : it,
           ),
@@ -162,7 +202,27 @@ export function App() {
       }
       if (item.originText !== undefined && item.text !== item.originText && item.kind === "label")
         ops.text = item.text;
-      if (item.hidden) ops.hidden = true;
+      if (
+        item.kind === "label" &&
+        item.originRotation !== undefined &&
+        item.rotation !== item.originRotation
+      )
+        ops.rotation = item.rotation;
+      if (
+        item.kind === "label" &&
+        item.originAnchor !== undefined &&
+        item.anchor !== item.originAnchor
+      )
+        ops.anchor = item.anchor;
+      if (
+        item.kind === "label" &&
+        item.originFontSize !== undefined &&
+        item.fontSize !== item.originFontSize
+      )
+        ops.fontSize = item.fontSize;
+      // emit hide AND show: ghosts (applied hides) carry originHidden=true so
+      // un-hiding them produces ops.hidden=false (removes the pcbStyle patch)
+      if (item.hidden !== (item.originHidden ?? false)) ops.hidden = item.hidden;
       return {
         fingerprint: item.fingerprint,
         ordinal: ordinalOf(items, item),
@@ -217,7 +277,7 @@ export function App() {
           if (v.ok && !v.newFingerprint) {
             const ghost = ghostOf.get(v.fingerprint);
             if (ghost && ghost.hidden) {
-              fresh.push({ ...ghost, dirty: false });
+              fresh.push({ ...ghost, dirty: false, originHidden: true });
             }
           }
         }
@@ -304,6 +364,9 @@ export function App() {
               onSelect={setSelected}
               onDragEnd={onDragEnd}
               onToggleHidden={onToggleHidden}
+              onTextEdit={onTextEdit}
+              onEditProp={onEditProp}
+              onReset={resetItem}
             />
             <ItemList
               items={items}
@@ -329,6 +392,9 @@ export function App() {
                 const what = [
                   e.ops.x !== undefined ? `move → (${e.ops.x}, ${e.ops.y}) mm` : null,
                   e.ops.text !== undefined ? `text → "${e.ops.text}"` : null,
+                  e.ops.rotation !== undefined ? `rotation → ${e.ops.rotation}°` : null,
+                  e.ops.anchor !== undefined ? `anchor → ${e.ops.anchor}` : null,
+                  e.ops.fontSize !== undefined ? `fontSize → ${e.ops.fontSize}mm` : null,
                   e.ops.hidden !== undefined ? (e.ops.hidden ? "hide" : "show") : null,
                 ]
                   .filter(Boolean)

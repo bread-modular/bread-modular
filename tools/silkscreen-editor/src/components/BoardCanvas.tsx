@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { SilkItem } from "../model";
 import { snapMm } from "../model";
 import { deriveMetrics, makeMapper, type Mapper } from "../transform";
+import { ItemPanel } from "./ItemPanel";
 
 type Props = {
   svg: string;
@@ -13,6 +14,15 @@ type Props = {
   onDragEnd(fingerprint: string, x: number, y: number): void;
   /** hide/show toggle from the canvas affordance */
   onToggleHidden(fingerprint: string): void;
+  /** edit the label string (labels only) */
+  onTextEdit(fingerprint: string, text: string): void;
+  /** rotation/anchor/fontSize edits (labels only) */
+  onEditProp(
+    fingerprint: string,
+    patch: Partial<Pick<SilkItem, "rotation" | "anchor" | "fontSize">>,
+  ): void;
+  /** reset local edits for one item */
+  onReset(fingerprint: string): void;
 };
 
 type DragState = {
@@ -45,6 +55,9 @@ export function BoardCanvas({
   onSelect,
   onDragEnd,
   onToggleHidden,
+  onTextEdit,
+  onEditProp,
+  onReset,
 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [renderedWidth, setRenderedWidth] = useState(0);
@@ -87,6 +100,7 @@ export function BoardCanvas({
 
   // live item positions: dragged item follows the pointer
   const dragItem = drag ? items.find((i) => i.fingerprint === drag.fingerprint) : null;
+  const selectedItem = selected ? (items.find((i) => i.fingerprint === selected) ?? null) : null;
 
   const beginDrag = (item: SilkItem, e: React.PointerEvent) => {
     if (item.readonly || !mapper) return;
@@ -235,6 +249,21 @@ export function BoardCanvas({
             <div className="drag-hint">
               {dragItem.text}: ({drag!.curX.toFixed(3)}, {drag!.curY.toFixed(3)}) mm — release to drop
             </div>
+          )}
+          {selectedItem && mapper && !drag && (
+            <ItemPanel
+              item={selectedItem}
+              px={mapper.mmToPx(selectedItem.x, selectedItem.y).px}
+              py={mapper.mmToPx(selectedItem.x, selectedItem.y).py}
+              overlayW={renderedWidth}
+              overlayH={wrapRef.current?.clientHeight ?? 600}
+              onClose={() => onSelect(null)}
+              onMove={(x, y) => onDragEnd(selectedItem.fingerprint, x, y)}
+              onEditProp={(patch) => onEditProp(selectedItem.fingerprint, patch)}
+              onToggleHidden={() => onToggleHidden(selectedItem.fingerprint)}
+              onTextEdit={(text) => onTextEdit(selectedItem.fingerprint, text)}
+              onReset={() => onReset(selectedItem.fingerprint)}
+            />
           )}
         </div>
       )}
