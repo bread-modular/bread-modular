@@ -1,13 +1,22 @@
 /**
- * API client (browser side) — mirrors server/api.ts.
+ * API client (browser side) — mirrors server/api.ts (single-entry mode: no
+ * module names anywhere; the server edits exactly one SILK_ENTRY file).
  */
 import type { SilkItem } from "./model";
+
+export type EntryResponse = {
+  ok: boolean;
+  error?: string;
+  entry?: string;
+  name?: string;
+  sourcePath?: string;
+};
 
 export type CompileResponse = {
   ok: boolean;
   error?: string;
-  module?: string;
   entry?: string;
+  name?: string;
   /** absolute path of the .circuit.tsx — shown before write-back */
   sourcePath?: string;
   /** source mtime at compile time; echoed on /api/apply as a stale guard */
@@ -45,6 +54,8 @@ export type ApplyEdit = {
   };
   componentCenter?: { x: number; y: number };
   componentRotation?: number;
+  /** echoed ownership claim from the inventory item (owner dispatch) */
+  owner?: import("./model").SilkOwner;
 };
 
 export type ApplyVerification = {
@@ -61,7 +72,8 @@ export type ApplyVerification = {
 export type ApplyResponse = {
   ok: boolean;
   error?: string;
-  module?: string;
+  entry?: string;
+  name?: string;
   sourcePath?: string;
   entryMtimeMs?: number;
   /** context-free line diff old → new (as written to disk) */
@@ -84,20 +96,19 @@ async function getJson<T>(url: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-export function fetchModules(): Promise<{ ok: boolean; modules: string[] }> {
-  return getJson("/api/modules");
+export function fetchEntry(): Promise<EntryResponse> {
+  return getJson("/api/entry");
 }
 
-export function fetchCompile(moduleName: string): Promise<CompileResponse> {
-  return getJson(`/api/compile?module=${encodeURIComponent(moduleName)}`);
+export function fetchCompile(): Promise<CompileResponse> {
+  return getJson("/api/compile");
 }
 
-export function fetchInventory(moduleName: string): Promise<CompileResponse> {
-  return getJson(`/api/inventory?module=${encodeURIComponent(moduleName)}`);
+export function fetchInventory(): Promise<CompileResponse> {
+  return getJson("/api/inventory");
 }
 
 export async function applyEdits(
-  moduleName: string,
   expectedEntryMtimeMs: number | undefined,
   edits: ApplyEdit[],
 ): Promise<ApplyResponse> {
@@ -105,7 +116,6 @@ export async function applyEdits(
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      module: moduleName,
       expectedEntryMtimeMs,
       edits,
     }),

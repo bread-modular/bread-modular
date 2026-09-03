@@ -14,13 +14,6 @@ type Props = {
   onDragEnd(fingerprint: string, x: number, y: number): void;
   /** hide/show toggle from the canvas affordance */
   onToggleHidden(fingerprint: string): void;
-  /** edit the label string (labels only) */
-  onTextEdit(fingerprint: string, text: string): void;
-  /** rotation/anchor/fontSize edits (labels only) */
-  onEditProp(
-    fingerprint: string,
-    patch: Partial<Pick<SilkItem, "rotation" | "anchor" | "fontSize">>,
-  ): void;
   /** reset local edits for one item */
   onReset(fingerprint: string): void;
 };
@@ -40,12 +33,18 @@ type DragState = {
 };
 
 /**
- * Board canvas (M2 viewer + M3 interactions): the silkscreen-only underlay SVG
- * plus an interactive handle overlay positioned via the deterministic mm⇄px
- * mapper. The underlay is never re-rendered during a drag — handles move in
- * the sibling overlay and the drag ghost shows the live dx/dy readout.
+ * Board canvas: the silkscreen-only underlay SVG plus an interactive handle
+ * overlay positioned via the deterministic mm⇄px mapper. The underlay is
+ * never re-rendered during a drag — handles move in the sibling overlay and
+ * the drag ghost shows the live dx/dy readout.
  *
- * Readonly (frame-computed) items get no drag/hide/edit affordances at all.
+ * Geometry contract (the overlay-alignment fix): the `.overlay` div covers
+ * exactly the rendered `<svg>` element's border box — same origin, same
+ * size — and handle positions are computed as
+ *   mmToPx(item) − svgRect.origin
+ * so every handle lands on the silkscreen ink it owns, at any container
+ * width. Readonly (frame/lib-owned) items render as ghosts with no
+ * drag/hide/edit affordances at all.
  */
 export function BoardCanvas({
   svg,
@@ -55,16 +54,22 @@ export function BoardCanvas({
   onSelect,
   onDragEnd,
   onToggleHidden,
-  onTextEdit,
-  onEditProp,
   onReset,
 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [renderedWidth, setRenderedWidth] = useState(0);
+  const svgBoxRef = useRef<{ x: number; y: number; w: number; h: number }>({
+    x: 0,
+    y: 0,
+    w: 0,
+    h: 0,
+  });
+  const [svgBox, setSvgBox] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [drag, setDrag] = useState<DragState | null>(null);
 
   // Inject the underlay once per compile; give it a viewBox so it scales with
-  // its container while keeping its intrinsic aspect ratio.
+  // its container while keeping its intrinsic aspect ratio. The svg element
+  // fills the wrap exactly (width 100%, height auto), so the wrap's border
+  // box IS the svg's border box.
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
@@ -74,6 +79,7 @@ export function BoardCanvas({
       const w = Number(el.getAttribute("width") ?? 800);
       const h = Number(el.getAttribute("height") ?? 600);
       el.setAttribute("viewBox", `0 0 ${w} ${h}`);
+      el.setAttribute("preserveAspectRatio", "xMidYMid meet");
       el.removeAttribute("width");
       el.removeAttribute("height");
       el.style.width = "100%";
@@ -82,21 +88,40 @@ export function BoardCanvas({
     }
   }, [svg]);
 
-  // Track rendered width for the px mapper.
+  // Track the RENDERED svg box (origin + size, CSS px, relative to the
+  // relatively-positioned .board-canvas). The svg fills the wrap, so the
+  // wrap's rect is the svg's rect — measured in one place, no drift.
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    const update = () => setRenderedWidth(wrap.clientWidth);
+    const update = () => {
+      const canvas = wrap.parentElement;
+      const cRect = canvas?.getBoundingClientRect();
+      const r = wrap.getBoundingClientRect();
+      const box = {
+        x: r.left - (cRect?.left ?? 0),
+        y: r.top - (cRect?.top ?? 0),
+        w: r.width,
+        h: r.height,
+      };
+      svgBoxRef.current = box;
+      setSvgBox(box);
+    };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(wrap);
-    return () => ro.disconnect();
-  }, []);
+    if (wrap.parentElement) ro.observe(wrap.parentElement);
+    window.addEventListener("resize", update);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [svg]);
 
   const mapper: Mapper | null = useMemo(() => {
-    if (renderedWidth <= 0 || !board.width) return null;
-    return makeMapper(deriveMetrics(svg, board), renderedWidth);
-  }, [svg, board, renderedWidth]);
+    if (svgBox.w <= 0 || !board.width) return null;
+    return makeMapper(deriveMetrics(svg, board), svgBox.w);
+  }, [svg, board, svgBox.w]);
 
   // live item positions: dragged item follows the pointer
   const dragItem = drag ? items.find((i) => i.fingerprint === drag.fingerprint) : null;
@@ -177,14 +202,25 @@ export function BoardCanvas({
   return (
     <div className="board-canvas">
       <div className="underlay-wrap" ref={wrapRef} onClick={() => onSelect(null)} />
-      {mapper && (
+      {mapper && svgBox.w > 0 && (
         <div
           className="overlay"
-          style={{ width: renderedWidth, height: (wrapRef.current?.clientHeight ?? 0) }}
+          data-testid="silk-overlay"
+          style={{
+            left: svgBox.x,
+            top: svgBox.y,
+            width: svgBox.w,
+            height: svgBox.h,
+          }}
         >
           {items.map((item, i) => {
             const isDragging = drag?.fingerprint === item.fingerprint;
-            const px = isDragging ? mapper.mmToPx(drag!.curX, drag!.curY) : mapper.mmToPx(item.x, item.y);
+            const abs = isDragging
+              ? mapper.mmToPx(drag!.curX, drag!.curY)
+              : mapper.mmToPx(item.x, item.y);
+            // mmToPx is in svg-unit space scaled to the rendered width; the
+            // overlay covers exactly the svg box, so subtract its origin.
+            const px = { px: abs.px - svgBox.x, py: abs.py - svgBox.y };
             const isSel = selected === item.fingerprint;
             const cls = [
               "handle",
@@ -201,6 +237,10 @@ export function BoardCanvas({
               <button
                 key={`${i}:${item.fingerprint}`}
                 className={cls}
+                data-testid={`silk-handle-${item.text}`}
+                data-fingerprint={item.fingerprint}
+                data-x={item.x}
+                data-y={item.y}
                 style={{
                   left: px.px,
                   top: px.py,
@@ -208,7 +248,7 @@ export function BoardCanvas({
                 }}
                 title={
                   item.readonly
-                    ? `${item.text} — position computed by module-frame (readonly)`
+                    ? `${item.text} — lib/frame-owned (read-only ghost)`
                     : item.hidden
                       ? `${item.text} — hidden (eye to show)`
                       : item.text
@@ -253,15 +293,13 @@ export function BoardCanvas({
           {selectedItem && mapper && !drag && (
             <ItemPanel
               item={selectedItem}
-              px={mapper.mmToPx(selectedItem.x, selectedItem.y).px}
-              py={mapper.mmToPx(selectedItem.x, selectedItem.y).py}
-              overlayW={renderedWidth}
-              overlayH={wrapRef.current?.clientHeight ?? 600}
+              px={mapper.mmToPx(selectedItem.x, selectedItem.y).px - svgBox.x}
+              py={mapper.mmToPx(selectedItem.x, selectedItem.y).py - svgBox.y}
+              overlayW={svgBox.w}
+              overlayH={svgBox.h}
               onClose={() => onSelect(null)}
               onMove={(x, y) => onDragEnd(selectedItem.fingerprint, x, y)}
-              onEditProp={(patch) => onEditProp(selectedItem.fingerprint, patch)}
               onToggleHidden={() => onToggleHidden(selectedItem.fingerprint)}
-              onTextEdit={(text) => onTextEdit(selectedItem.fingerprint, text)}
               onReset={() => onReset(selectedItem.fingerprint)}
             />
           )}

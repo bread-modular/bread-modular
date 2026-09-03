@@ -13,6 +13,18 @@
  *                                  (and the pcbStyle attr entirely if it empties)
  *   ref designator move            merge pcbSx={{ "& silkscreentext": { pcbX, pcbY } }}
  *                                  on the owning component.
+ *   RV09Pot caption move           set labelDx/labelDy on the <RV09Pot>
+ *                                  call site (offset from the pot-relative
+ *                                  base anchor — never pcbX/pcbY, which stay
+ *                                  derived from the pot position)
+ *   RV09Pot hide (any slot)        set hideLabel / hideDesignator / hideValue
+ *                                  on the <RV09Pot> call site
+ *   RV09Pot show                   remove the hide prop again
+ *
+ * Owner dispatch: the client echoes the inventory's `owner` claim
+ * (server/ownership.ts). `frame` claims are refused outright (ghosts);
+ * `rv09` claims patch the pot call site; `entry`/`ref`/absent claims use
+ * the legacy location-by-content path.
  *
  *   NOTE on ref positions: tscircuit's pcbStyle.silkscreenTextPosition
  *   {offsetX, offsetY} exists in the props schema but has NO runtime consumer
@@ -41,6 +53,8 @@ import {
   ScriptKind,
   ts,
 } from "ts-morph";
+import { parseEntryContext } from "./entry-parse";
+import type { SilkOwner } from "./entry-parse";
 
 /* ------------------------------------------------------------------ */
 /* public types                                                        */
@@ -79,6 +93,15 @@ export type SilkEdit = {
   /** ref items: owning component geometry (echoed from the inventory) */
   componentCenter?: { x: number; y: number };
   componentRotation?: number;
+  /**
+   * Write-back ownership the client received with the inventory item
+   * (server/ownership.ts). When the client echoes it back, the patch engine
+   * dispatches directly to the owning call site instead of guessing:
+   *   entry/rv09/ref → patch that call site,
+   *   frame          → refuse (ghost — lib/frame-owned or computed).
+   * Absent on old clients — falls back to legacy location by content.
+   */
+  owner?: SilkOwner;
 };
 
 export type EditOutcome = {
@@ -366,11 +389,162 @@ function locateComponentNode(
   return { node: byName[0] };
 }
 
+/** locate an <RV09Pot name="…"> call site in the module entry. */
+function locateRv09Node(
+  nodes: SourceNodes,
+  pot: string,
+): { node: Node } | { error: string } {
+  const byName = nodes.elements.filter(
+    (el) =>
+      tagName(el) === "RV09Pot" &&
+      stringLiteralValue(attr(el, "name")?.getInitializer()) === pot,
+  );
+  if (byName.length === 0) {
+    return {
+      error: `no <RV09Pot name="${pot}"> in the module source — cannot patch its labels`,
+    };
+  }
+  if (byName.length > 1) {
+    return {
+      error: `ambiguous <RV09Pot name="${pot}"> (${byName.length}) — refusing to guess`,
+    };
+  }
+  return { node: byName[0] };
+}
+
+/** set an optional numeric prop (labelDx/labelDy): add or overwrite literal. */
+function setOptionalNumericProp(
+  el: Node,
+  name: string,
+  value: number,
+): void {
+  const a = attr(el, name);
+  if (a) {
+    const lit = numericLiteralValue(a.getInitializer());
+    if (lit === undefined) {
+      throw new Error(
+        `${name} is computed (not a numeric literal) — refusing to patch`,
+      );
+    }
+    a.setInitializer(`{${fmtNum(value)}}`);
+  } else {
+    (el as any).addAttribute({ name, initializer: `{${fmtNum(value)}}` });
+  }
+}
+
+/** set an optional boolean prop (hideLabel/…): add or overwrite literal. */
+function setOptionalBooleanProp(
+  el: Node,
+  name: string,
+  value: boolean,
+): void {
+  const a = attr(el, name);
+  if (a) {
+    a.setInitializer(`{${value ? "true" : "false"}}`);
+  } else {
+    (el as any).addAttribute({
+      name,
+      initializer: `{${value ? "true" : "false"}}`,
+    });
+  }
+}
+
+/* RV09 hide prop per slot: label → hideLabel, designator → hideDesignator,
+   value → hideValue. */
+const RV09_HIDE_PROP = {
+  label: "hideLabel",
+  designator: "hideDesignator",
+  value: "hideValue",
+} as const;
+
 /* ------------------------------------------------------------------ */
 /* per-edit application                                                */
 /* ------------------------------------------------------------------ */
 
-function applyEditToNodes(nodes: SourceNodes, edit: SilkEdit): EditOutcome {
+/* ------------------------------------------------------------------ */
+/* per-edit application                                                */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Apply a move/hide edit to an <RV09Pot name="…"> call site:
+ *   move caption  → labelDx/labelDy (delta from the compiled position)
+ *   hide/show     → hideLabel / hideDesignator / hideValue booleans
+ * The recompile verification in server/api.ts is the safety net: a stale
+ * owner claim (pot renamed/removed since compile) fails location below or
+ * fails verification, and the whole batch rolls back.
+ */
+function applyRv09Edit(
+  nodes: SourceNodes,
+  entryCtx: import("./entry-parse").EntryContext,
+  edit: SilkEdit,
+  rv09: { pot: string; slot: "label" | "designator" | "value" },
+  base: EditOutcome,
+  expect: NonNullable<EditOutcome["expect"]>,
+): EditOutcome {
+  const located = locateRv09Node(nodes, rv09.pot);
+  if ("error" in located) return { ...base, reason: located.error, expect };
+  const el = located.node;
+  const potSite = entryCtx.rv09.find((p) => p.name === rv09.pot);
+
+  const changes: string[] = [];
+  try {
+    if (edit.ops.x !== undefined || edit.ops.y !== undefined) {
+      // slot === "label" is enforced by the caller.
+      const targetX = edit.ops.x ?? edit.x;
+      const targetY = edit.ops.y ?? edit.y;
+      if (potSite?.pcbX === undefined || potSite?.pcbY === undefined) {
+        return {
+          ...base,
+          reason: `<RV09Pot name="${rv09.pot}"> has a computed pcbX/pcbY — position owned by code, refusing to patch`,
+          expect,
+        };
+      }
+      if (potSite.labelDxComputed || potSite.labelDyComputed) {
+        return {
+          ...base,
+          reason: `labelDx/labelDy on <RV09Pot name="${rv09.pot}"> are computed (not literals) — refusing to patch`,
+          expect,
+        };
+      }
+      // caption anchor = (pcbX − 0.026 + labelDx, pcbY − 8.8 + labelDy), so
+      // the new offset is the target minus the pot-relative base anchor.
+      const dx = targetX - (potSite.pcbX - 0.026);
+      const dy = targetY - (potSite.pcbY - 8.8);
+      setOptionalNumericProp(el, "labelDx", dx);
+      setOptionalNumericProp(el, "labelDy", dy);
+      changes.push(
+        `caption offset → (labelDx ${fmtNum(dx)}, labelDy ${fmtNum(dy)})`,
+      );
+    }
+    if (edit.ops.hidden === true) {
+      setOptionalBooleanProp(el, RV09_HIDE_PROP[rv09.slot], true);
+      changes.push(`added ${RV09_HIDE_PROP[rv09.slot]}={true}`);
+    } else if (edit.ops.hidden === false) {
+      const a = attr(el, RV09_HIDE_PROP[rv09.slot]);
+      if (a) {
+        a.remove();
+        changes.push(`removed ${RV09_HIDE_PROP[rv09.slot]}`);
+      } else {
+        return { ...base, reason: "already visible — no change", expect };
+      }
+    }
+  } catch (err: any) {
+    return { ...base, reason: err?.message ?? String(err), expect };
+  }
+  return {
+    fingerprint: edit.fingerprint,
+    ok: changes.length > 0,
+    expect,
+    reason: changes.length === 0 ? "no-op edit" : undefined,
+    change: changes.join("; "),
+  };
+}
+
+function applyEditToNodes(
+  nodes: SourceNodes,
+  edit: SilkEdit,
+  entryCtx: import("./entry-parse").EntryContext,
+): EditOutcome {
   const base: EditOutcome = { fingerprint: edit.fingerprint, ok: false };
   const expect = {
     kind: edit.kind,
@@ -384,6 +558,21 @@ function applyEditToNodes(nodes: SourceNodes, edit: SilkEdit): EditOutcome {
     fontSize: edit.ops.fontSize,
     layer: edit.layer,
   };
+
+  // --- owner dispatch --------------------------------------------------
+  // The inventory told the client who owns this item (server/ownership.ts);
+  // the client echoes it back. Dispatch on the CLAIMED owner (the live call
+  // site is located below — a stale claim fails location, and the recompile
+  // verification in server/api.ts rolls the batch back on any mismatch).
+  const claimed = edit.owner?.kind;
+  if (claimed === "frame") {
+    return {
+      ...base,
+      reason:
+        "item is lib/frame-owned (read-only ghost) — move it in lib/ or the frame, not here",
+      expect,
+    };
+  }
 
   if (edit.kind === "ref" && edit.ops.text !== undefined && edit.ops.text !== edit.text) {
     return { ...base, reason: "renaming a ref designator changes netlist identity — not supported (M5)" };
@@ -400,6 +589,43 @@ function applyEditToNodes(nodes: SourceNodes, edit: SilkEdit): EditOutcome {
         "ref designators support move + hide only — rotation/anchor/fontSize of an auto ref are owned by the component/frame, not patchable",
       expect,
     };
+  }
+  // rv09 internals support move (caption only) + hide; text/rotation/anchor/
+  // fontSize live inside lib/rv09-pot.tsx, not the module entry.
+  const rv09Owner =
+    claimed === "rv09"
+      ? (edit.owner as {
+          kind: "rv09";
+          pot: string;
+          slot: "label" | "designator" | "value";
+        })
+      : undefined;
+  if (rv09Owner) {
+    if (edit.ops.text !== undefined && edit.ops.text !== edit.text) {
+      return { ...base, reason: "RV09Pot label text lives in lib/rv09-pot.tsx props (label/resistance/name) — edit the call-site prop text via the module source directly", expect };
+    }
+    if (
+      edit.ops.rotation !== undefined ||
+      edit.ops.anchor !== undefined ||
+      edit.ops.fontSize !== undefined
+    ) {
+      return {
+        ...base,
+        reason: "RV09Pot internals support move + hide only — rotation/anchor/fontSize live in lib/rv09-pot.tsx",
+        expect,
+      };
+    }
+    if (
+      (edit.ops.x !== undefined || edit.ops.y !== undefined) &&
+      rv09Owner.slot !== "label"
+    ) {
+      return {
+        ...base,
+        reason: `only the "${rv09Owner.pot}" caption moves (labelDx/labelDy) — the designator/value are fixed body markings in lib/rv09-pot.tsx`,
+        expect,
+      };
+    }
+    return applyRv09Edit(nodes, entryCtx, edit, rv09Owner, base, expect);
   }
 
   const located =
@@ -570,9 +796,13 @@ export function applyEditsToSource(
     scriptKind: ScriptKind.TSX,
   });
   const nodes = collectElements(source);
+  // Entry context (RV09 call sites) is parsed from the LIVE in-memory source
+  // — never the stale bytes on disk — so sequential edits in one batch share
+  // consistent state.
+  const entryCtx = parseEntryContext(entryPath, source.getFullText());
 
   const outcomes: EditOutcome[] = edits.map((edit) =>
-    applyEditToNodes(nodes, edit),
+    applyEditToNodes(nodes, edit, entryCtx),
   );
 
   const newSource = source.getFullText();

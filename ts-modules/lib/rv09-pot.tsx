@@ -90,6 +90,31 @@ export const RV09Pot = (props: {
   resistance: string;
   /** Optional silkscreen label printed below the pins (e.g. "GAIN") */
   label?: string;
+  /**
+   * Per-instance caption offset (board mm) applied on top of the default
+   * label anchor. The silkscreen editor writes this (never pcbX/pcbY, which
+   * stay derived from the pot position) so a nudge survives re-renders:
+   *   <RV09Pot name="RV1" labelDx={0.5} labelDy={-1} … />
+   * Defaults to 0,0 (KiCad-faithful position).
+   */
+  labelDx?: number;
+  labelDy?: number;
+  /**
+   * Hide the knob caption (e.g. "GAIN") from the silkscreen.
+   * The silkscreen editor toggles this instead of pcbStyle so the intent
+   * stays on the call site that owns the label.
+   */
+  hideLabel?: boolean;
+  /**
+   * Hide the designator text (e.g. "RV1") printed inside the pot body.
+   * (No per-instance offset: the designator is a fixed body marking.)
+   */
+  hideDesignator?: boolean;
+  /**
+   * Hide the resistance value text (e.g. "50k") printed inside the pot body.
+   * (No per-instance offset: the value is a fixed body marking.)
+   */
+  hideValue?: boolean;
   schX?: number;
   schY?: number;
   pcbX: number;
@@ -113,28 +138,32 @@ export const RV09Pot = (props: {
       pinAttributes={props.pinAttributes}
     />
     {/* Designator + resistance value, inside the body (like KiCad) */}
-    <silkscreentext
-      text={props.name}
-      pcbX={props.pcbX - 0.254}
-      pcbY={props.pcbY + 1.27}
-      fontSize={1}
-    />
-    <silkscreentext
-      text={props.resistance}
-      pcbX={props.pcbX - 0.127}
-      pcbY={props.pcbY - 0.381}
-      fontSize={1}
-    />
-    {props.label && (
+    {!props.hideDesignator && (
+      <silkscreentext
+        text={props.name}
+        pcbX={props.pcbX - 0.254}
+        pcbY={props.pcbY + 1.27}
+        fontSize={1}
+      />
+    )}
+    {!props.hideValue && (
+      <silkscreentext
+        text={props.resistance}
+        pcbX={props.pcbX - 0.127}
+        pcbY={props.pcbY - 0.381}
+        fontSize={1}
+      />
+    )}
+    {props.label && !props.hideLabel && (
       <silkscreentext
         text={props.label}
-        pcbX={props.pcbX - 0.026}
+        pcbX={props.pcbX - 0.026 + (props.labelDx ?? 0)}
         // -9.3 (not KiCad's literal -9.642 offset): tscircuit renders
         // bottom-anchored silkscreen text ~0.664*fontSize lower than KiCad's
         // justify-bottom, so the anchor is raised 0.686mm to land the ink at
         // the exact KiCad position, then lowered ~0.35mm for a clear gap to
         // the pin-row pads above.
-        pcbY={props.pcbY - 8.8}
+        pcbY={props.pcbY - 8.8 + (props.labelDy ?? 0)}
         anchorAlignment="bottom_center"
         fontSize={1}
       />
