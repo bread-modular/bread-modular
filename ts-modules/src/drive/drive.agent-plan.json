@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "board": "drive",
+  "createdAt": "2026-09-03T10:06:49.532Z",
+  "sections": [
+    {
+      "id": "S1",
+      "name": "section-2",
+      "rect": {
+        "minX": -13.2,
+        "maxX": 12.6,
+        "minY": -14.6,
+        "maxY": -5
+      },
+      "connections": [
+        "D1.1 > D2.2",
+        "D2.1 > RV2.2",
+        "D3.2 > D4.1",
+        "D4.2 > RV3.2",
+        "R3.1 > RV1.3"
+      ],
+      "phaseIndex": 0,
+      "status": "pending"
+    },
+    {
+      "id": "S2",
+      "name": "section-3",
+      "rect": {
+        "minX": -14.6,
+        "maxX": 13.43,
+        "minY": -8.856,
+        "maxY": 26.13
+      },
+      "connections": [
+        "C1.1 > V_SUPPLY1.5",
+        "D1.2 > U1.6",
+        "D6.2 > U1.7",
+        "INPUT1.1 > R8.1",
+        "INPUT1.2 > INPUT1.5",
+        "OUTPUT1.1 > R6.2",
+        "OUTPUT1.4 > R5.2",
+        "R1.2 > U1.5",
+        "R7.1 > U1.2",
+        "R7.2 > U1.1"
+      ],
+      "phaseIndex": 1,
+      "status": "pending"
+    },
+    {
+      "id": "S3",
+      "name": "section-1",
+      "rect": {
+        "minX": -6.6,
+        "maxX": 9.6,
+        "minY": -28.5,
+        "maxY": -8.536
+      },
+      "connections": [
+        "C1.2 > U1.4",
+        "D6.1 > R6.1"
+      ],
+      "phaseIndex": 2,
+      "status": "pending"
+    }
+  ]
+}

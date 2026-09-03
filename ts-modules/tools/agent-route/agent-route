@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Wrapper for the agent-route CLI (mirrors tsci.sh UX — works without a global install).
+# Usage: ./tools/agent-route/agent-route <command> [args...]
+#    e.g. ./tools/agent-route/agent-route plan blank
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TSMODULES="$(cd "$DIR/../.." && pwd)"
+export PATH="$TSMODULES/node_modules/.bin:$PATH"
+exec node "$DIR/cli.js" "$@"
