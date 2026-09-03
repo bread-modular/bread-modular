@@ -73,10 +73,12 @@ export default () => (
     <ATTINY1616 name="U2" schX={0} schY={0.5} pcbX={-3.5} pcbY={-7.83} pcbRotation={90} />
 
     {/* ============ U1 / U3: MCP6002 dual op-amps ============ */}
-    {/* U1 (right): A = audio out buffer, B = gate buffer */}
-    <MCP6002 name="U1" schX={5.5} schY={2} pcbX={5.145} pcbY={17.145} />
-    {/* U3 (left): A = CV1 buffer, B = CV2 buffer */}
-    <MCP6002 name="U3" schX={-5.5} schY={2} pcbX={-4.11} pcbY={17.145} />
+    {/* U1 (right): A = audio out buffer, B = gate buffer. Pulled ~1.2mm toward
+        the middle so the body/pads clear the OUTPUT pin captions (GATE/AUDIO
+        column); its ref designator is off (it printed over that column). */}
+    <MCP6002 name="U1" schX={5.5} schY={2} pcbX={3.9} pcbY={17.145} showRef={false} />
+    {/* U3 (left): A = CV1 buffer, B = CV2 buffer (ref designator off) */}
+    <MCP6002 name="U3" schX={-5.5} schY={2} pcbX={-4.11} pcbY={17.145} showRef={false} />
 
     {/* ============ Power: VMID divider (R4/R5) + decoupling ============ */}
     <resistor name="R4" resistance="1k" footprint="0402" schX={-3} schY={-6.5} pcbX={-5.709} pcbY={-17.526} />
@@ -105,7 +107,16 @@ export default () => (
     <RV09Pot name="RV1" resistance="50k" label="LOWPASS" schX={3} schY={-4} pcbX={6.858} pcbY={-11.007} pinAttributes={{ pin2: { doNotConnect: true } }} />
     <trace name="U2-pa6-rv1" from=".U2 > .PA6" to=".RV1 > .pin1" />
     <trace name="RV1-wiper-u1a-in" from=".RV1 > .pin3" to="net.U1A_IN" />
-    <capacitor name="C2" capacitance="100nF" footprint="0402" schX={4.5} schY={-5.5} pcbX={-1.4} pcbY={-15.748} />
+    <capacitor
+      name="C2"
+      capacitance="100nF"
+      footprint="0402"
+      schX={4.5}
+      schY={-5.5}
+      pcbX={-1.4}
+      pcbY={-15.748}
+      pcbStyle={{ silkscreenTextVisibility: "hidden" }}
+    />
     <trace name="C2-vmid" from=".C2 > .pin1" to={NET_VMID} width="0.3mm" />
     <trace name="C2-u1a-in" from=".C2 > .pin2" to="net.U1A_IN" />
     <trace name="U1-in1p" from=".U1 > .IN1P" to="net.U1A_IN" />
@@ -177,8 +188,17 @@ export default () => (
 
     {/* ============ LED: PA5 -> D1 -> R6 330 -> GND ============ */}
     <trace name="U2-pa5-led" from=".U2 > .PA5" to="net.LED_A" />
-    {/* D1 = red LED, JLCPCB C2286 */}
-    <led name="D1" footprint="0603" supplierPartNumbers={{ jlcpcb: ["C2286"] }} schX={-1} schY={5.5} pcbX={-10.9475} pcbY={-4.68} />
+    {/* D1 = red LED, JLCPCB C2286 (ref designator off — cramped at the edge) */}
+    <led
+      name="D1"
+      footprint="0603"
+      supplierPartNumbers={{ jlcpcb: ["C2286"] }}
+      schX={-1}
+      schY={5.5}
+      pcbX={-10.9475}
+      pcbY={-4.68}
+      pcbStyle={{ silkscreenTextVisibility: "hidden" }}
+    />
     <trace name="D1-anode" from=".D1 > .anode" to="net.LED_A" />
     <trace name="D1-cathode" from=".D1 > .cathode" to=".R6 > .pin1" />
     <resistor
@@ -231,8 +251,7 @@ export default () => (
     {/* Knob + button labels (caption under each pot comes from RV09Pot's
         label prop; MODE sits centered on top of the SW1 button) */}
     <silkscreentext text="MODE" pcbX={-9.525} pcbY={-8.7} fontSize={1} />
-    {/* R6's auto-placed ref collides with RV2's CV1 caption — hide it and
-        print it to the right of the body instead */}
-    <silkscreentext text="R6" pcbX={-6.7} pcbY={-6.85} fontSize={1} />
+    {/* R6: auto ref is hidden (pcbStyle above) and stays off — it collided
+        with RV2's CV1 caption and cluttered the LED area */}
   </BreadModule>
 );

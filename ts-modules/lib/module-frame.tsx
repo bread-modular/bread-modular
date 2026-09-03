@@ -34,8 +34,10 @@ export type BusLabel = string | false | null | undefined;
 /** Bus connector pin pitch (1x05 header, 2.54mm). */
 const BUS_PITCH = 2.54;
 
-/** Silkscreen inset from a bus connector's center line to the label column. */
-const BUS_LABEL_INSET = 6.2;
+/** Silkscreen inset from a bus connector's center line to the label column.
+ *  7.2 pulls the pin-function captions ~1mm further into the board — at 6.2
+ *  they sat almost touching the socket pads. */
+const BUS_LABEL_INSET = 7.2;
 
 /** Horizontal extent + edge tick of the OUTPUT label separator dashes. */
 const BUS_DASH = { x1: 6.858, x2: 3.175, x3: 2.413 };

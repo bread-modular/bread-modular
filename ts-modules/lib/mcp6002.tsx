@@ -34,7 +34,7 @@
  * both the wrong size AND too short (0.6x1.0 @ +-2.15mm); these are the real
  * C7377 pads (0.588x1.8 @ +-2.6mm).
  */
-const MCP6002_C7377_FOOTPRINT = () => (
+const MCP6002_C7377_FOOTPRINT = ({ showRef = true }: { showRef?: boolean }) => (
   <footprint>
     {/* -X side (left): pins 1-4, 1.27mm pitch along Y */}
     <smtpad shape="pill" portHints={["pin1"]} pcbX={-2.6} pcbY={1.905} width={1.8} height={0.588} radius={0.294} />
@@ -69,8 +69,11 @@ const MCP6002_C7377_FOOTPRINT = () => (
     <silkscreenpath route={[{ x: 1.521409, y: 0.47244 }, { x: 1.521409, y: -0.47244 }]} />
     <silkscreenpath route={[{ x: 1.521409, y: 1.74244 }, { x: 1.521409, y: 0.79756 }]} />
     <silkscreenpath route={[{ x: 1.521409, y: 2.526208 }, { x: 1.521409, y: 2.06756 }]} />
-    {/* Reference designator */}
-    <silkscreentext text="{NAME}" pcbX={4.2004} pcbY={0.0127} anchorAlignment="center" fontSize={1} />
+    {/* Reference designator — optional so modules can silence it (e.g. when
+        it would print over bus-caption silkscreen near the board edge). */}
+    {showRef !== false && (
+      <silkscreentext text="{NAME}" pcbX={4.2004} pcbY={0.0127} anchorAlignment="center" fontSize={1} />
+    )}
     {/* Courtyard */}
     <courtyardoutline
       outline={[
@@ -91,10 +94,12 @@ export const MCP6002 = (props: {
   schY?: number;
   pcbX?: number;
   pcbY?: number;
+  /** Print the {NAME} reference designator on the silkscreen (default true). */
+  showRef?: boolean;
 }) => (
   <chip
     name={props.name ?? "U1"}
-    footprint={<MCP6002_C7377_FOOTPRINT />}
+    footprint={<MCP6002_C7377_FOOTPRINT showRef={props.showRef} />}
     supplierPartNumbers={{ jlcpcb: ["C7377"] }} // MCP6002T-I/SN, SOIC-8
     pinLabels={{
       pin1: "OUT1",
