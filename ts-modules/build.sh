@@ -170,6 +170,13 @@ for row in rows[1:]:
 with open(path, "w", newline="") as fh:
     csv.writer(fh).writerows(rows)
 PY
+
+    # Fill the Footprint column. tscircuit's gerber export leaves it EMPTY for
+    # every part (it can't map custom <footprint> JSX or the opaque footprinter
+    # strings to readable names). tools/gen-bom.py resolves each component from
+    # the placed circuit and writes the KiCad-compatible footprint name.
+    echo "==> [$m] Filling BOM footprint names (tools/gen-bom.py)..."
+    python3 "$DIR/../tools/gen-bom.py" "$dist_circuit" "$out_abs/${m}-bom.csv"
   fi
 
   echo "==> [$m] Done -> $out/"
