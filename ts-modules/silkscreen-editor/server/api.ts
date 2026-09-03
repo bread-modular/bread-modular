@@ -1,17 +1,21 @@
 /**
  * Vite middleware plugin — the /api surface of the silkscreen editor.
  *
- *   GET  /api/modules                 → { modules: string[] }
- *   GET  /api/inventory?module=8bit   → { module, items, counts, board }
- *   GET  /api/compile?module=8bit     → { …, svg } (silkscreen-only underlay)
+ * Single-entry mode: the process edits exactly ONE .circuit.tsx (SILK_ENTRY);
+ * the UI auto-loads it on boot, so there is no module picker and no ?module=
+ * params anywhere.
+ *
+ *   GET  /api/entry                   → { entry, name, sourcePath }
+ *   GET  /api/inventory               → { entry, name, items, counts, board }
+ *   GET  /api/compile                 → { …, svg } (silkscreen-only underlay)
  *   POST /api/apply                   → M4 write-back (see below)
  *
  * The heavy lifting happens in the bun child (server/compile-worker.ts) so the
  * vite process never loads tscircuit internals.
  *
- * POST /api/apply { module, expectedEntryMtimeMs, edits: SilkEdit[] }:
+ * POST /api/apply { expectedEntryMtimeMs, edits: SilkEdit[] }:
  *   1. guard: refuse if the source file changed since the client's compile
- *      (mtime check) or if another apply is in flight for this module,
+ *      (mtime check) or if another apply is in flight,
  *   2. patch the TSX in memory with ts-morph (server/patch.ts) — edits that
  *      cannot be located / are computed are reported, never guessed,
  *   3. write the file, recompile, and verify every edit's expected post-edit
@@ -23,8 +27,8 @@
  */
 import type { Plugin } from "vite";
 import { readFile, stat, writeFile } from "node:fs/promises";
-import { compileModule } from "./compile";
-import { listModules, moduleExists, moduleEntry } from "./paths";
+import { compileEntry } from "./compile";
+import { entryDisplayName, resolveEntryPath } from "./paths";
 import {
   applyEditsToSource,
   type ApplyEditsResult,
@@ -134,67 +138,57 @@ function verifyStyle(
   return { ok: true, detail: "confirmed in fresh compile", matchedItem: it };
 }
 
-/** per-module in-flight lock (edits mutate real source files) */
-const locks = new Set<string>();
+/** in-flight lock (edits mutate a real source file — one apply at a time) */
+let applyInFlight = false;
 
 export function silkApiPlugin(): Plugin {
+  // resolve at plugin construction so a missing/invalid SILK_ENTRY fails
+  // the dev server boot loudly instead of per-request.
+  const entry = resolveEntryPath();
+  const name = entryDisplayName(entry);
+
   return {
     name: "bread-modular-silkscreen-api",
     configureServer(server) {
-      server.middlewares.use("/api/modules", (_req, res) =>
-        handle(res, async () => ({ ok: true, modules: listModules() })),
+      server.middlewares.use("/api/entry", (_req, res) =>
+        handle(res, async () => ({ ok: true, entry, name, sourcePath: entry })),
       );
 
-      server.middlewares.use("/api/inventory", (req, res) => {
-        const moduleName = moduleNameFromUrl(req.url);
-        if (!moduleName)
-          return json(res, 400, {
-            ok: false,
-            error: "missing/unknown ?module= (known: /api/modules)",
-          });
-        return handle(res, async () => {
-          const r = await compileModule(moduleName);
+      server.middlewares.use("/api/inventory", (_req, res) =>
+        handle(res, async () => {
+          const r = await compileEntry();
           if (!r.ok) return { ok: false, error: r.error };
           const { svg: _svg, ...rest } = r;
+          void _svg;
           return rest; // items + counts + board, no svg
-        });
-      });
+        }),
+      );
 
-      server.middlewares.use("/api/compile", (req, res) => {
-        const moduleName = moduleNameFromUrl(req.url);
-        if (!moduleName)
-          return json(res, 400, {
-            ok: false,
-            error: "missing/unknown ?module= (known: /api/modules)",
-          });
-        return handle(res, async () => {
-          const r = await compileModule(moduleName);
+      server.middlewares.use("/api/compile", (_req, res) =>
+        handle(res, async () => {
+          const r = await compileEntry();
           return r; // items + counts + board + svg underlay
-        });
-      });
+        }),
+      );
 
       server.middlewares.use("/api/apply", (req, res) => {
         if (req.method !== "POST")
           return json(res, 405, { ok: false, error: "POST only" });
-        return handleApply(req, res);
+        return handleApply(req, res, entry, name);
       });
 
       // eslint-disable-next-line no-console
       console.log(
-        "[silk-api] /api/modules /api/inventory /api/compile /api/apply ready",
+        `[silk-api] entry=${entry} — /api/entry /api/inventory /api/compile /api/apply ready`,
       );
     },
   };
 }
 
-async function handleApply(req: any, res: any): Promise<void> {
+async function handleApply(req: any, res: any, entry: string, name: string): Promise<void> {
   const body = await readBody(req);
   if (!body)
     return json(res, 400, { ok: false, error: "invalid JSON body" });
-
-  const moduleName = String(body.module ?? "");
-  if (!moduleExists(moduleName))
-    return json(res, 400, { ok: false, error: `unknown module "${moduleName}"` });
 
   const edits: SilkEdit[] = Array.isArray(body.edits) ? body.edits : [];
   if (edits.length === 0)
@@ -238,8 +232,6 @@ async function handleApply(req: any, res: any): Promise<void> {
     }
   }
 
-  const entry = moduleEntry(moduleName);
-
   // --- mtime guard: refuse stale saves (source changed since compile) ---
   const currentMtime = (await stat(entry)).mtimeMs;
   const expected = Number(body.expectedEntryMtimeMs);
@@ -253,12 +245,12 @@ async function handleApply(req: any, res: any): Promise<void> {
     });
   }
 
-  if (locks.has(moduleName))
+  if (applyInFlight)
     return json(res, 423, {
       ok: false,
-      error: "another apply is in flight for this module",
+      error: "another apply is in flight",
     });
-  locks.add(moduleName);
+  applyInFlight = true;
 
   const original = await readFile(entry, "utf8");
   let patched: ApplyEditsResult | null = null;
@@ -284,7 +276,7 @@ async function handleApply(req: any, res: any): Promise<void> {
 
     // 2. write + 3. recompile + 4. verify — full rollback on any failure
     await writeFile(entry, patched.newSource);
-    const fresh = await compileModule(moduleName);
+    const fresh = await compileEntry();
     if (!fresh.ok) {
       await writeFile(entry, original);
       return json(res, 500, {
@@ -323,7 +315,9 @@ async function handleApply(req: any, res: any): Promise<void> {
     // success — respond with the fresh compile so the UI updates in place
     return json(res, 200, {
       ok: true,
-      module: moduleName,
+      entry: fresh.sourcePath ?? entry,
+      module: name,
+      name,
       sourcePath: fresh.sourcePath ?? entry,
       entryMtimeMs: fresh.entryMtimeMs,
       diff: patched.diff ?? [],
@@ -350,7 +344,7 @@ async function handleApply(req: any, res: any): Promise<void> {
       rolledBack: true,
     });
   } finally {
-    locks.delete(moduleName);
+    applyInFlight = false;
   }
 }
 
@@ -361,10 +355,3 @@ async function handle(res: any, fn: () => Promise<unknown>) {
     json(res, 500, { ok: false, error: err?.message ?? String(err) });
   }
 }
-
-function moduleNameFromUrl(url: string | undefined): string | null {
-  const q = url?.split("?")[1] ?? "";
-  const m = new URLSearchParams(q).get("module");
-  return m && moduleExists(m) ? m : null;
-}
-

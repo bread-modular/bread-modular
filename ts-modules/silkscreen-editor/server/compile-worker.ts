@@ -19,8 +19,9 @@
  *   - RootCircuit.add(createElement(Component)); render until done
  *   - getCircuitJson()
  *
- * Protocol: argv --module <name> --out <result.json>. The parent reads the
- * result FILE (not stdout) so stray eval logs can never corrupt the payload.
+ * Protocol: argv --out <result.json>; the entry comes from SILK_ENTRY
+ * (server/paths.ts). The parent reads the result FILE (not stdout) so stray
+ * eval logs can never corrupt the payload.
  */
 import { writeFileSync, statSync } from "node:fs";
 import path from "node:path";
@@ -32,7 +33,12 @@ import {
   itemsFromCircuitJson,
   type SilkBoard,
 } from "./silkscreen";
-import { moduleEntry, tsModulesDir } from "./paths";
+import { buildEntryContext } from "./entry-parse";
+import {
+  entryDisplayName,
+  resolveEntryPath,
+  tsModulesDirFor,
+} from "./paths";
 
 function arg(name: string): string | undefined {
   const i = process.argv.indexOf(name);
@@ -50,10 +56,11 @@ async function fail(outPath: string, message: string): Promise<never> {
 
 async function main() {
   const outPath = arg("--out");
-  const moduleName = arg("--module");
   if (!outPath) throw new Error("missing --out <result.json>");
-  if (!moduleName) throw new Error("missing --module <name>");
-  const entry = moduleEntry(moduleName);
+  // single-entry mode: which .circuit.tsx we compile comes from SILK_ENTRY
+  const entry = resolveEntryPath();
+  const entryName = entryDisplayName(entry);
+  const tsModulesDir = tsModulesDirFor(entry);
 
   // --- user-land imports (ts-modules/node_modules — the patched copies) ---
   const userRequire = createRequire(path.join(tsModulesDir, "noop.js"));
@@ -98,7 +105,8 @@ async function main() {
 
   // --- silkscreen view-model + underlay ---
   const frameLabels = extractFrameLabels(entry);
-  const items = itemsFromCircuitJson(circuitJson, frameLabels);
+  const entryCtx = buildEntryContext(entry);
+  const items = itemsFromCircuitJson(circuitJson, frameLabels, entryCtx);
   const filtered = filterSilkscreenCircuitJson(circuitJson);
   const svg: string = convertCircuitJsonToPcbSvg(filtered as any, {
     layer: "top",
@@ -123,7 +131,7 @@ async function main() {
     JSON.stringify(
       {
         ok: true,
-        module: moduleName,
+        module: entryName,
         entry,
         sourcePath: entry,
         entryMtimeMs,

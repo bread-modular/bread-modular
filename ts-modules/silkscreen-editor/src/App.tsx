@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   applyEdits,
   fetchCompile,
-  fetchModules,
+  fetchEntry,
   type ApplyEdit,
   type ApplyResponse,
   type CompileResponse,
@@ -23,8 +23,8 @@ type SaveReport = {
 };
 
 export function App() {
-  const [modules, setModules] = useState<string[]>([]);
-  const [current, setCurrent] = useState<string | null>(null);
+  /** display name of the single entry under edit (from /api/entry) */
+  const [entryName, setEntryName] = useState<string | null>(null);
   const [compiled, setCompiled] = useState<CompileResponse | null>(null);
   /** session items — may carry local (unsaved) edits on top of `compiled` */
   const [items, setItems] = useState<SilkItem[]>([]);
@@ -36,23 +36,34 @@ export function App() {
   /** two-step save: pending holds the edits awaiting in-app confirmation */
   const [pendingSave, setPendingSave] = useState<ApplyEdit[] | null>(null);
 
+  // single-entry mode: resolve the entry, then auto-load its compile on boot
   useEffect(() => {
-    fetchModules()
-      .then((r) => setModules(r.modules ?? []))
-      .catch((e) => setError(String(e)));
+    setLoading(true);
+    fetchEntry()
+      .then((r) => {
+        if (!r.ok) throw new Error(r.error ?? "no entry configured");
+        setEntryName(r.name ?? null);
+        return fetchCompile();
+      })
+      .then((r) => {
+        if (!r.ok) throw new Error(r.error ?? "compile failed");
+        setCompiled(r);
+        setItems(r.items ?? []);
+      })
+      .catch((e) => setError(String(e)))
+      .finally(() => setLoading(false));
   }, []);
 
-  const load = (moduleName: string) => {
+  const reload = () => {
     setLoading(true);
     setError(null);
     setSelected(null);
     setReport(null);
-    fetchCompile(moduleName)
+    fetchCompile()
       .then((r) => {
-        if (!r.ok) setError(r.error ?? "compile failed");
-        setCompiled(r.ok ? r : null);
+        if (!r.ok) throw new Error(r.error ?? "compile failed");
+        setCompiled(r);
         setItems(r.items ?? []);
-        setCurrent(moduleName);
       })
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false));
@@ -69,20 +80,6 @@ export function App() {
               ...patch,
               originX: patch.x !== undefined ? (it.originX ?? it.x) : it.originX,
               originY: patch.y !== undefined ? (it.originY ?? it.y) : it.originY,
-              originText:
-                patch.text !== undefined ? (it.originText ?? it.text) : it.originText,
-              originRotation:
-                patch.rotation !== undefined
-                  ? (it.originRotation ?? it.rotation)
-                  : it.originRotation,
-              originAnchor:
-                patch.anchor !== undefined
-                  ? (it.originAnchor ?? it.anchor)
-                  : it.originAnchor,
-              originFontSize:
-                patch.fontSize !== undefined
-                  ? (it.originFontSize ?? it.fontSize)
-                  : it.originFontSize,
               originHidden:
                 patch.hidden !== undefined
                   ? (it.originHidden ?? it.hidden)
@@ -107,22 +104,6 @@ export function App() {
     patchItem(fingerprint, { hidden: !item.hidden });
   };
 
-  const onTextEdit = (fingerprint: string, text: string) => {
-    const item = items.find((i) => i.fingerprint === fingerprint);
-    if (!item || item.readonly || item.kind !== "label") return;
-    patchItem(fingerprint, { text });
-  };
-
-  /** style edits (rotation/anchor/fontSize) — custom labels only */
-  const onEditProp = (
-    fingerprint: string,
-    patch: Partial<Pick<SilkItem, "rotation" | "anchor" | "fontSize">>,
-  ) => {
-    const item = items.find((i) => i.fingerprint === fingerprint);
-    if (!item || item.readonly || item.kind !== "label") return;
-    patchItem(fingerprint, patch);
-  };
-
   const resetItem = (fingerprint: string) => {
     const item = items.find((i) => i.fingerprint === fingerprint);
     if (!item) return;
@@ -133,18 +114,10 @@ export function App() {
               ...it,
               x: it.originX ?? it.x,
               y: it.originY ?? it.y,
-              text: it.originText ?? it.text,
-              rotation: it.originRotation ?? it.rotation,
-              anchor: it.originAnchor ?? it.anchor,
-              fontSize: it.originFontSize ?? it.fontSize,
               hidden: it.originHidden ?? false,
               dirty: false,
               originX: undefined,
               originY: undefined,
-              originText: undefined,
-              originRotation: undefined,
-              originAnchor: undefined,
-              originFontSize: undefined,
               originHidden: undefined,
             }
           : it,
@@ -165,18 +138,10 @@ export function App() {
                   ...it,
                   x: it.originX ?? it.x,
                   y: it.originY ?? it.y,
-                  text: it.originText ?? it.text,
-                  rotation: it.originRotation ?? it.rotation,
-                  anchor: it.originAnchor ?? it.anchor,
-                  fontSize: it.originFontSize ?? it.fontSize,
                   hidden: it.originHidden ?? false,
                   dirty: false,
                   originX: undefined,
                   originY: undefined,
-                  originText: undefined,
-                  originRotation: undefined,
-                  originAnchor: undefined,
-                  originFontSize: undefined,
                   originHidden: undefined,
                 }
               : it,
@@ -200,58 +165,39 @@ export function App() {
         ops.x = item.x;
         ops.y = item.y;
       }
-      if (item.originText !== undefined && item.text !== item.originText && item.kind === "label")
-        ops.text = item.text;
-      if (
-        item.kind === "label" &&
-        item.originRotation !== undefined &&
-        item.rotation !== item.originRotation
-      )
-        ops.rotation = item.rotation;
-      if (
-        item.kind === "label" &&
-        item.originAnchor !== undefined &&
-        item.anchor !== item.originAnchor
-      )
-        ops.anchor = item.anchor;
-      if (
-        item.kind === "label" &&
-        item.originFontSize !== undefined &&
-        item.fontSize !== item.originFontSize
-      )
-        ops.fontSize = item.fontSize;
       // emit hide AND show: ghosts (applied hides) carry originHidden=true so
-      // un-hiding them produces ops.hidden=false (removes the pcbStyle patch)
+      // un-hiding them produces ops.hidden=false (removes the hide patch)
       if (item.hidden !== (item.originHidden ?? false)) ops.hidden = item.hidden;
       return {
         fingerprint: item.fingerprint,
         ordinal: ordinalOf(items, item),
         kind: item.kind,
         ref: item.ref,
-        text: item.originText ?? item.text, // locate by COMPILE-TIME text
+        text: item.text, // text is immutable here (move + hide only)
         x: item.originX ?? item.x, // locate by COMPILE-TIME position
         y: item.originY ?? item.y,
         layer: item.layer,
         ops,
         componentCenter: item.componentCenter,
         componentRotation: item.componentRotation,
+        owner: item.owner,
       };
     });
 
   const requestSave = () => {
-    if (!current || !compiled || dirtyItems.length === 0) return;
+    if (!compiled || dirtyItems.length === 0) return;
     const edits = buildEdits();
     setPendingSave(edits);
   };
 
   const saveToSource = async (edits: ApplyEdit[]) => {
-    if (!current || !compiled || edits.length === 0) return;
+    if (!compiled || edits.length === 0) return;
     setPendingSave(null);
     setSaving(true);
     setError(null);
     setReport(null);
     try {
-      const r = await applyEdits(current, compiled.entryMtimeMs, edits);
+      const r = await applyEdits(compiled.entryMtimeMs, edits);
       if (r.ok) {
         // merge fresh compile with session ghosts + unpatched leftovers
         const fresh: SilkItem[] = [...(r.items ?? [])];
@@ -301,7 +247,7 @@ export function App() {
       } else {
         if (r.stale) {
           // source changed under us — reload the compile
-          load(current);
+          reload();
         }
         setReport({
           ok: false,
@@ -318,21 +264,15 @@ export function App() {
     }
   };
 
+  const loaded = compiled?.svg && compiled.board;
+
   return (
     <div className="app">
       <header className="topbar">
         <h1>🔧 Bread Modular — Silkscreen Editor</h1>
-        <nav className="module-picker">
-          {modules.map((m) => (
-            <button
-              key={m}
-              className={`module-btn ${m === current ? "module-btn-active" : ""}`}
-              onClick={() => load(m)}
-            >
-              {m}
-            </button>
-          ))}
-        </nav>
+        <span className="entry-name" data-testid="silk-entry-name">
+          {entryName ?? (loading ? "…" : "no entry")}
+        </span>
         <div className="status">
           {loading && <span className="spinner">⏳ compiling…</span>}
           {compiled?.counts && (
@@ -347,25 +287,23 @@ export function App() {
 
       {error && <div className="error-banner">⚠ {error}</div>}
 
-      {!current && !loading && (
+      {!loaded && !loading && !error && (
         <div className="placeholder">
-          <p>Pick a module to compile its silkscreen (routing-disabled eval).</p>
+          <p>Compiling the entry…</p>
         </div>
       )}
 
       <main className="workspace">
-        {compiled?.svg && compiled.board && current && (
+        {loaded && (
           <>
             <BoardCanvas
-              svg={compiled.svg}
-              board={compiled.board}
+              svg={compiled.svg!}
+              board={compiled.board!}
               items={items}
               selected={selected}
               onSelect={setSelected}
               onDragEnd={onDragEnd}
               onToggleHidden={onToggleHidden}
-              onTextEdit={onTextEdit}
-              onEditProp={onEditProp}
               onReset={resetItem}
             />
             <ItemList
@@ -373,7 +311,6 @@ export function App() {
               selected={selected}
               onSelect={setSelected}
               onToggleHidden={onToggleHidden}
-              onTextEdit={onTextEdit}
               onReset={resetItem}
             />
           </>
@@ -385,16 +322,12 @@ export function App() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3>💾 Write edits to the module source?</h3>
             <p className="modal-path">
-              <code>{compiled.sourcePath ?? `ts-modules/src/${current}/${current}.circuit.tsx`}</code>
+              <code>{compiled.sourcePath ?? entryName ?? "module source"}</code>
             </p>
             <ul className="modal-edits">
               {pendingSave.map((e) => {
                 const what = [
                   e.ops.x !== undefined ? `move → (${e.ops.x}, ${e.ops.y}) mm` : null,
-                  e.ops.text !== undefined ? `text → "${e.ops.text}"` : null,
-                  e.ops.rotation !== undefined ? `rotation → ${e.ops.rotation}°` : null,
-                  e.ops.anchor !== undefined ? `anchor → ${e.ops.anchor}` : null,
-                  e.ops.fontSize !== undefined ? `fontSize → ${e.ops.fontSize}mm` : null,
                   e.ops.hidden !== undefined ? (e.ops.hidden ? "hide" : "show") : null,
                 ]
                   .filter(Boolean)
@@ -409,7 +342,7 @@ export function App() {
             <p className="modal-note">
               The file is patched in place with ts-morph, then recompiled and
               verified (rolled back on any failure). Afterwards run{" "}
-              <code>./build.sh {current}</code> to regenerate gerbers/SVGs.
+              <code>./build.sh {entryName}</code> to regenerate gerbers/SVGs.
             </p>
             <div className="modal-actions">
               <button className="btn-secondary" onClick={() => setPendingSave(null)}>
@@ -423,7 +356,7 @@ export function App() {
         </div>
       )}
 
-      {current && (
+      {loaded && (
         <footer className="savebar">
           <span className="savebar-info">
             {dirtyItems.length > 0 ? (
@@ -440,7 +373,7 @@ export function App() {
           {report?.ok && (
             <span className="savebar-ok">
               ✓ saved to <code>{report.sourcePath}</code> — run{" "}
-              <code>./build.sh {current}</code> to regenerate outputs
+              <code>./build.sh {entryName}</code> to regenerate outputs
               {report.unpatched && report.unpatched.length > 0 && (
                 <> · {report.unpatched.length} edit(s) could not be patched (see log)</>
               )}

@@ -9,12 +9,11 @@ import { spawn } from "node:child_process";
 import { readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { pkgDir } from "./paths";
+import { pkgDir, resolveEntryPath } from "./paths";
 
 export type CompileResult = {
   ok: boolean;
   error?: string;
-  module?: string;
   entry?: string;
   /** absolute path of the .circuit.tsx — shown in the UI before write-back */
   sourcePath?: string;
@@ -41,17 +40,18 @@ export type CompileResult = {
 const BUN = process.env.SILK_BUN ?? "bun";
 const COMPILE_TIMEOUT_MS = 120_000;
 
-export function compileModule(moduleName: string): Promise<CompileResult> {
+export function compileEntry(): Promise<CompileResult> {
+  const entry = resolveEntryPath();
   const outFile = path.join(
     tmpdir(),
-    `silk-compile-${moduleName}-${process.pid}-${Date.now()}.json`,
+    `silk-compile-${process.pid}-${Date.now()}.json`,
   );
   const worker = path.join(pkgDir, "server", "compile-worker.ts");
 
   return new Promise<CompileResult>((resolvePromise) => {
     const child = spawn(
       BUN,
-      [worker, "--module", moduleName, "--out", outFile],
+      [worker, "--out", outFile],
       {
         cwd: pkgDir,
         env: process.env,

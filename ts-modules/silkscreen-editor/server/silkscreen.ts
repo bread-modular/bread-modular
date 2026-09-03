@@ -1,5 +1,6 @@
-import { readFileSync } from "node:fs";
-import { Project, type JsxAttribute, type Node } from "ts-morph";
+import { classifyLabel, classifyRef } from "./ownership";
+import { buildEntryContext } from "./entry-parse";
+import type { EntryContext, FrameLabels } from "./entry-parse";
 
 
 /**
@@ -57,8 +58,16 @@ export type SilkItem = {
   /** mm */
   fontSize: number;
   layer: "top" | "bottom";
-  /** true ⇒ frame-computed position (module-frame / bus labels) — do not drag */
+  /** true ⇒ not draggable (frame-owned or otherwise not patchable) */
   readonly: boolean;
+  /**
+   * Write-back ownership (server/ownership.ts). The UI uses this to decide
+   * drag vs ghost:
+   *   entry/rv09/ref → draggable (patch engine knows the call site),
+   *   frame          → read-only ghost (lib/frame-owned or computed).
+   * Absent on inventories built without an entry context (M1 CLI compat).
+   */
+  owner?: import("./entry-parse").SilkOwner;
   /**
    * ref items only: owning pcb_component center (mm) + ccw rotation — needed
    * by the write-back to convert a target board position into the component-
@@ -95,12 +104,7 @@ export function fingerprintOf(
 /* Frame-computed label detection (plan §5.3)                          */
 /* ------------------------------------------------------------------ */
 
-export type FrameLabels = {
-  name?: string;
-  version?: string;
-  inputLabels: string[];
-  outputLabels: string[];
-};
+export type { FrameLabels } from "./entry-parse";
 
 /**
  * module-frame's bus pin labels sit exactly at x = ±(halfW − BUS_LABEL_INSET)
@@ -113,78 +117,28 @@ export const BUS_LABEL_INSET_MM = 7.2;
  * Parse the <BreadModule …> call site of the module entry with ts-morph to
  * learn which label strings the frame owns (name/version/INPUT/OUTPUT/BREAD/
  * MODULAR + inputLabels/outputLabels literals).
+ *
+ * Thin wrapper over server/entry-parse.ts (kept for M1 CLI compat).
  */
 export function extractFrameLabels(entryPath: string): FrameLabels {
-  const project = new Project({ useInMemoryFileSystem: true });
-  const source = project.createSourceFile(
-    "module.circuit.tsx",
-    readFileSync(entryPath, "utf8"),
-  );
-
-  const out: FrameLabels = { inputLabels: [], outputLabels: [] };
-
-  // NOTE: ts-morph's getDescendantsOfKind("JsxOpeningElement") returns nothing
-  // in this environment (kind-query quirk) — filter getDescendants() instead.
-  // Opening elements cover both <BreadModule …/> and <BreadModule …>…</…>.
-  const openingElements = source
-    .getDescendants()
-    .filter(
-      (n) =>
-        n.getKindName() === "JsxOpeningElement" ||
-        n.getKindName() === "JsxSelfClosingElement",
-    ) as any[];
-
-  const literalText = (expr: Node | undefined): string | undefined => {
-    if (expr?.getKindName() === "StringLiteral") {
-      return (expr as any).getLiteralText() as string;
-    }
-    return undefined;
-  };
-  const literalArray = (expr: Node | undefined): string[] => {
-    if (expr?.getKindName() !== "ArrayLiteralExpression") return [];
-    return (expr as any)
-      .getElements()
-      .map(literalText)
-      .filter((s: string | undefined): s is string => typeof s === "string");
-  };
-  // {["MIDI", …]} wraps the array in a JsxExpression — unwrap it.
-  const unwrap = (expr: Node | undefined): Node | undefined => {
-    if (expr?.getKindName() === "JsxExpression") {
-      return (expr as any).getExpression() as Node | undefined;
-    }
-    return expr;
-  };
-
-  for (const el of openingElements) {
-    const tagName = el.getTagNameNode().getText().split(".").pop();
-    if (tagName !== "BreadModule") continue;
-
-    for (const attr of el.getAttributes() as JsxAttribute[]) {
-      // NOTE: ts-morph's JsxAttribute has getNameNode() — NOT getName().
-      const attrName = attr.getNameNode?.().getText();
-      if (typeof attrName !== "string") continue; // e.g. spread attribute
-      const value = unwrap(attr.getInitializer());
-      if (!value) continue;
-      if (attrName === "name") out.name = literalText(value);
-      else if (attrName === "version") out.version = literalText(value);
-      else if (attrName === "inputLabels") out.inputLabels = literalArray(value);
-      else if (attrName === "outputLabels")
-        out.outputLabels = literalArray(value);
-    }
-    break; // first <BreadModule> call site is the module frame
-  }
-  return out;
+  return buildEntryContext(entryPath).frameLabels;
 }
 
 
 /**
- * Items from a compiled circuit json. `frameLabels` marks frame-computed
- * labels readonly; bus labels additionally require the bus column position
- * so a module-authored caption with the same string stays editable.
+ * Items from a compiled circuit json.
+ *
+ * Ownership (server/ownership.ts) decides draggable vs ghost:
+ *   - entry/rv09/ref owners → editable (the patch engine knows the call site)
+ *   - frame owner           → readonly ghost (lib/frame-owned or computed)
+ *
+ * Without an entry context (M1 CLI path) the legacy frame-label heuristic
+ * applies and `owner` is left undefined.
  */
 export function itemsFromCircuitJson(
   circuitJson: any[],
   frameLabels: FrameLabels,
+  entryCtx?: import("./entry-parse").EntryContext,
 ): SilkItem[] {
   const board = circuitJson.find((e) => e?.type === "pcb_board") as
     | { width?: number }
@@ -217,6 +171,21 @@ export function itemsFromCircuitJson(
     ),
   );
 
+  // Ownership (server/ownership.ts): which items the patch engine can write
+  // back. Without an entry context (M1 CLI path) the legacy frame-label
+  // heuristic below applies and `owner` stays undefined.
+  const ownerOf = (
+    kind: "label" | "ref",
+    item: { text: string; x: number; y: number },
+    refName?: string,
+  ): import("./entry-parse").SilkOwner | undefined => {
+    if (!entryCtx) return undefined;
+    if (kind === "ref") {
+      return classifyRef(refName ?? item.text, entryCtx);
+    }
+    return classifyLabel(item, entryCtx, halfW);
+  };
+
   const items: SilkItem[] = [];
   // pcb_component center/rotation for ref write-back math (plan §5.2)
   const pcbComponents = new Map<
@@ -239,9 +208,16 @@ export function itemsFromCircuitJson(
     const owning = e.pcb_component_id
       ? pcbComponents.get(e.pcb_component_id)
       : undefined;
+    const refName =
+      kind === "ref"
+        ? (sourceNames.get(pcbToSource.get(e.pcb_component_id) ?? "") ?? text)
+        : undefined;
 
-    let readonly = false;
-    if (kind === "label") {
+    const owner = ownerOf(kind, { text, x, y }, refName);
+    let readonly: boolean;
+    if (owner) {
+      readonly = owner.kind === "frame";
+    } else if (kind === "label") {
       if (fixedTexts.has(text)) {
         readonly = true;
       } else if (
@@ -250,17 +226,17 @@ export function itemsFromCircuitJson(
         Math.abs(Math.abs(x) - (halfW - BUS_LABEL_INSET_MM)) < 0.02
       ) {
         readonly = true; // sits exactly on the frame's bus label column
+      } else {
+        readonly = false;
       }
+    } else {
+      readonly = false;
     }
 
     items.push({
       fingerprint: fingerprintOf(kind, text, x, y, e.layer ?? "top"),
       kind,
-      ref:
-        kind === "ref"
-          ? (sourceNames.get(pcbToSource.get(e.pcb_component_id) ?? "") ??
-            text)
-          : undefined,
+      ref: refName,
       text,
       x,
       y,
@@ -269,6 +245,7 @@ export function itemsFromCircuitJson(
       fontSize: e.font_size ?? 1,
       layer: e.layer === "bottom" ? "bottom" : "top",
       readonly,
+      ...(owner ? { owner } : {}),
       ...(kind === "ref" && owning?.center
         ? {
             componentCenter: {

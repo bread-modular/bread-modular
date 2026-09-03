@@ -15,6 +15,12 @@ export type AnchorAlignment =
   | "center_left"
   | "center_right";
 
+export type SilkOwner =
+  | { kind: "entry" }
+  | { kind: "rv09"; pot: string; slot: "label" | "designator" | "value" }
+  | { kind: "ref"; comp: string }
+  | { kind: "frame" };
+
 export type SilkItem = {
   fingerprint: string;
   kind: "label" | "ref";
@@ -28,6 +34,13 @@ export type SilkItem = {
   layer: "top" | "bottom";
   readonly: boolean;
   /**
+   * Write-back ownership from the server inventory. entry/rv09/ref items are
+   * draggable (the patch engine knows the call site); frame items render as
+   * read-only ghosts. Absent on old payloads — treat as draggable iff
+   * !readonly (legacy heuristic).
+   */
+  owner?: SilkOwner;
+  /**
    * ref items only: owning component geometry — echoed back on /api/apply so
    * the server can convert a target board position into the component-local
    * pcbSx silkscreentext offset (text_pos = center + R(rot)·local).
@@ -40,12 +53,6 @@ export type SilkItem = {
   /** session-only: compiled position before local edits (for diff display) */
   originX?: number;
   originY?: number;
-  /** session-only: compiled text before local edits */
-  originText?: string;
-  /** session-only: compiled rotation/anchor/fontSize before local edits */
-  originRotation?: number;
-  originAnchor?: AnchorAlignment;
-  originFontSize?: number;
   /** session-only: compiled visibility before local edits (ghosts = true) */
   originHidden?: boolean;
 };
