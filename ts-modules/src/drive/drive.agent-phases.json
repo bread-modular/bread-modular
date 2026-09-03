@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "board": "drive",
+  "createdAt": "2026-09-03T16:24:19.493Z",
+  "phases": [
+    {
+      "phaseIndex": 0,
+      "name": "infra",
+      "nets": [
+        "C1.2 > U1.4",
+        "C1.1 > V_SUPPLY1.5",
+        "D1.1 > D2.2",
+        "D1.2 > U1.6",
+        "D2.1 > RV2.2",
+        "D3.2 > D4.1",
+        "D4.2 > RV3.2",
+        "D6.1 > R6.1",
+        "D6.2 > U1.7"
+      ],
+      "region": {
+        "minX": -15.24,
+        "maxX": 15.24,
+        "minY": -29.5,
+        "maxY": 27.13
+      },
+      "autorouter": "capacity-autorouter",
+      "budgetMs": 60000,
+      "status": "done"
+    },
+    {
+      "phaseIndex": 1,
+      "name": "signal-1",
+      "nets": [
+        "INPUT1.1 > R8.1",
+        "INPUT1.2 > INPUT1.5",
+        "OUTPUT1.1 > R6.2",
+        "OUTPUT1.4 > R5.2",
+        "R1.2 > U1.5",
+        "R3.1 > RV1.3",
+        "R7.1 > U1.2",
+        "R7.2 > U1.1"
+      ],
+      "region": {
+        "minX": -15.24,
+        "maxX": 14.43,
+        "minY": -26.6,
+        "maxY": 32.21
+      },
+      "autorouter": "capacity-autorouter",
+      "budgetMs": 60000
+    }
+  ],
+  "unclaimedNets": {
+    "missing": [],
+    "dupes": []
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "board": "blank",
+  "createdAt": "2026-09-03T16:24:09.006Z",
+  "phases": [
+    {
+      "phaseIndex": 0,
+      "name": "infra",
+      "nets": [
+        "C1.1 > V_SUPPLY1.5"
+      ],
+      "region": {
+        "minX": -9.35,
+        "maxX": 6.81,
+        "minY": 21.13,
+        "maxY": 27.13
+      },
+      "autorouter": "capacity-autorouter",
+      "budgetMs": 60000,
+      "status": "done"
+    },
+    {
+      "phaseIndex": 1,
+      "name": "signal-1",
+      "nets": [
+        "C1.2 > R2.2",
+        "R1.2 > R2.1"
+      ],
+      "region": {
+        "minX": -9.35,
+        "maxX": 6.81,
+        "minY": -24.59,
+        "maxY": 3
+      },
+      "autorouter": "capacity-autorouter",
+      "budgetMs": 60000,
+      "status": "done"
+    }
+  ],
+  "unclaimedNets": {
+    "missing": [],
+    "dupes": []
+  }
+}
