@@ -113,7 +113,10 @@ body {
 }
 .handle-ref { border-style: dashed; }
 .handle-readonly { color: #c9a15a; border-color: rgba(201, 161, 90, 0.7); }
-.handle-hidden { opacity: 0.25; }
+.handle-hidden {
+  opacity: 0.55;
+  border-style: dashed;
+}
 .handle-dirty {
   border-color: #ffb74d;
   color: #ffb74d;

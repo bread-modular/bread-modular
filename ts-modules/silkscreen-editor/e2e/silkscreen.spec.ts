@@ -239,3 +239,42 @@ test("frame-owned ghosts are not editable", async ({ page }) => {
   );
   await expect(page.getByTestId("silk-panel-visibility")).toBeDisabled();
 });
+
+/**
+ * Regression test for the Safari/overlay double-offset bug: the overlay used
+ * to subtract the svg box origin from coordinates that were already
+ * svg-element-relative, shifting EVERY handle by the wrap's offset inside the
+ * canvas — still "inside the board", so the box-containment test above
+ * passed. The invariant that actually catches it: each handle's center must
+ * sit on SOME silkscreen ink in the underlay svg (within 15px), no matter
+ * where the wrap is laid out on the page.
+ */
+test("every handle sits on its silkscreen ink (no overlay offset)", async ({
+  page,
+}) => {
+  await openEntry(page);
+
+  const offsets = await page.evaluate(() => {
+    const svg = document.querySelector(".underlay-wrap svg")!;
+    const ink = [...svg.querySelectorAll("text, path")];
+    const trs = ink.map((t) => t.getBoundingClientRect());
+    return [...document.querySelectorAll(".handle")].map((h) => {
+      const hr = h.getBoundingClientRect();
+      const hc = { x: hr.left + hr.width / 2, y: hr.top + hr.height / 2 };
+      let best = Infinity;
+      for (const tr of trs) {
+        const tc = { x: tr.left + tr.width / 2, y: tr.top + tr.height / 2 };
+        best = Math.min(best, Math.hypot(tc.x - hc.x, tc.y - hc.y));
+      }
+      return best;
+    });
+  });
+
+  expect(offsets.length).toBeGreaterThan(20);
+  for (const d of offsets) {
+    expect(
+      d,
+      `handle is ${d.toFixed(1)}px from the nearest ink — overlay offset bug`,
+    ).toBeLessThan(25);
+  }
+});
