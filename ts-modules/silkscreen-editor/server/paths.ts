@@ -5,17 +5,18 @@ import { fileURLToPath } from "node:url";
 // Works under bun (compile-worker) AND node (vite middleware).
 const here = dirname(fileURLToPath(import.meta.url));
 
-/** tools/silkscreen-editor */
+/** ts-modules/silkscreen-editor */
 export const pkgDir = resolve(here, "..");
-/** repo root (this package lives at <repo>/tools/silkscreen-editor) */
+/** repo root (this package lives at <repo>/ts-modules/silkscreen-editor) */
 export const repoRoot = resolve(pkgDir, "..", "..");
 /**
  * The circuit package whose node_modules (KiCad-font-patched) and src/<m>/
- * modules we eval against. Overridable for out-of-repo checkouts:
+ * modules we eval against — the PARENT dir now that the editor lives inside
+ * ts-modules. Overridable for out-of-tree checkouts:
  *   SILK_TS_MODULES_DIR=/path/to/bread-modular/ts-modules
  */
 export const tsModulesDir =
-  process.env.SILK_TS_MODULES_DIR ?? join(repoRoot, "ts-modules");
+  process.env.SILK_TS_MODULES_DIR ?? resolve(pkgDir, "..");
 
 export const MODULE_NAME_RE = /^[a-zA-Z0-9_-]+$/;
 

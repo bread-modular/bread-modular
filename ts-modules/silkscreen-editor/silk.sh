@@ -10,8 +10,8 @@
 set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TS_MODULES="$(cd "$DIR/.." && pwd)"
 REPO_ROOT="$(cd "$DIR/../.." && pwd)"
-TS_MODULES="$REPO_ROOT/ts-modules"
 
 # bun + tsci come from the circuit package (bun is an npm dep there).
 export PATH="$TS_MODULES/node_modules/.bin:$PATH"

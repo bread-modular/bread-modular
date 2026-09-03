@@ -2,10 +2,11 @@
  * M1 — headless inventory CLI.
  *
  *   bun server/inventory-cli.ts <module>        (default: 8bit)
- *   ./silk.sh run inventory 8bit
+ *   ./silk.sh run inventory 8bit            (from silkscreen-editor/)
+ *   npm run silk:inventory -- 8bit          (from ts-modules/)
  *
  * Prints the silkscreen item list (JSON array) on stdout. Cross-check against
- * ts-modules/src/<m>/<m>.routed.json: pcb_silkscreen_text count and the
+ * src/<m>/<m>.routed.json: pcb_silkscreen_text count and the
  * pcb_component_id-linked refs must match exactly.
  */
 import { compileModule } from "./compile";

@@ -1,7 +1,7 @@
-# tools/silkscreen-editor
+# silkscreen-editor
 
 A purpose-built dev tool for editing the **silkscreen text** of Bread Modular
-tscircuit PCBs (plan: `docs/silkscreen-editor-plan.md`). It renders only the
+tscircuit PCBs (plan: `../../docs/silkscreen-editor-plan.md`). It renders only the
 board outline + silkscreen — never traces, vias, pads or courtyards — and never
 routes (every compile runs the eval with `routingDisabled: true`, mirroring
 `tsci build --routing-disabled`).
@@ -12,15 +12,17 @@ Status: **M1 (inventory CLI) + M2 (viewer) + M3 (interactive editing) + M4 (sour
 
 ```bash
 # M1 — silkscreen inventory as JSON (defaults to 8bit)
-./silk.sh run inventory 8bit | jq
+./silk.sh run inventory 8bit | jq            # from silkscreen-editor/
 ./silk.sh run inventory blank
+npm run silk:inventory -- 8bit               # from ts-modules/
 
 # M2 — viewer (UI + /api middleware in one vite dev server)
-./silk.sh dev
+./silk.sh dev                                # from silkscreen-editor/
+npm run silk                                 # from ts-modules/
 # open http://localhost:5175 and pick a module
 ```
 
-`silk.sh` puts `ts-modules/node_modules/.bin` (bun, tsci) on `PATH`, re-applies
+`silk.sh` puts `../node_modules/.bin` (bun, tsci) on `PATH`, re-applies
 the KiCad silkscreen-font patch (idempotent), installs this package's deps on
 first run, then executes `bun run <script>` inside this package.
 
@@ -64,18 +66,18 @@ The vite middleware (`server/api.ts`) spawns a **bun child**
 (`server/compile-worker.ts`) which mirrors `@tscircuit/cli`'s
 `generateCircuitJson` eval path exactly:
 
-1. resolve + import `react` and `tscircuit` from **`ts-modules/node_modules`**
+1. resolve + import `react` and `tscircuit` from **`../node_modules`**
    (the KiCad-font-patched user-land — the KiCad glyph patch lives in
-   `@tscircuit/alphabet`, applied by `scripts/kicad-font/apply-kicad-font-patch.mjs`),
+   `@tscircuit/alphabet`, applied by `../../scripts/kicad-font/apply-kicad-font-patch.mjs`),
 2. `getPlatformConfig({ routingDisabled: true })` from `@tscircuit/eval/platform-config`,
 3. native `import(pathToFileURL(<m>.circuit.tsx))` — bun transpiles the TSX, so
-   `../../lib` resolves against `ts-modules/` (same as `tsci build`),
+   `../lib` resolves against `ts-modules/` (same as `tsci build`),
 4. `RootCircuit.add(createElement(Component))` + render-until-done loop,
 5. filter the circuit json to **board + silkscreen text/line/rect/circle/path +
    plated holes** (traces, vias, pads, courtyards, copper, source/schematic are
    dropped) and render the underlay with
    `convertCircuitJsonToPcbSvg(filtered, { layer: "top", … })` from
-   `circuit-to-svg` (also from `ts-modules/node_modules` via a `file:` dep).
+   `circuit-to-svg` (also from `../node_modules` via a `file:` dep).
 
 The worker writes its result to a temp **file** (not stdout) so eval logs can
 never corrupt the JSON payload.

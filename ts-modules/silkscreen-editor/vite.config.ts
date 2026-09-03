@@ -4,7 +4,7 @@ import { silkApiPlugin } from "./server/api";
 // Dev-tool config: browser UI + /api middleware in one process.
 // The middleware spawns a bun child (server/compile-worker.ts) for the actual
 // tscircuit eval, so the vite process itself never loads tscircuit internals
-// and the KiCad-font-patched ts-modules/node_modules stays the single source
+// and the KiCad-font-patched ../node_modules stays the single source
 // of truth for eval + rendering packages.
 export default defineConfig({
   // .tsx sources use the automatic JSX runtime (no `import React` needed);

@@ -71,7 +71,7 @@ export function compileModule(moduleName: string): Promise<CompileResult> {
       clearTimeout(timer);
       resolvePromise({
         ok: false,
-        error: `failed to spawn bun worker (${BUN}): ${err.message}. Run via ./silk.sh so bun is on PATH.`,
+        error: `failed to spawn bun worker (${BUN}): ${err.message}. Run via ./silkscreen-editor/silk.sh (or npm run silk) so bun is on PATH.`,
       });
     });
 
