@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "board": "blank",
+  "completed": [
+    0,
+    1
+  ],
+  "blocked": null,
+  "blockedPhases": [],
+  "phases": {
+    "0": {
+      "status": "done",
+      "name": "infra",
+      "ms": 93,
+      "attempts": 1,
+      "effort": 10,
+      "budgetMs": 60000,
+      "nets": 8,
+      "smoke": {
+        "pass": true,
+        "nets": 8,
+        "traces": 0,
+        "drcErrors": 0
+      }
+    },
+    "1": {
+      "status": "done",
+      "name": "signal-1",
+      "ms": 44,
+      "attempts": 1,
+      "effort": 10,
+      "budgetMs": 60000,
+      "nets": 11
+    }
+  },
+  "finalDrc": {
+    "ok": true,
+    "errors": []
+  },
+  "routedJson": "src/blank/blank.routed-v2.json"
+}

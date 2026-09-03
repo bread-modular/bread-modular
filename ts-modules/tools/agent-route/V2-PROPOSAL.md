@@ -4,18 +4,25 @@ Status: draft — proposal only, no code / board changes
 Date: 2026-09-03 | Branch: ts-circuit | Scope: `ts-modules/tools/agent-route/`
 Rule: brute-force nudging is banned. Router must route clean placements cleanly.
 
-## 1. v1 root cause: rect-slicing cuts shared escape corridors
+## 1. v1 root cause: `bounds = rect` forbids escape (planner sliver + blind gates)
 
-v1 plans by rect (`plan.js`: y-row bucketing + 1mm overlap), not by net.
-8bit plan proves it: S1 (upper, y 7.94–26.13) owns 45 nets, S2 (lower,
-y −23.59–8.113) owns 54 nets — disjoint net sets sharing one physical
-corridor. The overlap band is only ~0.17mm (y 7.94–8.11): no room for two
-independent escape plans.
+PRIMARY CAUSE (`lib/route-lib.js` `buildSectionSrj`): `bounds = rect` — each
+section solve is FORBIDDEN from routing outside its rect, not merely dodging
+frozen prior copper. v1 plans by rect (`plan.js`: y-row bucketing + 1mm
+overlap), not by net. 8bit plan proves it: S1 (upper, y 7.94–26.13) owns 45
+SRJ nets, S2 (lower, y −23.59–8.113) owns 54 — disjoint net sets sharing one
+physical corridor, with an overlap band of only ~0.17mm (y 7.94–8.11). Two
+independent escape plans with no shared room, enforced by hard bounds.
 
-Failure signature (`src/8bit/8bit.agent-route/status.json`): S1 done
-(4.6s), S2 TIMEOUT (600s), final merged gate 7× `pcb_trace_error`, all in
-the seam band. Critically, all 7 pair one S1-locked net × one S2-locked net
-— the partition itself manufactures the collisions.
+Failure signature (`src/8bit/8bit.agent-route/status.json`): S1 done (4.6s)
+— deferring cross-rect `source_net_0` to the later owner (the §8.5 deferral
+mechanism pushes cross-rect nets to the worst owner); S2 TIMEOUT (600s);
+final merged gate 7× `pcb_trace_error`, all pairing one S1-locked net × one
+S2-locked net — the partition itself manufactures the collisions. Location
+correction (earlier drafts said "all in the seam band"): only 4 of the 7 sit
+near y≈8 (gaps/overlaps at y 6.0–9.0); #2/#3 are at y≈−6.28 (deep in S2) and
+#7 at y≈17.75 (deep in S1). Locked-vs-new geometry fights wherever frozen S1
+copper blocks S2's corridor, not just at the band.
 
 Why no gate catches it earlier (`route-board.js` / `retry-section.js`):
 

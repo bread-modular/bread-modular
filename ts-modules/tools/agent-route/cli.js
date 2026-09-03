@@ -3,15 +3,21 @@
 //
 //   agent-route plan <board> [--json]              scan + print plan + scoring, write *.agent-plan.json
 //   agent-route plan validate <board> [--json]     re-check a hand-edited plan
+//   agent-route plan-v2 <board> [--json]           net-phase plan + corridor validator, write *.agent-phases.json
+//   agent-route plan-v2 validate <board> [--json]  re-check a hand-edited phases doc
 //   agent-route status <board> [--json]            section states + sig validity + timings
+//   agent-route status-v2 <board> [--json]         phase states + timings (v2)
 //   agent-route drc <board> [--json]               full-board runAllChecks gate
 //   agent-route run <board> ...                    route pending sections (./run.js, real)
 //   agent-route retry-section <board> S..          re-route one section (./run.js, real)
+//   agent-route run-v2 <board> ...                 route pending phases (./run-v2.js, real v2)
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadScanFromCircuitJson, runRoutingDisabledEval } from "./lib/scan.js";
 import { buildPlan, validatePlan, scorePlan } from "./lib/plan.js";
+import { buildPhases, validatePhases } from "./lib/plan-v2.js";
+import { phasesPath, phaseStatusPath } from "./lib/route-v2.js";
 import { sigForSection, verifySectionSig } from "./lib/sig.js";
 import {
   OVERLAP,
@@ -89,6 +95,77 @@ function cmdPlan(board) {
     ),
   ].join("\n");
   emit({ ok: true, exitCode: 0, plan, scoring }, text);
+}
+
+// --- plan-v2 --------------------------------------------------------------
+// Net-phase planner (v2, side-by-side with v1 `plan`): corridor-affinity
+// grouping, phases.json schema with unclaimedNets check, budgets adaptive.
+function cmdPlanV2(board, validateOnly = false) {
+  if (validateOnly) {
+    if (!existsSync(phasesPath(board))) {
+      fail(`no phases file (run 'agent-route plan-v2 ${board}' first)`);
+    }
+    let scan;
+    try {
+      scan = doScan(board);
+    } catch (e) {
+      fail(`scan failed: ${e.message}`);
+    }
+    const phasesDoc = readJson(phasesPath(board));
+    const res = validatePhases(phasesDoc, scan);
+    const text = [
+      `validate-v2 ${board}: ${res.ok ? "OK" : "FAILED"} (${res.errors.length} errors, ${res.warnings.length} warnings)`,
+      ...res.errors.map((e) => `  ERROR: ${e}`),
+      ...res.warnings.map((w) => `  WARN: ${w}`),
+    ].join("\n");
+    emit(
+      { ok: res.ok, exitCode: res.ok ? 0 : 1, errors: res.errors, warnings: res.warnings },
+      text,
+    );
+    process.exit(res.ok ? 0 : 1);
+  }
+  let scan;
+  try {
+    scan = doScan(board);
+  } catch (e) {
+    fail(`scan failed: ${e.message}`);
+  }
+  const { phases, scoring } = buildPhases(scan);
+  writeFileSync(phasesPath(board), JSON.stringify(phases, null, 2) + "\n");
+  const text = [
+    `plan-v2 ${board}: ${phases.phases.length} phase(s) -> src/${board}/${board}.agent-phases.json`,
+    ...scoring.phaseSizes.map((p) =>
+      `  P${p.phaseIndex} ${p.name}  nets=${p.nets}  budget=${p.budgetMs}ms`,
+    ),
+    `scoring: maxCrossPhaseCorridorOverlap=${scoring.maxCrossPhaseCorridorOverlap} (${scoring.overlapPairs}/${scoring.overlapTotal} cross-phase pairs share corridors)`,
+    `scoring: unclaimedNets=${scoring.unclaimedNets.length}` +
+    (scoring.unclaimedNets.length ? ` (${scoring.unclaimedNets.join("; ")})` : " (none — every net claimed)"),
+    `scoring: totalBudget=${scoring.totalBudgetMs}ms (cap ${scoring.boardBudgetCapMs}ms)`,
+    ...scoring.duplicateNets.map((d) => `  DUPE: ${d}`),
+  ].join("\n");
+  emit({ ok: true, exitCode: 0, phases, scoring }, text);
+}
+
+// --- status-v2 --------------------------------------------------------------
+function cmdStatusV2(board) {
+  const hasPhases = existsSync(phasesPath(board));
+  const phasesDoc = hasPhases ? readJson(phasesPath(board)) : null;
+  let statusJson = null;
+  if (existsSync(phaseStatusPath(board))) {
+    try { statusJson = readJson(phaseStatusPath(board)); } catch { /* ignore */ }
+  }
+  const rows = phasesDoc
+    ? phasesDoc.phases.map((p) => ({ phaseIndex: p.phaseIndex, name: p.name, status: p.status, nets: p.nets.length, timing: statusJson?.phases?.[p.phaseIndex] ?? null }))
+    : [];
+  const text = [
+    `status-v2 ${board}: phases=${hasPhases ? `${phasesDoc.phases.length} phase(s)` : "none"}  routed-phases=${rows.filter((r) => r.timing?.status === "done").length}  status.json=${statusJson ? "present" : "absent"}`,
+    ...rows.map((r) =>
+      `  P${r.phaseIndex} ${r.name} status=${r.status} nets=${r.nets}` +
+      (r.timing ? ` result=${r.timing.status} ms=${r.timing.ms}` : ""),
+    ),
+    ...(phasesDoc ? [] : [`  (no phases yet — run 'agent-route plan-v2 <board>')`]),
+  ].join("\n");
+  emit({ ok: true, exitCode: 0, board, phases: !!phasesDoc, rows, statusJson }, text);
 }
 
 // --- plan validate --------------------------------------------------------
@@ -238,18 +315,31 @@ if (!cmd || cmd === "help" || cmd === "--help" || cmd === "-h") {
 usage:
   agent-route plan <board> [--json]             scan + write *.agent-plan.json
   agent-route plan validate <board> [--json]    re-check a hand-edited plan
+  agent-route plan-v2 <board> [--json]          net-phase plan + corridor validator (-> *.agent-phases.json)
+  agent-route plan-v2 validate <board> [--json] re-check a hand-edited phases doc
   agent-route status <board> [--json]           section states + sig validity
+  agent-route status-v2 <board> [--json]        phase states + timings (v2)
   agent-route drc <board> [--json]              full-board DRC gate
   agent-route run <board> [--keep-going] [--no-bisect] [--json]
                           [--timeout-ms N] [--effort N] [--max-bisect-depth N]
+  agent-route run-v2 <board> [--json] [--effort N]
   agent-route retry-section <board> S.. [--json] [--timeout-ms N] [--effort N]`);
   process.exit(0);
 }
 if (cmd === "plan" && sub === "validate") cmdPlanValidate(needBoard());
 else if (cmd === "plan") cmdPlan(needBoard());
+else if (cmd === "plan-v2" && sub === "validate") cmdPlanV2(needBoard(), true);
+else if (cmd === "plan-v2") cmdPlanV2(needBoard());
+else if (cmd === "status-v2") cmdStatusV2(needBoard());
 else if (cmd === "status") cmdStatus(needBoard());
 else if (cmd === "drc") await cmdDrc(needBoard());
-else if (cmd === "run" || cmd === "retry-section") {
+else if (cmd === "run-v2") {
+  // v2 routing loop (./run-v2.js). Pass through raw args like v1 does.
+  const { spawnSync } = await import("node:child_process");
+  const raw = process.argv.slice(2);
+  const r = spawnSync(process.execPath, [join(DIR, "run-v2.js"), ...raw], { stdio: "inherit" });
+  process.exit(r.status ?? 2);
+} else if (cmd === "run" || cmd === "retry-section") {
   // Owned by the routing chat (./run.js). Pass through the raw args after the
   // command so flags/positionals keep their parsing in one place.
   const { spawnSync } = await import("node:child_process");
