@@ -190,3 +190,40 @@ The end-to-end behaviour is covered by `test/e2e-routing-reuse.sh`
 ```bash
 ./tsci.sh dev src/blank/blank.circuit.tsx
 ```
+
+### Resolving autorouter DRC errors (`tools/nudge`)
+
+When placement changes cause the autorouter to fail or produce DRC errors, use the
+`tools/nudge` CLI to auto-resolve them by "nudging" component placements. It targets
+components implicated in errors and iterates until 0 DRC errors are reached.
+
+**Important:** Do NOT use `build.sh` for nudge sweeps, as it reuses the routed board
+artifact. `nudge` invokes `tsci build` directly and busts the autorouter cache
+(`.tscircuit/cache`) to force fresh routing for every candidate.
+
+**Workflow (from repo root):**
+1. **Plan:** `tools/nudge plan --module <m>` (diagnose errors + propose moves).
+2. **Run:** `tools/nudge run --module <m>` (search and converge; applies best layout).
+3. **Status:** `tools/nudge status --module <m>` (verify zero DRC errors).
+
+**Whitelist Config (`src/<m>/<m>.nudge.json`):**
+The tool is authoritative: it only moves whitelisted components. `neverMove` is a
+human-readable lock-list for safety.
+
+```json
+{
+  "stepDefaults": { "x": 0.4, "y": 0.4 },
+  "components": {
+    "U3": { "axes": ["x"], "step": 0.4, "range": 1.2 },
+    "RV1": { "axes": ["x", "y"], "step": 0.5, "range": 1.5 }
+  },
+  "neverMove": ["U2", "INPUT1", "OUTPUT1"],
+  "search": { "strategy": "greedy", "maxIterations": 60, "timeBudgetSec": 900 }
+}
+```
+
+**Safety & State:**
+- **Backups:** `run` refreshes `tools/nudge-state/<m>/original.tsx` every run.
+- **Rollback:** `restore` reverts the source and verifies the SHA-256 hash.
+- **Exit Codes:** 0 (solved), 2 (unsolved within budget), 3 (error), 130 (interrupt).
+- **Fail-closed:** Never leaves the repo dirty; restores the original file on failure/interrupt.
