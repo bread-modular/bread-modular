@@ -164,7 +164,7 @@ export default () => (
     <trace name="INPUT1-udpi" from=".INPUT1 > .pin5" to="net.UDPI" />
     {/* R1 moved up (10.5 -> 14.5): RV2's courtyard grew when the pot moved
         up to make room for its CV1 caption */}
-    <resistor name="R1" resistance="4.7k" footprint="0402" schX={-4.5} schY={5.5} pcbX={-12.2} pcbY={14.5} />
+    <resistor name="R1" resistance="4.7k" footprint="0402" schX={-4.5} schY={5.5} pcbX={-12.4} pcbY={14.5} />
     <trace name="R1-udpi" from=".R1 > .pin2" to="net.UDPI" />
     <trace name="R1-pa0" from=".R1 > .pin1" to=".U2 > .PA0" />
 
@@ -178,7 +178,7 @@ export default () => (
     {/* ============ LED: PA5 -> D1 -> R6 330 -> GND ============ */}
     <trace name="U2-pa5-led" from=".U2 > .PA5" to="net.LED_A" />
     {/* D1 = red LED, JLCPCB C2286 */}
-    <led name="D1" footprint="0603" supplierPartNumbers={{ jlcpcb: ["C2286"] }} schX={-1} schY={5.5} pcbX={-10.9475} pcbY={-5.08} />
+    <led name="D1" footprint="0603" supplierPartNumbers={{ jlcpcb: ["C2286"] }} schX={-1} schY={5.5} pcbX={-10.9475} pcbY={-4.68} />
     <trace name="D1-anode" from=".D1 > .anode" to="net.LED_A" />
     <trace name="D1-cathode" from=".D1 > .cathode" to=".R6 > .pin1" />
     <resistor
