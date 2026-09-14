@@ -39,3 +39,7 @@ Thumbs.db
 
 # Host simulator build artifacts (8bit module firmware self-tests)
 modules/*/code/*/sim/test_*
+
+# KiCad-to-JLCPCB exporter outputs and Python bytecode
+**/jlcpcb/
+opt/kicad-jlcpcb/**/__pycache__/
