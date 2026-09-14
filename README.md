@@ -15,6 +15,12 @@ Bread Modular is an open-source hardware modular synthesizer format designed to 
 * **Ease of Customization:** Enables straightforward creation of custom modules tailored to specific needs.
 * **No Case Required:** Can be used directly on a breadboard or mounted on a simple base module.
 
+## KiCad workspace setup
+
+Footprint libraries use a shared project-local table in `opt/fp-lib-table`, linked
+into every KiCad project. Workspace initialization copies existing local
+submodules instead of cloning them. See [library setup and verification](opt/README.md).
+
 ## Table of Contents
 
 * [Specification](https://github.com/bread-modular/bread-modular/wiki/Specification)
