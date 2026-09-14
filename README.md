@@ -28,4 +28,13 @@ submodules instead of cloning them. See [library setup and verification](opt/REA
 * [Modules](https://github.com/bread-modular/bread-modular/wiki/Modules)
 * [Modular MIDI](https://github.com/bread-modular/bread-modular/wiki/Modular-MIDI)
 * [PCB Assembly](https://github.com/bread-modular/bread-modular/wiki/PCB-Assembly)
+* [KiCad → JLCPCB Export Tool](opt/kicad-jlcpcb/README.md) — Gerber ZIP, BOM and pick-and-place CSV; no extra Python packages or plugins.
+
+## KiCad assembly export
+
+```sh
+python3 opt/kicad-jlcpcb/export.py modules/line_in
+```
+
+Requires Python and KiCad's built-in CLI. Add an `LCSC` field to symbols using KiCad's native Symbol Properties / Symbol Fields Table to include catalog part numbers. See the [tool documentation](opt/kicad-jlcpcb/README.md) for requirements, field setup and export options.
 
