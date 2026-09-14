@@ -1,82 +1,79 @@
 #!/usr/bin/env bash
-#
 # workspace_init.sh — runs automatically when a new workspace is created.
 #   $1 = original project directory (the main repo checkout)
 #
-# Initializes the git submodules needed to BUILD firmware apps (16bit/32bit).
-# KiCad library submodules under opt/ are intentionally skipped — they are only
-# used for PCB design, not for building apps.
-#
-# Speed optimization: instead of cloning each submodule from the network, we
-# clone from the already-checked-out copy in the original project directory via
-# `git submodule update --reference`. Combined with `--dissociate`, the result
-# is a fully standalone local clone (no network, no dangling alternates link).
-# Falls back to a normal network clone if the local copy isn't available.
+# Copy ALL initialized submodules, including opt/ footprint libraries, from the
+# original checkout. No clone, fetch, or network fallback. Copy Git metadata too
+# so each workspace owns its files, index and objects (never reuse a .git link
+# pointing at the original checkout). Compatible with macOS Bash 3.2.
 
 set -euo pipefail
 
 ORIGINAL_DIR="${1:-}"
-
-# Resolve the workspace root (where this script lives).
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+if [ -n "$ORIGINAL_DIR" ]; then
+    ORIGINAL_DIR="$(cd -- "$ORIGINAL_DIR" && pwd -P)"
+fi
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 cd "$SCRIPT_DIR"
 
-log()  { printf '==> %s\n' "$*"; }
-warn() { printf '!!  %s\n' "$*" >&2; }
+log() { printf '==> %s\n' "$*"; }
+die() { printf '!!  %s\n' "$*" >&2; exit 1; }
 
-# Prefix of submodules that are KiCad-only and must be skipped.
-KICAD_PREFIX="opt/"
+# A failed/interrupted copy must not look initialized on the next invocation.
+staging=""
+trap '[ -z "$staging" ] || rm -rf -- "$staging"' EXIT
 
-# ---------------------------------------------------------------------------
-# Discover all submodule paths from .gitmodules and split into build vs KiCad.
-# (POSIX-safe loop — avoids bash-only `mapfile`, since macOS ships bash 3.2.)
-# ---------------------------------------------------------------------------
-BUILD_SUBMODULES=""
-while IFS= read -r path; do
-    [ -n "$path" ] || continue
-    case "$path" in
-        "$KICAD_PREFIX"*)
-            log "Skipping KiCad submodule: $path"
-            ;;
-        *)
-            BUILD_SUBMODULES="$BUILD_SUBMODULES $path"
-            ;;
-    esac
-done < <(git config -f .gitmodules --get-regexp '^submodule\..*\.path$' \
-            | sed 's/^[^ ]* //')
-
-# Trim leading space.
-BUILD_SUBMODULES="${BUILD_SUBMODULES# }"
-
-if [ -z "$BUILD_SUBMODULES" ]; then
-    log "No build submodules to initialize."
+[ -f .gitmodules ] || { log "No submodules to copy."; exit 0; }
+if paths="$(git config -f .gitmodules --get-regexp '^submodule\..*\.path$')"; then
+    paths="$(printf '%s\n' "$paths" | sed 's/^[^ ]* //')"
+else
+    status=$?
+    [ "$status" -eq 1 ] || die "Cannot read submodule paths from .gitmodules."
+    log "No submodules to copy."
     exit 0
 fi
-
-log "Build submodules to initialize:$BUILD_SUBMODULES"
-
-# ---------------------------------------------------------------------------
-# Initialize each build submodule.
-# ---------------------------------------------------------------------------
-for path in $BUILD_SUBMODULES; do
-    # Already initialized? (has a .git file or directory and content)
-    if [ -e "$path/.git" ] || [ -d "$path/.git" ]; then
+while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    if [ -e "$path/.git" ]; then
+        git -C "$path" rev-parse --verify HEAD >/dev/null 2>&1 \
+            || die "Invalid existing checkout: $path (left untouched)."
         log "Already initialized: $path"
         continue
     fi
 
-    ref=""
-    if [ -n "$ORIGINAL_DIR" ] && [ -e "$ORIGINAL_DIR/$path/.git" ]; then
-        ref="$ORIGINAL_DIR/$path"
+    [ -n "$ORIGINAL_DIR" ] && [ -e "$ORIGINAL_DIR/$path/.git" ] \
+        || die "No initialized local copy of '$path'. Initialize it in the original checkout first, then rerun: $0 /path/to/original. No network fallback."
+    source="$ORIGINAL_DIR/$path"
+    source_git_dir="$(git -C "$source" rev-parse --absolute-git-dir)"
+    git -C "$source" rev-parse --verify HEAD >/dev/null
+
+    # The project's submodules are ordinary independent checkouts. Do not copy
+    # metadata that would silently retain dependencies on a different checkout.
+    [ ! -f "$source_git_dir/commondir" ] \
+        || die "'$path' is a linked worktree; use an independent local submodule checkout as the source."
+    [ ! -s "$source_git_dir/objects/info/alternates" ] \
+        || die "'$path' borrows Git objects; dissociate the source checkout before copying."
+    [ ! -L "$path" ] || die "Refusing to replace symlink: $path"
+    if [ -e "$path" ]; then
+        [ -d "$path" ] && [ -z "$(ls -A -- "$path")" ] \
+            || die "Destination '$path' is nonempty but not initialized (left untouched)."
     fi
 
-    if [ -n "$ref" ]; then
-        log "Copying local copy of '$path' from original repo (fast path)"
-        git submodule update --init --dissociate --reference "$ref" -- "$path"
-    else
-        warn "No local copy of '$path' found — cloning from network"
-        git submodule update --init -- "$path"
+    log "Copying local submodule: $path"
+    mkdir -p -- "$(dirname -- "$path")"
+    staging="$(mktemp -d "$SCRIPT_DIR/${path}.workspace-copy.XXXXXX")"
+    cp -Rp -- "$source/." "$staging/"
+    # Submodule .git files contain paths relative to the ORIGINAL checkout.
+    # Replace those with a private directory, not a shared gitdir or hardlinks.
+    if [ ! -d "$staging/.git" ] || [ -L "$staging/.git" ]; then
+        rm -f -- "$staging/.git"
+        cp -Rp -- "$source_git_dir" "$staging/.git"
     fi
-done
+    git config --file "$staging/.git/config" core.worktree ..
+    git -C "$staging" rev-parse --verify HEAD >/dev/null
+    [ ! -d "$path" ] || rmdir -- "$path"
+    mv -- "$staging" "$path"
+    staging=""
+done <<< "$paths"
 
-log "Submodule initialization complete."
+log "All submodules ready (local copies only)."
