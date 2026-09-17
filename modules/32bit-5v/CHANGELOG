@@ -1,0 +1,72 @@
+# Changelog
+
+## 1.1.0 — 5V input variant (`32bit-5v`)
+New module, derived from `32bit` 1.0.0: the same board with an on-board 3.3V LDO,
+so the module can be powered from a 5V slot rail. Nothing else about the module
+changes — outline, mounting holes, connector type/pinout, mating geometry and all
+existing signal routing are untouched. See `POWER.md` for the rail map, the load
+budget and the thermal analysis.
+
+* **Supply socket `V_SUPPLY1` now carries `+5V`** (all five pins), not `+3V3`.
+  On a base v1.3.0+ board that is the slot rail with the rail-select jumper fitted
+  (`5V_SYS`); **the jumper must be fitted**, because the base's fail-safe default
+  is 3.3V and with only 3.3V in the regulator drops out and the module would run
+  below 3.0V (authoritative note in `POWER.md`).
+* **New `U5` = AP7361C-33E-13** (Diodes Inc., LCSC `C500795`), 1A low-dropout
+  linear regulator, SOT-223, 340mV dropout at 1A, 2.2–6.0V input. The SOT-223
+  (`-33E`) pinout is 1=IN, 2=GND/tab, 3=OUT, so the exposed tab — and therefore
+  the thermal path — is ground. This package has no EN pin, so no EN divider is
+  required.
+* **New `C40` = 10uF/25V X5R 0805** (LCSC `C15850`) on the regulator input and
+  **`C41` = 22uF/25V X5R 0805** (LCSC `C45783`) on its output — the values the
+  AP7361C datasheet requires (>=1uF in, >=2.2uF out) with margin, placed on the
+  back side within 2mm of the regulator. Value, MPN, Manufacturer, LCSC and
+  Datasheet are recorded on both the symbols and the footprints.
+* **Original decoupling is unchanged**: `C6`/`C8` on `+3V3`, and through `FB1`
+  (ESP32 rail) and `R15` (codec rail) the six 100uF and the codec capacitors. The
+  module has its own local bulk, so no extra bulk was added beyond `C40`/`C41`.
+* **Copper**: 0.8mm `+5V` from socket pin 4 to the regulator input; the two old
+  `+3V3` feeds out of `V_SUPPLY1` were removed and the regulator output now feeds
+  both the original `+3V3` via at (52.578, 50.038) (FB1/C8/R3) and the original
+  `In2.Cu` `+3V3` distribution trunk, so every original load is still fed.
+* **New bottom-side parts.** The top side has no room for a SOT-223 plus two
+  0805s (checked with a 0.25mm-grid free-space search), so `U5`, `C40` and `C41`
+  are placed on the back side in the free area next to `V_SUPPLY1`. The module's
+  underside keep-out is unchanged: the parts are 1.8mm tall against the 4.4mm of
+  clearance the base documents, so the mating height is unaffected.
+* **Verification** (KiCad 10.0.6, see `verification/`): ERC 55 -> 54 findings,
+  **zero new findings** (the `+3V3` net gained a power output, which removed one
+  `power_pin_not_driven`); DRC 102 -> 105 with **0 unconnected items** and
+  schematic parity 62 -> 4, and the only new findings are three
+  `lib_footprint_mismatch` warnings for the three new footprints (same class as
+  the 53 pre-existing ones: their bottom-side silkscreen was stripped and their
+  fields hidden to avoid ~40 silkscreen/text-height violations). Netlist proof:
+  the `+5V` net is exactly {`V_SUPPLY1`.1-5, `U5`.IN, `C40`.1} and every load the
+  original `+3V3` net drove is still driven (15/15 acceptance checks pass).
+* **Production outputs regenerated and renamed** (`production/32bit-5v.zip`,
+  `bom.csv`, `positions.csv`, `designators.csv`, `netlist.ipc`); no exported file
+  carries the old `32bit` name. The stale `production/backups/` snapshots of the
+  parent module were intentionally not carried over.
+* **Deliberately unchanged**: the `32BIT` / `32BIT 0.3.0` front silkscreen (no
+  new silkscreen findings) and `code/32bit` (the firmware is identical for both
+  variants — same MCU, same pinout — and renaming it would break its build).
+* Source module: `modules/32bit` 1.0.0, left byte-identical.
+
+## 1.0.0
+Fist 1.0 release with fxrack and pipe apps.
+
+## 0.3.2
+Use a known ferrite bead
+
+## 0.3.0
+Use better power supply for esp32 side with ferrite beads and caps
+
+## 0.2.0
+Introduce better routing to reduce the noise.
+
+## 0.1.1
+Moved CDATA & CCLK labels.
+They were just being marked wrongly in the ES8388 side.
+
+## 0.1.0
+Initial Release
