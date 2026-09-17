@@ -385,3 +385,60 @@ is why it still reports zero findings. A future "update PCB from schematic" woul
 therefore have to re-link all **96 relocated slot parts** (U6..U17, J7..J18,
 R28..R51, C22..C45, VSUPPLY_1..12, GND1..12) deliberately — it is not a no-op
 action. Nothing in v1.3.1 requires it; the routed board remains the deliverable.
+
+### 8.6 Netlist diff evidence (appended after the v1.3.1 commit — left uncommitted)
+
+Committed as `a32b20e` plus two review follow-up commits on this branch.
+`kicad-cli sch export netlist --format kicadsexpr` before
+(`verification/netlist-before.kicadsexpr`, v1.3.0 HEAD) and after
+(`verification/netlist-after.kicadsexpr`, v1.3.1) compares as follows:
+
+| section | before → after | result |
+|---|---|---|
+| `(nets …)` | 592 → 592 lines | **byte-identical** — the same 78 nets, 513 nodes, names, pin functions and pin types |
+| `(libparts …)`, `(libraries …)` | 320 / 19 lines | byte-identical |
+| `(design …)` | 20 → 212 lines | +12 sub-sheet entries (`Slot1` … `Slot12`) |
+| `(components …)` | 163 refs → 163 refs | same refs; values, footprints, datasheet, LCSC, MPN, manufacturer: **0 differences** |
+
+`diff` reports 3571 changed lines and every one of them is one of:
+
+1. component order inside `components` (the slot parts are now listed under their
+   sheet instead of inline in the root list);
+2. `Sheetname` / `Sheetfile` (96 lines each) and `sheetpath` (96 lines) — inherent
+   to moving the parts into sub-sheets;
+3. the per-component `tstamps` symbol UUID (96 lines): the twelve instances share
+   the template symbol, so slots 2…12 now carry the symbol UUID that the routed
+   board knows for slot 1 (see 8.5);
+4. 48 free-text `Description` texts, now instance-neutral.
+
+Nothing else moved: no net, node, pin function, pin type, reference, value,
+footprint, LCSC number or MPN. ERC (`--severity-all`) has identical counts before
+and after (4 `pin_not_connected`, 3 `power_pin_not_driven`,
+1 `lib_symbol_mismatch`); the `GND` `power_pin_not_driven` is now attributed to
+`#PWR026` instead of `#PWR02`, a GND symbol that moved into the template.
+
+Reproduce:
+
+```sh
+cd modules/base
+git show 5d0aca0:modules/base/base.kicad_sch > /tmp/pre.kicad_sch    # pre-refactor source
+python3 tools/build_slot_template.py --source /tmp/pre.kicad_sch --dry-run
+kicad-cli sch export netlist --format kicadsexpr -o /tmp/after.kicadsexpr base.kicad_sch
+kicad-cli sch erc --format json --severity-all -o /tmp/after-erc.json base.kicad_sch
+tools/verify_slot_refactor.py --before verification/netlist-before.kicadsexpr \
+    --after /tmp/after.kicadsexpr \
+    --erc-before verification/erc-before.json --erc-after /tmp/after-erc.json
+git diff --stat 5d0aca0..HEAD -- base.kicad_pcb    # empty: board untouched (cwd = modules/base)
+sha256sum base.kicad_pcb              # 9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484
+kicad-cli pcb drc --format json --schematic-parity --severity-all \
+    -o /tmp/drc.json base.kicad_pcb   # 0 unconnected items, 0 parity findings
+kicad-cli sch export bom --fields 'Reference,Footprint,${QUANTITY},Value,LCSC' \
+    --labels 'Designator,Footprint,Quantity,Value,LCSC Part #' \
+    --group-by 'Footprint,Value,LCSC' --ref-range-delimiter '' --exclude-dnp \
+    -o /tmp/bom.csv base.kicad_sch && diff /tmp/bom.csv production/bom.csv   # identical
+```
+
+`verification/netlist-after.kicadsexpr` is that same fresh export, kept as the
+checked-in after-state. The verifier rejects empty, truncated or unbalanced
+exports (exit 2) instead of reporting them as equal, and the comparison is
+order-insensitive (re-ordering the component blocks still reports IDENTICAL).
