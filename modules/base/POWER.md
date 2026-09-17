@@ -175,7 +175,11 @@ but a different package (SON-8) with a 0.63–1.25 A range. If this design goes 
 either pre-order the mux or plan a layout revision for the SON-8 part.
 
 **Jumper shunts are not on the assembly BOM on purpose** — they are fitted/removed per slot
-by the user, and they must not be pre-fitted (a pre-fitted shunt would force 5 V).
+by the user, and they must not be pre-fitted (a pre-fitted shunt would force 5 V). They are
+still a sourced, purchasable accessory: **LCSC `C5664`** — "2.0 short circuit cap", P = 2.00 mm,
+1.5 A, open-top unshrouded shunt, matching the 1.5 A header (C2905948); **126 449 in stock,
+$0.012 each**. Order 12 (one per slot) plus spares as a separate line item; a 2.54 mm shunt
+will **not** fit the 2.00 mm header.
 
 ### 5.2 Sourcing close-out (was 13 `TO-VERIFY` lines — now **0**)
 
@@ -185,7 +189,7 @@ by the user, and they must not be pre-fitted (a pre-fitted shunt would force 5 V
 | INPUT1, GND1…GND12, VSUPPLY_1…VSUPPLY_12 (25 refs) | TO-VERIFY | **C2894928** | PZ254-1-05-Z-8.5, 1×05 2.54 mm socket, stock 3 591 |
 | C2 (1 µF 0805) | TO-VERIFY | **C28323** | CL21B105KBFNNNE, 1 µF 50 V X7R 0805, basic, stock 3.1 M |
 | C16 (220 nF 0402) | TO-VERIFY | **C16772** | CL05B224KO5NNNC, 220 nF 16 V X7R 0402, basic, stock 2.9 M |
-| FB1, FB2 | TO-VERIFY | **C394493** | *substituted* CBW201209U801T (800 Ω @100 MHz, 1 A, 0805) — GZ2012E800TF is not in the JLCPCB library |
+| FB1, FB2 | TO-VERIFY | **C12389** | *substituted* PZ2012D800-3R0TF — **80 Ω @100 MHz ±25 %, 3 A, 40 mΩ DCR, 0805** (330 104 in stock, $0.0223). The designed `GZ2012E800TF` is **not** in the JLCPCB library (exact-part search returns 0). This substitute keeps the **same impedance class (80 Ω) and the same 0805 land**; its current rating is *higher* (3 A vs the ~1 A class of the original) and its DCR *lower*, so the DC drop and the HF attenuation are unchanged or better. Same-family alternative if a 1 A part is preferred: **C316425 GZ2012D800TF** (80 Ω, 1 A, 100 mΩ, 1 236 stock). ⚠️ This is a **part-number substitution for a pre-existing v1.2.0 part** — flagged for your sign-off; the schematic Value/MPN were synchronised to the fitted part so BOM and schematic cannot disagree. |
 | J5 | TO-VERIFY | **C165948** | TYPE-C-31-M-12 (HRO), USB-C 16P receptacle, stock 218 120 |
 | SW1 | TO-VERIFY | **C92589** | K2-1808SN-A4SW-01, SMD tactile switch, stock 5 505 |
 | R10, R12 (10 Ω 1206) | TO-VERIFY | **C17903** | 1206W4F100JT5E, 10 Ω 1 % 1206, basic, stock 1.1 M |
@@ -219,7 +223,9 @@ mating height before ordering.
    *was* refreshed here for the new parts).
 5. Unchanged observation: FB1/FB2 use the `Capacitor_SMD:C_0805_2012Metric` land pattern (a
    v1.2.0 choice); an `Inductor_SMD:L_0805_2012Metric` land would be the textbook choice for a
-   bead. Left as-is to avoid churn; decide in Phase 2.
+   bead. Left as-is to avoid churn; decide in Phase 2. The fitted bead's own land pattern
+   (PZ2012D800-3R0TF) is the standard 0805 chip-bead footprint, which the C_0805 land
+   approximates; confirm against the vendor drawing when the land is finalised in Phase 2.
 
 ## 7. KiCad gotchas found while generating this revision (keep in mind when hand-editing)
 

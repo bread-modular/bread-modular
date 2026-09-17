@@ -12709,7 +12709,7 @@
 				)
 			)
 		)
-		(property "Value" "GZ2012E800TF"
+		(property "Value" "PZ2012D800-3R0TF"
 			(at 452.0819 52.07 90)
 			(effects
 				(font
@@ -12735,7 +12735,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "0805 ferrite bead. GZ2012E800TF is not in the JLCPCB library; substituted with the stocked equivalent CBW201209U801T (800 ohm @100MHz, 1A)."
+		(property "Description" "0805 ferrite bead on the VBUS/LDO path. Designed part GZ2012E800TF is not in the JLCPCB library; fitted part is the stocked 80 ohm equivalent PZ2012D800-3R0TF (80 ohm @100MHz +/-25%, 3A, 40mohm DCR - same impedance class and same 0805 land as the design intent, higher current / lower DCR). Same-family 1A alternative: C316425 GZ2012D800TF. See POWER.md."
 			(at 452.12 55.88 0)
 			(effects
 				(font
@@ -12744,7 +12744,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C394493"
+		(property "LCSC" "C12389"
 			(at 0 0 0)
 			(effects
 				(font
@@ -12753,7 +12753,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "CBW201209U801T"
+		(property "MPN" "PZ2012D800-3R0TF"
 			(at 0 0 0)
 			(effects
 				(font
@@ -20007,7 +20007,7 @@
 				)
 			)
 		)
-		(property "Value" "GZ2012E800TF"
+		(property "Value" "PZ2012D800-3R0TF"
 			(at 405.0919 52.07 90)
 			(effects
 				(font
@@ -20033,7 +20033,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "0805 ferrite bead. GZ2012E800TF is not in the JLCPCB library; substituted with the stocked equivalent CBW201209U801T (800 ohm @100MHz, 1A). The C_0805_2012Metric land pattern is unchanged from v1.2.0."
+		(property "Description" "0805 ferrite bead on the VBUS/LDO path. Designed part GZ2012E800TF is not in the JLCPCB library; fitted part is the stocked 80 ohm equivalent PZ2012D800-3R0TF (80 ohm @100MHz +/-25%, 3A, 40mohm DCR - same impedance class and same 0805 land as the design intent, higher current / lower DCR). Same-family 1A alternative: C316425 GZ2012D800TF. See POWER.md."
 			(at 405.13 55.88 0)
 			(effects
 				(font
@@ -20042,7 +20042,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C394493"
+		(property "LCSC" "C12389"
 			(at 0 0 0)
 			(effects
 				(font
@@ -20051,7 +20051,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "CBW201209U801T"
+		(property "MPN" "PZ2012D800-3R0TF"
 			(at 0 0 0)
 			(effects
 				(font
@@ -24209,7 +24209,7 @@
 			)
 		)
 	)
-	(text "BASE v1.3.0 POWER UPGRADE - see POWER.md\nF1/D2 protect VBUS at the USB-C input; 5V_SYS is tapped from protected VBUS (after F1, before FB1) through F2, D3 and 100uF/0.1uF bulk.\n12 x per-slot 2:1 power mux (U6..U17): shunt fitted -> 5V_SYS, open/lost -> +3.3V (100k pulldown). J7..J18 sit hidden under a mated module: place them over the slot power rail, not in the ground/power gap. Protection hierarchy: F1 = 2A hold (input), F2 = 1.1A hold (5V branch), U5 own internal limit (3.3V branch). Per-slot current limit = 667mA nominal (R28..R51 = 750R)."
+	(text "BASE v1.3.0 POWER UPGRADE - see POWER.md\nF1/D2 protect VBUS at the USB-C input; 5V_SYS is tapped from protected VBUS (after F1, before FB1) through F2, D3 and 100uF/0.1uF bulk.\n12 x per-slot 2:1 power mux (U6..U17): shunt fitted -> 5V_SYS, open/lost -> +3.3V (100k pulldown). J7..J18 sit hidden under a mated module: place them over the slot power rail, not in the ground/power gap. Protection hierarchy: F1 = 2A hold (input), F2 = 1.1A hold (5V branch), U5 own internal limit (3.3V branch). Per-slot current limit = 667mA nominal (R28, R30 ... R50 = 750R ILIM; R29, R31 ... R51 = 100k SEL pulldown, pulled to GND)."
 		(exclude_from_sim no)
 		(at 241.3 280.67 0)
 		(effects
