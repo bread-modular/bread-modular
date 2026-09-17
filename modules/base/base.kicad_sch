@@ -4660,12 +4660,7 @@
 		(color 0 0 0 0)
 		(uuid "b481dd83-b44e-4823-98f7-bf37bf338e2f")
 	)
-	(junction
-		(at 72.39 48.26)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bdc0d871-3d40-4167-b773-5fcc7553afce")
-	)
+
 	(junction
 		(at 530.86 306.07)
 		(diameter 0)
@@ -5452,14 +5447,34 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 48.26) (xy 72.39 52.07)
+			(xy 72.39 50.8) (xy 72.39 52.07)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "41d2fe5c-782a-4cd8-86ed-93f39cd8210b")
+		(uuid "54871c9d-da84-4e5c-a4e2-bd8770aa3492")
 	)
+	(global_label "+2.5V" (shape output) (at 72.39 50.8 90) (fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d59a2e9a-ad6a-4f86-b5df-40ee7a0a8da8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 72.39 57.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+
 	(wire
 		(pts
 			(xy 30.48 45.72) (xy 49.53 45.72)
@@ -19122,102 +19137,12 @@
 			)
 		)
 	)
-		(wire
-		(pts
-			(xy 104.14 107.95) (xy 106.68 107.95)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8cc9aaec-bee0-4674-9940-46e5d06d655a")
-	)
-	(wire
-		(pts
-			(xy 106.68 110.49) (xy 104.14 110.49)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5a0dcbbf-88cd-4f12-af8c-4453fc8fce14")
-	)
-	(wire
-		(pts
-			(xy 106.68 118.11) (xy 106.68 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e2a226d8-3dd5-4d94-a65e-c917f76c55d8")
-	)
-	(global_label "IN_L"
-		(shape input)
-		(at 104.14 107.95 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "38cb9d5c-32d0-4df1-9cd6-a0c934b3e53b")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 91.24 107.95 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "NORM_R"
-		(shape passive)
-		(at 104.14 110.49 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "25ac011a-a88c-4c0f-812a-6d6fa89d45b1")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 91.24 110.49 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "BUFF_IN_R"
-		(shape input)
-		(at 106.68 120.65 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "dd743a1a-2854-4815-ac15-0ee78785ec1d")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 106.68 127.45 270)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
+
+
+
+
+
+
 	(global_label "+2.5V"
 		(shape output)
 		(at 30.48 60.96 270)
@@ -19240,189 +19165,7 @@
 			)
 		)
 	)
-(symbol
-		(lib_id "Device:R")
-		(at 106.68 114.3 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6fd72ae8-5140-48ab-bd8c-456a07784610")
-		(property "Reference" "R52"
-			(at 104.14 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "2M"
-			(at 104.14 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 104.902 114.3 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 106.68 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 106.68 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C11512"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "0402WGF2004TCE"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "UNI-ROYAL"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "f899bb07-d5c1-4bb0-9d8e-5e42c8a53748")
-		)
-		(pin "1"
-			(uuid "90da6f49-3fd7-42cc-9cea-adc8e144d3ae")
-		)
-		(instances
-			(project "base"
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
-					(reference "R52")
-					(unit 1)
-				)
-			)
-		)
-	)	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 111.76 107.95 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "e2691e50-938e-44cc-bff9-bf663d0dbc9e")
-		(property "Reference" "J19"
-			(at 106.68 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SolderJumper_2_Bridged"
-			(at 106.68 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm"
-			(at 111.76 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 111.76 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Normalling-disable link (2-pad solder jumper, bridged as shipped): pin1 = IN_L, pin2 = the 2M normal resistor fed from BUFF_IN_R. Cutting the bridge makes L and R independent."
-			(at 111.76 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" ""
-			(at 111.76 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" ""
-			(at 111.76 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1dfda1d6-e1cf-4901-b767-7f8ca1e54e0e")
-		)
-		(pin "2"
-			(uuid "7a79b354-ce78-4259-a8e9-41a9af493037")
-		)
-		(instances
-			(project "base"
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
-					(reference "J19")
-					(unit 1)
-				)
-			)
-		)
-	)(sheet
+(sheet
 		(at 434.34 246.38)
 		(size 38.1 20.32)
 		(exclude_from_sim no)
