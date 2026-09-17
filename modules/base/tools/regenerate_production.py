@@ -67,7 +67,7 @@ with zipfile.ZipFile(authoritative) as z:
 files=[PROD/n for n in ['netlist.ipc','designators.csv','positions.csv','bom.csv','base.zip']]
 files += list((BASE/'jlcpcb/base').iterdir())+[BASE/'jlcpcb/production_files/GERBER-base.zip']+list(legacy.iterdir())
 export=json.loads((BASE/'jlcpcb/base/export-report.json').read_text())
-manifest={'pcb_sha256':sha(PCB),'schematic_sha256':sha(SCH),'project_sha256':sha(BASE/'base.kicad_pro'),'custom_rules_sha256':sha(BASE/'base.kicad_dru'),'production_refs':len(refs),
+manifest={'pcb_sha256':sha(PCB),'schematic_sha256':sha(SCH),'slot_schematic_sha256':sha(BASE/'slot.kicad_sch'),'project_sha256':sha(BASE/'base.kicad_pro'),'custom_rules_sha256':sha(BASE/'base.kicad_dru'),'production_refs':len(refs),
           'assembly_hold':True,'assembly_hold_reason':'Actual female socket, assembled board gap and shunt height require owner confirmation.',
           'files':{str(f.relative_to(BASE)):sha(f) for f in sorted(files) if f.is_file()}}
 (PROD/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
