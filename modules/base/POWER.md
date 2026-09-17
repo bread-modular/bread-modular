@@ -119,6 +119,31 @@ parts are **D2 = VBUS TVS, D3 = 5V_SYS TVS, F1 = VBUS polyfuse, F2 = 5V_SYS poly
    deliberate marker; `opt/kicad-jlcpcb/export.py` rejects non-`C#####` values, so the
    JLCPCB export will refuse to run until each one is replaced with a real C-number.
 
+### 4.1 Concrete proposals for the two electrical decisions (need approval)
+
+**P1 — over-voltage protection (TVS clamp vs 6 V downstream rating).** Pick one:
+
+| | Proposal | Effect | Cost |
+|---|---|---|---|
+| P1a | **Recommended:** replace the bare F2+TVS on `5V_SYS` with a rated OVP switch, e.g. **TPS1663** (4.5–60 V, integrated FET, adjustable current limit *and* adjustable OVP) or **TPS2400 + P-MOSFET** | disconnects before the rail exceeds ~5.5–6 V, so the mux inputs stay inside their 6 V absolute maximum; also gives a real, specified current limit instead of a PPTC curve | ≈ $0.6–1.3 + 4 passives |
+| P1b | Accept the TVS as surge protection only and document the residual risk (rail may briefly exceed 6 V during a surge) | no change, no cost | $0 |
+| P1c | Drop `5V_SYS` for v1.3.0 (3.3 V-only base, keep the input protection) | no 5 V rail, no 6 V-exposed parts | $0, removes a feature |
+
+**P2 — current-limit setting.** Pick one:
+
+| | Proposal | Effect |
+|---|---|---|
+| P2a | keep `R_ILIM = 1.6 kΩ` (≈ 312 mA *extrapolated*, outside the guaranteed 0.63–1.25 A range) | protection as requested, accuracy unspecified — could be materially lower (nuisance trip) **or higher** than the target; **the limit is not guaranteed in either direction** |
+| P2b | fit `750 Ω` (≈ 667 mA) | inside the guaranteed range, weaker but specified protection |
+| P2c | use TPS2114A (0.31–0.75 A range) with consigned/sourced stock | exact range fits, but JLCPCB stock is 0 today |
+
+**P3 — fuse coordination.** F1 and F2 are identical 1.1 A-hold PPTCs, so a 5 V-side fault
+may open F1 (taking down `+3.3V` too) before F2. Proposal: make **F2 = 1.1 A hold** (as
+now) and **F1 = 2 A hold** (protecting the USB source and the input wiring rather than
+the branch), so the 5 V branch is the more likely to give first — *or* adopt P1a, which
+removes the coordination question entirely. This changes the frozen "~1 A hold" for F1
+and therefore needs approval.
+
 ## 5. Phase 2 (PCB) constraints — please honour these when routing
 
 * **F1 and D2 must be placed next to J5 / the VBUS entry**, before FB1, with the TVS
@@ -156,6 +181,12 @@ New parts (all verified, in stock at the time of writing):
 | R28…R51 (pulldown) | 0402WGF1003TCE 100 kΩ 1 % | 0402 | C25741 | $0.0025 | yes (basic) |
 | R28…R51 (ILIM) | 0402WGF1601TCE 1.6 kΩ 1 % | 0402 | C4908 | $0.0028 | yes |
 | J7–J18 | PZ200-1-02-Z, 1×02 2.00 mm vertical header | `Connector_PinHeader_2.00mm:PinHeader_1x02_P2.00mm_Vertical` | C2905948 | $0.024 | yes |
+
+Spot-check of a part whose value/package could easily be confused: **R26 (100 Ω,
+0402)** is `C25076 = 0402WGF1000TCE`, and the JPCLB record states 100 Ω, ±1 %, 50 V,
+0402, i.e. MPN, value and `Resistor_SMD:R_0402_1005Metric` all agree. (Do not confuse
+it with `C17901`, which is the 100 Ω **1206** part used for R10/R12 and has no
+verified number here.)
 
 Existing parts that now carry a verified number: C1525 (0.1 µF), C15008 (100 µF/6.3 V
 1206), C90146 (22 µF/16 V 1206), C1779 (4.7 µF/25 V 0805), C1705 (4.7 µF/10 V 0603),
