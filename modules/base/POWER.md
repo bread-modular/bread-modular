@@ -377,8 +377,11 @@ were written against the flat sheet:
 * the twelve slots are now served by one shared template symbol, so all twelve
   instances carry the same symbol UUID — the one the board knows for the slot-1
   parts;
-* every relocated part also moved to a new hierarchical sheet path
-  (`/<root-uuid>/<SlotN>`), including the slot-1 parts whose leaf UUID was reused.
+* every relocated part also moved to a new hierarchical sheet path: the linkage
+  string KiCad stores is `/<sheet-uuid>/<symbol-uuid>` — the sub-sheet's own UUID
+  (e.g. `1559256d-…` for `Slot1`), then the symbol's UUID, not the root UUID plus
+  the `SlotN` name. `modules/4mix` uses the same two-level form (`/40a9d1d3-…/<symbol-uuid>`).
+  This includes the slot-1 parts whose symbol UUID was reused.
 
 KiCad's parity check matches footprints to symbols by reference designator, which
 is why it still reports zero findings. A future "update PCB from schematic" would
