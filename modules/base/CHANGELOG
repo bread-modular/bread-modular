@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.3.3
+**Line-out output level, step 1 of the agreed fixes: the default gain is raised.**
+`R18`/`R19` 330 k -> 680 k (0603, same footprints/placement/geometry). The line-out
+stage is the inverting pair around `U4` with 1 M sense resistors (`R16`/`R17`), so the
+voltage gain goes from |330k/1M| = 0.33 to |680k/1M| = 0.68, i.e. **+6.28 dB relative to the previous 330 k board** (20*log10(0.68/0.33)) at the
+line-out jacks. No other value, net, reference, footprint or copper feature changes.
+
+* **Implemented here:** the 680 k default level fix, in both `base.kicad_sch` and
+  `base.kicad_pcb` (value properties only; copper untouched, R20/R21 stay 1 k).
+* **Still pending (designed, not yet in the files):** the gain-select shunt jumper that
+  selects the loud state (680 k + 820 k in series = 1.50 M -> +13.15 dB, i.e. +13.15 dB relative to the previous 330 k board), the
+  removal of the `R25` 10 k `IN_L`-`IN_R` bridge, the `R16`/`R17` re-tap from
+  `BUFF_IN_L`/`BUFF_IN_R`, and the normalling-disable jumper. These need new parts and
+  copper and are *not* in this revision; the shipped board is single-state at +6.28 dB.
+* **Headphone block untouched:** this revision changes only the two `Value`
+  properties of `R18`/`R19`; `U3`, `R6`/`R7`, `RV1`/`RV2` and `HEAD_OUT_*` are
+  byte-identical (the diff contains no occurrence of them).
+* **Verification for this change:** `kicad-cli sch erc` == baseline (11 findings, same
+  kinds); `kicad-cli pcb drc --schematic-parity` == baseline violations with 0
+  unconnected items (the KiCad 10.0.6 baseline carries 68 `lib_footprint_mismatch`
+  warnings and 146 `Datasheet '~' vs ''` parity warnings that are also present on the
+  unmodified board; KiCad 9.0.8 recorded 0 parity items).
+
 ## 1.3.2
 Fab-ready release: the hand-solder lines are recorded explicitly and the mated
 stack height is calculated from datasheet dimensions. **No part, value, footprint, reference
