@@ -257,3 +257,43 @@ byte-identical; `kicad-cli pcb drc --schematic-parity` still reports 0 unconnect
 items and 0 schematic-parity findings. The only netlist-file differences are the
 per-component `Sheetname` / `Sheetfile` properties and 48 instance-neutralised
 `Description` texts (see POWER.md section 8).
+
+## Fixed-geometry baseline re-established after the v1.3.1 slot-template refactor (2026-09-17)
+
+`fixed-geometry.json` carried the **v1.3.0** schematic pin while the committed
+schematic is the **v1.3.1** one, so the documented regeneration path stopped at the
+first guard:
+
+```
+AssertionError: Merged schematic changed (including text): explicitly forbidden by this task
+```
+
+That was the guard working, not a broken check: v1.3.1 intentionally rewrote
+`base.kicad_sch` (the twelve flat slot blocks became the `slot.kicad_sch` template
+instantiated as `Slot1`…`Slot12`), so the pinned hash was stale.
+
+**What moved, and what did not:**
+
+| pinned field | action | value |
+|---|---|---|
+| `schematic_sha256` | **updated** (v1.3.0 `eebbfee9…` → v1.3.1 `42b0fde4…`) | current committed `base.kicad_sch` |
+| `copper_layers` | unchanged, still matches | 2 |
+| `footprints` (85 entries) | unchanged, still matches | 85 original refs, verified against the live board |
+| `edges` (4), `mounting_holes` (28) | unchanged, still match | verified against the live board |
+| `project_design_rules`, `project_rule_severities`, `project_erc`, `project_schematic` | unchanged, still match | identical to the committed `base.kicad_pro` |
+| `pcb_sha256` | unchanged, still matches | `de29cdaa…` — deliberately the **pre-upgrade (v1.2.0) board** consumed by `tools/apply_power_layout.py`'s "refuse to re-apply to a routed board" guard, **not** the routed board `9fc20400…` |
+
+No check was deleted, relaxed or excluded — only the pinned hash of an
+intentionally changed source file moved. Both documented invocations were re-run on
+2026-09-17 and complete: `verify_power.py --report verification/connectivity.json`
+passes the same **1713 assertions**, and `regenerate_production.py` exports IPC/BOM/
+CPL and synchronizes the three fabrication archives. The rerun is not a board
+change: `base.kicad_pcb` stays at `9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484`,
+`production/bom.csv`, `production/positions.csv`, `production/designators.csv`,
+`production/netlist.ipc` and the JLC BOM/CPL regenerate byte-identically, and the
+eleven gerber/drill files differ from the committed ones only in their two KiCad
+export-date comment lines each (**22 changed lines across 11 files**). That
+date-only churn was discarded so every hash recorded in `production/manifest.json`
+still matches the committed bytes. A throwaway copy under `/tmp` with one edited
+character in `base.kicad_sch` still fails the same guard, so the check remains
+effective.
