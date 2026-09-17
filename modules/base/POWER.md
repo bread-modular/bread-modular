@@ -249,3 +249,29 @@ outputs remain stale relative to the schematic until that follow-up is done.
 The text-field cleanup done in this chat (ILIM 750 R / 667 mA, the TVS residual-risk wording, and
 the simulation-only sourcing fields set to `N/A-SIM`) changed no `Value`/`LCSC`/`MPN` field of any
 assembled part and no connectivity: the netlist `(nets ...)` section is byte-identical.
+
+
+### 6.1 Routing status
+
+Phase 2 PCB: all **78 new parts placed/routed**; F1/F2/TVS protection, 5V_SYS,
+12 mux clusters, VSLOT_1…12 and logic-only J7…J18 are synchronized to the unchanged
+schematic. All five supply pins per slot are on its VSLOT; removing the headers
+in a test copy leaves power connected. Original hardware, 28 mounting holes,
+223.52 × 160.02 mm outline and two copper layers are unchanged.
+
+Jumpers sit **3.80 mm above the supply row**, outside the GND↔supply gap and inside
+the measured 30.48 × 68.58 mm module shadows. **Height remains unverified:**
+C2905948 is 2.0 mm body + 4.0 mm pin = **6.0 mm nominal**; 2.8 mm is its solder
+tail. C2894928 is a **male header, not the specified female socket**. Need the actual
+socket/mated gap and fitted C5664 height; target at least 0.5 mm clearance above
+the worst-case assembly. Do not order/assemble until this is confirmed.
+
+Widths: **1.2 mm input/5V trunks, 1.0 mm slot buses, 0.8 mm input branches,
+0.25 mm short escapes/logic**, sized using 35 µm external copper / IPC-2221
+10 °C rise (minimum 0.172 mm at 667 mA; 0.781 mm at 2 A). New returns join a
+filled B.Cu GND plane. Final KiCad DRC: **0 errors, 0 unconnected, 0 parity issues**;
+59 documented library-copy warnings remain (before: 110 warnings plus two excluded
+USB pad-clearance errors). IPC, designators, full/SMD BOM+CPL and all fab ZIPs are
+regenerated. **1713 invariant checks pass.** Plots, warning reasons, stack-height
+hold, retained slot-1 alignment discrepancy and FB1/FB2 land verification are in
+`verification/README.md`. This note alone is intentionally uncommitted.

@@ -1,0 +1,7 @@
+(version 1)
+# HRO USB-C land pattern has 0.175 mm nominal spacing between the adjacent
+# 0.6 mm power/ground contacts. Allow the standard 0.15 mm process only
+# between pads inside J5, NOT for its routing or the rest of the board.
+(rule "J5 USB-C internal pad pitch"
+  (condition "A.Type == 'Pad' && B.Type == 'Pad' && A.memberOfFootprint('J5') && B.memberOfFootprint('J5')")
+  (constraint clearance (min 0.15mm)))
