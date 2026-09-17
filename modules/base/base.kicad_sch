@@ -6000,16 +6000,27 @@
 		)
 		(uuid "77f89b3c-c98b-54dc-97f4-d031221ca7c9")
 	)
-	(wire
+		(wire
 		(pts
-			(xy 74.93 374.65) (xy 87.63 374.65)
+			(xy 74.93 374.65) (xy 77.47 374.65)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "77fee3f0-f9a8-44a1-9314-e57131831fc4")
+		(uuid "96fb5406-118b-4de4-aff5-a003b933d095")
 	)
+	(wire
+		(pts
+			(xy 85.09 374.65) (xy 87.63 374.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a43fbae7-0769-48b1-9bfd-d218f682f32b")
+	)
+
 	(wire
 		(pts
 			(xy 72.39 59.69) (xy 72.39 74.93)
@@ -7020,16 +7031,27 @@
 		)
 		(uuid "c30d81db-e511-429d-9750-f4351a44bd04")
 	)
-	(wire
+		(wire
 		(pts
-			(xy 74.93 330.2) (xy 87.63 330.2)
+			(xy 74.93 330.2) (xy 77.47 330.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c30e8b79-596c-42e2-9ccd-ad14849c771b")
+		(uuid "ae698b2f-0fb7-4a17-8250-a887670645cd")
 	)
+	(wire
+		(pts
+			(xy 85.09 330.2) (xy 87.63 330.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c74a5913-c94b-464f-b5bd-48bb7dc37f4c")
+	)
+
 	(wire
 		(pts
 			(xy 208.28 252.73) (xy 208.28 259.08)
@@ -20140,6 +20162,560 @@
 			(project "base"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
 					(page "12")
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 331.47) (xy 85.09 331.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bf597dca-e09b-40db-ab5f-b07836a2f994")
+	)
+	(wire
+		(pts
+			(xy 85.09 331.47) (xy 85.09 330.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fab02e6b-967b-44c0-abe0-d8d91ae7395b")
+	)
+	(wire
+		(pts
+			(xy 77.47 331.47) (xy 78.74 331.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9791011c-12bd-4f60-b324-f4182fe85c1d")
+	)
+	(wire
+		(pts
+			(xy 77.47 331.47) (xy 77.47 330.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "62e3ba59-cc27-4327-9cea-9951f001aef0")
+	)
+	(junction
+		(at 85.09 330.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "cee04c0e-a993-40ca-9068-1b3e0fab4aa6")
+	)
+	(junction
+		(at 77.47 330.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b09c269f-5da0-4ac7-9d27-9ec14a510f91")
+	)
+	(global_label "LFB_A"
+		(shape passive)
+		(at 85.09 331.47 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f877db8a-419b-4829-80a9-0a68a520204e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 331.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "LFB_B"
+		(shape passive)
+		(at 77.47 331.47 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "702f7fdf-2c2b-4fe5-9805-0f1392e87b80")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 86.36 331.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 81.28 330.2 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "471a43a1-662c-40ad-9cbd-cbd54d6df75a")
+		(property "Reference" "R53"
+			(at 81.28 323.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1M"
+			(at 81.28 326.39 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 81.28 328.422 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 81.28 330.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 81.28 330.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C26083"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0402WGF1004TCE"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f0658681-21a9-4d68-b127-4ae5a2a0f0fc")
+		)
+		(pin "1"
+			(uuid "57ba31f1-35df-4346-b81e-2a30df93403a")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "R53")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 81.28 336.55 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "97f28434-7290-46bd-a1b4-07d448d51eb3")
+		(property "Reference" "J20"
+			(at 83.82 337.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SolderJumper_2_Bridged"
+			(at 83.82 337.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm"
+			(at 81.28 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 81.28 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Gain-select shunt (2-pad solder jumper, bridged as shipped): bridges the 1M series resistor in the line-out feedback path. Bridged = 680k feedback (default, +6.28 dB vs the 330k board); cut the bridge = 1.68M feedback (loud, +14.1 dB vs the 330k board). The amplifier stays closed-loop in both states."
+			(at 81.28 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 81.28 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" ""
+			(at 81.28 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b07545fb-a34e-4e8f-b5c9-1c175d58459b")
+		)
+		(pin "2"
+			(uuid "172827ea-bbab-4da3-8469-213e835f1e2d")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "J20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 375.92) (xy 85.09 375.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "abc374e3-1482-4cc8-a0fd-a060c34de28b")
+	)
+	(wire
+		(pts
+			(xy 85.09 375.92) (xy 85.09 374.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1b39dce9-5982-450d-ab60-2cb7c0b2c41a")
+	)
+	(wire
+		(pts
+			(xy 77.47 375.92) (xy 78.74 375.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5857fce0-1e81-4d5b-b4c7-1410bc248946")
+	)
+	(wire
+		(pts
+			(xy 77.47 375.92) (xy 77.47 374.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0ab185b5-686c-4539-9389-6d0022f60a59")
+	)
+	(junction
+		(at 85.09 374.65)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d026d625-1a28-4717-b429-cef7e4bc431a")
+	)
+	(junction
+		(at 77.47 374.65)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5c4efab2-cc90-4740-b4b1-50fb50b39ede")
+	)
+	(global_label "RFB_A"
+		(shape passive)
+		(at 85.09 375.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d9d8674d-d883-4a20-8ada-80f64161f40f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 375.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "RFB_B"
+		(shape passive)
+		(at 77.47 375.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "75602f88-5645-4132-a88a-fff9ae67eaa2")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 86.36 375.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 81.28 374.65 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5d402834-13c1-40ac-ad72-8c50a6fb77ba")
+		(property "Reference" "R54"
+			(at 81.28 368.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1M"
+			(at 81.28 370.84 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 81.28 372.872 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 81.28 374.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 81.28 374.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C26083"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0402WGF1004TCE"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "7c0af8a3-1a56-4e38-8f42-8f0dfd49cbd1")
+		)
+		(pin "1"
+			(uuid "844aa44b-2073-4739-8eaf-af237ecd190d")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "R54")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 81.28 381 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "ffa24b00-078d-4c79-b3d3-a3bf33b68160")
+		(property "Reference" "J21"
+			(at 83.82 382.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SolderJumper_2_Bridged"
+			(at 83.82 382.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm"
+			(at 81.28 381 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 81.28 381 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Gain-select shunt (2-pad solder jumper, bridged as shipped): bridges the 1M series resistor in the line-out feedback path. Bridged = 680k feedback (default, +6.28 dB vs the 330k board); cut the bridge = 1.68M feedback (loud, +14.1 dB vs the 330k board). The amplifier stays closed-loop in both states."
+			(at 81.28 381 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 81.28 381 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" ""
+			(at 81.28 381 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1637ffb8-c547-4726-be39-9fd91be83ac5")
+		)
+		(pin "2"
+			(uuid "2d4b1d85-f0d2-4c70-8181-42e35a5264bb")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "J21")
+					(unit 1)
 				)
 			)
 		)

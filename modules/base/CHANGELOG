@@ -1,5 +1,81 @@
 # Changelog
 
+## 1.3.5
+**Line-out loud-gain option (Phase 2 of the line-out/level work, the item 1.3.4 recorded as
+deferred): each channel now carries a series resistor with a shunt solder jumper across it, so
+the line-out feedback can be switched from 680 k to 1.68 M on the bench.** New parts and copper
+plus the matching schematic edit; no existing value, footprint position or routing changes.
+
+* **The two states, per channel.** `J20` (left) / `J21` (right) sit **in the inverting-node track**
+  and are **bridged as shipped** (`Jumper:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm`, the exact
+  footprint of `J19`). Bridged = the shunt is fitted = the node is continuous = feedback stays
+  `R19`/`R18` = **680 k = +6.28 dB vs the 330 k board (unchanged from 1.3.3/1.3.4, this is what
+  ships)**. Cutting the 0.3 mm copper bridge = the shunt is removed = the node is broken and the
+  only path left is through the new series resistor: feedback = 680 k + 1 M = **1.68 M =
+  +14.14 dB vs the 330 k board, i.e. +7.86 dB vs today's default**. Both states are
+  **closed-loop**: the summing node always keeps a DC path to the op-amp output (through
+  `R19`/`R18` alone when bridged, through `R19`+`R53` / `R18`+`R54` when cut), and `R17`/`R16`
+  keep the input path.
+* **New `R53`/`R54` = 1 M (0402).** `0402WGF1004TCE` / LCSC `C26083` - the part already used by
+  `R16`/`R17`, so **no new BOM line**. They are spliced into the inverting-node trunk
+  (`238.44,56.388`-`238.44,61.153` on the left, `248.982,56.261`-`248.982,61.153` on the right),
+  which is cut between `y=58.4` and `y=59.7`; the two branch tracks (F.Cu, 0.3 mm) run from
+  `R53`/`R54` pad 1/2 into `J20`/`J21` pad 1/2. Both new parts are SMD 0402 / SMD jumper with
+  `F.Cu` copper only - no via, no hole, no other layer is touched.
+* **The series resistor is not the 820 k 0402 that 1.3.4 looked for.** No 0402 820 k part could
+  be verified, and the spec-exact 0603 (C23252) does not fit the pocket, so the board keeps the
+  already-sourced 1 M `C26083` and lands at **1.68 M / +14.14 dB** (the design target was
+  "~+15 dB"); the divider is 680 k / 1 M in both channels, so the two states are 6.28 dB and
+  14.14 dB above the original 330 k board.
+* **Schematic.** `R53`/`R54` (`Device:R`, 1 M, C26083, `Datasheet "~"`) are inserted in series in
+  the `R17.pin1`->`U4.2` / `R16.pin1`->`U4.6` wire; `J20`/`J21`
+  (`Connector_Generic:Conn_01x02`, Value `SolderJumper_2_Bridged`, `in_bom no`, `Datasheet ""`)
+  bridge them from below. Four junctions were added and four **global** labels name the split
+  nodes: `LFB_A`/`LFB_B` and `RFB_A`/`RFB_B` (line-out feedback node, side A = the
+  `R19`/`R18` + op-amp-input side, side B = the `R17`/`R16` side).
+* **Netlist delta (exactly two nets per channel, nothing else).** `Net-(U4A--)` is renamed
+  **`LFB_A`** = {`R19.2`, `U4.2`} + the new `R53.1`, `J20.1`, and the new net **`LFB_B`** =
+  {`R17.1`} + `R53.2`, `J20.2`. Likewise `Net-(U4B--)` -> **`RFB_A`** = {`R18.2`, `U4.6`,
+  `R54.1`, `J21.1`} and **`RFB_B`** = {`R16.1`, `R54.2`, `J21.2`}. The schematic netlist goes
+  from 79 entries (78 signal nets + `GND`) to 81 (80 signal nets + `GND`); **every other net,
+  pin and value is unchanged** (verified by exporting both netlists and diffing the pin sets).
+  In the PCB the net table goes 80 -> 82 entries: net 33/30 keep their codes and are renamed,
+  net 80 = `LFB_B` and net 81 = `RFB_B` are new.
+* **Numbers.** Default (bridged): 680 k/1 M = 0.68 = -3.35 dB, +6.28 dB vs the 330 k board.
+  Loud (cut): 1.68 M/1 M = 1.68 = +4.51 dB, +14.14 dB vs the 330 k board and +7.86 dB vs the
+  shipped default. The 1.68 M feedback does **not** change the output impedance - that is set by
+  `R20`/`R21` (1 k) and the op-amp's closed-loop output impedance - it raises the noise gain from
+  1.68 to 2.68 (+4.06 dB, so the op-amp's own noise and the bias-rail noise rise with the
+  signal) and lowers the small-signal bandwidth from ~595 kHz to ~373 kHz (GBW 1 MHz / noise
+  gain), still far above the audio band. DC: the MCP6002's CMOS input current (~1 pA x 1.68 M =
+  ~1.7 uV) is negligible, and `C19`/`C18` block the output offset anyway.
+* **Verification.** `kicad-cli sch erc` == baseline (11 findings, same kinds/severities, no new
+  ones). `kicad-cli pcb drc --schematic-parity` == **0 errors, 0 unconnected, 145 parity items
+  (== baseline)**, 82 violations = 73 `lib_footprint_mismatch` (baseline 69 + the 4 new
+  footprints, the pre-existing library-copy class) + **9 silkscreen warnings, all listed here
+  because they are the only new items**: `J20`'s silk box and `J21`'s silk box clip `R17`'s and
+  `R16`'s existing reference text (5 `silk_overlap` items), and `R16`'s / `R17`'s / `C20`'s
+  existing reference text sits over `J21` pad 2, `R54` pad 2, `J20` pad 2 and `R53` pad 2
+  (4 `silk_over_copper` items). All of them are reference-text placement only; no copper,
+  clearance, mask or connectivity issue, and no existing part was moved to avoid them.
+* **Out of scope and proven unchanged.** `U3`, `R6`/`R7`, `RV1`/`RV2`, `C18`/`C19`, `R20`/`R21`,
+  `HEAD_OUT_L`/`HEAD_OUT_R`, `+2.5V` (name and network), the 1.65 V bias parts and the jack
+  footprints are byte-identical (block-by-block text comparison against 1.3.4); `R18`/`R19` keep
+  the 680 k value and their 0603 footprints; every `gr_*`/Edge.Cuts item, the outline, mounting
+  holes and jack positions are byte-identical; the Phase-1 parts (`R5`, `R24`, `R52`, `J19`, and
+  the removal of `R25`) are untouched - their footprint blocks differ only in the net-name lines
+  that this revision renamed.
+* **Pin-header variant (FYI, not implemented):** no. The only free pocket beside `R19`/`R17` and
+  `R18`/`R16` is 3.79 mm tall between the two 0603 courtyards, while a 2-pin 2.00 mm header in the
+  `J7..J18` style needs ~5.0 mm of courtyard plus 1.35 mm through-hole pads that would clash with
+  `R19`/`R18` and `U4`'s pads at the only in-line position; the same conclusion 1.3.4 recorded.
+* **Still true (unchanged, tracked separately):** the stale production exports / pinned
+  fingerprint issue - `tools/regenerate_production.py` still refuses to re-export because
+  `base.kicad_pcb` does not match the `routed_pcb_sha256` pin in
+  `verification/fixed-geometry.json`. When that pin is re-baselined, `R53`/`R54` collapse into the
+  existing C26083 BOM line and `J20`/`J21` (bare copper pads, no part ordered) join the excluded
+  set with `J19`.
+
 ## 1.3.4
 **Line-input normalling: the leaky `R25` bridge is gone, the mono normal is unilateral, and a
 normalling-disable link is fitted.** PCB work (new parts and copper), the first phase of the
