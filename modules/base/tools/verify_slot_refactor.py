@@ -46,11 +46,20 @@ EXPECTED_FIELDS = {"Description"}
 
 
 def parse_netlist(path: Path):
+    text = path.read_text(encoding="utf-8")
     nets: dict[str, list[tuple]] = collections.defaultdict(list)
     comps: dict[str, dict] = {}
     cur_net = None
     cur_comp = None
-    for line in path.read_text(encoding="utf-8").split("\n"):
+    for line in text.split("\n"):
+        section = re.match(r"^  \((\w+)", line)
+        if section:
+            # only lines inside the matching section may extend the current item
+            if section.group(1) != "nets":
+                cur_net = None
+            if section.group(1) != "components":
+                cur_comp = None
+            continue
         m = NET_RE.match(line)
         if m:
             cur_net = m.group(2)
@@ -77,6 +86,45 @@ def parse_netlist(path: Path):
             if m:
                 comps[cur_comp]["fields"].append((m.group(1), m.group(2)))
     return nets, comps
+
+
+def validate_structure(path: Path) -> list[str]:
+    """Reject truncated, unbalanced or non-netlist files instead of 'passing' them."""
+    problems = []
+    if not path.is_file():
+        return [f"{path}: not a file"]
+    text = path.read_text(encoding="utf-8", errors="replace")
+    if len(text) < 1000:
+        problems.append(f"{path.name}: suspiciously short ({len(text)} bytes)")
+    depth = 0
+    in_string = False
+    esc = False
+    for ch in text:
+        if in_string:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_string = False
+        elif ch == '"':
+            in_string = True
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+    if depth != 0:
+        problems.append(f"{path.name}: unbalanced parentheses (depth {depth})")
+    if in_string:
+        problems.append(f"{path.name}: unterminated string (truncated file?)")
+    if not text.lstrip().startswith("(export "):
+        problems.append(f"{path.name}: does not start with '(export'")
+    if not text.rstrip().endswith(")"):
+        problems.append(f"{path.name}: does not end with ')'")
+    for section in ("(components", "(nets", "(libparts"):
+        if section not in text:
+            problems.append(f"{path.name}: missing '{section}' section")
+    return problems
 
 
 def describe(key):
@@ -220,10 +268,17 @@ def main() -> int:
     args = ap.parse_args()
 
     try:
+        validation = validate_structure(Path(args.before)) + validate_structure(Path(args.after))
         nets_b, comps_b = parse_netlist(Path(args.before))
         nets_a, comps_a = parse_netlist(Path(args.after))
     except OSError as exc:
         print(f"ERROR: cannot read netlist: {exc}")
+        return 2
+
+    if validation:
+        print("ERROR: netlist input failed structural validation:")
+        for problem in validation:
+            print("   ", problem)
         return 2
 
     lines: list[str] = []

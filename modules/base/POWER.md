@@ -351,12 +351,15 @@ empty or malformed exports instead of reporting them as equal):
   `positions.csv` regenerate identically, and re-exported Gerbers differ from the
   committed ZIP only in their internal creation-date comment.
 
-The only content differences in the exported netlist *file* are the per-component
-`Sheetname` / `Sheetfile` properties (now `Slot1` … / `slot.kicad_sch`) and 48
-`Description` texts that named their own slot and are now instance-neutral
-(`Slot 4 rail decoupling` → `Slot rail decoupling`). KiCad 9 has no per-instance
-symbol fields, so those texts cannot stay slot-numbered in a shared template; no
-field that reaches the netlist nodes, BOM, CPL or board changed.
+The differences in the exported netlist *file* are bookkeeping only: the
+`(design …)` section gains the twelve sub-sheet entries, and every relocated
+component's `Sheetname` / `Sheetfile`, `sheetpath` and `tstamps` fields change to
+its template instance, plus 48 `Description` texts that named their own slot and
+are now instance-neutral (`Slot 4 rail decoupling` → `Slot rail decoupling`).
+KiCad 9 has no per-instance symbol fields, so those texts cannot stay
+slot-numbered in a shared template. No net, node, pin function or pin type
+changed, and no field that reaches the BOM, CPL or board changed; §8.6 lists the
+complete diff line by line.
 
 ### 8.5 PCB status (deliberately untouched)
 

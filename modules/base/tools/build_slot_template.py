@@ -706,12 +706,15 @@ def emit_part_symbol(src: Symbol, key: str, at, rot: int, desc, sheet_paths) -> 
     return "\t" + head + "\t\t(instances\n\t\t\t(project \"base\"\n" + inst + "\t\t\t)\n\t\t)\n\t)\n"
 
 
-def part_metadata_problems(src_text: str, new_text: str, label: str) -> list[str]:
+def part_metadata_problems(
+    src_text: str, new_text: str, label: str, ignore: tuple = ("Description",)
+) -> list[str]:
     """The template must keep every non-cosmetic attribute of the part it copies.
 
     Checks the DNP / BOM / board / simulation flags, every symbol field value
     (including LCSC, MPN, Manufacturer and Footprint) and the pin set.  Only the
-    free-text ``Description`` may be rewritten to become instance-neutral.
+    ignored fields (the per-instance reference and the free-text ``Description``)
+    may differ.
     """
     problems = []
     for flag in ("dnp", "in_bom", "on_board", "exclude_from_sim"):
@@ -728,7 +731,7 @@ def part_metadata_problems(src_text: str, new_text: str, label: str) -> list[str
 
     src_props, new_props = props(src_text), props(new_text)
     for key in sorted(set(src_props) | set(new_props)):
-        if key == "Description":
+        if key in ignore:
             continue
         if src_props.get(key) != new_props.get(key):
             problems.append(
@@ -738,6 +741,27 @@ def part_metadata_problems(src_text: str, new_text: str, label: str) -> list[str
     new_pins = sorted(re.findall(r'\(pin "([^"]+)"', new_text))
     if src_pins != new_pins:
         problems.append(f"{label}: pins {src_pins} -> {new_pins}")
+    return problems
+
+
+def check_slot_uniformity(by_ref: dict[str, Symbol]) -> list[str]:
+    """All twelve slots must describe their parts identically.
+
+    One shared template can only carry one variant of each part, so slots 2..12
+    are compared field-by-field (ignoring the per-instance reference) against
+    slot 1 - value, footprint, datasheet, LCSC, MPN, manufacturer, flags and pins.
+    """
+    problems = []
+    first = slot_refs(1)
+    for slot in range(2, SLOT_COUNT + 1):
+        refs = slot_refs(slot)
+        for key in sorted(refs):
+            problems += part_metadata_problems(
+                by_ref[first[key]].item.text,
+                by_ref[refs[key]].item.text,
+                f"{key} slot{slot} ({refs[key]} vs {first[key]})",
+                ignore=("Reference", "Description"),
+            )
     return problems
 
 
@@ -1039,7 +1063,11 @@ def main() -> int:
 
     child, metadata_problems = build_child(text, by_ref, sheet_paths, libs)
 
-    problems = check_child_geometry(libs) + metadata_problems
+    problems = (
+        check_child_geometry(libs)
+        + metadata_problems
+        + check_slot_uniformity(by_ref)
+    )
     if problems:
         print("ERROR: the generated template does not match the intended per-slot netlist:")
         for p in problems:
@@ -1047,6 +1075,7 @@ def main() -> int:
         return 2
     print("template geometry: verified against the intended per-slot netlist")
     print("template part metadata: flags, sourcing fields and pins preserved")
+    print("slot uniformity: slots 2..12 match slot 1 field-for-field")
 
     if args.dry_run:
         print("dry run: nothing written")
