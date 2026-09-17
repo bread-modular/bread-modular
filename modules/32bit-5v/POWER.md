@@ -94,9 +94,12 @@ recommended pad" figure is **not** good enough for the pathological case, and th
 layout therefore makes the tab a real heat-sink:
 
 * the SOT-223 tab is the GND pin in this package, so it is soldered to a
-  2.0 x 3.8mm pad that carries **four 0.6/0.3mm thermal vias straight into the
-  `In1.Cu` ground plane** (a full-board pour), plus one more via in the GND lead
-  pad and two at the capacitor grounds;
+  2.0 x 3.8mm pad that carries **three 0.6/0.3mm thermal vias straight into the
+  `In1.Cu` ground plane** (a full-board pour) at (57.90, 57.80), (57.90, 58.60)
+  and (57.90, 59.20); one more 0.6/0.3mm via sits in the GND *lead* pad at
+  (64.05, 57.60) — which is also how `C40`'s ground is returned — and a third
+  serves `C41`'s ground at (65.50, 63.00). Six new vias in total, the sixth being
+  the regulator's 0.5/0.3mm output via at (57.50, 52.25);
 * the plane is the heat-spreader: on a 4-layer board with a solid inner GND
   plane, θJA for a SOT-223 tab tied into it is ≈ 45-60 °C/W rather than the
   datasheet's 110 °C/W minimum-pad number.

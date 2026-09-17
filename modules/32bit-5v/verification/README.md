@@ -53,7 +53,13 @@ U5 origin (60.90, 57.60), layer B.Cu, orientation 180 deg
   pad 2  net=GND   at=(57.75,57.60) size 2.0x3.8   <- exposed TAB = GND
   pad 3  net=+3V3  at=(64.05,59.90) size 2.0x1.5   <- OUT, bottom of the lead column
   GND vias inside the tab pad: (57.90,57.80) (57.90,58.60) (57.90,59.20), 0.6/0.3
-  GND via in the GND lead pad: (64.05,57.60), 0.6/0.3
+  GND via in the GND lead pad: (64.05,57.60), 0.6/0.3  (also returns C40's ground)
+  GND via for C41's ground:    (65.50,63.00), 0.6/0.3
+  +3V3 regulator-output via:   (57.50,52.25), 0.5/0.3  (inside the In1 pour
+                               keep-out under V_SUPPLY1, so it cannot short to
+                               the In1 GND plane; it hands the rail to F.Cu and
+                               to the In2.Cu distribution trunk)
+  -- six new vias in total, all confirmed by a board-vs-board via set difference
 ```
 
 So pin 1 (IN, +5V) is the top pad, pin 3 (OUT, +3V3) is the bottom pad, and the
