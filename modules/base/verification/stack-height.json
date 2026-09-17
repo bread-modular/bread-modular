@@ -1,0 +1,556 @@
+{
+  "datum": "Base PCB top surface (z = 0). Everything below is measured upward from it. Through-board solder tails are explicitly NOT counted as height above the board.",
+  "inputs": {
+    "jumper_header": {
+      "lcsc": "C2905948",
+      "mpn": "PZ200-1-02-Z",
+      "above_board_mm": 6.0,
+      "solder_tail_below_board_mm": 1.2,
+      "source": "https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948"
+    },
+    "shunt": {
+      "lcsc": "C5664",
+      "height_mm": 3.5,
+      "source": "https://www.lcsc.com/datasheet/C5664.pdf"
+    },
+    "base_socket": {
+      "lcsc": "C2897368",
+      "mpn": "PM254-1-05-Z-8.5",
+      "insulator_mm": 8.5,
+      "total_length_mm": 11.7,
+      "source": "https://www.lcsc.com/datasheet/C2897368.pdf"
+    },
+    "module_male_header": {
+      "part": "unspecified on the module PCBs - assumed to be the mechanical twin of PZ254-1-05-Z-8.5",
+      "insulator_mm": 2.5,
+      "mating_pin_mm": 6.0,
+      "mounting": "bottom side (B.Cu) on every module",
+      "source": "https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928"
+    }
+  },
+  "tolerance_x_x_mm": 0.3,
+  "assembly_margin_mm": 0.5,
+  "jumper_envelope_nominal_mm": 6.0,
+  "jumper_envelope_worst_case_mm": 6.6,
+  "module_underside_nominal_mm": 11.0,
+  "module_underside_worst_case_mm": 10.4,
+  "clearance_nominal_mm": 5.0,
+  "clearance_worst_case_mm": 3.8,
+  "clearance_ok": true,
+  "minimum_socket_insulator_mm": 6.3,
+  "shunt_option_clearance_mm": {
+    "3.5 mm": 4.4,
+    "4.5 mm": 3.9,
+    "5.0 mm": 3.4
+  },
+  "nearest_module_side_envelope_gap_mm": 0.45,
+  "module_bottom_side_footprints_over_jumpers": 0,
+  "modules_inspected": 27,
+  "module_connectors": {
+    "16bit": {
+      "path": "modules/16bit/16bit.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "16bit+": {
+      "path": "modules/16bit+/16bit+.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "4mix": {
+      "path": "modules/4mix/4mix.kicad_pcb",
+      "male_headers": 4,
+      "layers": [
+        "F.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "8bit": {
+      "path": "modules/8bit/8bit.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "ar_env": {
+      "path": "modules/ar_env/ar_env.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "blank": {
+      "path": "modules/blank/blank.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "cv_math": {
+      "path": "modules/cv_math/cv_math.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "drive": {
+      "path": "modules/drive/drive.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "env": {
+      "path": "modules/env/env.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "head_out": {
+      "path": "modules/head_out/head_out.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "hihat": {
+      "path": "modules/hihat/hihat.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "imix": {
+      "path": "modules/imix/imix.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "F.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "jacks": {
+      "path": "modules/jacks/jacks.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "jvca": {
+      "path": "modules/jvca/jvca.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "kick": {
+      "path": "modules/kick/kick.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "line_in": {
+      "path": "modules/line_in/line_in.kicad_pcb",
+      "male_headers": 1,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "line_out": {
+      "path": "modules/line_out/line_out.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "low": {
+      "path": "modules/low/low.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "mcc": {
+      "path": "modules/mcc/mcc.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "mco": {
+      "path": "modules/mco/mco.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "midi": {
+      "path": "modules/midi/midi.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "noise": {
+      "path": "modules/noise/noise.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "pots": {
+      "path": "modules/pots/pots.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "svf": {
+      "path": "modules/svf/svf.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "usb_power": {
+      "path": "modules/usb_power/usb_power.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "v2ca": {
+      "path": "modules/v2ca/v2ca.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "wave": {
+      "path": "modules/wave/wave.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    }
+  },
+  "slots": [
+    {
+      "slot": 1,
+      "jumper": "J7",
+      "jumper_envelope_mm": [
+        59.315,
+        32.675,
+        64.365,
+        35.725
+      ],
+      "supply_first_pad_mm": [
+        71.0,
+        38.0
+      ],
+      "supply_last_pad_mm": [
+        60.84,
+        38.0
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 2,
+      "jumper": "J8",
+      "jumper_envelope_mm": [
+        89.915,
+        32.775,
+        94.965,
+        35.825
+      ],
+      "supply_first_pad_mm": [
+        101.6,
+        38.1
+      ],
+      "supply_last_pad_mm": [
+        91.44,
+        38.1
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 3,
+      "jumper": "J9",
+      "jumper_envelope_mm": [
+        120.395,
+        32.775,
+        125.445,
+        35.825
+      ],
+      "supply_first_pad_mm": [
+        132.08,
+        38.1
+      ],
+      "supply_last_pad_mm": [
+        121.92,
+        38.1
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 4,
+      "jumper": "J10",
+      "jumper_envelope_mm": [
+        150.875,
+        32.775,
+        155.925,
+        35.825
+      ],
+      "supply_first_pad_mm": [
+        162.56,
+        38.1
+      ],
+      "supply_last_pad_mm": [
+        152.4,
+        38.1
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 5,
+      "jumper": "J11",
+      "jumper_envelope_mm": [
+        181.355,
+        32.775,
+        186.405,
+        35.825
+      ],
+      "supply_first_pad_mm": [
+        193.04,
+        38.1
+      ],
+      "supply_last_pad_mm": [
+        182.88,
+        38.1
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 6,
+      "jumper": "J12",
+      "jumper_envelope_mm": [
+        211.835,
+        32.775,
+        216.885,
+        35.825
+      ],
+      "supply_first_pad_mm": [
+        223.52,
+        38.1
+      ],
+      "supply_last_pad_mm": [
+        213.36,
+        38.1
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 7,
+      "jumper": "J13",
+      "jumper_envelope_mm": [
+        59.435,
+        101.355,
+        64.485,
+        104.405
+      ],
+      "supply_first_pad_mm": [
+        71.12,
+        106.68
+      ],
+      "supply_last_pad_mm": [
+        60.96,
+        106.68
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 8,
+      "jumper": "J14",
+      "jumper_envelope_mm": [
+        89.915,
+        101.355,
+        94.965,
+        104.405
+      ],
+      "supply_first_pad_mm": [
+        101.6,
+        106.68
+      ],
+      "supply_last_pad_mm": [
+        91.44,
+        106.68
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 9,
+      "jumper": "J15",
+      "jumper_envelope_mm": [
+        120.395,
+        101.355,
+        125.445,
+        104.405
+      ],
+      "supply_first_pad_mm": [
+        132.08,
+        106.68
+      ],
+      "supply_last_pad_mm": [
+        121.92,
+        106.68
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 10,
+      "jumper": "J16",
+      "jumper_envelope_mm": [
+        150.875,
+        101.355,
+        155.925,
+        104.405
+      ],
+      "supply_first_pad_mm": [
+        162.56,
+        106.68
+      ],
+      "supply_last_pad_mm": [
+        152.4,
+        106.68
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 11,
+      "jumper": "J17",
+      "jumper_envelope_mm": [
+        181.355,
+        101.355,
+        186.405,
+        104.405
+      ],
+      "supply_first_pad_mm": [
+        193.04,
+        106.68
+      ],
+      "supply_last_pad_mm": [
+        182.88,
+        106.68
+      ],
+      "module_registration_offset_mm": null
+    },
+    {
+      "slot": 12,
+      "jumper": "J18",
+      "jumper_envelope_mm": [
+        211.835,
+        101.355,
+        216.885,
+        104.405
+      ],
+      "supply_first_pad_mm": [
+        223.52,
+        106.68
+      ],
+      "supply_last_pad_mm": [
+        213.36,
+        106.68
+      ],
+      "module_registration_offset_mm": null
+    }
+  ],
+  "assumptions": [
+    "The module PCBs do not annotate their power/ground header part number; the mechanical twin of PZ254-1-05-Z-8.5 (2.5 mm insulator, 6.0 mm mating pin) is assumed.",
+    "Header (C2905948) tolerances are not published; the general X.X +/-0.30 mm tolerance of the C5664/PM254 drawings is applied.",
+    "No assembled stack has been measured; this is a datasheet calculation, not a mating trial."
+  ]
+}

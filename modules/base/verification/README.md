@@ -1,8 +1,13 @@
 # BASE v1.3.0 — Phase 2 layout verification
 
-**Electrical layout complete; mechanical assembly release is ON HOLD.** The actual
-female slot socket and fitted-shunt height are not established. Do not order or
-claim a verified mated stack from the Phase 1 part-number description.
+**Electrical layout complete; the mechanical assembly release is FAB-READY as of
+v1.3.2.** The socket gender question is resolved — the base must carry **female**
+1x05 2.54 mm sockets, because all 27 module boards carry **male** `Conn_01x05_Pin`
+headers on the bottom side — and the mated stack height is now proved from
+datasheets in `stack-height.json`. No assembled stack has been measured yet; a
+mating trial is still advised. The ordering checklist is
+[`../production/RELEASE_STATUS.md`](../production/RELEASE_STATUS.md) and the
+engineering rationale is POWER.md section 9.
 
 ## What changed
 
@@ -72,29 +77,45 @@ only from a temporary plotting copy** so routes remain visible. Production uses
 the saved, filled PCB. Visual inspection found a consistent repeated cluster and
 no text collisions; DRC likewise reports no silk/text/dangling warnings.
 
-## Stack-height finding — owner decision required
+## Stack-height proof (v1.3.2 — was "owner decision required")
 
-The Phase 1 sourcing text is not reliable enough to establish a mated height:
+v1.3.0/v1.3.1 could not close this because the Phase 1 sourcing text was wrong
+(`C2894928 / PZ254-1-05-Z-8.5` is a **male** header, and the `2.8 mm` figure on
+`C2905948` is its solder tail, not its height above the board). Both are now
+resolved from the drawings and calculated in `stack-height.json`:
 
-- **C2905948 / PZ200-1-02-Z** has **2.0 mm insulation + 4.0 mm mating pin =
-  6.0 mm nominal above the base PCB**. Its **2.8 mm** dimension is the solder
-  tail, not the above-board body height. [source](https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948)
-- **C2894928 / PZ254-1-05-Z-8.5** is a **male header**, with **2.5 mm insulation
-  and 6.0 mm mating pins**, not an 8.5 mm-tall female socket. It cannot establish
-  the base-to-module gap with the module's existing male header. The schematic
-  and BOM were not silently substituted. [source](https://www.lcsc.com/product-detail/Pin-Headers_HCTL-PZ254-1-05-Z-8-5_C2894928.html)
-- **C5664** is a 2.00 mm open-top shunt, but its body height and seating tolerance
-  were **not verified** from an accessible dimensional drawing. Open-top does not
-  by itself prove that it fits under the module. [source](https://jlcpcb.com/partdetail/6116-2_0_Short_circuitcap/C5664)
+| # | Feature | Height above the base PCB top | Source |
+|---|---|---:|---|
+| 1 | Rail-select header `C2905948 / PZ200-1-02-Z` | insulator **2.0** + mating pin **4.0** = **6.0** | [source](https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948) |
+| 2 | Shunt `C5664` seated on (1) | 2.0 + **3.5** = 5.5 — below (1), so it does not extend the envelope | [source](https://www.lcsc.com/datasheet/C5664.pdf) |
+| 3 | **Jumper envelope** = max(1, 2) | **6.0** nominal / **6.6** worst case | |
+| 4 | Recommended female socket `C2897368` | insulator **8.5** | [source](https://www.lcsc.com/datasheet/C2897368.pdf) |
+| 5 | Module male header insulator (bottom mounted) | **+2.5** | [source](https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928) |
+| 6 | **Module PCB underside** = (4) + (5) | **11.0** nominal / 10.4 worst case | |
+| 7 | **Clearance (6) − (3)** | **5.0 mm** nominal / **3.8 mm** worst case | |
 
-Required physical check: identify the **actual female socket**, measure the fully
-mated base-top-to-module-underside gap, and measure the fitted C5664 envelope.
-The nominal header/shunt top is `2.0 + max(4.0, H_shunt)` mm if the shunt seats on
-the header body; add seating and manufacturing tolerances. Use at least **0.5 mm
-assembly margin** above the worst-case fitted envelope as a design target.
-Even with a shunt no taller than 4 mm, this means a **nominal minimum 6.5 mm gap**,
-not a claim that the present stack supplies it. No measured stack clearance is
-available in this repository. The shunts remain user-fit, not pre-assembled.
+The target is **≥ 0.5 mm** above the worst-case fitted envelope, so 3.3 mm of
+margin remains. Worst case here means every stacked nominal dimension moves by
+the drawings' general `X.X ±0.30` tolerance in the direction that closes the gap.
+The **minimum socket insulator height is 6.3 mm**, set by the need to swallow the
+module's worst-case 6.3 mm mating pin (the jumper-clearance bound is the weaker
+one at 4.9 mm), so the assembly notes state a practical minimum of **6.5 mm**.
+That also covers the tallest 5.0 mm shunt option of the C5664 family
+(worst-case clearances: 3.5 mm → 4.4 mm, 4.5 mm → 3.9 mm, 5.0 mm → 3.4 mm).
+
+`tools/verify_stack_height.py` recomputes the whole table, fails the release if
+any published number disagrees, and additionally registers every module footprint
+into base coordinates (module's leftmost physical ground pin onto the base
+slot's leftmost ground pad) to prove that **no module bottom-side footprint
+overlaps the jumper envelope** on any of the 12 slots. The nearest module-side
+body outline is **0.45 mm** away in X/Y, and the module connector insulators sit
+1.9 mm above the jumper's worst-case top.
+
+Still open, and listed in `../production/manifest.json` as
+`physical_validation_pending`: no assembled stack has been measured, the module
+male-header part number is not annotated on the module PCBs, slot 1's socket row
+keeps its pre-existing −0.12 mm / −0.10 mm offset, and 4mix/imix place their
+power headers on `F.Cu` where they cannot mate downwards as drawn.
 
 ## Trace widths, clearances and ground
 
@@ -215,11 +236,13 @@ connections, or schematic-parity findings. It emits:
   renamed Gerbers, stale drill-map PDFs and the old non-copper VScore plot were
   removed rather than mixed with current data. Historical `production/backups`
   and the old JLC plugin database are not production inputs and were not changed.
-- `production/manifest.json` records source and artifact SHA-256 hashes and the
-  explicit **assembly hold**. The JLC report contains source hashes as well.
+- `production/manifest.json` records the release status (`fab-ready`), the source
+  and artifact SHA-256 hashes, the hand-solder override hash and the pending
+  physical validations. The JLC report contains source hashes as well.
 
-Gerber/CPL generation succeeded, but the female-socket/shunt stack and assembler
-part/rotation preview still require approval before ordering.
+Gerber/CPL generation succeeded. The socket/shunt stack is proved from datasheets
+(above); the assembler's part and rotation preview is still a manual step before
+an order is approved.
 
 For forensic layout reproduction only, `tools/apply_power_layout.py` accepts an
 explicit pre-upgrade PCB and fresh schematic XML. It checks the baseline PCB hash,
@@ -297,3 +320,51 @@ date-only churn was discarded so every hash recorded in `production/manifest.jso
 still matches the committed bytes. A throwaway copy under `/tmp` with one edited
 character in `base.kicad_sch` still fails the same guard, so the check remains
 effective.
+
+## v1.3.2 hand-solder record, BOM override and new guards
+
+v1.3.2 touches **docs, tooling and generated outputs only**. `base.kicad_sch`,
+`slot.kicad_sch` and `base.kicad_pcb` are byte-identical to v1.3.1, so the v1.3.1
+netlist pair above is still the current after-state and
+`tools/verify_slot_refactor.py` still reports IDENTICAL.
+
+**Why the schematic was not edited.** The sockets' `LCSC`/`MPN` fields also live
+on the routed `base.kicad_pcb` footprints, and `tools/verify_power.py` asserts
+schematic/PCB field parity. Re-substituting the socket part in KiCad would
+therefore have required rewriting the pinned, byte-identical PCB and deleting a
+guard. Instead:
+
+* `../production/hand-solder.json` — hand-maintained, versioned release input:
+  the seven hand-solder groups, the required/recommended parts, the datasheet
+  numbers and the stack-height specification. Its SHA-256 is recorded in
+  `manifest.json` as `hand_solder_override_sha256`.
+* `../production/hand-solder.csv` — the generated one-row-per-reference list
+  (44 refs) of what the builder fits and where.
+* `tools/regenerate_production.py` applies the override to the **generated**
+  `production/bom.csv` only (`LCSC Part #` → `NOT-JLC`, the convention the jacks
+  and pots already use) and then refuses the export unless: the routed PCB still
+  matches the `routed_pcb_sha256` pin; the override changed exactly the intended
+  references and no BOM row mixes hand-solder and assembly refs; `C2894928` and
+  `C2894966` are absent from the BOM; no hand-solder ref reaches the JLCPCB
+  BOM/CPL; and the exporter's own exclusion set equals the hand-solder list
+  exactly (44 refs, all excluded as through-hole).
+* `verification/fixed-geometry.json` gains `routed_pcb_sha256` (the deliverable
+  board pin) and `slot_schematic_sha256`; `tools/verify_power.py` checks both and
+  now reports `stack_height_verified: true`, `release_status: fab-ready` and an
+  explicit `physical_validation_pending` list instead of the old hold text.
+* `tools/verify_stack_height.py` produces `stack-height.json` — the datasheet
+  calculation, the module gender inspection and the per-slot envelope check
+  described in the stack-height section above.
+
+**Artifact delta.** After regeneration the eleven gerber/drill files differ from
+the previously committed ones **only in their two KiCad export-date comment lines
+each** (22 changed lines across 11 files); every copper, mask, paste and drill
+coordinate is unchanged, and the zip contents differ only by the same 22 lines.
+`production/bom.csv` changes substantively — that is the intended override.
+`production/positions.csv`, `production/designators.csv`, `production/netlist.ipc`
+and `jlcpcb/base/{bom,positions}.csv` regenerate byte-identically.
+
+**Still not verified:** a measured assembled stack (mating trial), the module
+male-header part number (not annotated on the module PCBs), the `5V14` straight
+2x05 female part number, per-board cost (only the two hand-solder part prices
+were checked), and the assembler's part/rotation preview.

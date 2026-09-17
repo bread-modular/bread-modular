@@ -438,10 +438,170 @@ kicad-cli pcb drc --format json --schematic-parity --severity-all \
 kicad-cli sch export bom --fields 'Reference,Footprint,${QUANTITY},Value,LCSC' \
     --labels 'Designator,Footprint,Quantity,Value,LCSC Part #' \
     --group-by 'Footprint,Value,LCSC' --ref-range-delimiter '' --exclude-dnp \
-    -o /tmp/bom.csv base.kicad_sch && diff /tmp/bom.csv production/bom.csv   # identical
+    -o /tmp/bom.csv base.kicad_sch && diff /tmp/bom.csv production/bom.csv
+# v1.3.2: the only expected difference is the hand-solder override
+# (production/hand-solder.json -> NOT-JLC on the socket rows); see POWER.md section 9.
 ```
 
 `verification/netlist-after.kicadsexpr` is that same fresh export, kept as the
-checked-in after-state. The verifier rejects empty, truncated or unbalanced
-exports (exit 2) instead of reporting them as equal, and the comparison is
-order-insensitive (re-ordering the component blocks still reports IDENTICAL).
+checked-in after-state **of the v1.3.1 refactor**. v1.3.2 did not touch the
+schematic, so this pair and the tool are still current and still reproduce
+*identical*; only the 48 instance-neutral `Description` texts and the sheet
+metadata differ between the two files. The verifier rejects empty, truncated or
+unbalanced exports (exit 2) instead of reporting them as equal, and the
+comparison is order-insensitive (re-ordering the component blocks still reports
+IDENTICAL).
+
+---
+
+## 9. v1.3.2 — fab-ready hand-solder lines and a proved stack height
+
+v1.3.2 is a **release/documentation/packaging** revision. No net, part, value,
+footprint, reference designator or copper feature changed, and
+`base.kicad_pcb` stays byte-identical
+(`9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484`).
+
+### 9.1 Scope correction: the sockets are the builder's, not JLCPCB's
+
+The module sockets are **hand-soldered by the builder and never ordered from
+JLCPCB**, so the connector gender of the base sockets is an assembly note, not an
+ordering blocker. That is the whole reason behind lifting the v1.3.0/v1.3.1
+"DO NOT ORDER" hold.
+
+`jlcpcb/base/{bom.csv,positions.csv}` never contained a single through-hole
+reference: `opt/kicad-jlcpcb/export.py` runs without `--include-through-hole`, so
+every THT footprint is rejected with the reason *"Not an SMD footprint"*.
+Counts are therefore **unchanged**: **119 SMD placements in 32 BOM rows**, out of
+**163 board references**. The remaining **44** references split as:
+
+| Group | Refs | Qty | Part to fit |
+|---|---|---:|---|
+| Per-slot rail socket | `VSUPPLY_1` … `VSUPPLY_12` | 12 | female 1x05 2.54 mm socket |
+| Per-slot ground socket | `GND1` … `GND12` | 12 | female 1x05 2.54 mm socket |
+| Auxiliary input socket | `INPUT1` | 1 | female 1x05 2.54 mm socket |
+| Power-expansion socket | `5V14` (2x05) | 1 | female 2x05 2.54 mm socket |
+| Rail-select jumper | `J7` … `J18` | 12 | male 1x02 2.00 mm header (`C2905948`) |
+| 3.5 mm audio jacks | `J1`, `J2`, `J4`, `J6` | 4 | `WQP-PJ366ST` |
+| RV09 pots | `RV1`, `RV2` | 2 | `RV09-50K` |
+
+### 9.2 Why the base sockets must be female
+
+Every module PCB in this repository carries its power and ground connection as
+a **male** 1x05 2.54 mm header with the value `Conn_01x05_Pin`, mounted on the
+**bottom side** (`B.Cu`) so that its mating pins point down at the base:
+16bit, 16bit+, 8bit, ar_env, blank, cv_math, drive, env, head_out, hihat, jacks,
+jvca, kick, line_in, line_out, low, mcc, mco, midi, noise, pots, svf, usb_power,
+v2ca, wave, 4mix and imix — **27 module boards** were inspected by
+`tools/verify_stack_height.py`. (4mix and imix place the same male headers on
+`F.Cu`; see §9.6.) The base therefore needs **female** sockets.
+
+The legacy Phase-1 field `C2894928 / PZ254-1-05-Z-8.5` is a **male** 1x05 pin
+header (HCTL, 2.5 mm insulator, 6 mm mating pin) and is wrong for every one of
+those positions. It is **not** substituted in KiCad:
+
+* the same `LCSC`/`MPN` text also lives on the routed `base.kicad_pcb` footprint
+  fields, and `tools/verify_power.py` asserts schematic/PCB field parity;
+* the routed board is pinned byte-identical for this release, so it may not be
+  rewritten;
+* deleting the parity check to allow the edit was rejected as weakening a guard.
+
+Instead, `production/hand-solder.json` (hand-maintained, versioned, SHA-256
+recorded in `production/manifest.json`) declares a per-reference BOM override
+that `tools/regenerate_production.py` applies to the **generated**
+`production/bom.csv`: the sockets read **`NOT-JLC`**, exactly like the jacks and
+pots that already use that convention. `C2894928` and `C2894966` now appear
+nowhere in the generated BOM. Every reference designator, value and footprint is
+untouched and the schematic hash is unchanged.
+
+### 9.3 Recommended hand-solder parts
+
+* **Slot sockets — `C2897368` / `PM254-1-05-Z-8.5` (HCTL)**, 1x05 2.54 mm female
+  socket, straight pin, square holes, top entry, 3 A, 8.5 mm insulator, 11.7 mm
+  overall (3.2 mm solder tail). LCSC drawing *2.54 single-row female header,
+  straight pin, plastic height 8.5* (`PM254-1-N-Z-8.5-XX (L11.7)`) [source](https://www.lcsc.com/datasheet/C2897368.pdf).
+  Stock 6 155, min. 5 pcs, $0.1168 @5+ / $0.0826 @150+ (2026-09-17) [source](https://www.lcsc.com/product-detail/Female-Headers_HCTL-PM254-1-05-Z-8-5_C2897368.html).
+* **Shunt — `C5664` / "2.0 Short circuit cap" (BOOMELE)**, 2.00 mm open-top
+  shunt, 1.5 A, **3.5 mm** tall × 4.0 mm long. Its drawing `LY-DLM201-2-021`
+  rev A also offers 4.5 mm and 5.0 mm plastics heights in the same ordering code
+  [source](https://www.lcsc.com/datasheet/C5664.pdf). Stock 126 400, min. 50 pcs,
+  $0.0122 @50+ (2026-09-17) [source](https://www.lcsc.com/product-detail/Shunts-Jumpers_BOOMELE-Boom-Precision-Elec-C5664_C5664.html).
+* **Power-expansion socket (`5V14`)** — `C2897425` / `PM254-2-05-W-8.5` is the
+  nearest 2x05 female family member, but it is the right-angle (`W`) variant, so
+  the straight 2x05 equivalent must be picked before ordering. Not verified in
+  this pass.
+
+### 9.4 Stack height, proved from datasheets
+
+Datum: the **base PCB top surface**. Solder tails are below the board and are
+deliberately **not** counted as height (the jumper's 2.8 mm tail passes through
+the 1.6 mm base PCB and protrudes 1.2 mm underneath).
+
+| # | Feature | Height above the base top | Source |
+|---|---|---:|---|
+| 1 | Rail-select header `C2905948 / PZ200-1-02-Z` | insulator **2.0** + mating pin **4.0** = **6.0** | [source](https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948) |
+| 2 | Shunt `C5664` seated on (1) | 2.0 + **3.5** = 5.5 (below 1, so it does not extend the envelope) | [source](https://www.lcsc.com/datasheet/C5664.pdf) |
+| 3 | **Jumper envelope** = max(1, 2) | **6.0** nominal / **6.6** worst case (X.X ±0.30 each) | |
+| 4 | Recommended female socket `C2897368` | insulator **8.5** | [source](https://www.lcsc.com/datasheet/C2897368.pdf) |
+| 5 | Module male header insulator (bottom mounted) | **+2.5** | [source](https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928) |
+| 6 | **Module PCB underside** = (4) + (5) | **11.0** nominal / 10.4 worst case | |
+| 7 | **Clearance (6) − (3)** | **5.0 mm** nominal / **3.8 mm** worst case | |
+
+The target is **≥ 0.5 mm** above the worst-case fitted envelope, so the design
+clears it by 3.3 mm of margin. Two independent lower bounds set the **minimum
+socket insulator height**:
+
+* **6.3 mm** so the socket swallows the module's worst-case 6.0 + 0.30 mm mating
+  pin instead of letting it bottom out on the base PCB;
+* **4.9 mm** so the module underside still clears the fitted jumper by 0.5 mm.
+
+That gives a practical **assembly-note minimum of 6.5 mm**, which the recommended
+8.5 mm part comfortably meets, and which also covers the tallest 5.0 mm shunt
+option of the C5664 family (worst-case shunt clearances: 3.5 mm → 4.4 mm,
+4.5 mm → 3.9 mm, 5.0 mm → 3.4 mm).
+
+`tools/verify_stack_height.py` recomputes all of §9.4 from
+`production/hand-solder.json` and refuses the release if any number disagrees or
+if the clearance drops below the margin. It also transforms every module
+footprint into base coordinates (module's leftmost physical ground pin onto the
+base slot's leftmost ground pad) and proves that **no module bottom-side
+footprint overlaps the jumper envelope in X/Y** on any of the twelve slots; the
+nearest module-side body outline is 0.45 mm away in X/Y.
+
+### 9.5 Reference designator map for the twelve slots
+
+| Slot | Rail socket | Ground socket | Mux | ILIM | SEL | Jumper |
+|---:|---|---|---|---|---|---|
+| 1 | `VSUPPLY_1` | `GND1` | `U6` | `R28` | `R29` | `J7` |
+| 2 | `VSUPPLY_2` | `GND2` | `U7` | `R30` | `R31` | `J8` |
+| 3–11 | … | … | `U8`…`U16` | `R32`…`R48` | `R33`…`R49` | `J9`…`J17` |
+| 12 | `VSUPPLY_12` | `GND12` | `U17` | `R50` | `R51` | `J18` |
+
+### 9.6 Open assumptions
+
+1. **No assembled stack has been measured.** §9.4 is a datasheet calculation; a
+   mating trial of one base plus one module is still advised.
+2. The module PCBs do not annotate a part number for their male headers. The
+   assumed mechanical twin is `PZ254-1-05-Z-8.5` (2.5 mm insulator, 6.0 mm
+   mating pin).
+3. Header `C2905948` does not publish tolerances; the general `X.X ±0.30` of the
+   C5664 / PM254 drawings is applied to every stacked dimension.
+4. Slot 1's socket row is offset −0.12 mm in X / −0.10 mm in Y from the common
+   module registration. Pre-existing, preserved (no copper change), to be
+   re-checked in the mating trial.
+5. **4mix and imix** place their power/ground male headers on `F.Cu`, where they
+   cannot mate downwards with a base socket as drawn. This is a module-side
+   finding, not a base defect; recording it here so it is not lost.
+6. `modules/32bit/32bit.kicad_pcb` cannot be loaded standalone by `pcbnew` and
+   was therefore skipped by the module inspection.
+
+### 9.7 Reproduce
+
+```sh
+cd modules/base
+/usr/bin/python3 tools/verify_power.py --report verification/connectivity.json   # 1716 assertions
+/usr/bin/python3 tools/verify_stack_height.py --report verification/stack-height.json
+/usr/bin/python3 tools/regenerate_production.py     # runs both above, then ERC/DRC/export
+sha256sum base.kicad_pcb            # 9fc20400… (unchanged, copper pinned)
+diff <(sed -E 's/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:+-]+//g' jlcpcb/gerber/base-F_Cu.gbr) \
+     <(git show HEAD:modules/base/jlcpcb/gerber/base-F_Cu.gbr | sed -E 's/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:+-]+//g')
+```

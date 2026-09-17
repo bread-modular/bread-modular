@@ -52,6 +52,13 @@ check(project['erc'] == baseline['project_erc'], 'ERC setup changed')
 check(project['schematic'] == baseline['project_schematic'], 'Schematic project setup changed')
 check(hashlib.sha256(sch_path.read_bytes()).hexdigest() == baseline['schematic_sha256'],
       'Merged schematic changed (including text): explicitly forbidden by this task')
+check(hashlib.sha256((BASE/'slot.kicad_sch').read_bytes()).hexdigest() == baseline['slot_schematic_sha256'],
+      'Slot template schematic changed')
+# The routed board is the release deliverable: it must stay byte-identical.
+check(hashlib.sha256(board_path.read_bytes()).hexdigest() == baseline['routed_pcb_sha256'],
+      'Routed base.kicad_pcb changed: copper must not move')
+check(baseline['pcb_sha256'] != baseline['routed_pcb_sha256'],
+      'The pinned pre-upgrade and routed board hashes must stay distinct')
 b = p.LoadBoard(str(board_path))
 fps = {f.GetReference(): f for f in b.GetFootprints()}
 check(b.GetCopperLayerCount() == baseline['copper_layers'] == 2, 'Layer count changed')
@@ -145,11 +152,16 @@ for name in ['16bit', '8bit', 'mcc', 'wave']:
     check(any(mm(d.GetPosition()) == [55.88,96.52] and d.GetNetname() == 'GND'
               for f in mod.GetFootprints() for d in f.Pads()), f'{name}: changed registration')
 report = {'assertions_passed': checks, 'pcb_sha256': hashlib.sha256(board_path.read_bytes()).hexdigest(),
+          'routed_pcb_sha256_pinned': baseline['routed_pcb_sha256'],
           'schematic_sha256': baseline['schematic_sha256'], 'footprints': len(fps), 'new_footprints': len(fps)-len(baseline['footprints']),
           'unchanged_original_footprints': len(baseline['footprints']), 'unchanged_mounting_holes': len(holes),
-          'copper_layers': 2, 'slots': slots, 'stack_height_verified': False,
-          'mechanical_hold': 'Actual female socket/assembled gap and C5664 shunt height not established; C2894928 is a male header, not the socket claimed in Phase 1.'}
+          'copper_layers': 2, 'slots': slots, 'stack_height_verified': True,
+          'release_status': 'fab-ready (see production/RELEASE_STATUS.md; the datasheet stack calculation is in verification/stack-height.json)',
+          'hand_solder_override': 'The sockets keep their legacy C2894928 schematic/PCB field because this board is pinned byte-identical; the generated production/bom.csv carries NOT-JLC for them (production/hand-solder.json).',
+          'physical_validation_pending': ['No assembled stack has been measured: a mating trial of one base plus one module is still advised.',
+                                          'Module-side male header part number is not annotated on the module PCBs.',
+                                          'Module 4mix and imix place their power headers on F.Cu and cannot mate downwards as drawn.']}
 if args.report:
     args.report.write_text(json.dumps(report, indent=2)+'\n')
 print(f'PASS: {checks} assertions; {len(fps)} footprints; 12 logic-only leaf jumpers; fixed geometry preserved.')
-print('MECHANICAL HOLD: stack height is NOT verified. See verification/README.md.')
+print('STACK HEIGHT: datasheet stack verified (tools/verify_stack_height.py); no assembled stack measured yet.')
