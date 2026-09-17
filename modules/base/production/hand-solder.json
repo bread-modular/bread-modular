@@ -4,7 +4,7 @@
   "hand_maintained": true,
   "note": "Hand-maintained release input, NOT a generated file. tools/regenerate_production.py reads it, applies bom_override to the generated production/bom.csv for every reference listed with override_bom true, writes the derived production/hand-solder.csv and records this file's SHA-256 in production/manifest.json. Nothing here changes the schematic or the PCB.",
   "scope_correction": "The module sockets are hand-soldered by the builder and are NOT ordered from or assembled by JLCPCB. Connector gender is therefore an assembly-note item, not an ordering blocker.",
-  "reason": "The modules carry MALE 2.54 mm headers (verified on 28 module PCBs: V_SUPPLY*/5V*/GND* carry value Conn_01x05_Pin), so the base must carry FEMALE 1x05 2.54 mm sockets. The Phase-1 part C2894928 / PZ254-1-05-Z-8.5 is a MALE header and is wrong for every base socket position. It is still carried by the immutable schematic and PCB fields (base.kicad_sch / base.kicad_pcb, the latter pinned byte-identical), so it is overridden here rather than in KiCad: this keeps the schematic/PCB parity check in tools/verify_power.py intact and keeps base.kicad_pcb's SHA-256 unchanged.",
+  "reason": "The modules carry MALE 2.54 mm headers (28 module PCBs exist, 27 were inspected, and 25 of them carry value Conn_01x05_Pin on a bottom-side 1x05 2.54 mm header; 4mix and imix mount the same header on F.Cu and 32bit cannot be loaded standalone), so the base must carry FEMALE 1x05 2.54 mm sockets. The Phase-1 part C2894928 / PZ254-1-05-Z-8.5 is a MALE header and is wrong for every base socket position. It is still carried by the immutable schematic and PCB fields (base.kicad_sch / base.kicad_pcb, the latter pinned byte-identical), so it is overridden here rather than in KiCad: this keeps the schematic/PCB parity check in tools/verify_power.py intact and keeps base.kicad_pcb's SHA-256 unchanged.",
   "bom_override": {
     "field": "LCSC Part #",
     "value": "NOT-JLC",
@@ -129,6 +129,17 @@
       "candidate_rejected": "C2897425 / PM254-2-05-W-8.5 (HCTL) is the right-angle variant and is not a valid substitute for a top-entry socket",
       "checked_this_pass": false
     },
+    "rail_select_header": {
+      "lcsc": "C2905948",
+      "mpn": "PZ200-1-02-Z",
+      "manufacturer": "HCTL",
+      "description": "1x02 2.00 mm male pin header, straight (pin 1 = +3.3 V reference, pin 2 = SEL_n)",
+      "insulator_mm": 2.0,
+      "mating_pin_mm": 4.0,
+      "solder_tail_mm": 2.8,
+      "source": "https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948",
+      "checked_this_pass": false
+    },
     "shunt": {
       "lcsc": "C5664",
       "mpn": "2.0 Short circuit cap",
@@ -160,6 +171,7 @@
         "mating_pin_mm": 4.0,
         "solder_tail_mm": 2.8,
         "tail_below_board_mm": 1.2,
+        "tail_nominal_check": "solder_tail_mm - base_pcb_thickness_mm",
         "above_board_mm": 6.0,
         "source": "https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948"
       },
@@ -187,6 +199,9 @@
     },
     "rules": {
       "tolerance_x_x_mm": 0.30,
+      "base_pcb_thickness_mm": 1.6,
+      "module_pcb_thickness_mm": 1.6,
+      "module_pcb_thickness_tolerance_mm": 0.16,
       "assembly_margin_mm": 0.5
     },
     "derived": {
@@ -203,7 +218,7 @@
     }
   },
   "sources": {
-    "module_male_headers": "modules/*/*.kicad_pcb - V_SUPPLY*/5V*/GND* carry value Conn_01x05_Pin on a bottom-side (B.Cu) 1x05 2.54 mm header footprint on every module PCB in this repository.",
+    "module_male_headers": "modules/*/*.kicad_pcb - V_SUPPLY*/5V*/GND* carry value Conn_01x05_Pin on a 1x05 2.54 mm through-hole header footprint. Coverage: 28 module PCBs exist, 27 were inspected (32bit is unreadable by pcbnew), 25 carry it on B.Cu and 4mix/imix on F.Cu.",
     "detail_row": "https://www.lcsc.com/product-detail/Pin-Headers_HCTL-PZ254-1-05-Z-8-5_C2894928.html"
   }
 }

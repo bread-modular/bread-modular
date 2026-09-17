@@ -487,14 +487,17 @@ Counts are therefore **unchanged**: **119 SMD placements in 32 BOM rows**, out o
 The same file backs the sourced per-board component estimate in
 `production/cost-estimate.json` (see `production/RELEASE_STATUS.md` section 5):
 **119 SMD placements in 32 BOM rows**, and for a 50-board batch **$19.94/board of
-JLCPCB-assembled parts plus $1.95/board of hand-solder parts**, dominated by the
-twelve TPS2111APWRs at ≈$16.45/board.
+JLCPCB-assembled parts plus $2.14/board of hand-solder parts = $22.08/board**,
+dominated by the twelve TPS2111APWRs at ≈$16.45/board. That subtotal covers
+**154 of the 163 designators**; the nine it cannot price (5V14, the four jacks,
+the two pots, FB1/FB2) are listed explicitly in the file.
 
 ### 9.2 Why the base sockets must be female
 
-Every module PCB in this repository carries its power and ground connection as
-a **male** 1x05 2.54 mm header with the value `Conn_01x05_Pin`, mounted on the
-**bottom side** (`B.Cu`) so that its mating pins point down at the base:
+The module PCBs carry their power and ground connection as a **male** 1x05
+2.54 mm through-hole header with the value `Conn_01x05_Pin`. Of the 28 module
+PCBs in the repository, 27 were inspected and **25 mount that header on the
+bottom side** (`B.Cu`), so its mating pins point down at the base:
 16bit, 16bit+, 8bit, ar_env, blank, cv_math, drive, env, head_out, hihat, jacks,
 jvca, kick, line_in, line_out, low, mcc, mco, midi, noise, pots, svf, usb_power,
 v2ca and wave. `tools/verify_stack_height.py` records the exact coverage in
@@ -611,15 +614,22 @@ nearest module-side body outline is 0.45 mm away in X/Y.
 7. The socket drawings publish the **housing** height, not the internal contact
    depth. That the 8.5 mm housing accepts a 6.3 mm pin without bottoming out is
    an **assumption**, not a datasheet fact.
-8. A top-mounted THT header's solder tail would still hang 1.4 mm below the
-   module board, leaving 2.4 mm worst-case clearance — it only matters for the
-   two boards that cannot mate downwards anyway (item 5).
+8. A top-mounted THT part's solder tail hangs below the module board. The check
+   now walks every top-side through-hole footprint on all 27 modules (1 332
+   parts) and applies the tail (±0.30) and module-board (±0.16) tolerances: the
+   1.4 mm nominal tail becomes 1.86 mm worst case, the nearest XY gap to a
+   jumper envelope is 0.45 mm, and the worst-case clearance is **1.94 mm** — it
+   only matters for the two boards that cannot mate downwards anyway (item 5).
+9. `tools/verify_power.py` refuses a **stale** `verification/stack-height.json`:
+   the report carries SHA-256 fingerprints of `hand-solder.json`,
+   `fixed-geometry.json`, both schematics, the PCB and all 27 inspected module
+   PCBs, and the guard is covered by `tools/verify_power.py --selftest`.
 
 ### 9.7 Reproduce
 
 ```sh
 cd modules/base
-/usr/bin/python3 tools/verify_power.py --report verification/connectivity.json   # 1717 assertions
+/usr/bin/python3 tools/verify_power.py --report verification/connectivity.json   # 1718 assertions
 /usr/bin/python3 tools/verify_stack_height.py --report verification/stack-height.json
 /usr/bin/python3 tools/regenerate_production.py     # runs both above, then ERC/DRC/export
 sha256sum base.kicad_pcb            # 9fc20400… (unchanged, copper pinned)

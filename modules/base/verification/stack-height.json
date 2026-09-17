@@ -1,4 +1,40 @@
 {
+  "input_sha256": {
+    "hand-solder.json": "24410189dbd60ca5e4f62a086f6e148587b492cb68c27d21580ad2d595d62bf7",
+    "fixed-geometry.json": "2e7aec17adfb6b3be0d164325a500e3e1bf6b8c6a83d3c1849250af6337b29a4",
+    "base.kicad_pcb": "9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484",
+    "base.kicad_sch": "42b0fde4839be9359a309e9c0d09fe737644359e66cb55f0030ef31478e8b999",
+    "slot.kicad_sch": "968af7490500664bef60cea7f5f095bdce586b1b0fb987797cefc4676a789efb",
+    "module_pcbs": {
+      "16bit": "69303f273304d80af16ce560c2df46e8bf6cf55f6c1f0af6b5f672d24f6f8fb6",
+      "16bit+": "5d016238613fe4c27c597cf674d5b885c8470453e6358d6b1c70acdb096d76e2",
+      "4mix": "60e0a9746e39779898dda12ca73ad81b6fd24465c904da47e3712a364e43aa58",
+      "8bit": "e7e2987c6d4fe80e914160363cb04a598f151b704ecac2d5542f4059db44c4c7",
+      "ar_env": "9fadcb7e8240f8c0b054019e748a6773800e570a78caea7f20c127f46128f460",
+      "blank": "97426d04f1943e44a2ac06d47bd8ece65e2e58fa714543adf305927ac6676885",
+      "cv_math": "fb788a89293396032aa74ca0114226b0b1f46a00d5068008efe5411012488fdc",
+      "drive": "c0d8de875c91c68323b314042af37517d890d3933ff0c0a834c201a69242495c",
+      "env": "f32f9c22b53e01adcfd8555646f32a41db17ec650cf28d861443479a8bf4fe55",
+      "head_out": "5ce6dbc0db61242217a1f9e0bbca2184cee0fd8766141d2e272d2f933daa3437",
+      "hihat": "30dac46bce17a56295d612b10f66ded9213e88d53405c3144851499d6301c09a",
+      "imix": "d16f0416b1bdc3e05c871c82c2da58d7c08a8462920d6f93e66fba5e8e68e156",
+      "jacks": "d81d659e7e8c5f17e425d4984d19862ae077da9909bbfbb88d6cb7e0664ca3d1",
+      "jvca": "6db21d347c8079a8e918bc53cf934af63c35f30f65090dba4e111a2036d374bc",
+      "kick": "429d5b5b9c606b0daee5b54b32138f55b24973565113692d83bb286f6d1632d1",
+      "line_in": "82b01bbda1ec5170d5d57876ea6f54a1642c65ec68f6b1af6caeacbedbd7201a",
+      "line_out": "133be4acd07e0f33717a9f1706e1870c1575652b6e26eec38b8b10f457f7d4f2",
+      "low": "ba90de2e81aa8e5aefbd56cecfe187fcd9ac3fddb0e269cb67cb563897122c5c",
+      "mcc": "36a4c7aa86574fba42909dd2cd4fbae8a60891aaac5c629be1c1f686aa3358a7",
+      "mco": "c733a9b76678b729bc8ae30d6a54e52f81c7e008a2cc1303f5888e8c12e02433",
+      "midi": "a85dc7480ebd653a1f13f77f5f13871039d9dc1c406b6f4c48867c23984e7c9b",
+      "noise": "3ee95155a13b552e6e22e46c4854ab132f70ad3efa1d5a967f00f4f10bbf6b6f",
+      "pots": "24819d73b09e4ff07dc55945fe6d128691c1d6a3087f8d1e744fce10dfb76842",
+      "svf": "50724997f09cbbe331081bb51a9959a37158eeec1ca8e4c7977834e5d5f1c835",
+      "usb_power": "53771a23acc2fac1962d504b5cfbe8acc2f8c4a620c67b3a5aff220ee3893763",
+      "v2ca": "c0faa9ad26eecd58e64ac9b713ee52e4fb78424b6086166bd2b40c536031b1c1",
+      "wave": "a034f2ca7bf5ff4f0c4eb66ccb0537c4d104a9695b161d92a1e811881799167f"
+    }
+  },
   "datum": "Base PCB top surface (z = 0). Everything below is measured upward from it. Through-board solder tails are explicitly NOT counted as height above the board.",
   "inputs": {
     "jumper_header": {
@@ -59,12 +95,15 @@
     ]
   },
   "top_side_tht_tail": {
-    "tail_below_module_board_mm": 1.4,
-    "worst_case_clearance_mm": 2.4,
     "boards": [
       "4mix",
       "imix"
-    ]
+    ],
+    "parts_examined": 1332,
+    "tail_below_module_board_nominal_mm": 1.4,
+    "tail_below_module_board_worst_case_mm": 1.86,
+    "min_xy_gap_to_jumper_mm": 0.45,
+    "worst_case_clearance_mm": 1.94
   },
   "exceptions": [
     "32bit: kicad_pcb could not be loaded standalone (skipped)",

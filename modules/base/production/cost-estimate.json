@@ -2,7 +2,7 @@
   "schema": "bread-modular/base/cost-estimate/1",
   "hand_maintained": false,
   "generated_by": "tools/estimate_cost.py",
-  "fetched_at": "2026-09-17T14:35:32",
+  "fetched_at": "2026-09-17T14:41:51",
   "method": {
     "batch_boards": 50,
     "attrition_fraction": 0.05,
@@ -974,6 +974,38 @@
       "stock": null,
       "source": "https://www.lcsc.com/product-detail/C5664.html",
       "checked": "2026-09-17"
+    },
+    "C2905948": {
+      "unit_price_usd": 0.0239,
+      "ladder": [
+        [
+          20,
+          0.0239
+        ],
+        [
+          200,
+          0.0186
+        ],
+        [
+          500,
+          0.0146
+        ],
+        [
+          2000,
+          0.0129
+        ],
+        [
+          10000,
+          0.0113
+        ],
+        [
+          20000,
+          0.0105
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C2905948.html",
+      "checked": "2026-09-17"
     }
   },
   "unpriced_codes": {
@@ -1375,13 +1407,26 @@
       "unit_price_usd": 0.0097,
       "extended_usd": 6.111,
       "per_board_usd": 0.12222
+    },
+    {
+      "used_for": "rail_select_header",
+      "lcsc": "C2905948",
+      "mpn": "PZ200-1-02-Z",
+      "qty_per_board": 12,
+      "need_for_batch": 630,
+      "tier_qty": 500,
+      "unit_price_usd": 0.0146,
+      "extended_usd": 9.198,
+      "per_board_usd": 0.18396
     }
   ],
   "totals": {
+    "partial": true,
+    "partial_note": "Components only, and not every component: the parts in hand_solder_not_priced are missing from this subtotal, so it is a floor, not the board cost.",
     "jlcpcb_assembled_per_board_usd": 19.94,
-    "hand_solder_per_board_usd": 1.95,
-    "components_per_board_usd": 21.89,
-    "components_for_batch_usd": 1094.72,
+    "hand_solder_per_board_usd": 2.14,
+    "components_per_board_usd": 22.08,
+    "components_for_batch_usd": 1103.92,
     "quote_required": [
       "bare 2-layer PCB 223.52 x 160.02 mm (357.6 cm2)",
       "JLCPCB SMT assembly charge for 119 placements / 32 BOM rows + setup/stencil",
@@ -1394,5 +1439,51 @@
       "lcsc": "C12389",
       "comment": "PZ2012D800-3R0TF"
     }
-  ]
+  ],
+  "hand_solder_not_priced": [
+    {
+      "refs": [
+        "5V14"
+      ],
+      "qty_per_board": 1,
+      "group": "power-expansion-socket",
+      "reason": "straight 2x05 2.54 mm female socket - part number not selected in this pass (C2897425 is the right-angle variant and was rejected)"
+    },
+    {
+      "refs": [
+        "J1",
+        "J2",
+        "J4",
+        "J6"
+      ],
+      "qty_per_board": 4,
+      "group": "audio-jack",
+      "reason": "WQP-PJ366ST 3.5 mm jack has no LCSC number (schematic LCSC field is NOT-JLC); buy from the jack supplier"
+    },
+    {
+      "refs": [
+        "RV1",
+        "RV2"
+      ],
+      "qty_per_board": 2,
+      "group": "panel-pot",
+      "reason": "RV09-50K has no LCSC number (schematic LCSC field is NOT-JLC); every RV09 variant was out of JLCPCB stock"
+    }
+  ],
+  "counts": {
+    "designators_total": 163,
+    "designators_priced_roughly": 154,
+    "designators_not_priced": 9,
+    "not_priced_designators": [
+      "5V14",
+      "J1",
+      "J2",
+      "J4",
+      "J6",
+      "RV1",
+      "RV2",
+      "FB1",
+      "FB2"
+    ]
+  }
 }

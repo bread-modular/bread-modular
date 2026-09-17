@@ -64,6 +64,7 @@ def tier(ladder: list, need: int) -> tuple[int, float]:
     return best
 
 
+HAND_SOLDER_PARTS = (('slot_socket', 25), ('shunt', 12), ('rail_select_header', 12))
 parts = {}
 unpriced_codes = {}
 rows = list(csv.DictReader((BASE / 'jlcpcb/base/bom.csv').open(encoding='utf-8-sig')))
@@ -76,7 +77,7 @@ if args.refresh or not OUT.is_file():
             parts[code] = fetch(code)
         except LookupError as error:
             unpriced_codes[code] = str(error)
-    for key in ('slot_socket', 'shunt'):
+    for key in ('slot_socket', 'shunt', 'rail_select_header'):
         code = SPEC['recommended_parts'][key]['lcsc']
         try:
             parts[code] = fetch(code)
@@ -107,7 +108,7 @@ for row in rows:
 
 hand = []
 hand_total = 0.0
-for key, per_board in (('slot_socket', 25), ('shunt', 12)):
+for key, per_board in HAND_SOLDER_PARTS:
     code = SPEC['recommended_parts'][key]['lcsc']
     if code not in parts:
         unmatched.append({'designator': key, 'lcsc': code, 'comment': 'hand-solder part'})
@@ -120,6 +121,21 @@ for key, per_board in (('slot_socket', 25), ('shunt', 12)):
     hand.append({'used_for': key, 'lcsc': code, 'mpn': SPEC['recommended_parts'][key]['mpn'],
                  'qty_per_board': per_board, 'need_for_batch': buy, 'tier_qty': qty_tier,
                  'unit_price_usd': price, 'extended_usd': round(cost, 4), 'per_board_usd': round(cost / args.batch, 5)})
+
+# Hand-solder references that cannot be priced here, listed explicitly so the
+# subtotal is never mistaken for the whole board.
+hand_unpriced = [
+    {'refs': SPEC['groups'][3]['refs'], 'qty_per_board': 1, 'group': SPEC['groups'][3]['id'],
+     'reason': 'straight 2x05 2.54 mm female socket - part number not selected in this pass (C2897425 is the right-angle variant and was rejected)'},
+    {'refs': SPEC['groups'][5]['refs'], 'qty_per_board': 4, 'group': SPEC['groups'][5]['id'],
+     'reason': 'WQP-PJ366ST 3.5 mm jack has no LCSC number (schematic LCSC field is NOT-JLC); buy from the jack supplier'},
+    {'refs': SPEC['groups'][6]['refs'], 'qty_per_board': 2, 'group': SPEC['groups'][6]['id'],
+     'reason': 'RV09-50K has no LCSC number (schematic LCSC field is NOT-JLC); every RV09 variant was out of JLCPCB stock'},
+]
+unpriced_refs = [r for row in hand_unpriced for r in row['refs']] + [r.strip() for row in unmatched for r in row['designator'].split(',')]
+total_refs = len({ref.strip() for row in rows for ref in row['Designator'].split(',')}) + sum(len(g['refs']) for g in SPEC['groups'])
+priced_refs = total_refs - len(unpriced_refs)
+assert total_refs == 163, total_refs
 
 doc = {
     'schema': 'bread-modular/base/cost-estimate/1',
@@ -140,6 +156,8 @@ doc = {
     'jlcpcb_assembled_parts': items,
     'hand_solder_parts': hand,
     'totals': {
+        'partial': True,
+        'partial_note': 'Components only, and not every component: the parts in hand_solder_not_priced are missing from this subtotal, so it is a floor, not the board cost.',
         'jlcpcb_assembled_per_board_usd': round(assembled_total / args.batch, 2),
         'hand_solder_per_board_usd': round(hand_total / args.batch, 2),
         'components_per_board_usd': round((assembled_total + hand_total) / args.batch, 2),
@@ -149,6 +167,10 @@ doc = {
                            'shipping and taxes'],
     },
     'parts_not_priced': unmatched,
+    'hand_solder_not_priced': hand_unpriced,
+    'counts': {'designators_total': 163, 'designators_priced_roughly': 163 - len(unpriced_refs),
+               'designators_not_priced': len(unpriced_refs),
+               'not_priced_designators': unpriced_refs},
 }
 OUT.write_text(json.dumps(doc, indent=2) + '\n')
 print(f'batch {args.batch}: {doc["totals"]["components_per_board_usd"]} $/board components '

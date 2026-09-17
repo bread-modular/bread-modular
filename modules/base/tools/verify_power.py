@@ -19,6 +19,8 @@ BASE = Path(__file__).resolve().parents[1]
 ROOT = BASE.parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--report', type=Path)
+parser.add_argument('--selftest', action='store_true',
+                    help='exercise the stack-report freshness guard and exit')
 args = parser.parse_args()
 checks = 0
 
@@ -27,6 +29,47 @@ def check(ok, message):
     checks += 1
     if not ok:
         raise AssertionError(message)
+
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def stack_inputs(base):
+    return {'hand-solder.json': digest(base/'production/hand-solder.json'),
+            'fixed-geometry.json': digest(base/'verification/fixed-geometry.json'),
+            'base.kicad_pcb': digest(base/'base.kicad_pcb'),
+            'base.kicad_sch': digest(base/'base.kicad_sch'),
+            'slot.kicad_sch': digest(base/'slot.kicad_sch')}
+
+def stale_stack_inputs(stack_report, base, modules=None):
+    """Return the fingerprints that no longer match the files on disk."""
+    want = stack_report.get('input_sha256')
+    if not want:
+        return ['<no input_sha256 fingerprints in the stack report>']
+    have = stack_inputs(base)
+    have = {key: value for key, value in have.items() if key in want}
+    if 'module_pcbs' in want:
+        names = modules if modules is not None else sorted(want['module_pcbs'])
+        have['module_pcbs'] = {name: digest(ROOT/'modules'/name/f'{name}.kicad_pcb') for name in names}
+    return [key for key in want if have.get(key) != want[key]]
+
+stack_report_path = BASE / 'verification/stack-height.json'
+stack = json.loads(stack_report_path.read_text()) if stack_report_path.is_file() else None
+if stack is None:
+    raise SystemExit('verification/stack-height.json is missing: run tools/verify_stack_height.py first.')
+
+if args.selftest:
+    tampered = dict(stack, input_sha256=dict(stack['input_sha256'],
+                                             **{'base.kicad_pcb': '0'*64}))
+    dropped = dict(stack, input_sha256=dict(stack['input_sha256'],
+                                            **{'module_pcbs': dict(stack['input_sha256']['module_pcbs'],
+                                                                   **{sorted(stack['input_sha256']['module_pcbs'])[0]: '0'*64})}))
+    bad_modules = stale_stack_inputs(dropped, BASE)
+    check(stale_stack_inputs(stack, BASE) == [], 'freshness guard rejects the current report')
+    check('base.kicad_pcb' in stale_stack_inputs(tampered, BASE), 'freshness guard misses a changed board')
+    check(bad_modules, 'freshness guard misses a changed module PCB')
+    check(not stale_stack_inputs(dict(stack, input_sha256={}), BASE) == [], 'freshness guard accepts a report without fingerprints')
+    print(f'SELFTEST PASS: {checks} assertions; the stack-report freshness guard rejects a changed board and a changed module PCB.')
+    raise SystemExit(0)
 
 def pos(q):
     return [q.x, q.y]
@@ -151,11 +194,12 @@ for name in ['16bit', '8bit', 'mcc', 'wave']:
           [46.99, 40.64, 77.47, 109.22], f'{name}: changed module outline')
     check(any(mm(d.GetPosition()) == [55.88,96.52] and d.GetNetname() == 'GND'
               for f in mod.GetFootprints() for d in f.Pads()), f'{name}: changed registration')
-stack_report_path = BASE / 'verification/stack-height.json'
-stack = json.loads(stack_report_path.read_text()) if stack_report_path.is_file() else None
-check(stack is not None and stack.get('clearance_ok') is True,
-      'verification/stack-height.json is missing or reports insufficient clearance')
-report = {'assertions_passed': checks, 'pcb_sha256': hashlib.sha256(board_path.read_bytes()).hexdigest(),
+stale = stale_stack_inputs(stack, BASE)
+check(not stale, f'verification/stack-height.json is stale for {stale}: re-run tools/verify_stack_height.py')
+check(stack.get('clearance_ok') is True,
+      'verification/stack-height.json reports insufficient clearance')
+report = {'assertions_passed': checks,
+          'stack_report_inputs_fresh': True, 'pcb_sha256': hashlib.sha256(board_path.read_bytes()).hexdigest(),
           'routed_pcb_sha256_pinned': baseline['routed_pcb_sha256'],
           'schematic_sha256': baseline['schematic_sha256'], 'footprints': len(fps), 'new_footprints': len(fps)-len(baseline['footprints']),
           'unchanged_original_footprints': len(baseline['footprints']), 'unchanged_mounting_holes': len(holes),

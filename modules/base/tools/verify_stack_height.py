@@ -21,6 +21,7 @@ module underside plane is the only constraint at that location.
 Run with KiCad's system Python. Does not modify anything.
 """
 import argparse
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -67,6 +68,8 @@ stack = SPEC['stack_height']
 comp = stack['components']
 tol = stack['rules']['tolerance_x_x_mm']
 margin = stack['rules']['assembly_margin_mm']
+mod_thick = stack['rules']['module_pcb_thickness_mm']
+mod_thick_tol = stack['rules']['module_pcb_thickness_tolerance_mm']
 jumper = comp['jumper_header']
 shunt = comp['shunt']
 socket = comp['base_socket']
@@ -147,12 +150,14 @@ check(len(modules) >= 20, f'only {len(modules)} module board(s) inspected')
 bottom = sorted(name for name, m in modules.items() if m['layers'] == ['B.Cu'])
 top_side = sorted(name for name, m in modules.items() if m['layers'] != ['B.Cu'])
 check(len(bottom) >= 20, f'only {len(bottom)} module board(s) carry a bottom-side male header')
-# A top-mounted THT header's tail still hangs below the module board and must be
-# added to the interference check on those boards.
-top_side_tail = round(male['solder_tail_mm'] - comp['base_pcb_thickness_mm'], 3)
-top_side_clearance = round(module_worst - top_side_tail - envelope_worst, 3)
+# A top-mounted THT part's tail still hangs below the module board and must be
+# added to the interference check on those boards, with both the tail length and
+# the module board thickness taken to their unfavourable tolerance limits.
+top_side_tail_nominal = round(male['solder_tail_mm'] - mod_thick, 3)
+top_side_tail_worst = round((male['solder_tail_mm'] + tol) - (mod_thick - mod_thick_tol), 3)
+top_side_clearance = round(module_worst - top_side_tail_worst - envelope_worst, 3)
 check(top_side_clearance >= margin,
-      f'a top-mounted module header tail would leave only {top_side_clearance} mm')
+      f'a top-mounted module THT tail would leave only {top_side_clearance} mm')
 
 # --------------------------------- base side (slot geometry + envelopes) -----
 board = p.LoadBoard(str(BASE / 'base.kicad_pcb'))
@@ -161,6 +166,8 @@ mod_boards = {name: p.LoadBoard(str(ROOT / info['path'])) for name, info in modu
 check(all(m is not None for m in mod_boards.values()), 'a module board was registered but failed to reload')
 slots = []
 min_gap = None
+top_tails = []
+top_tail_hits = []
 for n in range(1, 13):
     supply, gnd = fps[f'VSUPPLY_{n}'], fps[f'GND{n}']
     jumper_fp = fps[f'J{6 + n}']
@@ -177,24 +184,33 @@ for n in range(1, 13):
         m_anchor = min((d for f in gnds for d in f.Pads()), key=lambda d: d.GetPosition().x).GetPosition()
         dx = round(ax - mm(m_anchor.x), 4)
         dy = round(ay - mm(m_anchor.y), 4)
-        inside = False
         for f in mod.GetFootprints():
             b = box(f)
             t = [round(b[0] + dx, 4), round(b[1] + dy, 4), round(b[2] + dx, 4), round(b[3] + dy, 4)]
-            if p.LayerName(f.GetLayer()) != 'B.Cu':
-                continue
-            if overlap(t, jbox):
-                rows.append({'module': name, 'ref': f.GetReference(), 'envelope': t, 'area': round((t[2] - t[0]) * (t[3] - t[1]), 3)})
-            elif t[3] > jbox[1] - 6 and t[1] < jbox[3] + 6:
-                g = gap(t, jbox)
-                min_gap = g if min_gap is None else min(min_gap, g)
-        inside = inside or True
+            layer = p.LayerName(f.GetLayer())
+            tht = any(d.GetDrillSize().x > 0 for d in f.Pads())
+            if layer == 'B.Cu':
+                # body of a bottom-mounted part hangs from the module underside
+                if overlap(t, jbox):
+                    rows.append({'module': name, 'ref': f.GetReference(), 'envelope': t,
+                                 'area': round((t[2] - t[0]) * (t[3] - t[1]), 3)})
+                elif t[3] > jbox[1] - 6 and t[1] < jbox[3] + 6:
+                    g = gap(t, jbox)
+                    min_gap = g if min_gap is None else min(min_gap, g)
+            elif tht:
+                # a top-mounted THT part's solder tail protrudes below the module board
+                top_tails.append({'module': name, 'ref': f.GetReference(), 'envelope': t,
+                                  'xy_gap_mm': gap(t, jbox)})
+                if overlap(t, jbox):
+                    top_tail_hits.append({'slot': n, 'module': name, 'ref': f.GetReference()})
     check(not rows, f'slot {n}: module bottom-side footprint(s) overlap the jumper envelope: {rows}')
     slots.append({'slot': n, 'jumper': jumper_fp.GetReference(), 'jumper_envelope_mm': jbox,
                   'supply_first_pad_mm': [mm(supply.Pads()[0].GetPosition().x), mm(supply.Pads()[0].GetPosition().y)],
                   'supply_last_pad_mm': [mm(list(supply.Pads())[-1].GetPosition().x), mm(list(supply.Pads())[-1].GetPosition().y)],
                   'module_registration_offset_mm': None})
 check(min_gap is not None and min_gap > 0, f'negative X/Y clearance next to a jumper: {min_gap}')
+check(not top_tail_hits, f'top-side THT tails overlap a jumper envelope: {top_tail_hits}')
+top_tail_gap = min((e['xy_gap_mm'] for e in top_tails), default=None)
 
 # The published numbers in production/hand-solder.json must equal what is
 # computed here - the JSON is documentation, this script is the calculation.
@@ -208,7 +224,21 @@ for key, value in computed.items():
     check(abs(float(published[key]) - value) < 0.001,
           f'production/hand-solder.json publishes {key}={published[key]} but the calculation gives {value}')
 
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+# Freshness fingerprints: anything that feeds this calculation is hashed here so
+# tools/verify_power.py can refuse a stale report instead of trusting it.
+inputs = {'hand-solder.json': digest(BASE / 'production/hand-solder.json'),
+          'fixed-geometry.json': digest(BASE / 'verification/fixed-geometry.json'),
+          'base.kicad_pcb': digest(BASE / 'base.kicad_pcb'),
+          'base.kicad_sch': digest(BASE / 'base.kicad_sch'),
+          'slot.kicad_sch': digest(BASE / 'slot.kicad_sch'),
+          'module_pcbs': {name: digest(ROOT / info['path']) for name, info in sorted(modules.items())}}
+
 report = {
+    'input_sha256': inputs,
     'datum': stack['datum'],
     'inputs': {'jumper_header': {'lcsc': jumper['lcsc'], 'mpn': jumper['mpn'], 'above_board_mm': jumper['above_board_mm'],
                                  'solder_tail_below_board_mm': jumper['tail_below_board_mm'], 'source': jumper['source']},
@@ -232,9 +262,12 @@ report = {
                  'module_pcbs_unreadable': unreadable,
                  'bottom_mounted_male_headers': len(bottom),
                  'top_mounted_male_headers': top_side},
-    'top_side_tht_tail': {'tail_below_module_board_mm': top_side_tail,
-                          'worst_case_clearance_mm': top_side_clearance,
-                          'boards': top_side},
+    'top_side_tht_tail': {'boards': top_side,
+                          'parts_examined': len(top_tails),
+                          'tail_below_module_board_nominal_mm': top_side_tail_nominal,
+                          'tail_below_module_board_worst_case_mm': top_side_tail_worst,
+                          'min_xy_gap_to_jumper_mm': top_tail_gap,
+                          'worst_case_clearance_mm': top_side_clearance},
     'exceptions': problems,
     'modules_inspected': len(mod_boards), 'module_connectors': modules,
     'slots': slots,

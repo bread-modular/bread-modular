@@ -121,7 +121,10 @@ engagement is assumed rather than proved; slot 1's socket row keeps its
 pre-existing −0.12 mm / −0.10 mm offset; and 4mix/imix place their power headers
 on `F.Cu` where they cannot mate downwards as drawn. `stack-height.json` also
 persists the per-module `exceptions` and the `coverage` counts behind these
-claims, including the 1.4 mm top-side THT tail that those two boards would add.
+claims, the SHA-256 fingerprints that make the report self-invalidating when an
+input changes, and the top-side through-hole tail check (1 332 parts examined,
+1.4 mm nominal / 1.86 mm worst-case tail, 0.45 mm nearest XY gap, 1.94 mm
+worst-case clearance) for the two boards that mount their headers on `F.Cu`.
 
 ## Trace widths, clearances and ground
 
@@ -362,9 +365,15 @@ guard. Instead:
   calculation, the module gender inspection, the coverage counts and the
   per-slot envelope check described in the stack-height section above.
 * `tools/estimate_cost.py` produces `../production/cost-estimate.json`, the
-  sourced component cost estimate quoted in `../production/RELEASE_STATUS.md`.
-  It is the only tool that touches the network, and only with `--refresh`, so the
-  regeneration path above stays offline.
+  sourced **partial** component subtotal quoted in
+  `../production/RELEASE_STATUS.md` (154 of 163 designators priced; the rest and
+  the PCB/SMT charges are listed as unpriced). It is the only tool that touches
+  the network, and only with `--refresh`, so the regeneration path above stays
+  offline.
+* `tools/verify_power.py --selftest` exercises the staleness guard on
+  `stack-height.json` (changed board, changed module PCB, missing fingerprints)
+  without touching the board, and it is cheap enough to run alongside the
+  documented path.
 
 **Artifact delta.** After regeneration the eleven gerber/drill files differ from
 the previously committed ones **only in their two KiCad export-date comment lines
