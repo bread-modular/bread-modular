@@ -1,5 +1,73 @@
 # Changelog
 
+## 1.3.4
+**Line-input normalling: the leaky `R25` bridge is gone, the mono normal is unilateral, and a
+normalling-disable link is fitted.** PCB work (new parts and copper), the first phase of the
+line-out/loud-jumper work that 1.3.3 listed as pending.
+
+* **`R25` (10 k, 0402) is removed.** It bridged `IN_L` and `IN_R` with a plain resistor, which is
+  bidirectional: measured as ~21 dB of channel separation and (with `R24`) a ~0.83 dB L/R level
+  imbalance. Nothing else is left dangling - `IN_L` keeps `INPUT1.1`, `R24.1`, `R17.2`, `U2.3` and
+  `IN_R` keeps `INPUT1.2`, `R16.2`, `R5.2`, `U2.5`.
+* **New `R52` = 2 M (0402, C11512) is the mono normal, and it is unilateral**: `BUFF_IN_R` (the
+  U2B follower output, a low-impedance driver) -> `R52` -> `J19.2` -> `IN_L`. The right channel can
+  therefore never be modulated by the left one, and when both inputs are patched the leak is set only
+  by the destination node's source impedance: 1 k/(1 k + 2 M) = **-66 dB** (was -21 dB).
+* **`R24` 10 k -> 2 M and its return moved from `GND` to the 1.65 V bias node `+2.5V`.** This is the
+  DC return the clamped normal needs: `IN_L` and `BUFF_IN_R` now sit at the same 1.65 V, so the
+  normal link carries no DC current and no offset is injected. It also removes the old imbalance -
+  `R24` no longer loads only the left source (0.002 dB of L/R difference, was 0.83 dB).
+* **`R5` 1 M -> 2 M.** `R5` is the pre-existing left->right unilateral normal (`BUFF_IN_L` ->
+  `IN_R`, the same convention `modules/head_out` uses for its input normalling); at 2 M its leak goes
+  from -60.0 dB to -66.0 dB, so the worst of the two links is 66 dB - 6 dB inside the 60 dB target.
+* **`J19` is the normalling-disable link: a 2-pad solder jumper** (`Jumper:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm`),
+  i.e. the same "bridged = normal enabled as shipped / cut the bridge = L and R independent" polarity
+  the design calls for. The first choice was a 2.00 mm pin header in the `J7..J18` style, but there
+  is **no room**: a clearance scan of the whole audio block finds no position where a 1.35 mm
+  through-hole pad clears the surrounding nets on both layers (the 2.00 mm headers live in the slot
+  bands, not in the audio block), so the solder-jumper fallback is used explicitly. It is
+  copper-only: the footprint carries `exclude_from_bom`/`exclude_from_pos_files` and the symbol is
+  `in_bom no`.
+* **Netlist delta (exactly one new net):** `NORM_R` = {`R52.1`, `J19.2`}; `IN_L` -`R25.1` +`J19.1`;
+  `IN_R` -`R25.2`; `+2.5V` +`R24.2`; `GND` -`R24.2`. Every other net, pin and value is unchanged.
+* **Headphone block untouched:** `U3`, `R6`/`R7`, `RV1`/`RV2`, `HEAD_OUT_L`/`HEAD_OUT_R` and
+  everything downstream are byte-identical (the per-file diff contains no line mentioning them).
+* **Verification:** `kicad-cli sch erc` == baseline (11 findings, same kinds, no new ones);
+  `kicad-cli pcb drc --schematic-parity` == **0 errors, 0 unconnected, 145 parity items** (the
+  baseline has 146; the one that disappeared was `R25`'s `Datasheet '~' vs ''`). Remaining warnings
+  are the pre-existing `lib_footprint_mismatch` class (69 vs 68: the two new footprints are copies of
+  the board's own customised library copies, like the 68) and 2 new `silk_over_copper` items (R52's
+  reference field and R15's reference field over R52's pad mask openings). The F.Cu GND zones were
+  re-poured (KiCad 10 filler, polygons written back in the file's own 20241229 format), which is the
+  only other change in `base.kicad_pcb`.
+* **Numbers:** channel separation >= 66 dB in normal mode (target >= 60 dB); mono-normal level
+  -12.0 dB for `R` patched only and -6.0 dB for `L` patched only. The level is set by the 1 M
+  `R17`/`R16` input loading; a unity-level normal needs the `R16`/`R17` re-tap to the buffered nodes,
+  which was evaluated and rejected for copper reasons (it needs a ~24 mm run through the `IN_L`/
+  `IN_R` corridor with no viable bottom-layer route: the +3.3 V and +2.5 V bottom runs block every
+  vertical corridor, and the diagonal pair runs 0.7 mm apart). Recorded here so the trade-off is
+  explicit: 66 dB of separation costs ~10 dB of normal level.
+* **Still true (unchanged, tracked separately):** the stale production exports / pinned fingerprint
+  issue. `tools/regenerate_production.py` refuses to re-export because `base.kicad_pcb` no longer
+  matches the `routed_pcb_sha256` pin in `verification/fixed-geometry.json`. When that pin is
+  re-baselined, `R5`/`R24`/`R52` collapse into one BOM line (C11512) and `J19` (bare copper pads, no
+  part ordered) joins the excluded set.
+
+* **Phase 2 (the line-out loud-gain shunt) is NOT in this revision - recorded as deferred, not
+  half-applied.** The designed change is: keep `R18`/`R19` = 680 k and add one series resistor per
+  channel so the feedback totals ~1.5 M, with a shunt across the added part (shunt fitted = 680 k =
+  +6.28 dB, exactly as shipped here; shunt removed = 1.5 M = +13.15 dB) - the amplifier stays
+  closed-loop in both states. Two concrete blockers are recorded: (1) **no verified part.** The only
+  820 k part that could be confirmed is the 0603 `0603WAF8203T5E` / C23252, and a 0603 does not fit
+  the only free slot beside `R18`/`R19` (its ~3.1 x 1.86 mm courtyard overlaps `R19`'s or `R18`'s
+  courtyard in the in-line vertical position). The board's already-sourced 0402 alternative is the
+  1 M `C26083` (680 k + 1 M = 1.68 M = +14.1 dB, i.e. ~1 dB above the "~13.1 dB" target); a 0402
+  820 k LCSC code could not be verified. (2) **layout.** It needs an in-line cut of both inverting-node
+  tracks (`238.44/56.39`-`238.44/61.15` and `248.98/56.26`-`248.98/61.15`) plus a ~3.3 x 2.5 mm shunt
+  placeholder in the only two free pockets (approx. `238.5..241.5 x 57.5..60.5` and
+  `249.5..252.5 x 57.2..60.9`), i.e. a second layout + ERC/DRC cycle of the same size as this one.
+  Nothing of Phase 2 exists in this revision: no footprint, copper or net was added for it, so the
+  board is left in one clean, fully verified state.
 ## 1.3.3
 **Line-out output level, step 1 of the agreed fixes: the default gain is raised.**
 `R18`/`R19` 330 k -> 680 k (0603, same footprints/placement/geometry). The line-out

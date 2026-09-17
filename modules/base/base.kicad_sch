@@ -4557,12 +4557,7 @@
 		(color 0 0 0 0)
 		(uuid "7d9d8dce-b3e2-4efd-89f2-cd52db6210bc")
 	)
-	(junction
-		(at 55.88 330.2)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7dae9bb9-7417-43d7-a90c-f36d3511fa17")
-	)
+	
 	(junction
 		(at 116.84 271.78)
 		(diameter 0)
@@ -5143,16 +5138,7 @@
 		)
 		(uuid "23d7f7f7-ee0b-4fdc-ad7f-5f967bb58417")
 	)
-	(wire
-		(pts
-			(xy 55.88 330.2) (xy 55.88 347.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "23efa982-4b4d-44f8-949d-c43b32e6d00c")
-	)
+	
 	(wire
 		(pts
 			(xy 556.26 256.54) (xy 551.18 256.54)
@@ -5423,16 +5409,7 @@
 		)
 		(uuid "3bcd8806-a02c-4c64-947b-68810a0f486f")
 	)
-	(wire
-		(pts
-			(xy 55.88 355.6) (xy 55.88 374.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3ca7b1b8-8cec-455c-bfe1-fbfb3d146aa6")
-	)
+	
 	(wire
 		(pts
 			(xy 439.42 57.15) (xy 448.31 57.15)
@@ -12308,103 +12285,7 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:R")
-		(at 55.88 351.79 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "64d97b84-a998-46c9-af29-0c6c50140f71")
-		(property "Reference" "R25"
-			(at 58.42 350.5199 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 58.42 353.0599 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 54.102 351.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 55.88 351.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 55.88 351.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C25744"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "0402WGF1002TCE"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "UNI-ROYAL"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "51d9a042-9a84-4dea-a826-fb57e107067b")
-		)
-		(pin "1"
-			(uuid "c3eab66d-75a7-43b9-9f6a-8f0e7e592bc7")
-		)
-		(instances
-			(project "base"
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
-					(reference "R25")
-					(unit 1)
-				)
-			)
-		)
-	)
+	
 	(symbol
 		(lib_id "Device:R")
 		(at 199.39 74.93 0)
@@ -13335,7 +13216,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1M"
+		(property "Value" "2M"
 			(at 74.93 57.1499 0)
 			(effects
 				(font
@@ -13371,7 +13252,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C26083"
+		(property "LCSC" "C11512"
 			(at -279.4 -86.36 0)
 			(effects
 				(font
@@ -13380,7 +13261,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "0402WGF1004TCE"
+		(property "MPN" "0402WGF2004TCE"
 			(at -279.4 -86.36 0)
 			(effects
 				(font
@@ -13688,7 +13569,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "2M"
 			(at 33.02 55.8799 0)
 			(effects
 				(font
@@ -13724,7 +13605,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C25744"
+		(property "LCSC" "C11512"
 			(at -279.4 -86.36 0)
 			(effects
 				(font
@@ -13733,7 +13614,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "0402WGF2004TCE"
 			(at -279.4 -86.36 0)
 			(effects
 				(font
@@ -18135,71 +18016,7 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "power:GND")
-		(at 30.48 60.96 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "e8a3d8ea-7d01-4d01-be29-e34c9a446303")
-		(property "Reference" "#PWR052"
-			(at 30.48 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 30.48 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 30.48 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 30.48 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 30.48 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "46be58f8-de6c-42d3-8487-34beccbefdfd")
-		)
-		(instances
-			(project "base"
-				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
-					(reference "#PWR052")
-					(unit 1)
-				)
-			)
-		)
-	)
+	
 	(symbol
 		(lib_id "power:GND")
 		(at 55.88 280.67 0)
@@ -19283,7 +19100,307 @@
 			)
 		)
 	)
-	(sheet
+		(wire
+		(pts
+			(xy 104.14 107.95) (xy 106.68 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8cc9aaec-bee0-4674-9940-46e5d06d655a")
+	)
+	(wire
+		(pts
+			(xy 106.68 110.49) (xy 104.14 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a0dcbbf-88cd-4f12-af8c-4453fc8fce14")
+	)
+	(wire
+		(pts
+			(xy 106.68 118.11) (xy 106.68 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2a226d8-3dd5-4d94-a65e-c917f76c55d8")
+	)
+	(global_label "IN_L"
+		(shape input)
+		(at 104.14 107.95 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "38cb9d5c-32d0-4df1-9cd6-a0c934b3e53b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 91.24 107.95 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "NORM_R"
+		(shape passive)
+		(at 104.14 110.49 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "25ac011a-a88c-4c0f-812a-6d6fa89d45b1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 91.24 110.49 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "BUFF_IN_R"
+		(shape input)
+		(at 106.68 120.65 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dd743a1a-2854-4815-ac15-0ee78785ec1d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 127.45 270)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "+2.5V"
+		(shape output)
+		(at 30.48 60.96 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "aed85a8d-d29a-4cc9-bf1c-3aa03e71f482")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.48 67.76 270)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+(symbol
+		(lib_id "Device:R")
+		(at 106.68 114.3 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6fd72ae8-5140-48ab-bd8c-456a07784610")
+		(property "Reference" "R52"
+			(at 104.14 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2M"
+			(at 104.14 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 104.902 114.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 106.68 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C11512"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0402WGF2004TCE"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f899bb07-d5c1-4bb0-9d8e-5e42c8a53748")
+		)
+		(pin "1"
+			(uuid "90da6f49-3fd7-42cc-9cea-adc8e144d3ae")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "R52")
+					(unit 1)
+				)
+			)
+		)
+	)	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 111.76 107.95 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "e2691e50-938e-44cc-bff9-bf663d0dbc9e")
+		(property "Reference" "J19"
+			(at 106.68 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SolderJumper_2_Bridged"
+			(at 106.68 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm"
+			(at 111.76 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 111.76 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Normalling-disable link (2-pad solder jumper, bridged as shipped): pin1 = IN_L, pin2 = the 2M normal resistor fed from BUFF_IN_R. Cutting the bridge makes L and R independent."
+			(at 111.76 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 111.76 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" ""
+			(at 111.76 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1dfda1d6-e1cf-4901-b767-7f8ca1e54e0e")
+		)
+		(pin "2"
+			(uuid "7a79b354-ce78-4259-a8e9-41a9af493037")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "J19")
+					(unit 1)
+				)
+			)
+		)
+	)(sheet
 		(at 434.34 246.38)
 		(size 38.1 20.32)
 		(exclude_from_sim no)
