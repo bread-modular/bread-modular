@@ -12,8 +12,9 @@ baseline; the stack height is calculated from datasheet dimensions
 
 The scope correction that made this release orderable: **the module sockets are
 hand-soldered by the builder and not ordered from or assembled by JLCPCB.** The
-connector-gender question is therefore an assembly note rather than an ordering
-blocker. Read POWER.md section 9 before ordering.
+connector-gender question is therefore an assembly note, not an ordering blocker.
+Read POWER.md section 9 before ordering, and treat the parts and prices below as
+order-time inputs rather than standing commitments.
 
 ## Ordering checklist
 
@@ -93,8 +94,9 @@ For a **50-board batch** (5 % attrition, buy max(needed, MOQ) at the largest tie
 | | USD / board |
 |---|---:|
 | JLCPCB-assembled parts (119 placements, 31 of 32 BOM rows priced) | **19.94** |
-| Builder-supplied hand-solder parts (25 x C2897368 + 12 x C5664 + 12 x C2905948) | **2.14** |
-| **Components subtotal** | **22.08** |
+| Builder-supplied board parts (25 x C2897368 sockets + 12 x C2905948 headers) | **2.01** |
+| **Components subtotal** | **21.96** |
+| Separate accessory order (12 x C5664 shunts, user-fit, not a board designator) | 0.12 |
 
 This is a **partial subtotal, not the board cost**, and it is deliberately
 labelled as one:

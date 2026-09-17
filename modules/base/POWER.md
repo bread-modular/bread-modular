@@ -487,10 +487,11 @@ Counts are therefore **unchanged**: **119 SMD placements in 32 BOM rows**, out o
 The same file backs the sourced per-board component estimate in
 `production/cost-estimate.json` (see `production/RELEASE_STATUS.md` section 5):
 **119 SMD placements in 32 BOM rows**, and for a 50-board batch **$19.94/board of
-JLCPCB-assembled parts plus $2.14/board of hand-solder parts = $22.08/board**,
-dominated by the twelve TPS2111APWRs at ≈$16.45/board. That subtotal covers
-**154 of the 163 designators**; the nine it cannot price (5V14, the four jacks,
-the two pots, FB1/FB2) are listed explicitly in the file.
+JLCPCB-assembled parts plus $2.01/board of hand-solder board parts = $21.96/board**,
+dominated by the twelve TPS2111APWRs at ≈$16.45/board (the 12 shunts are a
+separate $0.12/board accessory order). That subtotal covers **154 of the 163
+designators**; the nine it cannot price (5V14, the four jacks, the two pots,
+FB1/FB2) are listed explicitly by reference in the file.
 
 ### 9.2 Why the base sockets must be female
 
@@ -615,15 +616,21 @@ nearest module-side body outline is 0.45 mm away in X/Y.
    depth. That the 8.5 mm housing accepts a 6.3 mm pin without bottoming out is
    an **assumption**, not a datasheet fact.
 8. A top-mounted THT part's solder tail hangs below the module board. The check
-   now walks every top-side through-hole footprint on all 27 modules (1 332
-   parts) and applies the tail (±0.30) and module-board (±0.16) tolerances: the
-   1.4 mm nominal tail becomes 1.86 mm worst case, the nearest XY gap to a
-   jumper envelope is 0.45 mm, and the worst-case clearance is **1.94 mm** — it
-   only matters for the two boards that cannot mate downwards anyway (item 5).
+   walks every top-side through-hole footprint on all 27 inspected modules
+   (1 332 footprint-per-slot comparisons over 111 distinct parts) and applies the
+   tail (±0.30) and module-board (±0.16) tolerances: the 1.4 mm nominal tail
+   becomes 1.86 mm worst case, the nearest XY envelope gap to a jumper is
+   0.45 mm, and **no** top-side THT envelope overlaps a jumper envelope anywhere.
+   The 1.94 mm vertical figure is specific to the assumed 3.0 mm header tail — a
+   different THT part could have a longer tail — so the module-side assembly
+   should confirm tail lengths if the outlines ever get closer than 0.45 mm.
 9. `tools/verify_power.py` refuses a **stale** `verification/stack-height.json`:
-   the report carries SHA-256 fingerprints of `hand-solder.json`,
-   `fixed-geometry.json`, both schematics, the PCB and all 27 inspected module
-   PCBs, and the guard is covered by `tools/verify_power.py --selftest`.
+   the report carries SHA-256 fingerprints of the calculator itself,
+   `hand-solder.json`, `fixed-geometry.json`, both schematics, the PCB, the
+   independently enumerated module scope and all 27 readable module PCBs, and the
+   guard is covered by `tools/verify_power.py --selftest` (9 cases: fresh report,
+   changed board, changed specification, changed calculator, changed module PCB,
+   dropped key, no fingerprints, uncovered module, removed module).
 
 ### 9.7 Reproduce
 

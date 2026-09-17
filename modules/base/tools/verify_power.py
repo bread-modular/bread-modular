@@ -33,24 +33,57 @@ def check(ok, message):
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
-def stack_inputs(base):
-    return {'hand-solder.json': digest(base/'production/hand-solder.json'),
+STACK_FINGERPRINT_KEYS = {'calculator', 'hand-solder.json', 'fixed-geometry.json',
+                          'base.kicad_pcb', 'base.kicad_sch', 'slot.kicad_sch',
+                          'module_scope', 'module_pcbs'}
+
+def stack_inputs(base, root):
+    """Recompute every fingerprint independently of what the report claims."""
+    scope = sorted(path.parent.name for path in (root/'modules').glob('*/*.kicad_pcb')
+                   if path.parent.name != 'base')
+    readable = {}
+    for name in scope:
+        candidate = root/'modules'/name/f'{name}.kicad_pcb'
+        if candidate.is_file() and p.LoadBoard(str(candidate)) is not None:
+            readable[name] = digest(candidate)
+    return {'calculator': digest(base/'tools/verify_stack_height.py'),
+            'hand-solder.json': digest(base/'production/hand-solder.json'),
             'fixed-geometry.json': digest(base/'verification/fixed-geometry.json'),
             'base.kicad_pcb': digest(base/'base.kicad_pcb'),
             'base.kicad_sch': digest(base/'base.kicad_sch'),
-            'slot.kicad_sch': digest(base/'slot.kicad_sch')}
+            'slot.kicad_sch': digest(base/'slot.kicad_sch'),
+            'module_scope': {'enumerated': scope},
+            'module_pcbs': readable}
 
-def stale_stack_inputs(stack_report, base, modules=None):
-    """Return the fingerprints that no longer match the files on disk."""
+
+def stale_stack_inputs(stack_report, base, root=None):
+    """Return the fingerprint keys that no longer match the files on disk."""
+    root = root or ROOT
     want = stack_report.get('input_sha256')
     if not want:
         return ['<no input_sha256 fingerprints in the stack report>']
-    have = stack_inputs(base)
-    have = {key: value for key, value in have.items() if key in want}
-    if 'module_pcbs' in want:
-        names = modules if modules is not None else sorted(want['module_pcbs'])
-        have['module_pcbs'] = {name: digest(ROOT/'modules'/name/f'{name}.kicad_pcb') for name in names}
-    return [key for key in want if have.get(key) != want[key]]
+    missing = sorted(STACK_FINGERPRINT_KEYS - set(want))
+    if missing:
+        return [f'<report is missing fingerprints: {missing}>']
+    have = stack_inputs(base, root)
+    stale = [key for key in sorted(STACK_FINGERPRINT_KEYS)
+             if key != 'module_scope' and have[key] != want[key]]
+    # module coverage: every enumerated module must be accounted for, either
+    # inspected or explicitly reported unreadable.
+    scope = want['module_scope']
+    accounted = set(scope.get('inspected', [])) | set(scope.get('unreadable', []))
+    if set(scope.get('enumerated', [])) != accounted:
+        stale.append('module_scope')
+    if sorted(scope.get('enumerated', [])) != sorted(have['module_scope']['enumerated']):
+        stale.append('module_scope')
+    if sorted(want['module_pcbs']) != sorted(scope.get('inspected', [])):
+        stale.append('module_pcbs')
+    if set(have['module_scope']['enumerated']) - set(have['module_pcbs']):
+        # an enumerated module that cannot be read is fine only if the report says so
+        unreadable = set(scope.get('unreadable', []))
+        if set(have['module_scope']['enumerated']) - set(have['module_pcbs']) - unreadable:
+            stale.append('module_scope')
+    return stale
 
 stack_report_path = BASE / 'verification/stack-height.json'
 stack = json.loads(stack_report_path.read_text()) if stack_report_path.is_file() else None
@@ -58,17 +91,30 @@ if stack is None:
     raise SystemExit('verification/stack-height.json is missing: run tools/verify_stack_height.py first.')
 
 if args.selftest:
-    tampered = dict(stack, input_sha256=dict(stack['input_sha256'],
-                                             **{'base.kicad_pcb': '0'*64}))
-    dropped = dict(stack, input_sha256=dict(stack['input_sha256'],
-                                            **{'module_pcbs': dict(stack['input_sha256']['module_pcbs'],
-                                                                   **{sorted(stack['input_sha256']['module_pcbs'])[0]: '0'*64})}))
-    bad_modules = stale_stack_inputs(dropped, BASE)
-    check(stale_stack_inputs(stack, BASE) == [], 'freshness guard rejects the current report')
-    check('base.kicad_pcb' in stale_stack_inputs(tampered, BASE), 'freshness guard misses a changed board')
-    check(bad_modules, 'freshness guard misses a changed module PCB')
-    check(not stale_stack_inputs(dict(stack, input_sha256={}), BASE) == [], 'freshness guard accepts a report without fingerprints')
-    print(f'SELFTEST PASS: {checks} assertions; the stack-report freshness guard rejects a changed board and a changed module PCB.')
+    def mutated(**changes):
+        return dict(stack, input_sha256=dict(stack['input_sha256'], **changes))
+    fingerprints = stack['input_sha256']
+    scope = fingerprints['module_scope']
+    first_module = sorted(fingerprints['module_pcbs'])[0]
+    cases = {
+        'current report': (stack, False),
+        'changed board': (mutated(**{'base.kicad_pcb': '0'*64}), True),
+        'changed specification': (mutated(**{'hand-solder.json': '0'*64}), True),
+        'changed calculator': (mutated(**{'calculator': '0'*64}), True),
+        'changed module PCB': (mutated(module_pcbs=dict(fingerprints['module_pcbs'], **{first_module: '0'*64})), True),
+        'dropped fingerprint key': (dict(stack, input_sha256={k: v for k, v in fingerprints.items() if k != 'calculator'}), True),
+        'no fingerprints at all': (dict(stack, input_sha256={}), True),
+        'added module without coverage': (mutated(module_scope=dict(scope, enumerated=scope['enumerated'] + ['a-new-module'])), True),
+        'removed module': (mutated(module_scope=dict(scope, enumerated=scope['enumerated'][1:], inspected=scope['inspected'][1:],
+                                                     unreadable=[n for n in scope['unreadable'] if n != scope['enumerated'][0]])), True),
+    }
+    for label, (report, should_be_stale) in cases.items():
+        stale_keys = stale_stack_inputs(report, BASE)
+        check(bool(stale_keys) == should_be_stale,
+              f'freshness guard {"misses" if should_be_stale else "rejects"} the case: {label}')
+    print(f'SELFTEST PASS: {checks} assertions; the stack-report freshness guard accepts the current report and '
+          f'rejects a changed board, a changed specification, a changed calculator, a changed module PCB, a dropped key, '
+          f'no fingerprints, an uncovered module and a removed module.')
     raise SystemExit(0)
 
 def pos(q):

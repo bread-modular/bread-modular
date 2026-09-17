@@ -230,12 +230,17 @@ def digest(path):
 
 # Freshness fingerprints: anything that feeds this calculation is hashed here so
 # tools/verify_power.py can refuse a stale report instead of trusting it.
-inputs = {'hand-solder.json': digest(BASE / 'production/hand-solder.json'),
+module_paths = sorted((ROOT / 'modules').glob('*/*.kicad_pcb'))
+all_module_names = sorted(path.parent.name for path in module_paths if path.parent.name != 'base')
+inputs = {'calculator': digest(BASE / 'tools/verify_stack_height.py'),
+          'hand-solder.json': digest(BASE / 'production/hand-solder.json'),
           'fixed-geometry.json': digest(BASE / 'verification/fixed-geometry.json'),
           'base.kicad_pcb': digest(BASE / 'base.kicad_pcb'),
           'base.kicad_sch': digest(BASE / 'base.kicad_sch'),
           'slot.kicad_sch': digest(BASE / 'slot.kicad_sch'),
-          'module_pcbs': {name: digest(ROOT / info['path']) for name, info in sorted(modules.items())}}
+          'module_scope': {'enumerated': all_module_names, 'inspected': sorted(modules), 'unreadable': sorted(unreadable)},
+          'module_pcbs': {name: digest(ROOT / 'modules' / name / f'{name}.kicad_pcb')
+                          for name in sorted(modules)}}
 
 report = {
     'input_sha256': inputs,
@@ -263,7 +268,9 @@ report = {
                  'bottom_mounted_male_headers': len(bottom),
                  'top_mounted_male_headers': top_side},
     'top_side_tht_tail': {'boards': top_side,
-                          'parts_examined': len(top_tails),
+                          'footprint_slot_comparisons': len(top_tails),
+                          'distinct_parts': len({(e['module'], e['ref']) for e in top_tails}),
+                          'vertical_estimate_applies_to': 'the 3.0 mm through-hole header tail assumed in stack_height.components.module_male_header; other THT parts can have longer tails, but no top-side THT envelope overlaps a jumper envelope in X/Y on any inspected module',
                           'tail_below_module_board_nominal_mm': top_side_tail_nominal,
                           'tail_below_module_board_worst_case_mm': top_side_tail_worst,
                           'min_xy_gap_to_jumper_mm': top_tail_gap,

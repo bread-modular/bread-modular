@@ -121,10 +121,13 @@ engagement is assumed rather than proved; slot 1's socket row keeps its
 pre-existing −0.12 mm / −0.10 mm offset; and 4mix/imix place their power headers
 on `F.Cu` where they cannot mate downwards as drawn. `stack-height.json` also
 persists the per-module `exceptions` and the `coverage` counts behind these
-claims, the SHA-256 fingerprints that make the report self-invalidating when an
-input changes, and the top-side through-hole tail check (1 332 parts examined,
-1.4 mm nominal / 1.86 mm worst-case tail, 0.45 mm nearest XY gap, 1.94 mm
-worst-case clearance) for the two boards that mount their headers on `F.Cu`.
+claims, the SHA-256 fingerprints (calculator, specification, both schematics,
+PCB, independently enumerated module scope and every readable module PCB) that
+make the report self-invalidating when an input changes, and the top-side
+through-hole check (1 332 footprint-per-slot comparisons over 111 distinct parts
+on all 27 modules: 1.4 mm nominal / 1.86 mm worst-case header tail, 0.45 mm
+nearest XY envelope gap, no overlap anywhere; the vertical figure is
+header-tail-specific).
 
 ## Trace widths, clearances and ground
 
@@ -369,11 +372,15 @@ guard. Instead:
   `../production/RELEASE_STATUS.md` (154 of 163 designators priced; the rest and
   the PCB/SMT charges are listed as unpriced). It is the only tool that touches
   the network, and only with `--refresh`, so the regeneration path above stays
-  offline.
+  offline. `tools/estimate_cost.py --selftest` checks that a part that cannot be
+  priced moves to an explicit not-priced list **by reference** and that the
+  user-fit shunt stays an accessory rather than a board designator.
 * `tools/verify_power.py --selftest` exercises the staleness guard on
-  `stack-height.json` (changed board, changed module PCB, missing fingerprints)
-  without touching the board, and it is cheap enough to run alongside the
-  documented path.
+  `stack-height.json` (9 cases: fresh report accepted; changed board, changed
+  specification, changed calculator, changed module PCB, dropped fingerprint key,
+  absent fingerprints, uncovered module and removed module all rejected) without
+  touching the board, and it is cheap enough to run alongside the documented
+  path.
 
 **Artifact delta.** After regeneration the eleven gerber/drill files differ from
 the previously committed ones **only in their two KiCad export-date comment lines
