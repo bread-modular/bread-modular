@@ -6,14 +6,15 @@
 **result: IDENTICAL (netlist)**
 
 ## Nets
-* nets compared: 78; identical name/node sets: yes
+* nets compared: 78
+* identical name/node membership: yes
 * nodes compared: 513 (before), 513 (after)
 
 ## Components
 * components compared: 163
-* value/footprint/sourcing differences: 0
-* Sheetname/Sheetfile (expected to change): 192 components
-* free-text Description differences (expected, template-generic): 48
+* value/footprint/datasheet/field differences: 0
+* Sheetname/Sheetfile changed (expected): 192
+* free-text Description changed (expected, template-generic): 48
   - C22, C23, C24, C25, C26, C27, C28, C29 ...
 
 ## Sheet instances (ref mapping)
@@ -38,5 +39,5 @@
 * `erc-after.json`: error pin_not_connected x4, error power_pin_not_driven x3, warning lib_symbol_mismatch x1
 * identical finding counts per type: yes
 * representative item changes (same finding, different reporting symbol):
-  - error power_pin_not_driven: 1 -> 0
-  - error power_pin_not_driven: 0 -> 1
+  - error power_pin_not_driven [Symbol #PWR02 Pin 1 [Power input, Line]]: 1 -> 0
+  - error power_pin_not_driven [Symbol #PWR026 Pin 1 [Power input, Line]]: 0 -> 1

@@ -334,12 +334,17 @@ reference it has on the flat v1.3.0 sheet:
 
 `tools/build_slot_template.py` identifies the flat per-slot blocks by geometric
 connectivity (each block is its own electrical island), removes them from
-`base.kicad_sch`, emits `slot.kicad_sch`, and instantiates it twelve times.
-`tools/verify_slot_refactor.py` then compares the exported netlists:
+`base.kicad_sch`, emits `slot.kicad_sch`, and instantiates it twelve times in a
+4 × 3 grid of sheet symbols. It refuses to run when a slot block cannot be
+isolated, when a non-slot part would be swept into a slot island, when the
+template's own geometry does not resolve to the intended per-slot netlist, or
+when any copied part loses its DNP / BOM / board flag, source field or pin.
+`tools/verify_slot_refactor.py` then compares the exported netlists (and rejects
+empty or malformed exports instead of reporting them as equal):
 
 * **78 nets** before and after — same names, same nodes, pin functions and pin types;
-* **163 components** — identical references, values, footprints, LCSC, MPN and
-  manufacturer fields;
+* **163 components** — identical references, values, footprints, datasheet,
+  LCSC, MPN and manufacturer fields;
 * **ERC unchanged**: 4 `pin_not_connected`, 3 `power_pin_not_driven` and
   1 `lib_symbol_mismatch` before and after;
 * **`production/bom.csv` regenerates byte-identically**, the JLCPCB `bom.csv` and
@@ -356,16 +361,24 @@ field that reaches the netlist nodes, BOM, CPL or board changed.
 ### 8.5 PCB status (deliberately untouched)
 
 `base.kicad_pcb` is **byte-identical** (sha256
-`9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484`) — the board
-was routed against these nets, and because the netlist is unchanged it stays
-valid. `kicad-cli pcb drc --schematic-parity` still reports **0 unconnected items
-and 0 schematic-parity findings** (59 unchanged library-copy warnings).
+`9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484`;
+`git diff 5d0aca0..HEAD -- modules/base/base.kicad_pcb` is empty). The board was
+routed against these nets, and because the netlist is unchanged it stays valid:
+`kicad-cli pcb drc --schematic-parity` still reports **0 unconnected items and 0
+schematic-parity findings** (59 unchanged library-copy warnings).
 
-Two things to know before ever re-importing the schematic into the board:
+What does change is how the board's stored links map onto the schematic. Each
+footprint records a single symbol UUID as its schematic link, and those links
+were written against the flat sheet:
 
-* the board stores each footprint's schematic link as a single symbol UUID; the
-  Slot1 parts still match (their symbol blocks were reused verbatim), while the
-  other eleven instances are now served by that same shared symbol and match by
-  reference designator instead;
-* a future "update PCB from schematic" therefore has to re-link the relocated slot
-  parts deliberately — it is not a no-op action. Nothing in v1.3.1 requires it.
+* the twelve slots are now served by one shared template symbol, so all twelve
+  instances carry the same symbol UUID — the one the board knows for the slot-1
+  parts;
+* every relocated part also moved to a new hierarchical sheet path
+  (`/<root-uuid>/<SlotN>`), including the slot-1 parts whose leaf UUID was reused.
+
+KiCad's parity check matches footprints to symbols by reference designator, which
+is why it still reports zero findings. A future "update PCB from schematic" would
+therefore have to re-link all **96 relocated slot parts** (U6..U17, J7..J18,
+R28..R51, C22..C45, VSUPPLY_1..12, GND1..12) deliberately — it is not a no-op
+action. Nothing in v1.3.1 requires it; the routed board remains the deliverable.

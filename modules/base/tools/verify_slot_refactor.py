@@ -6,17 +6,20 @@ Compares two ``kicad-cli sch export netlist --format kicadsexpr`` files and,
 * checks that the set of nets and the ``(ref, pin)`` membership of every net is
   identical (the electrical acceptance criterion), including pin functions and
   pin types,
-* checks that the component inventory is unchanged (refs, values, footprints,
-  datasheet, LCSC/MPN/Manufacturer, DNP/BOM flags): only the sheet metadata
-  (``Sheetname`` / ``Sheetfile``) and the deliberately genericised free-text
-  ``Description`` field may differ,
-* reports the full-sheet instance mapping (ref -> Sheetname) so the per-slot
+* checks that the component inventory is unchanged: references, values,
+  footprints, datasheet, LCSC/MPN/Manufacturer fields and all other symbol
+  fields.  Only the sheet metadata (``Sheetname`` / ``Sheetfile``) and the
+  deliberately genericised free-text ``Description`` may differ,
+* reports the sheet instance mapping (ref -> Sheetname) so the per-slot
   reference table can be published.
+
+Empty or malformed netlists are rejected instead of being reported as "equal".
 
 Usage::
 
     tools/verify_slot_refactor.py --before <net> --after <net> [--out report.md]
-    tools/verify_slot_refactor.py --before <net> --after <net> --erc-before a.json --erc-after b.json
+    tools/verify_slot_refactor.py --before <net> --after <net> \
+        --erc-before a.json --erc-after b.json
 """
 from __future__ import annotations
 
@@ -33,6 +36,13 @@ NODE_RE = re.compile(
     r'(?: \(pinfunction "([^"]*)"\))? \(pintype "([^"]*)"\)'
 )
 COMP_RE = re.compile(r'^    \(comp \(ref "([^"]+)"\)')
+LINE_VALUE_RE = re.compile(r'^\s+\((value|footprint|datasheet|description) "(.*)"\)$')
+LINE_PROP_RE = re.compile(r'^\s+\(property \(name "([^"]*)"\) \(value "(.*)"\)\)$')
+LINE_FIELD_RE = re.compile(r'^\s+\(field \(name "([^"]*)"\) "(.*)"\)$')
+
+# reported as expected, not as a regression
+EXPECTED_STRING_KEYS = {"Sheetname", "Sheetfile"}
+EXPECTED_FIELDS = {"Description"}
 
 
 def parse_netlist(path: Path):
@@ -52,31 +62,31 @@ def parse_netlist(path: Path):
         m = COMP_RE.match(line)
         if m:
             cur_comp = m.group(1)
-            comps[cur_comp] = {"properties": {}, "fields": []}
+            comps[cur_comp] = {"scalars": {}, "properties": {}, "fields": []}
             continue
         if cur_comp:
-            m = re.match(r"^      \(value \"(.*)\"\)$", line)
+            m = LINE_VALUE_RE.match(line)
             if m:
-                comps[cur_comp]["value"] = m.group(1)
-            m = re.match(r"^      \(footprint \"(.*)\"\)$", line)
-            if m:
-                comps[cur_comp]["footprint"] = m.group(1)
-            m = re.match(r"^      \(datasheet \"(.*)\"\)$", line)
-            if m:
-                comps[cur_comp]["datasheet"] = m.group(1)
-            m = re.match(r"^      \(description \"(.*)\"\)$", line)
-            if m:
-                comps[cur_comp]["description"] = m.group(1)
-            m = re.match(r'^      \(property \(name "([^"]*)"\) \(value "(.*)"\)\)$', line)
+                comps[cur_comp]["scalars"][m.group(1)] = m.group(2)
+                continue
+            m = LINE_PROP_RE.match(line)
             if m:
                 comps[cur_comp]["properties"][m.group(1)] = m.group(2)
-            m = re.match(r'^      \(field \(name "([^"]*)"\) "(.*)"\)$', line)
+                continue
+            m = LINE_FIELD_RE.match(line)
             if m:
                 comps[cur_comp]["fields"].append((m.group(1), m.group(2)))
     return nets, comps
 
 
+def describe(key):
+    return f"{key[0]} {key[1]} [{key[2]}]"
+
+
 def compare_nets(before, after, lines):
+    if not before or not after:
+        lines.append(f"* ERROR: no nets parsed (before={len(before)}, after={len(after)})")
+        return False
     ok = True
     only_before = sorted(set(before) - set(after))
     only_after = sorted(set(after) - set(before))
@@ -84,60 +94,82 @@ def compare_nets(before, after, lines):
         ok = False
         lines.append(f"* net names only before: {only_before or '-'}")
         lines.append(f"* net names only after : {only_after or '-'}")
-    differing = []
-    for name in sorted(set(before) & set(after)):
-        if collections.Counter(before[name]) != collections.Counter(after[name]):
-            differing.append(name)
-    if differing:
-        ok = False
-        for name in differing:
-            missing = collections.Counter(before[name]) - collections.Counter(after[name])
-            extra = collections.Counter(after[name]) - collections.Counter(before[name])
-            lines.append(f"* net `{name}` differs: missing {sorted(missing)} extra {sorted(extra)}")
+    differing = [
+        name
+        for name in sorted(set(before) & set(after))
+        if collections.Counter(before[name]) != collections.Counter(after[name])
+    ]
+    for name in differing:
+        lines.append(f"* net `{name}` differs:")
+        missing = collections.Counter(before[name]) - collections.Counter(after[name])
+        extra = collections.Counter(after[name]) - collections.Counter(before[name])
+        lines.append(f"  - missing {sorted(missing)}")
+        lines.append(f"  - extra   {sorted(extra)}")
+    ok &= not differing
+    lines.append(f"* nets compared: {len(set(before) | set(after))}")
     lines.append(
-        f"* nets compared: {len(set(before) | set(after))}; "
-        f"identical name/node sets: {'yes' if not (only_before or only_after or differing) else 'NO'}"
+        "* identical name/node membership: "
+        f"{'yes' if not (only_before or only_after or differing) else 'NO'}"
     )
-    nodes = sum(len(v) for v in before.values())
-    lines.append(f"* nodes compared: {nodes} (before), {sum(len(v) for v in after.values())} (after)")
+    lines.append(
+        f"* nodes compared: {sum(len(v) for v in before.values())} (before), "
+        f"{sum(len(v) for v in after.values())} (after)"
+    )
     return ok
 
 
-IGNORED_COMP_KEYS = {"Sheetname", "Sheetfile"}
-
-
 def compare_components(before, after, lines):
+    if not before or not after:
+        lines.append(f"* ERROR: no components parsed (before={len(before)}, after={len(after)})")
+        return False
     ok = True
     if set(before) != set(after):
         ok = False
         lines.append(f"* refs only before: {sorted(set(before) - set(after))}")
         lines.append(f"* refs only after : {sorted(set(after) - set(before))}")
-    value_diffs, desc_diffs, sheet_diffs = [], [], []
+
+    diffs, desc_diffs, sheet_diffs = [], [], []
     for ref in sorted(set(before) & set(after)):
         b, a = before[ref], after[ref]
-        for key in ("value", "footprint", "datasheet"):
-            if b.get(key) != a.get(key):
-                ok = False
-                value_diffs.append(f"{ref}.{key}: {b.get(key)!r} -> {a.get(key)!r}")
-        if sorted(b["fields"]) != sorted(a["fields"]):
-            ok = False
-            value_diffs.append(f"{ref}.fields differ")
-        if b["description"] != a["description"]:
-            desc_diffs.append(ref)
-        for key in IGNORED_COMP_KEYS:
-            if b["properties"].get(key) != a["properties"].get(key):
-                sheet_diffs.append(f"{ref}: {key} {b['properties'].get(key)!r} -> {a['properties'].get(key)!r}")
-        for key in set(b["properties"]) | set(a["properties"]):
-            if key in IGNORED_COMP_KEYS:
+        for section in ("scalars",):
+            keys = set(b[section]) | set(a[section])
+            for key in sorted(keys):
+                if key == "description":
+                    continue
+                if b[section].get(key) != a[section].get(key):
+                    ok = False
+                    diffs.append(f"{ref}.{key}: {b[section].get(key)!r} -> {a[section].get(key)!r}")
+        for key in sorted(set(b["properties"]) | set(a["properties"])):
+            if key in EXPECTED_STRING_KEYS:
+                if b["properties"].get(key) != a["properties"].get(key):
+                    sheet_diffs.append(ref)
                 continue
             if b["properties"].get(key) != a["properties"].get(key):
                 ok = False
-                value_diffs.append(f"{ref}.{key}: {b['properties'].get(key)!r} -> {a['properties'].get(key)!r}")
+                diffs.append(
+                    f"{ref}.{key}: {b['properties'].get(key)!r} -> {a['properties'].get(key)!r}"
+                )
+        bf = collections.Counter(f for f in b["fields"] if f[0] not in EXPECTED_FIELDS)
+        af = collections.Counter(f for f in a["fields"] if f[0] not in EXPECTED_FIELDS)
+        if bf != af:
+            ok = False
+            diffs.append(f"{ref}.fields: {sorted(bf - af)} -> {sorted(af - bf)}")
+        if b["scalars"].get("description") != a["scalars"].get("description") or any(
+            name in EXPECTED_FIELDS and bval != aval
+            for (name, bval), (_, aval) in zip(
+                [f for f in b["fields"] if f[0] in EXPECTED_FIELDS],
+                [f for f in a["fields"] if f[0] in EXPECTED_FIELDS],
+            )
+        ):
+            desc_diffs.append(ref)
+
     lines.append(f"* components compared: {len(set(before) | set(after))}")
-    lines.append(f"* value/footprint/sourcing differences: {len(value_diffs)}"
-                 + (": " + "; ".join(value_diffs[:6]) if value_diffs else ""))
-    lines.append(f"* Sheetname/Sheetfile (expected to change): {len(sheet_diffs)} components")
-    lines.append(f"* free-text Description differences (expected, template-generic): {len(desc_diffs)}")
+    lines.append(
+        f"* value/footprint/datasheet/field differences: {len(diffs)}"
+        + (": " + "; ".join(diffs[:8]) if diffs else "")
+    )
+    lines.append(f"* Sheetname/Sheetfile changed (expected): {len(sheet_diffs)}")
+    lines.append(f"* free-text Description changed (expected, template-generic): {len(desc_diffs)}")
     if desc_diffs:
         lines.append(f"  - {', '.join(sorted(desc_diffs, key=natural)[:8])} ...")
     return ok
@@ -157,8 +189,7 @@ def slot_mapping(comps, lines):
     lines.append("| instance | sheet | parts |")
     lines.append("|---|---|---|")
     for slot in sorted(by_slot, key=natural):
-        parts = sorted(by_slot[slot], key=natural)
-        lines.append(f"| {slot} | slot.kicad_sch | {', '.join(parts)} |")
+        lines.append(f"| {slot} | slot.kicad_sch | {', '.join(sorted(by_slot[slot], key=natural))} |")
     return by_slot
 
 
@@ -169,9 +200,12 @@ def erc_summary(path: Path, lines):
     for sheet in d["sheets"]:
         for v in sheet["violations"]:
             counter[(v["severity"], v["type"])] += 1
-            details[(v["severity"], v["type"], v["items"][0]["description"] if v["items"] else "")] += 1
-    lines.append(f"* `{path.name}`: " + ", ".join(
-        f"{sev} {typ} x{n}" for (sev, typ), n in sorted(counter.items())) or "* none")
+            item = v["items"][0]["description"] if v["items"] else ""
+            details[(v["severity"], v["type"], item)] += 1
+    lines.append(
+        f"* `{path.name}`: "
+        + (", ".join(f"{sev} {typ} x{n}" for (sev, typ), n in sorted(counter.items())) or "none")
+    )
     return counter, details
 
 
@@ -185,13 +219,16 @@ def main() -> int:
     ap.add_argument("--title", default="base slot-template refactor - netlist evidence")
     args = ap.parse_args()
 
-    lines: list[str] = []
-    ok = True
-    nets_b, comps_b = parse_netlist(Path(args.before))
-    nets_a, comps_a = parse_netlist(Path(args.after))
+    try:
+        nets_b, comps_b = parse_netlist(Path(args.before))
+        nets_a, comps_a = parse_netlist(Path(args.after))
+    except OSError as exc:
+        print(f"ERROR: cannot read netlist: {exc}")
+        return 2
 
+    lines: list[str] = []
     lines.append("## Nets")
-    ok &= compare_nets(nets_b, nets_a, lines)
+    ok = compare_nets(nets_b, nets_a, lines)
     lines.append("")
     lines.append("## Components")
     ok &= compare_components(comps_b, comps_a, lines)
@@ -204,18 +241,31 @@ def main() -> int:
         lines.append("## ERC")
         cb, db = erc_summary(Path(args.erc_before), lines)
         ca, da = erc_summary(Path(args.erc_after), lines)
-        same = cb == ca
-        lines.append(f"* identical finding counts per type: {'yes' if same else 'NO'}")
+        lines.append(f"* identical finding counts per type: {'yes' if cb == ca else 'NO'}")
         moved = [k for k in set(db) | set(da) if db[k] != da[k]]
         if moved:
-            lines.append("* representative item changes (same finding, different reporting symbol):")
-            for k in moved[:6]:
-                lines.append(f"  - {k[0]} {k[1]}: {db[k]} -> {da[k]}")
-        ok &= same
+            lines.append(
+                "* representative item changes (same finding, different reporting symbol):"
+            )
+            for k in sorted(moved)[:6]:
+                lines.append(f"  - {describe(k)}: {db[k]} -> {da[k]}")
+        ok &= cb == ca
 
-    report = "\n".join([f"# {args.title}", "", f"* before: `{args.before}`",
-                        f"* after : `{args.after}`", "",
-                        f"**result: {'IDENTICAL (netlist)' if ok else 'DIFFERS'}**", ""] + lines) + "\n"
+    report = (
+        "\n".join(
+            [
+                f"# {args.title}",
+                "",
+                f"* before: `{args.before}`",
+                f"* after : `{args.after}`",
+                "",
+                f"**result: {'IDENTICAL (netlist)' if ok else 'DIFFERS'}**",
+                "",
+            ]
+            + lines
+        )
+        + "\n"
+    )
     print(report)
     if args.out:
         Path(args.out).write_text(report, encoding="utf-8")

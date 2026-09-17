@@ -13,9 +13,10 @@ unchanged, so the routed ``base.kicad_pcb`` stays valid.
 
 Usage (from anywhere)::
 
-    tools/build_slot_template.py                     # source = HEAD revision
-    tools/build_slot_template.py --source <file>      # explicit pre-refactor file
-    tools/build_slot_template.py --dry-run            # analysis only, no writes
+    tools/build_slot_template.py                          # pre-refactor = HEAD
+    tools/build_slot_template.py --rev 5d0aca0            # pre-refactor from git
+    tools/build_slot_template.py --source <file>          # explicit file
+    tools/build_slot_template.py --dry-run                # analysis only, no writes
 
 The script is deliberately standalone (no KiCad Python bindings) so it can be
 re-run and audited.  Run ``tools/verify_slot_refactor.py`` afterwards to prove
@@ -705,7 +706,43 @@ def emit_part_symbol(src: Symbol, key: str, at, rot: int, desc, sheet_paths) -> 
     return "\t" + head + "\t\t(instances\n\t\t\t(project \"base\"\n" + inst + "\t\t\t)\n\t\t)\n\t)\n"
 
 
-def build_child(text: str, by_ref: dict[str, Symbol], sheet_paths: list[str], lib_pins) -> str:
+def part_metadata_problems(src_text: str, new_text: str, label: str) -> list[str]:
+    """The template must keep every non-cosmetic attribute of the part it copies.
+
+    Checks the DNP / BOM / board / simulation flags, every symbol field value
+    (including LCSC, MPN, Manufacturer and Footprint) and the pin set.  Only the
+    free-text ``Description`` may be rewritten to become instance-neutral.
+    """
+    problems = []
+    for flag in ("dnp", "in_bom", "on_board", "exclude_from_sim"):
+        src = grab(src_text, r"\(%s (yes|no)\)" % flag)
+        new = grab(new_text, r"\(%s (yes|no)\)" % flag)
+        if src != new:
+            problems.append(f"{label}: flag {flag} {src} -> {new}")
+
+    def props(text):
+        return {
+            m.group(1): m.group(2)
+            for m in re.finditer(r'\(property "([^"]+)" "((?:[^"\\]|\\.)*)"', text)
+        }
+
+    src_props, new_props = props(src_text), props(new_text)
+    for key in sorted(set(src_props) | set(new_props)):
+        if key == "Description":
+            continue
+        if src_props.get(key) != new_props.get(key):
+            problems.append(
+                f"{label}: property {key} {src_props.get(key)!r} -> {new_props.get(key)!r}"
+            )
+    src_pins = sorted(re.findall(r'\(pin "([^"]+)"', src_text))
+    new_pins = sorted(re.findall(r'\(pin "([^"]+)"', new_text))
+    if src_pins != new_pins:
+        problems.append(f"{label}: pins {src_pins} -> {new_pins}")
+    return problems
+
+
+def build_child(text: str, by_ref: dict[str, Symbol], sheet_paths: list[str], lib_pins):
+    metadata_problems: list[str] = []
     libs = []
     for name in CHILD_LIBS:
         m = re.search(r'^\t\t\(symbol "%s"' % re.escape(name), text, re.M)
@@ -723,7 +760,11 @@ def build_child(text: str, by_ref: dict[str, Symbol], sheet_paths: list[str], li
     for name, (x, y) in GND_POINTS.items():
         body.append(emit_gnd_symbol(x, y, name, sheet_paths))
     for key, ref, at, rot, desc in PARTS:
-        body.append(emit_part_symbol(by_ref[ref], key, at, rot, desc, sheet_paths))
+        block = emit_part_symbol(by_ref[ref], key, at, rot, desc, sheet_paths)
+        metadata_problems.extend(
+            part_metadata_problems(by_ref[ref].item.text, block, f"{key} ({ref})")
+        )
+        body.append(block)
     body.append(
         emit_note(
             "SLOT TEMPLATE (base v1.3.1) - one sheet instance = one Base slot.\n"
@@ -761,12 +802,36 @@ def build_child(text: str, by_ref: dict[str, Symbol], sheet_paths: list[str], li
         f'\t(uuid "{w_uuid("sheet/slot")}")\n'
         "\t(paper \"A4\")\n\t(lib_symbols\n" + "".join(libs) + "\t)\n"
     )
-    return header + "".join(body) + "\t(embedded_fonts no)\n)\n"
+    return header + "".join(body) + "\t(embedded_fonts no)\n)\n", metadata_problems
 
 
 # ---------------------------------------------------------------------------
 # parent sheet additions
 # ---------------------------------------------------------------------------
+
+# Grid geometry of the twelve sheet symbols on the A2 root sheet.  The pitch has
+# to leave room for the pin stubs *and* the global label text of the previous
+# column, otherwise a label would be drawn on top of the next sheet symbol.
+SHEET_W, SHEET_H = 38.1, 20.32
+COL_PITCH, ROW_PITCH = 63.5, 27.94
+GRID_X, GRID_Y = 243.84, 190.5
+STUB_LEN = 10.16
+LABEL_ALLOWANCE = 12.7  # drawn text width of "VSLOT_12" / "SEL_12" at 1.27 mm
+
+
+def grid_position(slot: int):
+    col, row = (slot - 1) % 4, (slot - 1) // 4
+    return GRID_X + col * COL_PITCH, GRID_Y + row * ROW_PITCH
+
+
+def check_parent_grid() -> list[str]:
+    problems = []
+    if SHEET_W + STUB_LEN + LABEL_ALLOWANCE > COL_PITCH:
+        problems.append("the sheet grid columns are too close for the pin labels")
+    x_last, _ = grid_position(SLOT_COUNT)
+    if x_last + SHEET_W + STUB_LEN + LABEL_ALLOWANCE > 594 - 20:
+        problems.append("the sheet grid runs past the A2 drawing area")
+    return problems
 
 
 def emit_sheet(slot, x, y, w, h, sid, page, root_uuid) -> str:
@@ -801,7 +866,7 @@ def emit_sheet(slot, x, y, w, h, sid, page, root_uuid) -> str:
         f'\t\t\t\t(path "/{root_uuid}"\n\t\t\t\t\t(page "{page}")\n\t\t\t\t)\n'
         "\t\t\t)\n\t\t)\n\t)\n"
     )
-    xl = x + w + 15.24
+    xl = x + w + STUB_LEN
     wires = emit_wire(x + w, p_vslot, xl, p_vslot, f"parent/slot{slot}-vslot") + emit_wire(
         x + w, p_sel, xl, p_sel, f"parent/slot{slot}-sel"
     )
@@ -816,26 +881,35 @@ def emit_sheet(slot, x, y, w, h, sid, page, root_uuid) -> str:
 # ---------------------------------------------------------------------------
 
 
-def load_source(arg_source: str | None) -> str:
+def load_source(arg_source: str | None, arg_rev: str | None) -> str:
     if arg_source:
         return Path(arg_source).read_text(encoding="utf-8")
+    rev = arg_rev or "HEAD"
     out = subprocess.run(
-        ["git", "show", f"HEAD:{ROOT_REL}"], cwd=BASE, capture_output=True, text=True, check=True
+        ["git", "show", f"{rev}:{ROOT_REL}"], cwd=BASE, capture_output=True, text=True, check=True
     )
     return out.stdout
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--source", help="pre-refactor base.kicad_sch (default: HEAD revision)")
+    ap.add_argument("--source", help="pre-refactor base.kicad_sch file")
+    ap.add_argument(
+        "--rev",
+        default="HEAD",
+        help="git revision to read the pre-refactor base.kicad_sch from (default: HEAD)",
+    )
     ap.add_argument("--dry-run", action="store_true", help="analyse only, do not write")
     ap.add_argument("--out-base", default=str(BASE / "base.kicad_sch"))
     ap.add_argument("--out-slot", default=str(BASE / "slot.kicad_sch"))
     args = ap.parse_args()
 
-    text = load_source(args.source)
+    text = load_source(args.source, args.rev)
     if "slot.kicad_sch" in text:
-        print("ERROR: source already contains the slot template - refusing to refactor twice.")
+        print(
+            "ERROR: source already contains the slot template - refusing to refactor twice.\n"
+            "       Pass --rev <pre-refactor commit> or --source <pre-refactor file>."
+        )
         return 2
 
     root_uuid = grab(text, r'^\(kicad_sch\s*\n\t\(version .*?\n.*?\n.*?\n\t\(uuid "([^"]+)"', None)
@@ -898,7 +972,7 @@ def main() -> int:
         sym = next(s for s in symbols if s.item is it)
         sym_breakdown["slot parts" if sym.ref in ALL_SLOT_REFS else "power symbols"] += 1
 
-    print(f"source          : {args.source or 'HEAD revision'}")
+    print(f"source          : {args.source or (args.rev + ':modules/base/base.kicad_sch')}")
     print(f"top-level items : {len(items)}")
     print(f"slot islands    : {len(slot_islands)}")
     print(f"removed items   : {len(removed)} {kinds}")
@@ -917,6 +991,12 @@ def main() -> int:
         return 2
 
     # the twelve sheet symbols and their per-instance paths
+    grid_problems = check_parent_grid()
+    if grid_problems:
+        print("ERROR: parent sheet grid geometry is invalid:")
+        for p in grid_problems:
+            print("   ", p)
+        return 2
     sheet_paths, sheets = [], []
     sheets.append(
         "\t(text \"# Slot Power - 12 x slot.kicad_sch (base v1.3.1)\"\n"
@@ -927,11 +1007,10 @@ def main() -> int:
         f'\t\t(uuid "{w_uuid("text/slot-power-heading")}")\n\t)\n'
     )
     for slot in range(1, SLOT_COUNT + 1):
-        col, row = (slot - 1) % 4, (slot - 1) // 4
-        x, y = 243.84 + col * 55.88, 190.5 + row * 27.94
+        x, y = grid_position(slot)
         sid = w_uuid(f"sheet/slot{slot}")
         sheet_paths.append(f"/{root_uuid}/{sid}")
-        sheets.append(emit_sheet(slot, x, y, 48.26, 20.32, sid, slot + 1, root_uuid))
+        sheets.append(emit_sheet(slot, x, y, SHEET_W, SHEET_H, sid, slot + 1, root_uuid))
     sheets.append(
         "\t(text \"One sheet symbol = one instance of the slot template: supply + ground socket, TPS2111A 2:1\\n"
         "power mux, 750R ILIM, 100k SEL pulldown, decoupling and the 1x02 rail-select header. Sheet pins\\n"
@@ -958,15 +1037,16 @@ def main() -> int:
     out.append(text[cursor:])
     new_base = "".join(out)
 
-    child = build_child(text, by_ref, sheet_paths, libs)
+    child, metadata_problems = build_child(text, by_ref, sheet_paths, libs)
 
-    problems = check_child_geometry(libs)
+    problems = check_child_geometry(libs) + metadata_problems
     if problems:
         print("ERROR: the generated template does not match the intended per-slot netlist:")
         for p in problems:
             print("   ", p)
         return 2
     print("template geometry: verified against the intended per-slot netlist")
+    print("template part metadata: flags, sourcing fields and pins preserved")
 
     if args.dry_run:
         print("dry run: nothing written")
