@@ -7,9 +7,9 @@ Power upgrade: input protection, a protected 5 V rail and per-slot rail selectio
   (MF-MSMF110/16-2, 1.1 A hold / 16 V) in series with VBUS and TVS **D2**
   (SMAJ5.0A) on the protected node, both upstream of FB1.
 * New protected **5V_SYS** rail, tapped from protected VBUS (after F1) before FB1 with
-  its own polyfuse **F2**, TVS **D3**, 100 uF/16 V + 0.1 uF bulk and an ERC PWR_FLAG,
-  so a 5 V-side fault is cleared on the 5 V branch (with the coordination caveat in
-  POWER.md - F1/F2 are identical PPTCs, selective tripping is not guaranteed).
+  its own polyfuse **F2**, TVS **D3**, 100 uF/16 V + 0.1 uF bulk and an ERC PWR_FLAG.
+  (Coordination is NOT established: F1/F2 are identical PPTCs and F1 feeds both
+  branches - see POWER.md.)
 * 12 x per-slot 2:1 power mux (**U6..U17**, TPS2111APWR): IN1 = 5V_SYS, IN2 = +3.3 V,
   OUT = the slot rail feeding all five pins of the existing `VSUPPLY_n` socket
   (net `VSLOT_n`). Manual mode, reverse/cross-conduction blocking, adjustable current

@@ -81,9 +81,10 @@ specify accuracy. `R_ILIM = 1.6 kΩ` gives ≈ 312 mA *by extrapolation* — tha
 250–300 mA requirement. It is implemented as the closest match to the requested
 value, and is **provisional pending an explicit decision**:
 
-* accept the extrapolated ≈ 312 mA setting (protection level as requested, accuracy
-  unspecified — the actual limit could be materially lower and could nuisance-trip a
-  heavy module), or
+* accept the extrapolated ≈ 312 mA setting — **this is not the requested protection
+  level**, it is an unguaranteed value: the real limit could be materially lower (and
+  nuisance-trip a heavy module) **or materially higher** (and fail to protect the
+  slot), or
 * change the twelve 1.6 kΩ resistors to `750 Ω` for ≈ 667 mA, inside the guaranteed
   range (weaker but specified protection), or
 * drop the deliverable-level requirement and re-scope (e.g. a load-switch pair with a
@@ -125,24 +126,27 @@ parts are **D2 = VBUS TVS, D3 = 5V_SYS TVS, F1 = VBUS polyfuse, F2 = 5V_SYS poly
 
 | | Proposal | Effect | Cost |
 |---|---|---|---|
-| P1a | **Recommended:** replace the bare F2+TVS on `5V_SYS` with a rated OVP switch, e.g. **TPS1663** (4.5–60 V, integrated FET, adjustable current limit *and* adjustable OVP) or **TPS2400 + P-MOSFET** | disconnects before the rail exceeds ~5.5–6 V, so the mux inputs stay inside their 6 V absolute maximum; also gives a real, specified current limit instead of a PPTC curve | ≈ $0.6–1.3 + 4 passives |
-| P1b | Accept the TVS as surge protection only and document the residual risk (rail may briefly exceed 6 V during a surge) | no change, no cost | $0 |
-| P1c | Drop `5V_SYS` for v1.3.0 (3.3 V-only base, keep the input protection) | no 5 V rail, no 6 V-exposed parts | $0, removes a feature |
+| P1a | **Recommended:** add a rated OVP switch in series with **`VBUS_PROT`** (i.e. upstream of *both* FB1 → U5 and F2 → 5V_SYS), e.g. a controller + P-MOSFET such as TPS2400, or an integrated OVP/eFuse (TPS1663 class) | disconnects before the node exceeds ~5.5–6 V, so **both** downstream branches (the 3.3 V LDO path through FB1 *and* the 5 V branch) stay inside their 6 V absolute maximum | indicative ≈ $0.6–1.5 + ~4 passives — **price and part choice not verified yet**, and controller/MOSFET compatibility, real current-limit capability, cutoff tolerance and transient overshoot must be checked against the datasheets before adoption |
+| P1b | Accept the TVS as surge protection only and document the residual risk (the `VBUS_PROT` node may briefly exceed 6 V during a surge, exposing both U5 through FB1 and every mux input) | no change, no cost | $0 |
+| P1c | Drop `5V_SYS` for v1.3.0 (3.3 V-only base, keep the input protection) | removes the mux inputs from the exposed set, but **U5 is still fed from `VBUS_PROT` through FB1**, so the exposure is reduced, not eliminated | $0, removes a feature |
+
+Note: a series OVP switch does **not** by itself establish F1/F2 fuse coordination (F1
+still feeds both branches), and it does not replace the per-slot current limit.
 
 **P2 — current-limit setting.** Pick one:
 
 | | Proposal | Effect |
 |---|---|---|
-| P2a | keep `R_ILIM = 1.6 kΩ` (≈ 312 mA *extrapolated*, outside the guaranteed 0.63–1.25 A range) | protection as requested, accuracy unspecified — could be materially lower (nuisance trip) **or higher** than the target; **the limit is not guaranteed in either direction** |
+| P2a | keep `R_ILIM = 1.6 kΩ` (≈ 312 mA *extrapolated*, outside the guaranteed 0.63–1.25 A range) | as implemented; unguaranteed in either direction |
 | P2b | fit `750 Ω` (≈ 667 mA) | inside the guaranteed range, weaker but specified protection |
-| P2c | use TPS2114A (0.31–0.75 A range) with consigned/sourced stock | exact range fits, but JLCPCB stock is 0 today |
+| P2c | use TPS2114A with consigned/sourced stock (guaranteed range 0.31–0.75 A) | gets into a guaranteed range, but **it still does not meet 250–300 mA**: 0.31 A is the datasheet minimum, so only ≈310 mA of the requested band would be in range; JLCPCB stock is also 0 today |
 
 **P3 — fuse coordination.** F1 and F2 are identical 1.1 A-hold PPTCs, so a 5 V-side fault
 may open F1 (taking down `+3.3V` too) before F2. Proposal: make **F2 = 1.1 A hold** (as
 now) and **F1 = 2 A hold** (protecting the USB source and the input wiring rather than
-the branch), so the 5 V branch is the more likely to give first — *or* adopt P1a, which
-removes the coordination question entirely. This changes the frozen "~1 A hold" for F1
-and therefore needs approval.
+the branch), so the 5 V branch is the more likely to give first. This changes the frozen
+"~1 A hold" for F1 and therefore needs approval. Note that P1a does *not* remove the
+coordination question — F1 still feeds both branches.
 
 ## 5. Phase 2 (PCB) constraints — please honour these when routing
 
