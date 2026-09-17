@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.3.0
+Power upgrade: input protection, a protected 5 V rail and per-slot rail selection.
+
+* VBUS input protection at the USB-C connector: resettable polyfuse **F1**
+  (MF-MSMF110/16-2, 1.1 A hold / 16 V) in series with VBUS and TVS **D2**
+  (SMAJ5.0A) on the protected node, both upstream of FB1.
+* New protected **5V_SYS** rail, tapped from protected VBUS before FB1 with its own
+  polyfuse **F2**, TVS **D3**, 100 uF/16 V + 0.1 uF bulk and an ERC PWR_FLAG.
+  It is independently protected so a 5 V-side fault cannot take down the 3.3 V rail.
+* 12 x per-slot 2:1 power mux (**U6..U17**, TPS2111APWR): IN1 = 5V_SYS, IN2 = +3.3 V,
+  OUT = the slot rail feeding all five pins of the existing `VSUPPLY_n` socket
+  (net `VSLOT_n`). Manual mode, reverse/cross-conduction blocking, adjustable current
+  limit (R_ILIM = 1.6 k -> ~312 mA, see POWER.md).
+* Per-slot selection: `SEL_n` with a 100 k pulldown and a 1x02 low-profile header
+  (**J7..J18**, 2.00 mm, hidden under a mated module). Shunt fitted = 5V_SYS,
+  shunt absent/lost = +3.3 V (fail-safe).
+* Per-mux decoupling 1 uF + 0.1 uF on the slot rail; TVS + bulk caps on 5V_SYS.
+* `LCSC`/`MPN`/`Manufacturer` fields added to every symbol; BOM values fixed
+  (the 24 slot sockets were valued `Conn_02x05_Socket` although they are 1x05;
+  simulation sources V1..V3 are no longer offered for assembly) and
+  `production/bom.csv` regenerated.
+* No LED is added for 5 V indication (module firmware indicates its own rail).
+* U5/FB1/FB2 and the 3.3 V rail are unchanged. PCB placement/routing is NOT part of
+  this revision - see POWER.md for the Phase 2 constraints.
+
 ## 1.2.0
 Introduce a new LDO (AP2112K-3.3) which has an EN functionality.
 So, we can implement the reset button without using additional components.
