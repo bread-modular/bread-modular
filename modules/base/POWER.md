@@ -239,3 +239,13 @@ mating height before ordering.
 3. **ERC must be run inside the project directory** (with the `.kicad_pro` present) or every
    project-library footprint reports `footprint_link_issues` — a false alarm when comparing
    before/after.
+
+## 6. Revision note
+
+v1.3.0 covers the **schematic and BOM only**: `base.kicad_pcb` is not yet updated, placement and
+routing are a separate follow-up, so the new parts (U6..U17, F1, F2, D2, D3, C22..C47, J7..J18)
+currently have no PCB placement, and `production/netlist.ipc`, `designators.csv` and the fab
+outputs remain stale relative to the schematic until that follow-up is done.
+The text-field cleanup done in this chat (ILIM 750 R / 667 mA, the TVS residual-risk wording, and
+the simulation-only sourcing fields set to `N/A-SIM`) changed no `Value`/`LCSC`/`MPN` field of any
+assembled part and no connectivity: the netlist `(nets ...)` section is byte-identical.
