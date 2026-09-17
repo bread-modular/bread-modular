@@ -13,8 +13,8 @@ baseline; the stack height is calculated from datasheet dimensions
 The scope correction that made this release orderable: **the module sockets are
 hand-soldered by the builder and not ordered from or assembled by JLCPCB.** The
 connector-gender question is therefore an assembly note, not an ordering blocker.
-Read POWER.md section 9 before ordering, and treat the parts and prices below as
-order-time inputs rather than standing commitments.
+Read POWER.md section 9 before ordering, and treat the parts, prices and stock
+figures below as order-time inputs rather than standing commitments.
 
 ## Ordering checklist
 
