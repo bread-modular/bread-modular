@@ -1,0 +1,200 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-09-17T13:43:04+0530",
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "9.0.8",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab",
+            "violations": [
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol J2 Pin R [Passive, Line]",
+                            "pos": {
+                                "x": 1.5494,
+                                "y": 1.1303
+                            },
+                            "uuid": "ec46012f-1bd3-4f26-a470-2350b471bf0e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol J2 Pin T [Passive, Line]",
+                            "pos": {
+                                "x": 1.5494,
+                                "y": 1.1557
+                            },
+                            "uuid": "b79f8318-444a-4af3-b7d3-ae6def278fce"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol J4 Pin R [Passive, Line]",
+                            "pos": {
+                                "x": 1.5494,
+                                "y": 1.3208
+                            },
+                            "uuid": "e2548a14-9a82-4f1a-84b4-4260de85919f"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol J4 Pin T [Passive, Line]",
+                            "pos": {
+                                "x": 1.5494,
+                                "y": 1.3462
+                            },
+                            "uuid": "614e11b8-4451-4a90-b17a-08ba41a39f2c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol U5 Pin 1 [VIN, Power input, Line]",
+                            "pos": {
+                                "x": 4.2037,
+                                "y": 0.5588
+                            },
+                            "uuid": "81b458df-63ab-4d69-8480-456d20351011"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR025 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 5.1054,
+                                "y": 3.429
+                            },
+                            "uuid": "06f387b6-2466-4960-b183-a28ae790b774"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR026 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 5.1054,
+                                "y": 3.5306
+                            },
+                            "uuid": "4ea0526f-5a24-44fd-b02a-a1ac3522a583"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Symbol 'LED' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol D1 [LED]",
+                            "pos": {
+                                "x": 3.1877,
+                                "y": 0.6096
+                            },
+                            "uuid": "ea62caf0-9aab-4a0a-9876-2f124edd8924"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                }
+            ]
+        },
+        {
+            "path": "/Slot1/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/1559256d-7a61-5676-a6d8-f2fa17d43bff",
+            "violations": []
+        },
+        {
+            "path": "/Slot2/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/cecd91ad-5aea-54f0-9794-9f2497b56fb8",
+            "violations": []
+        },
+        {
+            "path": "/Slot3/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/401ad887-127f-5b5b-bf15-71eaab8158a2",
+            "violations": []
+        },
+        {
+            "path": "/Slot4/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/75157138-cd6d-58cb-8d14-31f4d69921c7",
+            "violations": []
+        },
+        {
+            "path": "/Slot5/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/1c27df18-b3c5-5578-b66e-f167c68611b7",
+            "violations": []
+        },
+        {
+            "path": "/Slot6/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/ada4ca56-d279-5c91-84c3-c4cd051cf9a0",
+            "violations": []
+        },
+        {
+            "path": "/Slot7/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/c47d27e3-1e86-5451-af44-07f450d45990",
+            "violations": []
+        },
+        {
+            "path": "/Slot8/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/9f5b4fb7-7766-5819-a2b8-92d0ebbaac1b",
+            "violations": []
+        },
+        {
+            "path": "/Slot9/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/ad721f0d-e3e0-5f46-b046-170fd14a7335",
+            "violations": []
+        },
+        {
+            "path": "/Slot10/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/2c5f2c53-1769-573b-896a-9ffec91b4be0",
+            "violations": []
+        },
+        {
+            "path": "/Slot11/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/ec8d1eb4-a8f0-5c4b-8695-0385e7fa26c6",
+            "violations": []
+        },
+        {
+            "path": "/Slot12/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab/01cc4229-f9cb-5286-8d4d-35c5f280907a",
+            "violations": []
+        }
+    ],
+    "source": "base.kicad_sch"
+}

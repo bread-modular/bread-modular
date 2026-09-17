@@ -226,3 +226,34 @@ explicit pre-upgrade PCB and fresh schematic XML. It checks the baseline PCB has
 loads the real project design rules, and uses `SaveBoard(..., aSkipSettings=True)`
 to prevent standalone pcbnew from overwriting the project/ERC settings. Do not
 re-run it against later hand-edited layouts; the routed PCB is the deliverable.
+
+## v1.3.1 structure refactor — netlist identity evidence
+
+v1.3.1 moves the twelve flat per-slot power blocks into the hierarchical template
+`slot.kicad_sch` (instantiated as `Slot1` … `Slot12`). It is a drawing change
+only; the PCB is intentionally untouched. The evidence in this directory:
+
+- `netlist-before.kicadsexpr` — flat netlist exported from the v1.3.0
+  `base.kicad_sch` (HEAD before the refactor).
+- `netlist-after.kicadsexpr` — flat netlist exported from the v1.3.1 schematic.
+- `erc-before.json`, `erc-after.json` — ERC reports (`--severity-all`).
+- `slot-refactor-netlist-diff.md` — the tool-generated comparison: **78 nets,
+  513 nodes, 163 components, identical names/membership/values**, plus the
+  per-instance reference table.
+- `slot-template.svg` — plot of the template sheet for review.
+
+Reproduce with:
+
+```sh
+kicad-cli sch export netlist --format kicadsexpr -o verification/netlist-after.kicadsexpr base.kicad_sch
+kicad-cli sch erc --format json --severity-all -o verification/erc-after.json base.kicad_sch
+tools/verify_slot_refactor.py --before verification/netlist-before.kicadsexpr \
+    --after verification/netlist-after.kicadsexpr \
+    --erc-before verification/erc-before.json --erc-after verification/erc-after.json
+```
+
+`production/netlist.ipc` is exported from the **PCB** (not the schematic) and is
+byte-identical; `kicad-cli pcb drc --schematic-parity` still reports 0 unconnected
+items and 0 schematic-parity findings. The only netlist-file differences are the
+per-component `Sheetname` / `Sheetfile` properties and 48 instance-neutralised
+`Description` texts (see POWER.md section 8).
