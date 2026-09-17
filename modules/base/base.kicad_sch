@@ -4220,7 +4220,178 @@
 			)
 			(embedded_fonts no)
 		)
-	)
+			(symbol "Connector_Generic:Conn_01x03"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x03"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x03_1_1"
+				(rectangle
+					(start -1.27 3.81)
+					(end 1.27 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+)
 	(text "## Reset Logic"
 		(exclude_from_sim no)
 		(at 513.334 40.132 0)
@@ -7329,13 +7500,91 @@
 	)
 	(wire
 		(pts
-			(xy 55.88 374.65) (xy 67.31 374.65)
+			(xy 55.88 374.65) (xy 62.23 374.65)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "d9c433ca-7012-45c1-83d8-5bab81bd18aa")
+	)
+	(wire
+		(pts
+			(xy 62.23 377.19) (xy 64.77 377.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b23ec053-3e4e-4387-972e-8359a2d9084b")
+	)
+	(wire
+		(pts
+			(xy 64.77 377.19) (xy 64.77 374.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bf047d6-b2ed-4342-b6a1-5b340b37f69f")
+	)
+	(wire
+		(pts
+			(xy 64.77 374.65) (xy 67.31 374.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "002d7a51-56f5-4d9c-9f6a-b0ce6b0d67ad")
+	)
+	(wire
+		(pts
+			(xy 57.15 379.73) (xy 62.23 379.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "02934fde-1b49-431e-8d12-5fc5ffe0c37c")
+	)
+	(global_label "RIN_SEL" (shape passive) (at 64.77 374.65 90) (fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0ed4b0af-d47a-4caa-a930-18d21827f97d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 64.77 373.0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "BUFF_IN_L" (shape input) (at 57.15 379.73 180) (fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a2a0e823-0f04-4c21-8f95-a62219c59305")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 57.15 386.53 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
 	)
 	(wire
 		(pts
@@ -20458,6 +20707,96 @@
 			(project "base"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
 					(reference "J21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x03")
+		(at 67.31 377.19 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "b42bc9d9-a9e8-454c-9398-97501b0167a8")
+		(property "Reference" "J22"
+			(at 62.23 371.475 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "SolderJumper_3_Bridged12"
+			(at 62.23 373.6349 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Bridged12_Pad1.0x1.5mm"
+			(at 67.31 377.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 67.31 377.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Line-out stereo/mono selector (3-pad solder jumper, pads 1-2 bridged as shipped): pin1 = IN_R (stereo), pin2 = the right line amplifier input (R16), pin3 = BUFF_IN_L (mono). Cut the 1-2 bridge and bridge 2-3 for mono; in mono the right input IN_R no longer reaches the right line output."
+			(at 67.31 377.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 67.31 377.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" ""
+			(at 67.31 377.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f3927ac2-775b-4a0c-9062-36e8c5c016a1")
+		)
+		(pin "2"
+			(uuid "3e340cd3-c684-4375-a774-9ff47d603e31")
+		)
+		(pin "3"
+			(uuid "23117bdf-f5bd-4b98-9d08-ebe8f689d3c6")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "J22")
 					(unit 1)
 				)
 			)

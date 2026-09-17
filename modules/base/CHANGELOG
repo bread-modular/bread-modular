@@ -1,14 +1,15 @@
 # Changelog
 
 ## 1.3.6
-**The line-input normalling is removed for good and the input stage is back to a pure, symmetric
-stereo path.** The passive mono normal that 1.3.4 added (`R52` + the `J19` link) is deleted, and the
-two input bias returns are re-derived so that the left and right channels are the same circuit: with
-no jumper fitted or bridged (as shipped) each channel is completely independent, there is **zero**
-cross-coupling between the left and right signal paths, the two channels have matched loading and
-matched level, and both input nodes sit on the 1.65 V `+2.5V` node. (The mono mode that replaces the
-old normal is a **selector jumper at the right line amplifier's input**, added by the second commit
-of this revision.)
+**The line-input normalling is gone and the input stage is back to a pure, symmetric stereo path,
+with a selector jumper as the mono mode.** The passive mono normal that 1.3.4 added (`R52` + the
+`J19` link) is deleted, the two input bias returns are re-derived so that the left and right
+channels are the same circuit, and a 3-pad solder jumper `J22` at the right line amplifier's input
+replaces the old normal as the stereo/mono selector. With no jumper cut or bridged (as shipped)
+each channel is completely independent: **zero** cross-coupling between the left and right signal
+paths, matched loading and matched level, and both input nodes on the 1.65 V `+2.5V` node.
+
+### Phase A - the passive normal is removed, the stereo path is symmetric again
 
 * **`R52` (2 M) and its link `J19` are removed** from the schematic and from the PCB, together with
   the net `NORM_R`, `J19`'s `IN_L` stub and the whole `BUFF_IN_R` branch that only fed `R52` (F.Cu
@@ -22,9 +23,9 @@ of this revision.)
   `R16`) and the same 680 k feedback (`R19` / `R18`). Numbers: input impedance
   `2 M || 1 M = 667 kOhm` on both channels (**0.000 dB** difference), gain `-680k/1M = -0.68 =
   -3.35 dB` on both (**0.000 dB** difference), and since both nodes sit on the same 1.65 V bias
-  there is no DC current in `R17`/`R16`, so the amplifier outputs sit at 1.65 V and the 1.65 V bias
-  level and `+2.5V` net name are unchanged. The MCP6002 input bias current (<= 20 pA x 2 M = 40 uV
-  worst case) is negligible; the resistors are the already-sourced C11512 part.
+  there is no DC current in `R17`/`R16`, so the amplifier outputs sit at 1.65 V. The 1.65 V bias
+  level and the `+2.5V` net name are unchanged; the MCP6002 input bias current (<= 20 pA x 2 M =
+  40 uV worst case) is negligible and both parts stay the already-sourced C11512.
 * **Why 2 M and not the v1.3.2 10 k:** a 2 M return does not load the 500 Ohm bias source (the node
   sits at the true 1.65 V and no offset is injected through `R17`/`R16`), it does not load the source
   (input impedance 667 kOhm instead of 9.9 kOhm), it keeps `R24`/`R5` at their existing value and
@@ -39,36 +40,86 @@ of this revision.)
   F.Cu segment (R24's `+2.5V` return, which has been on `+2.5V` at both ends since 1.3.4) was still
   stored with the old net code `1` (`GND`). Editing the PCB net table exposes it, so its one code
   digit is corrected to `18` (`+2.5V`). No geometry change.
-* **Netlist delta (exactly one net disappears).** `NORM_R` = {`R52.1`, `J19.2`} is gone: the
-  schematic netlist goes 81 -> 80 entries. `+2.5V` gains `R5.1`; `BUFF_IN_L` loses `R5.1` and is
-  {`RV2.3`, `U2.1`, `U2.2`}; `IN_L` loses `J19.1` and is {`INPUT1.1`, `R17.2`, `R24.1`, `U2.3`};
-  `IN_R` is unchanged at {`INPUT1.2`, `R16.2`, `R5.2`, `U2.5`}. Every other net, pin and value is
-  unchanged. Verbatim check: the two channels now share only `GND`, `+2.5V` and `+3.3V`; a netlist
-  graph search over the passive parts (resistors, capacitors, pots, jumpers; ICs excluded because
-  their internal path is intentional and per-channel) finds **no path from the left chain to the
-  right chain**, while the same search on 1.3.5 finds `BUFF_IN_L -R5- IN_R` and
-  `BUFF_IN_R -R52- NORM_R -J19- IN_L`.
+
+### Phase B - the mono mode is a selector jumper, and it discards the right input
+
+* **`J22` = 3-pad solder jumper** (`Jumper:SolderJumper-3_P1.3mm_Bridged12_Pad1.0x1.5mm`,
+  `Connector_Generic:Conn_01x03` symbol with Value `SolderJumper_3_Bridged12`, `in_bom no`,
+  `Datasheet ""`, no LCSC/MPN - bare copper pads, no part ordered) **sits at the right line
+  amplifier's input.** `R16`'s amplifier-side pin stays on `RFB_B`; its input pin moves off `IN_R`
+  onto the new net **`RIN_SEL` = {`J22.2`, `R16.2`}**, the jumper's centre pad. `J22.1` = `IN_R` and
+  `J22.3` = `BUFF_IN_L`, and the footprint keeps `net_tie_pad_groups "1, 2"` (pads 1-2 are joined by
+  the shipped copper bridge) - exactly the idiom the removed `J19` used.
+  * **As shipped (pads 1-2 bridged) = stereo:** the right line amplifier's input is its own channel
+    input `IN_R`; `BUFF_IN_L` is not connected to it in any way.
+  * **Mono (cut the 1-2 bridge, bridge 2-3):** the right line amplifier's input is driven by
+    `BUFF_IN_L`, the buffered LEFT channel, and the right input is discarded: `IN_R` no longer
+    reaches the right line output at all - its only remaining passive connection is its 2 M bias
+    return `R5`. Nothing is summed and there is no bleed path.
+* **Level: equal loudness in mono, no series resistor needed.** The buffer is a unity-gain follower
+  (`U2A`, output tied to its inverting input: gain 1.0000 = 0.000 dB), and the right amplifier sees
+  the same 1 M input resistor as the left (`R16` = `R17`) into the same 680 k feedback
+  (`R18` = `R19`), so in mono and in stereo alike
+  `V_out = -V_in x 680k/1M = -0.68 = **-3.35 dB**` on the right against **-3.35 dB** on the left:
+  **0.00 dB** L/R difference (the loud state, `J20`/`J21` cut, is `-(680k+1M)/1M = -1.68 =
+  -4.51 dB` on both, also 0.00 dB). The only mismatch left is component tolerance: with 1 % parts
+  the worst case is 0.17 dB. Adding a series resistor would only break the equality, so none is
+  fitted.
+* **DC/bias in both positions.** `RIN_SEL` sits at 1.65 V either way (stereo: `J22.1` = `IN_R`, held
+  at 1.65 V by `R5`; mono: `J22.3` = `BUFF_IN_L` = `IN_L`, held at 1.65 V by `R24`), so switching
+  produces no DC step at the amplifier input and no offset is injected through `R16`; `R16` always
+  sees 0 V across it.
+* **PCB.** `J22` sits in the free area right of the `IN_R` lane at `(250.317, 66.5)`
+  (courtyard 248.017-252.617 / 65.25-67.75, clear of `R16`, `R54`/`J21`, `C18`), pads 1/2/3 at
+  `x = 249.017 / 250.317 / 251.617`, y = 66.5. The old `IN_R` run into `R16.2` is replaced by three
+  F.Cu links: `J22.2 -> R16.2` (`250.317,66.5 -> 250.317,61.468`), `J22.1 -> IN_R`
+  (`249.017,66.5 -> 249.017,74.422`, landing on the `IN_R` horizontal, which is shortened and has
+  its old 45-degree jog to `R16.2` removed so no end dangles) and `J22.3 -> BUFF_IN_L`
+  (`251.617,66.5 -> 252.9,66.5 -> 252.9,84.0 -> 249.936,86.549`, joining the existing `BUFF_IN_L`
+  vertical). All new copper is F.Cu only, so this phase did not re-pour any zone.
+* **3-pin header re-check (FYI, not implemented):** a 3-pin 2.54 mm header needs 1.35 mm plated
+  through-holes on a 7.6 mm courtyard at the only place the selector can sit, where the
+  `R54`/`J21`/`C18` courtyards and the `+3.3V` B.Cu run leave under 5 mm; the solder jumper is used
+  explicitly, the same conclusion 1.3.4/1.3.5 recorded for the 2-pin case.
+
+### Netlist delta (final) and verification
+
+* **Netlist delta.** `NORM_R` = {`R52.1`, `J19.2`} disappears; **`RIN_SEL` = {`J22.2`, `R16.2`}** is
+  added. `+2.5V` gains `R5.1`; `BUFF_IN_L` loses `R5.1` and gains `J22.3` ({`J22.3`, `RV2.3`,
+  `U2.1`, `U2.2`}); `IN_L` loses `J19.1` ({`INPUT1.1`, `R17.2`, `R24.1`, `U2.3`}); `IN_R` becomes
+  {`INPUT1.2`, `J22.1`, `R5.2`, `U2.5`}. Every other net, pin and value is unchanged; the schematic
+  netlist goes 81 -> 80 (Phase A) -> 81 (Phase B) entries.
 * **Verification.** `kicad-cli sch erc` == baseline (11 findings, identical kinds/severities, no new
-  ones). `kicad-cli pcb drc --schematic-parity` == **0 errors, 0 unconnected, 145 parity items
-  (== baseline)**, 80 violations = 71 `lib_footprint_mismatch` (baseline 73 minus the two removed
-  footprints) + the 5 `silk_overlap` and 4 `silk_over_copper` items already present in the baseline
-  (no new silkscreen item, no part was moved). The B.Cu GND zone was re-poured: only one of its 49
-  filled polygons changed (clearance channel for the new B.Cu link plus the copper regained from the
-  deleted `R52`/`J19` tracks), which accounts for 1503 of the 2057 changed lines in the board file.
-* **Out of scope and proven unchanged** (block-by-block text comparison against 1.3.5): `U3`,
-  `R6`/`R7`, `RV1`/`RV2`, `C3`/`C7`/`C8`/`C9`/`C10`/`C11`/`C12`/`C13`, `R8`/`R9`/`R10`/`R12`,
-  `J6` (headphone jack), `J1` (line jack), `C18`/`C19`, `R20`/`R21`, the loud-gain parts
-  `R53`/`R54` + `J20`/`J21`, `R16`/`R17`/`R18`/`R19`, `U2`/`U4`, `R14`/`R15`, the 1.65 V bias
-  network, the jack footprints and every `gr_*`/Edge.Cuts item are byte-identical. `R5`'s footprint
-  block differs only in its pad-1 net line; `R24`'s is identical.
-* **Headphone consequence.** The headphone stage taps a different node - `BUFF_IN_L`/`BUFF_IN_R`
-  through `RV2`/`RV1` and `R7`/`R6` into `U3A`/`U3B`, not the line-out node - so this revision
-  changes nothing there and the headphone output stays stereo in both selector positions.
+  ones). `kicad-cli pcb drc --schematic-parity` == **0 errors, 0 unconnected, 146 parity items**
+  (145 baseline + the new `J22` field comparison, same class), 81 violations = 72
+  `lib_footprint_mismatch` (baseline 73 minus the two removed footprints plus `J22`) + the same 5
+  `silk_overlap` and 4 `silk_over_copper` items as the baseline: no new violation class and no new
+  silkscreen item. The B.Cu GND zone was re-poured once, in Phase A (only 1 of its 49 filled
+  polygons changed - the clearance channel for the new B.Cu link plus the copper regained from the
+  deleted `R52`/`J19` tracks), which accounts for 1503 of the 2057 changed board lines.
+* **Netlist proof, both positions** (passive parts only: resistors, capacitors, pots, jumpers;
+  ICs excluded because their internal path is intentional and per-channel; supply/GND/bias nets
+  blocked): 1.3.5 has `IN_L -J19- NORM_R -R52- BUFF_IN_R` *and* `BUFF_IN_L -R5- IN_R`; after Phase A
+  and in Phase B's stereo position there is **no passive path at all** between the left and right
+  chains; in the mono position the only such path is the intended one,
+  `BUFF_IN_L -J22- RIN_SEL -R16- RFB_B`, with `IN_R` reduced to its 2 M bias return.
+* **Out of scope and proven unchanged** (block-by-block text comparison): `U3`, `R6`/`R7`,
+  `RV1`/`RV2`, `C3`/`C7`/`C8`/`C9`/`C10`/`C11`/`C12`/`C13`, `R8`/`R9`/`R10`/`R12`, `J6` (headphone
+  jack), `J1` (line jack), `C18`/`C19`, `R20`/`R21`, the loud-gain parts `R53`/`R54` + `J20`/`J21`,
+  `R17`/`R18`/`R19`, `U2`/`U4`, `R14`/`R15`, the 1.65 V bias network, the jack footprints and every
+  `gr_*`/Edge.Cuts item are byte-identical. `R5`'s footprint block differs only in its pad-1 net
+  line and `R16`'s only in its pad-2 net line; `R24`'s is identical.
+* **Headphone consequence (explicit).** The headphone stage is fed from `BUFF_IN_L`/`BUFF_IN_R`
+  through `RV2`/`RV1` and `R7`/`R6` into `U3A`/`U3B` - a different node from the line amplifier
+  input - so the selector changes nothing in the headphone block, no headphone component is touched,
+  and mono is confined to the line output. The consequence is that in mono the right input is still
+  audible in the right ear through the headphone output: the headphone path stays stereo in both
+  selector positions.
 * **Still true (unchanged, tracked separately):** the stale production exports / pinned fingerprint
   issue documented in `production/EXPORT_BLOCKER.md`; `tools/regenerate_production.py` still refuses
   to re-export because `base.kicad_pcb` does not match the `routed_pcb_sha256` pin in
   `verification/fixed-geometry.json`. When that pin is re-baselined, `R5`/`R24` collapse into the
-  existing C11512 BOM line and `R52`/`J19` disappear from the excluded set.
+  existing C11512 BOM line and `R52`/`J19`/`J22` (bare copper pads) join the excluded set.
 
 ## 1.3.5
 **Line-out loud-gain option (Phase 2 of the line-out/level work, the item 1.3.4 recorded as

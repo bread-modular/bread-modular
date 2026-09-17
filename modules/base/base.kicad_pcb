@@ -203,6 +203,7 @@
 
 	(net 81 "RFB_B")
 	(net 80 "LFB_B")
+	(net 82 "RIN_SEL")
 	(footprint "Resistor_SMD:R_0402_1005Metric"
 		(layer "F.Cu")
 		(uuid "003964ce-4cff-4858-bae2-49e8a5a200ee")
@@ -7332,7 +7333,7 @@
 			(size 0.54 0.64)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(net 21 "IN_R")
+			(net 82 "RIN_SEL")
 			(pintype "passive")
 			(uuid "f4f8142e-5a9b-4c93-ad64-75e4b4753f3a")
 		)
@@ -46425,14 +46426,6 @@
 		(uuid "4bdc86bc-b166-43bb-8e34-02701daa0b11")
 	)
 	(segment
-		(start 249.682 74.422)
-		(end 250.317 73.787)
-		(width 0.3)
-		(layer "F.Cu")
-		(net 21)
-		(uuid "13d9ecda-3e06-492b-96fe-92b01de17115")
-	)
-	(segment
 		(start 238.125 86.745)
 		(end 237.455 86.075)
 		(width 0.3)
@@ -46475,7 +46468,7 @@
 	)
 	(segment
 		(start 241.681 74.422)
-		(end 249.682 74.422)
+		(end 249.017 74.422)
 		(width 0.3)
 		(layer "F.Cu")
 		(net 21)
@@ -46514,14 +46507,6 @@
 		(layer "F.Cu")
 		(net 21)
 		(uuid "85cb72ac-ff12-4637-9f67-917b9295886e")
-	)
-	(segment
-		(start 250.317 73.787)
-		(end 250.317 61.468)
-		(width 0.3)
-		(layer "F.Cu")
-		(net 21)
-		(uuid "9fd4ab8a-d15c-4097-a60b-3cc9f5d01c24")
 	)
 	(segment
 		(start 241.3 74.803)
@@ -49424,6 +49409,46 @@
 		(uuid "a1000000-0000-4000-8000-000000000002")
 	)
 	(segment
+		(start 250.317 66.5)
+		(end 250.317 61.468)
+		(width 0.2)
+		(layer "F.Cu")
+		(net 82)
+		(uuid "4418b103-11b9-46b7-90b3-babfbf5e6916")
+	)
+	(segment
+		(start 249.017 66.5)
+		(end 249.017 74.422)
+		(width 0.2)
+		(layer "F.Cu")
+		(net 21)
+		(uuid "21f342fd-be9f-4f05-b715-a8916e808199")
+	)
+	(segment
+		(start 251.617 66.5)
+		(end 252.9 66.5)
+		(width 0.2)
+		(layer "F.Cu")
+		(net 24)
+		(uuid "f04bf74d-8c07-47bf-9293-b25fb38a278a")
+	)
+	(segment
+		(start 252.9 66.5)
+		(end 252.9 84.0)
+		(width 0.2)
+		(layer "F.Cu")
+		(net 24)
+		(uuid "f550fb5f-53f5-4c8c-9a0d-f2ad10efb16d")
+	)
+	(segment
+		(start 252.9 84.0)
+		(end 249.936 86.549)
+		(width 0.2)
+		(layer "F.Cu")
+		(net 24)
+		(uuid "bcab719a-d89b-4aeb-9c8c-3e2781397cef")
+	)
+	(segment
 		(start 238.25 85.6)
 		(end 238.0 86.0)
 		(width 0.2)
@@ -50454,7 +50479,251 @@
 					(xyz 0 0 0)
 				)
 			)
-		)(zone
+		)
+	(footprint "Jumper:SolderJumper-3_P1.3mm_Bridged12_Pad1.0x1.5mm"
+		(layer "F.Cu")
+		(uuid "c056d76e-31e1-4ed1-b96a-0b12645294af")
+		(at 250.317 66.5)
+		(descr "SMD Solder 3-pad Jumper, 1x1.5mm Pads, 0.3mm gap, pads 1-2 bridged with 1 copper strip")
+		(tags "net tie solder jumper bridged")
+		(property "Reference" "J22"
+			(at 0 -1.8 0)
+			(layer "F.SilkS")
+			(uuid "e0e7eb17-474c-4870-ae13-4fac079162ef")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "SolderJumper_3_Bridged12"
+			(at 0 2 0)
+			(layer "F.Fab")
+			(uuid "775520b4-3715-4fd4-aecb-7c2c42749d02")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6febcd08-15d9-40d7-a61f-a21b85b27ab9")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Description" "Line-out stereo/mono selector (3-pad solder jumper, pads 1-2 bridged as shipped): pad1 = IN_R (stereo), pad2 = the right amp input (R16), pad3 = BUFF_IN_L (mono). Cut the 1-2 bridge and bridge 2-3 for mono."
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1cae15cd-6162-4461-acfd-c181e92b846e")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "LCSC" ""
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "328adcd0-d67c-44b1-a098-992a2a05e666")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "MPN" ""
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "1ed3931f-a116-4dd2-a027-988e527b8a11")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "SolderJumper*Bridged*")
+		(path "/b42bc9d9-a9e8-454c-9398-97501b0167a8")
+		(sheetname "/")
+		(sheetfile "base.kicad_sch")
+		(attr smd exclude_from_pos_files exclude_from_bom allow_soldermask_bridges)
+		(net_tie_pad_groups "1, 2")
+		(fp_poly
+			(pts
+				(xy -0.9 -0.3) (xy -0.4 -0.3) (xy -0.4 0.3) (xy -0.9 0.3)
+			)
+			(stroke
+				(width 0)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Cu")
+			(uuid "c998d3f3-a0d2-429b-82ba-67c49221b3c0")
+		)
+		(fp_rect
+			(start -0.8 -0.75)
+			(end 0.8 0.75)
+			(stroke
+				(width 0)
+				(type default)
+			)
+			(fill yes)
+			(layer "F.Mask")
+			(uuid "de9788c9-15eb-4ca3-abc8-aaa64ae813e5")
+		)
+		(fp_line
+			(start -2.05 -1)
+			(end 2.05 -1)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "a42b1727-5565-453d-a5ba-e29c480df270")
+		)
+		(fp_line
+			(start -2.05 1)
+			(end -2.05 -1)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "baf2443c-e99f-44f4-879d-2a7ca2a6780e")
+		)
+		(fp_line
+			(start -1.6 1.5)
+			(end -1 1.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "c28811c0-3eb9-451f-8f31-28c1d1185024")
+		)
+		(fp_line
+			(start -1.3 1.2)
+			(end -1.6 1.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "dcfeb3f6-c32d-4ffa-a944-f4f0bcb096ff")
+		)
+		(fp_line
+			(start -1.3 1.2)
+			(end -1 1.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "445d5fbd-f17a-4d09-bc51-59f0732922d2")
+		)
+		(fp_line
+			(start 2.05 -1)
+			(end 2.05 1)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "519d57f4-f8a1-4e82-b650-a753acbfc7bf")
+		)
+		(fp_line
+			(start 2.05 1)
+			(end -2.05 1)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "9bb10de9-63db-4ceb-8262-7d3027f14554")
+		)
+		(fp_line
+			(start -2.3 -1.25)
+			(end -2.3 1.25)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "80040418-3264-4888-bc07-deea4fe0ef3e")
+		)
+		(fp_line
+			(start -2.3 -1.25)
+			(end 2.3 -1.25)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "d81b6d5e-a617-4e2c-947b-381e1730de1d")
+		)
+		(fp_line
+			(start 2.3 1.25)
+			(end -2.3 1.25)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "7846798b-5f62-4f77-831f-2458afc02a13")
+		)
+		(fp_line
+			(start 2.3 1.25)
+			(end 2.3 -1.25)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "86b6b428-ae68-4b49-b616-69333ba618be")
+		)
+		(pad "1" smd rect
+			(at -1.3 0)
+			(size 1 1.5)
+			(layers "F.Cu" "F.Mask")
+			(uuid "f8735127-544d-47d4-87bd-8803b385b55c")
+			(net 21 "IN_R")
+			(pintype "passive")
+		)
+		(pad "2" smd rect
+			(at 0 0)
+			(size 1 1.5)
+			(layers "F.Cu" "F.Mask")
+			(uuid "bf3c9cd6-83cc-4887-9c9e-b6bcb574263f")
+			(net 82 "RIN_SEL")
+			(pintype "passive")
+		)
+		(pad "3" smd rect
+			(at 1.3 0)
+			(size 1 1.5)
+			(layers "F.Cu" "F.Mask")
+			(uuid "a7cee2bd-9a14-4210-8d81-e7cfaad5c385")
+			(net 24 "BUFF_IN_L")
+			(pintype "passive")
+		)
+		(embedded_fonts no)
+	)
+	(zone
 		(net 1)
 		(net_name "GND")
 		(layer "B.Cu")
