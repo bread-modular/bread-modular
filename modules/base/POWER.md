@@ -11,14 +11,16 @@ follow-up (Phase 2) chat. Nothing in this note overrides the schematic.
 ```
 USB-C J5 (power only, VBUS)
    │
-   ├── F1  polyfuse 1.1 A hold / 16 V ──► net VBUS_PROT ──┬── D2 TVS (SMAJ5.0A) ── GND
-   │        (input protection)                           ├── C17 22 µF, C21 0.1 µF, D1 status LED
-   │                                                     └── FB1 ──► LDO_VIN ──► U5 AP2112K-3.3 ──► +3.3V
-   │                                                                                (unchanged since v1.2.0)
-   └── F2  polyfuse 1.1 A hold / 16 V ──► net 5V_SYS ────┬── D3 TVS (SMAJ5.0A) ── GND
-            (independent 5 V protection)                ├── C46 100 µF/16 V (1210 X5R), C47 0.1 µF
-                                                        ├── PWR_FLAG (ERC: externally sourced)
-                                                        └── 12 × U6..U17  IN1
+  F1  polyfuse 1.1 A hold / 16 V        (input protection, in series with VBUS)
+   │
+   ▼
+net VBUS_PROT ──┬── D2 TVS (SMAJ5.0A) ── GND
+                ├── C17 22 µF, C21 0.1 µF, D1 status LED
+                ├── FB1 ──► LDO_VIN ──► U5 AP2112K-3.3 ──► +3.3V   (unchanged since v1.2.0)
+                └── F2  polyfuse 1.1 A hold / 16 V ──► net 5V_SYS ─┬── D3 TVS (SMAJ5.0A) ── GND
+                                                                   ├── C46 100 µF/16 V (1210 X5R), C47 0.1 µF
+                                                                   ├── PWR_FLAG (ERC: externally sourced)
+                                                                   └── 12 × U6..U17  IN1
 ```
 
 Per module slot *n* (1…12):
@@ -70,14 +72,25 @@ SEL polarity is the safety-critical requirement, therefore `IN1 = 5V_SYS` and
 `IN2 = +3.3V`. The external behaviour is exactly as specified (shunt fitted ⇒ 5 V,
 absent ⇒ 3.3 V).
 
-**D2 — current limit ≈ 312 mA, outside the datasheet's recommended window.**
-The proven part is TPS2111APWR: `ILIM = 500 / R_ILIM`, recommended adjustment range
-0.63–1.25 A (below 0.63 A the datasheet does not guarantee current-limit accuracy).
-`R_ILIM = 1.6 kΩ` gives ≈ 312 mA nominal, i.e. the requested ~250–300 mA, with the
-accuracy caveat above. If the in-spec window is preferred, change the 12 resistors to
-`750 Ω` (≈ 667 mA) — no other change is needed.
+**D2 — per-slot current limit is NOT inside the datasheet's guaranteed range.**
+The brief asks for ~250–300 mA per slot. The only JLCPCB-assemblable manual-select
+power mux with current-limit programming is TPS2111APWR, whose *guaranteed*
+adjustment range is 0.63–1.25 A (`ILIM = 500 / R_ILIM`); below 0.63 A TI does not
+specify accuracy. `R_ILIM = 1.6 kΩ` gives ≈ 312 mA *by extrapolation* — that number is
+**not a datasheet-guaranteed limit** and must not be quoted as meeting the
+250–300 mA requirement. It is implemented as the closest match to the requested
+value, and is **provisional pending an explicit decision**:
+
+* accept the extrapolated ≈ 312 mA setting (protection level as requested, accuracy
+  unspecified — the actual limit could be materially lower and could nuisance-trip a
+  heavy module), or
+* change the twelve 1.6 kΩ resistors to `750 Ω` for ≈ 667 mA, inside the guaranteed
+  range (weaker but specified protection), or
+* drop the deliverable-level requirement and re-scope (e.g. a load-switch pair with a
+  different current-limit scheme).
+
 The part that fits 0.31–0.75 A exactly (TPS2114A) was rejected because **JLCPCB stock
-= 0** (TPS2114APWR, TPS2110APWR). The TPS2116 would match the 1.6–5.5 V range and is
+= 0** (TPS2114APWR, TPS2110APWR). The TPS2116 matches the 1.6–5.5 V range and is
 cheap/stocked, but it has **no current-limit programming at all**, so it fails the
 brief.
 
@@ -91,12 +104,14 @@ parts are **D2 = VBUS TVS, D3 = 5V_SYS TVS, F1 = VBUS polyfuse, F2 = 5V_SYS poly
    5 V mode can exceed 1 A in aggregate and the PPTC hold current also derates with
    ambient temperature. If more than ~6 digital modules may run at once, re-size F1
    (e.g. 1.5–2 A hold) or document a maximum module count. Not changed here.
-2. **TVS coordination.** SMAJ5.0A clamps at 9.2 V at peak pulse current (7.0 V max
-   breakdown), which is above the 6 V absolute maximum of the TPS2111A (and of the
-   AP2112K). This is inherent to a "5 V" TVS — a clamp below 6 V would conduct on the
-   normal 5 V rail. The TVS only conducts during a surge; the 100 µF/0.1 µF keep the
-   rail stiff. Confirm this is acceptable, or add a series element / a lower-voltage
-   TVS with the DC-bias trade-off documented.
+2. **TVS coordination is UNRESOLVED protection, not just a note.** SMAJ5.0A clamps at
+   9.2 V at peak pulse current (7.0 V max breakdown) while the downstream parts
+   (TPS2111A, AP2112K) are rated 6 V absolute maximum. Bulk capacitance does not
+   establish safety here — it only slows the rail. A rated solution is required and
+   needs approval, e.g. a lower-clamp device (accepting DC leakage/derating on the 5 V
+   rail), a series impedance ahead of the semiconductors, or explicitly accepting a
+   surge beyond the downstream absolute maximum with the risk documented. Not resolved
+   in v1.3.0.
 3. **100 µF/10 V vs 16 V.** The brief asks ≥ 100 µF/10 V; C46 is **100 µF/16 V X5R
    1210** (better DC-bias derating, ≈ 50–60 µF effective at 5 V).
 4. **Current-limit accuracy** (D2 above) — needs a decision.
@@ -108,10 +123,11 @@ parts are **D2 = VBUS TVS, D3 = 5V_SYS TVS, F1 = VBUS polyfuse, F2 = 5V_SYS poly
 
 * **F1 and D2 must be placed next to J5 / the VBUS entry**, before FB1, with the TVS
   return to the connector ground (short loop).
-* **The 2-pin jumpers J7…J18 must be reachable while a module is fitted but hidden
-  when one is mated**: place them **over/on the slot power rail, close to it**, and
-  **not in the gap between the ground socket (`GND_n`) and the power socket
-  (`VSUPPLY_n`)**.
+* **The 2-pin jumpers J7…J18 must sit hidden underneath a mated module** (set the
+  shunt *before* plugging a module in, then remove the module to change it). Place
+  them **over/on the slot power rail, close to it**, and **not in the gap between the
+  ground socket (`GND_n`) and the power socket (`VSUPPLY_n`)**. They must stay
+  accessible with the module removed and the shunt must not foul the module body.
 * Use a low-profile header: v1.3.0 uses a **1×02 2.00 mm vertical header**
   (`Connector_PinHeader_2.00mm:PinHeader_1x02_P2.00mm_Vertical`, ~2.8 mm body,
   4 mm pins) so a mated module can sit above it. The mating shunt is user-fitted.
@@ -134,7 +150,7 @@ New parts (all verified, in stock at the time of writing):
 | U6–U17 | TPS2111APWR (2:1 power mux, manual select, ILIM, reverse blocking) | TSSOP-8 (`Package_SO:TSSOP-8_4.4x3mm_P0.65mm`) | C471060 | $1.38 | yes (stock 2482) |
 | F1, F2 | MF-MSMF110/16-2 (PPTC 1.1 A hold / 16 V) | 1812 (`Fuse:Fuse_1812_4532Metric`) | C210834 | $0.066 | yes (stock 24 734) |
 | D2, D3 | SMAJ5.0A/TR13 (TVS unidirectional 400 W) | SMA (`Diode_SMD:D_SMA`) | C78401 | $0.044 | yes (stock 98 557) |
-| C46 | CL32A107MPVNNNE 100 µF 16 V X5R (brief: ≥100 µF/10 V) | 1210 (`Capacitor_SMD:C_1210_3225Metric`) | C394395 | $0.52 | yes (stock 39 609) |
+| C46 | EMK325ABJ107MM-T (Taiyo Yuden) 100 µF 16 V X5R (brief: ≥100 µF/10 V) | 1210 (`Capacitor_SMD:C_1210_3225Metric`) | C394395 | $0.52 | yes (stock 39 609) |
 | C47, C22…C45 (0.1 µF) | CL05B104KO5NNNC 100 nF 16 V X7R | 0402 | C1525 | $0.0045 | yes (basic) |
 | C22…C45 (1 µF) | CL05A105KA5NQNC 1 µF 25 V X5R | 0402 | C52923 | $0.0099 | yes (basic) |
 | R28…R51 (pulldown) | 0402WGF1003TCE 100 kΩ 1 % | 0402 | C25741 | $0.0025 | yes (basic) |
@@ -171,7 +187,15 @@ kicad-cli sch export bom base.kicad_sch -o production/bom.csv \
 
 The 12 channel blocks are deliberately *repeated* (not hierarchical) so that every
 slot can be reviewed, probed and modified independently; the layout is a 4 × 3 grid
-in the free area of the sheet, each block identical.
+in the free area of the sheet, each block identical (x 241…466 mm, y 190…270 mm; the
+protection block sits at x 254…292 mm, y 122…146 mm).
+
+Placement was chosen from the free area of the A2 sheet and checked mechanically: the
+rendered v1.2.0 sheet has **no drawing element inside the interior of any new block**
+(SVG element coordinates were compared for four blocks and the protection block), and
+the nearest pre-existing item is ≈ 1 mm clear of the new labels. This is *not* a
+substitute for a human look at the rendered sheet — please eyeball the plotted
+schematic once before/while starting Phase 2.
 
 `production/netlist.ipc`, `positions.csv`, `designators.csv` and `base.zip` are
 PCB/fabrication-toolkit outputs and were **left untouched** — they can only be
