@@ -1,5 +1,47 @@
 # Changelog
 
+## 1.3.0
+Power upgrade: input protection, a protected 5 V rail and per-slot rail selection.
+
+* **Input protection** at the USB-C connector: **F1** resettable polyfuse
+  (BSMD1812-200-16V, 2 A hold / 4 A trip / 16 V) in series with VBUS and TVS **D2**
+  (SMAJ5.0A) on the protected node, both upstream of FB1.
+* **New protected 5V_SYS rail**, tapped from protected VBUS (after F1, before FB1) with its
+  own polyfuse **F2** (MF-MSMF110/16-2, 1.1 A hold / 2.2 A trip / 16 V), TVS **D3**,
+  100 uF/16 V + 0.1 uF bulk and an ERC PWR_FLAG. Protection hierarchy: F1 (2 A hold) protects
+  the source/wiring, F2 (1.1 A hold) the 5 V branch, U5's own internal limit the 3.3 V branch.
+* **Accepted limitation (documented in POWER.md):** the TVS diodes clamp at 9.2 V at peak
+  pulse, above the 6 V absolute maximum of the mux inputs and of U5; VBUS_PROT can therefore
+  transiently exceed 6 V during a surge. No rated OVP is fitted in v1.3.0; the planned (not
+  implemented) mitigation is a rated OVP switch upstream of both branches.
+* **12 x per-slot 2:1 power mux** (**U6..U17**, TPS2111APWR, extended part, 2 482 in stock):
+  IN1 = 5V_SYS, IN2 = +3.3 V, OUT = the slot rail feeding all five pins of the existing
+  `VSUPPLY_n` socket (net `VSLOT_n`). Manual mode (D0 strapped low), reverse and
+  cross-conduction blocking. (The input labels are swapped relative to the original brief so
+  that the mandated jumper polarity - shunt = 5 V - is preserved; see POWER.md.)
+* **Per-slot current limit** `R28, R30, ... R50 = 750 ohm` (ILIM) -> about 667 mA nominal,
+  inside the datasheet-guaranteed 0.63-1.25 A adjustment range of the TPS2111A. The
+  odd-numbered `R29, R31, ... R51` are the 100 k SEL pulldowns, not part of the limit.
+* **Per-slot selection**: `SEL_n` with a 100 k pulldown and a low-profile 1x02 header
+  (**J7..J18**, 2.00 mm, hidden under a mated module). **Shunt fitted = 5V_SYS; shunt absent
+  or lost = +3.3 V (fail-safe).** Slot current flows through the mux only - the header carries
+  the select level, never slot power.
+* Per-mux decoupling 1 uF + 0.1 uF on the slot rail.
+* **Sourcing**: LCSC/MPN/Manufacturer fields added to every symbol; `production/bom.csv`
+  regenerated and every `TO-VERIFY` line closed. FB1/FB2: the designed GZ2012E800TF is not in
+  the JLCPCB library, so the fitted part is the 80 ohm-class equivalent **PZ2012D800-3R0TF**
+  (C12389: 80 ohm @100 MHz +/-25 %, 3 A, 40 mohm - same impedance class and same 0805 land as
+  the design intent, higher current and lower DCR; same-family 1 A alternative C316425
+  GZ2012D800TF). Remaining `NOT-JLC` (4 lines, by design, hand-solder): the four 3.5 mm jacks
+  and the two RV09 pots; plans recorded in POWER.md. The per-slot 2.00 mm jumper shunts are a
+  user-fit accessory, not on the assembly BOM; the matching stocked part is C5664.
+* BOM values fixed (the 24 slot sockets were mislabelled `Conn_02x05_Socket` although they are
+  1x05; the SPICE sources V1..V3 are no longer offered for assembly).
+* No LED is added for 5 V indication (module firmware indicates its own rail).
+* U5, the 3.3 V regulator and the **FB1/FB2 circuit** are functionally unchanged (the beads are
+  simply ordered as the stocked 80 ohm equivalent noted above). PCB placement/routing is NOT
+  part of this revision - see POWER.md for the Phase 2 constraints.
+
 ## 1.2.0
 Introduce a new LDO (AP2112K-3.3) which has an EN functionality.
 So, we can implement the reset button without using additional components.
