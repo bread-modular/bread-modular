@@ -150,12 +150,19 @@ Known, deliberate DRC deltas:
 * **Input over-voltage**: the AP7361C's absolute maximum input is 6.5V
   (recommended 6.0V). The base's protection is a PPTC plus an SMAJ5.0A TVS whose
   peak clamp is 9.2V, which the base's own v1.3.0 note already accepts as an
-  exposure for its AP2112K; `32bit-5v` inherits the same exposure. A pin-compatible
-  alternative with an 18V input (e.g. LDL1117S33R, LCSC `C435835`) can be
-  substituted if that ever needs closing.
+  exposure for its AP2112K; `32bit-5v` inherits the same exposure. A part with an
+  ≥18V input (e.g. LDL1117S33R, LCSC `C435835`) would close it, but **only after
+  re-checking its SOT-223 pinout against this footprint** — see the warning below.
 * **Stock**: LCSC showed ~295 pieces of `C500795` at the time of writing — in
-  stock but thin. `AMS1117-3.3` (LCSC `C6186`, JLCPCB basic, 1M+ stock) is
-  pin-compatible in SOT-223 (1=GND, 2=OUT/tab, 3=IN) and can be dropped in, at
-  the cost of its 1.3V dropout and 5mA quiescent current.
+  stock but thin.
+* ⚠️ **Do not drop an AMS1117-3.3 into this footprint.** `U5` is wired for the
+  AP7361C-33E pinout, which for SOT-223 is **1 = IN, 2 = GND (and the tab),
+  3 = OUT**. The AMS1117/LM1117 family (LCSC `C6186` etc.) uses the mirrored
+  SOT-223 pinout **1 = GND/ADJ, 2 = OUT (and the tab), 3 = IN**. Substituting one
+  for the other would connect the regulator's ground to +5V and its output to
+  ground — i.e. a dead short on the slot rail. Any substitute must have its
+  pinout verified against *this* footprint (the tab is a separate pad here, so a
+  180° rotation is not a fix); otherwise the footprint and its net assignment
+  have to change with it.
 * **Bottom-side assembly**: `U5`, `C40`, `C41` are the module's first bottom-side
   SMD parts, so the JLCPCB CPL now contains `bottom` lines for this module.
