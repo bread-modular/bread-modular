@@ -2,9 +2,10 @@
 
 **Electrical layout complete; the mechanical assembly release is FAB-READY as of
 v1.3.2.** The socket gender question is resolved — the base must carry **female**
-1x05 2.54 mm sockets, because all 27 module boards carry **male** `Conn_01x05_Pin`
-headers on the bottom side — and the mated stack height is now proved from
-datasheets in `stack-height.json`. No assembled stack has been measured yet; a
+1x05 2.54 mm sockets, because 25 of the 27 inspected module boards (28 exist;
+`32bit` cannot be loaded standalone) carry a **male** `Conn_01x05_Pin` header on
+the bottom side — and the mated stack height is now **calculated from datasheet
+dimensions** in `stack-height.json`. No assembled stack has been measured yet; a
 mating trial is still advised. The ordering checklist is
 [`../production/RELEASE_STATUS.md`](../production/RELEASE_STATUS.md) and the
 engineering rationale is POWER.md section 9.
@@ -99,9 +100,10 @@ margin remains. Worst case here means every stacked nominal dimension moves by
 the drawings' general `X.X ±0.30` tolerance in the direction that closes the gap.
 The **minimum socket insulator height is 6.3 mm**, set by the need to swallow the
 module's worst-case 6.3 mm mating pin (the jumper-clearance bound is the weaker
-one at 4.9 mm), so the assembly notes state a practical minimum of **6.5 mm**.
-That also covers the tallest 5.0 mm shunt option of the C5664 family
-(worst-case clearances: 3.5 mm → 4.4 mm, 4.5 mm → 3.9 mm, 5.0 mm → 3.4 mm).
+one at 4.9 mm); because a part is bought by its nominal label, the assembly note
+asks for a **6.6 mm nominal part**. That also covers the tallest 5.0 mm shunt
+option of the C5664 family — with the jumper's own tolerance applied to the shunt
+side, worst-case clearances are 3.5 mm → 3.8 mm, 4.5 mm → 3.3 mm, 5.0 mm → 2.8 mm.
 
 `tools/verify_stack_height.py` recomputes the whole table, fails the release if
 any published number disagrees, and additionally registers every module footprint
@@ -112,10 +114,14 @@ body outline is **0.45 mm** away in X/Y, and the module connector insulators sit
 1.9 mm above the jumper's worst-case top.
 
 Still open, and listed in `../production/manifest.json` as
-`physical_validation_pending`: no assembled stack has been measured, the module
-male-header part number is not annotated on the module PCBs, slot 1's socket row
-keeps its pre-existing −0.12 mm / −0.10 mm offset, and 4mix/imix place their
-power headers on `F.Cu` where they cannot mate downwards as drawn.
+`physical_validation_pending`: no assembled stack has been measured; the module
+male-header part number is not annotated on the module PCBs; the socket drawings
+publish the housing height but not the internal contact depth, so full pin
+engagement is assumed rather than proved; slot 1's socket row keeps its
+pre-existing −0.12 mm / −0.10 mm offset; and 4mix/imix place their power headers
+on `F.Cu` where they cannot mate downwards as drawn. `stack-height.json` also
+persists the per-module `exceptions` and the `coverage` counts behind these
+claims, including the 1.4 mm top-side THT tail that those two boards would add.
 
 ## Trace widths, clearances and ground
 
@@ -240,7 +246,7 @@ connections, or schematic-parity findings. It emits:
   and artifact SHA-256 hashes, the hand-solder override hash and the pending
   physical validations. The JLC report contains source hashes as well.
 
-Gerber/CPL generation succeeded. The socket/shunt stack is proved from datasheets
+Gerber/CPL generation succeeded. The socket/shunt stack is calculated from datasheet dimensions
 (above); the assembler's part and rotation preview is still a manual step before
 an order is approved.
 
@@ -353,8 +359,12 @@ guard. Instead:
   now reports `stack_height_verified: true`, `release_status: fab-ready` and an
   explicit `physical_validation_pending` list instead of the old hold text.
 * `tools/verify_stack_height.py` produces `stack-height.json` — the datasheet
-  calculation, the module gender inspection and the per-slot envelope check
-  described in the stack-height section above.
+  calculation, the module gender inspection, the coverage counts and the
+  per-slot envelope check described in the stack-height section above.
+* `tools/estimate_cost.py` produces `../production/cost-estimate.json`, the
+  sourced component cost estimate quoted in `../production/RELEASE_STATUS.md`.
+  It is the only tool that touches the network, and only with `--refresh`, so the
+  regeneration path above stays offline.
 
 **Artifact delta.** After regeneration the eleven gerber/drill files differ from
 the previously committed ones **only in their two KiCad export-date comment lines
@@ -365,6 +375,8 @@ coordinate is unchanged, and the zip contents differ only by the same 22 lines.
 and `jlcpcb/base/{bom,positions}.csv` regenerate byte-identically.
 
 **Still not verified:** a measured assembled stack (mating trial), the module
-male-header part number (not annotated on the module PCBs), the `5V14` straight
-2x05 female part number, per-board cost (only the two hand-solder part prices
-were checked), and the assembler's part/rotation preview.
+male-header part number (not annotated on the module PCBs), the internal socket
+contact depth, the `5V14` straight 2x05 female part number, the PCB-fabrication
+and SMT-assembly share of the board cost (a quote is required; the component
+estimate in `cost-estimate.json` excludes it), and the assembler's part/rotation
+preview.

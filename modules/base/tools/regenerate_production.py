@@ -42,12 +42,17 @@ if pinned is None:fail('verification/fixed-geometry.json has no routed_pcb_sha25
 if sha(PCB)!=pinned:fail(f'base.kicad_pcb changed ({sha(PCB)} != pinned {pinned}). Copper must not move.')
 spec=json.loads(HANDSOLDER.read_text())
 hand_groups={g['id']:g for g in spec['groups']}
-hand_refs={ref for g in spec['groups'] for ref in g['refs']}
-override_refs={ref for g in spec['groups'] if g.get('override_bom') for ref in g['refs']}
-if len(hand_refs)!=len({r for g in spec['groups'] for r in g['refs']}):fail('duplicate reference in hand-solder.json')
+hand_ref_list=[ref for g in spec['groups'] for ref in g['refs']]
+hand_refs=set(hand_ref_list)
+override_ref_list=[ref for g in spec['groups'] if g.get('override_bom') for ref in g['refs']]
+override_refs=set(override_ref_list)
+if len(hand_ref_list)!=len(hand_refs):fail('duplicate reference in hand-solder.json')
+if len(override_ref_list)!=len(override_refs):fail('duplicate reference in a hand-solder override row')
+for g in spec['groups']:
+    if len(g['refs'])!=g['qty']:fail(f'group {g["id"]}: qty {g["qty"]} != {len(g["refs"])} refs')
 
-run(sys.executable,BASE/'tools/verify_power.py','--report',VERIFY/'connectivity.json')
 run(sys.executable,BASE/'tools/verify_stack_height.py','--report',VERIFY/'stack-height.json')
+run(sys.executable,BASE/'tools/verify_power.py','--report',VERIFY/'connectivity.json')
 run('kicad-cli','pcb','drc','--format','json','--schematic-parity','--severity-all','-o',VERIFY/'drc-after.json',PCB)
 drc=json.loads((VERIFY/'drc-after.json').read_text())
 if drc['unconnected_items'] or drc['schematic_parity'] or any(v['severity']=='error' for v in drc['violations']):
@@ -119,13 +124,24 @@ if not all('not an smd' in reason.lower() for reason in export['excluded'].value
 # ------------------------------------------- derived hand-solder list --------
 with (PROD/'hand-solder.csv').open('w',newline='',encoding='utf-8-sig') as f:
     w=csv.writer(f,lineterminator='\n')
-    w.writerow(['Designator','Group','Qty','Footprint','Value','Assembly','Supply','JLCPCB','Part to fit','Recommended'])
+    w.writerow(['Designator','Qty','Group','GroupQty','Footprint','Value','Assembly','Supply','JLCPCB','Part to fit','Recommended'])
     for g in spec['groups']:
         for ref in sorted(g['refs'],key=natural):
             fp=fps[ref]
-            w.writerow([ref,g['id'],len(g['refs']),str(fp.GetFPID().GetLibNickname())+':'+str(fp.GetFPID().GetLibItemName()),
+            w.writerow([ref,1,g['id'],len(g['refs']),str(fp.GetFPID().GetLibNickname())+':'+str(fp.GetFPID().GetLibItemName()),
                         fp.GetValue(),g['assembly'],g['supply'],'excluded (through hole)',
                         g.get('required',g.get('part','')),g.get('recommended','')])
+written=list(csv.DictReader((PROD/'hand-solder.csv').open(encoding='utf-8-sig')))
+if len(written)!=len(hand_refs):fail(f'hand-solder.csv has {len(written)} rows, expected {len(hand_refs)}')
+if sorted(r['Designator'] for r in written)!=sorted(hand_refs):fail('hand-solder.csv references are not unique/complete')
+if sum(int(r['Qty']) for r in written)!=len(hand_refs):fail('hand-solder.csv Qty does not sum to the hand-solder reference count')
+if {r['Group'] for r in written}!={g['id'] for g in spec['groups']}:fail('hand-solder.csv groups differ from hand-solder.json')
+for g in spec['groups']:
+    rows_g=[r for r in written if r['Group']==g['id']]
+    if len(rows_g)!=g['qty'] or any(int(r['GroupQty'])!=g['qty'] for r in rows_g):
+        fail(f'hand-solder.csv group {g["id"]} does not match qty {g["qty"]}')
+    if sorted(r['Designator'] for r in rows_g)!=sorted(g['refs']):
+        fail(f'hand-solder.csv group {g["id"]} references differ from hand-solder.json')
 
 authoritative=BASE/'jlcpcb/base/base-gerbers.zip'
 for dest in [PROD/'base.zip',BASE/'jlcpcb/production_files/GERBER-base.zip']:
@@ -163,6 +179,7 @@ manifest={'release_version':(BASE/'VERSION').read_text().strip(),
 files=[PROD/n for n in ['netlist.ipc','designators.csv','positions.csv','bom.csv','hand-solder.csv',
                         'hand-solder.json','base.zip']]
 files += [f for f in (BASE/'jlcpcb/base').iterdir()]+[BASE/'jlcpcb/production_files/GERBER-base.zip']+list(legacy.iterdir())
+if (PROD/'cost-estimate.json').is_file():files.append(PROD/'cost-estimate.json')
 manifest['files']={str(f.relative_to(BASE)):sha(f) for f in sorted(files,key=lambda f:natural(str(f))) if f.is_file()}
 (PROD/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print(f'Regenerated IPC-D-356, {len(refs)} designators, full BOM/CPL and synchronized all three fabrication archives.')

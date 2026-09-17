@@ -25,7 +25,7 @@
       "supply": "user-supplied",
       "override_bom": true,
       "legacy_part": "C2894928 / PZ254-1-05-Z-8.5 (HCTL) - MALE 1x05 pin header. DO NOT ORDER FOR THIS POSITION.",
-      "required": "FEMALE 1x05 2.54 mm socket, top entry, square holes, insulator height >= 6.5 mm.",
+      "required": "FEMALE 1x05 2.54 mm socket, top entry, square holes, insulator height >= 6.6 mm (nominal).",
       "recommended": "C2897368 / PM254-1-05-Z-8.5 (HCTL)"
     },
     {
@@ -38,7 +38,7 @@
       "supply": "user-supplied",
       "override_bom": true,
       "legacy_part": "C2894928 / PZ254-1-05-Z-8.5 (HCTL) - MALE 1x05 pin header. DO NOT ORDER FOR THIS POSITION.",
-      "required": "FEMALE 1x05 2.54 mm socket, top entry, square holes, insulator height >= 6.5 mm.",
+      "required": "FEMALE 1x05 2.54 mm socket, top entry, square holes, insulator height >= 6.6 mm (nominal).",
       "recommended": "C2897368 / PM254-1-05-Z-8.5 (HCTL)"
     },
     {
@@ -64,8 +64,8 @@
       "supply": "user-supplied",
       "override_bom": true,
       "legacy_part": "C2894966 / PZ254-2-05-Z-8.5 (HCTL) - MALE 2x05 pin header. DO NOT ORDER FOR THIS POSITION.",
-      "required": "FEMALE 2x05 2.54 mm socket, top entry, square holes.",
-      "recommended": "C2897425 / PM254-2-05-W-8.5 (HCTL) - verify hole direction and height, or any 2x05 2.54 mm female socket",
+      "required": "FEMALE 2x05 2.54 mm socket, top entry, square holes, straight (not right-angle).",
+      "recommended": "part number not selected in this pass - pick a straight 2x05 2.54 mm female socket (the HCTL PM254-2-05-W-8.5, C2897425, is the RIGHT-ANGLE variant and must not be used unless the hole direction is re-verified)",
       "discovered_in_this_pass": true
     },
     {
@@ -123,11 +123,10 @@
       "checked_this_pass": true
     },
     "power_expansion_socket": {
-      "lcsc": "C2897425",
-      "mpn": "PM254-2-05-W-8.5",
-      "manufacturer": "HCTL",
-      "description": "2x05 2.54 mm female socket (W = right-angle variant family; verify the straight 2x05 equivalent before ordering)",
-      "stock_note": "not verified in this pass - see assumptions",
+      "lcsc": null,
+      "mpn": null,
+      "description": "straight 2x05 2.54 mm female socket - part number NOT selected in this pass",
+      "candidate_rejected": "C2897425 / PM254-2-05-W-8.5 (HCTL) is the right-angle variant and is not a valid substitute for a top-entry socket",
       "checked_this_pass": false
     },
     "shunt": {
@@ -181,7 +180,8 @@
         "part": "unspecified on the module PCBs - assumed to be the mechanical twin of PZ254-1-05-Z-8.5",
         "insulator_mm": 2.5,
         "mating_pin_mm": 6.0,
-        "mounting": "bottom side (B.Cu) on every module",
+        "solder_tail_mm": 3.0,
+        "mounting": "bottom side (B.Cu) on 25 of the 27 inspected module boards; 4mix and imix mount the same headers on F.Cu",
         "source": "https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928"
       }
     },
@@ -198,7 +198,8 @@
       "clearance_nominal_mm": 5.0,
       "clearance_worst_case_mm": 3.8,
       "minimum_socket_insulator_mm": 6.3,
-      "minimum_socket_insulator_note": "Two lower bounds: (a) swallow the module's worst-case 6.3 mm mating pin, (b) hold the module underside 0.5 mm above the fitted jumper (4.9 mm). The recommended 8.5 mm part is 8.2 mm worst case. The (b) bound stays satisfied even for the tallest 5.0 mm shunt option of the C5664 family, so a 6.5 mm socket is the practical assembly-note minimum."
+      "minimum_socket_insulator_nominal_mm": 6.6,
+      "minimum_socket_insulator_note": "Two lower bounds on the NOMINAL part: (a) swallow the module's worst-case 6.3 mm mating pin, (b) hold the module underside 0.5 mm above the fitted jumper (4.9 mm). 6.3 mm is the requirement; because a part is bought by its nominal label and the drawing tolerance is X.X +/-0.30, the assembly-note minimum to buy is 6.6 mm. The recommended 8.5 mm part is 8.2 mm worst case. The (b) bound holds even for the tallest 5.0 mm shunt option of the C5664 family."
     }
   },
   "sources": {

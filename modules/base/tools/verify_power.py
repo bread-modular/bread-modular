@@ -151,11 +151,19 @@ for name in ['16bit', '8bit', 'mcc', 'wave']:
           [46.99, 40.64, 77.47, 109.22], f'{name}: changed module outline')
     check(any(mm(d.GetPosition()) == [55.88,96.52] and d.GetNetname() == 'GND'
               for f in mod.GetFootprints() for d in f.Pads()), f'{name}: changed registration')
+stack_report_path = BASE / 'verification/stack-height.json'
+stack = json.loads(stack_report_path.read_text()) if stack_report_path.is_file() else None
+check(stack is not None and stack.get('clearance_ok') is True,
+      'verification/stack-height.json is missing or reports insufficient clearance')
 report = {'assertions_passed': checks, 'pcb_sha256': hashlib.sha256(board_path.read_bytes()).hexdigest(),
           'routed_pcb_sha256_pinned': baseline['routed_pcb_sha256'],
           'schematic_sha256': baseline['schematic_sha256'], 'footprints': len(fps), 'new_footprints': len(fps)-len(baseline['footprints']),
           'unchanged_original_footprints': len(baseline['footprints']), 'unchanged_mounting_holes': len(holes),
-          'copper_layers': 2, 'slots': slots, 'stack_height_verified': True,
+          'copper_layers': 2, 'slots': slots,
+          # derived from the current stack report, never asserted here
+          'stack_height_verified': bool(stack['clearance_ok']),
+          'stack_clearance_nominal_mm': stack['clearance_nominal_mm'],
+          'stack_clearance_worst_case_mm': stack['clearance_worst_case_mm'],
           'release_status': 'fab-ready (see production/RELEASE_STATUS.md; the datasheet stack calculation is in verification/stack-height.json)',
           'hand_solder_override': 'The sockets keep their legacy C2894928 schematic/PCB field because this board is pinned byte-identical; the generated production/bom.csv carries NOT-JLC for them (production/hand-solder.json).',
           'physical_validation_pending': ['No assembled stack has been measured: a mating trial of one base plus one module is still advised.',
@@ -164,4 +172,4 @@ report = {'assertions_passed': checks, 'pcb_sha256': hashlib.sha256(board_path.r
 if args.report:
     args.report.write_text(json.dumps(report, indent=2)+'\n')
 print(f'PASS: {checks} assertions; {len(fps)} footprints; 12 logic-only leaf jumpers; fixed geometry preserved.')
-print('STACK HEIGHT: datasheet stack verified (tools/verify_stack_height.py); no assembled stack measured yet.')
+print(f'STACK HEIGHT: clearance {stack["clearance_nominal_mm"]} mm nominal / {stack["clearance_worst_case_mm"]} mm worst case; no assembled stack measured yet.')

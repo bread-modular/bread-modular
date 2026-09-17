@@ -94,15 +94,21 @@ clearance_worst = round(module_worst - envelope_worst, 3)
 need_engagement = round(male['mating_pin_mm'] + tol, 3)
 need_clearance = math.ceil((envelope_worst + margin - (male['insulator_mm'] - tol)) * 100) / 100
 min_socket = max(need_engagement, need_clearance)
+# A part is bought by its nominal label, so the assembly-note minimum must also
+# absorb the same X.X tolerance in the unfavourable direction.
+min_socket_nominal = math.ceil((min_socket + tol) * 10) / 10
 socket_worst = round(socket['insulator_mm'] - tol, 3)
 clearance_ok = clearance_worst >= margin
 check(clearance_ok, f'worst-case clearance {clearance_worst} mm is below the {margin} mm assembly margin')
 check(socket_worst >= min_socket,
       f'recommended socket {socket["insulator_mm"]} mm (worst case {socket_worst}) is below the {min_socket} mm minimum')
-# every plastics-height option of the C5664 ordering code must still clear
+check(min_socket_nominal <= socket['insulator_mm'],
+      f'the {min_socket_nominal} mm assembly-note minimum excludes the recommended {socket["insulator_mm"]} mm part')
+# every plastics-height option of the C5664 ordering code must still clear, with
+# the jumper's own tolerance applied to the shunt side of the stack as well
 shunt_options = {}
 for height in SPEC['recommended_parts']['shunt']['ordering_code_heights_mm']:
-    top = max(jumper['above_board_mm'], jumper['insulator_mm'] + height)
+    top = round(jumper['insulator_mm'] + tol + max(jumper['mating_pin_mm'] + tol, height + tol), 3)
     shunt_options[f'{height} mm'] = round(module_worst - top, 3)
     check(shunt_options[f'{height} mm'] >= margin,
           f'{height} mm shunt height leaves only {shunt_options[f"{height} mm"]} mm')
@@ -111,12 +117,14 @@ for height in SPEC['recommended_parts']['shunt']['ordering_code_heights_mm']:
 import re
 MATING = re.compile(r'^(V_SUPPLY\d+|5V\d+|GND\d+)$')
 modules = {}
+unreadable = []
 for path in sorted((ROOT / 'modules').glob('*/*.kicad_pcb')):
     name = path.parent.name
     if name == 'base':
         continue
     board = p.LoadBoard(str(path))
     if board is None:
+        unreadable.append(name)
         problems.append(f'{name}: kicad_pcb could not be loaded standalone (skipped)')
         continue
     connectors = [f for f in board.GetFootprints()
@@ -136,8 +144,15 @@ for path in sorted((ROOT / 'modules').glob('*/*.kicad_pcb')):
         problems.append(f'{name}: power/ground headers are on {layers}, not the bottom side, '
                         'so they cannot mate downwards with a base socket as drawn')
 check(len(modules) >= 20, f'only {len(modules)} module board(s) inspected')
-bottom = [name for name, m in modules.items() if m['layers'] == ['B.Cu']]
+bottom = sorted(name for name, m in modules.items() if m['layers'] == ['B.Cu'])
+top_side = sorted(name for name, m in modules.items() if m['layers'] != ['B.Cu'])
 check(len(bottom) >= 20, f'only {len(bottom)} module board(s) carry a bottom-side male header')
+# A top-mounted THT header's tail still hangs below the module board and must be
+# added to the interference check on those boards.
+top_side_tail = round(male['solder_tail_mm'] - comp['base_pcb_thickness_mm'], 3)
+top_side_clearance = round(module_worst - top_side_tail - envelope_worst, 3)
+check(top_side_clearance >= margin,
+      f'a top-mounted module header tail would leave only {top_side_clearance} mm')
 
 # --------------------------------- base side (slot geometry + envelopes) -----
 board = p.LoadBoard(str(BASE / 'base.kicad_pcb'))
@@ -187,7 +202,8 @@ published = stack['derived']
 computed = {'jumper_envelope_nominal_mm': envelope_nom, 'jumper_envelope_worst_case_mm': envelope_worst,
             'module_underside_nominal_mm': module_nom, 'module_underside_worst_case_mm': module_worst,
             'clearance_nominal_mm': clearance_nom, 'clearance_worst_case_mm': clearance_worst,
-            'minimum_socket_insulator_mm': min_socket}
+            'minimum_socket_insulator_mm': min_socket,
+            'minimum_socket_insulator_nominal_mm': min_socket_nominal}
 for key, value in computed.items():
     check(abs(float(published[key]) - value) < 0.001,
           f'production/hand-solder.json publishes {key}={published[key]} but the calculation gives {value}')
@@ -207,19 +223,31 @@ report = {
     'module_underside_nominal_mm': module_nom, 'module_underside_worst_case_mm': module_worst,
     'clearance_nominal_mm': clearance_nom, 'clearance_worst_case_mm': clearance_worst,
     'clearance_ok': clearance_ok, 'minimum_socket_insulator_mm': min_socket,
+    'minimum_socket_insulator_nominal_mm': min_socket_nominal,
     'shunt_option_clearance_mm': shunt_options,
     'nearest_module_side_envelope_gap_mm': min_gap,
     'module_bottom_side_footprints_over_jumpers': 0,
+    'coverage': {'module_pcbs_found': len(list((ROOT / 'modules').glob('*/*.kicad_pcb'))) - 1,
+                 'module_pcbs_inspected': len(mod_boards),
+                 'module_pcbs_unreadable': unreadable,
+                 'bottom_mounted_male_headers': len(bottom),
+                 'top_mounted_male_headers': top_side},
+    'top_side_tht_tail': {'tail_below_module_board_mm': top_side_tail,
+                          'worst_case_clearance_mm': top_side_clearance,
+                          'boards': top_side},
+    'exceptions': problems,
     'modules_inspected': len(mod_boards), 'module_connectors': modules,
     'slots': slots,
     'assumptions': ['The module PCBs do not annotate their power/ground header part number; the mechanical twin of PZ254-1-05-Z-8.5 (2.5 mm insulator, 6.0 mm mating pin) is assumed.',
-                    'Header (C2905948) tolerances are not published; the general X.X +/-0.30 mm tolerance of the C5664/PM254 drawings is applied.',
+                    'Header (C2905948) tolerances are not published; the general X.X +/-0.30 mm tolerance of the C5664/PM254 drawings is applied to every stacked dimension.',
+                    'The socket drawings publish the housing height, not the internal contact depth. That the 8.5 mm housing accepts a 6.3 mm pin without bottoming out is an ASSUMPTION, not a datasheet fact.',
                     'No assembled stack has been measured; this is a datasheet calculation, not a mating trial.'],
 }
 if args.report:
     args.report.write_text(json.dumps(report, indent=2) + '\n')
 print(f'PASS: {checks} assertions; clearance {clearance_nom} mm nominal / {clearance_worst} mm worst case '
-      f'(min {margin} mm); min socket height {min_socket} mm; {len(mod_boards)} module boards carry bottom-side male headers.')
+      f'(min {margin} mm); min socket {min_socket} mm requirement ({min_socket_nominal} mm nominal part); '
+      f'{len(mod_boards)} module boards inspected, {len(bottom)} bottom-mounted, {len(top_side)} top-mounted.')
 for line in problems:
     print(f'NOTE: {line}')
 print('PHYSICAL VALIDATION: no assembled stack has been measured. A mating trial is still advised.')

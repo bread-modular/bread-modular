@@ -24,7 +24,7 @@
       "part": "unspecified on the module PCBs - assumed to be the mechanical twin of PZ254-1-05-Z-8.5",
       "insulator_mm": 2.5,
       "mating_pin_mm": 6.0,
-      "mounting": "bottom side (B.Cu) on every module",
+      "mounting": "bottom side (B.Cu) on 25 of the 27 inspected module boards; 4mix and imix mount the same headers on F.Cu",
       "source": "https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928"
     }
   },
@@ -38,13 +38,40 @@
   "clearance_worst_case_mm": 3.8,
   "clearance_ok": true,
   "minimum_socket_insulator_mm": 6.3,
+  "minimum_socket_insulator_nominal_mm": 6.6,
   "shunt_option_clearance_mm": {
-    "3.5 mm": 4.4,
-    "4.5 mm": 3.9,
-    "5.0 mm": 3.4
+    "3.5 mm": 3.8,
+    "4.5 mm": 3.3,
+    "5.0 mm": 2.8
   },
   "nearest_module_side_envelope_gap_mm": 0.45,
   "module_bottom_side_footprints_over_jumpers": 0,
+  "coverage": {
+    "module_pcbs_found": 28,
+    "module_pcbs_inspected": 27,
+    "module_pcbs_unreadable": [
+      "32bit"
+    ],
+    "bottom_mounted_male_headers": 25,
+    "top_mounted_male_headers": [
+      "4mix",
+      "imix"
+    ]
+  },
+  "top_side_tht_tail": {
+    "tail_below_module_board_mm": 1.4,
+    "worst_case_clearance_mm": 2.4,
+    "boards": [
+      "4mix",
+      "imix"
+    ]
+  },
+  "exceptions": [
+    "32bit: kicad_pcb could not be loaded standalone (skipped)",
+    "4mix: power/ground headers are on ['F.Cu'], not the bottom side, so they cannot mate downwards with a base socket as drawn",
+    "imix: power/ground headers are on ['F.Cu'], not the bottom side, so they cannot mate downwards with a base socket as drawn",
+    "line_in: only 1 male 1x05 power/ground connector(s) found"
+  ],
   "modules_inspected": 27,
   "module_connectors": {
     "16bit": {
@@ -550,7 +577,8 @@
   ],
   "assumptions": [
     "The module PCBs do not annotate their power/ground header part number; the mechanical twin of PZ254-1-05-Z-8.5 (2.5 mm insulator, 6.0 mm mating pin) is assumed.",
-    "Header (C2905948) tolerances are not published; the general X.X +/-0.30 mm tolerance of the C5664/PM254 drawings is applied.",
+    "Header (C2905948) tolerances are not published; the general X.X +/-0.30 mm tolerance of the C5664/PM254 drawings is applied to every stacked dimension.",
+    "The socket drawings publish the housing height, not the internal contact depth. That the 8.5 mm housing accepts a 6.3 mm pin without bottoming out is an ASSUMPTION, not a datasheet fact.",
     "No assembled stack has been measured; this is a datasheet calculation, not a mating trial."
   ]
 }

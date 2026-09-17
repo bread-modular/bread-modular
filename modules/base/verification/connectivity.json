@@ -1,5 +1,5 @@
 {
-  "assertions_passed": 1716,
+  "assertions_passed": 1717,
   "pcb_sha256": "9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484",
   "routed_pcb_sha256_pinned": "9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484",
   "schematic_sha256": "42b0fde4839be9359a309e9c0d09fe737644359e66cb55f0030ef31478e8b999",
@@ -323,6 +323,8 @@
     }
   ],
   "stack_height_verified": true,
+  "stack_clearance_nominal_mm": 5.0,
+  "stack_clearance_worst_case_mm": 3.8,
   "release_status": "fab-ready (see production/RELEASE_STATUS.md; the datasheet stack calculation is in verification/stack-height.json)",
   "hand_solder_override": "The sockets keep their legacy C2894928 schematic/PCB field because this board is pinned byte-identical; the generated production/bom.csv carries NOT-JLC for them (production/hand-solder.json).",
   "physical_validation_pending": [

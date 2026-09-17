@@ -454,7 +454,7 @@ IDENTICAL).
 
 ---
 
-## 9. v1.3.2 — fab-ready hand-solder lines and a proved stack height
+## 9. v1.3.2 — fab-ready hand-solder lines and a calculated stack height
 
 v1.3.2 is a **release/documentation/packaging** revision. No net, part, value,
 footprint, reference designator or copper feature changed, and
@@ -484,6 +484,12 @@ Counts are therefore **unchanged**: **119 SMD placements in 32 BOM rows**, out o
 | 3.5 mm audio jacks | `J1`, `J2`, `J4`, `J6` | 4 | `WQP-PJ366ST` |
 | RV09 pots | `RV1`, `RV2` | 2 | `RV09-50K` |
 
+The same file backs the sourced per-board component estimate in
+`production/cost-estimate.json` (see `production/RELEASE_STATUS.md` section 5):
+**119 SMD placements in 32 BOM rows**, and for a 50-board batch **$19.94/board of
+JLCPCB-assembled parts plus $1.95/board of hand-solder parts**, dominated by the
+twelve TPS2111APWRs at ≈$16.45/board.
+
 ### 9.2 Why the base sockets must be female
 
 Every module PCB in this repository carries its power and ground connection as
@@ -491,9 +497,13 @@ a **male** 1x05 2.54 mm header with the value `Conn_01x05_Pin`, mounted on the
 **bottom side** (`B.Cu`) so that its mating pins point down at the base:
 16bit, 16bit+, 8bit, ar_env, blank, cv_math, drive, env, head_out, hihat, jacks,
 jvca, kick, line_in, line_out, low, mcc, mco, midi, noise, pots, svf, usb_power,
-v2ca, wave, 4mix and imix — **27 module boards** were inspected by
-`tools/verify_stack_height.py`. (4mix and imix place the same male headers on
-`F.Cu`; see §9.6.) The base therefore needs **female** sockets.
+v2ca and wave. `tools/verify_stack_height.py` records the exact coverage in
+`verification/stack-height.json`: **28 module PCBs exist, 27 were inspected**
+(`modules/32bit/32bit.kicad_pcb` cannot be loaded standalone by `pcbnew`), and
+**25 of them mount that male header on the bottom side**. The other two — **4mix
+and imix** — mount the same male header on `F.Cu` and therefore cannot mate
+downwards as drawn (§9.6). Those **25 bottom-mounted male headers** are the
+evidence that the base needs **female** sockets.
 
 The legacy Phase-1 field `C2894928 / PZ254-1-05-Z-8.5` is a **male** 1x05 pin
 header (HCTL, 2.5 mm insulator, 6 mm mating pin) and is wrong for every one of
@@ -515,7 +525,8 @@ untouched and the schematic hash is unchanged.
 
 ### 9.3 Recommended hand-solder parts
 
-* **Slot sockets — `C2897368` / `PM254-1-05-Z-8.5` (HCTL)**, 1x05 2.54 mm female
+* **Slot sockets — 25 per board (24 slot sockets + `INPUT1`) — `C2897368` /
+  `PM254-1-05-Z-8.5` (HCTL)**, 1x05 2.54 mm female
   socket, straight pin, square holes, top entry, 3 A, 8.5 mm insulator, 11.7 mm
   overall (3.2 mm solder tail). LCSC drawing *2.54 single-row female header,
   straight pin, plastic height 8.5* (`PM254-1-N-Z-8.5-XX (L11.7)`) [source](https://www.lcsc.com/datasheet/C2897368.pdf).
@@ -525,12 +536,12 @@ untouched and the schematic hash is unchanged.
   rev A also offers 4.5 mm and 5.0 mm plastics heights in the same ordering code
   [source](https://www.lcsc.com/datasheet/C5664.pdf). Stock 126 400, min. 50 pcs,
   $0.0122 @50+ (2026-09-17) [source](https://www.lcsc.com/product-detail/Shunts-Jumpers_BOOMELE-Boom-Precision-Elec-C5664_C5664.html).
-* **Power-expansion socket (`5V14`)** — `C2897425` / `PM254-2-05-W-8.5` is the
-  nearest 2x05 female family member, but it is the right-angle (`W`) variant, so
-  the straight 2x05 equivalent must be picked before ordering. Not verified in
-  this pass.
+* **Power-expansion socket (`5V14`)** — a **straight** 2x05 2.54 mm female socket
+  is required and **its part number was not selected in this pass**.
+  `C2897425` / `PM254-2-05-W-8.5` is the **right-angle** (`W`) family member and
+  must not be substituted for a top-entry socket.
 
-### 9.4 Stack height, proved from datasheets
+### 9.4 Stack height, calculated from datasheet dimensions
 
 Datum: the **base PCB top surface**. Solder tails are below the board and are
 deliberately **not** counted as height (the jumper's 2.8 mm tail passes through
@@ -554,10 +565,12 @@ socket insulator height**:
   pin instead of letting it bottom out on the base PCB;
 * **4.9 mm** so the module underside still clears the fitted jumper by 0.5 mm.
 
-That gives a practical **assembly-note minimum of 6.5 mm**, which the recommended
-8.5 mm part comfortably meets, and which also covers the tallest 5.0 mm shunt
-option of the C5664 family (worst-case shunt clearances: 3.5 mm → 4.4 mm,
-4.5 mm → 3.9 mm, 5.0 mm → 3.4 mm).
+Because a part is bought by its nominal label and the drawing tolerance is
+`X.X ±0.30`, the **assembly-note minimum to buy is a 6.6 mm-insulator socket**.
+The recommended 8.5 mm part is 8.2 mm worst case, and it also covers the tallest
+5.0 mm shunt option of the C5664 family: with the jumper's own tolerance applied
+to the shunt side, the worst-case clearances are **3.5 mm → 3.8 mm,
+4.5 mm → 3.3 mm, 5.0 mm → 2.8 mm**, all above the 0.5 mm target.
 
 `tools/verify_stack_height.py` recomputes all of §9.4 from
 `production/hand-solder.json` and refuses the release if any number disagrees or
@@ -592,13 +605,21 @@ nearest module-side body outline is 0.45 mm away in X/Y.
    cannot mate downwards with a base socket as drawn. This is a module-side
    finding, not a base defect; recording it here so it is not lost.
 6. `modules/32bit/32bit.kicad_pcb` cannot be loaded standalone by `pcbnew` and
-   was therefore skipped by the module inspection.
+   was therefore skipped by the module inspection, and `line_in` carries only
+   one of the two 1x05 power/ground connectors. Both are recorded in
+   `verification/stack-height.json` (`coverage`, `exceptions`).
+7. The socket drawings publish the **housing** height, not the internal contact
+   depth. That the 8.5 mm housing accepts a 6.3 mm pin without bottoming out is
+   an **assumption**, not a datasheet fact.
+8. A top-mounted THT header's solder tail would still hang 1.4 mm below the
+   module board, leaving 2.4 mm worst-case clearance — it only matters for the
+   two boards that cannot mate downwards anyway (item 5).
 
 ### 9.7 Reproduce
 
 ```sh
 cd modules/base
-/usr/bin/python3 tools/verify_power.py --report verification/connectivity.json   # 1716 assertions
+/usr/bin/python3 tools/verify_power.py --report verification/connectivity.json   # 1717 assertions
 /usr/bin/python3 tools/verify_stack_height.py --report verification/stack-height.json
 /usr/bin/python3 tools/regenerate_production.py     # runs both above, then ERC/DRC/export
 sha256sum base.kicad_pcb            # 9fc20400… (unchanged, copper pinned)

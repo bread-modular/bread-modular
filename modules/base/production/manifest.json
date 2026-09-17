@@ -11,7 +11,7 @@
   "jlcpcb_assembled_refs": 119,
   "jlcpcb_bom_rows": 32,
   "hand_solder_refs": 44,
-  "hand_solder_override_sha256": "914503e75e61debb13287dfaa43ab38f4775f6a0864023c6434690a1f83bc0da",
+  "hand_solder_override_sha256": "d3344813eccce4c7dc3a9567394de84a18ddc759a2215c69bbbe989889508ab2",
   "hand_solder_override_field": "LCSC Part #",
   "hand_solder_override_value": "NOT-JLC",
   "hand_solder": {
@@ -164,7 +164,7 @@
         "part": "unspecified on the module PCBs - assumed to be the mechanical twin of PZ254-1-05-Z-8.5",
         "insulator_mm": 2.5,
         "mating_pin_mm": 6.0,
-        "mounting": "bottom side (B.Cu) on every module",
+        "mounting": "bottom side (B.Cu) on 25 of the 27 inspected module boards; 4mix and imix mount the same headers on F.Cu",
         "source": "https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928"
       }
     },
@@ -178,13 +178,40 @@
     "clearance_worst_case_mm": 3.8,
     "clearance_ok": true,
     "minimum_socket_insulator_mm": 6.3,
+    "minimum_socket_insulator_nominal_mm": 6.6,
     "shunt_option_clearance_mm": {
-      "3.5 mm": 4.4,
-      "4.5 mm": 3.9,
-      "5.0 mm": 3.4
+      "3.5 mm": 3.8,
+      "4.5 mm": 3.3,
+      "5.0 mm": 2.8
     },
     "nearest_module_side_envelope_gap_mm": 0.45,
     "module_bottom_side_footprints_over_jumpers": 0,
+    "coverage": {
+      "module_pcbs_found": 28,
+      "module_pcbs_inspected": 27,
+      "module_pcbs_unreadable": [
+        "32bit"
+      ],
+      "bottom_mounted_male_headers": 25,
+      "top_mounted_male_headers": [
+        "4mix",
+        "imix"
+      ]
+    },
+    "top_side_tht_tail": {
+      "tail_below_module_board_mm": 1.4,
+      "worst_case_clearance_mm": 2.4,
+      "boards": [
+        "4mix",
+        "imix"
+      ]
+    },
+    "exceptions": [
+      "32bit: kicad_pcb could not be loaded standalone (skipped)",
+      "4mix: power/ground headers are on ['F.Cu'], not the bottom side, so they cannot mate downwards with a base socket as drawn",
+      "imix: power/ground headers are on ['F.Cu'], not the bottom side, so they cannot mate downwards with a base socket as drawn",
+      "line_in: only 1 male 1x05 power/ground connector(s) found"
+    ],
     "modules_inspected": 27,
     "module_connectors": {
       "16bit": {
@@ -690,7 +717,8 @@
     ],
     "assumptions": [
       "The module PCBs do not annotate their power/ground header part number; the mechanical twin of PZ254-1-05-Z-8.5 (2.5 mm insulator, 6.0 mm mating pin) is assumed.",
-      "Header (C2905948) tolerances are not published; the general X.X +/-0.30 mm tolerance of the C5664/PM254 drawings is applied.",
+      "Header (C2905948) tolerances are not published; the general X.X +/-0.30 mm tolerance of the C5664/PM254 drawings is applied to every stacked dimension.",
+      "The socket drawings publish the housing height, not the internal contact depth. That the 8.5 mm housing accepts a 6.3 mm pin without bottoming out is an ASSUMPTION, not a datasheet fact.",
       "No assembled stack has been measured; this is a datasheet calculation, not a mating trial."
     ]
   },
@@ -701,27 +729,28 @@
     "Module 4mix and imix place their power headers on F.Cu (top side) and cannot mate downwards as drawn."
   ],
   "files": {
-    "jlcpcb/base/base-gerbers.zip": "03772a684a41e7c492deb791f5d2abf434bd3bd902bdd0beed228317688f2248",
+    "jlcpcb/base/base-gerbers.zip": "57d15f9e5a99e7b7c9dec8844980570a4e019b4e3d6d74e4ead6831943068121",
     "jlcpcb/base/bom.csv": "b47a507c24e816c25122e9bd4c3d5be98177d9ba81716317b3355ca90cbcab1a",
     "jlcpcb/base/export-report.json": "4af26dacd0ba7d22209cc500f4bd032dd60604b4660b7b4d0e5edb4c72f0ac0e",
     "jlcpcb/base/positions.csv": "ee54f1a1a826fdd7be230105b45409322696ac01c95f095265fa9f66c156cd5d",
-    "jlcpcb/gerber/base-B_Cu.gbr": "ed28f09bc13ccad907cf941fdf3307145c9a6ee6d99fd03f1971e0fe8734110e",
-    "jlcpcb/gerber/base-B_Mask.gbr": "f7142f005298442145258dddd7b712d9902e1e9af4a369f162330da4a8073dd3",
-    "jlcpcb/gerber/base-B_Paste.gbr": "b92c1f67c7d3979beaf1f615cfa21e7a66179c9e54236cbbf7ff88c2c2e92e48",
-    "jlcpcb/gerber/base-B_Silkscreen.gbr": "36d75df5d11ee36acf8ab8a75210024b87958813ccb004c62bfe7dd149818979",
-    "jlcpcb/gerber/base-Edge_Cuts.gbr": "04b2723be2bd51d8d0fc4c4f336811f2aef5167855460249da0d0d79787fe812",
-    "jlcpcb/gerber/base-F_Cu.gbr": "bb6b8b56dbd59280ea9b59fa13c2fd719bf6909c71fe4cdd55bd1c45690f9973",
-    "jlcpcb/gerber/base-F_Mask.gbr": "e0a8b69a709b52f5f3c8fb455aa4fecf497a7a44609c337c13faf517e54c21e9",
-    "jlcpcb/gerber/base-F_Paste.gbr": "62b6faf50f9bcbc17a617c41c2ddcf0bb8289ee3ab192fffd1e3b3f1424d43c8",
-    "jlcpcb/gerber/base-F_Silkscreen.gbr": "3a33fcd8a3fbf6d087ed0e8c07de3fb6c57f6dae0d3e74d64427282b8f8714ef",
-    "jlcpcb/gerber/base-NPTH.drl": "e9afa3d2afe13346e150496efd69641b5565172cf91e5f542ea75ad8b574526e",
-    "jlcpcb/gerber/base-PTH.drl": "a8fe7d62aec22638bc732762efad6107bdf6a2bf81b65dfe424ba0ad015305bb",
-    "jlcpcb/production_files/GERBER-base.zip": "03772a684a41e7c492deb791f5d2abf434bd3bd902bdd0beed228317688f2248",
-    "production/base.zip": "03772a684a41e7c492deb791f5d2abf434bd3bd902bdd0beed228317688f2248",
+    "jlcpcb/gerber/base-B_Cu.gbr": "c9656bb827dd675b6217f3245c525d1bba14a57ced59b3ffd0baab7e92e4d183",
+    "jlcpcb/gerber/base-B_Mask.gbr": "7dcd6d40327cabba391f190c40e93286a3c05ecf9d5d4b78a82f59318350a6c2",
+    "jlcpcb/gerber/base-B_Paste.gbr": "2ee578bc29dbabf7b24bd6bdae1ca9c635ae4ceed84863ff823e103660a6afb8",
+    "jlcpcb/gerber/base-B_Silkscreen.gbr": "3d49bef422f7ca2201d9f050cd0f2a09211a6f9d06edbe5d25bf589458ee399c",
+    "jlcpcb/gerber/base-Edge_Cuts.gbr": "7cf3495a6815c4f2b9908c1873777c27f16031395c0e870fa4329c057969476a",
+    "jlcpcb/gerber/base-F_Cu.gbr": "24832e0195bb813b270c79e9f410db0d7fa550703e1fa3c348d720240afacc93",
+    "jlcpcb/gerber/base-F_Mask.gbr": "2d5d1349d3d95411430b6968cde67f51e36cb411cf67d0ee991990123d65c9a8",
+    "jlcpcb/gerber/base-F_Paste.gbr": "0be33d52a9a2fac8fba35a0703ce16929ca7dff30132957a237af16bb5e9962b",
+    "jlcpcb/gerber/base-F_Silkscreen.gbr": "a5a3aa33a901b60e95588c41187098b281a9d21f0372ce7f87ec5fbe107bb784",
+    "jlcpcb/gerber/base-NPTH.drl": "a829c7069059fcda6a32de1687e51c6141572252057380bcf572a7be052297f9",
+    "jlcpcb/gerber/base-PTH.drl": "49c41751623d529432e7343776fc371bbf1c4ffa7e431fe3c5997ac524820a4a",
+    "jlcpcb/production_files/GERBER-base.zip": "57d15f9e5a99e7b7c9dec8844980570a4e019b4e3d6d74e4ead6831943068121",
+    "production/base.zip": "57d15f9e5a99e7b7c9dec8844980570a4e019b4e3d6d74e4ead6831943068121",
     "production/bom.csv": "e62b1d92cd4a66bb9d51d471776e02ff21d5b61c19d00feba968ffa382f01e36",
+    "production/cost-estimate.json": "64a96f545db851a57a3665606132a9f471f3dfc9230f5391dd374da5d2f212e6",
     "production/designators.csv": "2bcfe9a58d8aa72f3fa2f6c4420c82f8efdcb166ec7ad5b03a0c10fe0aeabedd",
-    "production/hand-solder.csv": "301032f18eb8799bec0fbef41db347eb6cf21b7faa87ae06535c78ceb725226e",
-    "production/hand-solder.json": "914503e75e61debb13287dfaa43ab38f4775f6a0864023c6434690a1f83bc0da",
+    "production/hand-solder.csv": "c62d4e2a09e8902820a5b01603bbfde7e798fc129f38490690f397ef7f7fe077",
+    "production/hand-solder.json": "d3344813eccce4c7dc3a9567394de84a18ddc759a2215c69bbbe989889508ab2",
     "production/netlist.ipc": "6a94f9b8375f5b22293af487aad9b8b3366e5962107c744b23f7a07fecfedb36",
     "production/positions.csv": "cf7e345066061fef3ae559df238fe69a3641f6e615e4b0144fd71d67e1296e13"
   }
