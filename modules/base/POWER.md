@@ -190,12 +190,24 @@ slot can be reviewed, probed and modified independently; the layout is a 4 × 3 
 in the free area of the sheet, each block identical (x 241…466 mm, y 190…270 mm; the
 protection block sits at x 254…292 mm, y 122…146 mm).
 
-Placement was chosen from the free area of the A2 sheet and checked mechanically: the
-rendered v1.2.0 sheet has **no drawing element inside the interior of any new block**
-(SVG element coordinates were compared for four blocks and the protection block), and
-the nearest pre-existing item is ≈ 1 mm clear of the new labels. This is *not* a
-substitute for a human look at the rendered sheet — please eyeball the plotted
-schematic once before/while starting Phase 2.
+Placement was chosen from the free area of the A2 sheet and verified two ways:
+mechanically (the rendered v1.2.0 sheet has **no drawing element inside the interior of
+any of the twelve blocks or the protection block** — SVG element coordinates were
+compared) and visually: the v1.3.0 sheet was plotted to PDF/PNG and every new block was
+inspected, which is how the field-text collisions were found and fixed (mux and header
+annotations moved clear of the nets, capacitor/resistor fields rotated, the protection
+block re-spaced, the note moved into the empty strip below the block grid).
+
+Two KiCad connectivity gotchas found while generating this (they cost real debugging
+time, keep them in mind when hand-editing `base.kicad_sch`):
+
+1. **Split wires at every junction.** A wire stub that ends on the *interior* of a long
+   wire (with a junction dot) is not reliably connected by `kicad-cli`; the long wire
+   must be split into separate segments at the junction points. All buses in v1.3.0 are
+   generated that way.
+2. **Field text angle is relative to the symbol.** A field stored with angle 0 on a
+   symbol rotated 90° is drawn rotated; set the field angle to 90 to get horizontal
+   text (and note the justification is mirrored when KiCad normalises 180°).
 
 `production/netlist.ipc`, `positions.csv`, `designators.csv` and `base.zip` are
 PCB/fabrication-toolkit outputs and were **left untouched** — they can only be
