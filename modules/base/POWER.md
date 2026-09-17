@@ -275,3 +275,97 @@ USB pad-clearance errors). IPC, designators, full/SMD BOM+CPL and all fab ZIPs a
 regenerated. **1713 invariant checks pass.** Plots, warning reasons, stack-height
 hold, retained slot-1 alignment discrepancy and FB1/FB2 land verification are in
 `verification/README.md`. This note alone is intentionally uncommitted.
+
+---
+
+## 8. v1.3.1 — one slot template, twelve instances (structure only)
+
+v1.3.1 changes **how the same circuit is drawn**, not what it is. The twelve
+identical per-slot power blocks that used to be flattened onto `base.kicad_sch`
+are now a single hierarchical template sheet, **`slot.kicad_sch`**, instantiated
+twelve times (`Slot1` … `Slot12`). No part was added, removed, re-valued or
+re-sourced, and no electrical decision was reopened.
+
+### 8.1 What one instance contains
+
+| part | role in the slot |
+|---|---|
+| `VSUPPLY_n` — 1x05 socket | the selected slot rail, on all five pins (`VSLOT_n`) |
+| `GND_n` — 1x05 socket | module ground, all five pins on `GND` |
+| `U(5+n)` — TPS2111APWR | 2:1 power mux: `IN1 = 5V_SYS`, `IN2 = +3.3V`, `OUT = VSLOT_n`, `D0` strapped low, `D1 = SEL_n`, 667 mA ILIM |
+| `R(26+2n)` — 750R | ILIM resistor (per-slot current limit) |
+| `R(27+2n)` — 100k | fail-safe SEL pulldown |
+| `C(20+2n)`, `C(21+2n)` — 1uF + 0.1uF | slot rail decoupling |
+| `J(6+n)` — 1x02 | rail-select header: shunt fitted = `5V_SYS`, open or lost = `+3.3V` |
+
+### 8.2 Sheet interface
+
+Only two nets are slot specific, so the template exposes exactly two sheet pins:
+
+* **`VSLOT`** — `U(5+n).OUT`, both decoupling caps and all five `VSUPPLY_n` pins;
+* **`SEL`** — `U(5+n).D1`, `J(6+n)` pin 2 and the 100k pulldown.
+
+The parent sheet wires each sheet pin to a short stub carrying the existing
+global labels `VSLOT_n` / `SEL_n`, so the flattened net names survive unchanged.
+The rails `5V_SYS`, `+3.3V` and `GND` are still global labels / power symbols
+*inside* the template — the same objects that were on the flat sheet.
+
+### 8.3 Reference designators
+
+Reference designators are annotated per sheet instance, so every part keeps the
+reference it has on the flat v1.3.0 sheet:
+
+| instance | mux | header | ILIM | pulldown | 1uF | 0.1uF | supply | ground |
+|---|---|---|---|---|---|---|---|---|
+| Slot1 | U6 | J7 | R28 | R29 | C22 | C23 | VSUPPLY_1 | GND1 |
+| Slot2 | U7 | J8 | R30 | R31 | C24 | C25 | VSUPPLY_2 | GND2 |
+| Slot3 | U8 | J9 | R32 | R33 | C26 | C27 | VSUPPLY_3 | GND3 |
+| Slot4 | U9 | J10 | R34 | R35 | C28 | C29 | VSUPPLY_4 | GND4 |
+| Slot5 | U10 | J11 | R36 | R37 | C30 | C31 | VSUPPLY_5 | GND5 |
+| Slot6 | U11 | J12 | R38 | R39 | C32 | C33 | VSUPPLY_6 | GND6 |
+| Slot7 | U12 | J13 | R40 | R41 | C34 | C35 | VSUPPLY_7 | GND7 |
+| Slot8 | U13 | J14 | R42 | R43 | C36 | C37 | VSUPPLY_8 | GND8 |
+| Slot9 | U14 | J15 | R44 | R45 | C38 | C39 | VSUPPLY_9 | GND9 |
+| Slot10 | U15 | J16 | R46 | R47 | C40 | C41 | VSUPPLY_10 | GND10 |
+| Slot11 | U16 | J17 | R48 | R49 | C42 | C43 | VSUPPLY_11 | GND11 |
+| Slot12 | U17 | J18 | R50 | R51 | C44 | C45 | VSUPPLY_12 | GND12 |
+
+### 8.4 How the refactor was produced and checked
+
+`tools/build_slot_template.py` identifies the flat per-slot blocks by geometric
+connectivity (each block is its own electrical island), removes them from
+`base.kicad_sch`, emits `slot.kicad_sch`, and instantiates it twelve times.
+`tools/verify_slot_refactor.py` then compares the exported netlists:
+
+* **78 nets** before and after — same names, same nodes, pin functions and pin types;
+* **163 components** — identical references, values, footprints, LCSC, MPN and
+  manufacturer fields;
+* **ERC unchanged**: 4 `pin_not_connected`, 3 `power_pin_not_driven` and
+  1 `lib_symbol_mismatch` before and after;
+* **`production/bom.csv` regenerates byte-identically**, the JLCPCB `bom.csv` and
+  `positions.csv` regenerate identically, and re-exported Gerbers differ from the
+  committed ZIP only in their internal creation-date comment.
+
+The only content differences in the exported netlist *file* are the per-component
+`Sheetname` / `Sheetfile` properties (now `Slot1` … / `slot.kicad_sch`) and 48
+`Description` texts that named their own slot and are now instance-neutral
+(`Slot 4 rail decoupling` → `Slot rail decoupling`). KiCad 9 has no per-instance
+symbol fields, so those texts cannot stay slot-numbered in a shared template; no
+field that reaches the netlist nodes, BOM, CPL or board changed.
+
+### 8.5 PCB status (deliberately untouched)
+
+`base.kicad_pcb` is **byte-identical** (sha256
+`9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484`) — the board
+was routed against these nets, and because the netlist is unchanged it stays
+valid. `kicad-cli pcb drc --schematic-parity` still reports **0 unconnected items
+and 0 schematic-parity findings** (59 unchanged library-copy warnings).
+
+Two things to know before ever re-importing the schematic into the board:
+
+* the board stores each footprint's schematic link as a single symbol UUID; the
+  Slot1 parts still match (their symbol blocks were reused verbatim), while the
+  other eleven instances are now served by that same shared symbol and match by
+  reference designator instead;
+* a future "update PCB from schematic" therefore has to re-link the relocated slot
+  parts deliberately — it is not a no-op action. Nothing in v1.3.1 requires it.

@@ -1,5 +1,40 @@
 # Changelog
 
+## 1.3.1
+Structure-only refactor: the twelve identical per-slot power blocks are drawn
+once as a hierarchical template sheet (`slot.kicad_sch`) and instantiated twelve
+times (`Slot1` … `Slot12`) from `base.kicad_sch`. Nothing electrical changed.
+
+* **No part added, removed, re-valued or re-sourced.** The exported flat netlist
+  is unchanged: the same 78 nets with the same nodes, pin functions and pin types
+  (proof: `tools/verify_slot_refactor.py` diffing
+  `verification/netlist-before.kicadsexpr` against
+  `verification/netlist-after.kicadsexpr`; see POWER.md section 8).
+* One template instance = one slot: the 1x05 supply socket (`VSUPPLY_n`), the
+  1x05 ground socket (`GND_n`), the TPS2111APWR power mux (`U6..U17`), the 750R
+  ILIM resistor (`R28, R30 … R50`), the 100k SEL pulldown (`R29, R31 … R51`),
+  the 1uF + 0.1uF rail decoupling (`C22 … C45`) and the 1x02 rail-select header
+  (`J7..J18`) - exactly what the flat sheet drew per slot.
+* Only two nets are slot specific, so the template exposes exactly two sheet
+  pins - `VSLOT` and `SEL` - wired on the parent to the existing global labels
+  `VSLOT_n` / `SEL_n`. `5V_SYS`, `+3.3V` and `GND` stay global labels / power
+  symbols, as before.
+* Reference designators are annotated per sheet instance, so every part keeps the
+  reference it had in v1.3.0: Slot1 = U6 / J7 / R28 / R29 / C22 / C23 /
+  VSUPPLY_1 / GND1, … Slot12 = U17 / J18 / R50 / R51 / C44 / C45 / VSUPPLY_12 /
+  GND12.
+* ERC is unchanged (same 8 findings: 4 `pin_not_connected`, 3
+  `power_pin_not_driven`, 1 `lib_symbol_mismatch`). `production/bom.csv` and the
+  JLCPCB BOM/CPL regenerate identically (163 references / 119 SMD components,
+  32 BOM rows).
+* **`base.kicad_pcb` is intentionally untouched (byte-identical)**; KiCad still
+  reports 0 unconnected items and 0 schematic-parity findings against the new
+  schematic.
+* One file now serves twelve instances, so the free-text `Description` fields
+  that named their own slot ("Slot 4 rail decoupling") became instance-neutral.
+  No field that reaches the BOM, CPL, netlist or the board changed.
+* No LED is added and no electrical decision is reopened.
+
 ## 1.3.0
 Power upgrade: input protection, a protected 5 V rail and per-slot rail selection.
 
