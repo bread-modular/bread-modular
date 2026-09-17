@@ -1,21 +1,139 @@
-# v1.3.0 outputs — mechanical assembly hold
+# v1.3.2 outputs — FAB-READY
 
-These files have been regenerated from the routed v1.3.0 PCB, not the old board.
-KiCad DRC reports zero errors, zero unconnected items and zero schematic-parity
-findings. The 59 retained library-copy warnings are explained in
+**The DO-NOT-ORDER hold is lifted.** These files were regenerated from the routed
+board (`base.kicad_pcb`, SHA-256
+`9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484`, unchanged)
+through `../tools/regenerate_production.py`. KiCad DRC reports **0 errors, 0
+unconnected items, 0 schematic-parity findings**; ERC is at the 8-finding
+baseline; the stack height is calculated from datasheet dimensions
+(`../verification/stack-height.json`). The 59 retained
+`lib_footprint_mismatch` warnings are explained in
 [the verification report](../verification/README.md).
 
-**DO NOT ORDER / ASSEMBLE YET.** The Phase 1 socket code C2894928 describes a male
-header, not the female socket required to mate with the modules. Actual female
-socket identity, mated board gap and the fitted C5664 shunt height still need
-confirmation. The schematic/BOM was intentionally not substituted during Phase 2.
-The jumper itself is nominally 6 mm above the base, not 2.8 mm.
+The scope correction that made this release orderable: **the module sockets are
+hand-soldered by the builder and not ordered from or assembled by JLCPCB.** The
+connector-gender question is therefore an assembly note, not an ordering blocker.
+Read POWER.md section 9 before ordering, and treat the parts, prices and stock
+figures below as order-time inputs rather than standing commitments.
 
-- `base.zip` is identical to `../jlcpcb/base/base-gerbers.zip` and
+## Ordering checklist
+
+### 1. JLCPCB assembles (SMD only)
+
+| | |
+|---|---|
+| References | **119** |
+| BOM rows | **32** |
+| CPL entries | **119** (+ F1/F2, D2/D3, U6–U17, J5, SW1, all R/C/LED/FB) |
+| Files | `../jlcpcb/base/bom.csv`, `../jlcpcb/base/positions.csv`, `../jlcpcb/base/base-gerbers.zip` |
+
+Every through-hole reference is excluded automatically (`--include-through-hole`
+is off), so the assembly order cannot contain them. `C2894928` and `C2894966`
+appear on **no** assembly line.
+
+### 2. The builder hand-solders (44 of the 163 references)
+
+Machine-readable list: **`hand-solder.csv`** (one row per reference: `Qty` is 1
+per row, `GroupQty` is that group's size). Policy, parts and the stack-height
+specification: **`hand-solder.json`**.
+
+| Group | Refs | Qty | Part to fit |
+|---|---|---:|---|
+| Per-slot rail socket | `VSUPPLY_1` … `VSUPPLY_12` | 12 | **female** 1x05 2.54 mm socket |
+| Per-slot ground socket | `GND1` … `GND12` | 12 | **female** 1x05 2.54 mm socket |
+| Auxiliary input socket | `INPUT1` | 1 | **female** 1x05 2.54 mm socket |
+| Power-expansion socket | `5V14` (2x05) | 1 | **female** 2x05 2.54 mm socket |
+| Rail-select jumper | `J7` … `J18` | 12 | **male** 1x02 2.00 mm header, `C2905948` |
+| 3.5 mm audio jacks | `J1`, `J2`, `J4`, `J6` | 4 | `WQP-PJ366ST` |
+| RV09 panel pots | `RV1`, `RV2` | 2 | `RV09-50K` |
+
+**The socket gender requirement is not optional.** 28 module PCBs exist, 27 were
+inspected, and **25 of them carry their power and ground connection as a male
+1x05 2.54 mm header (`Conn_01x05_Pin`) on the bottom side**, so the base must
+carry **female** sockets. (4mix and imix mount the same male header on `F.Cu` and
+cannot mate downwards as drawn; `modules/32bit/32bit.kicad_pcb` cannot be loaded
+standalone.)
+The legacy `C2894928 / PZ254-1-05-Z-8.5` field is a male header and must not be
+ordered for these positions; it survives in the immutable schematic/PCB fields
+and is overridden to `NOT-JLC` in the generated `bom.csv`.
+
+### 3. Recommended builder parts (buy separately — not JLC lines)
+
+| Use | LCSC | MPN | Key dimensions | Stock (2026-09-17) | Price band |
+|---|---|---|---|---|---|
+| Slot sockets (25 pcs: 24 slot + `INPUT1`) | **C2897368** | `PM254-1-05-Z-8.5` (HCTL) | 8.5 mm insulator, 11.7 mm overall, square holes, top entry, 3 A | 6 155 | $0.1168 @5+ / $0.0826 @150+ |
+| Shunts (12 pcs, spare set recommended) | **C5664** | `2.0 Short circuit cap` (BOOMELE) | 2.00 mm open-top, 3.5 mm tall, 1.5 A | 126 400 | $0.0122 @50+ |
+
+Minimum socket insulator height: **6.3 mm requirement, 6.6 mm nominal part to
+buy** (calculated in `../verification/stack-height.json`). The `5V14` 2x05 socket
+needs a **straight** 2x05 female part and **its part number is still open**:
+`C2897425 / PM254-2-05-W-8.5` is the right-angle family member and must not be
+substituted for a top-entry socket.
+
+### 4. Stock and pre-order warnings
+
+* **TPS2111APWR `C471060` — 2 482 in stock ≈ 206 boards** (12 per board). This is
+  the single longest-lead, extended-part item; pre-order it or accept a JLCPCB
+  part-sourcing delay.
+* `C2897368` (6 155) and `C5664` (126 400) are plentiful but are **not** ordered
+  from JLCPCB; buy them from LCSC.
+* Everything else in the 32-row BOM was in stock at the time of the previous
+  sourcing pass; re-check at order time, because JLCPCB stock and part status
+  change daily.
+
+### 5. Per-board cost estimate (partial, components only)
+
+`cost-estimate.json` is a reproducible estimate generated by
+`../tools/estimate_cost.py`: it prices the parts in the JLCPCB BOM plus the
+builder-supplied C2897368 sockets, C5664 shunts and C2905948 headers from live
+LCSC tier prices, at a stated batch size, attrition and tier policy. Re-run with
+`--refresh` to re-fetch prices.
+
+For a **50-board batch** (5 % attrition, buy max(needed, MOQ) at the largest tier reached):
+
+| | USD / board |
+|---|---:|
+| JLCPCB-assembled parts (119 placements, 31 of 32 BOM rows priced) | **19.94** |
+| Builder-supplied board parts (25 x C2897368 sockets + 12 x C2905948 headers) | **2.01** |
+| **Components subtotal** | **21.96** |
+| Separate accessory order (12 x C5664 shunts, user-fit, not a board designator) | 0.12 |
+
+This is a **partial subtotal, not the board cost**, and it is deliberately
+labelled as one:
+
+* **154 of the 163 designators are priced.** The nine that are not are listed in
+  the file: `5V14` (straight 2x05 female part still unselected), the four 3.5 mm
+  jacks and the two RV09 pots (no LCSC number at all) and `FB1`/`FB2` (`C12389`
+  has no parsable LCSC price ladder).
+* **Excluded entirely, because only a real quote can give them:** the bare
+  2-layer PCB (223.52 × 160.02 mm = 357.6 cm²), the JLCPCB SMT assembly and setup
+  charge for 119 placements, the stencil, shipping and taxes.
+* The single dominant item is **TPS2111APWR `C471060` at ≈$16.45/board**
+  (12 pieces x ≈$1.37).
+
+### 6. Remaining physical assumption
+
+**No assembled stack has been measured.** The clearance figure (5.0 mm nominal /
+3.8 mm worst case) is a datasheet calculation with the assumed values listed in
+POWER.md section 9.6. A **mating trial of one base plus one module is still
+advised** before committing to a large order — in particular because the module
+male-header part number is not annotated on the module PCBs and because slot 1's
+socket row carries its pre-existing −0.12 mm / −0.10 mm registration offset.
+
+## Artifacts
+
+* `base.zip` is identical to `../jlcpcb/base/base-gerbers.zip` and
   `../jlcpcb/production_files/GERBER-base.zip`.
-- Full hand-assembly BOM/CPL and designators: 163 references.
-- `../jlcpcb/base/` has the SMD-only JLCPCB BOM/CPL: 119 references, 32 BOM rows.
-- `manifest.json` records source/artifact hashes and explicitly retains this hold.
-- The old plugin database and `backups/` are historical, not order inputs.
-- Preview diode/IC orientation and all placements in the assembler's system before
-  approving an order; native CPL generation is not assembly approval.
+* Full hand-assembly BOM/CPL and designators: **163 references**.
+  The four socket rows read `NOT-JLC` (see `hand-solder.json`); this value is
+  generated, not a KiCad field.
+* `manifest.json` records the release status, the source and artifact SHA-256
+  hashes, the hand-solder override hash and the pending physical validations.
+* `cost-estimate.json` is the partial component subtotal of section 5,
+  including the per-part LCSC price, tier and stock snapshot it was computed
+  from, the list of designators it could not price, and the method.
+* The regenerated gerbers/drills differ from the previously committed ones only
+  in their two KiCad export-date comment lines each.
+* The old plugin database and `backups/` are historical, not order inputs.
+* Preview diode/IC orientation and all placements in the assembler's system
+  before approving an order; native CPL generation is not assembly approval.

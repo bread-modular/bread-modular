@@ -1,0 +1,1708 @@
+{
+  "schema": "bread-modular/base/cost-estimate/1",
+  "hand_maintained": false,
+  "generated_by": "tools/estimate_cost.py",
+  "fetched_at": "2026-09-17T14:41:51",
+  "method": {
+    "batch_boards": 50,
+    "attrition_fraction": 0.05,
+    "tier_policy": "buy max(needed, MOQ) at the unit price of the largest published tier whose quantity is reached",
+    "scope": "component subtotal only, and partial: the parts listed as not priced are excluded",
+    "excluded": [
+      "bare PCB fabrication",
+      "JLCPCB SMT assembly and setup charge",
+      "stencil",
+      "shipping, duty and VAT",
+      "yield loss beyond the stated attrition",
+      "wastage rules that JLCPCB applies at order time"
+    ],
+    "caveat": "DISPOSABLE ESTIMATE. LCSC/JLCPCB prices and stock change daily; request a real quote before ordering."
+  },
+  "prices": {
+    "C1525": {
+      "unit_price_usd": 0.0046,
+      "ladder": [
+        [
+          100,
+          0.0046
+        ],
+        [
+          1000,
+          0.0034
+        ],
+        [
+          3000,
+          0.0029
+        ],
+        [
+          10000,
+          0.0025
+        ],
+        [
+          50000,
+          0.0024
+        ],
+        [
+          100000,
+          0.0023
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C1525.html",
+      "checked": "2026-09-17"
+    },
+    "C28323": {
+      "unit_price_usd": 0.0403,
+      "ladder": [
+        [
+          10,
+          0.0403
+        ],
+        [
+          100,
+          0.0309
+        ],
+        [
+          300,
+          0.0261
+        ],
+        [
+          2000,
+          0.0221
+        ],
+        [
+          4000,
+          0.0207
+        ],
+        [
+          10000,
+          0.0198
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C28323.html",
+      "checked": "2026-09-17"
+    },
+    "C15008": {
+      "unit_price_usd": 0.1431,
+      "ladder": [
+        [
+          10,
+          0.1431
+        ],
+        [
+          100,
+          0.1081
+        ],
+        [
+          300,
+          0.091
+        ],
+        [
+          2000,
+          0.0757
+        ],
+        [
+          4000,
+          0.0715
+        ],
+        [
+          10000,
+          0.069
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C15008.html",
+      "checked": "2026-09-17"
+    },
+    "C1779": {
+      "unit_price_usd": 0.0348,
+      "ladder": [
+        [
+          20,
+          0.0348
+        ],
+        [
+          200,
+          0.0268
+        ],
+        [
+          600,
+          0.0227
+        ],
+        [
+          2000,
+          0.0152
+        ],
+        [
+          10000,
+          0.014
+        ],
+        [
+          20000,
+          0.0132
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C1779.html",
+      "checked": "2026-09-17"
+    },
+    "C472806": {
+      "unit_price_usd": 0.0147,
+      "ladder": [
+        [
+          50,
+          0.0147
+        ],
+        [
+          500,
+          0.0116
+        ],
+        [
+          1500,
+          0.0099
+        ],
+        [
+          4000,
+          0.0089
+        ],
+        [
+          24000,
+          0.008
+        ],
+        [
+          48000,
+          0.0075
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C472806.html",
+      "checked": "2026-09-17"
+    },
+    "C90146": {
+      "unit_price_usd": 0.1133,
+      "ladder": [
+        [
+          5,
+          0.1133
+        ],
+        [
+          50,
+          0.0912
+        ],
+        [
+          150,
+          0.0798
+        ],
+        [
+          500,
+          0.0704
+        ],
+        [
+          2000,
+          0.0645
+        ],
+        [
+          4000,
+          0.0623
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C90146.html",
+      "checked": "2026-09-17"
+    },
+    "C16772": {
+      "unit_price_usd": 0.0051,
+      "ladder": [
+        [
+          50,
+          0.0051
+        ],
+        [
+          500,
+          0.004
+        ],
+        [
+          1500,
+          0.0034
+        ],
+        [
+          10000,
+          0.003
+        ],
+        [
+          20000,
+          0.0027
+        ],
+        [
+          50000,
+          0.0025
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C16772.html",
+      "checked": "2026-09-17"
+    },
+    "C1705": {
+      "unit_price_usd": 0.0164,
+      "ladder": [
+        [
+          50,
+          0.0164
+        ],
+        [
+          500,
+          0.0127
+        ],
+        [
+          1500,
+          0.0111
+        ],
+        [
+          4000,
+          0.009
+        ],
+        [
+          24000,
+          0.0085
+        ],
+        [
+          48000,
+          0.0082
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C1705.html",
+      "checked": "2026-09-17"
+    },
+    "C52923": {
+      "unit_price_usd": 0.01,
+      "ladder": [
+        [
+          50,
+          0.01
+        ],
+        [
+          500,
+          0.0075
+        ],
+        [
+          1500,
+          0.0064
+        ],
+        [
+          10000,
+          0.0047
+        ],
+        [
+          20000,
+          0.0044
+        ],
+        [
+          50000,
+          0.0042
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C52923.html",
+      "checked": "2026-09-17"
+    },
+    "C394395": {
+      "unit_price_usd": 0.7769,
+      "ladder": [
+        [
+          1,
+          0.7769
+        ],
+        [
+          10,
+          0.6652
+        ],
+        [
+          30,
+          0.588
+        ],
+        [
+          100,
+          0.5223
+        ],
+        [
+          500,
+          0.4533
+        ],
+        [
+          1000,
+          0.4402
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C394395.html",
+      "checked": "2026-09-17"
+    },
+    "C2286": {
+      "unit_price_usd": 0.0075,
+      "ladder": [
+        [
+          100,
+          0.0075
+        ],
+        [
+          1000,
+          0.0058
+        ],
+        [
+          4000,
+          0.0045
+        ],
+        [
+          8000,
+          0.0039
+        ],
+        [
+          48000,
+          0.0037
+        ],
+        [
+          100000,
+          0.0035
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C2286.html",
+      "checked": "2026-09-17"
+    },
+    "C78401": {
+      "unit_price_usd": 0.0534,
+      "ladder": [
+        [
+          10,
+          0.0534
+        ],
+        [
+          100,
+          0.044
+        ],
+        [
+          300,
+          0.0393
+        ],
+        [
+          1000,
+          0.0357
+        ],
+        [
+          5000,
+          0.0298
+        ],
+        [
+          10000,
+          0.0284
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C78401.html",
+      "checked": "2026-09-17"
+    },
+    "C883156": {
+      "unit_price_usd": 0.0719,
+      "ladder": [
+        [
+          10,
+          0.0719
+        ],
+        [
+          100,
+          0.0556
+        ],
+        [
+          300,
+          0.0474
+        ],
+        [
+          1500,
+          0.0413
+        ],
+        [
+          4500,
+          0.0364
+        ],
+        [
+          10500,
+          0.034
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C883156.html",
+      "checked": "2026-09-17"
+    },
+    "C210834": {
+      "unit_price_usd": 0.082,
+      "ladder": [
+        [
+          10,
+          0.082
+        ],
+        [
+          100,
+          0.0663
+        ],
+        [
+          300,
+          0.0585
+        ],
+        [
+          2000,
+          0.0484
+        ],
+        [
+          4000,
+          0.0437
+        ],
+        [
+          10000,
+          0.0413
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C210834.html",
+      "checked": "2026-09-17"
+    },
+    "C165948": {
+      "unit_price_usd": 0.1873,
+      "ladder": [
+        [
+          5,
+          0.1873
+        ],
+        [
+          50,
+          0.1478
+        ],
+        [
+          150,
+          0.1286
+        ],
+        [
+          1000,
+          0.1043
+        ],
+        [
+          2000,
+          0.0996
+        ],
+        [
+          5000,
+          0.0968
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C165948.html",
+      "checked": "2026-09-17"
+    },
+    "C11702": {
+      "unit_price_usd": 0.0022,
+      "ladder": [
+        [
+          100,
+          0.0022
+        ],
+        [
+          1000,
+          0.0018
+        ],
+        [
+          3000,
+          0.0015
+        ],
+        [
+          10000,
+          0.0014
+        ],
+        [
+          50000,
+          0.0012
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C11702.html",
+      "checked": "2026-09-17"
+    },
+    "C23186": {
+      "unit_price_usd": 0.0019,
+      "ladder": [
+        [
+          100,
+          0.0019
+        ],
+        [
+          1000,
+          0.0015
+        ],
+        [
+          5000,
+          0.0013
+        ],
+        [
+          10000,
+          0.0012
+        ],
+        [
+          50000,
+          0.0011
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C23186.html",
+      "checked": "2026-09-17"
+    },
+    "C25741": {
+      "unit_price_usd": 0.0025,
+      "ladder": [
+        [
+          100,
+          0.0025
+        ],
+        [
+          1000,
+          0.0019
+        ],
+        [
+          3000,
+          0.0016
+        ],
+        [
+          10000,
+          0.0015
+        ],
+        [
+          50000,
+          0.0013
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C25741.html",
+      "checked": "2026-09-17"
+    },
+    "C26083": {
+      "unit_price_usd": 0.0026,
+      "ladder": [
+        [
+          100,
+          0.0026
+        ],
+        [
+          1000,
+          0.002
+        ],
+        [
+          3000,
+          0.0017
+        ],
+        [
+          10000,
+          0.0016
+        ],
+        [
+          50000,
+          0.0012
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C26083.html",
+      "checked": "2026-09-17"
+    },
+    "C17903": {
+      "unit_price_usd": 0.0114,
+      "ladder": [
+        [
+          50,
+          0.0114
+        ],
+        [
+          500,
+          0.0093
+        ],
+        [
+          1500,
+          0.0081
+        ],
+        [
+          5000,
+          0.0069
+        ],
+        [
+          25000,
+          0.0063
+        ],
+        [
+          50000,
+          0.006
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C17903.html",
+      "checked": "2026-09-17"
+    },
+    "C23137": {
+      "unit_price_usd": 0.0014,
+      "ladder": [
+        [
+          100,
+          0.0014
+        ],
+        [
+          1000,
+          0.0011
+        ],
+        [
+          5000,
+          0.001
+        ],
+        [
+          10000,
+          0.0009
+        ],
+        [
+          50000,
+          0.0008
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C23137.html",
+      "checked": "2026-09-17"
+    },
+    "C25744": {
+      "unit_price_usd": 0.0031,
+      "ladder": [
+        [
+          100,
+          0.0031
+        ],
+        [
+          1000,
+          0.0025
+        ],
+        [
+          3000,
+          0.0021
+        ],
+        [
+          10000,
+          0.002
+        ],
+        [
+          50000,
+          0.0016
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C25744.html",
+      "checked": "2026-09-17"
+    },
+    "C25076": {
+      "unit_price_usd": 0.0037,
+      "ladder": [
+        [
+          100,
+          0.0037
+        ],
+        [
+          1000,
+          0.0029
+        ],
+        [
+          3000,
+          0.0026
+        ],
+        [
+          10000,
+          0.0024
+        ],
+        [
+          50000,
+          0.0022
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C25076.html",
+      "checked": "2026-09-17"
+    },
+    "C25890": {
+      "unit_price_usd": 0.0036,
+      "ladder": [
+        [
+          100,
+          0.0036
+        ],
+        [
+          1000,
+          0.0027
+        ],
+        [
+          3000,
+          0.0023
+        ],
+        [
+          10000,
+          0.002
+        ],
+        [
+          50000,
+          0.0018
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C25890.html",
+      "checked": "2026-09-17"
+    },
+    "C25132": {
+      "unit_price_usd": 0.0015,
+      "ladder": [
+        [
+          100,
+          0.0015
+        ],
+        [
+          1000,
+          0.0012
+        ],
+        [
+          3000,
+          0.0011
+        ],
+        [
+          10000,
+          0.001
+        ],
+        [
+          50000,
+          0.0009
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C25132.html",
+      "checked": "2026-09-17"
+    },
+    "C92589": {
+      "unit_price_usd": 0.1102,
+      "ladder": [
+        [
+          5,
+          0.1102
+        ],
+        [
+          50,
+          0.087
+        ],
+        [
+          150,
+          0.0754
+        ],
+        [
+          500,
+          0.0667
+        ],
+        [
+          3000,
+          0.0597
+        ],
+        [
+          6000,
+          0.0562
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C92589.html",
+      "checked": "2026-09-17"
+    },
+    "C7377": {
+      "unit_price_usd": 0.2891,
+      "ladder": [
+        [
+          5,
+          0.2891
+        ],
+        [
+          50,
+          0.2263
+        ],
+        [
+          150,
+          0.1956
+        ],
+        [
+          500,
+          0.1683
+        ],
+        [
+          3300,
+          0.1524
+        ],
+        [
+          6600,
+          0.1479
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C7377.html",
+      "checked": "2026-09-17"
+    },
+    "C51118": {
+      "unit_price_usd": 0.1726,
+      "ladder": [
+        [
+          5,
+          0.1726
+        ],
+        [
+          50,
+          0.1368
+        ],
+        [
+          150,
+          0.1193
+        ],
+        [
+          500,
+          0.1038
+        ],
+        [
+          3000,
+          0.0949
+        ],
+        [
+          6000,
+          0.0924
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C51118.html",
+      "checked": "2026-09-17"
+    },
+    "C471060": {
+      "unit_price_usd": 2.039,
+      "ladder": [
+        [
+          1,
+          2.039
+        ],
+        [
+          10,
+          1.7524
+        ],
+        [
+          30,
+          1.5723
+        ],
+        [
+          100,
+          1.3888
+        ],
+        [
+          500,
+          1.3053
+        ],
+        [
+          1000,
+          1.2693
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C471060.html",
+      "checked": "2026-09-17"
+    },
+    "C2897368": {
+      "unit_price_usd": 0.1168,
+      "ladder": [
+        [
+          5,
+          0.1168
+        ],
+        [
+          50,
+          0.094
+        ],
+        [
+          150,
+          0.0826
+        ],
+        [
+          480,
+          0.0697
+        ],
+        [
+          2400,
+          0.0628
+        ],
+        [
+          4800,
+          0.0594
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C2897368.html",
+      "checked": "2026-09-17"
+    },
+    "C5664": {
+      "unit_price_usd": 0.0122,
+      "ladder": [
+        [
+          50,
+          0.0122
+        ],
+        [
+          500,
+          0.0097
+        ],
+        [
+          2000,
+          0.0082
+        ],
+        [
+          4000,
+          0.0074
+        ],
+        [
+          24000,
+          0.0067
+        ],
+        [
+          50000,
+          0.0063
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C5664.html",
+      "checked": "2026-09-17"
+    },
+    "C2905948": {
+      "unit_price_usd": 0.0239,
+      "ladder": [
+        [
+          20,
+          0.0239
+        ],
+        [
+          200,
+          0.0186
+        ],
+        [
+          500,
+          0.0146
+        ],
+        [
+          2000,
+          0.0129
+        ],
+        [
+          10000,
+          0.0113
+        ],
+        [
+          20000,
+          0.0105
+        ]
+      ],
+      "stock": null,
+      "source": "https://www.lcsc.com/product-detail/C2905948.html",
+      "checked": "2026-09-17"
+    }
+  },
+  "unpriced_codes": {
+    "C12389": "C12389: no price ladder found at https://www.lcsc.com/product-detail/C12389.html"
+  },
+  "jlcpcb_assembled_parts": [
+    {
+      "lcsc": "C1525",
+      "qty_per_board": 3,
+      "need_for_batch": 158,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0046,
+      "extended_usd": 0.7268,
+      "per_board_usd": 0.01454,
+      "designator": "C1, C15, C21",
+      "comment": "0.1uf",
+      "mpn": "CL05B104KO5NNNC"
+    },
+    {
+      "lcsc": "C28323",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 10,
+      "unit_price_usd": 0.0403,
+      "extended_usd": 2.1359,
+      "per_board_usd": 0.04272,
+      "designator": "C2",
+      "comment": "1uf",
+      "mpn": "CL21B105KBFNNNE"
+    },
+    {
+      "lcsc": "C15008",
+      "qty_per_board": 10,
+      "need_for_batch": 525,
+      "tier_qty": 300,
+      "unit_price_usd": 0.091,
+      "extended_usd": 47.775,
+      "per_board_usd": 0.9555,
+      "designator": "C3, C7, C8, C9, C10, C11, C12, C13, C14, C20",
+      "comment": "100uf",
+      "mpn": "CL31A107MQHNNNE"
+    },
+    {
+      "lcsc": "C1779",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 20,
+      "unit_price_usd": 0.0348,
+      "extended_usd": 1.8444,
+      "per_board_usd": 0.03689,
+      "designator": "C4",
+      "comment": "4.7uf",
+      "mpn": "CL21A475KAQNNNE"
+    },
+    {
+      "lcsc": "C472806",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 50,
+      "unit_price_usd": 0.0147,
+      "extended_usd": 0.7791,
+      "per_board_usd": 0.01558,
+      "designator": "C5",
+      "comment": "10nf",
+      "mpn": "CL21B103KB6WPNC"
+    },
+    {
+      "lcsc": "C90146",
+      "qty_per_board": 2,
+      "need_for_batch": 105,
+      "tier_qty": 50,
+      "unit_price_usd": 0.0912,
+      "extended_usd": 9.576,
+      "per_board_usd": 0.19152,
+      "designator": "C6, C17",
+      "comment": "22uf",
+      "mpn": "CL31A226KOHNNNE"
+    },
+    {
+      "lcsc": "C16772",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 50,
+      "unit_price_usd": 0.0051,
+      "extended_usd": 0.2703,
+      "per_board_usd": 0.00541,
+      "designator": "C16",
+      "comment": "220nf",
+      "mpn": "CL05B224KO5NNNC"
+    },
+    {
+      "lcsc": "C1705",
+      "qty_per_board": 2,
+      "need_for_batch": 105,
+      "tier_qty": 50,
+      "unit_price_usd": 0.0164,
+      "extended_usd": 1.722,
+      "per_board_usd": 0.03444,
+      "designator": "C18, C19",
+      "comment": "4.7uf",
+      "mpn": "CL10A475KP8NNNC"
+    },
+    {
+      "lcsc": "C52923",
+      "qty_per_board": 12,
+      "need_for_batch": 630,
+      "tier_qty": 500,
+      "unit_price_usd": 0.0075,
+      "extended_usd": 4.725,
+      "per_board_usd": 0.0945,
+      "designator": "C22, C24, C26, C28, C30, C32, C34, C36, C38, C40, C42, C44",
+      "comment": "1uf",
+      "mpn": "CL05A105KA5NQNC"
+    },
+    {
+      "lcsc": "C1525",
+      "qty_per_board": 13,
+      "need_for_batch": 683,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0046,
+      "extended_usd": 3.1418,
+      "per_board_usd": 0.06284,
+      "designator": "C23, C25, C27, C29, C31, C33, C35, C37, C39, C41, C43, C45, C47",
+      "comment": "0.1uf",
+      "mpn": "CL05B104KO5NNNC"
+    },
+    {
+      "lcsc": "C394395",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 30,
+      "unit_price_usd": 0.588,
+      "extended_usd": 31.164,
+      "per_board_usd": 0.62328,
+      "designator": "C46",
+      "comment": "100uf",
+      "mpn": "EMK325ABJ107MM-T"
+    },
+    {
+      "lcsc": "C2286",
+      "qty_per_board": 1,
+      "need_for_batch": 100,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0075,
+      "extended_usd": 0.75,
+      "per_board_usd": 0.015,
+      "designator": "D1",
+      "comment": "LED",
+      "mpn": "KT-0603R"
+    },
+    {
+      "lcsc": "C78401",
+      "qty_per_board": 2,
+      "need_for_batch": 105,
+      "tier_qty": 100,
+      "unit_price_usd": 0.044,
+      "extended_usd": 4.62,
+      "per_board_usd": 0.0924,
+      "designator": "D2, D3",
+      "comment": "SMAJ5.0A",
+      "mpn": "SMAJ5.0A/TR13"
+    },
+    {
+      "lcsc": "C883156",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 10,
+      "unit_price_usd": 0.0719,
+      "extended_usd": 3.8107,
+      "per_board_usd": 0.07621,
+      "designator": "F1",
+      "comment": "BSMD1812-200-16V",
+      "mpn": "BSMD1812-200-16V"
+    },
+    {
+      "lcsc": "C210834",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 10,
+      "unit_price_usd": 0.082,
+      "extended_usd": 4.346,
+      "per_board_usd": 0.08692,
+      "designator": "F2",
+      "comment": "MF-MSMF110/16-2",
+      "mpn": "MF-MSMF110/16-2"
+    },
+    {
+      "lcsc": "C165948",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 50,
+      "unit_price_usd": 0.1478,
+      "extended_usd": 7.8334,
+      "per_board_usd": 0.15667,
+      "designator": "J5",
+      "comment": "USB_C_Receptacle_PowerOnly_6P",
+      "mpn": "TYPE-C-31-M-12"
+    },
+    {
+      "lcsc": "C11702",
+      "qty_per_board": 5,
+      "need_for_batch": 263,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0022,
+      "extended_usd": 0.5786,
+      "per_board_usd": 0.01157,
+      "designator": "R1, R14, R15, R20, R21",
+      "comment": "1k",
+      "mpn": "0402WGF1001TCE"
+    },
+    {
+      "lcsc": "C23186",
+      "qty_per_board": 2,
+      "need_for_batch": 105,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0019,
+      "extended_usd": 0.1995,
+      "per_board_usd": 0.00399,
+      "designator": "R2, R3",
+      "comment": "5.1k",
+      "mpn": "0603WAF5101T5E"
+    },
+    {
+      "lcsc": "C25741",
+      "qty_per_board": 5,
+      "need_for_batch": 263,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0025,
+      "extended_usd": 0.6575,
+      "per_board_usd": 0.01315,
+      "designator": "R4, R6, R7, R8, R9",
+      "comment": "100k",
+      "mpn": "0402WGF1003TCE"
+    },
+    {
+      "lcsc": "C26083",
+      "qty_per_board": 3,
+      "need_for_batch": 158,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0026,
+      "extended_usd": 0.4108,
+      "per_board_usd": 0.00822,
+      "designator": "R5, R16, R17",
+      "comment": "1M",
+      "mpn": "0402WGF1004TCE"
+    },
+    {
+      "lcsc": "C17903",
+      "qty_per_board": 2,
+      "need_for_batch": 105,
+      "tier_qty": 50,
+      "unit_price_usd": 0.0114,
+      "extended_usd": 1.197,
+      "per_board_usd": 0.02394,
+      "designator": "R10, R12",
+      "comment": "10",
+      "mpn": "1206W4F100JT5E"
+    },
+    {
+      "lcsc": "C23137",
+      "qty_per_board": 2,
+      "need_for_batch": 105,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0014,
+      "extended_usd": 0.147,
+      "per_board_usd": 0.00294,
+      "designator": "R18, R19",
+      "comment": "330k",
+      "mpn": "0603WAF3303T5E"
+    },
+    {
+      "lcsc": "C25744",
+      "qty_per_board": 2,
+      "need_for_batch": 105,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0031,
+      "extended_usd": 0.3255,
+      "per_board_usd": 0.00651,
+      "designator": "R24, R25",
+      "comment": "10k",
+      "mpn": "0402WGF1002TCE"
+    },
+    {
+      "lcsc": "C25076",
+      "qty_per_board": 1,
+      "need_for_batch": 100,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0037,
+      "extended_usd": 0.37,
+      "per_board_usd": 0.0074,
+      "designator": "R26",
+      "comment": "100",
+      "mpn": "0402WGF1000TCE"
+    },
+    {
+      "lcsc": "C25890",
+      "qty_per_board": 1,
+      "need_for_batch": 100,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0036,
+      "extended_usd": 0.36,
+      "per_board_usd": 0.0072,
+      "designator": "R27",
+      "comment": "3.3k",
+      "mpn": "0402WGF3301TCE"
+    },
+    {
+      "lcsc": "C25132",
+      "qty_per_board": 12,
+      "need_for_batch": 630,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0015,
+      "extended_usd": 0.945,
+      "per_board_usd": 0.0189,
+      "designator": "R28, R30, R32, R34, R36, R38, R40, R42, R44, R46, R48, R50",
+      "comment": "750",
+      "mpn": "0402WGF7500TCE"
+    },
+    {
+      "lcsc": "C25741",
+      "qty_per_board": 12,
+      "need_for_batch": 630,
+      "tier_qty": 100,
+      "unit_price_usd": 0.0025,
+      "extended_usd": 1.575,
+      "per_board_usd": 0.0315,
+      "designator": "R29, R31, R33, R35, R37, R39, R41, R43, R45, R47, R49, R51",
+      "comment": "100k",
+      "mpn": "0402WGF1003TCE"
+    },
+    {
+      "lcsc": "C92589",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 50,
+      "unit_price_usd": 0.087,
+      "extended_usd": 4.611,
+      "per_board_usd": 0.09222,
+      "designator": "SW1",
+      "comment": "K2-1808SN-A4SW-01",
+      "mpn": "K2-1808SN-A4SW-01"
+    },
+    {
+      "lcsc": "C7377",
+      "qty_per_board": 3,
+      "need_for_batch": 158,
+      "tier_qty": 150,
+      "unit_price_usd": 0.1956,
+      "extended_usd": 30.9048,
+      "per_board_usd": 0.6181,
+      "designator": "U2, U3, U4",
+      "comment": "MCP6002-xSN",
+      "mpn": "MCP6002T-I/SN"
+    },
+    {
+      "lcsc": "C51118",
+      "qty_per_board": 1,
+      "need_for_batch": 53,
+      "tier_qty": 50,
+      "unit_price_usd": 0.1368,
+      "extended_usd": 7.2504,
+      "per_board_usd": 0.14501,
+      "designator": "U5",
+      "comment": "AP2112K-3.3",
+      "mpn": "AP2112K-3.3TRG1"
+    },
+    {
+      "lcsc": "C471060",
+      "qty_per_board": 12,
+      "need_for_batch": 630,
+      "tier_qty": 500,
+      "unit_price_usd": 1.3053,
+      "extended_usd": 822.339,
+      "per_board_usd": 16.44678,
+      "designator": "U6, U7, U8, U9, U10, U11, U12, U13, U14, U15, U16, U17",
+      "comment": "TPS2111APWR",
+      "mpn": "TPS2111APWR"
+    }
+  ],
+  "hand_solder_parts": [
+    {
+      "lcsc": "C2897368",
+      "qty_per_board": 25,
+      "need_for_batch": 1313,
+      "tier_qty": 480,
+      "unit_price_usd": 0.0697,
+      "extended_usd": 91.5161,
+      "per_board_usd": 1.83032,
+      "used_for": "slot_socket",
+      "groups": [
+        "slot-rail-socket",
+        "slot-ground-socket",
+        "aux-input-socket"
+      ],
+      "mpn": "PM254-1-05-Z-8.5",
+      "refs": [
+        "VSUPPLY_1",
+        "VSUPPLY_2",
+        "VSUPPLY_3",
+        "VSUPPLY_4",
+        "VSUPPLY_5",
+        "VSUPPLY_6",
+        "VSUPPLY_7",
+        "VSUPPLY_8",
+        "VSUPPLY_9",
+        "VSUPPLY_10",
+        "VSUPPLY_11",
+        "VSUPPLY_12",
+        "GND1",
+        "GND2",
+        "GND3",
+        "GND4",
+        "GND5",
+        "GND6",
+        "GND7",
+        "GND8",
+        "GND9",
+        "GND10",
+        "GND11",
+        "GND12",
+        "INPUT1"
+      ]
+    },
+    {
+      "lcsc": "C2905948",
+      "qty_per_board": 12,
+      "need_for_batch": 630,
+      "tier_qty": 500,
+      "unit_price_usd": 0.0146,
+      "extended_usd": 9.198,
+      "per_board_usd": 0.18396,
+      "used_for": "rail_select_header",
+      "groups": [
+        "rail-select-header"
+      ],
+      "mpn": "PZ200-1-02-Z",
+      "refs": [
+        "J7",
+        "J8",
+        "J9",
+        "J10",
+        "J11",
+        "J12",
+        "J13",
+        "J14",
+        "J15",
+        "J16",
+        "J17",
+        "J18"
+      ]
+    }
+  ],
+  "accessories": [
+    {
+      "lcsc": "C5664",
+      "qty_per_board": 12,
+      "need_for_batch": 630,
+      "tier_qty": 500,
+      "unit_price_usd": 0.0097,
+      "extended_usd": 6.111,
+      "per_board_usd": 0.12222,
+      "used_for": "shunt",
+      "mpn": "2.0 Short circuit cap",
+      "note": "accessory, user-fit, not a board designator"
+    }
+  ],
+  "parts_not_priced": [
+    {
+      "refs": [
+        "FB1",
+        "FB2"
+      ],
+      "lcsc": "C12389",
+      "comment": "PZ2012D800-3R0TF",
+      "mpn": "PZ2012D800-3R0TF",
+      "reason": "no price ladder on the LCSC product page"
+    }
+  ],
+  "hand_solder_not_priced": [
+    {
+      "refs": [
+        "5V14"
+      ],
+      "group": [
+        "power-expansion-socket"
+      ],
+      "reason": "part number not selected in this pass - pick a straight 2x05 2.54 mm female socket (the HCTL PM254-2-05-W-8.5, C2897425, is the RIGHT-ANGLE variant and must not be used unless the hole direction is re-verified)"
+    },
+    {
+      "refs": [
+        "J1",
+        "J2",
+        "J4",
+        "J6"
+      ],
+      "group": [
+        "audio-jack"
+      ],
+      "reason": "WQP-PJ366ST (QingPu); schematic LCSC field is already NOT-JLC."
+    },
+    {
+      "refs": [
+        "RV1",
+        "RV2"
+      ],
+      "group": [
+        "panel-pot"
+      ],
+      "reason": "RV09-50K; schematic LCSC field is already NOT-JLC."
+    }
+  ],
+  "accessories_not_priced": [],
+  "counts": {
+    "designators_total": 163,
+    "designators_priced": 154,
+    "designators_not_priced": 9,
+    "not_priced_designators": [
+      "5V14",
+      "FB1",
+      "FB2",
+      "J1",
+      "J2",
+      "J4",
+      "J6",
+      "RV1",
+      "RV2"
+    ],
+    "priced_designators": [
+      "C1",
+      "C10",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C15",
+      "C16",
+      "C17",
+      "C18",
+      "C19",
+      "C2",
+      "C20",
+      "C21",
+      "C22",
+      "C23",
+      "C24",
+      "C25",
+      "C26",
+      "C27",
+      "C28",
+      "C29",
+      "C3",
+      "C30",
+      "C31",
+      "C32",
+      "C33",
+      "C34",
+      "C35",
+      "C36",
+      "C37",
+      "C38",
+      "C39",
+      "C4",
+      "C40",
+      "C41",
+      "C42",
+      "C43",
+      "C44",
+      "C45",
+      "C46",
+      "C47",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "D1",
+      "D2",
+      "D3",
+      "F1",
+      "F2",
+      "GND1",
+      "GND10",
+      "GND11",
+      "GND12",
+      "GND2",
+      "GND3",
+      "GND4",
+      "GND5",
+      "GND6",
+      "GND7",
+      "GND8",
+      "GND9",
+      "INPUT1",
+      "J10",
+      "J11",
+      "J12",
+      "J13",
+      "J14",
+      "J15",
+      "J16",
+      "J17",
+      "J18",
+      "J5",
+      "J7",
+      "J8",
+      "J9",
+      "R1",
+      "R10",
+      "R12",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "R18",
+      "R19",
+      "R2",
+      "R20",
+      "R21",
+      "R24",
+      "R25",
+      "R26",
+      "R27",
+      "R28",
+      "R29",
+      "R3",
+      "R30",
+      "R31",
+      "R32",
+      "R33",
+      "R34",
+      "R35",
+      "R36",
+      "R37",
+      "R38",
+      "R39",
+      "R4",
+      "R40",
+      "R41",
+      "R42",
+      "R43",
+      "R44",
+      "R45",
+      "R46",
+      "R47",
+      "R48",
+      "R49",
+      "R5",
+      "R50",
+      "R51",
+      "R6",
+      "R7",
+      "R8",
+      "R9",
+      "SW1",
+      "U10",
+      "U11",
+      "U12",
+      "U13",
+      "U14",
+      "U15",
+      "U16",
+      "U17",
+      "U2",
+      "U3",
+      "U4",
+      "U5",
+      "U6",
+      "U7",
+      "U8",
+      "U9",
+      "VSUPPLY_1",
+      "VSUPPLY_10",
+      "VSUPPLY_11",
+      "VSUPPLY_12",
+      "VSUPPLY_2",
+      "VSUPPLY_3",
+      "VSUPPLY_4",
+      "VSUPPLY_5",
+      "VSUPPLY_6",
+      "VSUPPLY_7",
+      "VSUPPLY_8",
+      "VSUPPLY_9"
+    ],
+    "accessories_total": 12
+  },
+  "totals": {
+    "partial": true,
+    "partial_note": "Components only, and not every component: hand_solder_not_priced, parts_not_priced and accessories_not_priced are missing from this subtotal, so it is a floor, not the board cost.",
+    "jlcpcb_assembled_per_board_usd": 19.94,
+    "hand_solder_per_board_usd": 2.01,
+    "components_per_board_usd": 21.96,
+    "components_for_batch_usd": 1097.81,
+    "accessories_per_board_usd": 0.12,
+    "quote_required": [
+      "bare 2-layer PCB 223.52 x 160.02 mm (357.6 cm2)",
+      "JLCPCB SMT assembly charge for 119 placements / 32 BOM rows + setup/stencil",
+      "shipping and taxes"
+    ]
+  }
+}

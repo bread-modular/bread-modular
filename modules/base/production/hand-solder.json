@@ -1,0 +1,224 @@
+{
+  "schema": "bread-modular/base/hand-solder/1",
+  "release": "1.3.2",
+  "hand_maintained": true,
+  "note": "Hand-maintained release input, NOT a generated file. tools/regenerate_production.py reads it, applies bom_override to the generated production/bom.csv for every reference listed with override_bom true, writes the derived production/hand-solder.csv and records this file's SHA-256 in production/manifest.json. Nothing here changes the schematic or the PCB.",
+  "scope_correction": "The module sockets are hand-soldered by the builder and are NOT ordered from or assembled by JLCPCB. Connector gender is therefore an assembly-note item, not an ordering blocker.",
+  "reason": "The modules carry MALE 2.54 mm headers (28 module PCBs exist, 27 were inspected, and 25 of them carry value Conn_01x05_Pin on a bottom-side 1x05 2.54 mm header; 4mix and imix mount the same header on F.Cu and 32bit cannot be loaded standalone), so the base must carry FEMALE 1x05 2.54 mm sockets. The Phase-1 part C2894928 / PZ254-1-05-Z-8.5 is a MALE header and is wrong for every base socket position. It is still carried by the immutable schematic and PCB fields (base.kicad_sch / base.kicad_pcb, the latter pinned byte-identical), so it is overridden here rather than in KiCad: this keeps the schematic/PCB parity check in tools/verify_power.py intact and keeps base.kicad_pcb's SHA-256 unchanged.",
+  "bom_override": {
+    "field": "LCSC Part #",
+    "value": "NOT-JLC",
+    "convention": "Identical to the existing hand-solder convention already used by the 3.5 mm jacks (J1, J2, J4, J6) and the RV09 pots (RV1, RV2) in base.kicad_sch."
+  },
+  "jlcpcb": {
+    "assembles": "ALL surface-mount footprints only. The exporter runs with --include-through-hole disabled, so every through-hole reference is excluded from the JLCPCB BOM and CPL automatically.",
+    "slot_socket_refs_are_absent": true
+  },
+  "groups": [
+    {
+      "id": "slot-rail-socket",
+      "qty": 12,
+      "refs": ["VSUPPLY_1", "VSUPPLY_2", "VSUPPLY_3", "VSUPPLY_4", "VSUPPLY_5", "VSUPPLY_6", "VSUPPLY_7", "VSUPPLY_8", "VSUPPLY_9", "VSUPPLY_10", "VSUPPLY_11", "VSUPPLY_12"],
+      "role": "Per-slot rail supply socket (net VSLOT_n). 1x05, 2.54 mm, through hole, 1.0 mm drill.",
+      "footprint": "BreadModular_MISC:Power_Connector",
+      "assembly": "hand-solder",
+      "supply": "user-supplied",
+      "override_bom": true,
+      "legacy_part": "C2894928 / PZ254-1-05-Z-8.5 (HCTL) - MALE 1x05 pin header. DO NOT ORDER FOR THIS POSITION.",
+      "required": "FEMALE 1x05 2.54 mm socket, top entry, square holes, insulator height >= 6.6 mm (nominal).",
+      "recommended": "C2897368 / PM254-1-05-Z-8.5 (HCTL)"
+    },
+    {
+      "id": "slot-ground-socket",
+      "qty": 12,
+      "refs": ["GND1", "GND2", "GND3", "GND4", "GND5", "GND6", "GND7", "GND8", "GND9", "GND10", "GND11", "GND12"],
+      "role": "Per-slot ground socket that mates with the module ground header. 1x05, 2.54 mm, through hole, 1.0 mm drill.",
+      "footprint": "BreadModular_MISC:Power_Connector",
+      "assembly": "hand-solder",
+      "supply": "user-supplied",
+      "override_bom": true,
+      "legacy_part": "C2894928 / PZ254-1-05-Z-8.5 (HCTL) - MALE 1x05 pin header. DO NOT ORDER FOR THIS POSITION.",
+      "required": "FEMALE 1x05 2.54 mm socket, top entry, square holes, insulator height >= 6.6 mm (nominal).",
+      "recommended": "C2897368 / PM254-1-05-Z-8.5 (HCTL)"
+    },
+    {
+      "id": "aux-input-socket",
+      "qty": 1,
+      "refs": ["INPUT1"],
+      "role": "Auxiliary 1x05 2.54 mm input socket at the board edge.",
+      "footprint": "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical",
+      "assembly": "hand-solder",
+      "supply": "user-supplied",
+      "override_bom": true,
+      "legacy_part": "C2894928 / PZ254-1-05-Z-8.5 (HCTL) - MALE 1x05 pin header. DO NOT ORDER FOR THIS POSITION.",
+      "required": "FEMALE 1x05 2.54 mm socket, top entry, square holes.",
+      "recommended": "C2897368 / PM254-1-05-Z-8.5 (HCTL)"
+    },
+    {
+      "id": "power-expansion-socket",
+      "qty": 1,
+      "refs": ["5V14"],
+      "role": "2x05 2.54 mm power-expansion socket (legacy designator 5V14; its pins carry +3.3 V and GND only).",
+      "footprint": "Connector_PinSocket_2.54mm:PinSocket_2x05_P2.54mm_Vertical",
+      "assembly": "hand-solder",
+      "supply": "user-supplied",
+      "override_bom": true,
+      "legacy_part": "C2894966 / PZ254-2-05-Z-8.5 (HCTL) - MALE 2x05 pin header. DO NOT ORDER FOR THIS POSITION.",
+      "required": "FEMALE 2x05 2.54 mm socket, top entry, square holes, straight (not right-angle).",
+      "recommended": "part number not selected in this pass - pick a straight 2x05 2.54 mm female socket (the HCTL PM254-2-05-W-8.5, C2897425, is the RIGHT-ANGLE variant and must not be used unless the hole direction is re-verified)",
+      "discovered_in_this_pass": true
+    },
+    {
+      "id": "rail-select-header",
+      "qty": 12,
+      "refs": ["J7", "J8", "J9", "J10", "J11", "J12", "J13", "J14", "J15", "J16", "J17", "J18"],
+      "role": "Per-slot rail-select jumper header (pin 1 = +3.3 V reference, pin 2 = SEL_n). 1x02, 2.00 mm, through hole.",
+      "footprint": "Connector_PinHeader_2.00mm:PinHeader_1x02_P2.00mm_Vertical",
+      "assembly": "hand-solder",
+      "supply": "order separately",
+      "override_bom": false,
+      "part": "C2905948 / PZ200-1-02-Z (HCTL) - male 2.00 mm header. Correct gender, part number kept in the BOM.",
+      "note": "Also excluded from the JLCPCB BOM/CPL (through hole). Counted here so the builder's work list is complete; the Phase-1 checklist mentioned only the slot sockets, the jacks and the pots."
+    },
+    {
+      "id": "audio-jack",
+      "qty": 4,
+      "refs": ["J1", "J2", "J4", "J6"],
+      "role": "3.5 mm mono audio jacks (LineOut, Ground x2, HeadphoneOut).",
+      "footprint": "BreadModular_AudioJacks:Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical",
+      "assembly": "hand-solder",
+      "supply": "user-supplied",
+      "override_bom": false,
+      "part": "WQP-PJ366ST (QingPu); schematic LCSC field is already NOT-JLC."
+    },
+    {
+      "id": "panel-pot",
+      "qty": 2,
+      "refs": ["RV1", "RV2"],
+      "role": "RV09 panel potentiometers, 50 k.",
+      "footprint": "BreadModular_Pots:Potentiometer_RV09",
+      "assembly": "hand-solder",
+      "supply": "user-supplied",
+      "override_bom": false,
+      "part": "RV09-50K; schematic LCSC field is already NOT-JLC."
+    }
+  ],
+  "recommended_parts": {
+    "slot_socket": {
+      "lcsc": "C2897368",
+      "mpn": "PM254-1-05-Z-8.5",
+      "manufacturer": "HCTL",
+      "description": "1x05 2.54 mm female socket, straight pin, square holes, top entry, through hole",
+      "insulator_height_mm": 8.5,
+      "total_length_mm": 11.7,
+      "solder_tail_mm": 3.2,
+      "current_a": 3,
+      "min_order": 5,
+      "price_band_usd": {"5+": 0.1168, "50+": 0.094, "150+": 0.0826, "2400+": 0.0628},
+      "stock": 6155,
+      "stock_asof": "2026-09-17",
+      "stock_source": "https://www.lcsc.com/product-detail/Female-Headers_HCTL-PM254-1-05-Z-8-5_C2897368.html",
+      "datasheet": "https://www.lcsc.com/datasheet/C2897368.pdf",
+      "datasheet_title": "2.54 single-row female header, straight pin, plastic height 8.5; part number PM254-1-N-Z-8.5-XX (L11.7)",
+      "checked_this_pass": true
+    },
+    "power_expansion_socket": {
+      "lcsc": null,
+      "mpn": null,
+      "description": "straight 2x05 2.54 mm female socket - part number NOT selected in this pass",
+      "candidate_rejected": "C2897425 / PM254-2-05-W-8.5 (HCTL) is the right-angle variant and is not a valid substitute for a top-entry socket",
+      "checked_this_pass": false
+    },
+    "rail_select_header": {
+      "lcsc": "C2905948",
+      "mpn": "PZ200-1-02-Z",
+      "manufacturer": "HCTL",
+      "description": "1x02 2.00 mm male pin header, straight (pin 1 = +3.3 V reference, pin 2 = SEL_n)",
+      "insulator_mm": 2.0,
+      "mating_pin_mm": 4.0,
+      "solder_tail_mm": 2.8,
+      "source": "https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948",
+      "checked_this_pass": false
+    },
+    "shunt": {
+      "lcsc": "C5664",
+      "mpn": "2.0 Short circuit cap",
+      "manufacturer": "BOOMELE (Boom Precision Elec)",
+      "description": "2.00 mm shunt / short-circuit cap, 1x2, open top, unshrouded, 1.5 A",
+      "height_mm": 3.5,
+      "length_mm": 4.0,
+      "height_tolerance_mm": 0.30,
+      "ordering_code_heights_mm": [3.5, 4.5, 5.0],
+      "min_order": 50,
+      "price_band_usd": {"50+": 0.0122, "500+": 0.009},
+      "stock": 126400,
+      "stock_asof": "2026-09-17",
+      "stock_source": "https://www.lcsc.com/product-detail/Shunts-Jumpers_BOOMELE-Boom-Precision-Elec-C5664_C5664.html",
+      "datasheet": "https://www.lcsc.com/datasheet/C5664.pdf",
+      "datasheet_drawing": "LY-DLM201-2-021 rev A - open type (C = open) 4.00 x 2.00 x 3.50 mm; ordering code item 3 (plastics height) offers 3.5 / 4.5 / 5.0 mm; general tolerance X.X +/-0.30",
+      "checked_this_pass": true,
+      "lower_profile_needed": false
+    }
+  },
+  "stack_height": {
+    "datum": "Base PCB top surface (z = 0). Everything below is measured upward from it. Through-board solder tails are explicitly NOT counted as height above the board.",
+    "components": {
+      "base_pcb_thickness_mm": 1.6,
+      "jumper_header": {
+        "lcsc": "C2905948",
+        "mpn": "PZ200-1-02-Z",
+        "insulator_mm": 2.0,
+        "mating_pin_mm": 4.0,
+        "solder_tail_mm": 2.8,
+        "tail_below_board_mm": 1.2,
+        "tail_nominal_check": "solder_tail_mm - base_pcb_thickness_mm",
+        "above_board_mm": 6.0,
+        "source": "https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948"
+      },
+      "shunt": {
+        "lcsc": "C5664",
+        "height_mm": 3.5,
+        "above_board_if_seated_on_insulator_mm": 5.5,
+        "source": "https://www.lcsc.com/datasheet/C5664.pdf"
+      },
+      "base_socket": {
+        "lcsc": "C2897368",
+        "mpn": "PM254-1-05-Z-8.5",
+        "insulator_mm": 8.5,
+        "total_length_mm": 11.7,
+        "source": "https://www.lcsc.com/datasheet/C2897368.pdf"
+      },
+      "module_male_header": {
+        "part": "unspecified on the module PCBs - assumed to be the mechanical twin of PZ254-1-05-Z-8.5",
+        "insulator_mm": 2.5,
+        "mating_pin_mm": 6.0,
+        "solder_tail_mm": 3.0,
+        "mounting": "bottom side (B.Cu) on 25 of the 27 inspected module boards; 4mix and imix mount the same headers on F.Cu",
+        "source": "https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928"
+      }
+    },
+    "rules": {
+      "tolerance_x_x_mm": 0.30,
+      "base_pcb_thickness_mm": 1.6,
+      "module_pcb_thickness_mm": 1.6,
+      "module_pcb_thickness_tolerance_mm": 0.16,
+      "assembly_margin_mm": 0.5
+    },
+    "derived": {
+      "jumper_envelope_nominal_mm": 6.0,
+      "jumper_envelope_worst_case_mm": 6.6,
+      "shunt_does_not_raise_envelope": true,
+      "module_underside_nominal_mm": 11.0,
+      "module_underside_worst_case_mm": 10.4,
+      "clearance_nominal_mm": 5.0,
+      "clearance_worst_case_mm": 3.8,
+      "minimum_socket_insulator_mm": 6.3,
+      "minimum_socket_insulator_nominal_mm": 6.6,
+      "minimum_socket_insulator_note": "Two lower bounds on the NOMINAL part: (a) swallow the module's worst-case 6.3 mm mating pin, (b) hold the module underside 0.5 mm above the fitted jumper (4.9 mm). 6.3 mm is the requirement; because a part is bought by its nominal label and the drawing tolerance is X.X +/-0.30, the assembly-note minimum to buy is 6.6 mm. The recommended 8.5 mm part is 8.2 mm worst case. The (b) bound holds even for the tallest 5.0 mm shunt option of the C5664 family."
+    }
+  },
+  "sources": {
+    "module_male_headers": "modules/*/*.kicad_pcb - V_SUPPLY*/5V*/GND* carry value Conn_01x05_Pin on a 1x05 2.54 mm through-hole header footprint. Coverage: 28 module PCBs exist, 27 were inspected (32bit is unreadable by pcbnew), 25 carry it on B.Cu and 4mix/imix on F.Cu.",
+    "detail_row": "https://www.lcsc.com/product-detail/Pin-Headers_HCTL-PZ254-1-05-Z-8-5_C2894928.html"
+  }
+}

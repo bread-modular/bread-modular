@@ -1,32 +1,862 @@
 {
+  "release_version": "1.3.2",
+  "release_status": "fab-ready",
   "pcb_sha256": "9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484",
+  "routed_pcb_sha256_pinned": "9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484",
   "schematic_sha256": "42b0fde4839be9359a309e9c0d09fe737644359e66cb55f0030ef31478e8b999",
   "slot_schematic_sha256": "968af7490500664bef60cea7f5f095bdce586b1b0fb987797cefc4676a789efb",
   "project_sha256": "6a8512e853f7ca3f155bbf6dcdb6286c7bcc0fb31127625399593266643402a1",
   "custom_rules_sha256": "f5d445bb5bf8f4b3351b9d46e235b397d9759dffa9469b3c83eb7c0deca0646f",
   "production_refs": 163,
-  "assembly_hold": true,
-  "assembly_hold_reason": "Actual female socket, assembled board gap and shunt height require owner confirmation.",
+  "jlcpcb_assembled_refs": 119,
+  "jlcpcb_bom_rows": 32,
+  "hand_solder_refs": 44,
+  "hand_solder_override_sha256": "24410189dbd60ca5e4f62a086f6e148587b492cb68c27d21580ad2d595d62bf7",
+  "hand_solder_override_field": "LCSC Part #",
+  "hand_solder_override_value": "NOT-JLC",
+  "hand_solder": {
+    "list": "production/hand-solder.csv",
+    "slot_socket_refs": [
+      "VSUPPLY_1",
+      "VSUPPLY_2",
+      "VSUPPLY_3",
+      "VSUPPLY_4",
+      "VSUPPLY_5",
+      "VSUPPLY_6",
+      "VSUPPLY_7",
+      "VSUPPLY_8",
+      "VSUPPLY_9",
+      "VSUPPLY_10",
+      "VSUPPLY_11",
+      "VSUPPLY_12",
+      "GND1",
+      "GND2",
+      "GND3",
+      "GND4",
+      "GND5",
+      "GND6",
+      "GND7",
+      "GND8",
+      "GND9",
+      "GND10",
+      "GND11",
+      "GND12"
+    ],
+    "aux_input_socket_refs": [
+      "INPUT1"
+    ],
+    "power_expansion_socket_refs": [
+      "5V14"
+    ],
+    "groups": [
+      {
+        "id": "slot-rail-socket",
+        "qty": 12,
+        "refs": [
+          "VSUPPLY_1",
+          "VSUPPLY_2",
+          "VSUPPLY_3",
+          "VSUPPLY_4",
+          "VSUPPLY_5",
+          "VSUPPLY_6",
+          "VSUPPLY_7",
+          "VSUPPLY_8",
+          "VSUPPLY_9",
+          "VSUPPLY_10",
+          "VSUPPLY_11",
+          "VSUPPLY_12"
+        ]
+      },
+      {
+        "id": "slot-ground-socket",
+        "qty": 12,
+        "refs": [
+          "GND1",
+          "GND2",
+          "GND3",
+          "GND4",
+          "GND5",
+          "GND6",
+          "GND7",
+          "GND8",
+          "GND9",
+          "GND10",
+          "GND11",
+          "GND12"
+        ]
+      },
+      {
+        "id": "aux-input-socket",
+        "qty": 1,
+        "refs": [
+          "INPUT1"
+        ]
+      },
+      {
+        "id": "power-expansion-socket",
+        "qty": 1,
+        "refs": [
+          "5V14"
+        ]
+      },
+      {
+        "id": "rail-select-header",
+        "qty": 12,
+        "refs": [
+          "J7",
+          "J8",
+          "J9",
+          "J10",
+          "J11",
+          "J12",
+          "J13",
+          "J14",
+          "J15",
+          "J16",
+          "J17",
+          "J18"
+        ]
+      },
+      {
+        "id": "audio-jack",
+        "qty": 4,
+        "refs": [
+          "J1",
+          "J2",
+          "J4",
+          "J6"
+        ]
+      },
+      {
+        "id": "panel-pot",
+        "qty": 2,
+        "refs": [
+          "RV1",
+          "RV2"
+        ]
+      }
+    ]
+  },
+  "schema_note": "Schematic and PCB are unchanged; the hand-solder LCSC value exists only in the generated production/bom.csv.",
+  "stack_height": {
+    "input_sha256": {
+      "calculator": "b00bd46523fa1402af7398bf775a6690107f62060baff735e70255627433b0b9",
+      "hand-solder.json": "24410189dbd60ca5e4f62a086f6e148587b492cb68c27d21580ad2d595d62bf7",
+      "fixed-geometry.json": "2e7aec17adfb6b3be0d164325a500e3e1bf6b8c6a83d3c1849250af6337b29a4",
+      "base.kicad_pcb": "9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484",
+      "base.kicad_sch": "42b0fde4839be9359a309e9c0d09fe737644359e66cb55f0030ef31478e8b999",
+      "slot.kicad_sch": "968af7490500664bef60cea7f5f095bdce586b1b0fb987797cefc4676a789efb",
+      "module_scope": {
+        "enumerated": [
+          "16bit",
+          "16bit+",
+          "32bit",
+          "4mix",
+          "8bit",
+          "ar_env",
+          "blank",
+          "cv_math",
+          "drive",
+          "env",
+          "head_out",
+          "hihat",
+          "imix",
+          "jacks",
+          "jvca",
+          "kick",
+          "line_in",
+          "line_out",
+          "low",
+          "mcc",
+          "mco",
+          "midi",
+          "noise",
+          "pots",
+          "svf",
+          "usb_power",
+          "v2ca",
+          "wave"
+        ],
+        "inspected": [
+          "16bit",
+          "16bit+",
+          "4mix",
+          "8bit",
+          "ar_env",
+          "blank",
+          "cv_math",
+          "drive",
+          "env",
+          "head_out",
+          "hihat",
+          "imix",
+          "jacks",
+          "jvca",
+          "kick",
+          "line_in",
+          "line_out",
+          "low",
+          "mcc",
+          "mco",
+          "midi",
+          "noise",
+          "pots",
+          "svf",
+          "usb_power",
+          "v2ca",
+          "wave"
+        ],
+        "unreadable": [
+          "32bit"
+        ]
+      },
+      "module_pcbs": {
+        "16bit": "69303f273304d80af16ce560c2df46e8bf6cf55f6c1f0af6b5f672d24f6f8fb6",
+        "16bit+": "5d016238613fe4c27c597cf674d5b885c8470453e6358d6b1c70acdb096d76e2",
+        "4mix": "60e0a9746e39779898dda12ca73ad81b6fd24465c904da47e3712a364e43aa58",
+        "8bit": "e7e2987c6d4fe80e914160363cb04a598f151b704ecac2d5542f4059db44c4c7",
+        "ar_env": "9fadcb7e8240f8c0b054019e748a6773800e570a78caea7f20c127f46128f460",
+        "blank": "97426d04f1943e44a2ac06d47bd8ece65e2e58fa714543adf305927ac6676885",
+        "cv_math": "fb788a89293396032aa74ca0114226b0b1f46a00d5068008efe5411012488fdc",
+        "drive": "c0d8de875c91c68323b314042af37517d890d3933ff0c0a834c201a69242495c",
+        "env": "f32f9c22b53e01adcfd8555646f32a41db17ec650cf28d861443479a8bf4fe55",
+        "head_out": "5ce6dbc0db61242217a1f9e0bbca2184cee0fd8766141d2e272d2f933daa3437",
+        "hihat": "30dac46bce17a56295d612b10f66ded9213e88d53405c3144851499d6301c09a",
+        "imix": "d16f0416b1bdc3e05c871c82c2da58d7c08a8462920d6f93e66fba5e8e68e156",
+        "jacks": "d81d659e7e8c5f17e425d4984d19862ae077da9909bbfbb88d6cb7e0664ca3d1",
+        "jvca": "6db21d347c8079a8e918bc53cf934af63c35f30f65090dba4e111a2036d374bc",
+        "kick": "429d5b5b9c606b0daee5b54b32138f55b24973565113692d83bb286f6d1632d1",
+        "line_in": "82b01bbda1ec5170d5d57876ea6f54a1642c65ec68f6b1af6caeacbedbd7201a",
+        "line_out": "133be4acd07e0f33717a9f1706e1870c1575652b6e26eec38b8b10f457f7d4f2",
+        "low": "ba90de2e81aa8e5aefbd56cecfe187fcd9ac3fddb0e269cb67cb563897122c5c",
+        "mcc": "36a4c7aa86574fba42909dd2cd4fbae8a60891aaac5c629be1c1f686aa3358a7",
+        "mco": "c733a9b76678b729bc8ae30d6a54e52f81c7e008a2cc1303f5888e8c12e02433",
+        "midi": "a85dc7480ebd653a1f13f77f5f13871039d9dc1c406b6f4c48867c23984e7c9b",
+        "noise": "3ee95155a13b552e6e22e46c4854ab132f70ad3efa1d5a967f00f4f10bbf6b6f",
+        "pots": "24819d73b09e4ff07dc55945fe6d128691c1d6a3087f8d1e744fce10dfb76842",
+        "svf": "50724997f09cbbe331081bb51a9959a37158eeec1ca8e4c7977834e5d5f1c835",
+        "usb_power": "53771a23acc2fac1962d504b5cfbe8acc2f8c4a620c67b3a5aff220ee3893763",
+        "v2ca": "c0faa9ad26eecd58e64ac9b713ee52e4fb78424b6086166bd2b40c536031b1c1",
+        "wave": "a034f2ca7bf5ff4f0c4eb66ccb0537c4d104a9695b161d92a1e811881799167f"
+      }
+    },
+    "datum": "Base PCB top surface (z = 0). Everything below is measured upward from it. Through-board solder tails are explicitly NOT counted as height above the board.",
+    "inputs": {
+      "jumper_header": {
+        "lcsc": "C2905948",
+        "mpn": "PZ200-1-02-Z",
+        "above_board_mm": 6.0,
+        "solder_tail_below_board_mm": 1.2,
+        "source": "https://jlcpcb.com/partdetail/HCTL-PZ200_1_02Z/C2905948"
+      },
+      "shunt": {
+        "lcsc": "C5664",
+        "height_mm": 3.5,
+        "source": "https://www.lcsc.com/datasheet/C5664.pdf"
+      },
+      "base_socket": {
+        "lcsc": "C2897368",
+        "mpn": "PM254-1-05-Z-8.5",
+        "insulator_mm": 8.5,
+        "total_length_mm": 11.7,
+        "source": "https://www.lcsc.com/datasheet/C2897368.pdf"
+      },
+      "module_male_header": {
+        "part": "unspecified on the module PCBs - assumed to be the mechanical twin of PZ254-1-05-Z-8.5",
+        "insulator_mm": 2.5,
+        "mating_pin_mm": 6.0,
+        "mounting": "bottom side (B.Cu) on 25 of the 27 inspected module boards; 4mix and imix mount the same headers on F.Cu",
+        "source": "https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928"
+      }
+    },
+    "tolerance_x_x_mm": 0.3,
+    "assembly_margin_mm": 0.5,
+    "jumper_envelope_nominal_mm": 6.0,
+    "jumper_envelope_worst_case_mm": 6.6,
+    "module_underside_nominal_mm": 11.0,
+    "module_underside_worst_case_mm": 10.4,
+    "clearance_nominal_mm": 5.0,
+    "clearance_worst_case_mm": 3.8,
+    "clearance_ok": true,
+    "minimum_socket_insulator_mm": 6.3,
+    "minimum_socket_insulator_nominal_mm": 6.6,
+    "shunt_option_clearance_mm": {
+      "3.5 mm": 3.8,
+      "4.5 mm": 3.3,
+      "5.0 mm": 2.8
+    },
+    "nearest_module_side_envelope_gap_mm": 0.45,
+    "module_bottom_side_footprints_over_jumpers": 0,
+    "coverage": {
+      "module_pcbs_found": 28,
+      "module_pcbs_inspected": 27,
+      "module_pcbs_unreadable": [
+        "32bit"
+      ],
+      "bottom_mounted_male_headers": 25,
+      "top_mounted_male_headers": [
+        "4mix",
+        "imix"
+      ]
+    },
+    "top_side_tht_tail": {
+      "boards": [
+        "4mix",
+        "imix"
+      ],
+      "footprint_slot_comparisons": 1332,
+      "distinct_parts": 111,
+      "vertical_estimate_applies_to": "the 3.0 mm through-hole header tail assumed in stack_height.components.module_male_header; other THT parts can have longer tails, but no top-side THT envelope overlaps a jumper envelope in X/Y on any inspected module",
+      "tail_below_module_board_nominal_mm": 1.4,
+      "tail_below_module_board_worst_case_mm": 1.86,
+      "min_xy_gap_to_jumper_mm": 0.45,
+      "worst_case_clearance_mm": 1.94
+    },
+    "exceptions": [
+      "32bit: kicad_pcb could not be loaded standalone (skipped)",
+      "4mix: power/ground headers are on ['F.Cu'], not the bottom side, so they cannot mate downwards with a base socket as drawn",
+      "imix: power/ground headers are on ['F.Cu'], not the bottom side, so they cannot mate downwards with a base socket as drawn",
+      "line_in: only 1 male 1x05 power/ground connector(s) found"
+    ],
+    "modules_inspected": 27,
+    "module_connectors": {
+      "16bit": {
+        "path": "modules/16bit/16bit.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "16bit+": {
+        "path": "modules/16bit+/16bit+.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "4mix": {
+        "path": "modules/4mix/4mix.kicad_pcb",
+        "male_headers": 4,
+        "layers": [
+          "F.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "8bit": {
+        "path": "modules/8bit/8bit.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "ar_env": {
+        "path": "modules/ar_env/ar_env.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "blank": {
+        "path": "modules/blank/blank.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "cv_math": {
+        "path": "modules/cv_math/cv_math.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "drive": {
+        "path": "modules/drive/drive.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "env": {
+        "path": "modules/env/env.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "head_out": {
+        "path": "modules/head_out/head_out.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "hihat": {
+        "path": "modules/hihat/hihat.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "imix": {
+        "path": "modules/imix/imix.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "F.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "jacks": {
+        "path": "modules/jacks/jacks.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "jvca": {
+        "path": "modules/jvca/jvca.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "kick": {
+        "path": "modules/kick/kick.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "line_in": {
+        "path": "modules/line_in/line_in.kicad_pcb",
+        "male_headers": 1,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "line_out": {
+        "path": "modules/line_out/line_out.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "low": {
+        "path": "modules/low/low.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "mcc": {
+        "path": "modules/mcc/mcc.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "mco": {
+        "path": "modules/mco/mco.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "midi": {
+        "path": "modules/midi/midi.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "noise": {
+        "path": "modules/noise/noise.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "pots": {
+        "path": "modules/pots/pots.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "svf": {
+        "path": "modules/svf/svf.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "usb_power": {
+        "path": "modules/usb_power/usb_power.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "v2ca": {
+        "path": "modules/v2ca/v2ca.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      },
+      "wave": {
+        "path": "modules/wave/wave.kicad_pcb",
+        "male_headers": 2,
+        "layers": [
+          "B.Cu"
+        ],
+        "values": [
+          "Conn_01x05_Pin"
+        ]
+      }
+    },
+    "slots": [
+      {
+        "slot": 1,
+        "jumper": "J7",
+        "jumper_envelope_mm": [
+          59.315,
+          32.675,
+          64.365,
+          35.725
+        ],
+        "supply_first_pad_mm": [
+          71.0,
+          38.0
+        ],
+        "supply_last_pad_mm": [
+          60.84,
+          38.0
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 2,
+        "jumper": "J8",
+        "jumper_envelope_mm": [
+          89.915,
+          32.775,
+          94.965,
+          35.825
+        ],
+        "supply_first_pad_mm": [
+          101.6,
+          38.1
+        ],
+        "supply_last_pad_mm": [
+          91.44,
+          38.1
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 3,
+        "jumper": "J9",
+        "jumper_envelope_mm": [
+          120.395,
+          32.775,
+          125.445,
+          35.825
+        ],
+        "supply_first_pad_mm": [
+          132.08,
+          38.1
+        ],
+        "supply_last_pad_mm": [
+          121.92,
+          38.1
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 4,
+        "jumper": "J10",
+        "jumper_envelope_mm": [
+          150.875,
+          32.775,
+          155.925,
+          35.825
+        ],
+        "supply_first_pad_mm": [
+          162.56,
+          38.1
+        ],
+        "supply_last_pad_mm": [
+          152.4,
+          38.1
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 5,
+        "jumper": "J11",
+        "jumper_envelope_mm": [
+          181.355,
+          32.775,
+          186.405,
+          35.825
+        ],
+        "supply_first_pad_mm": [
+          193.04,
+          38.1
+        ],
+        "supply_last_pad_mm": [
+          182.88,
+          38.1
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 6,
+        "jumper": "J12",
+        "jumper_envelope_mm": [
+          211.835,
+          32.775,
+          216.885,
+          35.825
+        ],
+        "supply_first_pad_mm": [
+          223.52,
+          38.1
+        ],
+        "supply_last_pad_mm": [
+          213.36,
+          38.1
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 7,
+        "jumper": "J13",
+        "jumper_envelope_mm": [
+          59.435,
+          101.355,
+          64.485,
+          104.405
+        ],
+        "supply_first_pad_mm": [
+          71.12,
+          106.68
+        ],
+        "supply_last_pad_mm": [
+          60.96,
+          106.68
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 8,
+        "jumper": "J14",
+        "jumper_envelope_mm": [
+          89.915,
+          101.355,
+          94.965,
+          104.405
+        ],
+        "supply_first_pad_mm": [
+          101.6,
+          106.68
+        ],
+        "supply_last_pad_mm": [
+          91.44,
+          106.68
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 9,
+        "jumper": "J15",
+        "jumper_envelope_mm": [
+          120.395,
+          101.355,
+          125.445,
+          104.405
+        ],
+        "supply_first_pad_mm": [
+          132.08,
+          106.68
+        ],
+        "supply_last_pad_mm": [
+          121.92,
+          106.68
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 10,
+        "jumper": "J16",
+        "jumper_envelope_mm": [
+          150.875,
+          101.355,
+          155.925,
+          104.405
+        ],
+        "supply_first_pad_mm": [
+          162.56,
+          106.68
+        ],
+        "supply_last_pad_mm": [
+          152.4,
+          106.68
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 11,
+        "jumper": "J17",
+        "jumper_envelope_mm": [
+          181.355,
+          101.355,
+          186.405,
+          104.405
+        ],
+        "supply_first_pad_mm": [
+          193.04,
+          106.68
+        ],
+        "supply_last_pad_mm": [
+          182.88,
+          106.68
+        ],
+        "module_registration_offset_mm": null
+      },
+      {
+        "slot": 12,
+        "jumper": "J18",
+        "jumper_envelope_mm": [
+          211.835,
+          101.355,
+          216.885,
+          104.405
+        ],
+        "supply_first_pad_mm": [
+          223.52,
+          106.68
+        ],
+        "supply_last_pad_mm": [
+          213.36,
+          106.68
+        ],
+        "module_registration_offset_mm": null
+      }
+    ],
+    "assumptions": [
+      "The module PCBs do not annotate their power/ground header part number; the mechanical twin of PZ254-1-05-Z-8.5 (2.5 mm insulator, 6.0 mm mating pin) is assumed.",
+      "Header (C2905948) tolerances are not published; the general X.X +/-0.30 mm tolerance of the C5664/PM254 drawings is applied to every stacked dimension.",
+      "The socket drawings publish the housing height, not the internal contact depth. That the 8.5 mm housing accepts a 6.3 mm pin without bottoming out is an ASSUMPTION, not a datasheet fact.",
+      "No assembled stack has been measured; this is a datasheet calculation, not a mating trial."
+    ]
+  },
+  "physical_validation_pending": [
+    "Mated stack height has not been measured on real hardware: a mating trial of one base plus one module is still advised.",
+    "Module-side male header part number is not annotated on the module PCBs (assumed mechanical twin of PZ254-1-05-Z-8.5).",
+    "Slot 1 socket row is offset -0.12 mm in X / -0.10 mm in Y from the common module registration (pre-existing, preserved).",
+    "Module 4mix and imix place their power headers on F.Cu (top side) and cannot mate downwards as drawn."
+  ],
   "files": {
-    "jlcpcb/base/base-gerbers.zip": "0f312cb43c7b32cd238a75f7a874ce719900f99412b3e3a86536f723e36ef121",
+    "jlcpcb/base/base-gerbers.zip": "f230bee6a676356f1b4ba54ab38f715714f3beff02295fb47298ca0e45753d92",
     "jlcpcb/base/bom.csv": "b47a507c24e816c25122e9bd4c3d5be98177d9ba81716317b3355ca90cbcab1a",
-    "jlcpcb/base/export-report.json": "896d7c1459d0c68580f61a26b03519712c812a8b6999430a0d99293d9d29bade",
+    "jlcpcb/base/export-report.json": "4af26dacd0ba7d22209cc500f4bd032dd60604b4660b7b4d0e5edb4c72f0ac0e",
     "jlcpcb/base/positions.csv": "ee54f1a1a826fdd7be230105b45409322696ac01c95f095265fa9f66c156cd5d",
-    "jlcpcb/gerber/base-B_Cu.gbr": "eb1e7a9cf23b3f66480857b7036507293d48bba5c51309b55f5ebe95d36b237b",
-    "jlcpcb/gerber/base-B_Mask.gbr": "f6564bfd1c25df1231773502f646f6be0fc14404168a729e1359315c3ad028ba",
-    "jlcpcb/gerber/base-B_Paste.gbr": "cbefa386a90114cfbeb6d3d276fe7c31f4105d21533370db3fa98614e7157257",
-    "jlcpcb/gerber/base-B_Silkscreen.gbr": "f49e598bb7b120cedc561eaf935ac032ca0ec4a8edb4a3d9f4a71254f3cb9919",
-    "jlcpcb/gerber/base-Edge_Cuts.gbr": "c0e32afa04579f8b269eaf40443523c0f70cf64b850fa1d803009a38a9f5ab79",
-    "jlcpcb/gerber/base-F_Cu.gbr": "13e98f6abe86ef8ac15bd96409ba68b9ea51c7c4889ed26e1cc6a4eb04aedb81",
-    "jlcpcb/gerber/base-F_Mask.gbr": "38ac905ae568b043986ce5c85a5527e40bf39418af853d2c5373c46e9c5ad338",
-    "jlcpcb/gerber/base-F_Paste.gbr": "4ff6195d6ea6ed94fe392fcf27c3dac80a3fe95b482da8653ffb32cdaa381ffc",
-    "jlcpcb/gerber/base-F_Silkscreen.gbr": "849ba879509e8e18cad1baa05a1ffa6a2ce970e81419838b0b5c7696fa64fc40",
-    "jlcpcb/gerber/base-NPTH.drl": "bed630aaa0ffb654892819cb1c20278ac292b0e0fa9fcd720df310638b63ba14",
-    "jlcpcb/gerber/base-PTH.drl": "71cde0f88b1f66f742ba1820e7631e6fa05aabb4b7a80cd3a157d67798050cf9",
-    "jlcpcb/production_files/GERBER-base.zip": "0f312cb43c7b32cd238a75f7a874ce719900f99412b3e3a86536f723e36ef121",
-    "production/base.zip": "0f312cb43c7b32cd238a75f7a874ce719900f99412b3e3a86536f723e36ef121",
-    "production/bom.csv": "3b861750e17d7ef1ba6bfc9d5bbc14b0141ba3ee1520968cef66823745325093",
+    "jlcpcb/gerber/base-B_Cu.gbr": "533226562e92299bc56a12a55d2c404d6da8a5da3e539cd61a8e746d0912a590",
+    "jlcpcb/gerber/base-B_Mask.gbr": "331adc4f86f656dc14809e58f8163342e2b7bd4fff0f208936c215c498552535",
+    "jlcpcb/gerber/base-B_Paste.gbr": "d91f050ff699c7d7ba4701523c0fcde92953c2e5a4e5e170845069b928296f57",
+    "jlcpcb/gerber/base-B_Silkscreen.gbr": "d4db3b918b6d4a48836246c3906a7e7e43acf4bb18e78eb3cfde0cbc314453ec",
+    "jlcpcb/gerber/base-Edge_Cuts.gbr": "c3f854437aceb78e1a07d579e9243f46cc1d5ea16964cf5c7ab31ae25a84edd6",
+    "jlcpcb/gerber/base-F_Cu.gbr": "5ad180f5695e7b76c23fcc2c4ddf0bb0961910433a305af2a7f42d535a87a2af",
+    "jlcpcb/gerber/base-F_Mask.gbr": "ca7e46b61d30da970d79927ae748da49ee4a706f405f97e195df2bf19cc1345e",
+    "jlcpcb/gerber/base-F_Paste.gbr": "b7f98c17a4c6471246c23126374ceaadeca547fb4e9b396d5d59986c28e55d7d",
+    "jlcpcb/gerber/base-F_Silkscreen.gbr": "9c35da12bf68d550c3ce04dd030eecfe46186ba54fff2f42f09222421609b495",
+    "jlcpcb/gerber/base-NPTH.drl": "19bd1f362c4792848afbd39c7ee642fe2783f24b3c972b086e9aef93aa415668",
+    "jlcpcb/gerber/base-PTH.drl": "683416d19ff6f8badd7c5816d59080de47c37c059959f1ca4321b1824e94db46",
+    "jlcpcb/production_files/GERBER-base.zip": "f230bee6a676356f1b4ba54ab38f715714f3beff02295fb47298ca0e45753d92",
+    "production/base.zip": "f230bee6a676356f1b4ba54ab38f715714f3beff02295fb47298ca0e45753d92",
+    "production/bom.csv": "e62b1d92cd4a66bb9d51d471776e02ff21d5b61c19d00feba968ffa382f01e36",
+    "production/cost-estimate.json": "94912667671688cabdb0ebd9f957aaaccf8ab85d06df8e14dd8efb0eceb2849f",
     "production/designators.csv": "2bcfe9a58d8aa72f3fa2f6c4420c82f8efdcb166ec7ad5b03a0c10fe0aeabedd",
+    "production/hand-solder.csv": "c62d4e2a09e8902820a5b01603bbfde7e798fc129f38490690f397ef7f7fe077",
+    "production/hand-solder.json": "24410189dbd60ca5e4f62a086f6e148587b492cb68c27d21580ad2d595d62bf7",
     "production/netlist.ipc": "6a94f9b8375f5b22293af487aad9b8b3366e5962107c744b23f7a07fecfedb36",
     "production/positions.csv": "cf7e345066061fef3ae559df238fe69a3641f6e615e4b0144fd71d67e1296e13"
   }
