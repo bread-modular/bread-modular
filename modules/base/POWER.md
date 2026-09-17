@@ -34,7 +34,7 @@ Per module slot *n* (1…12):
          J(n+6) ── 1 = +3.3V        R(27+2n-1) 1.6 k ── GND
                   2 = SEL_n
                        │
-              R(27+2n) 100 k ── GND            C(21+2n) 1 µF, C(20+2n) 0.1 µF  VSLOT_n ── GND
+              R(27+2n) 100 k ── GND            C(20+2n) 1 µF, C(21+2n) 0.1 µF  VSLOT_n ── GND
 ```
 
 The socket pinout is unchanged: every `VSUPPLY_n` socket still has all five pins
@@ -126,7 +126,7 @@ parts are **D2 = VBUS TVS, D3 = 5V_SYS TVS, F1 = VBUS polyfuse, F2 = 5V_SYS poly
 
 | | Proposal | Effect | Cost |
 |---|---|---|---|
-| P1a | **Recommended:** add a rated OVP switch in series with **`VBUS_PROT`** (i.e. upstream of *both* FB1 → U5 and F2 → 5V_SYS), e.g. a controller + P-MOSFET such as TPS2400, or an integrated OVP/eFuse (TPS1663 class) | disconnects before the node exceeds ~5.5–6 V, so **both** downstream branches (the 3.3 V LDO path through FB1 *and* the 5 V branch) stay inside their 6 V absolute maximum | indicative ≈ $0.6–1.5 + ~4 passives — **price and part choice not verified yet**, and controller/MOSFET compatibility, real current-limit capability, cutoff tolerance and transient overshoot must be checked against the datasheets before adoption |
+| P1a | **Recommended direction (part not chosen):** add a rated OVP switch in series with **`VBUS_PROT`**, i.e. upstream of *both* FB1 → U5 and F2 → 5V_SYS (an integrated OVP/eFuse in the TPS1663 class is the candidate, but **the part, price, current-limit capability, clamp/cutoff tolerance and transient overshoot are NOT verified** — this needs a datasheet study before it can be specified) | **design target:** disconnect before the node exceeds the 6 V absolute maximum of *both* downstream branches (U5 through FB1 and every mux input). Whether a given part actually meets that target, and by how much it overshoots during a surge, is exactly what has to be verified | unknown until verified |
 | P1b | Accept the TVS as surge protection only and document the residual risk (the `VBUS_PROT` node may briefly exceed 6 V during a surge, exposing both U5 through FB1 and every mux input) | no change, no cost | $0 |
 | P1c | Drop `5V_SYS` for v1.3.0 (3.3 V-only base, keep the input protection) | removes the mux inputs from the exposed set, but **U5 is still fed from `VBUS_PROT` through FB1**, so the exposure is reduced, not eliminated | $0, removes a feature |
 
@@ -180,17 +180,16 @@ New parts (all verified, in stock at the time of writing):
 | F1, F2 | MF-MSMF110/16-2 (PPTC 1.1 A hold / 16 V) | 1812 (`Fuse:Fuse_1812_4532Metric`) | C210834 | $0.066 | yes (stock 24 734) |
 | D2, D3 | SMAJ5.0A/TR13 (TVS unidirectional 400 W) | SMA (`Diode_SMD:D_SMA`) | C78401 | $0.044 | yes (stock 98 557) |
 | C46 | EMK325ABJ107MM-T (Taiyo Yuden) 100 µF 16 V X5R (brief: ≥100 µF/10 V) | 1210 (`Capacitor_SMD:C_1210_3225Metric`) | C394395 | $0.52 | yes (stock 39 609) |
-| C47, C22…C45 (0.1 µF) | CL05B104KO5NNNC 100 nF 16 V X7R | 0402 | C1525 | $0.0045 | yes (basic) |
-| C22…C45 (1 µF) | CL05A105KA5NQNC 1 µF 25 V X5R | 0402 | C52923 | $0.0099 | yes (basic) |
+| C47, C23, C25…C45 (0.1 µF) | CL05B104KO5NNNC 100 nF 16 V X7R | 0402 | C1525 | $0.0045 | yes (basic) |
+| C22, C24…C44 (1 µF) | CL05A105KA5NQNC 1 µF 25 V X5R | 0402 | C52923 | $0.0099 | yes (basic) |
 | R28…R51 (pulldown) | 0402WGF1003TCE 100 kΩ 1 % | 0402 | C25741 | $0.0025 | yes (basic) |
 | R28…R51 (ILIM) | 0402WGF1601TCE 1.6 kΩ 1 % | 0402 | C4908 | $0.0028 | yes |
 | J7–J18 | PZ200-1-02-Z, 1×02 2.00 mm vertical header | `Connector_PinHeader_2.00mm:PinHeader_1x02_P2.00mm_Vertical` | C2905948 | $0.024 | yes |
 
 Spot-check of a part whose value/package could easily be confused: **R26 (100 Ω,
-0402)** is `C25076 = 0402WGF1000TCE`, and the JPCLB record states 100 Ω, ±1 %, 50 V,
-0402, i.e. MPN, value and `Resistor_SMD:R_0402_1005Metric` all agree. (Do not confuse
-it with `C17901`, which is the 100 Ω **1206** part used for R10/R12 and has no
-verified number here.)
+0402)** is `C25076 = 0402WGF1000TCE`; the JLCPCB record states 100 Ω, ±1 %, 50 V, 0402,
+so MPN, value and the assigned `Resistor_SMD:R_0402_1005Metric` all agree. (R10/R12 are
+a different part — 10 Ω 1206 — and remain `TO-VERIFY`.)
 
 Existing parts that now carry a verified number: C1525 (0.1 µF), C15008 (100 µF/6.3 V
 1206), C90146 (22 µF/16 V 1206), C1779 (4.7 µF/25 V 0805), C1705 (4.7 µF/10 V 0603),
