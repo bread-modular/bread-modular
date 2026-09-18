@@ -40,9 +40,94 @@ Per module slot *n* (1…12):
               R(27+2n) 100 k ── GND        C(20+2n) 1 µF, C(21+2n) 0.1 µF   VSLOT_n ── GND
 ```
 
+*(`U(n+5)` is `TPS2111APWR` on the fabricated board and `TPS2116DRLR` in the current
+schematic. Normal-operation select behaviour is identical, but the two parts are **not**
+equivalent when `+3.3 V` is missing — see the reset blocker in §1a.)*
+
 The socket pinout is unchanged: every `VSUPPLY_n` socket still has all five pins on one
 slot rail (now `VSLOT_n` instead of unconditionally `+3.3V`), and `GND_n` remains the
 mating ground socket.
+
+## 1a. v1.3.8 — per-slot mux swapped to TPS2116DRLR (schematic only, PCB pending, **not releasable yet**)
+
+The twelve per-slot muxes (`U6…U17`, one per slot-template instance) are `TPS2116DRLR` in
+the schematic. The board is untouched: the working tree's `base.kicad_pcb` is byte-identical
+to this branch's committed board (sha256 `b8df0829…`, **not** the `routed_pcb_sha256` pin
+`9fc20400…`, which is the older v1.3.2 fab release and is already stale on this branch), and
+every payload in `production/` is still the **v1.3.2** release (`manifest.json`
+`release_version: "1.3.2"`). Phase 2 swaps the twelve footprints, re-routes them and
+re-exports.
+
+> **Status: release blocker.** The +3.3 V fail-safe does *not* survive a reset press with a
+> `MODE` pin tied to `+3.3 V` (see the blocker item below). The schematic change is recorded
+> here for review and for the cost decision, not for fabrication.
+
+Why: measured on the JLCPCB parts API on 2026-09-18, `TPS2111APWR` (C471060) is
+**$1.3804 @100 / $2.0267 @1-9 with 2 482 in stock**, and there is no cheaper TSSOP-8
+sibling (`TPS2110APWR` $1.6848/0, `TPS2114APWR` $1.2714/0, `TPS2115APWR` $1.7499/206,
+`TPS2113APWR` $1.5579/2 121, `TPS2112PWR` $2.0902/199). `TPS2116DRLR` (C3235557,
+SOT-583) is **$0.2052 @500-999 with 48 871 in stock** → **≈$13.1/board cheaper**
+(12 × $1.2974 − 12 × $0.2052), and it deletes the twelve ILIM resistors with it.
+
+| pin | TPS2111APWR | net | TPS2116DRLR | net |
+|---|---|---|---|---|
+| 1 | `D0` | GND (manual-mode strap) | `GND` | GND |
+| 2 | `D1` | `SEL_n` | `VOUT` | `VSLOT_n` |
+| 3 | `VSNS` | GND | `VIN1` | `5V_SYS` |
+| 4 | `ILIM` | 750 Ω → GND | `PR1` | `SEL_n` |
+| 5 | `GND` | GND | `MODE` | `+3.3V` (= `VIN2`) |
+| 6 | `IN2` | `+3.3V` | `VIN2` | `+3.3V` |
+| 7 | `OUT` | `VSLOT_n` | `VOUT` | `VSLOT_n` |
+| 8 | `IN1` | `5V_SYS` | `ST` | *no connect* |
+
+* Normal-operation polarity is preserved: shunt fitted ⇒ `SEL_n` high ⇒ `PR1` high ⇒
+  `VIN1 = 5V_SYS`; shunt absent (100 kΩ pulldown) ⇒ `PR1` low ⇒ `VIN2 = +3.3 V`.
+  `MODE` is tied to `VIN2`, *not* to `VIN1` — that is what selects manual mode; tying it to
+  `VIN1` would select priority mode.
+* **⚠️ RELEASE BLOCKER 1 — a RESET press drives the slot rail to `5V_SYS` in *both* jumper
+  states.** `MODE` must be pulled up by an external rail (≥ 1 V) to stay in manual mode, and it
+  is tied to `+3.3 V`; `PR1` is fed from the *same* `+3.3 V` rail through the jumper shunt
+  (`J(n+6)` pin 1 = `+3.3 V`, pin 2 = `SEL_n`). `SW1` gates `U5.EN`, so **every reset press
+  removes `+3.3 V` while `5V_SYS` (from `VBUS_PROT` through `F2`, not from the LDO) stays up** —
+  and both control pins fall with it:
+  * `MODE` drops below `VIL,MODE = 0.35 V` while `PR1` has already fallen below `VREF ≈ 1 V`
+    (they decay together out of the same rail), so the part ends up in *diode mode*:
+    **"When the PR1 pin is pulled low, the higher voltage supply between VIN1 and VIN2 is
+    passed to the output"** — i.e. **the slot rail is driven to 5V_SYS through every reset
+    press, in both the shunt-fitted and the shunt-absent state**, on a slot the user may have
+    jumpered for 3.3 V.
+    [source](https://e2e.ti.com/support/power-management-group/power-management/f/power-management-forum/1559536/tps2116-confusing-logic-description-in-the-datasheet)
+  * While the rail decays, `PR1` crosses its 1 V threshold before `MODE` reaches 0.35 V, so the
+    mux first re-selects `VIN2` and then hands over to diode mode. Either way the slot rail is
+    **not** held at 3.3 V and cannot be relied on to stay below 5 V.
+  * The TPS2111A did not behave this way: `D0 = GND` / `D1 = SEL_n` select the channel purely by
+    logic, so a reset only sagged the +3.3 V rail instead of switching the slot to 5 V.
+  **Do not release this revision as drawn.** The release stays blocked until a
+  *datasheet-verified* control arrangement is chosen and bench-proven:
+  (a) pull `MODE` up from a rail that survives a reset, e.g. `VBUS_PROT` (needs a datasheet and
+  bench check that `MODE` may sit above `VINx`); (b) keep a mux whose select does not depend on a
+  rail — the TPS2111A already in production, or `TPS2120` (C1850326, $0.6626 @100, DSBGA-20) with
+  its own control pin. An RC hold-up on `MODE` is **not** a remedy: a held reset button, a slow
+  +3.3 V startup or a sustained rail failure all outlast it. Bench-check all four states — shunt
+  fitted, shunt absent, reset pressed, and power-up sequencing.
+* **Consequence 2 — no programmable ILIM.** The 667 mA per-slot current limit of §3.3 is
+  gone and `R28/R30/…/R50` (750 Ω) are deleted from the schematic (they stay fitted on the
+  board until Phase 2). What remains is reverse-current blocking, soft start, **thermal
+  shutdown (170 °C — an over-temperature trip, *not* a current limit)**, the upstream
+  `5V_SYS` PPTC (`F2`) and the `U5` LDO limit. If a per-slot limit must come back, the
+  cheapest mux with an adjustable one is `TPS2120` (C1850326, above).
+* Evidence: `tools/swap_slot_mux_tps2116.py` is the deterministic migration (refuses to
+  run twice); with `kicad-cli` it proves the only netlist difference is the table above
+  (every other net and component unchanged), compares ERC findings by identity
+  (severity + type + sheet + affected items) between the pre-swap design and this one —
+  **11 before / 11 after, none added, none removed** — and writes
+  `verification/mux-swap-tps2116.json`. `tools/verify_power.py` now expects the new pin
+  map and declares the board-side refs as *PCB pending*.
+* Phase 2 checklist: **first resolve the `MODE` pull-up blocker above** (option a/b/c, then
+  record the bench result), then swap `U6…U17` to `Package_TO_SOT_SMD:SOT-583-8`, delete
+  `R28/R30/…/R50`, re-route the local pads, re-run `kicad-cli pcb drc
+  --schematic-parity`, then `verify_stack_height.py`, `verify_power.py` (drop
+  `PCB_PENDING`) and `regenerate_production.py`.
 
 ## 2. Per-slot 2:1 selection — truth table (as implemented)
 
@@ -76,7 +161,7 @@ mating ground socket.
 | **F1** (input, in series with VBUS) | PPTC **2 A hold / 4 A trip / 16 V** | the USB source + the input wiring + the whole `VBUS_PROT` node |
 | **F2** (5 V branch) | PPTC **1.1 A hold / 2.2 A trip / 16 V** | the `5V_SYS` branch |
 | U5 AP2112K | internal current limit + thermal shutdown | the 3.3 V branch |
-| U6…U17 ILIM | 667 mA nominal per slot (see 3.3) | each slot's wiring and module |
+| U6…U17 ILIM | 667 mA nominal per slot (see 3.3) — **v1.3.8: gone, see §1a** | each slot's wiring and module |
 
 Because F1 > F2, a 5 V-branch fault is *the more likely* to open F2 first and leave the 3.3 V
 rail alive. Note that this is a PPTC hierarchy, not a coordinated fuse/breaker scheme: PPTC
@@ -173,6 +258,12 @@ pin-compatible alternative**: `TPS2111APWRG4` is 0 stock, `TPS2110A`/`TPS2114A` 
 0.31–0.75 A-limit versions) are 0 stock, and `TPS2115ADRBR` (636 in stock) is manual-select
 but a different package (SON-8) with a 0.63–1.25 A range. If this design goes to volume,
 either pre-order the mux or plan a layout revision for the SON-8 part.
+
+> **Superseded by §1a (v1.3.8, schematic only):** the twelve channels are now
+> `TPS2116DRLR` (C3235557, SOT-583, 48 871 in stock, $0.2052 @500-999), which is the
+> cheapest option found in the JLCPCB library — see §1a for the pin map, the two
+> accepted consequences and the Phase 2 checklist. The table rows above still describe
+> the **released v1.3.7 board**, which is what the fab payloads contain.
 
 **Jumper shunts are not on the assembly BOM on purpose** — they are fitted/removed per slot
 by the user, and they must not be pre-fitted (a pre-fitted shunt would force 5 V). They are
@@ -292,7 +383,7 @@ re-sourced, and no electrical decision was reopened.
 |---|---|
 | `VSUPPLY_n` — 1x05 socket | the selected slot rail, on all five pins (`VSLOT_n`) |
 | `GND_n` — 1x05 socket | module ground, all five pins on `GND` |
-| `U(5+n)` — TPS2111APWR | 2:1 power mux: `IN1 = 5V_SYS`, `IN2 = +3.3V`, `OUT = VSLOT_n`, `D0` strapped low, `D1 = SEL_n`, 667 mA ILIM |
+| `U(5+n)` — TPS2111APWR | 2:1 power mux: `IN1 = 5V_SYS`, `IN2 = +3.3V`, `OUT = VSLOT_n`, `D0` strapped low, `D1 = SEL_n`, 667 mA ILIM **(released v1.3.7 board; the v1.3.8 schematic uses TPS2116DRLR — §1a)** |
 | `R(26+2n)` — 750R | ILIM resistor (per-slot current limit) |
 | `R(27+2n)` — 100k | fail-safe SEL pulldown |
 | `C(20+2n)`, `C(21+2n)` — 1uF + 0.1uF | slot rail decoupling |
@@ -492,6 +583,12 @@ dominated by the twelve TPS2111APWRs at ≈$16.45/board (the 12 shunts are a
 separate $0.12/board accessory order). That subtotal covers **154 of the 163
 designators**; the nine it cannot price (5V14, the four jacks, the two pots,
 FB1/FB2) are listed explicitly by reference in the file.
+
+> **v1.3.8 (schematic only, §1a):** with the twelve channels on `TPS2116DRLR`
+> (C3235557, $0.2052 @500-999) and the ILIM resistors deleted, that line item becomes
+> 12 × $0.2052 = **$2.46/board** instead of ≈$16.45/board — **≈$13.10/board cheaper**
+> (≈$655 on a 50-board batch), plus 12 fewer placements. `production/cost-estimate.json`
+> is still the released v1.3.7 estimate and must be regenerated in Phase 2.
 
 ### 9.2 Why the base sockets must be female
 

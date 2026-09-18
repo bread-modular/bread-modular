@@ -2,10 +2,10 @@
   "input_sha256": {
     "calculator": "b00bd46523fa1402af7398bf775a6690107f62060baff735e70255627433b0b9",
     "hand-solder.json": "24410189dbd60ca5e4f62a086f6e148587b492cb68c27d21580ad2d595d62bf7",
-    "fixed-geometry.json": "2e7aec17adfb6b3be0d164325a500e3e1bf6b8c6a83d3c1849250af6337b29a4",
-    "base.kicad_pcb": "9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484",
-    "base.kicad_sch": "42b0fde4839be9359a309e9c0d09fe737644359e66cb55f0030ef31478e8b999",
-    "slot.kicad_sch": "968af7490500664bef60cea7f5f095bdce586b1b0fb987797cefc4676a789efb",
+    "fixed-geometry.json": "2b6dcd6bd7fee1a214edad138a28c07b1416d156bcb552c3a23b75dbbcec05a4",
+    "base.kicad_pcb": "b8df082974c533e45a36d78a7b12d548ffbb5ad383fc22f28c40d850fb490db6",
+    "base.kicad_sch": "158dda8325c54f353564325dcd25d5557ca136e60b65f5e1d008cb6244077dd4",
+    "slot.kicad_sch": "20066c766de2dbdfa25abe986f8eb904cd6ac286edaccc184e6cd87c55b9f2f2",
     "module_scope": {
       "enumerated": [
         "16bit",
@@ -40,6 +40,7 @@
       "inspected": [
         "16bit",
         "16bit+",
+        "32bit",
         "4mix",
         "8bit",
         "ar_env",
@@ -66,13 +67,12 @@
         "v2ca",
         "wave"
       ],
-      "unreadable": [
-        "32bit"
-      ]
+      "unreadable": []
     },
     "module_pcbs": {
       "16bit": "69303f273304d80af16ce560c2df46e8bf6cf55f6c1f0af6b5f672d24f6f8fb6",
       "16bit+": "5d016238613fe4c27c597cf674d5b885c8470453e6358d6b1c70acdb096d76e2",
+      "32bit": "3dafe85cc8c4e7a0c828cdd7fe6c0c7f14ba5c12417b281fd9add13024bae22e",
       "4mix": "60e0a9746e39779898dda12ca73ad81b6fd24465c904da47e3712a364e43aa58",
       "8bit": "e7e2987c6d4fe80e914160363cb04a598f151b704ecac2d5542f4059db44c4c7",
       "ar_env": "9fadcb7e8240f8c0b054019e748a6773800e570a78caea7f20c127f46128f460",
@@ -149,11 +149,9 @@
   "module_bottom_side_footprints_over_jumpers": 0,
   "coverage": {
     "module_pcbs_found": 28,
-    "module_pcbs_inspected": 27,
-    "module_pcbs_unreadable": [
-      "32bit"
-    ],
-    "bottom_mounted_male_headers": 25,
+    "module_pcbs_inspected": 28,
+    "module_pcbs_unreadable": [],
+    "bottom_mounted_male_headers": 26,
     "top_mounted_male_headers": [
       "4mix",
       "imix"
@@ -164,8 +162,8 @@
       "4mix",
       "imix"
     ],
-    "footprint_slot_comparisons": 1332,
-    "distinct_parts": 111,
+    "footprint_slot_comparisons": 1392,
+    "distinct_parts": 116,
     "vertical_estimate_applies_to": "the 3.0 mm through-hole header tail assumed in stack_height.components.module_male_header; other THT parts can have longer tails, but no top-side THT envelope overlaps a jumper envelope in X/Y on any inspected module",
     "tail_below_module_board_nominal_mm": 1.4,
     "tail_below_module_board_worst_case_mm": 1.86,
@@ -173,12 +171,11 @@
     "worst_case_clearance_mm": 1.94
   },
   "exceptions": [
-    "32bit: kicad_pcb could not be loaded standalone (skipped)",
     "4mix: power/ground headers are on ['F.Cu'], not the bottom side, so they cannot mate downwards with a base socket as drawn",
     "imix: power/ground headers are on ['F.Cu'], not the bottom side, so they cannot mate downwards with a base socket as drawn",
     "line_in: only 1 male 1x05 power/ground connector(s) found"
   ],
-  "modules_inspected": 27,
+  "modules_inspected": 28,
   "module_connectors": {
     "16bit": {
       "path": "modules/16bit/16bit.kicad_pcb",
@@ -192,6 +189,16 @@
     },
     "16bit+": {
       "path": "modules/16bit+/16bit+.kicad_pcb",
+      "male_headers": 2,
+      "layers": [
+        "B.Cu"
+      ],
+      "values": [
+        "Conn_01x05_Pin"
+      ]
+    },
+    "32bit": {
+      "path": "modules/32bit/32bit.kicad_pcb",
       "male_headers": 2,
       "layers": [
         "B.Cu"

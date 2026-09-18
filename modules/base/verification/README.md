@@ -396,3 +396,52 @@ contact depth, the `5V14` straight 2x05 female part number, the PCB-fabrication
 and SMT-assembly share of the board cost (a quote is required; the component
 estimate in `cost-estimate.json` excludes it), and the assembler's part/rotation
 preview.
+
+## v1.3.8 mux swap — schematic-only evidence (2026-09-18)
+
+`tools/swap_slot_mux_tps2116.py` migrated the twelve per-slot power muxes from
+`TPS2111APWR` (TSSOP-8) to `TPS2116DRLR` (SOT-583) on the **schematic side only** and deleted
+the twelve 750 Ω ILIM resistors. The board is untouched: `base.kicad_pcb` is byte-identical to
+**this branch's committed board (`b8df0829…`)**, not to the `routed_pcb_sha256` pin
+(`9fc20400…`, already stale on this branch), and every payload in `production/` is still the
+**v1.3.2** release (`manifest.json` → `release_version: "1.3.2"`), not v1.3.7. See CHANGELOG
+1.3.8 and POWER.md §1a.
+
+> **Unresolved release blocker.** A **reset press drives the slot rail to `5V_SYS` in both
+> jumper states**: `MODE` and `PR1` are both fed from the `+3.3 V` rail (PR1 through the jumper
+> shunt) and `SW1` gates `U5.EN`, so a reset drops both control pins, the part enters *diode
+> mode* and passes the higher input. The release stays blocked until a datasheet-verified
+> control arrangement is chosen and bench-proven (an RC hold-up on `MODE` is **not** a remedy);
+> the second consequence — no programmable ILIM (the 667 mA/slot limit is gone) — must be
+> accepted explicitly. **Resolve the blocker before any PCB work or production re-export.**
+
+* `mux-swap-tps2116.json` — before/after hashes (schematic, symbol library, board), the
+  netlist delta proof, both ERC runs and the explicit PCB-pending list.
+* `mux-swap-netlist-after.kicadsexpr` — the post-swap netlist the delta proof was made
+  against.
+* Netlist delta: the **only** differences are, per slot, `U(n+5)` pin 8 → pin 3 on
+  `5V_SYS`, pin 2 → pin 4 on `SEL_n`, pin 2+7 on `VSLOT_n`, pin 5+6 on `+3.3V`, pin 1 on
+  `GND`, pin 8 unconnected, the deletion of `Net-(U(n+5)-ILIM)` and of `R(26+2n)`, and the
+  sourcing fields of `U(n+5)`. Every other net and component is unchanged (asserted, not
+  eyeballed).
+* ERC — compared **by finding identity** (severity + type + sheet + affected items) between the
+  pre-swap design and this one, not just by counts: **11 before / 11 after, nothing added,
+  nothing removed** (4 `pin_not_connected`, 3 `power_pin_not_driven`, 4 pre-existing
+  `lib_symbol_mismatch`); no `unconnected_wire_endpoint`. Both full reports are stored in
+  `mux-swap-tps2116.json` (`erc_before.sheets` / `erc_after.sheets`) with the reproduce recipe,
+  and `--record-erc-identity` fails on a removal as well as an addition.
+
+**PCB pending (Phase 2):** **first resolve the reset/`MODE` release blocker above and record the
+bench result**, then swap the twelve `U6…U17` footprints to
+`Package_TO_SOT_SMD:SOT-583-8`, delete `R28/R30/…/R50`, re-route the local pads, then re-run
+`kicad-cli pcb drc --schematic-parity`, `verify_stack_height.py`, `verify_power.py` (delete
+the `PCB_PENDING` block once the board catches up) and `regenerate_production.py`.
+
+**Pre-existing drift observed while doing this (not caused by, and not fixed by, the mux
+swap):** on this branch the schematic is already ahead of the routed board
+(`U18/U19`, `J20…J24`, `C48/C49`, `R55/R56` are schematic-only), and the baseline pins in
+`fixed-geometry.json` predate the 1.3.6/1.3.7 board work (`project_erc`,
+`project_schematic`, `routed_pcb_sha256` and the `R25`/`GND2` geometry pins no longer
+match). `verify_power.py` therefore stops before it can reach a clean pass, with or without
+the mux swap; only the two schematic hash pins were re-pinned here (previous values kept in
+the new `schematic_revision` block).

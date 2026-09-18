@@ -21,6 +21,16 @@ Usage (from anywhere)::
 The script is deliberately standalone (no KiCad Python bindings) so it can be
 re-run and audited.  Run ``tools/verify_slot_refactor.py`` afterwards to prove
 netlist identity against the baseline netlist.
+
+Status (v1.3.8, 2026-09-18): this is a **historical, one-shot migration** for the
+v1.3.1 flat-to-hierarchical refactor, and it refuses to run against a tree that
+already contains the template.  ``slot.kicad_sch`` is now maintained directly: the
+v1.3.8 TPS2111APWR -> TPS2116DRLR mux swap (new pin map, MODE tied to VIN2, ST
+no-connect, the 750R ILIM resistors deleted) was applied by
+``tools/swap_slot_mux_tps2116.py``, not by re-running this script.  The inventories
+and geometry constants below still describe the template as this script emits it
+(pre-swap), so read ``slot.kicad_sch`` as the source of truth and do not
+regenerate that file from an old revision.
 """
 from __future__ import annotations
 
