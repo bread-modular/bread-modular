@@ -1,5 +1,141 @@
 # Changelog
 
+## 1.3.10 — loud-gain option **withdrawn**, `INPUT1` return pins grounded, `U3` is a real `TS922IDT` (schematic only, PCB pending)
+
+**Three owner decisions taken after the three-model schematic review.** Only `base.kicad_sch`
+and the project symbol library changed; `base.kicad_pcb` and every `production/` payload are
+untouched (the board is still the pinned earlier revision, so all three items land in Phase 2).
+
+**1. `INPUT1` pins 3/4/5 — the auxiliary socket's return — are tied to `GND` through a new
+`R57` = 100 Ω 0402.** The review found the net `Net-(INPUT1-Pin_3)` floating: three nodes
+(`INPUT1.3`, `.4`, `.5`) tied only to each other and to nothing else. `INPUT1` is the copy/tap
+socket (`PZ254-1-05-Z-8.5`, `C2894928`; pin 1 = `IN_L`, pin 2 = `IN_R`), so pins 3/4/5 are the
+return that the tapped source needs; the owner asked for it to be grounded **through a
+resistor** rather than hard-tied.
+
+* **Part.** `R57` = `100`, `Resistor_SMD:R_0402_1005Metric`, `C25076` / `0402WGF1000TCE`
+  (UNI-ROYAL, 100 Ω ±1 %, 62.5 mW, 50 V) — deliberately the **same part `R26` already uses**,
+  so it adds no new BOM line and needs no new sourcing: 761 000 in stock, JLCPCB part
+  `C25076` (2026-09-18). `Value`/`MPN`/`Manufacturer`/`LCSC` are filled in as on every other
+  sourced part, the footprint is the project's 0402 land, and `Datasheet` is left empty exactly
+  as on all 30 other `Device:R` instances in this sheet (a `~`/URL there would only add another
+  schematic↔PCB `Datasheet` parity value class in KiCad 10 — see `production/EXPORT_BLOCKER.md`
+  §2); the part is identified by `LCSC`/`MPN`/`Manufacturer`. Its purpose is documented in the
+  schematic note next to it and in POWER.md §10.1.
+* **Value, with numbers.** The return only carries the tapped signal's own current, and the
+  base presents **667 kΩ** per channel (`R24`/`R5` 2 M ∥ `R17`/`R16` 1 M), so at a full-scale
+  ±5 V on both channels the return current is 2 × 7.5 µA = **15 µA** and the potential the
+  return sits above `GND` is 15 µA × 100 Ω = **1.5 mV = −70 dB** relative to full scale
+  (20·log10(1.5 mV / 5 V) = −70.5 dB): inaudible, and 7 orders of magnitude below the
+  62.5 mW / 25 mA continuous rating of the part (steady-state dissipation 0.23 nW).
+  What the resistance buys: a fault or ESD strike into the return is limited to 5 V / 100 Ω =
+  **50 mA** instead of whatever the source can deliver into a hard tie, and if two
+  mains-powered devices are patched together with, say, 1 V of ground-potential difference the
+  loop current is **10 mA** instead of the (unbounded) earth-loop current of a 0 Ω tie.
+* **A hard 0 Ω tie was considered first.** It is *marginally* better as a signal reference —
+  it removes the 1.5 mV — but it gives up all of that current limiting, and the owner asked for
+  a resistor; 100 Ω keeps the reference error at −70 dB while bounding fault and ground-loop
+  current. If a hard tie is ever preferred it is a one-part change (a 0 Ω 0402 keeps it a
+  real part), not a re-route.
+* **Netlist proof.** `Net-(INPUT1-Pin_3)` = {`INPUT1.3`, `INPUT1.4`, `INPUT1.5`}
+  becomes {`INPUT1.3`, `INPUT1.4`, `INPUT1.5`, `R57.1`} with `R57.2` on `GND` and **nothing else**
+  joining either net; **no** ERC finding is added or removed by it.
+
+**2. The loud-gain option is withdrawn — "let's remove the loud gain jumper for now; if it's
+still low, we can increase it in the next batch".** `R53`, `R54`, `R56`, `C49`, `J24` and
+`U19` are **deleted** from the schematic, together with every net that existed only for them
+(`GAIN_SEL`, the 1.3.7 `LFB_B`/`RFB_B` labels at the selector, the two `no_connect`s on
+`U19.2`/`U19.4`, the `#7db Loud Toggle.` note and six now-orphaned `+5V`/`GND` power symbols).
+
+* **Why it was withdrawn.** In the loud state the amplifier's inverting node sits behind
+  **1.68 MΩ** (`R19` 680 k + `R53` 1 M, or `R18` + `R54`) with an `TS5A23157` analog switch in
+  that path, which produces two independent defects:
+  * **DC offset from leakage.** Every leakage current at that node — the switch's off-state
+    leakage (orders of magnitude larger than the amplifier's own ±20 pA input bias current),
+    PCB leakage and, at temperature, everything in between — flows through the *whole*
+    1.68 MΩ and appears at the output as `I_leak × Rf`: 10 nA of node leakage is **17 mV** of
+    output offset, and leakage roughly doubles every 10 °C, so the offset is neither small nor
+    stable. (For scale: the amplifier's own 20 pA would be 34 nV in the same resistance — the
+    switch dominates by five orders of magnitude.)
+  * **HF tilt.** The same 1.68 MΩ against the amplifier + switch + stray capacitance (a few pF)
+    puts a pole at f = 1/(2π·1.68 MΩ·C): ≈**19 kHz** for 5 pF, ≈23 kHz for 4 pF — i.e.
+    **≈2.4 to 3.3 dB of loss at 20 kHz**, a real treble tilt in the one state the option exists
+    for. The review recorded ≈−2.4 dB by 20 kHz.
+* **How it may come back.** Either **scale the network ~10× down** — `Rin` 100 k, `Rf` 68 k
+  default / **168 k** loud, which keeps exactly the 0.68 and 1.68 ratios but moves the loud node
+  to 168 kΩ: the leakage-induced offset drops **10×** and the pole (same stray capacitance)
+  moves to **≈190–250 kHz**, so both defects vanish — or **put the switch on the low-impedance
+  input leg** (a series element in the 100 k input resistor), where the same argument gives the
+  same result. Both are PCB changes as well, so they belong to a later batch.
+* **Plain inverting topology restored.** The 1.3.7 node re-wiring is undone cleanly: the
+  inverting inputs move back onto the summing nodes, so **`U4.2` goes from `LFB_B` to `LFB_A`**
+  and **`U4.6` from `RFB_B` to `RFB_A`**, and the two series 1 M resistors disappear with the
+  switch that shunted them. `LFB_A` = {`R19.2`, `R17.1`, `U4.2`} and `RFB_A` =
+  {`R18.2`, `R16.1`, `U4.6`}: the summing node carries only the 680 k feedback and the 1 M input
+  resistor, exactly as in 1.3.6. `LFB_B`/`RFB_B` no longer exist as nets at all.
+* **Gain, in the only remaining state: `Rf`/`Rin` = 680 k / 1 M = 0.68 = −3.35 dB**, with no
+  switch, no series element and no 1.68 MΩ node anywhere in the feedback path — the number the
+  shipped 1.3.6 build already had.
+* **The mono selector is untouched.** `J23`, `U18`, `R55` (the 100 k `MONO_SEL` pulldown, i.e.
+  the fail-safe that keeps a *lost* shunt in stereo) and `C48` stay exactly as they are:
+  shunt absent/lost = stereo, shunt fitted = mono, `IN_R` discarded, the right line amplifier
+  fed from `BUFF_IN_L`. `MONO_SEL`, `RIN_SEL`, `IN_R` and `BUFF_IN_L` are byte-identical in the
+  netlist. (The task's part list also named `R55`/`C48` for deletion; that would have removed
+  the mono jumper's fail-safe pulldown and its decoupling, contradicting "keep `J23`/`U18`
+  exactly as it is", so only the loud-gain parts were removed — flagged here deliberately.)
+
+**3. `U3` (headphone driver) now has a symbol that says what the part is.** The 1.3.9-era swap
+had put `TS922IDT` metadata on an `Amplifier_Operational:MCP6002-xSN` symbol, so the schematic
+still read `MCP6002`, and all three op-amps sat on a **`SOIC-8-1EP` footprint with an exposed
+pad** the real parts do not have.
+
+* **New project-local symbol `BreadModular_Analog:TS922IDT`** (new file
+  `BreadModular_Analog.kicad_sym`, one line in `sym-lib-table`), used by **all three `U3` units**
+  (A/B/power). Geometry and pin numbering are the MCP6002's SO-8 pin-out, which is also the
+  TS922's (1 = OUT1, 2 = IN1−, 3 = IN1+, 4 = V−, 5 = IN2+, 6 = IN2−, 7 = OUT2, 8 = V+), so the
+  netlist is unchanged by the swap. `Value`, `MPN`, `Datasheet` (ST `ts922.pdf`), `Description`
+  and the symbol id/name all read `TS922IDT` now; `LCSC` stays `C93687` and the part is still
+  stocked — **54 286 in stock**, from $0.2101 @1+ (LCSC, 2026-09-18).
+* **Footprint fixed on the same defect class.** `U3` moves to
+  `Package_SO:SOIC-8_3.9x4.9mm_P1.27mm`. `U2` and `U4` suffered **exactly the same stale EP
+  footprint** (`SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm`), so they were moved to the plain SO-8
+  as well — a footprint-metadata correction with no behavioural change, applied to all nine
+  `U2`/`U3`/`U4` units.
+* **Schematic-side only.** The three footprints (and the twelve slot muxes, and the rest of the
+  1.3.6-1.3.9 work) still have to be applied to `base.kicad_pcb` in Phase 2.
+
+* **Schematic-only.** The change lives in `base.kicad_sch` plus the new project-local library
+  file (`BreadModular_Analog.kicad_sym`) and its one `sym-lib-table` line. `base.kicad_pcb` is
+  byte-identical and `production/*` is still the **v1.3.2** payload. Component count:
+  160 → 155 refs (six deleted, one added).
+* **Reproduce/verify:** `kicad-cli sch erc` (from `modules/base`) reports **11 findings
+  (7 errors + 4 warnings) before and after, identical by identity** (severity + type + sheet +
+  affected items — none added, none removed), and `kicad-cli sch export netlist --format
+  kicadsexpr` differs from the 1.3.9 netlist by exactly: `C49`/`J24`/`R53`/`R54`/`R56`/`U19`
+  out, `R57` in; `U2`/`U3`/`U4` footprint → `Package_SO:SOIC-8_3.9x4.9mm_P1.27mm`;
+  `U3` libsource → (`BreadModular_Analog`, `TS922IDT`); `R17.1`/`U4.2` `LFB_B`→`LFB_A`
+  and `R16.1`/`U4.6` `RFB_B`→`RFB_A` (the four nets become `{R19.2, R17.1, U4.2}` and
+  `{R18.2, R16.1, U4.6}`); `INPUT1.3/4/5` gain `R57.1`; and `GND` gains `R57.2` while losing
+  `R56.2` (nothing else on any net moves — all twelve `VSLOT_n`/`SEL_n`/`MODE` nets, the mono
+  selector nets and every other component are untouched).
+* **guard note:** `tools/verify_power.py` still stops earlier on this branch (pre-existing
+  `'ERC setup changed'`, see §1a) — its `PCB_PENDING` block and the hash pins in
+  `verification/fixed-geometry.json` predate 1.3.10 and must be re-baselined in Phase 2, in one
+  reviewed commit, together with the board work below.
+* **Phase 2 (PCB) to-do after 1.3.10 — the list is shorter than after 1.3.7, not longer:**
+  1. **No loud-gain parts at all**: there is nothing to place for `R53`/`R54`/`R56`/`C49`/`J24`/
+     `U19`, and nothing to delete for `J20`/`J21`/`J22` beyond what 1.3.6/1.3.7 already left
+     (the board's `R53`/`R54` footprints and their copper go away with this step).
+  2. **`R57`** (100 Ω 0402) is a new SMD placement at the `INPUT1` return, to be placed and
+     routed with one stub to the `INPUT1` pin-3/4/5 tie.
+  3. **`J23`/`U18`/`R55`/`C48`** (mono selector) — the 1.3.7 Phase-2 work, unchanged.
+  4. **`U2`/`U3`/`U4` footprints** → plain `SOIC-8_3.9x4.9mm_P1.27mm` (the exposed pad and its
+     copper must come out with them).
+  5. The earlier power items: the twelve `U6…U17` → `SOT-583-8` swap, `R28/R30/…/R50` deletion,
+     the twelve `J7…J18` pin-1 nets from `+3.3V` to `VBUS_PROT`, the `MODE`/`PR1` bench proof of
+     POWER.md §1a, then `kicad-cli pcb drc --schematic-parity`, `verify_power.py` (drop the
+     `PCB_PENDING` block), `verify_stack_height.py` and `regenerate_production.py`.
+
 ## 1.3.9 — per-slot mux select re-referenced from +3.3 V to VBUS_PROT (schematic only, PCB pending)
 
 **Resolves the 1.3.8 release blocker in the schematic.** The per-slot 2:1 muxes stay
@@ -114,6 +250,16 @@ and the `U5` LDO limit.
   nets) instead of silently skipping them.
 
 ## 1.3.7
+
+> ⚠️ **Partly superseded by 1.3.10 — the *gain* half of this entry no longer describes the
+> design.** The loud-gain option (`J24`, `U19`, `R53`, `R54`, `R56`, `C49` and the
+> `GAIN_SEL`/`LFB_B`/`RFB_B` nets) was **withdrawn** in 1.3.10 because it put a 1.68 MΩ node
+> with an analog switch in the feedback path (leakage ⇒ `I_leak × 1.68 M` of DC offset; a
+> ≈19 kHz pole ⇒ treble tilt). Those six parts and their nets do not exist any more: `U4.2`
+> is back on `LFB_A`, `U4.6` on `RFB_A`, and the only gain state is
+> `Rf`/`Rin` = 680 k / 1 M = 0.68 = −3.35 dB. The **mono** half (`J23`, `U18`, `R55`, `C48`)
+> is unchanged and still describes the built circuit. See the 1.3.10 entry.
+
 **The three solder jumpers become real jumpers: two 1x02 2.00 mm header + shunt selectors (the same
 part as the J7...J18 slot rail selectors) drive two TS5A23157DGS dual-SPDT analog switches, and the
 gain selector is re-wired so that cutting the shunt really does put the extra 1 M into the feedback
@@ -225,7 +371,8 @@ height, wire/label/junction/no-connect boxes) and then re-laid out. Reproduce wi
 ### Assembly note - `J23`/`J24` are DNP
 
 * `J23`/`J24` (the two 1x02 2.00 mm selector headers, `C2905948`) carry `(dnp yes)` in
-  `base.kicad_sch`: **JLCPCB must not fit them - the builder solders them locally.** They keep
+  `base.kicad_sch`: **JLCPCB must not fit them - the builder solders them locally.** (`J24`
+  went with the loud-gain option in 1.3.10; **only `J23`, the mono selector, is left**.) They keep
   `in_bom yes` / `on_board yes`, so the footprints and the BOM line stay and only the assembly
   step is suppressed. Connectivity is untouched: the netlist is identical apart from the two
   added `dnp` properties, and ERC is unchanged (11 findings, same kinds).

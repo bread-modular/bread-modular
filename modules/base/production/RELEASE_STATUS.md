@@ -25,10 +25,13 @@
 > * `../tools/verify_power.py` cannot reach a clean pass: it reports the swap as
 >   *PCB pending* (24 refs, 12 ghost `Net-(U*-ILIM)` nets, 12 schematic-only
 >   `unconnected-(U*-ST-Pad8)` nets) and labels the run **NOT fab-ready**; the
->   branch's pre-existing drift (`U18/U19`, `J20…J24`, `C48/C49`, `R55/R56` are
->   schematic-only too, and the `project_erc`, `project_schematic`,
+>   branch's pre-existing drift is still there too — `J23`/`U18` (mono selector), `R55`,
+>   `C48`, the new `R57` (the `INPUT1` return tie, 1.3.10) and the `U2`/`U3`/`U4` plain
+>   SO-8 footprints are schematic-only, while the 1.3.5/1.3.7 loud-gain parts
+>   (`R53`/`R54`/`J20`/`J21`/`J24`/`U19`/`R56`/`C49`) were **deleted in 1.3.10** and the
+>   board still carries `R53`/`R54`, and the `project_erc`, `project_schematic`,
 >   `routed_pcb_sha256` and footprint-geometry pins predate the 1.3.6/1.3.7 board
->   work) still stops it earlier.
+>   work — so it still stops earlier.
 > * `../tools/regenerate_production.py` refuses to run: its DRC
 >   `--schematic-parity` gate is exactly what the pending swap breaks. **Do not
 >   regenerate or order anything from this directory until the blocker and Phase 2

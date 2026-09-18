@@ -439,7 +439,9 @@ the `PCB_PENDING` block once the board catches up) and `regenerate_production.py
 
 **Pre-existing drift observed while doing this (not caused by, and not fixed by, the mux
 swap):** on this branch the schematic is already ahead of the routed board
-(`U18/U19`, `J20…J24`, `C48/C49`, `R55/R56` are schematic-only), and the baseline pins in
+(`J23`/`U18` + `R55`/`C48` + the 1.3.10 `R57` and the `U2`/`U3`/`U4` plain SO-8 footprints are
+schematic-only; the 1.3.5/1.3.7 loud-gain parts — `R53`/`R54`/`J20`/`J21`/`J24`/`U19`/`R56`/`C49` —
+were **deleted in 1.3.10**, and the board still carries `R53`/`R54`), and the baseline pins in
 `fixed-geometry.json` predate the 1.3.6/1.3.7 board work (`project_erc`,
 `project_schematic`, `routed_pcb_sha256` and the `R25`/`GND2` geometry pins no longer
 match). `verify_power.py` therefore stops before it can reach a clean pass, with or without

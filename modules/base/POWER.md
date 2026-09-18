@@ -358,7 +358,7 @@ will **not** fit the 2.00 mm header.
 | Ref | Previously | Now | Verified as |
 |---|---|---|---|
 | 5V14 | TO-VERIFY | **C2894966** | PZ254-2-05-Z-8.5, 1×2×05 2.54 mm socket, stock 23 016 |
-| INPUT1, GND1…GND12, VSUPPLY_1…VSUPPLY_12 (25 refs) | TO-VERIFY | **C2894928** | PZ254-1-05-Z-8.5, 1×05 2.54 mm socket, stock 3 591 |
+| INPUT1, GND1…GND12, VSUPPLY_1…VSUPPLY_12 (25 refs) | TO-VERIFY | **C2894928** | PZ254-1-05-Z-8.5, 1×05 2.54 mm socket, stock 3 591. `INPUT1`'s return pins 3/4/5 are grounded through `R57` (100 Ω 0402, `C25076`) — §10.1 |
 | C2 (1 µF 0805) | TO-VERIFY | **C28323** | CL21B105KBFNNNE, 1 µF 50 V X7R 0805, basic, stock 3.1 M |
 | C16 (220 nF 0402) | TO-VERIFY | **C16772** | CL05B224KO5NNNC, 220 nF 16 V X7R 0402, basic, stock 2.9 M |
 | FB1, FB2 | TO-VERIFY | **C12389** | *substituted* PZ2012D800-3R0TF — **80 Ω @100 MHz ±25 %, 3 A, 40 mΩ DCR, 0805** (330 104 in stock, $0.0223). The designed `GZ2012E800TF` is **not** in the JLCPCB library (exact-part search returns 0). This substitute keeps the **same impedance class (80 Ω) and the same 0805 land**; its current rating is *higher* (3 A vs the ~1 A class of the original) and its DCR *lower*, so the DC drop and the HF attenuation are unchanged or better. Same-family alternative if a 1 A part is preferred: **C316425 GZ2012D800TF** (80 Ω, 1 A, 100 mΩ, 1 236 stock). ⚠️ This is a **part-number substitution for a pre-existing v1.2.0 part** — flagged for your sign-off; the schematic Value/MPN were synchronised to the fitted part so BOM and schematic cannot disagree. |
@@ -821,3 +821,100 @@ sha256sum base.kicad_pcb            # 9fc20400… (unchanged, copper pinned)
 diff <(sed -E 's/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:+-]+//g' jlcpcb/gerber/base-F_Cu.gbr) \
      <(git show HEAD:modules/base/jlcpcb/gerber/base-F_Cu.gbr | sed -E 's/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:+-]+//g')
 ```
+
+## 10. v1.3.10 — the loud-gain option is withdrawn, `INPUT1`'s return is grounded, `U3` says `TS922IDT`
+
+Schematic-only; the full entry with the verification evidence is in `CHANGELOG` (1.3.10). The
+routed `base.kicad_pcb` is still the pinned earlier revision, so all three items are Phase 2
+PCB work — see §10.4 for the to-do list.
+
+### 10.1 `INPUT1` pins 3/4/5 — the auxiliary socket's return — grounded through `R57`
+
+`INPUT1` (`C2894928`, 1×05 2.54 mm socket) is the copy/tap input: pin 1 = `IN_L`, pin 2 =
+`IN_R`. Pins 3/4/5 were tied only to each other — the floating net `Net-(INPUT1-Pin_3)`,
+3 nodes, nothing else — and are now the socket's **return to `GND` through `R57` = 100 Ω 0402
+(`C25076` / `0402WGF1000TCE`, UNI-ROYAL — the same part `R26` already uses, so no new BOM line
+and no new sourcing: **761 000 in stock**, 62.5 mW, 50 V, ±1 %).**
+
+| quantity | value | note |
+|---|---|---|
+| base input impedance, per channel | 667 kΩ | `R24`/`R5` 2 M ∥ `R17`/`R16` 1 M |
+| return current at ±5 V on both channels | 15 µA | 2 × 5 V / 667 kΩ |
+| return potential above `GND` | 1.5 mV = **−70 dB** | 15 µA × 100 Ω, against 5 V full scale |
+| steady-state dissipation in `R57` | 0.23 nW | vs. the part's 62.5 mW / 25 mA / 2.5 V limits |
+| fault current into the return at 5 V | 50 mA | 5 V / 100 Ω (unbounded at a 0 Ω tie) |
+| loop current for 1 V of ground difference | 10 mA | 1 V / 100 Ω, i.e. an ESD/ground-loop limit |
+
+100 Ω is the resistor tie the owner asked for: it bounds a fault or ESD strike into the return
+and any ground loop between two patched-together mains-powered devices, at a **−70 dB** cost as
+a signal reference. A hard 0 Ω tie was considered first and is marginally better as a
+reference — it removes the 1.5 mV — but gives up all of that current limiting; if it is ever
+preferred, a 0 Ω 0402 keeps it a real part and is a one-part change, not a re-route.
+Netlist: `{INPUT1.3, INPUT1.4, INPUT1.5, R57.1}` on the return, `R57.2` on `GND`, nothing else
+joining either net.
+
+### 10.2 The loud-gain option (1.3.5 `J20`/`J21`, 1.3.7 `J24`/`U19`) is withdrawn
+
+The loud state put the line amplifier's inverting node behind **1.68 MΩ** (`R19` 680 k + `R53`
+1 M, `R18` + `R54` on the right) with an analog switch in that path, and both of its defects are
+properties of that resistance, not of the switch alone:
+
+* **DC offset.** Every leakage current at the node — switch off-state leakage, PCB leakage, and
+  everything that grows with temperature — flows through the *whole* 1.68 MΩ and appears at the
+  output as `I_leak × Rf`: 10 nA gives **17 mV** of offset, and leakage roughly doubles every
+  10 °C. (The amplifier's own ±20 pA would be 34 nV in the same resistance; the switch dominates
+  by five orders of magnitude.)
+* **HF tilt.** The same resistance against the amplifier + switch + stray capacitance (a few pF)
+  puts a pole at `f = 1/(2π · 1.68 MΩ · C)` ≈ **19 kHz** for 5 pF, ≈23 kHz for 4 pF — i.e.
+  **2.4 … 3.3 dB of loss at 20 kHz** in the one state the option exists for.
+
+Consequence in the schematic: `R53`, `R54`, `R56`, `C49`, `J24` and `U19` are **deleted**, the
+`GAIN_SEL`/`LFB_B`/`RFB_B` nets are gone, and **`U4.2` is back on `LFB_A`** and **`U4.6` on
+`RFB_A`** — the summing node carries only the 680 k feedback (`R19`/`R18`) and the 1 M input
+resistor (`R17`/`R16`), so the single remaining state is
+**`Rf`/`Rin` = 680 k / 1 M = 0.68 = −3.35 dB**, with no switch and no series element anywhere in
+the feedback path. If the option returns in a later batch it should be **scaled ~10× down**
+(`Rin` 100 k, `Rf` 68 k default / **168 k** loud — same 0.68 and 1.68 ratios, but a 168 kΩ loud
+node: leakage-induced offset 10× smaller and the pole 10× higher, ≈190–250 kHz) or switched on
+the **low-impedance input leg**; both are PCB changes as well.
+
+**The mono selector is untouched and still ships fail-safe stereo.** `J23`, `U18`, `R55` (the
+100 k `MONO_SEL` pulldown) and `C48` are exactly as in 1.3.7: shunt absent or lost = stereo;
+shunt fitted = mono with `IN_R` discarded and the right line amplifier fed from `BUFF_IN_L`.
+The 1.3.7 `J23`/`J24` assembly note now applies to `J23` only.
+
+### 10.3 `U3` is a real `BreadModular_Analog:TS922IDT`, and the op-amps are on a plain SO-8
+
+The 1.3.9-era swap left `TS922IDT` metadata on an `Amplifier_Operational:MCP6002-xSN` symbol and
+all three op-amps on a `SOIC-8-1EP` footprint (an exposed pad the real parts do not have).
+
+* **New project-local symbol `BreadModular_Analog:TS922IDT`** (new file
+  `BreadModular_Analog.kicad_sym` + one `sym-lib-table` line), on **all three `U3` units**.
+  Its pin-out is the TS922's SO-8 pin-out, which is also the MCP6002's (1 = OUT1, 2 = IN1−,
+  3 = IN1+, 4 = V−, 5 = IN2+, 6 = IN2−, 7 = OUT2, 8 = V+), so connectivity is unchanged and the
+  netlist just gains the right `libsource`: **`U3` = (`BreadModular_Analog`, `TS922IDT`)**,
+  `C93687`, `MPN` `TS922IDT`, `Datasheet` = ST `ts922.pdf`. Still stocked: **54 286 in stock**,
+  from $0.2101 @1+ (LCSC, 2026-09-18).
+* **Footprint:** `U3` moves to `Package_SO:SOIC-8_3.9x4.9mm_P1.27mm`; `U2` and `U4` had the
+  **same stale EP footprint** and were moved with it (all nine `U2`/`U3`/`U4` units). No
+  behaviour change — the pin-out is identical; only the land pattern stops claiming pads that do
+  not exist.
+* The `Sim.*` fields inherited from the old symbol are the generic
+  `kicad_builtin_opamp_dual` sub-circuit, not an MCP6002 model, and are unchanged.
+
+### 10.4 Phase 2 (PCB) to-do after 1.3.10
+
+1. **Nothing loud-gain is placed**: no `R53`/`R54`/`R56`/`C49`/`J24`/`U19` parts, and the
+   board's `R53`/`R54` footprints and copper are deleted with this step.
+2. **`R57`** (100 Ω 0402) is a new SMD placement at the `INPUT1` return, to be placed and routed
+   with one stub onto the `INPUT1` pin-3/4/5 tie.
+3. **`J23`/`U18`/`R55`/`C48`** — the mono selector, i.e. the 1.3.7 Phase-2 work, unchanged.
+4. **`U2`/`U3`/`U4`** footprints → `SOIC-8_3.9x4.9mm_P1.27mm`; the exposed pad and its copper go
+   away with them.
+5. The earlier power items: the twelve `U6…U17` → `SOT-583-8` swap, the `R28/R30/…/R50`
+   deletion, the twelve `J7…J18` pin-1 nets from `+3.3V` to `VBUS_PROT`, the `MODE`/`PR1` bench
+   proof of §1a, then `kicad-cli pcb drc --schematic-parity`, `tools/verify_power.py` (drop the
+   `PCB_PENDING` block), `tools/verify_stack_height.py` and `tools/regenerate_production.py`.
+6. Re-baseline `verification/fixed-geometry.json` (both schematic hashes and the footprint/pad
+   geometry) in the same reviewed commit — it still pins the pre-1.3.6 board, which is why
+   `tools/verify_power.py` stops at `'ERC setup changed'` before it reaches any of the above.

@@ -4,7 +4,8 @@
 that way**: moving the pin would not make it produce valid exports. The tracked
 `production/` and `jlcpcb/` outputs still describe the **v1.3.2** board, so they
 predate 1.3.3 (680 k), 1.3.4 (`R25` removed, `R52` added, `R5`/`R24` to 2 M) and
-1.3.5 (`R53`/`R54` + `J20`/`J21`). Read this file and
+1.3.5 (`R53`/`R54` + `J20`/`J21` — that loud-gain option was **withdrawn in 1.3.10**, see
+`../CHANGELOG`). Read this file and
 [`RELEASE_STATUS.md`](RELEASE_STATUS.md) before ordering anything.
 
 Current state (branch tip `base-improvements`; the `R18`/`R19` field fix is commit
@@ -15,6 +16,15 @@ Current state (branch tip `base-improvements`; the `R18`/`R19` field fix is comm
 | `../base.kicad_pcb` | `18823a8bab09c6af…` | 168 footprints, 0 unconnected |
 | `../base.kicad_sch` | `b98bced23e106ae2…` | `VERSION` = 1.3.5 |
 | pinned in `../verification/fixed-geometry.json` | `9fc20400ad6268ae…` | **the v1.3.2 board** |
+
+> **Reference-designator note (2026-09-18).** This document is written against the
+> **1.3.5-era** schematic and its `J19`/`J20`/`J21` discussion is kept as the record of why
+> the export gate was written. Those three solder jumpers were already replaced in 1.3.6
+> (`J22`) and 1.3.7 (`J23`/`J24`, `U18`/`U19`), and in **1.3.10** the whole loud-gain option
+> was **withdrawn**: `R53`, `R54`, `R56`, `C49`, `J24` and `U19` no longer exist in the
+> schematic, the mono selector is `J23`/`U18`/`R55`/`C48`, and `R57` (100 Ω) ties the `INPUT1`
+> return to `GND`. Wherever this file says "`J19`/`J20`/`J21`" read "the non-placed designators
+> of the *then* revision" — for the current revision that set is `J23` (DNP, through-hole).
 
 ## 1. What the pin protects
 
@@ -114,8 +124,11 @@ real (small) decision, not something to guess.
   i.e. after 1.3.3 the value and the part number disagreed with each other —
   that part number is `C25822` in `base.kicad_sch` / `base.kicad_pcb` since
   commit `d9991d9`.
-* They still list `R25` and `R5` = 1 M and are missing `R52`, `R53`, `R54` and
-  `J20`/`J21`, and `R24` is still 10 k.
+* They still list `R25` and `R5` = 1 M and are missing `R52`, `R55`, `R57`, `J23` and the
+  `U18`/`U19` selectors, and `R24` is still 10 k. They also still carry the 1.3.5 loud-gain
+  parts (`R53`, `R54`, `J20`/`J21`) that 1.3.7 replaced and **1.3.10 deleted**, and they predate
+  the `U2`/`U3`/`U4` SO-8 footprint correction — so no tracked output matches the current
+  schematic.
 * `manifest.json` / `RELEASE_STATUS.md` still say `release_version 1.3.2`,
   163 references, 119 JLCPCB placements, 32 JLCPCB BOM rows.
 * `RELEASE_STATUS.md` is the order-time document. It is **stale and must not be
