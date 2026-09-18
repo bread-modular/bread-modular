@@ -1,5 +1,84 @@
 # Changelog
 
+## 1.1.2 — ESP32 rail: the five legacy 100uF bulk caps (`C9`..`C13`) are removed
+**Schematic-only revision.** `32bit-5v.kicad_sch` changes; `32bit-5v.kicad_pcb` is
+deliberately **not** touched (no placement, no routing, no zone refill, no footprint
+deletion) — the owner does the routing pass, which now also has to delete the five
+orphaned 1206 bulk-cap footprints. The `production/` BOM/CPL exports stay stale for the
+same reason (they are generated from the board). See `POWER.md` §1.3 for the full
+rationale and §6 for the hand-off table.
+
+* **Removed `C9`, `C10`, `C11`, `C12`, `C13`** — five generic **100uF 1206** capacitors
+  that sat in parallel on `+3V3_ESP32`, i.e. behind the `FB1` ferrite, directly across
+  the ESP32 module's supply. Together with the 10uF the rail carried ≈**510uF**; it now
+  carries **10.1uF**. The bank dates from the pre-regulator era (0.3.0, *"use better
+  power supply for esp32 side with ferrite beads and caps"*), when the 3.3V rail was an
+  unregulated feed and brute-force bulk was the only mitigation available. Since 1.1.0
+  the module has its own 600mA LDO, so the bank was sized against a premise that no
+  longer holds.
+* **Kept, unchanged in value/footprint/fields**: `C1` 0.1uF 0402 and `C2` 10uF 0603 on
+  `+3V3_ESP32`, `FB1` (GZ2012D121TF) and the `R3`/`C3` EN delay. The only change on the
+  rail is the deletion of the five 100uF parts plus their 20 stub/bus wires and 8
+  junctions, so nothing dangles.
+* **What the ESP32 specifies** (Espressif *ESP32-S3 Hardware Design Guidelines*,
+  schematic checklist; `ESP32-S3-WROOM-1` datasheet "Power Supply"): a **10uF + 0.1uF**
+  pair at the module's 3V3 input — which is exactly the `+3V3_ESP32` rail here and is
+  already `C2` + `C1` — an **LC circuit on the VDD3P3 rail with the inductor rated
+  ≥500mA** (`FB1`, already fitted), and **≥10uF at the main power entrance** (`C40`
+  10uF + `C42` 0.1uF on `+5V`). The five 100uF parts were an addition on top of that
+  specification, not a requirement of it. The guidelines' warning about *excessively
+  large* capacitors is about the **chip-level `VDD_SPI` rail** (internal to the module
+  here), so it is quoted for context only and is **not** the reason for this trim — see
+  `POWER.md` §1.3 for the table that separates the two levels.
+* **Margin is reduced deliberately, and the replacement is not validated.** A 500uF bank
+  also supplied charge for slow load transients; 10uF does not, even when both "meet the
+  datasheet". This revision contains **no measurement** of load-transient/brownout
+  behaviour on the trimmed rail, and no measurement of `C2`'s DC-bias-reduced effective
+  capacitance. Both are **pending bench items** (`POWER.md` §1.3 and §5); if they show
+  brownout or PSRAM-related resets, the remedy is **one** 0805/1206 bulk cap back behind
+  `FB1`, not the bank.
+* **Net effect** (proved in `verification/proof-bulk-cap-trim.json`, 20/20): `+3V3_ESP32`
+  = {`C1`.1, `C2`.1, `FB1`.1, `U1`.2}, `GND` lost only the five pin-2 nodes, every other
+  net in the design is byte-identical, and no surviving component's value, footprint or
+  fields changed. 77 nets before and after; no net was merged, split or renamed.
+* **Verification** (KiCad 10.0.6): `sch erc --severity-all` stays at **56 (35 error /
+  21 warning)** and — compared as normalised findings (severity + type + affected items
+  + positions, not just the total) — the before and after reports are **identical**, so
+  0 new and 0 changed findings. The new trim proof is **20/20** and chains
+  1.1.0 → 1.1.1-as-released → 1.1.1 source → 1.1.2 link by link. The regulator-swap
+  proof still reproduces **19/19** from the frozen artefacts.
+* **Fixture correction (worth recording).** The `verification/` artefacts shipped with
+  1.1.1 were **stale**: commit `1244ad0` ("Update the 32bit schematics a bit") changed
+  the schematic *after* they were generated, which is why the v1.1.1 note claimed 54
+  ERC findings while the same source actually produces 56. This revision freezes a
+  correct 1.1.1 baseline (`erc-32bit-5v-1.1.1.json`,
+  `netlist-32bit-5v-1.1.1.kicadsexpr`), keeps the shipped report for the record
+  (`erc-32bit-5v-1.1.1-pre-1244ad0.json`), and explains the two-finding difference.
+* **Found, NOT fixed — `C41` is disconnected (pre-existing, `1244ad0`).** That commit
+  re-placed `C41` (22uF, the LDO output bulk) and left its `+3V3` stub ending in
+  mid-air, so the netlist now contains `unconnected-(C41-Pad1)` and ERC carries exactly
+  `+1 error pin_not_connected (C41 pin 1)` and `+1 warning unconnected_wire_endpoint
+  (Vertical Wire, length 0.0254 mm)` versus the shipped 1.1.1 report. It is **not** part
+  of this revision and is **not** repaired here — it is logged in `POWER.md` §5 (with
+  the exact one-wire + one-junction remedy) and §6 item 8, and is modelled as its own
+  link in the chain proof so the history stays exact. **Do not read it as harmless:**
+  `C8`/`C6` keep the 3.3V rail decoupled so the module is expected to run, but the
+  regulator is missing 22uF of its documented output bulk and that has not been
+  validated. It should be fixed **before board synchronisation or manufacture**. Note
+  also that fixing `C41` does not restore `check_ldo_swap_netlist.py` against a 1.1.2
+  netlist — that proof belongs to the frozen 1.1.0 → 1.1.1-as-released pair.
+* **Board-side consequences (owner's routing pass)**: the board still carries `C9`..`C13`
+  footprints. Parity (`kicad-cli pcb drc --schematic-parity`) has **not been re-run**
+  since the v1.1.0 board run, so this is an expectation rather than a result: it should
+  report at least `U5` (wrong footprint, from 1.1.1), `C42` (in the schematic since
+  1.1.1, never placed), `C41` (net mismatch — see above) and the five `C9`..`C13`
+  capacitors still on the board. The `production/` exports remain the 1.1.0 ones.
+  Removing the five 1206 parts frees real estate exactly where `C1`/`C2` need to sit —
+  with no distant reservoir left, their **placement close to `U1` pin 2** is what
+  carries the decoupling (`POWER.md` §1.3, §6 items 2 and 6).
+* **Not touched**: `32bit-5v.kicad_pcb`, `32bit-5v.kicad_pro`, `production/`, `code/`,
+  and the module's outline/connectors/signal routing.
+
 ## 1.1.1 — same 3.3V regulator as the base module (`AP2112K-3.3`), schematic only
 **Schematic-only revision.** `32bit-5v.kicad_sch` changes; `32bit-5v.kicad_pcb`
 is deliberately **not** touched (no placement, no routing, no zone refill, no

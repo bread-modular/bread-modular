@@ -4,12 +4,25 @@
 Schematic-only change: the board (*.kicad_pcb) is deliberately NOT updated, so this
 proof is about the schematic netlist only.
 
-Usage (from the module directory, KiCad 10 toolchain):
+Usage — reproduce the shipped proof from the frozen netlist artefacts (the arguments are
+netlists, not schematics; do not feed a netlist back into `sch export netlist`):
 
-    kicad-cli sch export netlist --format kicadsexpr -o /tmp/pre.net \
-        verification/netlist-32bit-5v-1.1.0.kicadsexpr   # (or the 1.1.0 artefact)
+    python3 verification/check_ldo_swap_netlist.py \
+        verification/netlist-32bit-5v-1.1.0.kicadsexpr \
+        verification/netlist-32bit-5v-1.1.1-as-released.kicadsexpr
+
+Usage — rebuild the netlists from the schematics first (only needed when re-freezing a
+revision), from the module directory:
+
+    kicad-cli sch export netlist --format kicadsexpr -o /tmp/pre.net  <pre schematic>
     kicad-cli sch export netlist --format kicadsexpr -o /tmp/post.net 32bit-5v.kicad_sch
     python3 verification/check_ldo_swap_netlist.py /tmp/pre.net /tmp/post.net
+
+NOTE (1.1.2): this proof describes the 1.1.0 -> 1.1.1-as-released pair. Commit
+`1244ad0` later re-placed C41 and left its +3V3 stub floating, so running this script
+against the 1.1.1 *source* at that commit gives 16/19 - the three failures are exactly
+('C41','1') leaving '+3V3'. That is a pre-existing defect, documented in POWER.md
+section 5; check_bulk_cap_trim.py models it explicitly as a link in the chain.
 
 Writes verification/netlist-proof-ldo-swap.json and exits non-zero if any check fails.
 """
