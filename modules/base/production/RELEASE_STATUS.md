@@ -1,5 +1,44 @@
 # v1.3.2 outputs — FAB-READY
 
+> ## ⚠️ Schematic ahead of PCB (v1.3.8 mux swap, 2026-09-18) — **do not order from a re-export**
+>
+> The **schematic** was migrated on 2026-09-18: the twelve per-slot muxes
+> (`U6…U17`) are `TPS2116DRLR` (SOT-583, `C3235557`) and `R28/R30/…/R50` (750 Ω
+> ILIM) are deleted (CHANGELOG 1.3.8, POWER.md §1a,
+> `../verification/mux-swap-tps2116.json`). Nothing else moved: `base.kicad_pcb`
+> is **byte-identical to this branch's committed board (`b8df0829…`)**, and every
+> file in this directory is still the **v1.3.2** release
+> (`manifest.json` → `release_version: "1.3.2"`). That is a *different* board
+> revision from the `routed_pcb_sha256` pin (`9fc20400…`), which is already stale
+> on this branch — the pin, not the board, is what has drifted.
+>
+> **Known blocker (POWER.md §1a): a reset press drives the slot rail to 5V_SYS in *both*
+> jumper states.** `MODE` is pulled up by `+3.3 V` and `PR1` comes from the same rail through
+> the jumper shunt, while `SW1` gates `U5.EN` — so on every reset press both control pins fall,
+> the part enters *diode mode* and passes the higher input (`5V_SYS`) to a slot that may be
+> jumpered for 3.3 V. Resolve it with a datasheet-verified control arrangement (an RC hold-up is
+> not a remedy) before any re-export.
+>
+> Consequences until that is resolved and Phase 2 (footprint swap + local
+> re-route + re-export) lands:
+>
+> * `../tools/verify_power.py` cannot reach a clean pass: it reports the swap as
+>   *PCB pending* (24 refs, 12 ghost `Net-(U*-ILIM)` nets, 12 schematic-only
+>   `unconnected-(U*-ST-Pad8)` nets) and labels the run **NOT fab-ready**; the
+>   branch's pre-existing drift (`U18/U19`, `J20…J24`, `C48/C49`, `R55/R56` are
+>   schematic-only too, and the `project_erc`, `project_schematic`,
+>   `routed_pcb_sha256` and footprint-geometry pins predate the 1.3.6/1.3.7 board
+>   work) still stops it earlier.
+> * `../tools/regenerate_production.py` refuses to run: its DRC
+>   `--schematic-parity` gate is exactly what the pending swap breaks. **Do not
+>   regenerate or order anything from this directory until the blocker and Phase 2
+>   are resolved** — the files here are the verified v1.3.2 payloads for the board
+>   revision they describe.
+> * The two schematic hash pins in `../verification/fixed-geometry.json`
+>   (`schematic_sha256`, `slot_schematic_sha256`) were deliberately re-pinned for
+>   this revision, with the previous values kept in the new
+>   `schematic_revision` block.
+
 **The DO-NOT-ORDER hold is lifted.** These files were regenerated from the routed
 board (`base.kicad_pcb`, SHA-256
 `9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484`, unchanged)

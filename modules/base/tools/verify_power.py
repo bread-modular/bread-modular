@@ -132,6 +132,31 @@ def pad_data(f):
 
 board_path = BASE / 'base.kicad_pcb'
 sch_path = BASE / 'base.kicad_sch'
+
+# ---------------------------------------------------------------------------
+# schematic-ahead-of-PCB state (v1.3.8 mux swap)
+# ---------------------------------------------------------------------------
+# The twelve per-slot TPS2111APWR muxes were replaced by TPS2116DRLR on the
+# schematic side only (tools/swap_slot_mux_tps2116.py).  The routed board is the
+# pinned release deliverable, so until Phase 2 swaps the twelve footprints, the
+# local copper and the production payloads, the board and the schematic are
+# deliberately out of step for exactly these references.  Everything that can
+# still be proven is still checked; only the mux-specific board/schematic
+# comparisons below are listed here, and they are reported in the JSON report so
+# a release reviewer cannot miss them.
+PCB_PENDING = {
+    'refs': {f'U{n + 5}' for n in range(1, 13)} | {f'R{26 + 2 * n}' for n in range(1, 13)},
+    'ghost_board_nets': {f'Net-(U{n + 5}-ILIM)' for n in range(1, 13)},
+    'new_schematic_nets': {f'unconnected-(U{n + 5}-ST-Pad8)' for n in range(1, 13)},
+}
+PCB_PENDING_NOTE = (
+    'v1.3.8 mux swap is schematic-only: U6..U17 (TPS2116DRLR) and R28/R30/.../R50 '
+    '(ILIM) differ from the routed, pinned base.kicad_pcb.  Phase 2 must swap the '
+    'twelve footprints, re-route them, then re-run this check without PCB_PENDING.'
+)
+pending_skipped = []
+
+
 baseline = json.loads((BASE / 'verification/fixed-geometry.json').read_text())
 project = json.loads((BASE/'base.kicad_pro').read_text())
 check(project['board']['design_settings']['rules'] == baseline['project_design_rules'], 'Global DRC minima changed')
@@ -171,26 +196,43 @@ with tempfile.TemporaryDirectory(prefix='base-netlist-') as tmp:
     root = ET.parse(xmlfile).getroot()
 components = {c.attrib['ref']: c for c in root.find('components')
               if c.findtext('footprint') and c.find("property[@name='exclude_from_board']") is None}
-check(set(components) == set(fps), 'Missing or extra PCB footprints')
+check(set(components) - set(fps) == set(),
+      'Schematic components with no board footprint: {}'.format(sorted(set(components) - set(fps))))
+board_only = set(fps) - set(components)
+check(board_only <= PCB_PENDING['refs'],
+      'Board-only footprints outside PCB_PENDING: {}'.format(sorted(board_only - PCB_PENDING['refs'])))
 expected = {(v.attrib['ref'], v.attrib['pin']): n.attrib['name']
             for n in root.find('nets') for v in n if v.attrib['ref'] in fps}
 actual = collections.defaultdict(set)
 for ref, f in fps.items():
-    c = components[ref]
-    check(f.GetValue() == c.findtext('value'), f'{ref}: stale value')
-    ident = str(f.GetFPID().GetLibNickname()) + ':' + str(f.GetFPID().GetLibItemName())
-    check(ident == c.findtext('footprint'), f'{ref}: footprint differs from schematic')
-    for key in ['LCSC', 'MPN', 'Manufacturer']:
-        val = c.findtext(f"fields/field[@name='{key}']")
-        if val:
-            check(f.GetFieldText(key) == val, f'{ref}: stale {key}')
+    c = components.get(ref)
+    if ref in PCB_PENDING['refs'] or c is None:
+        pending_skipped.append(ref)
+    else:
+        check(f.GetValue() == c.findtext('value'), f'{ref}: stale value')
+        ident = str(f.GetFPID().GetLibNickname()) + ':' + str(f.GetFPID().GetLibItemName())
+        check(ident == c.findtext('footprint'), f'{ref}: footprint differs from schematic')
+        for key in ['LCSC', 'MPN', 'Manufacturer']:
+            val = c.findtext(f"fields/field[@name='{key}']")
+            if val:
+                check(f.GetFieldText(key) == val, f'{ref}: stale {key}')
     for d in f.Pads():
         pair = (ref, d.GetNumber())
-        check(d.GetNetname() == expected.get(pair, ''), f'{pair}: incorrect pad net')
+        if ref not in PCB_PENDING['refs']:
+            check(d.GetNetname() == expected.get(pair, ''), f'{pair}: incorrect pad net')
         if d.GetNetname():
             actual[d.GetNetname()].add(pair)
 check(set(expected) <= {pair for nodes in actual.values() for pair in nodes}, 'Missing schematic pin')
-check(set(map(str, b.GetNetsByName().keys())) - {''} == set(expected.values()), 'Ghost/stale board net')
+board_nets = set(map(str, b.GetNetsByName().keys())) - {''}
+ghost = board_nets - set(expected.values())
+stale_schematic = set(expected.values()) - board_nets
+check(ghost <= PCB_PENDING['ghost_board_nets'], f'Ghost board nets: {sorted(ghost)}')
+check(stale_schematic <= PCB_PENDING['new_schematic_nets'],
+      f'Schematic nets with no board counterpart: {sorted(stale_schematic)}')
+sch_nodes = collections.defaultdict(set)
+for (ref, pin), name in expected.items():
+    sch_nodes[name].add((ref, pin))
+
 required = {'5V_SYS', 'VBUS_PROT', 'VBUS_IN'} | {f'{prefix}_{n}' for n in range(1, 13) for prefix in ['VSLOT', 'SEL']}
 check(required <= set(actual), 'Missing power-upgrade nets')
 
@@ -198,13 +240,23 @@ slots = []
 for n in range(1, 13):
     u, j, ri, rs = f'U{n+5}', f'J{n+6}', f'R{26+2*n}', f'R{27+2*n}'
     c1, c2, supply = f'C{20+2*n}', f'C{21+2*n}', f'VSUPPLY_{n}'
-    check(actual[f'VSLOT_{n}'] == {(supply, str(k)) for k in range(1, 6)} |
-          {(u, '7'), (c1, '1'), (c2, '1')}, f'VSLOT_{n}: wrong current path')
-    check(actual[f'SEL_{n}'] == {(u, '2'), (j, '2'), (rs, '1')}, f'SEL_{n}: incorrect select')
-    check(actual[f'Net-({u}-ILIM)'] == {(u, '4'), (ri, '1')}, f'{u}: incorrect ILIM')
-    check(fps[ri].GetValue() == '750' and fps[rs].GetValue() == '100k', f'{u}: resistor values')
-    check({(u, '1'), (u, '3'), (u, '5'), (ri, '2'), (rs, '2'), (c1, '2'), (c2, '2')} <= actual['GND'], f'{u}: returns/manual mode')
-    check((u, '8') in actual['5V_SYS'] and (u, '6') in actual['+3.3V'], f'{u}: input reversal')
+    check(sch_nodes[f'VSLOT_{n}'] == {(supply, str(k)) for k in range(1, 6)} |
+          {(u, '2'), (u, '7'), (c1, '1'), (c2, '1')}, f'VSLOT_{n}: wrong schematic current path')
+    check(sch_nodes[f'SEL_{n}'] == {(u, '4'), (j, '2'), (rs, '1')}, f'SEL_{n}: incorrect select map')
+    check(not any(ref == ri for ref, _ in expected), f'{ri}: ILIM resistor must be gone')
+    check(f'Net-({u}-ILIM)' not in sch_nodes, f'{u}: stale ILIM net')
+    check({(u, '1'), (rs, '2'), (c1, '2'), (c2, '2')} <= sch_nodes['GND'], f'{u}: returns')
+    check((u, '3') in sch_nodes['5V_SYS'] and {(u, '5'), (u, '6')} <= sch_nodes['+3.3V'],
+          f'{u}: input map / manual-mode MODE tie')
+    check(sch_nodes[f'unconnected-({u}-ST-Pad8)'] == {(u, '8')} and
+          sum((u, '8') in nodes for nodes in sch_nodes.values()) == 1, f'{u}: ST must be unconnected')
+    # Pinned fab release: the routed board is byte-identical (checked above), so the
+    # mux channel it carries is the TPS2111APWR one.  Board/schematic parity for
+    # these refs is therefore impossible until Phase 2 - the header block above
+    # lists exactly which refs and nets that covers, and the board hash pin keeps
+    # the old copper frozen.  Only the pulldown, the jumper leaves, the sockets and
+    # the geometry below are asserted board-side.
+    check(fps[rs].GetValue() == '100k', f'{u}: SEL pulldown value')
     jpads = list(fps[j].Pads())
     check({d.GetNumber(): d.GetNetname() for d in jpads} == {'1': '+3.3V', '2': f'SEL_{n}'}, f'{j}: not logic only')
     # Each jumper pin is a single trace endpoint (a leaf), not a series bus.
@@ -254,12 +306,28 @@ report = {'assertions_passed': checks,
           'stack_height_verified': bool(stack['clearance_ok']),
           'stack_clearance_nominal_mm': stack['clearance_nominal_mm'],
           'stack_clearance_worst_case_mm': stack['clearance_worst_case_mm'],
-          'release_status': 'fab-ready (see production/RELEASE_STATUS.md; the datasheet stack calculation is in verification/stack-height.json)',
+          'release_status': ('NOT fab-ready: the schematic is ahead of the pinned PCB '
+                             '(see the pcb_pending_schematic_ahead block and POWER.md 1a)'
+                             if PCB_PENDING['refs'] else
+                             'fab-ready (see production/RELEASE_STATUS.md; the datasheet stack calculation is in verification/stack-height.json)'),
           'hand_solder_override': 'The sockets keep their legacy C2894928 schematic/PCB field because this board is pinned byte-identical; the generated production/bom.csv carries NOT-JLC for them (production/hand-solder.json).',
+          'pcb_pending_schematic_ahead': {
+              'note': PCB_PENDING_NOTE,
+              'refs': sorted(PCB_PENDING['refs']),
+              'ghost_board_nets': sorted(PCB_PENDING['ghost_board_nets']),
+              'new_schematic_nets': sorted(PCB_PENDING['new_schematic_nets']),
+              'skipped_board_parity_refs': sorted(pending_skipped)},
           'physical_validation_pending': ['No assembled stack has been measured: a mating trial of one base plus one module is still advised.',
                                           'Module-side male header part number is not annotated on the module PCBs.',
                                           'Module 4mix and imix place their power headers on F.Cu and cannot mate downwards as drawn.']}
 if args.report:
     args.report.write_text(json.dumps(report, indent=2)+'\n')
 print(f'PASS: {checks} assertions; {len(fps)} footprints; 12 logic-only leaf jumpers; fixed geometry preserved.')
+if PCB_PENDING['refs']:
+    print('RESULT: NOT fab-ready — the schematic is ahead of the pinned PCB (POWER.md 1a).')
+    print(f'PCB PENDING (schematic ahead): {PCB_PENDING_NOTE}')
+    print(f'  board parity deliberately skipped for {len(PCB_PENDING["refs"])} refs: '
+          f'{sorted(PCB_PENDING["refs"])}')
+    print(f'  ghost board nets (ILIM, Phase 2 will delete them): {sorted(PCB_PENDING["ghost_board_nets"])}')
+    print(f'  schematic-only nets (ST no-connect): {sorted(PCB_PENDING["new_schematic_nets"])}')
 print(f'STACK HEIGHT: clearance {stack["clearance_nominal_mm"]} mm nominal / {stack["clearance_worst_case_mm"]} mm worst case; no assembled stack measured yet.')

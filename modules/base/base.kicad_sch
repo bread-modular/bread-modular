@@ -1019,7 +1019,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "BreadModular_PowerMux:TPS2111APWR"
+		(symbol "BreadModular_PowerMux:TPS2116DRLR"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1036,7 +1036,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "TPS2111APWR"
+			(property "Value" "TPS2116DRLR"
 				(at -8.89 -9.525 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1047,7 +1047,7 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Package_SO:TSSOP-8_4.4x3mm_P0.65mm"
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-583-8"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1058,7 +1058,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tps2111a.pdf"
+			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tps2116.pdf"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1069,7 +1069,7 @@
 					)
 				)
 			)
-			(property "Description" "2:1 power mux / load switch, 2.8-5.5V, 84mOhm, adjustable current limit (ILIM=500/RILIM), manual select (D0=0: D1=1 -> IN1, D1=0 -> IN2), reverse & cross-conduction blocking, TSSOP-8"
+			(property "Description" "2:1 power mux, 1.6-5.5V, 40mOhm, 2.5A, reverse-current & cross-conduction blocking, thermal shutdown, soft start; manual select: MODE tied to an external rail (>=1V) and PR1 (PR1=1 -> VIN1, PR1=0 -> VIN2); no programmable current limit; SOT-583 (DRL) 8-pin"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1080,7 +1080,7 @@
 					)
 				)
 			)
-			(symbol "TPS2111APWR_0_1"
+			(symbol "TPS2116DRLR_0_1"
 				(rectangle
 					(start -5.08 7.62)
 					(end 5.08 -7.62)
@@ -1093,11 +1093,11 @@
 					)
 				)
 			)
-			(symbol "TPS2111APWR_1_1"
-				(pin input line
+			(symbol "TPS2116DRLR_1_1"
+				(pin power_in line
 					(at -7.62 -5.08 0)
 					(length 2.54)
-					(name "D0"
+					(name "GND"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1112,10 +1112,10 @@
 						)
 					)
 				)
-				(pin input line
-					(at -7.62 -2.54 0)
+				(pin passive line
+					(at 7.62 0 180)
 					(length 2.54)
-					(name "D1"
+					(name "VOUT"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1130,10 +1130,10 @@
 						)
 					)
 				)
-				(pin input line
-					(at 7.62 -2.54 180)
+				(pin power_in line
+					(at -7.62 5.08 0)
 					(length 2.54)
-					(name "VSNS"
+					(name "VIN1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1148,10 +1148,10 @@
 						)
 					)
 				)
-				(pin passive line
-					(at 7.62 0 180)
+				(pin input line
+					(at -7.62 -2.54 0)
 					(length 2.54)
-					(name "ILIM"
+					(name "PR1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1166,10 +1166,10 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at 7.62 -5.08 180)
+				(pin input line
+					(at -7.62 0 0)
 					(length 2.54)
-					(name "GND"
+					(name "MODE"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1187,7 +1187,7 @@
 				(pin power_in line
 					(at -7.62 2.54 0)
 					(length 2.54)
-					(name "IN2"
+					(name "VIN2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1205,7 +1205,7 @@
 				(pin power_out line
 					(at 7.62 5.08 180)
 					(length 2.54)
-					(name "OUT"
+					(name "VOUT"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1220,10 +1220,10 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -7.62 5.08 0)
+				(pin open_collector line
+					(at 7.62 -5.08 180)
 					(length 2.54)
-					(name "IN1"
+					(name "ST"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1241,6 +1241,7 @@
 			)
 			(embedded_fonts no)
 		)
+
 		(symbol "Connector:Conn_01x05_Socket"
 			(pin_names
 				(offset 1.016)

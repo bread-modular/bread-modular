@@ -1,5 +1,55 @@
 # Changelog
 
+## 1.3.8 — per-slot mux swapped to TPS2116DRLR (schematic only, PCB pending)
+
+**All twelve per-slot 2:1 power muxes are now `TPS2116DRLR` (LCSC `C3235557`, SOT-583) and the
+twelve 750 Ω ILIM resistors (`R28/R30/…/R50`) are deleted.** Reason: the released
+`TPS2111APWR` (`C471060`) is an *extended* part at **$1.3804 @100 / $2.0267 @1-9 with only
+2 482 in stock**, and every TSSOP-8 sibling of the family is more expensive and worse stocked
+(TPS2110APWR $1.6848/0, TPS2114APWR $1.2714/0, TPS2115APWR $1.7499/206, TPS2113APWR
+$1.5579/2 121, TPS2112PWR $2.0902/199) — i.e. there is no cheap pin-compatible drop-in.
+`TPS2116DRLR` costs **$0.2052 @500-999 with 48 871 in stock** → **≈$13.10/board cheaper**
+(12 × $1.2974 → 12 × $0.2052, ≈$655 on a 50-board batch) and 12 fewer placements.
+
+Jumper polarity and the `VSLOT_n`/`SEL_n` net names are unchanged for **normal operation**:
+`MODE` is tied to `VIN2` (= +3.3 V) which selects manual mode, `PR1 = SEL_n` selects
+`VIN1 = 5V_SYS` when the shunt is fitted, `VIN2 = +3.3 V` when it is absent (100 kΩ pulldown),
+`VOUT` sits on pins 2 and 7, and the `ST` status output is left as a no-connect.
+
+**⚠️ Release blocker — a RESET press drives the slot rail to 5V_SYS in BOTH jumper states
+(POWER.md §1a).** `MODE` needs an external pull-up ≥ 1 V to stay in manual mode, so it is tied to
+`+3.3 V`, and `PR1` is fed from the *same* rail through the jumper shunt. `SW1` gates `U5.EN`:
+every reset press removes `+3.3 V` while `5V_SYS` (from `VBUS_PROT` through `F2`) stays up, so
+both control pins fall with the rail (`MODE` < 0.35 V with `PR1` already below `VREF ≈ 1 V`). The
+part then enters *diode mode* and **"the higher voltage supply between VIN1 and VIN2 is passed to
+the output"** — i.e. **a 3.3 V-jumpered slot is fed 5V_SYS through every reset press, with the
+shunt fitted or absent**. The TPS2111A selected the channel purely by logic and did neither.
+**Do not release this revision as drawn**; the release stays blocked until a datasheet-verified
+control arrangement is chosen and bench-proven (see POWER.md §1a — an RC hold-up is not a remedy,
+because a held button or a slow +3.3 V startup outlasts it).
+
+**Consequence — no programmable ILIM.** The **667 mA per-slot current limit is gone** (the
+TPS2116DRLR has no ILIM pin). What remains is reverse-current blocking, soft start, thermal
+shutdown (170 °C, an over-temperature trip — *not* a current limit), the `5V_SYS` PPTC `F2`
+and the `U5` LDO limit.
+
+* **Schematic-only.** `base.kicad_pcb` is byte-identical to this branch's committed board
+  (`b8df0829…`); `production/*` and every fab payload are still the **v1.3.2** release
+  (`manifest.json` `release_version: "1.3.2"`), which is a different board revision from the
+  `routed_pcb_sha256` pin (`9fc20400…`, already stale on this branch). Phase 2 swaps the
+  twelve footprints, deletes the ILIM resistors, re-routes them and re-exports
+  (`verify_power.py` reports the affected refs/nets as *PCB pending* until then).
+* **Reproduce/verify:** `tools/swap_slot_mux_tps2116.py` (deterministic, refuses a second run)
+  applies the swap and proves with `kicad-cli` that the only netlist difference is the
+  documented pin remap — every other net and component is unchanged — and that the ERC findings
+  are **identical by identity** (severity + type + sheet + affected items: 11 before / 11 after,
+  none added, none removed); it writes `verification/mux-swap-tps2116.json` plus the post-swap
+  netlist.
+* **Guard:** `tools/verify_power.py` now expects the new pin map and the missing ILIM branch,
+  asserts the `ST` pin is the only unconnected one, and prints the explicit *PCB pending*
+  block (24 refs, 12 ghost `Net-(U*-ILIM)` nets, 12 schematic-only `unconnected-(U*-ST-Pad8)`
+  nets) instead of silently skipping them.
+
 ## 1.3.7
 **The three solder jumpers become real jumpers: two 1x02 2.00 mm header + shunt selectors (the same
 part as the J7...J18 slot rail selectors) drive two TS5A23157DGS dual-SPDT analog switches, and the
