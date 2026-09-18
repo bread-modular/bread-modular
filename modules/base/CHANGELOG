@@ -109,6 +109,22 @@ height, wire/label/junction/no-connect boxes) and then re-laid out. Reproduce wi
   side at 234...256 / 48...82, refilling the zones) is **not** done yet, so the board/schematic parity
   check will report the changes until it lands, and no DRC claim is made for this entry.
 
+### Assembly note - `J23`/`J24` are DNP
+
+* `J23`/`J24` (the two 1x02 2.00 mm selector headers, `C2905948`) carry `(dnp yes)` in
+  `base.kicad_sch`: **JLCPCB must not fit them - the builder solders them locally.** They keep
+  `in_bom yes` / `on_board yes`, so the footprints and the BOM line stay and only the assembly
+  step is suppressed. Connectivity is untouched: the netlist is identical apart from the two
+  added `dnp` properties, and ERC is unchanged (11 findings, same kinds).
+* The JLCPCB exporter excludes both with the reason `Do not populate`
+  (`opt/kicad-jlcpcb/export.py:194` reads the schematic `${DNP}` field; KiCad 10 writes the
+  literal `DNP`), on top of the through-hole exclusion that already applied to them.
+* The PCB phase of this entry is still pending, so the flag reaches the footprints only when
+  `U18`/`U19`/`J23`/`J24`/`R55`/`R56`/`C48`/`C49` are placed and the PCB is updated from the
+  schematic (F8). `tools/regenerate_production.py` exports the production BOM with
+  `--exclude-dnp`, so its `bomrefs == refs` invariant now needs the same "minus DNP" treatment
+  as the non-placed jumpers (`production/EXPORT_BLOCKER.md`, section 3).
+
 ## 1.3.6
 **The line-input normalling is gone and the input stage is back to a pure, symmetric stereo path,
 with a selector jumper as the mono mode.** The passive mono normal that 1.3.4 added (`R52` + the
