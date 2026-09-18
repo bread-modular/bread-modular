@@ -1,5 +1,114 @@
 # Changelog
 
+## 1.3.7
+**The three solder jumpers become real jumpers: two 1x02 2.00 mm header + shunt selectors (the same
+part as the J7...J18 slot rail selectors) drive two TS5A23157DGS dual-SPDT analog switches, and the
+gain selector is re-wired so that cutting the shunt really does put the extra 1 M into the feedback
+path.** `J20`/`J21` (per-channel gain) and `J22` (stereo/mono) are deleted; `U18` (stereo/mono) and
+`U19` (gain, both channels from one select line) do the switching - no audio current flows through a
+header. Shunt absent (or lost) is the fail-safe shipped default: **stereo** and **680 k / -3.35 dB**.
+
+### Phase B - legibility pass (graphical only, netlist byte-identical)
+
+The A2 root sheet was audited with a bounding-box script over `base.kicad_sch`
+(symbol bodies from the library geometry, field text boxes at the real 1.27 mm text
+height, wire/label/junction/no-connect boxes) and then re-laid out. Reproduce with
+`python3 diag.py base.kicad_sch`.
+
+| defect class (whole root sheet) | before | after |
+|---|---|---|
+| coincident symbols (centres < 0.6 mm) | 0 | 0 |
+| symbol body vs body overlap | 1 (`J24` under `J1`) | 0 |
+| symbol sitting on another symbol's wire | 0 | 0 |
+| Reference/Value text collisions | 21 | 0 |
+| field text over other ink (body/wire/label/note/no-connect) | 6 | 3 (see below) |
+| note text collisions | 1 | 0 |
+| pins buried inside another symbol body | 26 | 0 |
+| off-grid items / off-grid pins | 0 / 0 | 0 / 0 |
+| wires not split at a junction (POWER.md 7) | 0 | 0 |
+| duplicated collinear wires | 0 | 0 |
+
+* **Analog input/output + gain/mono area re-laid out.** The two new blocks are now two
+  labelled, spaced functional groups in the empty band (x 238-390 mm, y 272-368 mm):
+  `U18` (mono/stereo, three units, its parked pole tied to GND) + `J23` + `R55` + `C48`,
+  and `U19` (gain, one shared select line) + `J24` + `R56` + `C49`, each with its
+  truth-table note underneath. `J24` no longer sits on top of the `J1` jack symbol.
+* **Every Reference/Value field is horizontal, left-justified, on a consistent 2.1 mm
+  stack above (or below) its body**, then de-collided against bodies, wires, labels,
+  notes and no-connect flags by an iterative settle pass; `fields_autoplaced` is set to
+  `no` for the symbols that were moved. Value/Reference of rotated parts (RV1/RV2,
+  jacks, fuses) now read horizontally as well.
+* **Short wires + net labels instead of long runs**: the select nets (`MONO_SEL`,
+  `GAIN_SEL`) are label-only at both ends, `LFB_A/LFB_B/RFB_A/RFB_B/RIN_SEL/IN_R/
+  BUFF_IN_L` stubs are 1.27-2.54 mm label tails, and every label sits on a real wire
+  end (no stub onto a wire interior).
+* **Guard evidence**: `kicad-cli sch export netlist --format kicadsexpr` before/after -
+  the `(nets ...)` section is byte-identical and the `(components ...)` section differs
+  only in symbol-instance `(tstamps ...)` UUID values (0 connectivity lines);
+  `kicad-cli sch erc` = 11 findings with the same kinds as 1.3.6
+  (4 pin_not_connected, 3 power_pin_not_driven, 4 lib_symbol_mismatch).
+* **Residual (intentional, not fixed)**: `V2`/`V3` and `#FLG203` still print their value
+  over the power symbol they are pinned across (`#PWR030`, `#PWR032`, `#PWR202`). Those
+  symbol pairs are pin-coincident by design (the SPICE source / flag must touch the rail
+  pin), so separating them would change connectivity - left as is.
+
+### Phase A - real jumpers + analog switches, and the 1.3.5/1.3.6 gain numbers corrected
+
+* **Correction to the 1.3.5 and 1.3.6 changelog entries (the record was wrong).** The 1 M resistors
+  `R53`/`R54` were wired between the amplifier's inverting input and the `R17`/`R16` input resistor
+  (`LFB_B = {J20.2, R17.1, R53.2}`), i.e. **in the input leg**, with `J20` shorting them. Bridged (as
+  shipped) gave `Rf = R19 = 680 k`, `Rin = R17 = 1 M` -> **-0.68 = -3.35 dB**; *cut* gave
+  `Rf = 680 k`, `Rin = 1 M + 1 M = 2 M` -> **-0.34 = -9.36 dB, i.e. -6.02 dB quieter than shipped**,
+  not `-(680k+1M)/1M = -1.68`. The "+6.28 dB / +14.14 dB" figures in 1.3.5/1.3.6 are only the deltas
+  of those two *feedback* values against the older 330 k board, and the "cut = 1.68 M loud state"
+  was never reachable in the built circuit. The gain selector now works as intended: see below.
+* **Gain selector (was `J20`+`J21`, now one jumper + one dual switch).** `R19`/`R18` (680 k) stay the
+  always-connected feedback from `U4.1`/`U4.7`; **the inverting input moves**: `U4.2` from `LFB_A`
+  to `LFB_B` and `U4.6` from `RFB_A` to `RFB_B`, so `R53`/`R54` (1 M) now sit **in the feedback leg in
+  series with the 680 k**, and `U19` (dual SPDT, one shared select line `IN1`+`IN2` = `GAIN_SEL`)
+  shorts them in the shipped state. Result: `LFB_A = {R19.2, R53.1, U19.9 (NC1)}`,
+  `LFB_B = {U4.2, R17.1, R53.2, U19.10 (COM1)}` (and `RFB_A`/`RFB_B` the same).
+  Truth table: `J24` shunt **absent/lost** -> `R56` 100 k pulls `GAIN_SEL` low -> `IN` low -> `COM-NC`
+  closed -> `R53`/`R54` shorted -> **`Rf = 680 k, gain -0.68 = -3.35 dB` (shipped default)**;
+  `J24` shunt **fitted** -> `GAIN_SEL` = +3.3 V -> `IN` high -> `COM-NO` (open) -> **`Rf = 680 k +
+  1 M = 1.68 M, gain -1.68 = +4.51 dB, i.e. +7.86 dB louder than shipped**. One jumper moves both
+  channels; the amplifiers stay closed-loop in both states (`Rin = R17`/`R16` = 1 M in both).
+  Switch error budget: at 3.3 V the `TS5A23157` on-resistance is 18 Ohm typ / 23 Ohm max, in series
+  with the 680 k feedback -> 23/680000 = 3.4e-5 = **0.0003 dB**, negligible; the off-channel
+  feedthrough (off-isolation -65 dB at 10 MHz ~ 0.2 pF) is across a 1 M resistor and only tilts the
+  *loud* state above ~800 kHz. Signal range is 0...V+ = 0...3.3 V; the audio sits on the 1.65 V
+  `+2.5V` bias with < +/-0.7 V swing, well inside the range, and the control threshold at 3.3 V is
+  VIH = 0.7 x V+ = 2.31 V / VIL = 0.99 V, so the header can only ever drive it high or low.
+* **Stereo/mono selector (was `J22`, now `J23` + `U18`).** `U18` channel 1: `COM1` = `RIN_SEL`
+  (the `R16` input node), `NC1` = `IN_R`, `NO1` = `BUFF_IN_L`; `IN1` = `MONO_SEL` with the 100 k
+  pulldown `R55`. Truth table: `J23` shunt **absent/lost** -> `MONO_SEL` low -> `COM-NC` -> the right
+  line amplifier is driven by its own `IN_R` -> **stereo (shipped)**; `J23` shunt **fitted** ->
+  `MONO_SEL` = +3.3 V -> `COM-NO` -> the right amplifier is driven by `BUFF_IN_L` at the same level
+  and **`IN_R` is disconnected from the line amplifier entirely** (no summing at any level); the left
+  channel and both headphone channels are unchanged in either position. `U18`'s second pole is tied
+  off (`COM2`/`NO2`/`NC2` = `GND`) with its `IN2` on `MONO_SEL`, so no pin floats; `U19`'s two unused
+  `NO` pins carry no-connect flags.
+* **Jumper idiom** copied from the slot rail selectors `J7...J18`: `PZ200-1-02-Z` 1x02 2.00 mm header
+  (LCSC **C2905948**, live JLCPCB stock 2441, $0.0236) + removable shunt (**C5664**, stock 126394,
+  $0.012) + 100 k select pull-down (**C25741**, 10.99 M stock, JLC basic) + 100 nF decoupling
+  (**C1525**, 29.7 M stock, JLC basic). Pin 1 = +3.3 V, pin 2 = the select net, exactly as on
+  `J7...J18`; shunt fitted = select high = the engaged state. **Switches:** `TS5A23157DGSR`
+  (dual SPDT, MSOP-10/TSSOP-10 0.5 mm, LCSC **C11133**, live JLCPCB stock 4796, $0.332 @100,
+  stock alternatives `C523778` 5728 and `C130086` 966; the single-SPDT `TS5A3157DBVR` `C353034`
+  stock 5655 was rejected only because one dual package covers both gain channels from one select
+  line). Both ICs are placed as a 3-unit symbol from the stock `Analog_Switch` library, with
+  `Value`/`MPN`/`Manufacturer`/`LCSC`/`Datasheet` filled in the schematic and the matching
+  `Package_SO:TSSOP-10_3x3mm_P0.5mm` footprint with the same fields on the PCB.
+* **State of this entry: schematic only.** `base.kicad_sch` carries the change and is ERC-clean
+  (11 findings, identical kinds to 1.3.6: 4 `pin_not_connected`, 3 `power_pin_not_driven`,
+  4 `lib_symbol_mismatch`), and the netlist diff is exactly: `J20`/`J21`/`J22` out,
+  `U18`/`U19`/`J23`/`J24`/`R55`/`R56`/`C48`/`C49` in, `LFB_A`/`RFB_A` lose `U4.2`/`U4.6` and gain the switch's `NC` throws
+  `U19.9`/`U19.7`, `LFB_B`/`RFB_B` gain `U4.2`/`U4.6` plus the `COM` throws `U19.10`/`U19.6`, `RIN_SEL`/`IN_R`/`BUFF_IN_L` move from `J22` to
+  `U18.10`/`U18.9`/`U18.2`, and the new nets `MONO_SEL`/`GAIN_SEL` appear. The PCB phase (deleting
+  `J20`/`J21`/`J22` footprints and their copper, placing and routing the eight new parts on the top
+  side at 234...256 / 48...82, refilling the zones) is **not** done yet, so the board/schematic parity
+  check will report the changes until it lands, and no DRC claim is made for this entry.
+
 ## 1.3.6
 **The line-input normalling is gone and the input stage is back to a pure, symmetric stereo path,
 with a selector jumper as the mono mode.** The passive mono normal that 1.3.4 added (`R52` + the
