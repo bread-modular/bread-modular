@@ -148,11 +148,19 @@ PCB_PENDING = {
     'refs': {f'U{n + 5}' for n in range(1, 13)} | {f'R{26 + 2 * n}' for n in range(1, 13)},
     'ghost_board_nets': {f'Net-(U{n + 5}-ILIM)' for n in range(1, 13)},
     'new_schematic_nets': {f'unconnected-(U{n + 5}-ST-Pad8)' for n in range(1, 13)},
+    # v1.3.9 moved the per-slot select reference (MODE + the jumper pin 1) from +3.3V to
+    # VBUS_PROT on the schematic side only.  The routed board still ties J7..J18 pin 1 to
+    # +3.3V, so those twelve pads are the one deliberately relaxed net comparison; the
+    # board-side value is asserted explicitly below.
+    'moved_jumper_ref_pads': {(f'J{n + 6}', '1') for n in range(1, 13)},
 }
 PCB_PENDING_NOTE = (
-    'v1.3.8 mux swap is schematic-only: U6..U17 (TPS2116DRLR) and R28/R30/.../R50 '
-    '(ILIM) differ from the routed, pinned base.kicad_pcb.  Phase 2 must swap the '
-    'twelve footprints, re-route them, then re-run this check without PCB_PENDING.'
+    'v1.3.8/v1.3.9 are schematic-only: U6..U17 (TPS2116DRLR), R28/R30/.../R50 (ILIM) and '
+    'the J7..J18 pin-1 select reference (now VBUS_PROT, board still +3.3V) differ from the '
+    'routed, pinned base.kicad_pcb.  Phase 2 must swap the twelve footprints, re-route the '
+    'local pads, move the twelve jumper pin-1 nets, then re-run this check without PCB_PENDING.  '
+    'NOTE: this guard aborts earlier on this branch (project_erc / sha pins in '
+    'verification/fixed-geometry.json predate the KiCad 10 project format).'
 )
 pending_skipped = []
 
@@ -218,7 +226,7 @@ for ref, f in fps.items():
                 check(f.GetFieldText(key) == val, f'{ref}: stale {key}')
     for d in f.Pads():
         pair = (ref, d.GetNumber())
-        if ref not in PCB_PENDING['refs']:
+        if ref not in PCB_PENDING['refs'] and pair not in PCB_PENDING['moved_jumper_ref_pads']:
             check(d.GetNetname() == expected.get(pair, ''), f'{pair}: incorrect pad net')
         if d.GetNetname():
             actual[d.GetNetname()].add(pair)
@@ -246,8 +254,9 @@ for n in range(1, 13):
     check(not any(ref == ri for ref, _ in expected), f'{ri}: ILIM resistor must be gone')
     check(f'Net-({u}-ILIM)' not in sch_nodes, f'{u}: stale ILIM net')
     check({(u, '1'), (rs, '2'), (c1, '2'), (c2, '2')} <= sch_nodes['GND'], f'{u}: returns')
-    check((u, '3') in sch_nodes['5V_SYS'] and {(u, '5'), (u, '6')} <= sch_nodes['+3.3V'],
-          f'{u}: input map / manual-mode MODE tie')
+    check((u, '3') in sch_nodes['5V_SYS'] and (u, '6') in sch_nodes['+3.3V'] and
+          (u, '5') in sch_nodes['VBUS_PROT'],
+          f'{u}: input map / manual-mode MODE bias (v1.3.9: MODE is pulled up to VBUS_PROT)')
     check(sch_nodes[f'unconnected-({u}-ST-Pad8)'] == {(u, '8')} and
           sum((u, '8') in nodes for nodes in sch_nodes.values()) == 1, f'{u}: ST must be unconnected')
     # Pinned fab release: the routed board is byte-identical (checked above), so the
@@ -257,7 +266,10 @@ for n in range(1, 13):
     # the old copper frozen.  Only the pulldown, the jumper leaves, the sockets and
     # the geometry below are asserted board-side.
     check(fps[rs].GetValue() == '100k', f'{u}: SEL pulldown value')
+    check((j, '1') in sch_nodes['VBUS_PROT'],
+          f'{j}: select reference must be VBUS_PROT since v1.3.9 (board/PCB_pending)')
     jpads = list(fps[j].Pads())
+    # board side: the routed, pinned copper is frozen at v1.3.2 and still ties pin 1 to +3.3V
     check({d.GetNumber(): d.GetNetname() for d in jpads} == {'1': '+3.3V', '2': f'SEL_{n}'}, f'{j}: not logic only')
     # Each jumper pin is a single trace endpoint (a leaf), not a series bus.
     for d in jpads:
@@ -316,6 +328,7 @@ report = {'assertions_passed': checks,
               'refs': sorted(PCB_PENDING['refs']),
               'ghost_board_nets': sorted(PCB_PENDING['ghost_board_nets']),
               'new_schematic_nets': sorted(PCB_PENDING['new_schematic_nets']),
+              'moved_jumper_ref_pads': sorted(f'{r}.{p}' for r, p in PCB_PENDING['moved_jumper_ref_pads']),
               'skipped_board_parity_refs': sorted(pending_skipped)},
           'physical_validation_pending': ['No assembled stack has been measured: a mating trial of one base plus one module is still advised.',
                                           'Module-side male header part number is not annotated on the module PCBs.',
@@ -330,4 +343,6 @@ if PCB_PENDING['refs']:
           f'{sorted(PCB_PENDING["refs"])}')
     print(f'  ghost board nets (ILIM, Phase 2 will delete them): {sorted(PCB_PENDING["ghost_board_nets"])}')
     print(f'  schematic-only nets (ST no-connect): {sorted(PCB_PENDING["new_schematic_nets"])}')
+    print(f'  jumper pin-1 select reference moved on the schematic only: '
+          f'{sorted(f"{r}.{p}" for r, p in PCB_PENDING["moved_jumper_ref_pads"])}')
 print(f'STACK HEIGHT: clearance {stack["clearance_nominal_mm"]} mm nominal / {stack["clearance_worst_case_mm"]} mm worst case; no assembled stack measured yet.')

@@ -1,5 +1,68 @@
 # Changelog
 
+## 1.3.9 — per-slot mux select re-referenced from +3.3 V to VBUS_PROT (schematic only, PCB pending)
+
+**Resolves the 1.3.8 release blocker in the schematic.** The per-slot 2:1 muxes stay
+`TPS2116DRLR` (`C3235557`); what changes is the rail the select hangs off.
+
+**What the blocker was (v1.3.8, as drawn).** `MODE` was tied to `VIN2 = +3.3 V` and `PR1` was
+fed from the *same* rail through the `J(n+6)` shunt (pin 1 = `+3.3 V`). `SW1` gates `U5.EN`,
+so every reset press removed `+3.3 V` while `5V_SYS` (from `VBUS_PROT` through `F2`, *not*
+from the LDO) stayed up. Both control pins then fell with the rail — `MODE` through
+`VIL,MODE = 0.35 V` with `PR1` already below `VREF ≈ 1 V` — and the part entered *diode mode*:
+quoting the datasheet, **"When the PR1 pin is pulled low, the higher voltage supply between
+VIN1 and VIN2 is passed to the output"**. A slot the user had jumpered for 3.3 V was therefore
+fed **`5V_SYS` on every reset press, with the shunt fitted or absent**. The `TPS2111A` it
+replaced selected the channel purely by logic and never did that.
+
+**What changed.** `MODE` and the `J(n+6)` pin-1 select reference moved from `+3.3 V` to
+`VBUS_PROT` (the always-on protected 5 V upstream of `F2`, so it survives both a reset press
+and an `F2` trip). `VIN2` stays on `+3.3 V`; the jumper, the 100 kΩ `PR1` pulldown and every
+`SEL_n` / `VSLOT_n` net name are unchanged. No series or divider resistor is required or
+added. Datasheet basis — TI **SLVSFG1A** (*TPS2116*, rev. May 2021): §5 Table 5-1 (`MODE`
+"pulled up to an external voltage" = manual mode) and §7.6.1.2 ("the GPIO pin can be directly
+connected to the PR1 pin when MODE is tied high (≥ 1 V)"); §6.5 (`VIH,MODE = 1…5.5 V`,
+`VIL,MODE = 0…0.35 V`, `VREF = 0.92/1/1.08 V`); §6.3 (`VST, VMODE, VPR1 = 0…5.5 V`,
+**independent of VINx**) and §6.1 (`−0.3…6 V` absolute maximum) — a ~5 V `VBUS_PROT` is
+inside the recommended range, so biasing `MODE`/`PR1` from it is legal as a direct tie.
+
+**New truth table, in one line each** (full table in POWER.md §2). `VIN1 = 5V_SYS`,
+`VIN2 = +3.3 V`, `MODE` = `VBUS_PROT` (≥ 1 V ⇒ manual mode), `PR1` = `SEL_n`:
+
+* normal, shunt absent → `VIN2` = **3.3 V**; normal, shunt fitted → `VIN1` = **5 V**;
+* **RESET pressed** (`+3.3 V` = 0 V): `MODE` stays ≈ 5 V ⇒ manual mode, `PR1` low ⇒
+  **the 3.3 V-jumpered slot goes to 0 V (deselected) and never to `5V_SYS`**; the
+  5 V-jumpered slot still gets 5 V. Same for a 3.3 V-rail-only fault;
+* power-up: the only diode-mode window is `MODE ≤ 0.35 V`, i.e. `VBUS_PROT ≤ 0.35 V`, and
+  since `VIN1` and `VIN2` are both derived from `VBUS_PROT` **both inputs are ≤ 0.35 V** in
+  that window — so the "higher input" it passes can never be 5 V.
+
+**Still not protected — the ILIM gap, explicitly accepted by the owner for now.** The 667 mA
+per-slot current limit is gone (the `TPS2116DRLR` has no `ILIM` pin) and `R28/R30/…/R50` stay
+deleted. A slot overload is bounded only by the **shared** `5V_SYS` PPTC `F2` (1.1 A hold /
+2.2 A trip for all twelve slots), the `U5` LDO limit, soft start, reverse-current blocking and
+the mux's **thermal shutdown (170 °C — an over-temperature trip, not a current limit)** — one
+bad slot can brown out the whole 5 V branch before `F2` trips. The §3.2 surge limitation now
+also covers the `MODE`/`PR1` pins (same 6 V absolute maximum).
+
+* **Schematic-only, and only one file.** The whole change lives in `slot.kicad_sch` — the
+  single template behind all twelve sheet instances, so all twelve slots are fixed by it
+  (`base.kicad_sch` is untouched). `base.kicad_pcb` is byte-identical (`b8df0829…`) and
+  `production/*` is still the **v1.3.2** payload. Phase 2 must additionally **move the twelve
+  `J7…J18` pin-1 nets** from `+3.3V` to `VBUS_PROT` on the board (new PCB-pending item)
+  alongside the 1.3.8 footprint/ILIM work.
+* **Reproduce/verify:** `tools/reroute_mux_select_vbus_prot.py` (deterministic, refuses a
+  second run) re-uses the 1.3.8 harness and proves with `kicad-cli` that the **only** netlist
+  difference is the 12 `MODE` pins and the 12 `J(n+6)` pin-1 pins leaving `+3.3 V` and joining
+  `VBUS_PROT` (every other net — all twelve `SEL_n` and `VSLOT_n` included — and every
+  component identical), that all twelve instances `U6…U17`/`J7…J18` carry it, and that the
+  ERC findings are identical by identity: **11 before / 11 after, none added, none removed**.
+  It writes `verification/mux-select-vbus-prot.json` plus the post-change netlist.
+* **Guard:** `tools/verify_power.py` now expects `MODE` on `VBUS_PROT` and the twelve
+  `J7…J18.1` pads in `moved_jumper_ref_pads`. Note it already aborts earlier on this branch
+  (`'ERC setup changed'`, pre-existing: `verification/fixed-geometry.json` predates the
+  KiCad 10 project format) — reproduced on untouched `e18b038`; see POWER.md §1a.
+
 ## 1.3.8 — per-slot mux swapped to TPS2116DRLR (schematic only, PCB pending)
 
 **All twelve per-slot 2:1 power muxes are now `TPS2116DRLR` (LCSC `C3235557`, SOT-583) and the

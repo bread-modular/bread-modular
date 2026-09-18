@@ -26,41 +26,45 @@ net VBUS_PROT ──┬── D2 TVS (SMAJ5.0A) ── GND
                                   └── 12 × U6..U17  IN1
 ```
 
-Per module slot *n* (1…12):
+Per module slot *n* (1…12) — **v1.3.9 select arrangement** (see §1a and §2):
 
 ```
+   VBUS_PROT ──┬── U(n+5).MODE       manual-mode bias, ≥ 1 V external (v1.3.9)
+               └── J(n+6) pin 1      shunt ⇒ PR1 high ⇒ VIN1 = 5V_SYS
+
    +3.3V ─────┐
-              ├── U(n+5) TPS2111APWR (2:1 power mux, manual mode)
-   5V_SYS ────┘        │            │                │
-                  D1 = SEL_n     ILIM           OUT ─┴──► net VSLOT_n ──► all five pins of the
-                       │            │                                  existing VSUPPLY_n socket
-         J(n+6) ── 1 = +3.3V     R(27+2n-1) 750 Ω ── GND
-                  2 = SEL_n
-                       │
-              R(27+2n) 100 k ── GND        C(20+2n) 1 µF, C(21+2n) 0.1 µF   VSLOT_n ── GND
+               ├── U(n+5) TPS2116DRLR (2:1 power mux, manual mode)
+   5V_SYS ─────┘        │                  │               │
+                  PR1 = SEL_n         VOUT pins 2+7 ──┴──► net VSLOT_n ──► all five pins of the
+                       │                                     existing VSUPPLY_n socket
+              R(27+2n) 100 k ── GND      C(20+2n) 1 µF, C(21+2n) 0.1 µF   VSLOT_n ── GND
 ```
 
 *(`U(n+5)` is `TPS2111APWR` on the fabricated board and `TPS2116DRLR` in the current
-schematic. Normal-operation select behaviour is identical, but the two parts are **not**
-equivalent when `+3.3 V` is missing — see the reset blocker in §1a.)*
+schematic. The two parts are **not** pin- or behaviour-equivalent, and since v1.3.9 the
+control reference is `VBUS_PROT` rather than `+3.3 V` — see §1a.)*
 
 The socket pinout is unchanged: every `VSUPPLY_n` socket still has all five pins on one
 slot rail (now `VSLOT_n` instead of unconditionally `+3.3V`), and `GND_n` remains the
 mating ground socket.
 
-## 1a. v1.3.8 — per-slot mux swapped to TPS2116DRLR (schematic only, PCB pending, **not releasable yet**)
+## 1a. v1.3.8/v1.3.9 — per-slot mux swapped to TPS2116DRLR, select re-referenced to VBUS_PROT (schematic only, PCB pending)
 
 The twelve per-slot muxes (`U6…U17`, one per slot-template instance) are `TPS2116DRLR` in
 the schematic. The board is untouched: the working tree's `base.kicad_pcb` is byte-identical
 to this branch's committed board (sha256 `b8df0829…`, **not** the `routed_pcb_sha256` pin
 `9fc20400…`, which is the older v1.3.2 fab release and is already stale on this branch), and
 every payload in `production/` is still the **v1.3.2** release (`manifest.json`
-`release_version: "1.3.2"`). Phase 2 swaps the twelve footprints, re-routes them and
-re-exports.
+`release_version: "1.3.2"`). Phase 2 swaps the twelve footprints, moves the twelve jumper
+pin-1 nets, re-routes them and re-exports.
 
-> **Status: release blocker.** The +3.3 V fail-safe does *not* survive a reset press with a
-> `MODE` pin tied to `+3.3 V` (see the blocker item below). The schematic change is recorded
-> here for review and for the cost decision, not for fabrication.
+> **Status: the v1.3.8 reset blocker is resolved in the schematic (v1.3.9).** `MODE` and the
+> `J(n+6)` pin-1 select reference now come from `VBUS_PROT`, so the select survives a reset —
+> see *Blocker 1 (v1.3.8, as drawn then) → fix (v1.3.9)* below and the state table in §2.
+> **What is still not protected, and is now the only electrical gap:** the per-slot 667 mA
+> `ILIM` limit is gone and is **accepted by the owner for this revision** (*Consequence 2*),
+> and the §3.2 surge limitation is unchanged.
+
 
 Why: measured on the JLCPCB parts API on 2026-09-18, `TPS2111APWR` (C471060) is
 **$1.3804 @100 / $2.0267 @1-9 with 2 482 in stock**, and there is no cheaper TSSOP-8
@@ -75,80 +79,147 @@ SOT-583) is **$0.2052 @500-999 with 48 871 in stock** → **≈$13.1/board cheap
 | 2 | `D1` | `SEL_n` | `VOUT` | `VSLOT_n` |
 | 3 | `VSNS` | GND | `VIN1` | `5V_SYS` |
 | 4 | `ILIM` | 750 Ω → GND | `PR1` | `SEL_n` |
-| 5 | `GND` | GND | `MODE` | `+3.3V` (= `VIN2`) |
+| 5 | `GND` | GND | `MODE` | `VBUS_PROT` (external bias ≥ 1 V; was `+3.3V` in v1.3.8) |
 | 6 | `IN2` | `+3.3V` | `VIN2` | `+3.3V` |
 | 7 | `OUT` | `VSLOT_n` | `VOUT` | `VSLOT_n` |
 | 8 | `IN1` | `5V_SYS` | `ST` | *no connect* |
 
 * Normal-operation polarity is preserved: shunt fitted ⇒ `SEL_n` high ⇒ `PR1` high ⇒
   `VIN1 = 5V_SYS`; shunt absent (100 kΩ pulldown) ⇒ `PR1` low ⇒ `VIN2 = +3.3 V`.
-  `MODE` is tied to `VIN2`, *not* to `VIN1` — that is what selects manual mode; tying it to
-  `VIN1` would select priority mode.
-* **⚠️ RELEASE BLOCKER 1 — a RESET press drives the slot rail to `5V_SYS` in *both* jumper
-  states.** `MODE` must be pulled up by an external rail (≥ 1 V) to stay in manual mode, and it
-  is tied to `+3.3 V`; `PR1` is fed from the *same* `+3.3 V` rail through the jumper shunt
-  (`J(n+6)` pin 1 = `+3.3 V`, pin 2 = `SEL_n`). `SW1` gates `U5.EN`, so **every reset press
-  removes `+3.3 V` while `5V_SYS` (from `VBUS_PROT` through `F2`, not from the LDO) stays up** —
-  and both control pins fall with it:
-  * `MODE` drops below `VIL,MODE = 0.35 V` while `PR1` has already fallen below `VREF ≈ 1 V`
-    (they decay together out of the same rail), so the part ends up in *diode mode*:
-    **"When the PR1 pin is pulled low, the higher voltage supply between VIN1 and VIN2 is
-    passed to the output"** — i.e. **the slot rail is driven to 5V_SYS through every reset
-    press, in both the shunt-fitted and the shunt-absent state**, on a slot the user may have
-    jumpered for 3.3 V.
-    [source](https://e2e.ti.com/support/power-management-group/power-management/f/power-management-forum/1559536/tps2116-confusing-logic-description-in-the-datasheet)
-  * While the rail decays, `PR1` crosses its 1 V threshold before `MODE` reaches 0.35 V, so the
-    mux first re-selects `VIN2` and then hands over to diode mode. Either way the slot rail is
-    **not** held at 3.3 V and cannot be relied on to stay below 5 V.
-  * The TPS2111A did not behave this way: `D0 = GND` / `D1 = SEL_n` select the channel purely by
-    logic, so a reset only sagged the +3.3 V rail instead of switching the slot to 5 V.
-  **Do not release this revision as drawn.** The release stays blocked until a
-  *datasheet-verified* control arrangement is chosen and bench-proven:
-  (a) pull `MODE` up from a rail that survives a reset, e.g. `VBUS_PROT` (needs a datasheet and
-  bench check that `MODE` may sit above `VINx`); (b) keep a mux whose select does not depend on a
-  rail — the TPS2111A already in production, or `TPS2120` (C1850326, $0.6626 @100, DSBGA-20) with
-  its own control pin. An RC hold-up on `MODE` is **not** a remedy: a held reset button, a slow
-  +3.3 V startup or a sustained rail failure all outlast it. Bench-check all four states — shunt
-  fitted, shunt absent, reset pressed, and power-up sequencing.
-* **Consequence 2 — no programmable ILIM.** The 667 mA per-slot current limit of §3.3 is
-  gone and `R28/R30/…/R50` (750 Ω) are deleted from the schematic (they stay fitted on the
-  board until Phase 2). What remains is reverse-current blocking, soft start, **thermal
-  shutdown (170 °C — an over-temperature trip, *not* a current limit)**, the upstream
-  `5V_SYS` PPTC (`F2`) and the `U5` LDO limit. If a per-slot limit must come back, the
-  cheapest mux with an adjustable one is `TPS2120` (C1850326, above).
-* Evidence: `tools/swap_slot_mux_tps2116.py` is the deterministic migration (refuses to
-  run twice); with `kicad-cli` it proves the only netlist difference is the table above
-  (every other net and component unchanged), compares ERC findings by identity
-  (severity + type + sheet + affected items) between the pre-swap design and this one —
-  **11 before / 11 after, none added, none removed** — and writes
-  `verification/mux-swap-tps2116.json`. `tools/verify_power.py` now expects the new pin
-  map and declares the board-side refs as *PCB pending*.
-* Phase 2 checklist: **first resolve the `MODE` pull-up blocker above** (option a/b/c, then
-  record the bench result), then swap `U6…U17` to `Package_TO_SOT_SMD:SOT-583-8`, delete
-  `R28/R30/…/R50`, re-route the local pads, re-run `kicad-cli pcb drc
-  --schematic-parity`, then `verify_stack_height.py`, `verify_power.py` (drop
-  `PCB_PENDING`) and `regenerate_production.py`.
+  **v1.3.9 changed only the reference rail of the select**: `MODE` and the jumper pin 1 now
+  come from `VBUS_PROT` instead of `+3.3 V`, so the select state no longer collapses with the
+  3.3 V rail. `MODE` is not tied to `VIN1`; a ≥ 1 V external bias is what selects manual
+  mode. The jumper, the 100 kΩ pulldown and every `SEL_n`/`VSLOT_n` net name are unchanged.
+* **Blocker 1 (v1.3.8, as drawn then) → fix (v1.3.9).** In v1.3.8 `MODE` was tied to
+  `VIN2 = +3.3 V` and `PR1` was fed from the *same* rail through the `J(n+6)` shunt
+  (pin 1 = `+3.3 V`, pin 2 = `SEL_n`). `SW1` gates `U5.EN`, so **every reset press removed
+  `+3.3 V` while `5V_SYS` (from `VBUS_PROT` through `F2`, not from the LDO) stayed up** and
+  both control pins fell with the rail: `MODE` below `VIL,MODE = 0.35 V` with `PR1` already
+  below `VREF ≈ 1 V`. The part then entered *diode mode* — quoting the datasheet, **"When
+  the PR1 pin is pulled low, the higher voltage supply between VIN1 and VIN2 is passed to
+  the output"** — i.e. **a 3.3 V-jumpered slot was fed `5V_SYS` on every reset press, shunt
+  fitted or absent.** The TPS2111A did not behave this way (`D0 = GND` / `D1 = SEL_n`
+  selected the channel purely by logic, so a reset only sagged the 3.3 V rail). The
+  datasheet wording that makes the low-`MODE` state a diode/OR-ing mode rather than a
+  defined off state is also the subject of
+  [this TI E2E thread](https://e2e.ti.com/support/power-management-group/power-management/f/power-management-forum/1559536/tps2116-confusing-logic-description-in-the-datasheet).
+* **The fix: the select reference is `VBUS_PROT`, not `+3.3 V`.** `MODE` and the jumper
+  pin 1 moved to `VBUS_PROT` (the always-on protected 5 V upstream of `F2`); `VIN2` stays on
+  `+3.3 V`. Datasheet basis — TI **SLVSFG1A** (*TPS2116*, Jan 2021, rev. May 2021):
+  * §5 Table 5-1 — `MODE`: "Device is put into Priority mode when MODE is tied to VIN1 and
+    **manual mode when MODE is pulled up to an external voltage**"; §7.6.1.2 — "the GPIO pin
+    can be **directly connected to the PR1 pin when MODE is tied high (≥ 1 V)**", i.e. no
+    series resistor is required and the existing 100 kΩ pulldown is what defines the
+    un-shunted state. No other resistor is needed or added.
+  * §6.5 Electrical Characteristics — `VIH,MODE = 1…5.5 V`, `VIL,MODE = 0…0.35 V`,
+    `VREF = 0.92/1/1.08 V`. A ~5 V `VBUS_PROT` is unambiguously logic high and
+    unambiguously above `VREF` (≥ 4× margin on `VIH,MODE`).
+  * §6.3 Recommended Operating Conditions — `VST, VMODE, VPR1 = 0…5.5 V`, **independent of
+    VINx**; §6.1 Absolute Maximum Ratings — control pins `−0.3…6 V`. Biasing these two pins
+    from `VBUS_PROT` is therefore **inside spec**: no divider and no level shift is needed.
+    (A divider from `VBUS_PROT` was considered and rejected — it adds 24 parts and a
+    high-impedance failure mode, and the datasheet's own manual-mode wiring is a direct
+    connection. A series resistor would not protect against the §3.2 surge either, because
+    no current flows in that pin.)
+  * §7.6.1 nuance — the device decides manual mode from the **level on `MODE`** (≥ 1 V
+    external bias), not from which node feeds it. `VBUS_PROT` and `VIN1 = 5V_SYS` are the
+    same source separated only by the `F2` PPTC (~0.6 Ω), so even if the silicon read the
+    pin as "tied to VIN1" the selection would be identical: in both modes, a hard-driven
+    `PR1` selects `VIN1` above `VREF` and `VIN2` below it (§7.3.1 truth table, §7.6.1).
+    `PR1` is always driven hard from the header, never divided off `VIN1`.
+* **Why the reset is now safe, in one line.** `VIN1`, `VIN2` *and* the select reference are
+  all derived from the single `VBUS_PROT` node, so the residual diode-mode window
+  (`MODE ≤ 0.35 V`) can only occur while `VBUS_PROT ≤ 0.35 V` — and therefore while **both**
+  inputs are ≤ 0.35 V. The "higher of the two" that diode mode passes can never be 5 V. The
+  full state table, including the reset and power-up rows, is in §2.
+* **Consequence 2 — no programmable `ILIM`, accepted by the owner for this revision.** The
+  667 mA per-slot current limit of §3.3 is gone (the `TPS2116DRLR` has no `ILIM` pin) and
+  `R28/R30/…/R50` (750 Ω) are deleted from the schematic (they stay fitted on the board
+  until Phase 2). **Stated plainly, what is still not protected:** a slot-level overload (a
+  stub, a reversed module, a shorted module input) is bounded only by the **upstream**
+  limits — the `5V_SYS` PPTC `F2` (1.1 A hold / 2.2 A trip, **shared by all twelve slots**),
+  the `U5` LDO limit on the 3.3 V branch, the mux's soft start and its reverse-current
+  blocking, plus **thermal shutdown (170 °C — an over-temperature trip, *not* a current
+  limit)**. The mux itself is rated 2.5 A continuous, so one bad slot can pull the whole
+  `5V_SYS` branch down (and brown out every other slot) before `F2` trips. If a per-slot
+  limit must come back, the cheapest mux with an adjustable one is `TPS2120` (C1850326,
+  $0.6626 @100, DSBGA-20).
+* Evidence (v1.3.9): `tools/reroute_mux_select_vbus_prot.py` is the deterministic migration
+  (refuses to run twice). With `kicad-cli` it proves that the **only** netlist difference is
+  the 12 `MODE` pins and the 12 `J(n+6)` pin-1 pins leaving `+3.3 V` and joining `VBUS_PROT`
+  (every other net — including all twelve `SEL_n` and all twelve `VSLOT_n` — and every
+  component byte-identical), that **all twelve** instances (`U6…U17` / `J7…J18`) carry the
+  change, and that the ERC findings are identical by identity (severity + type + sheet +
+  affected items): **11 before / 11 after, none added, none removed**. It writes
+  `verification/mux-select-vbus-prot.json` plus the post-change netlist. The v1.3.8 evidence
+  for the part swap itself is still `verification/mux-swap-tps2116.json` (its stored
+  "after" netlist describes the pre-v1.3.9 schematic, by design).
+* Guard: `tools/verify_power.py` now expects `MODE` on `VBUS_PROT` and lists the twelve
+  `J7…J18` pin-1 pads in `moved_jumper_ref_pads` (board-side *PCB pending*). **It does not
+  run to completion on this branch**: it aborts at
+  `check(project['erc'] == baseline['project_erc'], 'ERC setup changed')` because three pins
+  in `verification/fixed-geometry.json` (`project_erc`, `schematic_sha256`,
+  `routed_pcb_sha256`) predate the KiCad 10 project format and the 1.3.7/1.3.8 schematics.
+  That abort is **pre-existing** — it reproduces on untouched `e18b038` — and is unrelated to
+  this change (it is the same `check` call, shifted from line 165 to 173 by the lines added
+  here). The assertions touched by this change were evaluated directly against the exported
+  netlist and the board instead.
+* Phase 2 checklist: swap `U6…U17` to `Package_TO_SOT_SMD:SOT-583-8`, delete
+  `R28/R30/…/R50`, **move the twelve `J7…J18` pin-1 nets from `+3.3V` to `VBUS_PROT`**,
+  re-route the local pads, re-run `kicad-cli pcb drc --schematic-parity`, then
+  `verify_stack_height.py`, `verify_power.py` (drop `PCB_PENDING`, after re-pinning the stale
+  `fixed-geometry.json` hashes) and `regenerate_production.py`. Bench-check all four states —
+  shunt fitted, shunt absent, reset pressed, and power-up sequencing — before releasing.
+* Residual risks, recorded and **not** fixed here: (a) the per-slot `ILIM` gap above;
+  (b) the §3.2 surge limitation, which since v1.3.9 also covers the `MODE`/`PR1` pins (they
+  share the same 6 V absolute maximum); (c) a stray short from a select header pin 1 to
+  ground now pulls `VBUS_PROT` through `F1` (2 A hold) rather than into the LDO's own limit —
+  the header is a logic-only 2 mm pin pair under a shunt, unchanged in use.
 
-## 2. Per-slot 2:1 selection — truth table (as implemented)
+## 2. Per-slot 2:1 selection — truth table (v1.3.9, as implemented)
 
-| Jumper J(n+6) | `SEL_n` | U D1 | U D0 | Mode | OUT |
-|---|---|---|---|---|---|
-| **open / lost** | low (100 kΩ pulldown) | 0 | 0 | manual | **IN2 = +3.3 V** |
-| **shunt fitted** | high (tied to +3.3 V) | 1 | 0 | manual | **IN1 = 5V_SYS** |
+Select reference rail = `VBUS_PROT` (~5 V whenever USB power is present; upstream of `F2`, so
+it survives both a reset press and an `F2` trip). `VIN1 = 5V_SYS`, `VIN2 = +3.3 V`;
+`MODE` = `VBUS_PROT` (≥ 1 V ⇒ **manual mode**); `PR1` = `SEL_n` (shunt fitted ⇒ pin 1 =
+`VBUS_PROT` ⇒ `PR1` ≈ 5 V; shunt absent ⇒ 100 kΩ pulldown ⇒ `PR1` = 0 V).
 
-* **Fail-safe default is +3.3 V**: a missing, forgotten or vibrated-out shunt always leaves
-  the slot on the 3.3 V rail. The polarity is never inverted anywhere in the design.
-* Datasheet basis (TPS2111A): `D0 = logic low` selects **manual switching mode**; in that mode
-  `OUT` connects to **IN1 if D1 is logic high**, otherwise to **IN2**. D0 is hard-strapped to
-  GND on every channel; D1 is `SEL_n`.
-* **Input assignment**: `IN1 = 5V_SYS`, `IN2 = +3.3 V`. The original brief wrote
+| # | state | `VBUS_PROT` | `+3.3 V` | `5V_SYS` | `MODE` | mode | `PR1` open / shunt | `VOUT` — 3.3 V-jumper | `VOUT` — 5 V-jumper |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | normal, shunt absent | ≈5 V | 3.3 V | ≈5 V | ≈5 V | manual | 0 V / — | **`VIN2` = 3.3 V** | — |
+| 2 | normal, shunt fitted | ≈5 V | 3.3 V | ≈5 V | ≈5 V | manual | — / ≈5 V | — | **`VIN1` = 5 V** |
+| 3 | **RESET pressed** (`SW1` ⇒ `+3.3 V` = 0 V) | ≈5 V | 0 V | ≈5 V | ≈5 V | **manual** | 0 V / ≈5 V | **0 V** (deselected — *never* `5V_SYS`) | **`VIN1` = 5 V** |
+| 4 | 3.3 V-rail-only fault (`+3.3 V` = 0 V) | ≈5 V | 0 V | ≈5 V | ≈5 V | manual | 0 V / ≈5 V | **0 V** | **5 V** |
+| 5 | power-up, `VBUS_PROT` ≤ 0.35 V | ≤0.35 V | 0 V | ≤0.35 V | ≤0.35 V | diode (self-bounded) | 0 V / ≤0.35 V | ≤0.35 V | ≤0.35 V |
+| 6 | power-up, `VBUS_PROT` ≈1…2.5 V (LDO not started) | 1…2.5 V | 0 V | 1…2.5 V | ≥1 V | manual | 0 V / ≥1 V | **0 V** | follows `VBUS_PROT` |
+| 7 | no USB attached | 0 V | 0 V | 0 V | 0 V | diode (both inputs 0 V) | 0 V / 0 V | 0 V | 0 V |
+
+* **Target met.** A **3.3 V-jumpered slot never sees `5V_SYS` in any state** — rows 1, 3, 4,
+  5, 6 and 7 all leave it on `VIN2` (3.3 V, 0 V, or ≤ 0.35 V) — and a **5 V-jumpered slot
+  still gets 5 V** (rows 2, 3, 4).
+* Rows 5 and 7 are the diode-mode states. Row 5 (the only one with any rail energy, during
+  power-up) is **self-limiting**: `VIN1` (`5V_SYS`) and `VIN2` (`+3.3 V`) are both derived
+  from `VBUS_PROT`, while diode mode needs `MODE ≤ 0.35 V`, i.e. `VBUS_PROT ≤ 0.35 V` — so
+  **both** inputs are ≤ 0.35 V and the "higher input" the device passes cannot be 5 V. The
+  undefined band `0.35 V < MODE < 1 V` (i.e. `VBUS_PROT` between 0.35 V and 1 V) also sits
+  below the device's own 1.6 V minimum `VIN`, with `VIN1` ≤ 1 V there. Row 7 has both inputs
+  at 0 V.
+* **v1.3.8 for contrast:** with `MODE` on `+3.3 V`, rows 3 and 4 had `MODE` = 0 V / diode mode
+  and the slot rail was the *higher* input = `5V_SYS` even on a 3.3 V-jumpered slot — the
+  blocker described in §1a.
+* **Fail-safe default is still +3.3 V**: a missing, forgotten or vibrated-out shunt always
+  leaves the slot on the 3.3 V rail. The polarity is never inverted anywhere in the design.
+* Datasheet basis (TPS2116, SLVSFG1A §7.3.1 truth table / §7.6.1): `MODE ≥ 1 V` ⇒ manual
+  mode; in manual mode `OUT` connects to `VIN1` if `PR1 > VREF` and to `VIN2` if
+  `PR1 < VREF`; `MODE ≤ 0.35 V` with `PR1` high puts both channels off (`Hi-Z`), and with
+  `PR1` low passes the higher input.
+* **Input assignment**: `VIN1 = 5V_SYS`, `VIN2 = +3.3 V`. The original brief wrote
   `VIN1 = +3.3V, VIN2 = 5V_SYS` together with "shunt ⇒ 5 V"; with every assemblable
   manual-select mux *select high selects IN1*, so those two statements cannot both hold.
   The mandated, safety-critical part is the jumper polarity, so the input labels were swapped
   instead. Externally the behaviour is exactly as specified.
 * **Current path**: slot power flows `IN1/IN2 → OUT` **through the mux only**. The header
-  carries the µA select level (`pin 1` = +3.3 V reference, `pin 2` = `SEL_n`) and nothing
-  else — verified below (§5).
+  carries the µA select level (`pin 1` = `VBUS_PROT` reference since v1.3.9, `pin 2` =
+  `SEL_n`) and nothing else — verified in §5/§8.
 * Manual mode means there is **no automatic fallback**: if the selected rail disappears the
   slot rail is simply that rail (3.3 V or 5 V); it never silently switches to the other one.
 
@@ -161,7 +232,7 @@ SOT-583) is **$0.2052 @500-999 with 48 871 in stock** → **≈$13.1/board cheap
 | **F1** (input, in series with VBUS) | PPTC **2 A hold / 4 A trip / 16 V** | the USB source + the input wiring + the whole `VBUS_PROT` node |
 | **F2** (5 V branch) | PPTC **1.1 A hold / 2.2 A trip / 16 V** | the `5V_SYS` branch |
 | U5 AP2112K | internal current limit + thermal shutdown | the 3.3 V branch |
-| U6…U17 ILIM | 667 mA nominal per slot (see 3.3) — **v1.3.8: gone, see §1a** | each slot's wiring and module |
+| U6…U17 ILIM | 667 mA nominal per slot (see 3.3) — **v1.3.8: removed; accepted by the owner, see §1a** | each slot's wiring and module |
 
 Because F1 > F2, a 5 V-branch fault is *the more likely* to open F2 first and leave the 3.3 V
 rail alive. Note that this is a PPTC hierarchy, not a coordinated fuse/breaker scheme: PPTC
@@ -171,12 +242,17 @@ design intent rather than a guaranteed discrimination.
 ### 3.2 Over-voltage protection (decision P1b = accepted with a documented limitation)
 
 `D2`/`D3` (SMAJ5.0A) clamp `VBUS_PROT` and `5V_SYS` against surges, but their peak-pulse
-clamping voltage is **9.2 V — above the 6 V absolute maximum of the mux inputs and of U5
-(through FB1)**. This is accepted knowingly for v1.3.0:
+clamping voltage is **9.2 V — above the 6 V absolute maximum of the TPS2116 inputs
+(VIN1/VIN2) and of the `MODE`/`PR1` control pins, and of U5 (through FB1)**. This is
+accepted knowingly since v1.3.0:
 
 > **Accepted limitation:** during a surge, `VBUS_PROT` (and therefore both downstream
-> branches) can transiently exceed the 6 V absolute maximum of the TPS2111A inputs and of
-> U5. **No rated OVP switch is fitted in v1.3.0.** Bulk capacitance and the PPTCs do not
+> branches) can transiently exceed the 6 V absolute maximum of the TPS2116 inputs and of
+> U5. **Since v1.3.9 the `MODE` and `PR1` control pins are tied to `VBUS_PROT` as well**, so
+> they join this exposure — they share the same `−0.3…6 V` rating (§6.1 of SLVSFG1A). A
+> series resistor or a divider does **not** remove it (no current flows in a control pin
+> during a DC surge, so there is no drop to trade); only a clamp or a rated switch would.
+> **No rated OVP switch is fitted in v1.3.9.** Bulk capacitance and the PPTCs do not
 > remove this exposure; they only reduce its duration/energy. This is a field-surge/ESD
 > robustness limitation, not a continuous-operation limit (the rails are 3.3 V / 5 V).
 
@@ -187,7 +263,12 @@ TPS1663 class, or a controller + P-FET), ≈ $0.6–1.5 + ~4 passives. The part,
 tolerance and transient overshoot must be verified against the datasheet before adoption, and
 a series switch does **not** by itself establish F1/F2 coordination.
 
-### 3.3 Per-slot current limit (decision P2b = implemented)
+### 3.3 Per-slot current limit (decision P2b = implemented in v1.3.0–v1.3.7; **removed in v1.3.8, accepted**)
+
+> **Not in the current schematic.** `R28/R30/…/R50` (750 Ω) and the 667 mA per-slot limit
+> were removed with the `TPS2116DRLR` swap (v1.3.8) and the **owner accepts the gap for this
+> revision** (§1a, *Consequence 2*). The text below is the v1.3.0–v1.3.7 rationale and still
+> describes the released, frozen board.
 
 `R_ILIM = 750 Ω` → **I_LIM ≈ 667 mA nominal** (`I = 500 / R` for TPS2111A), which sits inside
 the datasheet's **guaranteed current-limit adjustment range of 0.63–1.25 A**. A specified,
@@ -383,7 +464,7 @@ re-sourced, and no electrical decision was reopened.
 |---|---|
 | `VSUPPLY_n` — 1x05 socket | the selected slot rail, on all five pins (`VSLOT_n`) |
 | `GND_n` — 1x05 socket | module ground, all five pins on `GND` |
-| `U(5+n)` — TPS2111APWR | 2:1 power mux: `IN1 = 5V_SYS`, `IN2 = +3.3V`, `OUT = VSLOT_n`, `D0` strapped low, `D1 = SEL_n`, 667 mA ILIM **(released v1.3.7 board; the v1.3.8 schematic uses TPS2116DRLR — §1a)** |
+| `U(5+n)` — TPS2111APWR | 2:1 power mux: `IN1 = 5V_SYS`, `IN2 = +3.3V`, `OUT = VSLOT_n`, `D0` strapped low, `D1 = SEL_n`, 667 mA ILIM **(released v1.3.7 board; the v1.3.8/v1.3.9 schematic uses TPS2116DRLR with `MODE`/`PR1` referenced to VBUS_PROT — §1a)** |
 | `R(26+2n)` — 750R | ILIM resistor (per-slot current limit) |
 | `R(27+2n)` — 100k | fail-safe SEL pulldown |
 | `C(20+2n)`, `C(21+2n)` — 1uF + 0.1uF | slot rail decoupling |

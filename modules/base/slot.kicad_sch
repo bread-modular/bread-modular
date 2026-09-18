@@ -1042,7 +1042,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "SLOT TEMPLATE (base v1.3.8) - one sheet instance = one Base slot.\nSupply socket pair, TPS2116DRLR 2:1 power mux (VIN1 = 5V_SYS, VIN2 = +3.3V),\nMODE tied to VIN2, 100k SEL pulldown on PR1, rail decoupling and the\n1x02 select header. VSLOT / SEL are sheet pins: the parent sheet wires\nthem to VSLOT_n / SEL_n."
+	(text "SLOT TEMPLATE (base v1.3.9) - one sheet instance = one Base slot.\nSupply socket pair, TPS2116DRLR 2:1 power mux (VIN1 = 5V_SYS, VIN2 = +3.3V),\nMODE and the jumper pin-1 reference on VBUS_PROT (the select survives a reset),\n100k SEL pulldown on PR1, rail decoupling and the 1x02 select header. VSLOT /\nSEL are sheet pins: the parent sheet wires them to VSLOT_n / SEL_n."
 		(exclude_from_sim no)
 		(at 25.4 96.52 0)
 		(effects
@@ -1055,7 +1055,7 @@
 		)
 		(uuid "073f1a7a-50c9-56b9-9897-a1c58863ff8c")
 	)
-	(text "Rail select: MODE is tied to VIN2 (+3.3V) = manual mode, so the mux\nfollows PR1 (SEL). VSUPPLY_n carries the selected rail on all five pins,\nGND_n the ground."
+	(text "Rail select: MODE is pulled up to VBUS_PROT (external bias >= 1V) = manual\nmode, so the mux follows PR1 (SEL). VSUPPLY_n carries the selected rail on all\nfive pins, GND_n the ground."
 		(exclude_from_sim no)
 		(at 25.4 158.75 0)
 		(effects
@@ -1066,7 +1066,7 @@
 		)
 		(uuid "682f2ddf-1410-5be4-8990-ddb7ea9e594e")
 	)
-	(text "Shunt fitted = 5V_SYS (SEL high); shunt absent or lost = +3.3V (100k pulldown).\nModule current flows through the mux - the header carries the select level only.\nBLOCKER: MODE and PR1 both come from +3.3V (PR1 through the jumper shunt), and SW1\ngates U5.EN: every RESET press removes +3.3V while 5V_SYS stays up, so both pins\nfall (MODE below 0.35V) and the mux enters diode mode, passing the HIGHER input\n= 5V_SYS to the slot - shunt fitted or not.  No programmable ILIM either\n(667 mA/slot limit gone).  See POWER.md 1a: the release stays blocked until a\ndatasheet-verified control arrangement is chosen and bench-proven."
+	(text "Shunt fitted = 5V_SYS (SEL high, PR1 = VBUS_PROT); shunt absent or lost = +3.3V\n(SEL low, 100k pulldown). Module current flows through the mux - the header\ncarries the select level only. v1.3.9: MODE and the jumper reference now come\nfrom VBUS_PROT, not +3.3V, so the select state no longer follows the 3.3V rail\ndown. A RESET press leaves MODE >= 1V (manual mode) and PR1 low selects\nVIN2 = 0V: a 3.3V-jumpered slot is deselected, never driven to 5V_SYS. The mux\nhas no programmable ILIM (the 667 mA/slot limit is gone). See POWER.md 1a."
 		(exclude_from_sim no)
 		(at 25.4 116.84 0)
 		(effects
@@ -1088,16 +1088,7 @@
 		)
 		(uuid "be379f48-1f23-537f-b69a-5606db122eb8")
 	)
-	(wire
-		(pts
-			(xy 119.38 44.45) (xy 119.38 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "49dafb6d-ecbe-52c2-ab0d-407ca4d0bdde")
-	)
+
 	(wire
 		(pts
 			(xy 134.62 41.91) (xy 134.62 46.99)
@@ -1108,12 +1099,7 @@
 		)
 		(uuid "db21fed2-2066-57a1-bcf5-65464e865371")
 	)
-	(junction
-		(at 119.38 44.45)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b860f739-a5dc-5119-ac48-e23adfdf6a73")
-	)
+
 	(junction
 		(at 134.62 41.91)
 		(diameter 0)
@@ -1518,6 +1504,39 @@
 		)
 		(uuid "f04d82a9-4da1-5be3-ae01-e301291ecc1b")
 	)
+	(wire
+		(pts
+			(xy 111.76 46.99) (xy 119.38 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c119559b-e804-5212-a0ec-4ece1f7d0b83")
+	)
+	(global_label "VBUS_PROT"
+		(shape input)
+		(at 111.76 46.99 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7884c00e-ffa9-591b-ab35-34893c4e8abf")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 111.76 46.99 180)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "5V_SYS"
 		(shape input)
 		(at 111.76 41.91 180)
@@ -1541,7 +1560,7 @@
 			)
 		)
 	)
-	(global_label "+3.3V"
+	(global_label "VBUS_PROT"
 		(shape input)
 		(at 107.95 57.15 180)
 		(fields_autoplaced yes)
@@ -1664,7 +1683,7 @@
 				)
 			)
 		)
-		(property "Description" "Slot rail select header: pin1=+3.3V, pin2=SEL_n. Shunt fitted = 5V_SYS, open = +3.3V (100k pulldown). Logic only, no module current."
+		(property "Description" "Slot rail select header: pin1=VBUS_PROT (reset-surviving select reference), pin2=SEL_n. Shunt fitted = 5V_SYS, open = +3.3V (100k pulldown). Logic only, no module current."
 			(at 115.57 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -2249,7 +2268,7 @@
 				)
 			)
 		)
-		(property "Description" "Per-slot 2:1 power mux (TPS2116DRLR): VIN1=5V_SYS, VIN2=+3.3V, MODE tied to VIN2 = manual mode, PR1=SEL_n (shunt = 5V_SYS, absent = +3.3V via 100k pulldown), VOUT on pins 2 and 7, ST not connected"
+		(property "Description" "Per-slot 2:1 power mux (TPS2116DRLR): VIN1=5V_SYS, VIN2=+3.3V, MODE pulled up to VBUS_PROT (>=1V external bias) = manual mode (v1.3.9: select reference no longer depends on +3.3V), PR1=SEL_n (shunt = VBUS_PROT -> VIN1 = 5V_SYS, absent = 100k pulldown -> VIN2 = +3.3V), VOUT on pins 2 and 7, ST not connected"
 			(at 127 46.99 0)
 			(hide yes)
 			(show_name no)

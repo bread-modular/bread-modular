@@ -1,0 +1,155 @@
+{
+  "what": "per-slot mux select re-referenced from +3.3V to VBUS_PROT (MODE + jumper pin 1), schematic only",
+  "version": "1.3.9",
+  "date": "2026-09-18T14:18:00+05:30",
+  "tool": "tools/reroute_mux_select_vbus_prot.py",
+  "datasheet": "TI TPS2116 SLVSFG1A (Jan 2021, rev. May 2021) - Table 5-1, 6.1, 6.3, 6.5, 7.3.1, 7.6.1.2",
+  "why": [
+    "v1.3.8 tied MODE to +3.3V and fed PR1 from +3.3V through the jumper shunt; SW1",
+    "gates U5.EN, so a RESET press removed +3.3V while 5V_SYS stayed up, MODE fell",
+    "below VIL,MODE = 0.35V and the part entered diode mode, passing the HIGHER input",
+    "(5V_SYS) to a slot the user may have jumpered for 3.3V.",
+    "MODE and the jumper pin-1 reference now come from VBUS_PROT (always on while USB",
+    "is present, upstream of F2), so the select state does not follow the 3.3V rail",
+    "down: RESET -> MODE >= 1V = manual mode, PR1 low -> VIN2 -> a 3.3V slot is",
+    "deselected (0V), never driven to 5V_SYS."
+  ],
+  "pcb_untouched": true,
+  "hashes_before": {
+    "slot.kicad_sch": "20066c766de2dbdfa25abe986f8eb904cd6ac286edaccc184e6cd87c55b9f2f2",
+    "base.kicad_sch": "0c0b877c41475a5d70b22251db4343a411802cf0e8fe66addd3f48a81947a061",
+    "base.kicad_pcb": "b8df082974c533e45a36d78a7b12d548ffbb5ad383fc22f28c40d850fb490db6"
+  },
+  "hashes_after": {
+    "slot.kicad_sch": "76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1",
+    "base.kicad_sch": "0c0b877c41475a5d70b22251db4343a411802cf0e8fe66addd3f48a81947a061",
+    "base.kicad_pcb": "b8df082974c533e45a36d78a7b12d548ffbb5ad383fc22f28c40d850fb490db6"
+  },
+  "netlist_delta": {
+    "nets": 85,
+    "components": 160,
+    "moved_nodes": [
+      "J10.1",
+      "J11.1",
+      "J12.1",
+      "J13.1",
+      "J14.1",
+      "J15.1",
+      "J16.1",
+      "J17.1",
+      "J18.1",
+      "J7.1",
+      "J8.1",
+      "J9.1",
+      "U10.5",
+      "U11.5",
+      "U12.5",
+      "U13.5",
+      "U14.5",
+      "U15.5",
+      "U16.5",
+      "U17.5",
+      "U6.5",
+      "U7.5",
+      "U8.5",
+      "U9.5"
+    ],
+    "net_node_counts": {
+      "+3.3V": {
+        "before": 55,
+        "after": 31
+      },
+      "VBUS_PROT": {
+        "before": 7,
+        "after": 31
+      }
+    },
+    "problems": []
+  },
+  "changed_nets": [
+    "+3.3V: -[('J10', '1'), ('J11', '1'), ('J12', '1'), ('J13', '1'), ('J14', '1'), ('J15', '1'), ('J16', '1'), ('J17', '1'), ('J18', '1'), ('J7', '1'), ('J8', '1'), ('J9', '1'), ('U10', '5'), ('U11', '5'), ('U12', '5'), ('U13', '5'), ('U14', '5'), ('U15', '5'), ('U16', '5'), ('U17', '5'), ('U6', '5'), ('U7', '5'), ('U8', '5'), ('U9', '5')] +[]",
+    "VBUS_PROT: -[] +[('J10', '1'), ('J11', '1'), ('J12', '1'), ('J13', '1'), ('J14', '1'), ('J15', '1'), ('J16', '1'), ('J17', '1'), ('J18', '1'), ('J7', '1'), ('J8', '1'), ('J9', '1'), ('U10', '5'), ('U11', '5'), ('U12', '5'), ('U13', '5'), ('U14', '5'), ('U15', '5'), ('U16', '5'), ('U17', '5'), ('U6', '5'), ('U7', '5'), ('U8', '5'), ('U9', '5')]"
+  ],
+  "erc_before": {
+    "total": 11,
+    "by_type": [
+      "error: pin_not_connected",
+      "error: pin_not_connected",
+      "error: pin_not_connected",
+      "error: pin_not_connected",
+      "error: power_pin_not_driven",
+      "error: power_pin_not_driven",
+      "error: power_pin_not_driven",
+      "warning: lib_symbol_mismatch",
+      "warning: lib_symbol_mismatch",
+      "warning: lib_symbol_mismatch",
+      "warning: lib_symbol_mismatch"
+    ]
+  },
+  "erc_after": {
+    "total": 11,
+    "by_type": [
+      "error: pin_not_connected",
+      "error: pin_not_connected",
+      "error: pin_not_connected",
+      "error: pin_not_connected",
+      "error: power_pin_not_driven",
+      "error: power_pin_not_driven",
+      "error: power_pin_not_driven",
+      "warning: lib_symbol_mismatch",
+      "warning: lib_symbol_mismatch",
+      "warning: lib_symbol_mismatch",
+      "warning: lib_symbol_mismatch"
+    ]
+  },
+  "erc_identity_delta": {
+    "added": [],
+    "removed": []
+  },
+  "erc_identity_before": [
+    "error|pin_not_connected|/|Symbol J2 Pin R [Passive, Line]",
+    "error|pin_not_connected|/|Symbol J2 Pin T [Passive, Line]",
+    "error|pin_not_connected|/|Symbol J4 Pin R [Passive, Line]",
+    "error|pin_not_connected|/|Symbol J4 Pin T [Passive, Line]",
+    "error|power_pin_not_driven|/|Symbol U5 Pin 1 [VIN, Power input, Line]",
+    "error|power_pin_not_driven|/|Symbol #PWR025 Pin 1 [Power input, Line]",
+    "error|power_pin_not_driven|/|Symbol #PWR026 Pin 1 [Power input, Line]",
+    "warning|lib_symbol_mismatch|/|Symbol RV1 [R_Potentiometer]",
+    "warning|lib_symbol_mismatch|/|Symbol RV2 [R_Potentiometer]",
+    "warning|lib_symbol_mismatch|/|Symbol D1 [LED]",
+    "warning|lib_symbol_mismatch|/|Symbol J5 [USB_C_Receptacle_PowerOnly_6P]"
+  ],
+  "erc_identity_after": [
+    "error|pin_not_connected|/|Symbol J2 Pin R [Passive, Line]",
+    "error|pin_not_connected|/|Symbol J2 Pin T [Passive, Line]",
+    "error|pin_not_connected|/|Symbol J4 Pin R [Passive, Line]",
+    "error|pin_not_connected|/|Symbol J4 Pin T [Passive, Line]",
+    "error|power_pin_not_driven|/|Symbol U5 Pin 1 [VIN, Power input, Line]",
+    "error|power_pin_not_driven|/|Symbol #PWR025 Pin 1 [Power input, Line]",
+    "error|power_pin_not_driven|/|Symbol #PWR026 Pin 1 [Power input, Line]",
+    "warning|lib_symbol_mismatch|/|Symbol RV1 [R_Potentiometer]",
+    "warning|lib_symbol_mismatch|/|Symbol RV2 [R_Potentiometer]",
+    "warning|lib_symbol_mismatch|/|Symbol D1 [LED]",
+    "warning|lib_symbol_mismatch|/|Symbol J5 [USB_C_Receptacle_PowerOnly_6P]"
+  ],
+  "slots_covered": [
+    "U6/J7",
+    "U7/J8",
+    "U8/J9",
+    "U9/J10",
+    "U10/J11",
+    "U11/J12",
+    "U12/J13",
+    "U13/J14",
+    "U14/J15",
+    "U15/J16",
+    "U16/J17",
+    "U17/J18"
+  ],
+  "pcb_pending": [
+    "U6..U17 still carry the released TSSOP-8 / TPS2111APWR footprints and copper.",
+    "R28/R30/.../R50 (750R ILIM) are still fitted on the released board.",
+    "NEW in v1.3.9: J7..J18 pin 1 is VBUS_PROT in the schematic but +3.3V on the board.",
+    "Phase 2: footprint swap + jumper pin-1 net move + local re-route + DRC/parity + re-export."
+  ]
+}
