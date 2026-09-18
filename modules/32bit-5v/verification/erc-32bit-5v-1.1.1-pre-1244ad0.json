@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-09-18T13:22:39",
+    "date": "2026-09-18T06:21:16",
     "ignored_checks": [
         {
             "description": "Global label only appears once in the schematic",
@@ -542,21 +542,6 @@
                     "type": "pin_not_connected"
                 },
                 {
-                    "description": "Pin not connected",
-                    "items": [
-                        {
-                            "description": "Symbol C41 Pin 1 [Passive, Line]",
-                            "pos": {
-                                "x": 4.6482,
-                                "y": 0.2921
-                            },
-                            "uuid": "3a9b22ec-8862-4c35-a8be-006ae22f07fc"
-                        }
-                    ],
-                    "severity": "error",
-                    "type": "pin_not_connected"
-                },
-                {
                     "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
                     "items": [
                         {
@@ -855,21 +840,6 @@
                     ],
                     "severity": "warning",
                     "type": "lib_symbol_mismatch"
-                },
-                {
-                    "description": "Unconnected wire endpoint",
-                    "items": [
-                        {
-                            "description": "Vertical Wire, length 0.0254 mm",
-                            "pos": {
-                                "x": 4.6482,
-                                "y": 0.2921
-                            },
-                            "uuid": "83a9b05e-c4d8-43e4-a0fe-41b40fc31cea"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "unconnected_wire_endpoint"
                 }
             ]
         }

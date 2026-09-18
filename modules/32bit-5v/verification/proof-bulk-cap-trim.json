@@ -1,0 +1,124 @@
+{
+ "revision": "1.1.2",
+ "pre": "netlist-32bit-5v-1.1.1.kicadsexpr",
+ "post": "netlist-32bit-5v.kicadsexpr",
+ "chain_from": "netlist-32bit-5v-1.1.0.kicadsexpr",
+ "chain_via": "netlist-32bit-5v-1.1.1-as-released.kicadsexpr",
+ "erc_pre": "erc-32bit-5v-1.1.1.json",
+ "erc_post": "erc-32bit-5v.json",
+ "erc_findings_pre": 56,
+ "erc_findings_post": 56,
+ "components_removed": [
+  "C10",
+  "C11",
+  "C12",
+  "C13",
+  "C9"
+ ],
+ "nets_total": 77,
+ "pre_existing_defect_not_fixed_by_this_revision": [
+  "C41 pin 1 is not on +3V3 from rev 1244ad0 onward (net \"unconnected-(C41-Pad1)\"), see POWER.md section 5"
+ ],
+ "checks": [
+  {
+   "check": "exactly 5 components removed",
+   "pass": true,
+   "detail": "removed=['C10', 'C11', 'C12', 'C13', 'C9']"
+  },
+  {
+   "check": "removed set == {C9,C10,C11,C12,C13}",
+   "pass": true,
+   "detail": "removed=['C10', 'C11', 'C12', 'C13', 'C9']"
+  },
+  {
+   "check": "no component added",
+   "pass": true,
+   "detail": "added=[]"
+  },
+  {
+   "check": "every removed part was a 100uf C_1206 (the legacy bulk)",
+   "pass": true,
+   "detail": " {'C10': ('100uf', 'Capacitor_SMD:C_1206_3216Metric'), 'C11': ('100uf', 'Capacitor_SMD:C_1206_3216Metric'), 'C12': ('100uf', 'Capacitor_SMD:C_1206_3216Metric'), 'C13': ('100uf', 'Capacitor_SMD:C_1206_3216Metric'), 'C9': ('100uf', 'Capacitor_SMD:C_1206_3216Metric')}"
+  },
+  {
+   "check": "every surviving component value/footprint/fields unchanged",
+   "pass": true,
+   "detail": "drifted=[]"
+  },
+  {
+   "check": "net count unchanged (77)",
+   "pass": true,
+   "detail": "pre=77 post=77"
+  },
+  {
+   "check": "every net == pre-nets minus only the C9..C13 pins",
+   "pass": true,
+   "detail": "diff nets=[]"
+  },
+  {
+   "check": "only +3V3_ESP32 and GND changed",
+   "pass": true,
+   "detail": "changed=['+3V3_ESP32', 'GND']"
+  },
+  {
+   "check": "'+3V3_ESP32' lost exactly C9..C13 pin 1",
+   "pass": true,
+   "detail": "lost=[('C10', '1'), ('C11', '1'), ('C12', '1'), ('C13', '1'), ('C9', '1')]"
+  },
+  {
+   "check": "'+3V3_ESP32' gained nothing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "'+3V3_ESP32' == {C1.1 0.1uF, C2.1 10uF, FB1.1, U1.2}",
+   "pass": true,
+   "detail": "net=[('C1', '1'), ('C2', '1'), ('FB1', '1'), ('U1', '2')]"
+  },
+  {
+   "check": "'GND' lost exactly C9..C13 pin 2",
+   "pass": true,
+   "detail": "lost=[('C10', '2'), ('C11', '2'), ('C12', '2'), ('C13', '2'), ('C9', '2')]"
+  },
+  {
+   "check": "'GND' gained nothing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "'+3V3_8388' untouched (this trim is ESP32-rail scoped)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "'+3V3' / '+5V' untouched (regulator rail unaffected)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "ERC findings identical (severity+type+items+positions), 56 -> 56",
+   "pass": true,
+   "detail": "only_before=[] only_after=[]"
+  },
+  {
+   "check": "ERC has no net_conflict finding",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "chain link 1: 1.1.0 + regulator swap == 1.1.1-as-released",
+   "pass": true,
+   "detail": "diff nets=[] refs=[]"
+  },
+  {
+   "check": "chain link 2: 1.1.1-as-released + C41 disconnect (PRE-EXISTING DEFECT, unchanged here) == 1.1.1@1244ad0",
+   "pass": true,
+   "detail": "diff nets=[]"
+  },
+  {
+   "check": "chain link 3: 1.1.1@1244ad0 + trim == 1.1.2 (every net)",
+   "pass": true,
+   "detail": "diff nets=[]"
+  }
+ ]
+}
