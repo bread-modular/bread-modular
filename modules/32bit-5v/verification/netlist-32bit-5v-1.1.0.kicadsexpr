@@ -1,8 +1,8 @@
 (export
 	(version "E")
 	(design
-		(source "/home/azero/.okbrain/workspaces/bread-modular-kicad/245/modules/32bit-5v/32bit-5v.kicad_sch")
-		(date "2026-09-18T06:21:15")
+		(source "/home/azero/.okbrain/workspaces/bread-modular-kicad/237/modules/32bit-5v/32bit-5v.kicad_sch")
+		(date "2026-09-17T18:09:00")
 		(tool "Eeschema 10.0.6-10.0.6~ubuntu26.04.1")
 		(sheet
 			(number "1")
@@ -1409,7 +1409,7 @@
 			(value "10uf")
 			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(datasheet "https://www.lcsc.com/product-detail/C15850.html")
-			(description "10uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO input bulk (needs >=1uF; kept larger than base C2 1uF because the 5V arrives from the slot socket with no upstream bulk)")
+			(description "10uF 25V X5R 0805 MLCC - LDO input capacitor (>=1uF required by AP7361C)")
 			(fields
 				(field
 					(name "LCSC") "C15850")
@@ -1422,7 +1422,7 @@
 				(field
 					(name "Datasheet") "https://www.lcsc.com/product-detail/C15850.html")
 				(field
-					(name "Description") "10uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO input bulk (needs >=1uF; kept larger than base C2 1uF because the 5V arrives from the slot socket with no upstream bulk)")
+					(name "Description") "10uF 25V X5R 0805 MLCC - LDO input capacitor (>=1uF required by AP7361C)")
 			)
 			(libsource
 				(lib "Device")
@@ -1481,7 +1481,7 @@
 			(value "22uf")
 			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(datasheet "https://www.lcsc.com/product-detail/C45783.html")
-			(description "22uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO output bulk (needs >=1uF; kept larger than base C4 4.7uF for the ESP32 + ES8388 load)")
+			(description "22uF 25V X5R 0805 MLCC - LDO output capacitor (>=2.2uF required by AP7361C)")
 			(fields
 				(field
 					(name "LCSC") "C45783")
@@ -1494,7 +1494,7 @@
 				(field
 					(name "Datasheet") "https://www.lcsc.com/product-detail/C45783.html")
 				(field
-					(name "Description") "22uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO output bulk (needs >=1uF; kept larger than base C4 4.7uF for the ESP32 + ES8388 load)")
+					(name "Description") "22uF 25V X5R 0805 MLCC - LDO output capacitor (>=2.2uF required by AP7361C)")
 			)
 			(libsource
 				(lib "Device")
@@ -1534,78 +1534,6 @@
 				(tstamps "/")
 			)
 			(tstamps "97cf3697-fe69-4393-ae02-a392d5cae96d")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-						(pin
-							(num "2")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "C42")
-			(value "0.1uf")
-			(footprint "Capacitor_SMD:C_0402_1005Metric")
-			(datasheet "https://www.lcsc.com/product-detail/C1525.html")
-			(description "0.1uF 16V X7R 0402 MLCC - LDO input HF decoupling (same part as base C1/C21)")
-			(fields
-				(field
-					(name "LCSC") "C1525")
-				(field
-					(name "MPN") "CL05B104KO5NNNC")
-				(field
-					(name "Manufacturer") "Samsung")
-				(field
-					(name "Footprint") "Capacitor_SMD:C_0402_1005Metric")
-				(field
-					(name "Datasheet") "https://www.lcsc.com/product-detail/C1525.html")
-				(field
-					(name "Description") "0.1uF 16V X7R 0402 MLCC - LDO input HF decoupling (same part as base C1/C21)")
-			)
-			(libsource
-				(lib "Device")
-				(part "C")
-				(description "Unpolarized capacitor")
-			)
-			(property
-				(name "LCSC")
-				(value "C1525")
-			)
-			(property
-				(name "MPN")
-				(value "CL05B104KO5NNNC")
-			)
-			(property
-				(name "Manufacturer")
-				(value "Samsung")
-			)
-			(property
-				(name "Sheetname")
-				(value "32bit-5v")
-			)
-			(property
-				(name "Sheetfile")
-				(value "32bit-5v.kicad_sch")
-			)
-			(property
-				(name "ki_keywords")
-				(value "cap capacitor")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "C_*")
-			)
-			(sheetpath
-				(names "/")
-				(tstamps "/")
-			)
-			(tstamps "e1eec9f8-da46-4bb5-bce8-2b3d36cb12c8")
 			(units
 				(unit
 					(name "A")
@@ -3948,40 +3876,40 @@
 		)
 		(comp
 			(ref "U5")
-			(value "AP2112K-3.3")
-			(footprint "Package_TO_SOT_SMD:SOT-23-5")
-			(datasheet "https://www.diodes.com/assets/Datasheets/AP2112.pdf")
-			(description "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5")
+			(value "AP7361C-33E-13")
+			(footprint "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
+			(datasheet "https://www.diodes.com/assets/Datasheets/AP7361C.pdf")
+			(description "1A low dropout linear regulator, 3.3V fixed output, SOT-223 (no EN pin in this package)")
 			(fields
 				(field
-					(name "LCSC") "C51118")
+					(name "LCSC") "C500795")
 				(field
-					(name "MPN") "AP2112K-3.3TRG1")
+					(name "MPN") "AP7361C-33E-13")
 				(field
-					(name "Manufacturer") "Diodes")
+					(name "Manufacturer") "Diodes Incorporated")
 				(field
-					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-5")
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
 				(field
-					(name "Datasheet") "https://www.diodes.com/assets/Datasheets/AP2112.pdf")
+					(name "Datasheet") "https://www.diodes.com/assets/Datasheets/AP7361C.pdf")
 				(field
-					(name "Description") "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5")
+					(name "Description") "1A low dropout linear regulator, 3.3V fixed output, SOT-223 (no EN pin in this package)")
 			)
 			(libsource
 				(lib "Regulator_Linear")
-				(part "AP2112K-3.3")
-				(description "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5")
+				(part "AP7361C-33E")
+				(description "1A Low Dropout regulator, positive, 3.3V fixed output, SOT-223")
 			)
 			(property
 				(name "LCSC")
-				(value "C51118")
+				(value "C500795")
 			)
 			(property
 				(name "MPN")
-				(value "AP2112K-3.3TRG1")
+				(value "AP7361C-33E-13")
 			)
 			(property
 				(name "Manufacturer")
-				(value "Diodes")
+				(value "Diodes Incorporated")
 			)
 			(property
 				(name "Sheetname")
@@ -3997,7 +3925,7 @@
 			)
 			(property
 				(name "ki_fp_filters")
-				(value "SOT?23?5*")
+				(value "SOT?223*")
 			)
 			(sheetpath
 				(names "/")
@@ -4012,16 +3940,10 @@
 							(num "1")
 						)
 						(pin
-							(num "3")
-						)
-						(pin
 							(num "2")
 						)
 						(pin
-							(num "4")
-						)
-						(pin
-							(num "5")
+							(num "3")
 						)
 					)
 				)
@@ -5009,28 +4931,28 @@
 		)
 		(libpart
 			(lib "Regulator_Linear")
-			(part "AP2112K-3.3")
-			(description "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5")
-			(docs "https://www.diodes.com/assets/Datasheets/AP2112.pdf")
+			(part "AP7361C-33E")
+			(description "1A Low Dropout regulator, positive, 3.3V fixed output, SOT-223")
+			(docs "https://www.diodes.com/assets/Datasheets/AP7361C.pdf")
 			(footprints
-				(fp "SOT?23?5*")
+				(fp "SOT?223*")
 			)
 			(fields
 				(field
 					(name "Reference") "U")
 				(field
-					(name "Value") "AP2112K-3.3")
+					(name "Value") "AP7361C-33E")
 				(field
-					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-5")
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
 				(field
-					(name "Datasheet") "https://www.diodes.com/assets/Datasheets/AP2112.pdf")
+					(name "Datasheet") "https://www.diodes.com/assets/Datasheets/AP7361C.pdf")
 				(field
-					(name "Description") "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5")
+					(name "Description") "1A Low Dropout regulator, positive, 3.3V fixed output, SOT-223")
 			)
 			(pins
 				(pin
 					(num "1")
-					(name "VIN")
+					(name "VI")
 					(type "power_in")
 				)
 				(pin
@@ -5040,17 +4962,7 @@
 				)
 				(pin
 					(num "3")
-					(name "EN")
-					(type "input")
-				)
-				(pin
-					(num "4")
-					(name "NC")
-					(type "no_connect")
-				)
-				(pin
-					(num "5")
-					(name "VOUT")
+					(name "VO")
 					(type "power_out")
 				)
 			)
@@ -5166,8 +5078,8 @@
 			)
 			(node
 				(ref "U5")
-				(pin "5")
-				(pinfunction "VOUT_5")
+				(pin "3")
+				(pinfunction "VO_3")
 				(pintype "power_out")
 			)
 		)
@@ -5316,21 +5228,10 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "C42")
-				(pin "1")
-				(pintype "passive")
-			)
-			(node
 				(ref "U5")
 				(pin "1")
-				(pinfunction "VIN_1")
+				(pinfunction "VI_1")
 				(pintype "power_in")
-			)
-			(node
-				(ref "U5")
-				(pin "3")
-				(pinfunction "EN_3")
-				(pintype "input")
 			)
 			(node
 				(ref "V_SUPPLY1")
@@ -5721,11 +5622,6 @@
 			)
 			(node
 				(ref "C41")
-				(pin "2")
-				(pintype "passive")
-			)
-			(node
-				(ref "C42")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -6781,17 +6677,6 @@
 				(pin "14")
 				(pinfunction "ROUT2_14")
 				(pintype "input")
-			)
-		)
-		(net
-			(code "76")
-			(name "unconnected-(U5-NC-Pad4)")
-			(class "Default")
-			(node
-				(ref "U5")
-				(pin "4")
-				(pinfunction "NC_4")
-				(pintype "no_connect")
 			)
 		)
 	)

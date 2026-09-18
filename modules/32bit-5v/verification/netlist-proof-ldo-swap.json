@@ -1,0 +1,97 @@
+[
+ {
+  "check": "net '+5V' exists",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "net '+5V' == {V_SUPPLY1.1-5, U5.VIN(1), U5.EN(3), C40.1, C42.1}",
+  "pass": true,
+  "detail": "extra=[] missing=[]"
+ },
+ {
+  "check": "net '+5V' gained only U5.EN(3) and C42.1 vs 1.1.0",
+  "pass": true,
+  "detail": "gained=[('C42', '1'), ('U5', '3')] lost=[]"
+ },
+ {
+  "check": "net '+3V3' lost only the old regulator VO pin",
+  "pass": true,
+  "detail": "lost=[('U5', '3')]"
+ },
+ {
+  "check": "net '+3V3' gained only the new regulator VOUT pin",
+  "pass": true,
+  "detail": "gained=[('U5', '5')]"
+ },
+ {
+  "check": "net '+3V3' still drives every 1.1.0 load",
+  "pass": true,
+  "detail": "nodes=10"
+ },
+ {
+  "check": "net '+3V3_ESP32' unchanged",
+  "pass": true,
+  "detail": "lost=[] gained=[]"
+ },
+ {
+  "check": "net '+3V3_8388' unchanged",
+  "pass": true,
+  "detail": "lost=[] gained=[]"
+ },
+ {
+  "check": "net 'GND' gained only C42.2 (no losses)",
+  "pass": true,
+  "detail": "gained=[('C42', '2')] lost=[]"
+ },
+ {
+  "check": "no 1.1.0 3.3 V consumer lost its rail",
+  "pass": true,
+  "detail": "lost consumers=[]"
+ },
+ {
+  "check": "'AP7361C' appears nowhere in the netlist",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "U5 value == AP2112K-3.3",
+  "pass": true,
+  "detail": "'AP2112K-3.3'"
+ },
+ {
+  "check": "base U5 Value matches (AP2112K-3.3)",
+  "pass": true,
+  "detail": "base='AP2112K-3.3' module='AP2112K-3.3'"
+ },
+ {
+  "check": "base U5 Footprint matches (Package_TO_SOT_SMD:SOT-23-5)",
+  "pass": true,
+  "detail": "base='Package_TO_SOT_SMD:SOT-23-5' module='Package_TO_SOT_SMD:SOT-23-5'"
+ },
+ {
+  "check": "base U5 Datasheet matches (https://www.diodes.com/assets/Datasheets/AP2112.pdf)",
+  "pass": true,
+  "detail": "base='https://www.diodes.com/assets/Datasheets/AP2112.pdf' module='https://www.diodes.com/assets/Datasheets/AP2112.pdf'"
+ },
+ {
+  "check": "base U5 Description matches (600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5)",
+  "pass": true,
+  "detail": "base='600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5' module='600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5'"
+ },
+ {
+  "check": "base U5 LCSC matches (C51118)",
+  "pass": true,
+  "detail": "base='C51118' module='C51118'"
+ },
+ {
+  "check": "base U5 MPN matches (AP2112K-3.3TRG1)",
+  "pass": true,
+  "detail": "base='AP2112K-3.3TRG1' module='AP2112K-3.3TRG1'"
+ },
+ {
+  "check": "base U5 Manufacturer matches (Diodes)",
+  "pass": true,
+  "detail": "base='Diodes' module='Diodes'"
+ }
+]

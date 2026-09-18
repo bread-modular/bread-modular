@@ -5,29 +5,15 @@
 	(uuid "b63493d3-5f6d-47e3-845b-87e7090fc1ab")
 	(paper "A2")
 	(lib_symbols
-	(symbol "Regulator_Linear:AP7361C-33E"
+	(symbol "Regulator_Linear:AP2112K-3.3"
 			(pin_names
 				(offset 0.254)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "U"
-				(at -3.81 3.175 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "AP7361C-33E"
-				(at 0 3.175 0)
-				(show_name no)
-				(do_not_autoplace no)
+				(at -5.08 5.715 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -35,66 +21,64 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
+			(property "Value" "AP2112K-3.3"
 				(at 0 5.715 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP7361C.pdf"
-				(at 0 -1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify left)
 				)
 			)
-			(property "Description" "1A Low Dropout regulator, positive, 3.3V fixed output, SOT-223"
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+				(at 0 8.255 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP2112.pdf"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
 			(property "ki_keywords" "linear regulator ldo fixed positive"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SOT?223*"
+			(property "ki_fp_filters" "SOT?23?5*"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(symbol "AP7361C-33E_0_1"
+			(symbol "AP2112K-3.3_0_1"
 				(rectangle
-					(start -5.08 -5.08)
-					(end 5.08 1.905)
+					(start -5.08 4.445)
+					(end 5.08 -5.08)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -104,11 +88,11 @@
 					)
 				)
 			)
-			(symbol "AP7361C-33E_1_1"
+			(symbol "AP2112K-3.3_1_1"
 				(pin power_in line
-					(at -7.62 0 0)
+					(at -7.62 2.54 0)
 					(length 2.54)
-					(name "VI"
+					(name "VIN"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -116,6 +100,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -141,17 +143,36 @@
 						)
 					)
 				)
-				(pin power_out line
-					(at 7.62 0 180)
+				(pin no_connect line
+					(at 5.08 0 180)
 					(length 2.54)
-					(name "VO"
+					(hide yes)
+					(name "NC"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "3"
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 7.62 2.54 180)
+					(length 2.54)
+					(name "VOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5245,6 +5266,56 @@
 	(no_connect
 		(at 76.2 26.67)
 		(uuid "4e85646a-4ef1-46c1-9a30-12e98d5e7388")
+	)
+	(wire
+		(pts
+			(xy 505.46 20.32) (xy 505.46 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ec7103a-4234-4466-8e98-66ecbdb2f8d1")
+	)
+	(wire
+		(pts
+			(xy 520.7 20.32) (xy 520.7 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "19260198-50bb-4451-bdbd-411b501b6c89")
+	)
+	(wire
+		(pts
+			(xy 487.68 22.86) (xy 497.84 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "818b0ba5-9267-4636-8877-2301866e3905")
+	)
+	(wire
+		(pts
+			(xy 487.68 25.4) (xy 487.68 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e52e85c-511e-4375-8fc7-ece7a6a34432")
+	)
+	(wire
+		(pts
+			(xy 487.68 33.02) (xy 487.68 35.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c64e9204-d25e-4413-8d36-c8b7d35db848")
 	)
 	(wire
 		(pts
@@ -17801,7 +17872,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Regulator_Linear:AP7361C-33E")
+		(lib_id "Regulator_Linear:AP2112K-3.3")
 		(at 513.08 22.86 0)
 		(unit 1)
 		(body_style 1)
@@ -17812,7 +17883,8 @@
 		(dnp no)
 		(uuid "ab2b7620-b331-4ef2-90d5-8558aa6193cc")
 		(property "Reference" "U5"
-			(at 513.08 19.05 0)
+			(at 513.08 13.97 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17821,8 +17893,9 @@
 				)
 			)
 		)
-		(property "Value" "AP7361C-33E-13"
-			(at 513.08 25.4 0)
+		(property "Value" "AP2112K-3.3"
+			(at 513.08 16.51 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17831,7 +17904,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
 			(at 513.08 28.575 0)
 			(hide yes)
 			(show_name no)
@@ -17842,7 +17915,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP7361C.pdf"
+		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP2112.pdf"
 			(at 513.08 22.86 0)
 			(hide yes)
 			(show_name no)
@@ -17853,7 +17926,7 @@
 				)
 			)
 		)
-		(property "Description" "1A low dropout linear regulator, 3.3V fixed output, SOT-223 (no EN pin in this package)"
+		(property "Description" "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5"
 			(at 513.08 22.86 0)
 			(hide yes)
 			(show_name no)
@@ -17864,7 +17937,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C500795"
+		(property "LCSC" "C51118"
 			(at 513.08 22.86 0)
 			(hide yes)
 			(show_name no)
@@ -17875,7 +17948,7 @@
 				)
 			)
 		)
-		(property "MPN" "AP7361C-33E-13"
+		(property "MPN" "AP2112K-3.3TRG1"
 			(at 513.08 22.86 0)
 			(hide yes)
 			(show_name no)
@@ -17886,7 +17959,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Diodes Incorporated"
+		(property "Manufacturer" "Diodes"
 			(at 513.08 22.86 0)
 			(hide yes)
 			(show_name no)
@@ -17898,13 +17971,19 @@
 			)
 		)
 		(pin "1"
-			(uuid "bbf6d2de-2b01-4ab3-89cb-11f2119e4253")
+			(uuid "c250f10f-9c51-4267-a802-f23f2fed0d93")
 		)
 		(pin "2"
-			(uuid "f71aea12-79fa-42a7-b290-219d49981cd1")
+			(uuid "bbc7a772-c0f5-42be-a267-99fc681d8a11")
 		)
 		(pin "3"
-			(uuid "4e5dac4d-820a-4852-aa36-6dce7c84870f")
+			(uuid "1bf6c99d-25f9-4011-aeef-8693e232f1f5")
+		)
+		(pin "4"
+			(uuid "81b31248-7e76-4014-bb1b-7fb4482c323d")
+		)
+		(pin "5"
+			(uuid "7c82075b-2ff3-4501-ae96-d59d922284ce")
 		)
 		(instances
 			(project "32bit-5v"
@@ -17970,7 +18049,7 @@
 				)
 			)
 		)
-		(property "Description" "10uF 25V X5R 0805 MLCC - LDO input capacitor (>=1uF required by AP7361C)"
+		(property "Description" "10uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO input bulk (needs >=1uF; kept larger than base C2 1uF because the 5V arrives from the slot socket with no upstream bulk)"
 			(at 500.38 29.21 0)
 			(hide yes)
 			(show_name no)
@@ -18084,7 +18163,7 @@
 				)
 			)
 		)
-		(property "Description" "22uF 25V X5R 0805 MLCC - LDO output capacitor (>=2.2uF required by AP7361C)"
+		(property "Description" "22uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO output bulk (needs >=1uF; kept larger than base C4 4.7uF for the ESP32 + ES8388 load)"
 			(at 525.78 29.21 0)
 			(hide yes)
 			(show_name no)
@@ -18703,6 +18782,209 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "91bb7111-b3ee-48e8-8a78-b8ede0181e6e")
+	)
+	(junction
+		(at 497.84 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5033ce51-8baa-4040-8a3d-6630f731118b")
+	)
+	(junction
+		(at 505.46 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "edd4ea42-30bc-4df0-b2ee-aadc739c53fc")
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 487.68 29.21 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e1eec9f8-da46-4bb5-bce8-2b3d36cb12c8")
+		(property "Reference" "C42"
+			(at 489.712 27.686 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1uf"
+			(at 485.648 31.242 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 487.68 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C1525.html"
+			(at 487.68 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "0.1uF 16V X7R 0402 MLCC - LDO input HF decoupling (same part as base C1/C21)"
+			(at 487.68 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
+			(at 487.68 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 487.68 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung"
+			(at 487.68 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a5794784-624d-411c-9753-701a55dea0b6")
+		)
+		(pin "2"
+			(uuid "568aee40-cfd0-48ee-89af-695b9ad7990e")
+		)
+		(instances
+			(project "32bit-5v"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "C42")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 487.68 35.56 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4edc33ab-f242-4c6c-9c5f-2faa2e3c21a2")
+		(property "Reference" "#PWR107"
+			(at 487.68 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 487.68 39.370000000000005 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 487.68 35.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 487.68 35.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 487.68 35.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "770d673d-8a8e-492d-b2c3-31e19e4e7767")
+		)
+		(instances
+			(project "32bit-5v"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "#PWR107")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(sheet_instances
 		(path "/"
