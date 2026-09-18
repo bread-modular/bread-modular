@@ -1,10 +1,20 @@
-# 32bit-5v — 5V input, on-board 3.3V rail (v1.1.2, schematic-only)
+# 32bit-5v — 5V input, on-board 3.3V rail (v1.1.2 → v1.1.3, schematic-only)
 
 This note describes the power architecture of the `32bit-5v` variant and the numbers
 behind the component choices. The schematic is the authority for the schematic and
 `32bit-5v.kicad_pcb` for the board — and as of **v1.1.2** the board still carries the
 **v1.1.0** layout, because both the regulator swap (v1.1.1) and the ESP32 bulk-cap
 trim (v1.1.2) are **schematic-only** changes (see §1.1 and §6).
+
+> **v1.1.3 note (schematic-only).** The `C41` defect this note flags in §5 — the missing
+> `+3V3` connection left behind by commit `1244ad0` — is **fixed**: one wire
+> `(464.82, 26.67) → (464.82, 24.13)` plus a junction at `(464.82, 24.13)` puts `C41`.1
+> back on `+3V3`, takes ERC from 56 to 54 findings (element-for-element the v1.1.1
+> report again) and clears the `C41` schematic-parity mismatch (19 → 18). `C41` is
+> **not** a 1.1.3 change on the board: `32bit-5v.kicad_pcb` is byte-identical to 1.1.2
+> and was never broken. The `C41` statements below are written against the **v1.1.2**
+> source — where they say `C41` is *not connected*, read them as v1.1.2 history. See
+> `CHANGELOG` 1.1.3.
 
 ---
 
@@ -24,7 +34,7 @@ V_SUPPLY1 (1x05, all five pins)   == +5V   (slot rail = 5V_SYS when the base's
        │  NC   = pin 4  (hidden no-connect pin, exactly as in the base)
        │  VOUT = pin 5  (right lead)
        │
-       ├── C41 22uF/25V X5R 0805 ..... output bulk  ** NOT CONNECTED — see §5 **
+       ├── C41 22uF/25V X5R 0805 ..... output bulk  ** reconnected in v1.1.3 — see §5 **
        │
        ▼
      +3V3  ──┬── C6 0.1uF, C8 10uF ....... output HF + local bulk (pre-existing)
@@ -80,7 +90,7 @@ SOT-23-5, has **added `C42`** (v1.1.1, never placed on the board) and **has no
 v1.1.0 board run; the expected outcome is a mismatch list covering at least
 `U5` (wrong footprint), `C42` (present in the schematic, absent from the board),
 `C9`..`C13` (still on the board, gone from the schematic) and `C41` (whose *net* differs:
-the board routes it to `+3V3`, the schematic currently leaves it floating — see §5).
+the board routes it to `+3V3`, the schematic left it floating until v1.1.3 — see §5).
 That is **expected and owned by the owner**; it is not something to "fix" from the
 schematic side. See §6 for the hand-off.
 
@@ -90,7 +100,7 @@ schematic side. See §6 for the hand-off.
 |---|---|---|---|
 | LDO input bulk | `C2` 1uF 0805, LCSC `C28323` (`CL21B105KBFNNNE`) | `C40` 10uF 0805, LCSC `C15850` (`CL21A106KAYNNNE`) | **deviation**: 10x larger, same Samsung CL21 0805 family. The module's 5V arrives on a slot socket with no upstream bulk, whereas the base has 22uF (`C17`) + 0.1uF (`C21`) ahead of its input ferrite. |
 | LDO input HF | `C21` 0.1uF 0402, LCSC `C1525` (`CL05B104KO5NNNC`) | **`C42` 0.1uF 0402, LCSC `C1525`** (added in v1.1.1) | identical part, same value/footprint/LCSC |
-| LDO output at the pin | `C4` 4.7uF 0805, LCSC `C1779` | `C41` 22uF 0805, LCSC `C45783` (`CL21A226MAQNNNE`) | **deviation**: larger bulk for the ESP32 + ES8388 load; same Samsung CL21 0805 family. **`C41` is currently NOT connected to `+3V3` — see §5.** |
+| LDO output at the pin | `C4` 4.7uF 0805, LCSC `C1779` | `C41` 22uF 0805, LCSC `C45783` (`CL21A226MAQNNNE`) | **deviation**: larger bulk for the ESP32 + ES8388 load; same Samsung CL21 0805 family. **`C41` was NOT connected to `+3V3` from `1244ad0` until v1.1.3 — see §5.** |
 | Output bulk / HF behind the ferrite | `C6` 22uF 1206 (`C90146`) + `C1` 0.1uF 0402 (`C1525`) | `C8` 10uF + `C6` 0.1uF 0402 on `+3V3`, then `FB1` → `+3V3_ESP32` → `C1` 0.1uF + `C2` 10uF | pre-existing module decoupling; the five 100uF bulk caps behind `FB1` were trimmed in v1.1.2 (§1.3) |
 | `EN` | `R4` 100k VIN→EN, `C16` 220nF, `SW1` to GND | `EN` wired directly to VIN (`+5V`) | **deviation**: no switch — the module must always be on |
 
@@ -261,7 +271,8 @@ kept as `netlist-32bit-5v-1.1.0.kicadsexpr` and
 
 ## 5. Open risks (v1.1.2)
 
-* **`C41` (22uF, LDO output bulk) is not connected to `+3V3`.** Commit `1244ad0`
+* **~~`C41` (22uF, LDO output bulk) is not connected to `+3V3`.~~ FIXED in v1.1.3** (one
+  wire + one junction; `C41`.1 back on `+3V3`, ERC 56 → 54, parity 19 → 18). Commit `1244ad0`
   re-placed `C41` from (525.78, 29.21) to (464.82, 33.02) but its top stub, wire
   `(464.82, 29.21) → (464.82, 26.67)`, was left ending in mid-air: the `+3V3` trunk
   next to it stops at `x = 444.5`, and the nearest `+3V3` wire is the horizontal run at
@@ -324,7 +335,7 @@ kept as `netlist-32bit-5v-1.1.0.kicadsexpr` and
 | 5 | **Move to the top side** (or replace) | `C40` (0805, 10uF) and `C41` (0805, 22uF) | they are on the bottom side today; moving them makes the module single-side SMD |
 | 6 | **Place `C1`/`C2` tight to `U1` pin 2** (0402 0.1uF + 0603 10uF) | `Capacitor_SMD:C_0402_1005Metric`, `Capacitor_SMD:C_0603_1608Metric` | values/parts unchanged by v1.1.2, but with the 100uF bank gone there is no distant reservoir left, so these two parts carry the decoupling — short loop to a solid `GND`, per §1.3 |
 | 7 | **Keep as is** | `C40` 10uF/25V 0805 (`C15850`), `C41` 22uF/25V 0805 (`C45783`), `C1` 0.1uF, `C2` 10uF, `C6` 0.1uF, `C8` 10uF, `FB1`, all `+3V3` loads | values/parts unchanged by v1.1.1 and v1.1.2 |
-| 8 | **Owner decision, do before board sync/manufacture: reconnect `C41` in the schematic** | one wire + one junction (see §5) | not applied in v1.1.2 — it is a pre-existing `1244ad0` defect, deliberately outside this revision's scope; until it is fixed the schematic and any board built from it disagree on `C41`'s net |
+| 8 | ~~**Owner decision, do before board sync/manufacture: reconnect `C41` in the schematic**~~ **DONE in v1.1.3** | one wire + one junction (see §5) | **applied in v1.1.3**, not applied in v1.1.2 — it was a pre-existing `1244ad0` defect, deliberately outside that revision's scope; the schematic and any board built from it now agree on `C41`'s net (`+3V3`) |
 
 Suggested region: the input area around the old regulator / `V_SUPPLY1` and the old
 `C40`/`C41` position, on the **top (F.Cu)** side, so that `VIN`+`EN`, `GND` and

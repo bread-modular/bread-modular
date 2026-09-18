@@ -1,5 +1,66 @@
 # Changelog
 
+## 1.1.3 — `C41` (the 22uF LDO output bulk) is reconnected to `+3V3`
+**Schematic-only revision.** `32bit-5v.kicad_sch` gains **one wire segment and one
+junction** (16 added lines, 0 deleted); `32bit-5v.kicad_pcb` is **byte-identical** to
+1.1.2 (same SHA-256 `0294006d…`) — **no copper was added**, because the board never lost
+the connection. This closes the pre-existing `1244ad0` defect that 1.1.2 found and
+deliberately did not fix (`POWER.md` §5, §6 item 8).
+
+* **Fix `C41` (22 µF LDO output bulk) — its `+3V3` connection was missing since
+  `1244ad0`; one segment + junction added; DRC connectivity now clean.**
+* **The defect.** Commit `1244ad0` re-placed `C41` from `(525.78, 29.21)` to
+  `(464.82, 33.02)` and left its top stub wire `(464.82, 29.21) → (464.82, 26.67)`
+  ending in mid-air: the `+3V3` run `(459.74, 24.13) → (467.36, 24.13)` passes **2.54 mm
+  above** it and never touches. The netlist therefore carried the auto net
+  `unconnected-(C41-Pad1)`, and ERC carried `+1 error pin_not_connected (Symbol C41
+  Pin 1)` plus `+1 warning unconnected_wire_endpoint (Vertical Wire, 0.0254 mm)`.
+* **The fix** — exactly the remedy scoped in `POWER.md` §5: one 2.54 mm segment, one
+  junction, no part moved, nothing else touched.
+  ```
+  (wire     (pts (xy 464.82 26.67) (xy 464.82 24.13))  ; closes the 2.54 mm gap
+  (junction (at 464.82 24.13))                          ; T onto the +3V3 run
+  ```
+* **Measured before → after** (KiCad 10.0.6 `kicad-cli`; invocations as in
+  `verification/README.md`):
+  * **netlist** — 77 → **76 nets**: the auto net `unconnected-(C41-Pad1)` is gone and
+    `+3V3` gains exactly `('C41','1')` (9 → 10 nodes). `+3V3` is the **only** net whose
+    node set changed — the other 75 shared nets are node-for-node identical, so the new
+    junction merges nothing and shorts nothing. No net was renamed, merged or split.
+  * **ERC `--severity-all`** — 56 → **54** (35/21 → **34/20**). Normalised (severity +
+    type + description + item positions) against the 1.1.2 source the diff is **exactly
+    two findings removed and none added**: the `C41` `pin_not_connected` error and the
+    `C41` `unconnected_wire_endpoint` warning, both at `(464.82, 29.21)` = `C41` pin 1.
+    The 1.1.3 report is in fact **element-for-element identical to the report shipped
+    with v1.1.1** (`verification/erc-32bit-5v-1.1.1-pre-1244ad0.json`) — the defect and
+    both of its artefacts are fully gone. Note this does **not** restore
+    `check_ldo_swap_netlist.py`: that 19/19 proof is bound to the frozen
+    1.1.0 → 1.1.1-as-released pair (unchanged by this revision).
+  * **Board DRC `--schematic-parity`** — **105 violations / 0 unconnected items, both
+    before and after** (the board is untouched), and schematic parity **19 → 18**. The
+    single removed item is exactly `Pad net (+3V3) doesn't match net given by schematic
+    (unconnected-(C41-Pad1))`, i.e. the board and the schematic now agree on `C41`'s net
+    for the first time since `1244ad0`. The other 18 parity items are the inherited ones
+    (`U5` footprint/value/LCSC, the never-placed `C42`, the `J5` B-row pins and the five
+    `C9`..`C13`) and remain the owner's routing-pass scope, not this revision's work.
+  * **`C41` on the board was never broken.** Pad 1 is `+3V3` at `(66.8, 59.85)` on
+    B.Cu, reached by the 0.8 mm track `(64.05, 60.4) → (66.8, 60.4)`; `pcbnew`
+    connectivity fits the pad into the `+3V3` cluster and DRC reports **0 unconnected
+    items**. There is no `+3V3` zone/pour anywhere on this board (the only pour is `GND`
+    on `In1.Cu`) and no dead `+3V3` stub near `C41`, so **nothing was added and nothing
+    was cleaned up on the copper**: the defect was schematic-only — i.e. it lived in the
+    netlist that a board re-sync would have been built from, not in the 1.1.0 layout.
+* **Not touched**: `32bit-5v.kicad_pcb` (byte-identical to 1.1.2), `32bit-5v.kicad_pro`,
+  `production/`, `code/`, and the **`verification/` fixture set**. Those fixtures are the
+  **1.1.2** side of the frozen trim proof — `check_bulk_cap_trim.py` consumes
+  `netlist-32bit-5v.kicadsexpr` and `erc-32bit-5v.json` as its current-revision inputs —
+  so overwriting them with 1.1.3 output would invalidate the 20/20 proof. They stay
+  exactly as they are, the same way the 1.1.0 and 1.1.1-as-released netlists stayed
+  frozen in 1.1.2.
+* `POWER.md` carries a **v1.1.3 note** at the top: its `C41` statements (§1 rail map,
+  §1.1, §1.2, §5, §6 item 8) are written against the **v1.1.2** source and are annotated
+  where they would otherwise still read as an open defect.
+
 ## 1.1.2 — ESP32 rail: the five legacy 100uF bulk caps (`C9`..`C13`) are removed
 **Schematic-only revision.** `32bit-5v.kicad_sch` changes; `32bit-5v.kicad_pcb` is
 deliberately **not** touched (no placement, no routing, no zone refill, no footprint
