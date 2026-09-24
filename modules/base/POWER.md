@@ -4,6 +4,11 @@ Scope of v1.3.0: **schematic, footprints and part numbers only.** The PCB
 (`base.kicad_pcb`) is intentionally *not* updated, placed or routed — that is Phase 2.
 Nothing in this note overrides the schematic.
 
+**Signal contract:** Bread Modular signals are **0–3.3 V**. A 5 V slot powers a
+module's internal regulator; it does not imply 5 V signals. The schematic now
+includes modest reset/power-off input-current limiting (v1.3.11, §11), not full
+powered-off isolation.
+
 ---
 
 ## 1. Rail map
@@ -918,3 +923,57 @@ all three op-amps on a `SOIC-8-1EP` footprint (an exposed pad the real parts do 
 6. Re-baseline `verification/fixed-geometry.json` (both schematic hashes and the footprint/pad
    geometry) in the same reviewed commit — it still pins the pre-1.3.6 board, which is why
    `tools/verify_power.py` stops at `'ERC setup changed'` before it reaches any of the above.
+
+## 11. v1.3.11 — minimal reset/power-off input-current limiting
+
+`SW1` removes the base's 3.3 V supply, but a module with its own regulator on a
+5 V slot can continue driving a **0–3.3 V** signal. U18's TS5A23157 analog pins do
+not provide powered-off isolation. The parallel U2 buffer input was also connected
+directly to the same external signal, so protecting only U18's pin 9 would leave
+that other injection path intact.
+
+The chosen compromise is **two series resistors, no new IC or diode network**:
+
+```
+INPUT1.1 / IN_L -- R58 10k -- IN_L_PROT -- U2.3, R24.1, R17.2
+INPUT1.2 / IN_R -- R59 10k -- IN_R_PROT -- U2.5, R5.2, U18.9
+```
+
+The simulation sources V2/V3 stay on the raw `IN_L`/`IN_R` side, so they do not
+bypass the new resistors. `BUFF_IN_L`, `BUFF_IN_R`, `RIN_SEL`, the U18 pin map,
+J23's open=stereo / fitted=left-to-both-line-outputs behaviour, R55 and C48 are
+unchanged. Headphones remain stereo. The two bias returns stay downstream of the
+resistors so unpatched inputs retain their 1.65 V bias (legacy label `+2.5V`).
+
+* **Parts:** R58/R59 use `C25744`, UNI-ROYAL `0402WGF1002TCE`, 10 kΩ ±1%, 62.5 mW,
+  `Resistor_SMD:R_0402_1005Metric`. The part identity/rating is verified; no stock
+  or price guarantee is implied. [source](https://jlcpcb.com/partdetail/26487-0402WGF1002TCE/C25744)
+* **Current bound:** for a 3.3 V source and nonnegative receiving rail, ignoring
+  clamp forward voltage gives `I <= 3.3 / 9900 = 0.334 mA` per channel, including
+  the resistor's −1% tolerance. Both inputs together contribute at most about
+  0.667 mA under these assumptions. This is shared among downstream paths, not
+  that much current in each path. Worst-case resistor dissipation with the full
+  3.3 V across it is about 1.10 mW.
+* **Device basis:** TS5A23157 §6.1, note 3 permits exceeding its input/output
+  voltage limits if clamp-current limits are observed; its analog-port clamp
+  rating is ±50 mA. The series resistance greatly reduces stress but does not
+  promise valid switch operation outside the normal supply range.
+  [source](https://www.ti.com/lit/ds/symlink/ts5a23157.pdf)
+* **Signal cost:** with a low-impedance source, a stiff 1.65 V bias and ideal
+  buffers, `Rload = 2M || 1M = 666.7k`; the added low-frequency factor is
+  `Rload / (Rload + 10k) = 0.9852`, or **−0.129 dB**. This applies to both channels
+  in stereo and to the shared left source in mono. The unselected right input
+  in mono sees essentially its 2 MΩ bias resistor, giving about −0.043 dB at its
+  headphone buffer. No feedback/gain resistors were changed. These are calculated
+  estimates, not measured frequency-response or distortion results.
+* **Limits:** this is **current limiting, not power-off isolation**. Residual
+  injection can raise the disabled supply; R27 and the bias divider provide a
+  discharge load, but this change does not guarantee a zero-volt rail or reset
+  timing. It is not protection for arbitrary bipolar/5 V signal faults, nor a
+  qualified ESD/surge solution. Other ports are outside this change's scope.
+
+Before release, bench-check reset/recovery with both inputs held at 3.3 V by a
+still-powered module in both jumper states, then check audio level/response.
+The PCB and production exports remain unchanged; the next PCB update must place
+R58/R59 before the signal branches, without a raw-input bypass. The schematic-only
+netlist/ERC regression procedure is in `verification/README.md`.

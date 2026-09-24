@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.3.11 — modest input-injection protection for U18/U2 (schematic only, PCB pending)
+
+* Added only **R58/R59 = 10 kΩ, 1%, 0402** (`C25744`, UNI-ROYAL
+  `0402WGF1002TCE`) in series with the two external signal inputs. `IN_L` and `IN_R`
+  remain the raw socket/simulation-source nets; `IN_L_PROT` and `IN_R_PROT` feed the
+  existing bias resistors, U2 buffers and line-input/mono-selector circuitry.
+* Protecting just U18's NC1 branch would leave a parallel backfeed path through
+  `U2.5`. Putting the resistors before the branches limits both paths, and does the
+  same for the left input. U18, J23, R55, C48, the gains and all supply nets are
+  otherwise unchanged. No extra clamps, replacement IC or supply redesign.
+* Bread Modular signals are **0–3.3 V**, including modules powered from a 5 V slot:
+  those modules use a local regulator. The relevant fault is a still-driven signal
+  while the base 3.3 V rail is off, not normal 5 V audio.
+* At a 3.3 V input, even ignoring the internal clamp's voltage drop, each 10 kΩ
+  resistor limits injection to **0.33 mA nominal / 0.334 mA at −1% tolerance**.
+  Added low-frequency attenuation is approximately **0.13 dB** with the existing
+  2 MΩ bias / 1 MΩ line-input load. See `POWER.md` §11 for assumptions and limits.
+* This is **current limiting, not powered-off isolation**: a small residual
+  backfeed can remain. Do not treat it as guaranteed rail discharge, reset timing,
+  arbitrary-voltage fault protection or an ESD qualification.
+* PCB/routing and production files are deliberately untouched. R58/R59 must be
+  carried into the later schematic-to-PCB update. Verification is documented in
+  `verification/README.md` under "Input-injection protection".
+
 ## 1.3.10 — loud-gain option **withdrawn**, `INPUT1` return pins grounded, `U3` is a real `TS922IDT` (schematic only, PCB pending)
 
 **Three owner decisions taken after the three-model schematic review.** Only `base.kicad_sch`

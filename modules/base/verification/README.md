@@ -447,3 +447,50 @@ were **deleted in 1.3.10**, and the board still carries `R53`/`R54`), and the ba
 match). `verify_power.py` therefore stops before it can reach a clean pass, with or without
 the mux swap; only the two schematic hash pins were re-pinned here (previous values kept in
 the new `schematic_revision` block).
+
+## Input-injection protection — v1.3.11 (schematic only)
+
+`tools/verify_input_protection.py` checks the **exact** change from the 1.3.10
+schematic at `b0bb8e7`: only R58/R59 (10 kΩ, 1%, 0402, C25744) are added. Six
+existing pins move from raw `IN_L`/`IN_R` to their corresponding `_PROT` nets;
+all other pin/net assignments, pin types and existing component metadata must
+remain identical. INPUT1 and V2/V3 stay upstream of the new resistors, preventing
+an accidental bypass through U2. ERC comparison checks finding identities, not
+just totals. No board, routing, fabrication output or waiver is changed/read by
+this checker.
+
+Verified result: **523 pin/net assignments checked**, **162 existing component
+records unchanged**, **7 ERC errors + 4 warnings before and after**, no added or
+removed findings. The exported root-sheet PDF was also inspected for readable
+labels, connected resistors and the unchanged mono-selector topology.
+
+Reproduce from the repository root (KiCad CLI and Python 3; work products stay in
+a temporary directory, including any KiCad project-state files):
+
+```sh
+work=$(mktemp -d)
+mkdir "$work/before" "$work/after"
+for file in base.kicad_sch slot.kicad_sch base.kicad_pro sym-lib-table \
+            BreadModular_PowerMux.kicad_sym BreadModular_Analog.kicad_sym; do
+  git show "b0bb8e7:modules/base/$file" > "$work/before/$file"
+  cp "modules/base/$file" "$work/after/$file"
+done
+for stage in before after; do
+  ln -s "$PWD/opt/fp-lib-table" "$work/$stage/fp-lib-table"
+  ln -s "$PWD/opt/footprints" "$work/$stage/footprints"
+  kicad-cli sch export netlist --format kicadxml \
+    -o "$work/$stage/netlist.xml" "$work/$stage/base.kicad_sch"
+  kicad-cli sch erc --format json --severity-all \
+    -o "$work/$stage/erc.json" "$work/$stage/base.kicad_sch"
+done
+python3 modules/base/tools/verify_input_protection.py \
+  --before "$work/before/netlist.xml" --after "$work/after/netlist.xml" \
+  --erc-before "$work/before/erc.json" --erc-after "$work/after/erc.json"
+```
+
+**Scope:** this proves the schematic delta, not analog performance or production
+readiness. R58/R59 limit a 3.3 V source to at most approximately 0.334 mA/channel
+with resistor tolerance; they **do not isolate an unpowered input or guarantee
+zero residual rail voltage**. See `POWER.md` §11 for the calculation, signal-level
+contract and reset/audio bench checks still required. Carry both resistors and
+the net split into the pending PCB update before fabrication.
