@@ -6961,7 +6961,7 @@
 	)
 	(wire
 		(pts
-			(xy 62.23 74.93) (xy 72.39 74.93)
+			(xy 69.85 74.93) (xy 72.39 74.93)
 		)
 		(stroke
 			(width 0)
@@ -9612,7 +9612,7 @@
 			)
 		)
 	)
-	(global_label "IN_R"
+	(global_label "IN_R_PROT"
 		(shape passive)
 		(at 193.04 311.15 0)
 		(fields_autoplaced yes)
@@ -9899,7 +9899,7 @@
 	)
 	(global_label "IN_L"
 		(shape input)
-		(at 26.67 45.72 180)
+		(at 16.51 45.72 90)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -9909,7 +9909,7 @@
 		)
 		(uuid "7588bf86-df88-42a5-9f36-6dc71539bd63")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 19.7538 45.72 0)
+			(at 9.5938 45.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10352,7 +10352,7 @@
 			)
 		)
 	)
-	(global_label "IN_L"
+	(global_label "IN_L_PROT"
 		(shape input)
 		(at 34.29 267.97 180)
 		(fields_autoplaced yes)
@@ -10735,7 +10735,7 @@
 	)
 	(global_label "IN_R"
 		(shape input)
-		(at 62.23 74.93 180)
+		(at 58.42 74.93 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10745,7 +10745,7 @@
 		)
 		(uuid "f3ae1556-2a58-454a-8b5c-8cebb74fe613")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 55.0719 74.93 0)
+			(at 51.2619 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25725,4 +25725,259 @@
 		)
 	)
 	(embedded_fonts no)
+	(symbol
+		(lib_id "Device:R")
+		(at 22.86 45.72 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d65696ae-dd56-411c-9b63-59f4b8e826f5")
+		(property "Reference" "R58"
+			(at 22.86 40.64 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 22.86 43.18 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 22.86 45.72 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 22.86 45.72 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "10k 1% 0402 series input current limiter for reset/power-off; not an isolator"
+			(at 22.86 45.72 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25744"
+			(at 22.86 45.72 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402WGF1002TCE"
+			(at 22.86 45.72 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 22.86 45.72 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "2e024ece-e60d-4754-9d27-8c16fa116f7e")
+		)
+		(pin "1"
+			(uuid "0f0a10cb-e766-46fa-a031-a4c0e3bb517a")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "R58")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 66.04 74.93 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "93b29dc4-821a-480f-83d6-a913fcb4b3d5")
+		(property "Reference" "R59"
+			(at 66.04 69.85 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 66.04 72.39 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 66.04 74.93 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 66.04 74.93 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "10k 1% 0402 series input current limiter for reset/power-off; not an isolator"
+			(at 66.04 74.93 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25744"
+			(at 66.04 74.93 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402WGF1002TCE"
+			(at 66.04 74.93 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 66.04 74.93 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "2b999cb7-d39e-4524-a9c9-5ae40ac8132c")
+		)
+		(pin "1"
+			(uuid "75721018-e2bc-4b35-85dc-b31b46de2698")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "R59")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts (xy 16.51 45.72) (xy 19.05 45.72))
+		(stroke (width 0) (type default))
+		(uuid "8f47033a-7d8a-430a-89a5-f4c653861ece")
+	)
+	(wire
+		(pts (xy 58.42 74.93) (xy 62.23 74.93))
+		(stroke (width 0) (type default))
+		(uuid "59bd7555-3397-46d2-aaee-752f63e29456")
+	)
+	(global_label "IN_L_PROT"
+		(shape input)
+		(at 30.48 45.72 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "80530cb6-34a2-4917-a71a-0851a65d80fc")
+	)
+	(global_label "IN_R_PROT"
+		(shape input)
+		(at 76.2 74.93 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "70b296d8-6caf-43ac-9312-8c1ce2cd9ed0")
+	)
+	(text "0-3.3 V signals; 5 V slots use local regulation.\nR58/R59 (10k) limit reset-time input injection\ninto U18 and U2 to <=0.34 mA/channel.\nCurrent limiting, NOT power-off isolation."
+		(at 27.94 101.6 0)
+		(effects (font (size 1.27 1.27)) (justify left top))
+		(uuid "4e908346-c010-4670-b7ec-215f7e0ff0a7")
+	)
 )
