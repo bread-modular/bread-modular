@@ -3,11 +3,11 @@
 #include <algorithm>
 #include "io.h"
 #include "midi.h"
-#include "fs/fs.h"
+#include "fs/FS.h"
 #include "psram.h"
 #include "audio/manager.h"
 #include "audio/samples/s01.h"
-#include "audio/mod/biquad.h"
+#include "audio/mod/Biquad.h"
 #include "audio/tools/sample_player.h"
 #include "api/web_serial.h"
 #include "audio/apps/interfaces/audio_app.h"
