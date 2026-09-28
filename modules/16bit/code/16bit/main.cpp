@@ -5,7 +5,7 @@
 
 #include "io.h"
 #include "midi.h"
-#include "fs/fs.h"
+#include "fs/FS.h"
 #include "psram.h"
 #include "audio/manager.h"
 #include "api/web_serial.h"
