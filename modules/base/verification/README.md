@@ -7,20 +7,29 @@ imported into isolated workspace 265 based on `base-improvements` at `ab9fd44`.
 All 79 imported files matched the source candidate and initial `--verify-only`
 passed before edits. `imported-candidate.json` preserves the complete path list,
 file hashes, initial source/ZIP identity and pinned before-evidence hashes.
-Original checkout and workspace 261 are read-only dependencies, never edit targets.
+That production preparation did not edit the original checkout or workspace 261.
+The complete **103-path** production commit `4384e9cec531b8a56ffa921c44883365403e113e`
+has now been guardedly fast-forwarded into the original `base-improvements`
+checkout, with all 103 file bytes/hashes and every manifest hash verified before
+metadata publication. Workspace 265 is unchanged; workspace 261 was not touched.
 
 Astra's **prior 1.3.12** copper/connectivity/fabrication checks passed, but assembly
 was held for J5's mouth-based CPL datum. This **1.3.13** candidate addresses that
 issue and the requested hand-solder notes, three local supply bypass caps and
-J23 LINE mono silk. **Focused targeted independent confirmation is pending**;
-no advisor/other model was used. Vendor placement preview and physical/bench
-signoffs remain separately unperformed.
+J23 LINE mono silk. **Astra Max targeted 1.3.13 software/layout/export confirmation
+is complete: PASS**, all four findings resolved, no remaining targeted defects,
+in chat `fa1ba1b6-d28a-4178-bb09-cf6a42d01a68`. `astra-confirmation.json`
+records the user-supplied completed read-only review, exact source/export hashes
+and scope. No advisor/other model was invoked during integration. Vendor
+placement-preview/polarity/library mapping and physical/bench signoffs remain
+separately UNPERFORMED.
 
 ## Current evidence / independent gates
 
 - `drc-after.json`: real saved/refilled KiCad CLI DRC, all severities/parity;
   **0 errors / 0 unrouted / 0 parity**, **70 visible library-copy warnings only**.
-  No rule/severity suppression or exclusions. All silk/mask/courtyard/clearance
+  No new rule/severity suppression; zero DRC exclusions; five inherited ignored
+  checks remain unchanged. All silk/mask/courtyard/clearance
   findings from the local editing iterations were actually resolved.
 - `erc-after.json`: real current **7 errors + 4 warnings**, unchanged UUID/type/
   severity identities, not zero ERC. `warnings.md` explicitly justifies each.
@@ -65,6 +74,8 @@ signoffs remain separately unperformed.
   visible warnings. Source and compared library-file hashes are recorded.
 - `render-review.json`: 13 aspect-correct review images, physical crop/pixels/
   scales/hashes, real ZIP independently parsed with recorded parser notices.
+- `astra-confirmation.json`: completed targeted Astra review attribution, frozen
+  103-path source commit, exact hashes, findings/check summaries and real-world holds.
 - `software-checks.json`, `release-hashes.json`: executed checks and exact source/
   synchronized export identities. `../production/manifest.json` pins all current
   sources/tools/evidence/exports/docs, with honest prior/current review status.
@@ -90,6 +101,9 @@ identity, independent documented J5 datum and every published manifest hash.
 It uses temporary reports and does not rewrite sources or export payloads.
 After deliberately refreshing evidence/docs, `--refresh-manifest-only` runs the
 same current export/source checks and refreshes hashes without re-exporting.
+A matching recorded confirmation remains PASS only for the pinned release,
+source and export identities; absent/stale confirmation falls back to pending.
+Only the software review flag changes; vendor/bench/mating/order flags stay false.
 Rewriting source/geometry still requires freeze + every mandatory gate.
 
 ## Export / optional aspect-correct views
@@ -153,15 +167,17 @@ plugin database and production backups remain **historical**, not current releas
 instructions. Exact original POWER rationale remains unchanged in
 `../POWER-HISTORICAL-pre-1.3.12.md`. Price/stock observations are stale.
 
-`intended-paths.json` and `changed-files.txt` enumerate the **complete combined
-Git delta**, including every imported tracked/new deliverable and all bounded
-additions, not a dashboard-truncated subset. A full Git binary patch backup is
-kept at `/tmp/base-265/complete-1.3.13.patch`. All intended artifacts are to be
-committed atomically only on the isolated workspace branch; no caches/bytecode/
-core files/unrelated modules, no original-branch commit, no merge/push/order.
-Current commit identity is Git HEAD after packaging, avoiding self-referential
-commit/hash data inside the payload.
+`intended-paths.json` and `changed-files.txt` enumerate the **104-path complete
+combined Git delta** from `ab9fd44`, including the new review record. The inventory
+separately identifies the original **103-path production payload** at
+`4384e9cec531b8a56ffa921c44883365403e113e` and the **10-path metadata-only
+follow-up** on `base-improvements`; original inventory/content fingerprints are
+retained. The manifest pins every affected document/tool and the new record.
+No source, fabrication ZIP, BOM/CPL, render, manufacturing policy, unrelated
+module or library was changed by the follow-up. Existing user files were
+preserved; no workspace deletion, advisors, push or order. The final metadata
+commit is identified by Git HEAD, avoiding recursive self-hashes.
 
-**Residual holds:** targeted independent confirmation, JLCPCB library/portal
-placement preview, bench reset/startup/load/audio/headphone checks, physical
-mating and current quote/stock qualification. Exports do not authorize ordering.
+**Residual holds:** JLCPCB library/portal placement preview, polarity and mapping;
+bench reset/startup/load/audio/headphone checks; physical mating; current
+quote/stock qualification — all UNPERFORMED. Software PASS is not ordering approval.

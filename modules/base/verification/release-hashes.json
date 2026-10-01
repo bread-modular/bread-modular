@@ -37,5 +37,22 @@
   },
   "J5_CPL": "J5,4.035000,130.810000,270.000000,top",
   "original_imported_path_count": 79,
-  "manifest_note": "manifest.json pins every current source/tool/evidence/export/doc. Commit SHA and full backup patch hash are recorded outside the payload after atomic workspace-only commit to avoid recursive hashes."
+  "manifest_note": "manifest.json pins every current source/tool/evidence/export/doc, including the confirmation record. Original production payload is the 103-path commit recorded above; the 104-path full inventory includes a metadata-only follow-up. Final metadata commit identity is Git HEAD; self-hashes are intentionally excluded.",
+  "production_payload": {
+    "commit": "4384e9cec531b8a56ffa921c44883365403e113e",
+    "changed_path_count": 103,
+    "path_sha256_map_digest": "33f6d78319f95bdbee42059bc66e01b2511d8e34326461f05c03ac3356c50ddb"
+  },
+  "review_confirmation": {
+    "record": "verification/astra-confirmation.json",
+    "sha256": "946145a34e63a97edf4f4c969fac270b7238d1514a27670db262b7be26b414db",
+    "chat_id": "fa1ba1b6-d28a-4178-bb09-cf6a42d01a68",
+    "model": "Astra Max",
+    "scope": [
+      "software",
+      "layout",
+      "export"
+    ],
+    "status": "PASS"
+  }
 }

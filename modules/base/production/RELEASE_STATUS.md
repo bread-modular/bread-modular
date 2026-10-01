@@ -1,13 +1,21 @@
-# BASE 1.3.13 — bounded improvement candidate; NOT order authorization
+# BASE 1.3.13 — Astra-reviewed software/layout/export; NOT order authorization
 
 ## Review status and scope
 
 Astra's completed **1.3.12** independent review passed copper/connectivity/
 fabrication but placed assembly on **HOLD for J5's mouth-based CPL datum**.
-This 1.3.13 candidate addresses the four requested issues; **focused independent
-confirmation of these fixes is pending**. Only the requested worker was used,
-with no advisors or other models. Work is isolated on workspace **265**, based
-on `base-improvements` at `ab9fd44`, never editing original checkout or 261.
+The completed read-only **Astra Max 1.3.13 confirmation is PASS for software,
+layout and export**, with all four findings resolved and no remaining targeted
+defects, in chat `fa1ba1b6-d28a-4178-bb09-cf6a42d01a68`.
+`../verification/astra-confirmation.json` records the user-supplied confirmation,
+exact source commit/hashes, check summaries and real-world holds. No advisor or
+other model was invoked during this integration.
+
+The frozen **103-path production payload** is commit
+`4384e9cec531b8a56ffa921c44883365403e113e`, a direct child of `ab9fd44`.
+It was safely fast-forwarded into the original `base-improvements` checkout; all
+103 files and every manifest hash matched the candidate before metadata edits.
+Workspace 265 remains unchanged; workspace 261 was not touched.
 The complete independently round-tripped **79-path binary delta** was imported,
 all 79 files matched the source candidate exactly and initial `--verify-only`
 passed before edits. `../verification/imported-candidate.json` records that proof.
@@ -68,7 +76,8 @@ Old plugin `jlcpcb/project.db` and production backups are historical, not order 
 
 - Real saved/refilled KiCad CLI DRC with parity/all severities: **0 errors,
   0 unrouted, 0 parity**, **70 visible library-copy warnings only**.
-  No severity suppression/exclusions. 67/70 installed pad sets match; J5
+  No new severity suppression; zero DRC exclusions; five inherited ignored checks
+  remain unchanged. 67/70 installed pad sets match; J5
   contact renumbering and INPUT1/5V14 annulus flags remain intentional/preserved.
 - Power verifier: **4068 assertions, 160 footprints, 515 physical pad-net
   assignments**, no PCB_PENDING. All owner power/input/audio decisions retained.
@@ -92,11 +101,12 @@ Old plugin `jlcpcb/project.db` and production backups are historical, not order 
 
 ## Residual release holds — not hidden by generated files
 
-Targeted Astra confirmation, **JLCPCB library/portal placement preview**, bench
-reset/startup/load/audio/headphone checks, physical socket/module/shunt mating,
-current quote/stock qualification and order authorization are **unperformed**.
-No push, merge or order. One complete package commit is authorized **only on the
-isolated workspace branch**; the original base branch stays at ab9fd44.
+**JLCPCB library/portal placement-preview, polarity and library mapping**, bench
+reset/startup/load/audio/headphone checks, physical socket/module/shunt mating
+and current quote/stock qualification remain **UNPERFORMED**. Ordering is NOT
+authorized by the software PASS. The authorized local fast-forward and narrow
+review-metadata publication are complete; no push or order. Source, fabrication
+ZIPs, BOM/CPL, renders and manufacturing policy remain unchanged by publication.
 
 Accepted limitations unchanged: no per-slot ILIM; shared rails/upstream limits;
 TVS/surge qualification gap; residual powered-off backfeed with R58/R59; module

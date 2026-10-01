@@ -1,10 +1,10 @@
 {
-  "schema": "bread-modular/base/intended-paths/1",
+  "schema": "bread-modular/base/intended-paths/2",
   "base_commit": "ab9fd44e759db7ab389169605b64d7f9876b6903",
   "workspace": 265,
   "workspace_branch": "okbrain/bread-modular-kicad/265-af88ad3f",
   "imported_path_count": 79,
-  "combined_changed_path_count": 103,
+  "combined_changed_path_count": 104,
   "paths": [
     "modules/base/CHANGELOG",
     "modules/base/POWER-HISTORICAL-pre-1.3.12.md",
@@ -57,6 +57,7 @@
     "modules/base/verification/J5-assembly.svg",
     "modules/base/verification/README.md",
     "modules/base/verification/assembly-orientation.json",
+    "modules/base/verification/astra-confirmation.json",
     "modules/base/verification/audio-critical.png",
     "modules/base/verification/audio-critical.svg",
     "modules/base/verification/audio-routing.png",
@@ -110,5 +111,33 @@
     "opt/kicad-jlcpcb/export.py",
     "opt/kicad-jlcpcb/tests/test_export.py"
   ],
-  "note": "Complete combined Git delta, not dashboard subset. Unmodified tracked dependencies remain part of the base commit; all required new/export artifacts are explicitly included."
+  "note": "Full 104-path delta from base_commit, not a dashboard subset. Original 103-path production payload and 10-path metadata follow-up overlap on nine paths; only astra-confirmation.json is new. Manufacturing/source/BOM/CPL/render artifacts stay identical to production_payload.commit.",
+  "production_payload": {
+    "commit": "4384e9cec531b8a56ffa921c44883365403e113e",
+    "base_commit": "ab9fd44e759db7ab389169605b64d7f9876b6903",
+    "changed_path_count": 103,
+    "path_sha256_map_digest": "33f6d78319f95bdbee42059bc66e01b2511d8e34326461f05c03ac3356c50ddb",
+    "original_inventory_sha256": "2731ab06976c234ba87932e21136ff36bc6e0f688014af145779ba3ada0fc9e0",
+    "original_changed_files_sha256": "27919fd37039330335be67b5d64e5222c56ef67a4f6ddf8797ec29fcb7ed5e66",
+    "original_inventory_location": "git show 4384e9cec531b8a56ffa921c44883365403e113e:modules/base/verification/intended-paths.json"
+  },
+  "review_metadata_followup": {
+    "branch": "base-improvements",
+    "base_commit": "4384e9cec531b8a56ffa921c44883365403e113e",
+    "changed_path_count": 10,
+    "paths": [
+      "modules/base/production/EXPORT_BLOCKER.md",
+      "modules/base/production/RELEASE_STATUS.md",
+      "modules/base/production/manifest.json",
+      "modules/base/tools/regenerate_production.py",
+      "modules/base/verification/J5-assembly-datum.md",
+      "modules/base/verification/README.md",
+      "modules/base/verification/astra-confirmation.json",
+      "modules/base/verification/changed-files.txt",
+      "modules/base/verification/intended-paths.json",
+      "modules/base/verification/release-hashes.json"
+    ],
+    "manufacturing_artifacts_changed": false,
+    "commit_identity": "Git HEAD after metadata publication; excluded from payload to avoid recursive hash"
+  }
 }

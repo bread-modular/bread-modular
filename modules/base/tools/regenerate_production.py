@@ -48,6 +48,23 @@ def csv_refs(data):
     require(all(len(row['Designator'].split(','))==int(row['Quantity']) for row in data),'BOM quantity mismatch')
     return set(refs)
 
+def independent_review_confirmed(source_hashes):
+    # Review metadata only: never bypass source/export, DRC, ERC or physical gates.
+    path=VERIFY/'astra-confirmation.json'
+    if not path.is_file(): return False
+    record=json.loads(path.read_text())
+    if (record.get('schema')!='bread-modular/base/astra-confirmation/1' or
+        record.get('release_version')!=(BASE/'VERSION').read_text().strip() or
+        record.get('reviewer_model')!='Astra Max' or record.get('status')!='PASS' or
+        record.get('scope')!=['software','layout','export'] or
+        record.get('source_sha256')!=source_hashes): return False
+    exports=json.loads((VERIFY/'release-hashes.json').read_text())['exports_sha256']
+    required={'production/base.zip','jlcpcb/base/base-gerbers.zip',
+              'jlcpcb/production_files/GERBER-base.zip','jlcpcb/base/bom.csv',
+              'jlcpcb/base/positions.csv','production/bom.csv','production/positions.csv'}
+    return (required<=exports.keys() and record.get('exports_sha256')==exports and
+            all(sha(BASE/name)==digest for name,digest in exports.items()))
+
 frozen=json.loads((VERIFY/'fixed-geometry.json').read_text())
 require(sha(PCB)==frozen['routed_pcb_sha256'],'Saved PCB does not match validated frozen source')
 source_names=['base.kicad_pcb','base.kicad_sch','slot.kicad_sch','base.kicad_pro','base.kicad_dru']
@@ -269,14 +286,16 @@ if not args.verify_only:
     if args.render: run(sys.executable,BASE/'tools/plot_power.py','--gerber')
 result=validate_published()
 require(source_hashes=={n:sha(BASE/n) for n in source_names},'A circuit source changed during export/validation')
+independent_review=independent_review_confirmed(source_hashes)
 if args.verify_only and not args.refresh_manifest_only:
     manifest=json.loads((PROD/'manifest.json').read_text())
     require(manifest['source_sha256']==source_hashes,'Manifest source hashes are stale')
+    require(manifest['signoffs']['independent_review']==independent_review,'Manifest review signoff does not match recorded source/export identity')
     for name,digest in manifest['files'].items(): require(sha(BASE/name)==digest,f'Stale published file: {name}')
     for name,digest in manifest['repository_tools_sha256'].items(): require(sha(ROOT/name)==digest,f'Stale repository exporter/tool: {name}')
 else:
     (VERIFY/'manufacturing-validation.json').write_text(json.dumps(dict(result,source_sha256=source_hashes,result='PASS'),indent=2)+'\n')
-    manifest={'schema':'bread-modular/base/release-manifest/2','release_version':(BASE/'VERSION').read_text().strip(),'release_status':'software-checked candidate; NOT order authorization','source_sha256':source_hashes,'pcb_sha256':source_hashes['base.kicad_pcb'],'schematic_sha256':source_hashes['base.kicad_sch'],'slot_schematic_sha256':source_hashes['slot.kicad_sch'],**result,'drc':{'errors':0,'unconnected_items':0,'schematic_parity':0,'warnings':dict(collections.Counter(q['type'] for q in drc['violations']))},'erc':dict(collections.Counter(q['severity'] for sheet in json.loads((VERIFY/'erc-after.json').read_text())['sheets'] for q in sheet['violations'])),'review_status':{'prior_1.3.12':'Astra copper/connectivity/fabrication PASS; assembly HOLD J5 mouth-based datum','current_1.3.13':'targeted independent confirmation pending; no advisor invoked'},'signoffs':{'independent_review':False,'bench_reset_startup_audio':False,'physical_mating_trial':False,'JLCPCB_placement_preview':False,'order_authorized':False},'cost_stock_status':'Historical cost-estimate.json explicitly STALE; no live stock or price check','files':{}}
+    manifest={'schema':'bread-modular/base/release-manifest/2','release_version':(BASE/'VERSION').read_text().strip(),'release_status':('Astra-reviewed software/layout/export PASS; NOT order authorization' if independent_review else 'software-checked candidate; NOT order authorization'),'source_sha256':source_hashes,'pcb_sha256':source_hashes['base.kicad_pcb'],'schematic_sha256':source_hashes['base.kicad_sch'],'slot_schematic_sha256':source_hashes['slot.kicad_sch'],**result,'drc':{'errors':0,'unconnected_items':0,'schematic_parity':0,'warnings':dict(collections.Counter(q['type'] for q in drc['violations']))},'erc':dict(collections.Counter(q['severity'] for sheet in json.loads((VERIFY/'erc-after.json').read_text())['sheets'] for q in sheet['violations'])),'review_status':{'prior_1.3.12':'Astra copper/connectivity/fabrication PASS; assembly HOLD J5 mouth-based datum','current_1.3.13':('Astra Max targeted software/layout/export PASS; see verification/astra-confirmation.json; real-world holds unchanged' if independent_review else 'targeted independent confirmation pending; no advisor invoked')},'signoffs':{'independent_review':independent_review,'bench_reset_startup_audio':False,'physical_mating_trial':False,'JLCPCB_placement_preview':False,'order_authorized':False},'cost_stock_status':'Historical cost-estimate.json explicitly STALE; no live stock or price check','files':{}}
     files=[PROD/n for n in ['netlist.ipc','designators.csv','positions.csv','bom.csv','assembly-policy.csv','hand-solder.csv','hand-solder.json','base.zip','cost-estimate.json','RELEASE_STATUS.md','EXPORT_BLOCKER.md']]
     files+=list((BASE/'jlcpcb/base').iterdir())+[BASE/'jlcpcb/production_files/GERBER-base.zip']+list((BASE/'jlcpcb/gerber').iterdir())
     files+=[BASE/n for n in ['VERSION','CHANGELOG','POWER.md','POWER-HISTORICAL-pre-1.3.12.md']]+list((BASE/'tools').glob('*.py'))

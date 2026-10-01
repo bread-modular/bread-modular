@@ -1,0 +1,115 @@
+{
+  "schema": "bread-modular/base/astra-confirmation/1",
+  "release_version": "1.3.13",
+  "reviewer_model": "Astra Max",
+  "chat_id": "fa1ba1b6-d28a-4178-bb09-cf6a42d01a68",
+  "status": "PASS",
+  "scope": [
+    "software",
+    "layout",
+    "export"
+  ],
+  "provenance": "User-provided report of completed read-only Astra confirmation in the cited chat; recorded by Sol Max without invoking any advisor or other model. Not a new Astra review or a bench/vendor signoff.",
+  "source_commit": "4384e9cec531b8a56ffa921c44883365403e113e",
+  "source_sha256": {
+    "base.kicad_pcb": "dae64cad273575d4709ee02587e594065267a2a7ad567d833ef9f52a0bb562d0",
+    "base.kicad_sch": "672d7c896413578cf9a2b8afd7ecc9e3eb631a03e0b3a65efae2f4676fe817ab",
+    "slot.kicad_sch": "76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1",
+    "base.kicad_pro": "0d16b3f17e34bcda4b8d45860c69665f8b6db5a991470dc710e6dd95c1876101",
+    "base.kicad_dru": "f5d445bb5bf8f4b3351b9d46e235b397d9759dffa9469b3c83eb7c0deca0646f"
+  },
+  "exports_sha256": {
+    "production/base.zip": "3c7f69c2c7b750161fc85158ed65d419ccb4bab6caa4bb250927cd59229c645f",
+    "jlcpcb/base/base-gerbers.zip": "3c7f69c2c7b750161fc85158ed65d419ccb4bab6caa4bb250927cd59229c645f",
+    "jlcpcb/production_files/GERBER-base.zip": "3c7f69c2c7b750161fc85158ed65d419ccb4bab6caa4bb250927cd59229c645f",
+    "jlcpcb/base/bom.csv": "fb4b49526781aacf29ed27c62da827dc02114956351fa158ed107ba9df0dec49",
+    "jlcpcb/base/positions.csv": "20b9bc273b5ad29bba7435d947f5ffa479f686778386ee6f7103738cda8cc769",
+    "production/bom.csv": "331678e905e7bf0fdeb1e87703c20e124b355d027e3831a468553bf33f5b870f",
+    "production/positions.csv": "66825386c6b5caf175f5c56578b6bdc258488b7bfd2565f1e525d7fb53c898cb",
+    "production/designators.csv": "cba4ab34310571f0cd094d698ba82239f2bdc85bc8e9d0a9eea11dfb64d27256",
+    "production/assembly-policy.csv": "7087480760b0c323150d8281b4ead86aa008032fd6efcd92de4d9161d7ddc3fe",
+    "production/hand-solder.csv": "c62d4e2a09e8902820a5b01603bbfde7e798fc129f38490690f397ef7f7fe077",
+    "production/hand-solder.json": "c33c6c755d7f66d0876b29c1a5400945b87c40ce8e5ea8470ad7d1f552f22a01"
+  },
+  "production_payload": {
+    "base_commit": "ab9fd44e759db7ab389169605b64d7f9876b6903",
+    "commit": "4384e9cec531b8a56ffa921c44883365403e113e",
+    "path_count": 103,
+    "path_sha256_map_digest": "33f6d78319f95bdbee42059bc66e01b2511d8e34326461f05c03ac3356c50ddb",
+    "original_inventory_sha256": "2731ab06976c234ba87932e21136ff36bc6e0f688014af145779ba3ada0fc9e0",
+    "original_manifest_sha256": "12647c87c310d7c68220e41124aa5636a297c81b32436c7a707df7f53850075d"
+  },
+  "prior_1.3.12": "Copper/connectivity/fabrication PASS; assembly HOLD for mouth-based J5 CPL datum (historical, not the current targeted review status).",
+  "review_summary": {
+    "remaining_targeted_defects": 0,
+    "resolved_findings": 4,
+    "J5": "Archived HRO TYPE-C-31-M-12/C165948 nominal shell supports CPL (4.035,130.810) mm / 270 deg / top; mouth datum rejected; fixed pads/holes/anchor preserved; signed XY offsets nonrotating/nonmirroring; malformed/conflicting values rejected.",
+    "bypass_caps": "C50/C51/C52 C1525 100 nF on U2/U3/U4 pin 8 +3.3 V; supply traces 2.582/1.888/1.625 mm; GND returns 0.40/0.72/0.80 mm; C14/C15/C20 remain +2.5 V.",
+    "hand_solder": "VBUS_PROT/stereo footprint/28-26-2 coverage notes correct; assembly exclusions unchanged.",
+    "J23": "LINE MONO / OPEN=STEREO legend truthful.",
+    "drc": {
+      "errors": 0,
+      "unconnected_items": 0,
+      "schematic_parity": 0,
+      "warnings": {
+        "lib_footprint_mismatch": 70
+      }
+    },
+    "erc": {
+      "error": 7,
+      "warning": 4,
+      "identity_delta": 0
+    },
+    "rules": "Project/rules unchanged; 70 justified visible library-copy warnings; five inherited ignored checks; zero DRC exclusions; no new suppression.",
+    "preserved": {
+      "old_schematic_pin_memberships": 523,
+      "old_pad_anchor_sets": 157,
+      "old_copper_items": 1109,
+      "mounting_holes": 28,
+      "outline": true
+    },
+    "inventory": {
+      "physical": 160,
+      "SMD": 115,
+      "JLC_BOM_rows": 35,
+      "hand_solder": 44,
+      "DNP": [
+        "J23"
+      ]
+    },
+    "exporter_tests": 37,
+    "datum_tests": 6,
+    "test_skips": 0,
+    "bounded_and_release_verify_only": "PASS",
+    "binary_backup_roundtrip_paths": 103
+  },
+  "original_checkout_integration": {
+    "chat_id": "01a30ffc-da97-436a-bf94-b3e5d8c18215",
+    "worker": "Sol Max",
+    "checkout": "/home/azero/data/projects/bread-modular",
+    "branch": "base-improvements",
+    "method": "Guarded git merge --ff-only of the exact source_commit; hooks disabled to prevent unrelated side effects.",
+    "verified_immediately_after_merge": {
+      "candidate_content_paths": 103,
+      "manifest_files": 113,
+      "repository_tool_hashes": 3,
+      "all_source_export_hashes": true,
+      "all_preexisting_files_preserved": true
+    },
+    "local_checks_before_metadata_publication": {
+      "regenerate_production_verify_only": "PASS (fresh DRC/parity/ERC identity, power, stack, bounded geometry and all published hashes)",
+      "exporter_tests": 37,
+      "datum_tests": 6,
+      "test_skips": 0
+    },
+    "candidate_workspace_265_unchanged": true,
+    "workspace_261_not_touched": true
+  },
+  "real_world_holds": {
+    "JLCPCB_placement_preview_polarity_library_mapping": "UNPERFORMED",
+    "bench_reset_startup_load_audio_headphone": "UNPERFORMED",
+    "physical_mating": "UNPERFORMED",
+    "current_stock_prices": "UNPERFORMED",
+    "order_authorization": "NOT_GRANTED"
+  }
+}

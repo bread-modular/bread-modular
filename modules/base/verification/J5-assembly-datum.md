@@ -64,9 +64,12 @@ JLCPCB defines Mid X/Y as the component centroid. [source](https://jlcpcb.com/he
 ## Review / release hold
 
 Astra's prior **1.3.12** review passed copper/connectivity/fabrication and held
-assembly for J5's mouth-based placement. This candidate addresses that datum in
-software using the evidence above; **targeted Astra confirmation of 1.3.13 is
-pending**. No advisor or other model was invoked for this improvement pass.
+assembly for J5's mouth-based placement (historical HOLD). **Targeted Astra Max
+1.3.13 software/layout/export confirmation is complete: PASS**, including the
+nominal shell datum and corrected CPL, in chat
+`fa1ba1b6-d28a-4178-bb09-cf6a42d01a68`. `astra-confirmation.json` records
+the user-supplied completed review and exact reviewed source/export identities.
+No advisor or other model was invoked during this integration.
 The **JLCPCB library/portal placement preview has genuinely NOT been performed**.
 That remains a separate hold: validate shell/contact registration, orientation,
 pin mapping and any portal-specific correction before authorizing assembly.
