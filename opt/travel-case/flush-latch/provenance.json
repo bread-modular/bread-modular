@@ -1,0 +1,69 @@
+{
+  "release_url": "https://github.com/bread-modular/bread-modular/releases/tag/case_1.0.0",
+  "release_commit": "4bf18d99c3bf07a0d0a7c33ffb2b1b0f9e1d4337",
+  "release_assets": [
+    {
+      "name": "bm_case_bottom_1.0.0.stl",
+      "size": 644184,
+      "digest": "sha256:9b54e84fa84387984ac3beb4655cf139c6941f3c05d1e52d41358828d4c607b3",
+      "browser_download_url": "https://github.com/bread-modular/bread-modular/releases/download/case_1.0.0/bm_case_bottom_1.0.0.stl"
+    },
+    {
+      "name": "bm_case_top_1.0.0.stl",
+      "size": 563584,
+      "digest": "sha256:61a508e86d91a2fc7d8b43a006bd4d7f8b676c8fd83ab89cb2c56ee5cb6eb609",
+      "browser_download_url": "https://github.com/bread-modular/bread-modular/releases/download/case_1.0.0/bm_case_top_1.0.0.stl"
+    },
+    {
+      "name": "breadmodular-case-1.0.0.f3z",
+      "size": 15526920,
+      "digest": "sha256:f9c1daa038b2a73d891daa4cbb9b789b00389e58ce3e191e65417187f31e56fe",
+      "browser_download_url": "https://github.com/bread-modular/bread-modular/releases/download/case_1.0.0/breadmodular-case-1.0.0.f3z"
+    }
+  ],
+  "native_source": "F3Z containing three F3D archives with SMB/SMBH; preserved, inventoried, not natively translated.",
+  "source_reuse": "Authorized concept handoff cached pristine STL conversions from workspace264; original asset bytes independently hash-checked. Frozen faceted reference shells + editable analytic local closure/repair geometry; not Fusion history.",
+  "license": "MIT; Copyright (c) 2024 Arunoda Susiripala; original/case_1.0.0/LICENSE",
+  "tooling": {
+    "FreeCAD": [
+      "1",
+      "1",
+      "4",
+      "20260928 (Git shallow)",
+      "Unknown",
+      "2026/09/28 13:46:34",
+      "(HEAD detached at 4fd3bf320)",
+      "4fd3bf320d9566a27e60069fc8387448aaa3a094"
+    ],
+    "OCC": "7.8.1",
+    "appimage_url": "https://github.com/FreeCAD/FreeCAD/releases/download/1.1.4/FreeCAD_1.1.4-Linux-x86_64-py311.AppImage",
+    "appimage_sha256": "f6dc6ba676e5ac96a565ebc8d657232f94c6158e85b4352141bd1a46f6b43434",
+    "extracted_appdir": "/tmp/astra-freecad-262/squashfs-root",
+    "python": "/tmp/astra-freecad-262/squashfs-root/usr/bin/python",
+    "freecad_library": "/tmp/astra-freecad-262/squashfs-root/usr/lib",
+    "blender": "/usr/bin/blender"
+  },
+  "printer_primary_source": {
+    "url": "https://bambulab.com/en-us/p2s/specs",
+    "build_volume_mm": [
+      256,
+      256,
+      256
+    ],
+    "included_nozzle_mm": 0.4,
+    "checked": "2026-10-01"
+  },
+  "scope": "Original-size flush latch final assembly; no rejected closure geometry copied",
+  "handoff_source": "workspace264 opt/travel-case/flush-latch and original/case_1.0.0 ONLY",
+  "source_transform_mm": {
+    "X": "releaseX-20.68",
+    "Y": "-releaseZ-7.98",
+    "Z": "releaseY+15"
+  },
+  "repair_lessons": "Read-only prior lessons; overlapping 6.32 mm magnet patches and localized 0.5 mm cosmetic recess suppression. No prior closure code or geometry imported.",
+  "physical_print_or_slicer_tests": false,
+  "strength_fatigue_load_tests": false,
+  "status": "Computational geometry delivery; see reports/validation.json; coupon required",
+  "printer_primary_source_rechecked": "https://bambulab.com/en-us/p2s/specs (256 mm cube / included 0.4 mm nozzle)",
+  "build_failure_policy": "set -euo pipefail; build && validate; no optional cutaway/STEP in mandatory build"
+}
