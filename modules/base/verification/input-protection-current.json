@@ -1,0 +1,44 @@
+{
+  "result": "PASS",
+  "release": "1.3.13",
+  "source_sha256": {
+    "base.kicad_pcb": "dae64cad273575d4709ee02587e594065267a2a7ad567d833ef9f52a0bb562d0",
+    "base.kicad_sch": "672d7c896413578cf9a2b8afd7ecc9e3eb631a03e0b3a65efae2f4676fe817ab",
+    "slot.kicad_sch": "76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1",
+    "base.kicad_pro": "0d16b3f17e34bcda4b8d45860c69665f8b6db5a991470dc710e6dd95c1876101",
+    "base.kicad_dru": "f5d445bb5bf8f4b3351b9d46e235b397d9759dffa9469b3c83eb7c0deca0646f"
+  },
+  "historical_exact_delta_verifier_rerun": {
+    "result": "PASS",
+    "added_components": [
+      "R58",
+      "R59"
+    ],
+    "pin_net_assignments_checked": 523,
+    "existing_component_metadata_unchanged": 162,
+    "erc": {
+      "error": 7,
+      "warning": 4
+    },
+    "erc_delta": 0,
+    "max_input_current_mA_at_3V3_and_minus_1pct": 0.3333333333333333,
+    "estimated_stereo_low_frequency_change_dB": -0.1293208449846343,
+    "routing_reviewed": false,
+    "limitation": "Current limiting only; not powered-off isolation or bench verification"
+  },
+  "historical_verifier_after": "exact imported 1.3.12 improvements-before.xml; not mislabelled as final full XML",
+  "current_proof": {
+    "live_bounded_verifier": "verify_bounded_improvements.py",
+    "old_schematic_pin_memberships_unchanged": 523,
+    "only_new_pins": 6,
+    "deliberate_metadata_delta": "J5 position X/Y offsets only",
+    "old_existing_input_routes_unchanged": true,
+    "current_full_topology_verifier": "verify_power.py",
+    "current_unrouted": 0,
+    "current_parity": 0,
+    "ERC_identity_delta": 0
+  },
+  "bench_proof": false,
+  "powered_off_isolation": false,
+  "limitation": "Current limiting only; not powered-off isolation or bench verification"
+}

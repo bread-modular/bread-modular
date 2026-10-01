@@ -1,4 +1,771 @@
+## 1.3.13 — bounded post-review improvement candidate (2026-10-01)
+
+- Imported and hash-verified the complete 79-path 1.3.12 candidate binary patch
+  against ab9fd44 in isolated workspace 265; initial --verify-only PASS.
+- Prior Astra 1.3.12 copper/connectivity/fabrication PASS; assembly HOLD J5.
+  Current targeted confirmation pending; no advisors/other models invoked.
+- J5 C165948 HRO drawing: nominal 8.94 x 7.35 mm shell body centre, not pad
+  average. Assembly-only native XY deltas +3.675/0 mm in exported X-right/Y-up
+  board frame; CPL 4.035/130.810 mm, unchanged 270 deg top. Matching schematic/
+  PCB fields, F.Fab-only body art, independent expected-datum verification and
+  finite/conflict/overflow handling/tests. All physical pads/drills/anchor fixed.
+  Portal/library placement preview remains genuinely unperformed.
+- Added ONLY C50-C52, exact sourced C1525 100nF/0402, +3.3V-to-GND near U2/U3/U4
+  pin8 with short GND via returns. C14/C15/C20 stay on +2.5V bias. Not a proven
+  oscillation fix or bench claim. All 523 old pin memberships and 164 old
+  component metadata preserved except two J5 fields; only six new supply pins.
+- Corrected hand-solder VBUS_PROT selector/jack/coverage notes; no exclusions
+  changed. Truthful J23 LINE MONO / OPEN=STEREO silk, no headphone-mono promise.
+- Actual final counts 160 physical / 115 SMD / 35 BOM rows / 44 hand-solder / DNP
+  J23. 0 DRC errors/opens/parity, 70 unsuppressed library-copy warnings, existing
+  7 ERC errors +4 warnings unchanged by identity. 37 exporter tests +6 independent
+  datum mutation tests PASS; stack/power/protection/library checks PASS.
+- All 157 old pad/anchor sets, all 1109 old copper items, outline/28 holes and
+  stack assumptions retained. Synchronized final exports/renders/hashes and
+  complete path inventory/binary backup for one authorized workspace-only commit.
+  Original POWER history retained; no merge/push/order. Review/bench/mating/
+  placement-preview and current quote/stock holds remain explicit.
+
 # Changelog
+
+## 1.3.12 — PCB finalization and verified manufacturing candidate (NOT order authorization)
+
+* Synchronized/routed the saved PCB to the unchanged latest root + hierarchical
+  slot schematics, including all 1.3.11 changes. The actual branch VERSION was
+  stale at 1.3.10 although CHANGELOG already contained 1.3.11; VERSION and board
+  silkscreen now identify manufacturing candidate 1.3.12.
+* U6–U17 now use real SOT-583-8 TPS2116 land patterns. Removed all twelve ILIM
+  resistors/copper; MODE and J7–J18 pin 1 are VBUS_PROT. Rail headers retain
+  approved coordinates and logic-only leaves. Local output decouplers moved
+  closer, broad row trunks retained, slot 6/12 feeds locally detoured.
+* Added/routed approved U18/J23/R55/C48 mono selector (J23 DNP, stereo default),
+  R57 100-ohm return and R58/R59 10k protected inputs. Withdrew PCB remnants
+  J20/J21/J22/R53/R54 and gain/ILIM ghost nets. No U19/J24/R56/C49 reinstatement.
+* U2/U3/U4 plain SOIC-8, no fictitious exposed/paste pads; U3 TS922IDT. External
+  SOIC pads and all other fixed hardware/mechanical geometry preserved. Copied
+  actual native symbol supplier fields/flags/Datasheet/Description to the PCB.
+* Actual saved-board KiCad CLI 10.0.6 DRC: zero errors/opens/parity, 67 visible
+  library-copy warnings; ERC remains 7 errors + 4 warnings, unchanged. Strong
+  full pad/net/metadata checks replace every PCB_PENDING exemption.
+* Frozen final hashes only after DRC/parity and separate input mechanical proof:
+  114 preserved footprint/pad sets, 28 mounting holes, 223.52 × 160.02 mm outline.
+  Drill/place origin set to the lower-left corner. No DRC minima/severities or
+  source circuit/project rules weakened.
+* Regenerated Gerber + PTH/NPTH ZIP and all published copies. JLCPCB BOM/CPL:
+  112 populated SMD refs in 35 rows; 44 builder THT refs and DNP J23 excluded.
+  Physical inventory counts all 157 footprints, including DNP. All 435 PTH and
+  2 NPTH drill/slot features independently checked against PCB geometry.
+* Exporter repaired for KiCad 10 excluded-from-BOM metadata via native XML;
+  private CLI copies prevent source PRL/cache rewrites. Full 31-test unit/real
+  integration suite, library checks and protection/stack/geometry checks pass.
+* Aspect-correct front/back/critical-region renders and independent actual-ZIP
+  Gerber/drill views; preliminary stretched audio render replaced without any
+  mechanical change. Historical pricing explicitly stale, no live stock research.
+* Software-checked candidate only: independent Astra review, bench reset/startup/
+  load/audio checks, physical mating and JLCPCB placement preview unperformed.
+  No advisor invocation, order, commit, push or merge. No per-slot ILIM and
+  residual input-backfeed/surge limitations remain accepted/documented.
+
+**Historical entries below are chronology, not current order-file instructions.
+Use production/manifest.json and RELEASE_STATUS.md for the current candidate.**
+
+
+## 1.3.11 — modest input-injection protection for U18/U2 (schematic only, PCB pending)
+
+* Added only **R58/R59 = 10 kΩ, 1%, 0402** (`C25744`, UNI-ROYAL
+  `0402WGF1002TCE`) in series with the two external signal inputs. `IN_L` and `IN_R`
+  remain the raw socket/simulation-source nets; `IN_L_PROT` and `IN_R_PROT` feed the
+  existing bias resistors, U2 buffers and line-input/mono-selector circuitry.
+* Protecting just U18's NC1 branch would leave a parallel backfeed path through
+  `U2.5`. Putting the resistors before the branches limits both paths, and does the
+  same for the left input. U18, J23, R55, C48, the gains and all supply nets are
+  otherwise unchanged. No extra clamps, replacement IC or supply redesign.
+* Bread Modular signals are **0–3.3 V**, including modules powered from a 5 V slot:
+  those modules use a local regulator. The relevant fault is a still-driven signal
+  while the base 3.3 V rail is off, not normal 5 V audio.
+* At a 3.3 V input, even ignoring the internal clamp's voltage drop, each 10 kΩ
+  resistor limits injection to **0.33 mA nominal / 0.334 mA at −1% tolerance**.
+  Added low-frequency attenuation is approximately **0.13 dB** with the existing
+  2 MΩ bias / 1 MΩ line-input load. See `POWER.md` §11 for assumptions and limits.
+* This is **current limiting, not powered-off isolation**: a small residual
+  backfeed can remain. Do not treat it as guaranteed rail discharge, reset timing,
+  arbitrary-voltage fault protection or an ESD qualification.
+* PCB/routing and production files are deliberately untouched. R58/R59 must be
+  carried into the later schematic-to-PCB update. Verification is documented in
+  `verification/README.md` under "Input-injection protection".
+
+## 1.3.10 — loud-gain option **withdrawn**, `INPUT1` return pins grounded, `U3` is a real `TS922IDT` (schematic only, PCB pending)
+
+**Three owner decisions taken after the three-model schematic review.** Only `base.kicad_sch`
+and the project symbol library changed; `base.kicad_pcb` and every `production/` payload are
+untouched (the board is still the pinned earlier revision, so all three items land in Phase 2).
+
+**1. `INPUT1` pins 3/4/5 — the auxiliary socket's return — are tied to `GND` through a new
+`R57` = 100 Ω 0402.** The review found the net `Net-(INPUT1-Pin_3)` floating: three nodes
+(`INPUT1.3`, `.4`, `.5`) tied only to each other and to nothing else. `INPUT1` is the copy/tap
+socket (`PZ254-1-05-Z-8.5`, `C2894928`; pin 1 = `IN_L`, pin 2 = `IN_R`), so pins 3/4/5 are the
+return that the tapped source needs; the owner asked for it to be grounded **through a
+resistor** rather than hard-tied.
+
+* **Part.** `R57` = `100`, `Resistor_SMD:R_0402_1005Metric`, `C25076` / `0402WGF1000TCE`
+  (UNI-ROYAL, 100 Ω ±1 %, 62.5 mW, 50 V) — deliberately the **same part `R26` already uses**,
+  so it adds no new BOM line and needs no new sourcing: 761 000 in stock, JLCPCB part
+  `C25076` (2026-09-18). `Value`/`MPN`/`Manufacturer`/`LCSC` are filled in as on every other
+  sourced part, the footprint is the project's 0402 land, and `Datasheet` is left empty exactly
+  as on all 30 other `Device:R` instances in this sheet (a `~`/URL there would only add another
+  schematic↔PCB `Datasheet` parity value class in KiCad 10 — see `production/EXPORT_BLOCKER.md`
+  §2); the part is identified by `LCSC`/`MPN`/`Manufacturer`. Its purpose is documented in the
+  schematic note next to it and in POWER.md §10.1.
+* **Value, with numbers.** The return only carries the tapped signal's own current, and the
+  base presents **667 kΩ** per channel (`R24`/`R5` 2 M ∥ `R17`/`R16` 1 M), so at a full-scale
+  ±5 V on both channels the return current is 2 × 7.5 µA = **15 µA** and the potential the
+  return sits above `GND` is 15 µA × 100 Ω = **1.5 mV = −70 dB** relative to full scale
+  (20·log10(1.5 mV / 5 V) = −70.5 dB): inaudible, and 7 orders of magnitude below the
+  62.5 mW / 25 mA continuous rating of the part (steady-state dissipation 0.23 nW).
+  What the resistance buys: a fault or ESD strike into the return is limited to 5 V / 100 Ω =
+  **50 mA** instead of whatever the source can deliver into a hard tie, and if two
+  mains-powered devices are patched together with, say, 1 V of ground-potential difference the
+  loop current is **10 mA** instead of the (unbounded) earth-loop current of a 0 Ω tie.
+* **A hard 0 Ω tie was considered first.** It is *marginally* better as a signal reference —
+  it removes the 1.5 mV — but it gives up all of that current limiting, and the owner asked for
+  a resistor; 100 Ω keeps the reference error at −70 dB while bounding fault and ground-loop
+  current. If a hard tie is ever preferred it is a one-part change (a 0 Ω 0402 keeps it a
+  real part), not a re-route.
+* **Netlist proof.** `Net-(INPUT1-Pin_3)` = {`INPUT1.3`, `INPUT1.4`, `INPUT1.5`}
+  becomes {`INPUT1.3`, `INPUT1.4`, `INPUT1.5`, `R57.1`} with `R57.2` on `GND` and **nothing else**
+  joining either net; **no** ERC finding is added or removed by it.
+
+**2. The loud-gain option is withdrawn — "let's remove the loud gain jumper for now; if it's
+still low, we can increase it in the next batch".** `R53`, `R54`, `R56`, `C49`, `J24` and
+`U19` are **deleted** from the schematic, together with every net that existed only for them
+(`GAIN_SEL`, the 1.3.7 `LFB_B`/`RFB_B` labels at the selector, the two `no_connect`s on
+`U19.2`/`U19.4`, the `#7db Loud Toggle.` note and six now-orphaned `+5V`/`GND` power symbols).
+
+* **Why it was withdrawn.** In the loud state the amplifier's inverting node sits behind
+  **1.68 MΩ** (`R19` 680 k + `R53` 1 M, or `R18` + `R54`) with an `TS5A23157` analog switch in
+  that path, which produces two independent defects:
+  * **DC offset from leakage.** Every leakage current at that node — the switch's off-state
+    leakage (orders of magnitude larger than the amplifier's own ±20 pA input bias current),
+    PCB leakage and, at temperature, everything in between — flows through the *whole*
+    1.68 MΩ and appears at the output as `I_leak × Rf`: 10 nA of node leakage is **17 mV** of
+    output offset, and leakage roughly doubles every 10 °C, so the offset is neither small nor
+    stable. (For scale: the amplifier's own 20 pA would be 34 nV in the same resistance — the
+    switch dominates by five orders of magnitude.)
+  * **HF tilt.** The same 1.68 MΩ against the amplifier + switch + stray capacitance (a few pF)
+    puts a pole at f = 1/(2π·1.68 MΩ·C): ≈**19 kHz** for 5 pF, ≈23 kHz for 4 pF — i.e.
+    **≈2.4 to 3.3 dB of loss at 20 kHz**, a real treble tilt in the one state the option exists
+    for. The review recorded ≈−2.4 dB by 20 kHz.
+* **How it may come back.** Either **scale the network ~10× down** — `Rin` 100 k, `Rf` 68 k
+  default / **168 k** loud, which keeps exactly the 0.68 and 1.68 ratios but moves the loud node
+  to 168 kΩ: the leakage-induced offset drops **10×** and the pole (same stray capacitance)
+  moves to **≈190–250 kHz**, so both defects vanish — or **put the switch on the low-impedance
+  input leg** (a series element in the 100 k input resistor), where the same argument gives the
+  same result. Both are PCB changes as well, so they belong to a later batch.
+* **Plain inverting topology restored.** The 1.3.7 node re-wiring is undone cleanly: the
+  inverting inputs move back onto the summing nodes, so **`U4.2` goes from `LFB_B` to `LFB_A`**
+  and **`U4.6` from `RFB_B` to `RFB_A`**, and the two series 1 M resistors disappear with the
+  switch that shunted them. `LFB_A` = {`R19.2`, `R17.1`, `U4.2`} and `RFB_A` =
+  {`R18.2`, `R16.1`, `U4.6`}: the summing node carries only the 680 k feedback and the 1 M input
+  resistor, exactly as in 1.3.6. `LFB_B`/`RFB_B` no longer exist as nets at all.
+* **Gain, in the only remaining state: `Rf`/`Rin` = 680 k / 1 M = 0.68 = −3.35 dB**, with no
+  switch, no series element and no 1.68 MΩ node anywhere in the feedback path — the number the
+  shipped 1.3.6 build already had.
+* **The mono selector is untouched.** `J23`, `U18`, `R55` (the 100 k `MONO_SEL` pulldown, i.e.
+  the fail-safe that keeps a *lost* shunt in stereo) and `C48` stay exactly as they are:
+  shunt absent/lost = stereo, shunt fitted = mono, `IN_R` discarded, the right line amplifier
+  fed from `BUFF_IN_L`. `MONO_SEL`, `RIN_SEL`, `IN_R` and `BUFF_IN_L` are byte-identical in the
+  netlist. (The task's part list also named `R55`/`C48` for deletion; that would have removed
+  the mono jumper's fail-safe pulldown and its decoupling, contradicting "keep `J23`/`U18`
+  exactly as it is", so only the loud-gain parts were removed — flagged here deliberately.)
+
+**3. `U3` (headphone driver) now has a symbol that says what the part is.** The 1.3.9-era swap
+had put `TS922IDT` metadata on an `Amplifier_Operational:MCP6002-xSN` symbol, so the schematic
+still read `MCP6002`, and all three op-amps sat on a **`SOIC-8-1EP` footprint with an exposed
+pad** the real parts do not have.
+
+* **New project-local symbol `BreadModular_Analog:TS922IDT`** (new file
+  `BreadModular_Analog.kicad_sym`, one line in `sym-lib-table`), used by **all three `U3` units**
+  (A/B/power). Geometry and pin numbering are the MCP6002's SO-8 pin-out, which is also the
+  TS922's (1 = OUT1, 2 = IN1−, 3 = IN1+, 4 = V−, 5 = IN2+, 6 = IN2−, 7 = OUT2, 8 = V+), so the
+  netlist is unchanged by the swap. `Value`, `MPN`, `Datasheet` (ST `ts922.pdf`), `Description`
+  and the symbol id/name all read `TS922IDT` now; `LCSC` stays `C93687` and the part is still
+  stocked — **54 286 in stock**, from $0.2101 @1+ (LCSC, 2026-09-18).
+* **Footprint fixed on the same defect class.** `U3` moves to
+  `Package_SO:SOIC-8_3.9x4.9mm_P1.27mm`. `U2` and `U4` suffered **exactly the same stale EP
+  footprint** (`SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm`), so they were moved to the plain SO-8
+  as well — a footprint-metadata correction with no behavioural change, applied to all nine
+  `U2`/`U3`/`U4` units.
+* **Schematic-side only.** The three footprints (and the twelve slot muxes, and the rest of the
+  1.3.6-1.3.9 work) still have to be applied to `base.kicad_pcb` in Phase 2.
+
+* **Schematic-only.** The change lives in `base.kicad_sch` plus the new project-local library
+  file (`BreadModular_Analog.kicad_sym`) and its one `sym-lib-table` line. `base.kicad_pcb` is
+  byte-identical and `production/*` is still the **v1.3.2** payload. Component count:
+  160 → 155 refs (six deleted, one added).
+* **Reproduce/verify:** `kicad-cli sch erc` (from `modules/base`) reports **11 findings
+  (7 errors + 4 warnings) before and after, identical by identity** (severity + type + sheet +
+  affected items — none added, none removed), and `kicad-cli sch export netlist --format
+  kicadsexpr` differs from the 1.3.9 netlist by exactly: `C49`/`J24`/`R53`/`R54`/`R56`/`U19`
+  out, `R57` in; `U2`/`U3`/`U4` footprint → `Package_SO:SOIC-8_3.9x4.9mm_P1.27mm`;
+  `U3` libsource → (`BreadModular_Analog`, `TS922IDT`); `R17.1`/`U4.2` `LFB_B`→`LFB_A`
+  and `R16.1`/`U4.6` `RFB_B`→`RFB_A` (the four nets become `{R19.2, R17.1, U4.2}` and
+  `{R18.2, R16.1, U4.6}`); `INPUT1.3/4/5` gain `R57.1`; and `GND` gains `R57.2` while losing
+  `R56.2` (nothing else on any net moves — all twelve `VSLOT_n`/`SEL_n`/`MODE` nets, the mono
+  selector nets and every other component are untouched).
+* **guard note:** `tools/verify_power.py` still stops earlier on this branch (pre-existing
+  `'ERC setup changed'`, see §1a) — its `PCB_PENDING` block and the hash pins in
+  `verification/fixed-geometry.json` predate 1.3.10 and must be re-baselined in Phase 2, in one
+  reviewed commit, together with the board work below.
+* **Phase 2 (PCB) to-do after 1.3.10 — the list is shorter than after 1.3.7, not longer:**
+  1. **No loud-gain parts at all**: there is nothing to place for `R53`/`R54`/`R56`/`C49`/`J24`/
+     `U19`, and nothing to delete for `J20`/`J21`/`J22` beyond what 1.3.6/1.3.7 already left
+     (the board's `R53`/`R54` footprints and their copper go away with this step).
+  2. **`R57`** (100 Ω 0402) is a new SMD placement at the `INPUT1` return, to be placed and
+     routed with one stub to the `INPUT1` pin-3/4/5 tie.
+  3. **`J23`/`U18`/`R55`/`C48`** (mono selector) — the 1.3.7 Phase-2 work, unchanged.
+  4. **`U2`/`U3`/`U4` footprints** → plain `SOIC-8_3.9x4.9mm_P1.27mm` (the exposed pad and its
+     copper must come out with them).
+  5. The earlier power items: the twelve `U6…U17` → `SOT-583-8` swap, `R28/R30/…/R50` deletion,
+     the twelve `J7…J18` pin-1 nets from `+3.3V` to `VBUS_PROT`, the `MODE`/`PR1` bench proof of
+     POWER.md §1a, then `kicad-cli pcb drc --schematic-parity`, `verify_power.py` (drop the
+     `PCB_PENDING` block), `verify_stack_height.py` and `regenerate_production.py`.
+
+## 1.3.9 — per-slot mux select re-referenced from +3.3 V to VBUS_PROT (schematic only, PCB pending)
+
+**Resolves the 1.3.8 release blocker in the schematic.** The per-slot 2:1 muxes stay
+`TPS2116DRLR` (`C3235557`); what changes is the rail the select hangs off.
+
+**What the blocker was (v1.3.8, as drawn).** `MODE` was tied to `VIN2 = +3.3 V` and `PR1` was
+fed from the *same* rail through the `J(n+6)` shunt (pin 1 = `+3.3 V`). `SW1` gates `U5.EN`,
+so every reset press removed `+3.3 V` while `5V_SYS` (from `VBUS_PROT` through `F2`, *not*
+from the LDO) stayed up. Both control pins then fell with the rail — `MODE` through
+`VIL,MODE = 0.35 V` with `PR1` already below `VREF ≈ 1 V` — and the part entered *diode mode*:
+quoting the datasheet, **"When the PR1 pin is pulled low, the higher voltage supply between
+VIN1 and VIN2 is passed to the output"**. A slot the user had jumpered for 3.3 V was therefore
+fed **`5V_SYS` on every reset press, with the shunt fitted or absent**. The `TPS2111A` it
+replaced selected the channel purely by logic and never did that.
+
+**What changed.** `MODE` and the `J(n+6)` pin-1 select reference moved from `+3.3 V` to
+`VBUS_PROT` (the always-on protected 5 V upstream of `F2`, so it survives both a reset press
+and an `F2` trip). `VIN2` stays on `+3.3 V`; the jumper, the 100 kΩ `PR1` pulldown and every
+`SEL_n` / `VSLOT_n` net name are unchanged. No series or divider resistor is required or
+added. Datasheet basis — TI **SLVSFG1A** (*TPS2116*, rev. May 2021): §5 Table 5-1 (`MODE`
+"pulled up to an external voltage" = manual mode) and §7.6.1.2 ("the GPIO pin can be directly
+connected to the PR1 pin when MODE is tied high (≥ 1 V)"); §6.5 (`VIH,MODE = 1…5.5 V`,
+`VIL,MODE = 0…0.35 V`, `VREF = 0.92/1/1.08 V`); §6.3 (`VST, VMODE, VPR1 = 0…5.5 V`,
+**independent of VINx**) and §6.1 (`−0.3…6 V` absolute maximum) — a ~5 V `VBUS_PROT` is
+inside the recommended range, so biasing `MODE`/`PR1` from it is legal as a direct tie.
+
+**New truth table, in one line each** (full table in POWER.md §2). `VIN1 = 5V_SYS`,
+`VIN2 = +3.3 V`, `MODE` = `VBUS_PROT` (≥ 1 V ⇒ manual mode), `PR1` = `SEL_n`:
+
+* normal, shunt absent → `VIN2` = **3.3 V**; normal, shunt fitted → `VIN1` = **5 V**;
+* **RESET pressed** (`+3.3 V` = 0 V): `MODE` stays ≈ 5 V ⇒ manual mode, `PR1` low ⇒
+  **the 3.3 V-jumpered slot goes to 0 V (deselected) and never to `5V_SYS`**; the
+  5 V-jumpered slot still gets 5 V. Same for a 3.3 V-rail-only fault;
+* power-up: the only diode-mode window is `MODE ≤ 0.35 V`, i.e. `VBUS_PROT ≤ 0.35 V`, and
+  since `VIN1` and `VIN2` are both derived from `VBUS_PROT` **both inputs are ≤ 0.35 V** in
+  that window — so the "higher input" it passes can never be 5 V.
+
+**Still not protected — the ILIM gap, explicitly accepted by the owner for now.** The 667 mA
+per-slot current limit is gone (the `TPS2116DRLR` has no `ILIM` pin) and `R28/R30/…/R50` stay
+deleted. A slot overload is bounded only by the **shared** `5V_SYS` PPTC `F2` (1.1 A hold /
+2.2 A trip for all twelve slots), the `U5` LDO limit, soft start, reverse-current blocking and
+the mux's **thermal shutdown (170 °C — an over-temperature trip, not a current limit)** — one
+bad slot can brown out the whole 5 V branch before `F2` trips. The §3.2 surge limitation now
+also covers the `MODE`/`PR1` pins (same 6 V absolute maximum).
+
+* **Schematic-only, and only one file.** The whole change lives in `slot.kicad_sch` — the
+  single template behind all twelve sheet instances, so all twelve slots are fixed by it
+  (`base.kicad_sch` is untouched). `base.kicad_pcb` is byte-identical (`b8df0829…`) and
+  `production/*` is still the **v1.3.2** payload. Phase 2 must additionally **move the twelve
+  `J7…J18` pin-1 nets** from `+3.3V` to `VBUS_PROT` on the board (new PCB-pending item)
+  alongside the 1.3.8 footprint/ILIM work.
+* **Reproduce/verify:** `tools/reroute_mux_select_vbus_prot.py` (deterministic, refuses a
+  second run) re-uses the 1.3.8 harness and proves with `kicad-cli` that the **only** netlist
+  difference is the 12 `MODE` pins and the 12 `J(n+6)` pin-1 pins leaving `+3.3 V` and joining
+  `VBUS_PROT` (every other net — all twelve `SEL_n` and `VSLOT_n` included — and every
+  component identical), that all twelve instances `U6…U17`/`J7…J18` carry it, and that the
+  ERC findings are identical by identity: **11 before / 11 after, none added, none removed**.
+  It writes `verification/mux-select-vbus-prot.json` plus the post-change netlist.
+* **Guard:** `tools/verify_power.py` now expects `MODE` on `VBUS_PROT` and the twelve
+  `J7…J18.1` pads in `moved_jumper_ref_pads`. Note it already aborts earlier on this branch
+  (`'ERC setup changed'`, pre-existing: `verification/fixed-geometry.json` predates the
+  KiCad 10 project format) — reproduced on untouched `e18b038`; see POWER.md §1a.
+
+## 1.3.8 — per-slot mux swapped to TPS2116DRLR (schematic only, PCB pending)
+
+**All twelve per-slot 2:1 power muxes are now `TPS2116DRLR` (LCSC `C3235557`, SOT-583) and the
+twelve 750 Ω ILIM resistors (`R28/R30/…/R50`) are deleted.** Reason: the released
+`TPS2111APWR` (`C471060`) is an *extended* part at **$1.3804 @100 / $2.0267 @1-9 with only
+2 482 in stock**, and every TSSOP-8 sibling of the family is more expensive and worse stocked
+(TPS2110APWR $1.6848/0, TPS2114APWR $1.2714/0, TPS2115APWR $1.7499/206, TPS2113APWR
+$1.5579/2 121, TPS2112PWR $2.0902/199) — i.e. there is no cheap pin-compatible drop-in.
+`TPS2116DRLR` costs **$0.2052 @500-999 with 48 871 in stock** → **≈$13.10/board cheaper**
+(12 × $1.2974 → 12 × $0.2052, ≈$655 on a 50-board batch) and 12 fewer placements.
+
+Jumper polarity and the `VSLOT_n`/`SEL_n` net names are unchanged for **normal operation**:
+`MODE` is tied to `VIN2` (= +3.3 V) which selects manual mode, `PR1 = SEL_n` selects
+`VIN1 = 5V_SYS` when the shunt is fitted, `VIN2 = +3.3 V` when it is absent (100 kΩ pulldown),
+`VOUT` sits on pins 2 and 7, and the `ST` status output is left as a no-connect.
+
+**⚠️ Release blocker — a RESET press drives the slot rail to 5V_SYS in BOTH jumper states
+(POWER.md §1a).** `MODE` needs an external pull-up ≥ 1 V to stay in manual mode, so it is tied to
+`+3.3 V`, and `PR1` is fed from the *same* rail through the jumper shunt. `SW1` gates `U5.EN`:
+every reset press removes `+3.3 V` while `5V_SYS` (from `VBUS_PROT` through `F2`) stays up, so
+both control pins fall with the rail (`MODE` < 0.35 V with `PR1` already below `VREF ≈ 1 V`). The
+part then enters *diode mode* and **"the higher voltage supply between VIN1 and VIN2 is passed to
+the output"** — i.e. **a 3.3 V-jumpered slot is fed 5V_SYS through every reset press, with the
+shunt fitted or absent**. The TPS2111A selected the channel purely by logic and did neither.
+**Do not release this revision as drawn**; the release stays blocked until a datasheet-verified
+control arrangement is chosen and bench-proven (see POWER.md §1a — an RC hold-up is not a remedy,
+because a held button or a slow +3.3 V startup outlasts it).
+
+**Consequence — no programmable ILIM.** The **667 mA per-slot current limit is gone** (the
+TPS2116DRLR has no ILIM pin). What remains is reverse-current blocking, soft start, thermal
+shutdown (170 °C, an over-temperature trip — *not* a current limit), the `5V_SYS` PPTC `F2`
+and the `U5` LDO limit.
+
+* **Schematic-only.** `base.kicad_pcb` is byte-identical to this branch's committed board
+  (`b8df0829…`); `production/*` and every fab payload are still the **v1.3.2** release
+  (`manifest.json` `release_version: "1.3.2"`), which is a different board revision from the
+  `routed_pcb_sha256` pin (`9fc20400…`, already stale on this branch). Phase 2 swaps the
+  twelve footprints, deletes the ILIM resistors, re-routes them and re-exports
+  (`verify_power.py` reports the affected refs/nets as *PCB pending* until then).
+* **Reproduce/verify:** `tools/swap_slot_mux_tps2116.py` (deterministic, refuses a second run)
+  applies the swap and proves with `kicad-cli` that the only netlist difference is the
+  documented pin remap — every other net and component is unchanged — and that the ERC findings
+  are **identical by identity** (severity + type + sheet + affected items: 11 before / 11 after,
+  none added, none removed); it writes `verification/mux-swap-tps2116.json` plus the post-swap
+  netlist.
+* **Guard:** `tools/verify_power.py` now expects the new pin map and the missing ILIM branch,
+  asserts the `ST` pin is the only unconnected one, and prints the explicit *PCB pending*
+  block (24 refs, 12 ghost `Net-(U*-ILIM)` nets, 12 schematic-only `unconnected-(U*-ST-Pad8)`
+  nets) instead of silently skipping them.
+
+## 1.3.7
+
+> ⚠️ **Partly superseded by 1.3.10 — the *gain* half of this entry no longer describes the
+> design.** The loud-gain option (`J24`, `U19`, `R53`, `R54`, `R56`, `C49` and the
+> `GAIN_SEL`/`LFB_B`/`RFB_B` nets) was **withdrawn** in 1.3.10 because it put a 1.68 MΩ node
+> with an analog switch in the feedback path (leakage ⇒ `I_leak × 1.68 M` of DC offset; a
+> ≈19 kHz pole ⇒ treble tilt). Those six parts and their nets do not exist any more: `U4.2`
+> is back on `LFB_A`, `U4.6` on `RFB_A`, and the only gain state is
+> `Rf`/`Rin` = 680 k / 1 M = 0.68 = −3.35 dB. The **mono** half (`J23`, `U18`, `R55`, `C48`)
+> is unchanged and still describes the built circuit. See the 1.3.10 entry.
+
+**The three solder jumpers become real jumpers: two 1x02 2.00 mm header + shunt selectors (the same
+part as the J7...J18 slot rail selectors) drive two TS5A23157DGS dual-SPDT analog switches, and the
+gain selector is re-wired so that cutting the shunt really does put the extra 1 M into the feedback
+path.** `J20`/`J21` (per-channel gain) and `J22` (stereo/mono) are deleted; `U18` (stereo/mono) and
+`U19` (gain, both channels from one select line) do the switching - no audio current flows through a
+header. Shunt absent (or lost) is the fail-safe shipped default: **stereo** and **680 k / -3.35 dB**.
+
+### Phase B - legibility pass (graphical only, netlist byte-identical)
+
+The A2 root sheet was audited with a bounding-box script over `base.kicad_sch`
+(symbol bodies from the library geometry, field text boxes at the real 1.27 mm text
+height, wire/label/junction/no-connect boxes) and then re-laid out. Reproduce with
+`python3 diag.py base.kicad_sch`.
+
+| defect class (whole root sheet) | before | after |
+|---|---|---|
+| coincident symbols (centres < 0.6 mm) | 0 | 0 |
+| symbol body vs body overlap | 1 (`J24` under `J1`) | 0 |
+| symbol sitting on another symbol's wire | 0 | 0 |
+| Reference/Value text collisions | 21 | 0 |
+| field text over other ink (body/wire/label/note/no-connect) | 6 | 3 (see below) |
+| note text collisions | 1 | 0 |
+| pins buried inside another symbol body | 26 | 0 |
+| off-grid items / off-grid pins | 0 / 0 | 0 / 0 |
+| wires not split at a junction (POWER.md 7) | 0 | 0 |
+| duplicated collinear wires | 0 | 0 |
+
+* **Analog input/output + gain/mono area re-laid out.** The two new blocks are now two
+  labelled, spaced functional groups in the empty band (x 238-390 mm, y 272-368 mm):
+  `U18` (mono/stereo, three units, its parked pole tied to GND) + `J23` + `R55` + `C48`,
+  and `U19` (gain, one shared select line) + `J24` + `R56` + `C49`, each with its
+  truth-table note underneath. `J24` no longer sits on top of the `J1` jack symbol.
+* **Every Reference/Value field is horizontal, left-justified, on a consistent 2.1 mm
+  stack above (or below) its body**, then de-collided against bodies, wires, labels,
+  notes and no-connect flags by an iterative settle pass; `fields_autoplaced` is set to
+  `no` for the symbols that were moved. Value/Reference of rotated parts (RV1/RV2,
+  jacks, fuses) now read horizontally as well.
+* **Short wires + net labels instead of long runs**: the select nets (`MONO_SEL`,
+  `GAIN_SEL`) are label-only at both ends, `LFB_A/LFB_B/RFB_A/RFB_B/RIN_SEL/IN_R/
+  BUFF_IN_L` stubs are 1.27-2.54 mm label tails, and every label sits on a real wire
+  end (no stub onto a wire interior).
+* **Guard evidence**: `kicad-cli sch export netlist --format kicadsexpr` before/after -
+  the `(nets ...)` section is byte-identical and the `(components ...)` section differs
+  only in symbol-instance `(tstamps ...)` UUID values (0 connectivity lines);
+  `kicad-cli sch erc` = 11 findings with the same kinds as 1.3.6
+  (4 pin_not_connected, 3 power_pin_not_driven, 4 lib_symbol_mismatch).
+* **Residual (intentional, not fixed)**: `V2`/`V3` and `#FLG203` still print their value
+  over the power symbol they are pinned across (`#PWR030`, `#PWR032`, `#PWR202`). Those
+  symbol pairs are pin-coincident by design (the SPICE source / flag must touch the rail
+  pin), so separating them would change connectivity - left as is.
+
+### Phase A - real jumpers + analog switches, and the 1.3.5/1.3.6 gain numbers corrected
+
+* **Correction to the 1.3.5 and 1.3.6 changelog entries (the record was wrong).** The 1 M resistors
+  `R53`/`R54` were wired between the amplifier's inverting input and the `R17`/`R16` input resistor
+  (`LFB_B = {J20.2, R17.1, R53.2}`), i.e. **in the input leg**, with `J20` shorting them. Bridged (as
+  shipped) gave `Rf = R19 = 680 k`, `Rin = R17 = 1 M` -> **-0.68 = -3.35 dB**; *cut* gave
+  `Rf = 680 k`, `Rin = 1 M + 1 M = 2 M` -> **-0.34 = -9.36 dB, i.e. -6.02 dB quieter than shipped**,
+  not `-(680k+1M)/1M = -1.68`. The "+6.28 dB / +14.14 dB" figures in 1.3.5/1.3.6 are only the deltas
+  of those two *feedback* values against the older 330 k board, and the "cut = 1.68 M loud state"
+  was never reachable in the built circuit. The gain selector now works as intended: see below.
+* **Gain selector (was `J20`+`J21`, now one jumper + one dual switch).** `R19`/`R18` (680 k) stay the
+  always-connected feedback from `U4.1`/`U4.7`; **the inverting input moves**: `U4.2` from `LFB_A`
+  to `LFB_B` and `U4.6` from `RFB_A` to `RFB_B`, so `R53`/`R54` (1 M) now sit **in the feedback leg in
+  series with the 680 k**, and `U19` (dual SPDT, one shared select line `IN1`+`IN2` = `GAIN_SEL`)
+  shorts them in the shipped state. Result: `LFB_A = {R19.2, R53.1, U19.9 (NC1)}`,
+  `LFB_B = {U4.2, R17.1, R53.2, U19.10 (COM1)}` (and `RFB_A`/`RFB_B` the same).
+  Truth table: `J24` shunt **absent/lost** -> `R56` 100 k pulls `GAIN_SEL` low -> `IN` low -> `COM-NC`
+  closed -> `R53`/`R54` shorted -> **`Rf = 680 k, gain -0.68 = -3.35 dB` (shipped default)**;
+  `J24` shunt **fitted** -> `GAIN_SEL` = +3.3 V -> `IN` high -> `COM-NO` (open) -> **`Rf = 680 k +
+  1 M = 1.68 M, gain -1.68 = +4.51 dB, i.e. +7.86 dB louder than shipped**. One jumper moves both
+  channels; the amplifiers stay closed-loop in both states (`Rin = R17`/`R16` = 1 M in both).
+  Switch error budget: at 3.3 V the `TS5A23157` on-resistance is 18 Ohm typ / 23 Ohm max, in series
+  with the 680 k feedback -> 23/680000 = 3.4e-5 = **0.0003 dB**, negligible; the off-channel
+  feedthrough (off-isolation -65 dB at 10 MHz ~ 0.2 pF) is across a 1 M resistor and only tilts the
+  *loud* state above ~800 kHz. Signal range is 0...V+ = 0...3.3 V; the audio sits on the 1.65 V
+  `+2.5V` bias with < +/-0.7 V swing, well inside the range, and the control threshold at 3.3 V is
+  VIH = 0.7 x V+ = 2.31 V / VIL = 0.99 V, so the header can only ever drive it high or low.
+* **Stereo/mono selector (was `J22`, now `J23` + `U18`).** `U18` channel 1: `COM1` = `RIN_SEL`
+  (the `R16` input node), `NC1` = `IN_R`, `NO1` = `BUFF_IN_L`; `IN1` = `MONO_SEL` with the 100 k
+  pulldown `R55`. Truth table: `J23` shunt **absent/lost** -> `MONO_SEL` low -> `COM-NC` -> the right
+  line amplifier is driven by its own `IN_R` -> **stereo (shipped)**; `J23` shunt **fitted** ->
+  `MONO_SEL` = +3.3 V -> `COM-NO` -> the right amplifier is driven by `BUFF_IN_L` at the same level
+  and **`IN_R` is disconnected from the line amplifier entirely** (no summing at any level); the left
+  channel and both headphone channels are unchanged in either position. `U18`'s second pole is tied
+  off (`COM2`/`NO2`/`NC2` = `GND`) with its `IN2` on `MONO_SEL`, so no pin floats; `U19`'s two unused
+  `NO` pins carry no-connect flags.
+* **Jumper idiom** copied from the slot rail selectors `J7...J18`: `PZ200-1-02-Z` 1x02 2.00 mm header
+  (LCSC **C2905948**, live JLCPCB stock 2441, $0.0236) + removable shunt (**C5664**, stock 126394,
+  $0.012) + 100 k select pull-down (**C25741**, 10.99 M stock, JLC basic) + 100 nF decoupling
+  (**C1525**, 29.7 M stock, JLC basic). Pin 1 = +3.3 V, pin 2 = the select net, exactly as on
+  `J7...J18`; shunt fitted = select high = the engaged state. **Switches:** `TS5A23157DGSR`
+  (dual SPDT, MSOP-10/TSSOP-10 0.5 mm, LCSC **C11133**, live JLCPCB stock 4796, $0.332 @100,
+  stock alternatives `C523778` 5728 and `C130086` 966; the single-SPDT `TS5A3157DBVR` `C353034`
+  stock 5655 was rejected only because one dual package covers both gain channels from one select
+  line). Both ICs are placed as a 3-unit symbol from the stock `Analog_Switch` library, with
+  `Value`/`MPN`/`Manufacturer`/`LCSC`/`Datasheet` filled in the schematic and the matching
+  `Package_SO:TSSOP-10_3x3mm_P0.5mm` footprint with the same fields on the PCB.
+* **State of this entry: schematic only.** `base.kicad_sch` carries the change and is ERC-clean
+  (11 findings, identical kinds to 1.3.6: 4 `pin_not_connected`, 3 `power_pin_not_driven`,
+  4 `lib_symbol_mismatch`), and the netlist diff is exactly: `J20`/`J21`/`J22` out,
+  `U18`/`U19`/`J23`/`J24`/`R55`/`R56`/`C48`/`C49` in, `LFB_A`/`RFB_A` lose `U4.2`/`U4.6` and gain the switch's `NC` throws
+  `U19.9`/`U19.7`, `LFB_B`/`RFB_B` gain `U4.2`/`U4.6` plus the `COM` throws `U19.10`/`U19.6`, `RIN_SEL`/`IN_R`/`BUFF_IN_L` move from `J22` to
+  `U18.10`/`U18.9`/`U18.2`, and the new nets `MONO_SEL`/`GAIN_SEL` appear. The PCB phase (deleting
+  `J20`/`J21`/`J22` footprints and their copper, placing and routing the eight new parts on the top
+  side at 234...256 / 48...82, refilling the zones) is **not** done yet, so the board/schematic parity
+  check will report the changes until it lands, and no DRC claim is made for this entry.
+
+### Assembly note - `J23`/`J24` are DNP
+
+* `J23`/`J24` (the two 1x02 2.00 mm selector headers, `C2905948`) carry `(dnp yes)` in
+  `base.kicad_sch`: **JLCPCB must not fit them - the builder solders them locally.** (`J24`
+  went with the loud-gain option in 1.3.10; **only `J23`, the mono selector, is left**.) They keep
+  `in_bom yes` / `on_board yes`, so the footprints and the BOM line stay and only the assembly
+  step is suppressed. Connectivity is untouched: the netlist is identical apart from the two
+  added `dnp` properties, and ERC is unchanged (11 findings, same kinds).
+* The JLCPCB exporter excludes both with the reason `Do not populate`
+  (`opt/kicad-jlcpcb/export.py:194` reads the schematic `${DNP}` field; KiCad 10 writes the
+  literal `DNP`), on top of the through-hole exclusion that already applied to them.
+* The PCB phase of this entry is still pending, so the flag reaches the footprints only when
+  `U18`/`U19`/`J23`/`J24`/`R55`/`R56`/`C48`/`C49` are placed and the PCB is updated from the
+  schematic (F8). `tools/regenerate_production.py` exports the production BOM with
+  `--exclude-dnp`, so its `bomrefs == refs` invariant now needs the same "minus DNP" treatment
+  as the non-placed jumpers (`production/EXPORT_BLOCKER.md`, section 3).
+
+## 1.3.6
+**The line-input normalling is gone and the input stage is back to a pure, symmetric stereo path,
+with a selector jumper as the mono mode.** The passive mono normal that 1.3.4 added (`R52` + the
+`J19` link) is deleted, the two input bias returns are re-derived so that the left and right
+channels are the same circuit, and a 3-pad solder jumper `J22` at the right line amplifier's input
+replaces the old normal as the stereo/mono selector. With no jumper cut or bridged (as shipped)
+each channel is completely independent: **zero** cross-coupling between the left and right signal
+paths, matched loading and matched level, and both input nodes on the 1.65 V `+2.5V` node.
+
+### Phase A - the passive normal is removed, the stereo path is symmetric again
+
+* **`R52` (2 M) and its link `J19` are removed** from the schematic and from the PCB, together with
+  the net `NORM_R`, `J19`'s `IN_L` stub and the whole `BUFF_IN_R` branch that only fed `R52` (F.Cu
+  stub `(233.690, 91.900)-(233.700, 88.500)`, B.Cu trunk `(233.700, 88.500)-(247.600, 88.500)`,
+  B.Cu jog `(247.600, 88.500)-(247.600, 88.265)` and the via at `(233.700, 88.500)`). `BUFF_IN_R`
+  keeps the existing `U2.6`/`U2.7 -> RV1.3` path, so nothing is left dangling.
+* **`R5` 2 M becomes the right channel's DC bias return: its pin 1 moves from `BUFF_IN_L` to the
+  1.65 V node `+2.5V`** (pin 2 stays on `IN_R`); `R24` 2 M keeps its 1.3.4 role and remains the left
+  channel's bias return (`IN_L` -> `+2.5V`). Both channels are therefore identical: the same 2 M
+  return to `+2.5V` at the input node, the same 1 M series resistor into the line amplifier (`R17` /
+  `R16`) and the same 680 k feedback (`R19` / `R18`). Numbers: input impedance
+  `2 M || 1 M = 667 kOhm` on both channels (**0.000 dB** difference), gain `-680k/1M = -0.68 =
+  -3.35 dB` on both (**0.000 dB** difference), and since both nodes sit on the same 1.65 V bias
+  there is no DC current in `R17`/`R16`, so the amplifier outputs sit at 1.65 V. The 1.65 V bias
+  level and the `+2.5V` net name are unchanged; the MCP6002 input bias current (<= 20 pA x 2 M =
+  40 uV worst case) is negligible and both parts stay the already-sourced C11512.
+* **Why 2 M and not the v1.3.2 10 k:** a 2 M return does not load the 500 Ohm bias source (the node
+  sits at the true 1.65 V and no offset is injected through `R17`/`R16`), it does not load the source
+  (input impedance 667 kOhm instead of 9.9 kOhm), it keeps `R24`/`R5` at their existing value and
+  part number, and both channels stay exactly matched.
+* **PCB.** `R5` is not moved; only its pin-1 copper changes. `R5.1` is joined to the `+2.5V` B.Cu
+  rail by one 0.2 mm F.Cu stub, one 0.7/0.3 mm via and two 0.2 mm B.Cu segments
+  (`238.125,85.725 -> 238.25,85.60`; via at `238.25,85.60`; `-> 238.00,86.00 -> 238.00,90.062`, the
+  last one landing on the existing `+2.5V` horizontal at `y = 90.062`). The B.Cu link crosses the
+  `IN_L` trace on the other layer: an all-F.Cu connection is impossible because the `IN_L` trace
+  walls that pocket off (the same conclusion 1.3.4 recorded for the buffered re-tap).
+* **Latent mis-coded return stub corrected.** The existing `(241.929, 64.643)-(240.411, 64.643)`
+  F.Cu segment (R24's `+2.5V` return, which has been on `+2.5V` at both ends since 1.3.4) was still
+  stored with the old net code `1` (`GND`). Editing the PCB net table exposes it, so its one code
+  digit is corrected to `18` (`+2.5V`). No geometry change.
+
+### Phase B - the mono mode is a selector jumper, and it discards the right input
+
+* **`J22` = 3-pad solder jumper** (`Jumper:SolderJumper-3_P1.3mm_Bridged12_Pad1.0x1.5mm`,
+  `Connector_Generic:Conn_01x03` symbol with Value `SolderJumper_3_Bridged12`, `in_bom no`,
+  `Datasheet ""`, no LCSC/MPN - bare copper pads, no part ordered) **sits at the right line
+  amplifier's input.** `R16`'s amplifier-side pin stays on `RFB_B`; its input pin moves off `IN_R`
+  onto the new net **`RIN_SEL` = {`J22.2`, `R16.2`}**, the jumper's centre pad. `J22.1` = `IN_R` and
+  `J22.3` = `BUFF_IN_L`, and the footprint keeps `net_tie_pad_groups "1, 2"` (pads 1-2 are joined by
+  the shipped copper bridge) - exactly the idiom the removed `J19` used.
+  * **As shipped (pads 1-2 bridged) = stereo:** the right line amplifier's input is its own channel
+    input `IN_R`; `BUFF_IN_L` is not connected to it in any way.
+  * **Mono (cut the 1-2 bridge, bridge 2-3):** the right line amplifier's input is driven by
+    `BUFF_IN_L`, the buffered LEFT channel, and the right input is discarded: `IN_R` no longer
+    reaches the right line output at all - its only remaining passive connection is its 2 M bias
+    return `R5`. Nothing is summed and there is no bleed path.
+* **Level: equal loudness in mono, no series resistor needed.** The buffer is a unity-gain follower
+  (`U2A`, output tied to its inverting input: gain 1.0000 = 0.000 dB), and the right amplifier sees
+  the same 1 M input resistor as the left (`R16` = `R17`) into the same 680 k feedback
+  (`R18` = `R19`), so in mono and in stereo alike
+  `V_out = -V_in x 680k/1M = -0.68 = **-3.35 dB**` on the right against **-3.35 dB** on the left:
+  **0.00 dB** L/R difference (the loud state, `J20`/`J21` cut, is `-(680k+1M)/1M = -1.68 =
+  -4.51 dB` on both, also 0.00 dB). The only mismatch left is component tolerance: with 1 % parts
+  the worst case is 0.17 dB. Adding a series resistor would only break the equality, so none is
+  fitted.
+* **DC/bias in both positions.** `RIN_SEL` sits at 1.65 V either way (stereo: `J22.1` = `IN_R`, held
+  at 1.65 V by `R5`; mono: `J22.3` = `BUFF_IN_L` = `IN_L`, held at 1.65 V by `R24`), so switching
+  produces no DC step at the amplifier input and no offset is injected through `R16`; `R16` always
+  sees 0 V across it.
+* **PCB.** `J22` sits in the free area right of the `IN_R` lane at `(250.317, 66.5)`
+  (courtyard 248.017-252.617 / 65.25-67.75, clear of `R16`, `R54`/`J21`, `C18`), pads 1/2/3 at
+  `x = 249.017 / 250.317 / 251.617`, y = 66.5. The old `IN_R` run into `R16.2` is replaced by three
+  F.Cu links: `J22.2 -> R16.2` (`250.317,66.5 -> 250.317,61.468`), `J22.1 -> IN_R`
+  (`249.017,66.5 -> 249.017,74.422`, landing on the `IN_R` horizontal, which is shortened and has
+  its old 45-degree jog to `R16.2` removed so no end dangles) and `J22.3 -> BUFF_IN_L`
+  (`251.617,66.5 -> 252.9,66.5 -> 252.9,84.0 -> 249.936,86.549`, joining the existing `BUFF_IN_L`
+  vertical). All new copper is F.Cu only, so this phase did not re-pour any zone.
+* **3-pin header re-check (FYI, not implemented):** a 3-pin 2.54 mm header needs 1.35 mm plated
+  through-holes on a 7.6 mm courtyard at the only place the selector can sit, where the
+  `R54`/`J21`/`C18` courtyards and the `+3.3V` B.Cu run leave under 5 mm; the solder jumper is used
+  explicitly, the same conclusion 1.3.4/1.3.5 recorded for the 2-pin case.
+
+### Netlist delta (final) and verification
+
+* **Netlist delta.** `NORM_R` = {`R52.1`, `J19.2`} disappears; **`RIN_SEL` = {`J22.2`, `R16.2`}** is
+  added. `+2.5V` gains `R5.1`; `BUFF_IN_L` loses `R5.1` and gains `J22.3` ({`J22.3`, `RV2.3`,
+  `U2.1`, `U2.2`}); `IN_L` loses `J19.1` ({`INPUT1.1`, `R17.2`, `R24.1`, `U2.3`}); `IN_R` becomes
+  {`INPUT1.2`, `J22.1`, `R5.2`, `U2.5`}. Every other net, pin and value is unchanged; the schematic
+  netlist goes 81 -> 80 (Phase A) -> 81 (Phase B) entries.
+* **Verification.** `kicad-cli sch erc` == baseline (11 findings, identical kinds/severities, no new
+  ones). `kicad-cli pcb drc --schematic-parity` == **0 errors, 0 unconnected, 146 parity items**
+  (145 baseline + the new `J22` field comparison, same class), 81 violations = 72
+  `lib_footprint_mismatch` (baseline 73 minus the two removed footprints plus `J22`) + the same 5
+  `silk_overlap` and 4 `silk_over_copper` items as the baseline: no new violation class and no new
+  silkscreen item. The B.Cu GND zone was re-poured once, in Phase A (only 1 of its 49 filled
+  polygons changed - the clearance channel for the new B.Cu link plus the copper regained from the
+  deleted `R52`/`J19` tracks), which accounts for 1503 of the 2057 changed board lines.
+* **Netlist proof, both positions** (passive parts only: resistors, capacitors, pots, jumpers;
+  ICs excluded because their internal path is intentional and per-channel; supply/GND/bias nets
+  blocked): 1.3.5 has `IN_L -J19- NORM_R -R52- BUFF_IN_R` *and* `BUFF_IN_L -R5- IN_R`; after Phase A
+  and in Phase B's stereo position there is **no passive path at all** between the left and right
+  chains; in the mono position the only such path is the intended one,
+  `BUFF_IN_L -J22- RIN_SEL -R16- RFB_B`, with `IN_R` reduced to its 2 M bias return.
+* **Out of scope and proven unchanged** (block-by-block text comparison): `U3`, `R6`/`R7`,
+  `RV1`/`RV2`, `C3`/`C7`/`C8`/`C9`/`C10`/`C11`/`C12`/`C13`, `R8`/`R9`/`R10`/`R12`, `J6` (headphone
+  jack), `J1` (line jack), `C18`/`C19`, `R20`/`R21`, the loud-gain parts `R53`/`R54` + `J20`/`J21`,
+  `R17`/`R18`/`R19`, `U2`/`U4`, `R14`/`R15`, the 1.65 V bias network, the jack footprints and every
+  `gr_*`/Edge.Cuts item are byte-identical. `R5`'s footprint block differs only in its pad-1 net
+  line and `R16`'s only in its pad-2 net line; `R24`'s is identical.
+* **Headphone consequence (explicit).** The headphone stage is fed from `BUFF_IN_L`/`BUFF_IN_R`
+  through `RV2`/`RV1` and `R7`/`R6` into `U3A`/`U3B` - a different node from the line amplifier
+  input - so the selector changes nothing in the headphone block, no headphone component is touched,
+  and mono is confined to the line output. The consequence is that in mono the right input is still
+  audible in the right ear through the headphone output: the headphone path stays stereo in both
+  selector positions.
+* **Still true (unchanged, tracked separately):** the stale production exports / pinned fingerprint
+  issue documented in `production/EXPORT_BLOCKER.md`; `tools/regenerate_production.py` still refuses
+  to re-export because `base.kicad_pcb` does not match the `routed_pcb_sha256` pin in
+  `verification/fixed-geometry.json`. When that pin is re-baselined, `R5`/`R24` collapse into the
+  existing C11512 BOM line and `R52`/`J19`/`J22` (bare copper pads) join the excluded set.
+
+## 1.3.5
+**Line-out loud-gain option (Phase 2 of the line-out/level work, the item 1.3.4 recorded as
+deferred): each channel now carries a series resistor with a shunt solder jumper across it, so
+the line-out feedback can be switched from 680 k to 1.68 M on the bench.** New parts and copper
+plus the matching schematic edit; no existing value, footprint position or routing changes.
+
+* **The two states, per channel.** `J20` (left) / `J21` (right) sit **in the inverting-node track**
+  and are **bridged as shipped** (`Jumper:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm`, the exact
+  footprint of `J19`). Bridged = the shunt is fitted = the node is continuous = feedback stays
+  `R19`/`R18` = **680 k = +6.28 dB vs the 330 k board (unchanged from 1.3.3/1.3.4, this is what
+  ships)**. Cutting the 0.3 mm copper bridge = the shunt is removed = the node is broken and the
+  only path left is through the new series resistor: feedback = 680 k + 1 M = **1.68 M =
+  +14.14 dB vs the 330 k board, i.e. +7.86 dB vs today's default**. Both states are
+  **closed-loop**: the summing node always keeps a DC path to the op-amp output (through
+  `R19`/`R18` alone when bridged, through `R19`+`R53` / `R18`+`R54` when cut), and `R17`/`R16`
+  keep the input path.
+* **New `R53`/`R54` = 1 M (0402).** `0402WGF1004TCE` / LCSC `C26083` - the part already used by
+  `R16`/`R17`, so **no new BOM line**. They are spliced into the inverting-node trunk
+  (`238.44,56.388`-`238.44,61.153` on the left, `248.982,56.261`-`248.982,61.153` on the right),
+  which is cut between `y=58.4` and `y=59.7`; the two branch tracks (F.Cu, 0.3 mm) run from
+  `R53`/`R54` pad 1/2 into `J20`/`J21` pad 1/2. Both new parts are SMD 0402 / SMD jumper with
+  `F.Cu` copper only - no via, no hole, no other layer is touched.
+* **The series resistor is not the 820 k 0402 that 1.3.4 looked for.** No 0402 820 k part could
+  be verified, and the spec-exact 0603 (C23252) does not fit the pocket, so the board keeps the
+  already-sourced 1 M `C26083` and lands at **1.68 M / +14.14 dB** (the design target was
+  "~+15 dB"); the divider is 680 k / 1 M in both channels, so the two states are 6.28 dB and
+  14.14 dB above the original 330 k board.
+* **Schematic.** `R53`/`R54` (`Device:R`, 1 M, C26083, `Datasheet "~"`) are inserted in series in
+  the `R17.pin1`->`U4.2` / `R16.pin1`->`U4.6` wire; `J20`/`J21`
+  (`Connector_Generic:Conn_01x02`, Value `SolderJumper_2_Bridged`, `in_bom no`, `Datasheet ""`)
+  bridge them from below. Four junctions were added and four **global** labels name the split
+  nodes: `LFB_A`/`LFB_B` and `RFB_A`/`RFB_B` (line-out feedback node, side A = the
+  `R19`/`R18` + op-amp-input side, side B = the `R17`/`R16` side).
+* **Netlist delta (exactly two nets per channel, nothing else).** `Net-(U4A--)` is renamed
+  **`LFB_A`** = {`R19.2`, `U4.2`} + the new `R53.1`, `J20.1`, and the new net **`LFB_B`** =
+  {`R17.1`} + `R53.2`, `J20.2`. Likewise `Net-(U4B--)` -> **`RFB_A`** = {`R18.2`, `U4.6`,
+  `R54.1`, `J21.1`} and **`RFB_B`** = {`R16.1`, `R54.2`, `J21.2`}. The schematic netlist goes
+  from 79 entries (78 signal nets + `GND`) to 81 (80 signal nets + `GND`); **every other net,
+  pin and value is unchanged** (verified by exporting both netlists and diffing the pin sets).
+  In the PCB the net table goes 80 -> 82 entries: net 33/30 keep their codes and are renamed,
+  net 80 = `LFB_B` and net 81 = `RFB_B` are new.
+* **Numbers.** Default (bridged): 680 k/1 M = 0.68 = -3.35 dB, +6.28 dB vs the 330 k board.
+  Loud (cut): 1.68 M/1 M = 1.68 = +4.51 dB, +14.14 dB vs the 330 k board and +7.86 dB vs the
+  shipped default. The 1.68 M feedback does **not** change the output impedance - that is set by
+  `R20`/`R21` (1 k) and the op-amp's closed-loop output impedance - it raises the noise gain from
+  1.68 to 2.68 (+4.06 dB, so the op-amp's own noise and the bias-rail noise rise with the
+  signal) and lowers the small-signal bandwidth from ~595 kHz to ~373 kHz (GBW 1 MHz / noise
+  gain), still far above the audio band. DC: the MCP6002's CMOS input current (~1 pA x 1.68 M =
+  ~1.7 uV) is negligible, and `C19`/`C18` block the output offset anyway.
+* **Verification.** `kicad-cli sch erc` == baseline (11 findings, same kinds/severities, no new
+  ones). `kicad-cli pcb drc --schematic-parity` == **0 errors, 0 unconnected, 145 parity items
+  (== baseline)**, 82 violations = 73 `lib_footprint_mismatch` (baseline 69 + the 4 new
+  footprints, the pre-existing library-copy class) + **9 silkscreen warnings, all listed here
+  because they are the only new items**: `J20`'s silk box and `J21`'s silk box clip `R17`'s and
+  `R16`'s existing reference text (5 `silk_overlap` items), and `R16`'s / `R17`'s / `C20`'s
+  existing reference text sits over `J21` pad 2, `R54` pad 2, `J20` pad 2 and `R53` pad 2
+  (4 `silk_over_copper` items). All of them are reference-text placement only; no copper,
+  clearance, mask or connectivity issue, and no existing part was moved to avoid them.
+* **Out of scope and proven unchanged.** `U3`, `R6`/`R7`, `RV1`/`RV2`, `C18`/`C19`, `R20`/`R21`,
+  `HEAD_OUT_L`/`HEAD_OUT_R`, `+2.5V` (name and network), the 1.65 V bias parts and the jack
+  footprints are byte-identical (block-by-block text comparison against 1.3.4); `R18`/`R19` keep
+  the 680 k value and their 0603 footprints; every `gr_*`/Edge.Cuts item, the outline, mounting
+  holes and jack positions are byte-identical; the Phase-1 parts (`R5`, `R24`, `R52`, `J19`, and
+  the removal of `R25`) are untouched - their footprint blocks differ only in the net-name lines
+  that this revision renamed.
+* **Pin-header variant (FYI, not implemented):** no. The only free pocket beside `R19`/`R17` and
+  `R18`/`R16` is 3.79 mm tall between the two 0603 courtyards, while a 2-pin 2.00 mm header in the
+  `J7..J18` style needs ~5.0 mm of courtyard plus 1.35 mm through-hole pads that would clash with
+  `R19`/`R18` and `U4`'s pads at the only in-line position; the same conclusion 1.3.4 recorded.
+* **Still true (unchanged, tracked separately):** the stale production exports / pinned
+  fingerprint issue - `tools/regenerate_production.py` still refuses to re-export because
+  `base.kicad_pcb` does not match the `routed_pcb_sha256` pin in
+  `verification/fixed-geometry.json`. When that pin is re-baselined, `R53`/`R54` collapse into the
+  existing C26083 BOM line and `J20`/`J21` (bare copper pads, no part ordered) join the excluded
+  set with `J19`.
+
+## 1.3.4
+**Line-input normalling: the leaky `R25` bridge is gone, the mono normal is unilateral, and a
+normalling-disable link is fitted.** PCB work (new parts and copper), the first phase of the
+line-out/loud-jumper work that 1.3.3 listed as pending.
+
+* **`R25` (10 k, 0402) is removed.** It bridged `IN_L` and `IN_R` with a plain resistor, which is
+  bidirectional: measured as ~21 dB of channel separation and (with `R24`) a ~0.83 dB L/R level
+  imbalance. Nothing else is left dangling - `IN_L` keeps `INPUT1.1`, `R24.1`, `R17.2`, `U2.3` and
+  `IN_R` keeps `INPUT1.2`, `R16.2`, `R5.2`, `U2.5`.
+* **New `R52` = 2 M (0402, C11512) is the mono normal, and it is unilateral**: `BUFF_IN_R` (the
+  U2B follower output, a low-impedance driver) -> `R52` -> `J19.2` -> `IN_L`. The right channel can
+  therefore never be modulated by the left one, and when both inputs are patched the leak is set only
+  by the destination node's source impedance: 1 k/(1 k + 2 M) = **-66 dB** (was -21 dB).
+* **`R24` 10 k -> 2 M and its return moved from `GND` to the 1.65 V bias node `+2.5V`.** This is the
+  DC return the clamped normal needs: `IN_L` and `BUFF_IN_R` now sit at the same 1.65 V, so the
+  normal link carries no DC current and no offset is injected. It also removes the old imbalance -
+  `R24` no longer loads only the left source (0.002 dB of L/R difference, was 0.83 dB).
+* **`R5` 1 M -> 2 M.** `R5` is the pre-existing left->right unilateral normal (`BUFF_IN_L` ->
+  `IN_R`, the same convention `modules/head_out` uses for its input normalling); at 2 M its leak goes
+  from -60.0 dB to -66.0 dB, so the worst of the two links is 66 dB - 6 dB inside the 60 dB target.
+* **`J19` is the normalling-disable link: a 2-pad solder jumper** (`Jumper:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm`),
+  i.e. the same "bridged = normal enabled as shipped / cut the bridge = L and R independent" polarity
+  the design calls for. The first choice was a 2.00 mm pin header in the `J7..J18` style, but there
+  is **no room**: a clearance scan of the whole audio block finds no position where a 1.35 mm
+  through-hole pad clears the surrounding nets on both layers (the 2.00 mm headers live in the slot
+  bands, not in the audio block), so the solder-jumper fallback is used explicitly. It is
+  copper-only: the footprint carries `exclude_from_bom`/`exclude_from_pos_files` and the symbol is
+  `in_bom no`.
+* **Netlist delta (exactly one new net):** `NORM_R` = {`R52.1`, `J19.2`}; `IN_L` -`R25.1` +`J19.1`;
+  `IN_R` -`R25.2`; `+2.5V` +`R24.2`; `GND` -`R24.2`. Every other net, pin and value is unchanged.
+* **Headphone block untouched:** `U3`, `R6`/`R7`, `RV1`/`RV2`, `HEAD_OUT_L`/`HEAD_OUT_R` and
+  everything downstream are byte-identical (the per-file diff contains no line mentioning them).
+* **Verification:** `kicad-cli sch erc` == baseline (11 findings, same kinds, no new ones);
+  `kicad-cli pcb drc --schematic-parity` == **0 errors, 0 unconnected, 145 parity items** (the
+  baseline has 146; the one that disappeared was `R25`'s `Datasheet '~' vs ''`). Remaining warnings
+  are the pre-existing `lib_footprint_mismatch` class (69 vs 68: the two new footprints are copies of
+  the board's own customised library copies, like the 68) and 2 new `silk_over_copper` items (R52's
+  reference field and R15's reference field over R52's pad mask openings). The F.Cu GND zones were
+  re-poured (KiCad 10 filler, polygons written back in the file's own 20241229 format), which is the
+  only other change in `base.kicad_pcb`.
+* **Numbers:** channel separation >= 66 dB in normal mode (target >= 60 dB); mono-normal level
+  -12.0 dB for `R` patched only and -6.0 dB for `L` patched only. The level is set by the 1 M
+  `R17`/`R16` input loading; a unity-level normal needs the `R16`/`R17` re-tap to the buffered nodes,
+  which was evaluated and rejected for copper reasons (it needs a ~24 mm run through the `IN_L`/
+  `IN_R` corridor with no viable bottom-layer route: the +3.3 V and +2.5 V bottom runs block every
+  vertical corridor, and the diagonal pair runs 0.7 mm apart). Recorded here so the trade-off is
+  explicit: 66 dB of separation costs ~10 dB of normal level.
+* **Still true (unchanged, tracked separately):** the stale production exports / pinned fingerprint
+  issue. `tools/regenerate_production.py` refuses to re-export because `base.kicad_pcb` no longer
+  matches the `routed_pcb_sha256` pin in `verification/fixed-geometry.json`. When that pin is
+  re-baselined, `R5`/`R24`/`R52` collapse into one BOM line (C11512) and `J19` (bare copper pads, no
+  part ordered) joins the excluded set.
+
+* **Phase 2 (the line-out loud-gain shunt) is NOT in this revision - recorded as deferred, not
+  half-applied.** The designed change is: keep `R18`/`R19` = 680 k and add one series resistor per
+  channel so the feedback totals ~1.5 M, with a shunt across the added part (shunt fitted = 680 k =
+  +6.28 dB, exactly as shipped here; shunt removed = 1.5 M = +13.15 dB) - the amplifier stays
+  closed-loop in both states. Two concrete blockers are recorded: (1) **no verified part.** The only
+  820 k part that could be confirmed is the 0603 `0603WAF8203T5E` / C23252, and a 0603 does not fit
+  the only free slot beside `R18`/`R19` (its ~3.1 x 1.86 mm courtyard overlaps `R19`'s or `R18`'s
+  courtyard in the in-line vertical position). The board's already-sourced 0402 alternative is the
+  1 M `C26083` (680 k + 1 M = 1.68 M = +14.1 dB, i.e. ~1 dB above the "~13.1 dB" target); a 0402
+  820 k LCSC code could not be verified. (2) **layout.** It needs an in-line cut of both inverting-node
+  tracks (`238.44/56.39`-`238.44/61.15` and `248.98/56.26`-`248.98/61.15`) plus a ~3.3 x 2.5 mm shunt
+  placeholder in the only two free pockets (approx. `238.5..241.5 x 57.5..60.5` and
+  `249.5..252.5 x 57.2..60.9`), i.e. a second layout + ERC/DRC cycle of the same size as this one.
+  Nothing of Phase 2 exists in this revision: no footprint, copper or net was added for it, so the
+  board is left in one clean, fully verified state.
+## 1.3.3
+**Line-out output level, step 1 of the agreed fixes: the default gain is raised.**
+`R18`/`R19` 330 k -> 680 k (0603, same footprints/placement/geometry). The line-out
+stage is the inverting pair around `U4` with 1 M sense resistors (`R16`/`R17`), so the
+voltage gain goes from |330k/1M| = 0.33 to |680k/1M| = 0.68, i.e. **+6.28 dB relative to the previous 330 k board** (20*log10(0.68/0.33)) at the
+line-out jacks. No other value, net, reference, footprint or copper feature changes.
+
+* **Implemented here:** the 680 k default level fix, in both `base.kicad_sch` and
+  `base.kicad_pcb` (value properties only; copper untouched, R20/R21 stay 1 k).
+* **Still pending (designed, not yet in the files):** the gain-select shunt jumper that
+  selects the loud state (680 k + 820 k in series = 1.50 M -> +13.15 dB, i.e. +13.15 dB relative to the previous 330 k board), the
+  removal of the `R25` 10 k `IN_L`-`IN_R` bridge, the `R16`/`R17` re-tap from
+  `BUFF_IN_L`/`BUFF_IN_R`, and the normalling-disable jumper. These need new parts and
+  copper and are *not* in this revision; the shipped board is single-state at +6.28 dB.
+* **Headphone block untouched:** this revision changes only the two `Value`
+  properties of `R18`/`R19`; `U3`, `R6`/`R7`, `RV1`/`RV2` and `HEAD_OUT_*` are
+  byte-identical (the diff contains no occurrence of them).
+* **Verification for this change:** `kicad-cli sch erc` == baseline (11 findings, same
+  kinds); `kicad-cli pcb drc --schematic-parity` == baseline violations with 0
+  unconnected items (the KiCad 10.0.6 baseline carries 68 `lib_footprint_mismatch`
+  warnings and 146 `Datasheet '~' vs ''` parity warnings that are also present on the
+  unmodified board; KiCad 9.0.8 recorded 0 parity items).
 
 ## 1.3.2
 Fab-ready release: the hand-solder lines are recorded explicitly and the mated

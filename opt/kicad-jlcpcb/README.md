@@ -5,7 +5,7 @@ A standalone, offline exporter for a directory containing a KiCad project. It ge
 ## Requirements
 
 - Python **3.8+**, standard library only.
-- **KiCad 9+** with `kicad-cli` available; tested with KiCad **9.0.8**.
+- **KiCad 9+** with `kicad-cli` available; covered by the real CLI integration suite with KiCad **10.0.6** (legacy KiCad 9 BOM support retained).
 - No pip packages, KiCad plugins, `pcbnew` Python bindings, Node, external `zip` executable, or network access.
 
 KiCad itself is required to interpret and plot the board correctly. “No dependencies” here means **no additional third-party packages beyond Python and KiCad**, not a replacement for KiCad's plotting engine.
@@ -44,7 +44,7 @@ Existing files are protected by default. Regenerate them explicitly:
 python3 opt/kicad-jlcpcb/export.py modules/line_in --overwrite
 ```
 
-All KiCad commands and content validation run in a fresh temporary directory before the four result files are published. `--overwrite` replaces only those four filenames, not unrelated files in the output directory. Each replacement is atomic, but publishing the entire set is not a filesystem transaction; do not run concurrent exports to the same directory.
+All KiCad export commands use private copies of circuit/project files in a fresh temporary directory before the four result files are published. This prevents CLI-created or rewritten `.kicad_prl` / project cache files in the source checkout. Project-local footprint libraries are resolved through read-only symlinks; original circuit sources and native exclusion flags are not rewritten. `--overwrite` replaces only those four filenames, not unrelated files in the output directory. Each replacement is atomic, but publishing the entire set is not a filesystem transaction; do not run concurrent exports to the same directory.
 
 ## Add part numbers using built-in KiCad features
 
@@ -60,7 +60,7 @@ You do **not** need a fabrication plugin or a custom symbol library.
 
 For many components, use **Tools → Edit Symbol Fields** (the native Symbol Fields Table) to add/fill the same `LCSC`, `MPN` and `Manufacturer` columns in bulk. KiCad copies symbol fields to their corresponding footprints when updating the PCB from the schematic. [source](https://docs.kicad.org/9.0/en/eeschema/eeschema.html)
 
-The exporter reads native fields from the **root schematic via KiCad's BOM export** (including hierarchical sheets and multi-unit symbols), and from the **actual board footprints**. A number stored only on the schematic is therefore included even before that particular field has been copied to the PCB; synchronizing before manufacture is still strongly recommended. PCB fields provide a fallback when schematic fields are absent/blank.
+The exporter reads native fields from the **root schematic via KiCad** (including hierarchical sheets and multi-unit symbols), and from the **actual board footprints**. KiCad 9 uses the native BOM export; KiCad 10 uses the native XML netlist metadata because its BOM exporter omits excluded-from-BOM symbols even with the deprecated include switch. The XML properties keep DNP / excluded-from-BOM / excluded-from-board symbols visible to the exclusion guards rather than accidentally assembling their PCB copies. A number stored only on the schematic is therefore included even before that particular field has been copied to the PCB; synchronizing before manufacture is still strongly recommended. PCB fields provide a fallback when schematic fields are absent/blank.
 
 If you work without a schematic, add the same native fields in the PCB Editor's **Footprint Properties** dialog and use `--pcb-only`. A project directory with no `.kicad_sch` files also falls back to PCB-only mode, with a warning.
 
@@ -151,9 +151,9 @@ Coordinates are in **millimetres**, layers are `top` / `bottom`, and angles are 
 
 **Origin:** all three fabrication exports use the board's **drill/place origin**. Set it to a convenient board corner in KiCad before exporting if desired. With no custom origin, KiCad's default origin is used. The script preserves KiCad's Cartesian position coordinates; it does **not** mirror bottom-side X or independently translate coordinates to a bounding box.
 
-**Centroid and rotation:** positions are KiCad's footprint anchor positions, not a newly computed body centroid. Footprint anchors and JLCPCB library orientations may need adjustment, especially for asymmetric connectors, ICs and polarized parts. No universal automatic rotation database is included. Always inspect JLCPCB's placement preview.
+**Centroid and rotation:** positions default to KiCad's footprint anchors. No centroid is inferred from pads. Evidence-backed assembly-only XY fields can translate an anchor to a documented body datum without moving physical pads. Footprint anchors and JLCPCB library orientations may need adjustment, especially for asymmetric connectors, ICs and polarized parts. No universal automatic rotation database is included. Always inspect JLCPCB's placement preview.
 
-If a particular part needs an orientation correction, add a native field **`JLCPCB Rotation Offset`** with a signed number of degrees, e.g. `90` or `-90`. The script adds it to the KiCad-exported rotation and normalizes the result. This is **this tool's field**, not an automatic import of Fabrication Toolkit's correction settings. Check the resulting orientation in the preview on both sides. Position offsets are not implemented; correct the footprint anchor in KiCad or adjust the placement with the assembler.
+If a particular part needs an orientation correction, add a native field **`JLCPCB Rotation Offset`** with a signed number of degrees, e.g. `90` or `-90`. The script adds it to the KiCad-exported rotation and normalizes the result. This is **this tool's field**, not an automatic import of Fabrication Toolkit's correction settings. Check the resulting orientation in the preview on both sides. Native **`JLCPCB Position Offset X`** and **`JLCPCB Position Offset Y`** specify signed millimetre deltas in the exported board Cartesian frame (**X right, Y up**, common top view). Missing/blank axes mean zero. These are NOT footprint-local vectors: they are added after KiCad's origin conversion, never rotated with the component/rotation correction and never reflected for bottom. An assembly offset must be recalculated if a component is rotated/flipped. Set matching fields in schematic and PCB; numeric conflicts (including normalized-name aliases), malformed/non-finite values and overflow fail rather than silently overriding. Numeric `0` and equivalent decimal/scientific strings are supported. BASE J5 documents an independently evidenced shell-centre correction in `modules/base/verification/J5-assembly-datum.md`. Library-specific portal corrections remain a separate unperformed signoff.
 
 ### Selection and validation
 

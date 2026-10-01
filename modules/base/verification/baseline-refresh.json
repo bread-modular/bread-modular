@@ -1,0 +1,115 @@
+{
+  "status": "software validation complete; order/bench/mating signoffs pending",
+  "input_hashes": {
+    "base.kicad_pcb": "b8df082974c533e45a36d78a7b12d548ffbb5ad383fc22f28c40d850fb490db6",
+    "base.kicad_sch": "ee92e702490409808f284c5113125f6b25afa314cb45e66cdcaa12a46c232e68",
+    "slot.kicad_sch": "76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1",
+    "base.kicad_pro": "0d16b3f17e34bcda4b8d45860c69665f8b6db5a991470dc710e6dd95c1876101"
+  },
+  "final_source_hashes": {
+    "base.kicad_pcb": "dae64cad273575d4709ee02587e594065267a2a7ad567d833ef9f52a0bb562d0",
+    "base.kicad_sch": "672d7c896413578cf9a2b8afd7ecc9e3eb631a03e0b3a65efae2f4676fe817ab",
+    "slot.kicad_sch": "76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1",
+    "base.kicad_pro": "0d16b3f17e34bcda4b8d45860c69665f8b6db5a991470dc710e6dd95c1876101",
+    "base.kicad_dru": "f5d445bb5bf8f4b3351b9d46e235b397d9759dffa9469b3c83eb7c0deca0646f"
+  },
+  "prior_pins": {
+    "pcb_sha256": "b8df082974c533e45a36d78a7b12d548ffbb5ad383fc22f28c40d850fb490db6",
+    "routed_pcb_sha256": "56d67e8c1b57de40f1e740f89ac97465bc2076fa609e08c6769f41e82780999b",
+    "schematic_sha256": "ee92e702490409808f284c5113125f6b25afa314cb45e66cdcaa12a46c232e68",
+    "slot_schematic_sha256": "76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1"
+  },
+  "drc": {
+    "errors": 0,
+    "unconnected_items": 0,
+    "schematic_parity": 0,
+    "warnings": {
+      "lib_footprint_mismatch": 70
+    }
+  },
+  "erc": {
+    "error": 7,
+    "warning": 4
+  },
+  "geometry": {
+    "preserved_footprints": 114,
+    "preserved_mounting_holes": 28,
+    "package_changes": [
+      "U10",
+      "U11",
+      "U12",
+      "U13",
+      "U14",
+      "U15",
+      "U16",
+      "U17",
+      "U2",
+      "U3",
+      "U4",
+      "U6",
+      "U7",
+      "U8",
+      "U9"
+    ],
+    "local_decoupler_moves": [
+      "C22",
+      "C23",
+      "C24",
+      "C25",
+      "C26",
+      "C27",
+      "C28",
+      "C29",
+      "C30",
+      "C31",
+      "C32",
+      "C33",
+      "C34",
+      "C35",
+      "C36",
+      "C37",
+      "C38",
+      "C39",
+      "C40",
+      "C41",
+      "C42",
+      "C43",
+      "C44",
+      "C45"
+    ],
+    "added": [
+      "C48",
+      "J23",
+      "R55",
+      "R57",
+      "R58",
+      "R59",
+      "U18"
+    ],
+    "removed": [
+      "J20",
+      "J21",
+      "J22",
+      "R28",
+      "R30",
+      "R32",
+      "R34",
+      "R36",
+      "R38",
+      "R40",
+      "R42",
+      "R44",
+      "R46",
+      "R48",
+      "R50",
+      "R53",
+      "R54"
+    ],
+    "bounded_supply_additions": [
+      "C50",
+      "C51",
+      "C52"
+    ]
+  },
+  "erc_pin_refresh_note": "Project/ERC severities unchanged. With --bounded-improvements, live ERC identities and old net memberships are proven identical except six supply/GND pins and two deliberate J5 fields; see bounded-improvements.json."
+}

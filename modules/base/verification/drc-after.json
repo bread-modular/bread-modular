@@ -1,19 +1,49 @@
 {
     "$schema": "https://schemas.kicad.org/drc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-09-17T14:46:18+0530",
+    "date": "2026-10-01T11:33:32",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "key": "pth_inside_courtyard"
+        },
+        {
+            "description": "NPTH inside courtyard",
+            "key": "npth_inside_courtyard"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
     "included_severities": [
         "error",
         "warning",
         "exclusion"
     ],
-    "kicad_version": "9.0.8",
+    "kicad_version": "10.0.6",
     "schematic_parity": [],
     "source": "base.kicad_pcb",
     "unconnected_items": [],
     "violations": [
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R17",
@@ -28,7 +58,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R6",
@@ -43,7 +73,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical' does not match copy in library 'BreadModular_AudioJacks'.",
+            "description": "Footprint 'Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical' does not match copy in library 'BreadModular_AudioJacks'",
             "items": [
                 {
                     "description": "Footprint J2",
@@ -58,7 +88,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C8",
@@ -73,7 +103,37 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J9",
+                    "pos": {
+                        "x": 121.92,
+                        "y": 34.3
+                    },
+                    "uuid": "0de70a46-82ba-4226-8e91-4bb7b136758c"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J10",
+                    "pos": {
+                        "x": 152.4,
+                        "y": 34.3
+                    },
+                    "uuid": "110fbfea-3ce0-4e6d-88d6-a91e1bc65387"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C13",
@@ -88,7 +148,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R21",
@@ -103,7 +163,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'SOT-23-5' does not match copy in library 'Package_TO_SOT_SMD'.",
+            "description": "Footprint 'SOT-23-5' does not match copy in library 'Package_TO_SOT_SMD'",
             "items": [
                 {
                     "description": "Footprint U5",
@@ -118,7 +178,22 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J14",
+                    "pos": {
+                        "x": 91.44,
+                        "y": 102.88
+                    },
+                    "uuid": "25a8a8ab-f930-4638-8b0a-cd77dab6753c"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C5",
@@ -133,22 +208,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm' does not match copy in library 'Package_SO'.",
-            "items": [
-                {
-                    "description": "Footprint U3",
-                    "pos": {
-                        "x": 243.14,
-                        "y": 97.385
-                    },
-                    "uuid": "2ab375d8-fcd7-4fc5-a773-d38509174c92"
-                }
-            ],
-            "severity": "warning",
-            "type": "lib_footprint_mismatch"
-        },
-        {
-            "description": "Footprint 'Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical' does not match copy in library 'BreadModular_AudioJacks'.",
+            "description": "Footprint 'Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical' does not match copy in library 'BreadModular_AudioJacks'",
             "items": [
                 {
                     "description": "Footprint J6",
@@ -163,7 +223,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical' does not match copy in library 'BreadModular_AudioJacks'.",
+            "description": "Footprint 'Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical' does not match copy in library 'BreadModular_AudioJacks'",
             "items": [
                 {
                     "description": "Footprint J4",
@@ -178,7 +238,22 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0603_1608Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J17",
+                    "pos": {
+                        "x": 182.88,
+                        "y": 102.88
+                    },
+                    "uuid": "2d53823d-e085-49a8-aa25-3b6e5a5eda1f"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0603_1608Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R19",
@@ -193,7 +268,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R16",
@@ -208,7 +283,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'K2-1808SN-A4SW-01' does not match copy in library 'BreadModular_MISC'.",
+            "description": "Footprint 'K2-1808SN-A4SW-01' does not match copy in library 'BreadModular_MISC'",
             "items": [
                 {
                     "description": "Footprint SW1",
@@ -223,7 +298,22 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0603_1608Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint C50",
+                    "pos": {
+                        "x": 244.65,
+                        "y": 83.7
+                    },
+                    "uuid": "384222c6-b091-5377-abf6-53529434d1ff"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0603_1608Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R18",
@@ -238,7 +328,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C14",
@@ -253,7 +343,22 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J13",
+                    "pos": {
+                        "x": 60.96,
+                        "y": 102.88
+                    },
+                    "uuid": "457be54f-d214-4c6a-b621-43d13df8bd0c"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C2",
@@ -268,7 +373,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R24",
@@ -283,7 +388,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R7",
@@ -298,7 +403,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0603_1608Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_0603_1608Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C19",
@@ -313,7 +418,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R15",
@@ -328,7 +433,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C1",
@@ -343,7 +448,22 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J7",
+                    "pos": {
+                        "x": 60.84,
+                        "y": 34.2
+                    },
+                    "uuid": "53959f41-ac7d-4a4d-b015-69bb6f3f87e8"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C11",
@@ -358,7 +478,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_1206_3216Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_1206_3216Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R12",
@@ -373,7 +493,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'HRO-TYPE-C-31-M-12' does not match copy in library 'BreadModular_TypeC'.",
+            "description": "Footprint 'HRO-TYPE-C-31-M-12' does not match copy in library 'BreadModular_TypeC'",
             "items": [
                 {
                     "description": "Footprint J5",
@@ -388,7 +508,22 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'PinSocket_2x05_P2.54mm_Vertical' does not match copy in library 'Connector_PinSocket_2.54mm'.",
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint C51",
+                    "pos": {
+                        "x": 245.6,
+                        "y": 93.65
+                    },
+                    "uuid": "5dcaad5b-a8cb-55ce-bbd2-2bb1c38cc416"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'PinSocket_2x05_P2.54mm_Vertical' does not match copy in library 'Connector_PinSocket_2.54mm'",
             "items": [
                 {
                     "description": "Footprint 5V14",
@@ -403,7 +538,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint FB2",
@@ -418,7 +553,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C15",
@@ -433,7 +568,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C12",
@@ -448,7 +583,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C9",
@@ -463,7 +598,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0603_1608Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0603_1608Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R2",
@@ -478,7 +613,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0603_1608Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0603_1608Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R3",
@@ -493,7 +628,37 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J18",
+                    "pos": {
+                        "x": 213.36,
+                        "y": 102.88
+                    },
+                    "uuid": "80fa2513-c88f-41db-926c-488f7bbf761e"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J8",
+                    "pos": {
+                        "x": 91.44,
+                        "y": 34.3
+                    },
+                    "uuid": "82bd5aec-1b00-48f8-bb10-35b1c434f979"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C4",
@@ -508,7 +673,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R14",
@@ -523,7 +688,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'LED_0603_1608Metric' does not match copy in library 'LED_SMD'.",
+            "description": "Footprint 'LED_0603_1608Metric' does not match copy in library 'LED_SMD'",
             "items": [
                 {
                     "description": "Footprint D1",
@@ -538,7 +703,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R1",
@@ -553,7 +718,22 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J11",
+                    "pos": {
+                        "x": 182.88,
+                        "y": 34.3
+                    },
+                    "uuid": "9c34855a-2574-4344-804c-28ac0b8f0691"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint FB1",
@@ -568,22 +748,22 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm' does not match copy in library 'Package_SO'.",
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
             "items": [
                 {
-                    "description": "Footprint U4",
+                    "description": "Footprint J16",
                     "pos": {
-                        "x": 243.905,
-                        "y": 54.725
+                        "x": 152.4,
+                        "y": 102.88
                     },
-                    "uuid": "a3c85ed1-0950-4696-b2a9-d121a79a4248"
+                    "uuid": "a45670a4-29e5-45e9-9575-1d3087a1988a"
                 }
             ],
             "severity": "warning",
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R20",
@@ -598,7 +778,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R8",
@@ -613,7 +793,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R26",
@@ -628,7 +808,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C3",
@@ -643,7 +823,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C16",
@@ -658,7 +838,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'PinSocket_1x05_P2.54mm_Vertical' does not match copy in library 'Connector_PinSocket_2.54mm'.",
+            "description": "Footprint 'PinSocket_1x05_P2.54mm_Vertical' does not match copy in library 'Connector_PinSocket_2.54mm'",
             "items": [
                 {
                     "description": "Footprint INPUT1",
@@ -673,22 +853,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm' does not match copy in library 'Package_SO'.",
-            "items": [
-                {
-                    "description": "Footprint U2",
-                    "pos": {
-                        "x": 243.14,
-                        "y": 87.745
-                    },
-                    "uuid": "c304300d-eb1b-4e31-a1ed-d8e9cdd5e31a"
-                }
-            ],
-            "severity": "warning",
-            "type": "lib_footprint_mismatch"
-        },
-        {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C7",
@@ -703,7 +868,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C21",
@@ -718,7 +883,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R27",
@@ -733,7 +898,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R9",
@@ -748,7 +913,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C6",
@@ -763,7 +928,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C20",
@@ -778,7 +943,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C10",
@@ -793,7 +958,52 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint C52",
+                    "pos": {
+                        "x": 247.65,
+                        "y": 51.4
+                    },
+                    "uuid": "e067cb58-d25c-5661-a376-4829719267e8"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J15",
+                    "pos": {
+                        "x": 121.92,
+                        "y": 102.88
+                    },
+                    "uuid": "e087c30f-6f00-4450-8f92-c7d191219f83"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'PinHeader_1x02_P2.00mm_Vertical' does not match copy in library 'Connector_PinHeader_2.00mm'",
+            "items": [
+                {
+                    "description": "Footprint J12",
+                    "pos": {
+                        "x": 213.36,
+                        "y": 34.3
+                    },
+                    "uuid": "e660c8c8-9899-4060-8b9a-785c5b05c9a3"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R4",
@@ -808,7 +1018,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_1206_3216Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_1206_3216Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R10",
@@ -823,7 +1033,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C17",
@@ -838,22 +1048,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
-            "items": [
-                {
-                    "description": "Footprint R25",
-                    "pos": {
-                        "x": 245.489,
-                        "y": 64.643
-                    },
-                    "uuid": "f7f1b2ae-b957-4de4-b0f1-524f28899dea"
-                }
-            ],
-            "severity": "warning",
-            "type": "lib_footprint_mismatch"
-        },
-        {
-            "description": "Footprint 'C_0603_1608Metric' does not match copy in library 'Capacitor_SMD'.",
+            "description": "Footprint 'C_0603_1608Metric' does not match copy in library 'Capacitor_SMD'",
             "items": [
                 {
                     "description": "Footprint C18",
@@ -868,7 +1063,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical' does not match copy in library 'BreadModular_AudioJacks'.",
+            "description": "Footprint 'Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical' does not match copy in library 'BreadModular_AudioJacks'",
             "items": [
                 {
                     "description": "Footprint J1",
@@ -883,7 +1078,7 @@
             "type": "lib_footprint_mismatch"
         },
         {
-            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.",
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
             "items": [
                 {
                     "description": "Footprint R5",

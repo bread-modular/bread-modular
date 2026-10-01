@@ -1,0 +1,58 @@
+{
+  "result": "PASS",
+  "source_sha256": {
+    "base.kicad_pcb": "dae64cad273575d4709ee02587e594065267a2a7ad567d833ef9f52a0bb562d0",
+    "base.kicad_sch": "672d7c896413578cf9a2b8afd7ecc9e3eb631a03e0b3a65efae2f4676fe817ab",
+    "slot.kicad_sch": "76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1",
+    "base.kicad_pro": "0d16b3f17e34bcda4b8d45860c69665f8b6db5a991470dc710e6dd95c1876101",
+    "base.kicad_dru": "f5d445bb5bf8f4b3351b9d46e235b397d9759dffa9469b3c83eb7c0deca0646f"
+  },
+  "old_schematic_components_preserved": 164,
+  "old_schematic_pin_memberships_preserved": 523,
+  "added_schematic_pins": 6,
+  "total_schematic_pin_memberships": 529,
+  "old_physical_geometry_preserved": 157,
+  "outline_and_all_28_mounting_holes_preserved": true,
+  "old_copper_items_preserved": 1109,
+  "new_copper_items": 9,
+  "dedicated_bypass_caps": {
+    "C50": {
+      "target_pin8": "U2",
+      "supply_track_mm": 2.582174471254799,
+      "GND_return_track_mm": 0.4,
+      "GND_via_board_mm": [
+        245.13,
+        83.3
+      ]
+    },
+    "C51": {
+      "target_pin8": "U3",
+      "supply_track_mm": 1.8881538602560968,
+      "GND_return_track_mm": 0.72,
+      "GND_via_board_mm": [
+        244.4,
+        93.65
+      ]
+    },
+    "C52": {
+      "target_pin8": "U4",
+      "supply_track_mm": 1.6249615380063616,
+      "GND_return_track_mm": 0.8,
+      "GND_via_board_mm": [
+        248.13,
+        50.6
+      ]
+    }
+  },
+  "J5_expected_CPL_mm": [
+    4.035,
+    130.81
+  ],
+  "ERC_identity_delta": 0,
+  "ERC_counts": {
+    "error": 7,
+    "warning": 4
+  },
+  "PCB_pending_skips": 0,
+  "bench_proof": false
+}
