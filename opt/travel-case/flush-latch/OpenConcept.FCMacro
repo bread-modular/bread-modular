@@ -1,0 +1,14 @@
+# Local concept only. Run in FreeCAD GUI if desired; GUI not used for generation.
+import sys
+from pathlib import Path
+import FreeCAD as App
+root=Path(__file__).resolve().parent
+sys.path.insert(0,str(root))
+import concept_features
+App.openDocument(str(root/'cad/local-latch-concept.FCStd'))
+if App.GuiUp:
+    import FreeCADGui as Gui
+    for obj in App.ActiveDocument.Objects:
+        if hasattr(obj,'ViewObject'):obj.ViewObject.Visibility=obj.Name in ('BottomConcept','TopConcept','SliderConcept')
+    Gui.activeDocument().activeView().viewAxonometric()
+    Gui.activeDocument().activeView().fitAll()

@@ -1,0 +1,957 @@
+{
+  "status": "CONCEPT ONLY - not print-ready; no full-case repairs or exports",
+  "station_origin_X": 47.0,
+  "station_local_bounds": {
+    "bottom": [
+      -14.0,
+      0.0,
+      8.0,
+      30.000000000000004,
+      12.100000381469727,
+      15.0
+    ],
+    "top": [
+      -14.000000000000014,
+      0.0,
+      14.0,
+      30.0,
+      14.0,
+      25.000000000000004
+    ],
+    "slider": [
+      -10.0,
+      0.8000000190734857,
+      10.4,
+      18.00000000000003,
+      12.4,
+      21.0
+    ]
+  },
+  "part_validity": {
+    "bottom": {
+      "valid": true,
+      "solids": 1
+    },
+    "top": {
+      "valid": true,
+      "solids": 1
+    },
+    "slider": {
+      "valid": true,
+      "solids": 1
+    }
+  },
+  "collision_tolerance_mm3": 1e-05,
+  "endpoint_checks": [
+    {
+      "travel_mm": 0,
+      "lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "outside_original_material_mm3": 0.0,
+      "lift_0_31_bottom_intersection_mm3": 0.0
+    },
+    {
+      "travel_mm": 8,
+      "lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "outside_original_material_mm3": 0.0,
+      "lift_0_31_bottom_intersection_mm3": 0.1680000000000263
+    }
+  ],
+  "released_slide_samples": [
+    {
+      "travel_mm": 0,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 0.5,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 1,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 2,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 3,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 4,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 5,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 6,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 7,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 7.5,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    },
+    {
+      "travel_mm": 8,
+      "rigid_path_lid_intersection_mm3": 0.0,
+      "bottom_intersection_mm3": 0.0,
+      "released_tooth_lid_intersection_mm3": 0.0,
+      "pressed_paddle_lid_intersection_mm3": 0.0,
+      "outside_original_closed_material_mm3": 0.0
+    }
+  ],
+  "printed_fit_assumptions": {
+    "per_face_clearance_mm": 0.3,
+    "pawl_clearance_press_mm": 0.8,
+    "material": "PETG starting assumption; physical coupon required",
+    "beam_flex_model": "NOT FEA; translated tooth/paddle clearance surrogate only"
+  },
+  "deferred": [
+    "Four-station full case booleans",
+    "12 magnet fills",
+    "cosmetic mesh repair",
+    "Final snap-gate hook details and pull-out checks",
+    "End-stop and final assembly tests",
+    "Full mesh manifold/self-intersection and functional-interface preservation tests",
+    "Slicer and physical tests"
+  ],
+  "locked_section_edges": {
+    "bottom": [
+      [
+        [
+          2.249999523162842,
+          15.0
+        ],
+        [
+          6.3999999999999995,
+          14.999999999999995
+        ]
+      ],
+      [
+        [
+          2.172359633237901,
+          14.989741909373166
+        ],
+        [
+          2.249999523162842,
+          15.0
+        ]
+      ],
+      [
+        [
+          6.3999999999999995,
+          14.999999999999995
+        ],
+        [
+          6.4,
+          12.7
+        ]
+      ],
+      [
+        [
+          8.7,
+          14.999999999999995
+        ],
+        [
+          9.600000381469727,
+          15.0
+        ]
+      ],
+      [
+        [
+          8.7,
+          14.999999999999995
+        ],
+        [
+          8.700000000000001,
+          10.1
+        ]
+      ],
+      [
+        [
+          9.600000381469727,
+          15.0
+        ],
+        [
+          9.600000381469727,
+          13.0
+        ]
+      ],
+      [
+        [
+          9.600000381469727,
+          13.0
+        ],
+        [
+          12.100000381469727,
+          13.0
+        ]
+      ],
+      [
+        [
+          2.158137174201559,
+          14.987856244918506
+        ],
+        [
+          2.172359633237901,
+          14.989741909373166
+        ]
+      ],
+      [
+        [
+          3.3000000000000003,
+          12.7
+        ],
+        [
+          6.4,
+          12.7
+        ]
+      ],
+      [
+        [
+          8.700000000000001,
+          10.1
+        ],
+        [
+          3.3000000000000003,
+          10.1
+        ]
+      ],
+      [
+        [
+          3.3000000000000003,
+          10.1
+        ],
+        [
+          3.3000000000000003,
+          12.7
+        ]
+      ],
+      [
+        [
+          12.100000381469727,
+          13.0
+        ],
+        [
+          12.100000381469727,
+          8.0
+        ]
+      ],
+      [
+        [
+          0.0,
+          8.0
+        ],
+        [
+          1.907348590179936e-08,
+          13.800000190734863
+        ]
+      ],
+      [
+        [
+          0.0,
+          8.0
+        ],
+        [
+          12.100000381469727,
+          8.0
+        ]
+      ],
+      [
+        [
+          1.907348590179936e-08,
+          13.800000190734863
+        ],
+        [
+          1.7499995231628418,
+          13.800000190734863
+        ]
+      ],
+      [
+        [
+          1.7499995231628418,
+          13.800000190734863
+        ],
+        [
+          1.7499995231628418,
+          14.5
+        ]
+      ],
+      [
+        [
+          1.7499995231628418,
+          14.5
+        ],
+        [
+          1.7670369148254395,
+          14.629409790039062
+        ]
+      ],
+      [
+        [
+          1.7670369148254395,
+          14.629409790039062
+        ],
+        [
+          1.8169875144958496,
+          14.75
+        ]
+      ],
+      [
+        [
+          1.8169875144958496,
+          14.75
+        ],
+        [
+          1.896446704864502,
+          14.853553771972656
+        ]
+      ],
+      [
+        [
+          1.896446704864502,
+          14.853553771972656
+        ],
+        [
+          1.9999995231628418,
+          14.933012962341309
+        ]
+      ],
+      [
+        [
+          1.9999995231628418,
+          14.933012962341309
+        ],
+        [
+          2.025240107375196,
+          14.943488273467729
+        ]
+      ],
+      [
+        [
+          2.1199543873921227,
+          14.982791800795844
+        ],
+        [
+          2.123401183067243,
+          14.983248843070209
+        ]
+      ],
+      [
+        [
+          2.025240107375196,
+          14.943488273467729
+        ],
+        [
+          2.1199543873921227,
+          14.982791800795844
+        ]
+      ],
+      [
+        [
+          2.123401183067243,
+          14.983248843070209
+        ],
+        [
+          2.137565095975612,
+          14.985127791096996
+        ]
+      ],
+      [
+        [
+          2.137565095975612,
+          14.985127791096996
+        ],
+        [
+          2.1488844030884824,
+          14.98662863909375
+        ]
+      ],
+      [
+        [
+          2.1488844030884824,
+          14.98662863909375
+        ],
+        [
+          2.158137174201559,
+          14.987856244918506
+        ]
+      ]
+    ],
+    "top": [
+      [
+        [
+          9.23879623413086,
+          23.67316436767578
+        ],
+        [
+          9.641287071619061,
+          25.0
+        ]
+      ],
+      [
+        [
+          8.314697265625,
+          21.944297790527344
+        ],
+        [
+          9.23879623413086,
+          23.67316436767578
+        ]
+      ],
+      [
+        [
+          9.641287071619061,
+          25.0
+        ],
+        [
+          14.0,
+          25.0
+        ]
+      ],
+      [
+        [
+          7.0710673332214355,
+          20.428932189941406
+        ],
+        [
+          8.314697265625,
+          21.944297790527344
+        ]
+      ],
+      [
+        [
+          14.0,
+          25.0
+        ],
+        [
+          14.0,
+          15.0
+        ]
+      ],
+      [
+        [
+          6.426562543098326,
+          19.9
+        ],
+        [
+          7.0710673332214355,
+          20.428932189941406
+        ]
+      ],
+      [
+        [
+          14.0,
+          15.0
+        ],
+        [
+          8.700000000000003,
+          14.99999999999999
+        ]
+      ],
+      [
+        [
+          1.907348590179936e-08,
+          14.0
+        ],
+        [
+          1.907348590179936e-08,
+          15.3
+        ]
+      ],
+      [
+        [
+          1.4999995231628418,
+          14.0
+        ],
+        [
+          1.907348590179936e-08,
+          14.0
+        ]
+      ],
+      [
+        [
+          1.907348590179936e-08,
+          15.3
+        ],
+        [
+          3.0,
+          15.3
+        ]
+      ],
+      [
+        [
+          6.426562543098326,
+          19.9
+        ],
+        [
+          9.0,
+          19.9
+        ]
+      ],
+      [
+        [
+          8.700000000000001,
+          15.3
+        ],
+        [
+          8.700000000000003,
+          14.99999999999999
+        ]
+      ],
+      [
+        [
+          6.400000000000003,
+          14.99999999999999
+        ],
+        [
+          1.4999995231628418,
+          15.0
+        ]
+      ],
+      [
+        [
+          6.4,
+          15.3
+        ],
+        [
+          6.400000000000003,
+          14.99999999999999
+        ]
+      ],
+      [
+        [
+          1.4999995231628418,
+          15.0
+        ],
+        [
+          1.4999995231628418,
+          14.0
+        ]
+      ],
+      [
+        [
+          3.0,
+          17.2
+        ],
+        [
+          3.0,
+          15.3
+        ]
+      ],
+      [
+        [
+          9.0,
+          19.9
+        ],
+        [
+          9.0,
+          19.6
+        ]
+      ],
+      [
+        [
+          9.0,
+          19.6
+        ],
+        [
+          9.7,
+          19.6
+        ]
+      ],
+      [
+        [
+          9.7,
+          19.6
+        ],
+        [
+          9.7,
+          21.3
+        ]
+      ],
+      [
+        [
+          8.700000000000001,
+          15.3
+        ],
+        [
+          9.0,
+          15.3
+        ]
+      ],
+      [
+        [
+          4.2,
+          15.3
+        ],
+        [
+          6.4,
+          15.3
+        ]
+      ],
+      [
+        [
+          9.7,
+          16.7
+        ],
+        [
+          9.7,
+          17.599999999999998
+        ]
+      ],
+      [
+        [
+          9.7,
+          16.7
+        ],
+        [
+          12.700000000000001,
+          16.7
+        ]
+      ],
+      [
+        [
+          9.0,
+          17.599999999999998
+        ],
+        [
+          9.7,
+          17.599999999999998
+        ]
+      ],
+      [
+        [
+          9.7,
+          21.3
+        ],
+        [
+          12.700000000000001,
+          21.3
+        ]
+      ],
+      [
+        [
+          12.700000000000001,
+          21.3
+        ],
+        [
+          12.700000000000001,
+          16.7
+        ]
+      ],
+      [
+        [
+          4.2,
+          15.3
+        ],
+        [
+          4.2,
+          17.2
+        ]
+      ],
+      [
+        [
+          3.0,
+          17.2
+        ],
+        [
+          4.2,
+          17.2
+        ]
+      ],
+      [
+        [
+          9.0,
+          17.599999999999998
+        ],
+        [
+          9.0,
+          15.3
+        ]
+      ]
+    ],
+    "slider": [
+      [
+        [
+          10.0,
+          21.0
+        ],
+        [
+          10.0,
+          19.3
+        ]
+      ],
+      [
+        [
+          10.0,
+          21.0
+        ],
+        [
+          12.4,
+          21.0
+        ]
+      ],
+      [
+        [
+          6.7,
+          19.3
+        ],
+        [
+          10.0,
+          19.3
+        ]
+      ],
+      [
+        [
+          10.0,
+          17.9
+        ],
+        [
+          10.0,
+          17.0
+        ]
+      ],
+      [
+        [
+          8.4,
+          17.9
+        ],
+        [
+          10.0,
+          17.9
+        ]
+      ],
+      [
+        [
+          10.0,
+          17.0
+        ],
+        [
+          12.4,
+          17.0
+        ]
+      ],
+      [
+        [
+          12.4,
+          21.0
+        ],
+        [
+          12.4,
+          17.0
+        ]
+      ],
+      [
+        [
+          8.4,
+          17.9
+        ],
+        [
+          8.4,
+          10.4
+        ]
+      ],
+      [
+        [
+          6.7,
+          12.4
+        ],
+        [
+          6.7,
+          19.3
+        ]
+      ],
+      [
+        [
+          3.6,
+          10.4
+        ],
+        [
+          8.4,
+          10.4
+        ]
+      ],
+      [
+        [
+          3.6,
+          12.4
+        ],
+        [
+          3.6,
+          10.4
+        ]
+      ],
+      [
+        [
+          3.6,
+          12.4
+        ],
+        [
+          6.7,
+          12.4
+        ]
+      ],
+      [
+        [
+          5.7,
+          16.0
+        ],
+        [
+          4.5,
+          16.0
+        ]
+      ],
+      [
+        [
+          5.7,
+          17.2
+        ],
+        [
+          5.7,
+          16.0
+        ]
+      ],
+      [
+        [
+          4.5,
+          16.0
+        ],
+        [
+          4.5,
+          17.2
+        ]
+      ],
+      [
+        [
+          4.5,
+          17.2
+        ],
+        [
+          5.7,
+          17.2
+        ]
+      ]
+    ]
+  },
+  "positive_detents": {
+    "unlocked_move_0_4mm_unpressed_lid_intersection_mm3": 0.05999999999999944,
+    "locked_move_minus_0_4mm_unpressed_lid_intersection_mm3": 0.05999999999999962,
+    "tooth_radial_engagement_mm": 0.6,
+    "pressed_radial_clearance_mm": 0.2
+  },
+  "captive_head_checks": {
+    "down_0_31_lid_intersection_mm3": 0.6719999999998665,
+    "outward_0_31_lid_intersection_mm3": 0.5599999999999871,
+    "up_0_31_lid_intersection_mm3": 0.6720000000001052,
+    "lid_floor_thickness_mm": 1.7,
+    "inner_skin_thickness_mm": 1.3,
+    "minimum_floor_head_bearing_area_mm2": 67.2
+  },
+  "catch": {
+    "foot_Z_top": 12.4,
+    "underside_Z": 12.7,
+    "axial_slack_mm": 0.3,
+    "ledge_thickness_mm": 2.3000000000000007,
+    "Y_overlap_mm": 2.8000000000000003,
+    "X_overlap_locked_mm": 6,
+    "bearing_area_mm2_per_latch": 16.8,
+    "open_entry_mm": [
+      6.6,
+      5.4
+    ],
+    "stem_slot_width_Y_mm": 2.3000000000000003,
+    "nominal_two_clearances_lid_lift_before_load_mm": 0.6
+  },
+  "unlocked_vertical_release": [
+    {
+      "lift_mm": 0,
+      "receiver_intersection_mm3": 0.0
+    },
+    {
+      "lift_mm": 0.3,
+      "receiver_intersection_mm3": 0.0
+    },
+    {
+      "lift_mm": 1,
+      "receiver_intersection_mm3": 0.0
+    },
+    {
+      "lift_mm": 2,
+      "receiver_intersection_mm3": 0.0
+    },
+    {
+      "lift_mm": 3,
+      "receiver_intersection_mm3": 0.0
+    },
+    {
+      "lift_mm": 4.6,
+      "receiver_intersection_mm3": 0.0
+    },
+    {
+      "lift_mm": 6,
+      "receiver_intersection_mm3": 0.0
+    }
+  ],
+  "lower_receiver_inside_measured_rim": {
+    "max_Y_mm": 8.700000000000001,
+    "min_inner_rim_Y_mm": 9.6,
+    "remaining_inner_wall_mm": 0.8999999999999986,
+    "catch_outer_root_mm": 1.3430199999999999,
+    "skirt_outer_Y_max_mm": 1.5,
+    "bottom_skirt_channel_start_Y_mm": 1.75
+  },
+  "all_concept_checks_pass": true,
+  "editability": {
+    "thickness_edit_delta_mm3": 0.18600000000026284,
+    "restored_volume_error_mm3": 0.0,
+    "valid_after_restore": true
+  }
+}
