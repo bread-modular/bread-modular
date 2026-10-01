@@ -1,0 +1,1 @@
+../../attiny1616-tools/updi-programmer-setup.sh
