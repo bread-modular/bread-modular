@@ -1,13 +1,31 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-09-17T13:43:04+0530",
+    "date": "2026-10-01T11:33:33",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
     "included_severities": [
         "error",
         "warning",
         "exclusion"
     ],
-    "kicad_version": "9.0.8",
+    "kicad_version": "10.0.6",
     "sheets": [
         {
             "path": "/",
@@ -19,8 +37,8 @@
                         {
                             "description": "Symbol J2 Pin R [Passive, Line]",
                             "pos": {
-                                "x": 1.5494,
-                                "y": 1.1303
+                                "x": 1.4859,
+                                "y": 0.7747
                             },
                             "uuid": "ec46012f-1bd3-4f26-a470-2350b471bf0e"
                         }
@@ -34,8 +52,8 @@
                         {
                             "description": "Symbol J2 Pin T [Passive, Line]",
                             "pos": {
-                                "x": 1.5494,
-                                "y": 1.1557
+                                "x": 1.4859,
+                                "y": 0.8001
                             },
                             "uuid": "b79f8318-444a-4af3-b7d3-ae6def278fce"
                         }
@@ -49,8 +67,8 @@
                         {
                             "description": "Symbol J4 Pin R [Passive, Line]",
                             "pos": {
-                                "x": 1.5494,
-                                "y": 1.3208
+                                "x": 1.4859,
+                                "y": 0.9652
                             },
                             "uuid": "e2548a14-9a82-4f1a-84b4-4260de85919f"
                         }
@@ -64,8 +82,8 @@
                         {
                             "description": "Symbol J4 Pin T [Passive, Line]",
                             "pos": {
-                                "x": 1.5494,
-                                "y": 1.3462
+                                "x": 1.4859,
+                                "y": 0.9906
                             },
                             "uuid": "614e11b8-4451-4a90-b17a-08ba41a39f2c"
                         }
@@ -79,8 +97,8 @@
                         {
                             "description": "Symbol U5 Pin 1 [VIN, Power input, Line]",
                             "pos": {
-                                "x": 4.2037,
-                                "y": 0.5588
+                                "x": 3.0099,
+                                "y": 0.5842
                             },
                             "uuid": "81b458df-63ab-4d69-8480-456d20351011"
                         }
@@ -119,15 +137,60 @@
                     "type": "power_pin_not_driven"
                 },
                 {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV1 [R_Potentiometer]",
+                            "pos": {
+                                "x": 0.4064,
+                                "y": 2.0574
+                            },
+                            "uuid": "9f5a2891-583a-4e85-afde-fabddcdbd0ea"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV2 [R_Potentiometer]",
+                            "pos": {
+                                "x": 0.4191,
+                                "y": 1.524
+                            },
+                            "uuid": "cab4b5d6-065b-4c4f-9215-f7ca61dd3e52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
                     "description": "Symbol 'LED' doesn't match copy in library 'Device'",
                     "items": [
                         {
                             "description": "Symbol D1 [LED]",
                             "pos": {
-                                "x": 3.1877,
-                                "y": 0.6096
+                                "x": 1.9939,
+                                "y": 0.635
                             },
                             "uuid": "ea62caf0-9aab-4a0a-9876-2f124edd8924"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'USB_C_Receptacle_PowerOnly_6P' doesn't match copy in library 'Connector'",
+                    "items": [
+                        {
+                            "description": "Symbol J5 [USB_C_Receptacle_PowerOnly_6P]",
+                            "pos": {
+                                "x": 2.2606,
+                                "y": 0.6604
+                            },
+                            "uuid": "44092a9a-a549-4f89-8063-a715746d0562"
                         }
                     ],
                     "severity": "warning",

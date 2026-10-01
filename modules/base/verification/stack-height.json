@@ -1,11 +1,11 @@
 {
   "input_sha256": {
     "calculator": "b00bd46523fa1402af7398bf775a6690107f62060baff735e70255627433b0b9",
-    "hand-solder.json": "24410189dbd60ca5e4f62a086f6e148587b492cb68c27d21580ad2d595d62bf7",
-    "fixed-geometry.json": "2b6dcd6bd7fee1a214edad138a28c07b1416d156bcb552c3a23b75dbbcec05a4",
-    "base.kicad_pcb": "b8df082974c533e45a36d78a7b12d548ffbb5ad383fc22f28c40d850fb490db6",
-    "base.kicad_sch": "158dda8325c54f353564325dcd25d5557ca136e60b65f5e1d008cb6244077dd4",
-    "slot.kicad_sch": "20066c766de2dbdfa25abe986f8eb904cd6ac286edaccc184e6cd87c55b9f2f2",
+    "hand-solder.json": "c33c6c755d7f66d0876b29c1a5400945b87c40ce8e5ea8470ad7d1f552f22a01",
+    "fixed-geometry.json": "a4b38f2e56ffecec497ca6b24ec1838ef4f54abab153ba431b053f8e9fb58448",
+    "base.kicad_pcb": "dae64cad273575d4709ee02587e594065267a2a7ad567d833ef9f52a0bb562d0",
+    "base.kicad_sch": "672d7c896413578cf9a2b8afd7ecc9e3eb631a03e0b3a65efae2f4676fe817ab",
+    "slot.kicad_sch": "76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1",
     "module_scope": {
       "enumerated": [
         "16bit",
@@ -125,7 +125,7 @@
       "part": "unspecified on the module PCBs - assumed to be the mechanical twin of PZ254-1-05-Z-8.5",
       "insulator_mm": 2.5,
       "mating_pin_mm": 6.0,
-      "mounting": "bottom side (B.Cu) on 25 of the 27 inspected module boards; 4mix and imix mount the same headers on F.Cu",
+      "mounting": "bottom side (B.Cu) on 26 of the 28 inspected module boards; 4mix, imix mount headers on F.Cu and cannot mate downwards as drawn",
       "source": "https://jlcpcb.com/partdetail/Hctl-PZ254_1_05_Z_85/C2894928"
     }
   },

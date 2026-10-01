@@ -1,181 +1,117 @@
-# v1.3.2 outputs — FAB-READY
+# BASE 1.3.13 — bounded improvement candidate; NOT order authorization
 
-> ## ⚠️ Schematic ahead of PCB (v1.3.8 mux swap, 2026-09-18) — **do not order from a re-export**
->
-> The **schematic** was migrated on 2026-09-18: the twelve per-slot muxes
-> (`U6…U17`) are `TPS2116DRLR` (SOT-583, `C3235557`) and `R28/R30/…/R50` (750 Ω
-> ILIM) are deleted (CHANGELOG 1.3.8, POWER.md §1a,
-> `../verification/mux-swap-tps2116.json`). Nothing else moved: `base.kicad_pcb`
-> is **byte-identical to this branch's committed board (`b8df0829…`)**, and every
-> file in this directory is still the **v1.3.2** release
-> (`manifest.json` → `release_version: "1.3.2"`). That is a *different* board
-> revision from the `routed_pcb_sha256` pin (`9fc20400…`), which is already stale
-> on this branch — the pin, not the board, is what has drifted.
->
-> **Known blocker (POWER.md §1a): a reset press drives the slot rail to 5V_SYS in *both*
-> jumper states.** `MODE` is pulled up by `+3.3 V` and `PR1` comes from the same rail through
-> the jumper shunt, while `SW1` gates `U5.EN` — so on every reset press both control pins fall,
-> the part enters *diode mode* and passes the higher input (`5V_SYS`) to a slot that may be
-> jumpered for 3.3 V. Resolve it with a datasheet-verified control arrangement (an RC hold-up is
-> not a remedy) before any re-export.
->
-> Consequences until that is resolved and Phase 2 (footprint swap + local
-> re-route + re-export) lands:
->
-> * `../tools/verify_power.py` cannot reach a clean pass: it reports the swap as
->   *PCB pending* (24 refs, 12 ghost `Net-(U*-ILIM)` nets, 12 schematic-only
->   `unconnected-(U*-ST-Pad8)` nets) and labels the run **NOT fab-ready**; the
->   branch's pre-existing drift is still there too — `J23`/`U18` (mono selector), `R55`,
->   `C48`, the new `R57` (the `INPUT1` return tie, 1.3.10) and the `U2`/`U3`/`U4` plain
->   SO-8 footprints are schematic-only, while the 1.3.5/1.3.7 loud-gain parts
->   (`R53`/`R54`/`J20`/`J21`/`J24`/`U19`/`R56`/`C49`) were **deleted in 1.3.10** and the
->   board still carries `R53`/`R54`, and the `project_erc`, `project_schematic`,
->   `routed_pcb_sha256` and footprint-geometry pins predate the 1.3.6/1.3.7 board
->   work — so it still stops earlier.
-> * `../tools/regenerate_production.py` refuses to run: its DRC
->   `--schematic-parity` gate is exactly what the pending swap breaks. **Do not
->   regenerate or order anything from this directory until the blocker and Phase 2
->   are resolved** — the files here are the verified v1.3.2 payloads for the board
->   revision they describe.
-> * The two schematic hash pins in `../verification/fixed-geometry.json`
->   (`schematic_sha256`, `slot_schematic_sha256`) were deliberately re-pinned for
->   this revision, with the previous values kept in the new
->   `schematic_revision` block.
+## Review status and scope
 
-**The DO-NOT-ORDER hold is lifted.** These files were regenerated from the routed
-board (`base.kicad_pcb`, SHA-256
-`9fc20400ad6268ae35720c288995e211e4cbe28019649b2265d493139e2dc484`, unchanged)
-through `../tools/regenerate_production.py`. KiCad DRC reports **0 errors, 0
-unconnected items, 0 schematic-parity findings**; ERC is at the 8-finding
-baseline; the stack height is calculated from datasheet dimensions
-(`../verification/stack-height.json`). The 59 retained
-`lib_footprint_mismatch` warnings are explained in
-[the verification report](../verification/README.md).
+Astra's completed **1.3.12** independent review passed copper/connectivity/
+fabrication but placed assembly on **HOLD for J5's mouth-based CPL datum**.
+This 1.3.13 candidate addresses the four requested issues; **focused independent
+confirmation of these fixes is pending**. Only the requested worker was used,
+with no advisors or other models. Work is isolated on workspace **265**, based
+on `base-improvements` at `ab9fd44`, never editing original checkout or 261.
+The complete independently round-tripped **79-path binary delta** was imported,
+all 79 files matched the source candidate exactly and initial `--verify-only`
+passed before edits. `../verification/imported-candidate.json` records that proof.
 
-The scope correction that made this release orderable: **the module sockets are
-hand-soldered by the builder and not ordered from or assembled by JLCPCB.** The
-connector-gender question is therefore an assembly note, not an ordering blocker.
-Read POWER.md section 9 before ordering, and treat the parts, prices and stock
-figures below as order-time inputs rather than standing commitments.
+The only circuit additions are three populated 100 nF supply bypass capacitors:
+**C50/U2, C51/U3, C52/U4**. Exact sourced C1525 / CL05B104KO5NNNC / Samsung / 0402
+and native fields copied from C15. Their 2.582 / 1.888 / 1.625 mm pin-8 supply
+tracks and 0.40 / 0.72 / 0.80 mm GND returns end at adjacent 0.4 mm drill vias.
+C14/C15/C20 remain on the **+2.5V bias**, not repurposed. This is good local
+bypassing practice, **not a fix for proven oscillation or bench-proven stability**.
 
-## Ordering checklist
+- **J5**: HRO C165948 drawing supports 8.94 × 7.35 mm nominal shell centre.
+  Body board datum **(34.515,46.990)**, assembly-only board-Cartesian XY fields
+  **(+3.675,0) mm**, expected CPL **(4.035,130.810), 270°, top**. Anchor/pads/drills
+  never move. F.Fab-only shell art documents this independently of the anchor.
+  No guessed library rotation correction. `../verification/J5-assembly-datum.md`
+  explains current drawing vs legacy 7.30 mm graphics and exact axes/tests.
+- **Hand-solder instructions**: J7–J18.1 correctly **VBUS_PROT**; stereo-footprint
+  output jacks and ground-only J2/J4 described accurately. Coverage derived from
+  current stack report: **28 inspected / 26 bottom / 2 top (4mix/imix)**.
+  Exclusions unchanged; historical price/stock observations explicitly stale.
+- **J23 silk**: `J23 LINE MONO` / `OPEN=STEREO`; shunt fitted selects LINE mono
+  through U18, not a blanket headphone-mono promise. DNP policy unchanged.
 
-### 1. JLCPCB assembles (SMD only)
+## Exact final source and export identity
 
-| | |
+| Path relative to `modules/base` | SHA-256 |
 |---|---|
-| References | **119** |
-| BOM rows | **32** |
-| CPL entries | **119** (+ F1/F2, D2/D3, U6–U17, J5, SW1, all R/C/LED/FB) |
-| Files | `../jlcpcb/base/bom.csv`, `../jlcpcb/base/positions.csv`, `../jlcpcb/base/base-gerbers.zip` |
+| `base.kicad_pcb` | `dae64cad273575d4709ee02587e594065267a2a7ad567d833ef9f52a0bb562d0` |
+| `base.kicad_sch` | `672d7c896413578cf9a2b8afd7ecc9e3eb631a03e0b3a65efae2f4676fe817ab` |
+| `slot.kicad_sch` | `76d098af20c61ec651943f95069bd292694ae9cb9cbfdf1ed3593b1eee8740b1` |
 
-Every through-hole reference is excluded automatically (`--include-through-hole`
-is off), so the assembly order cannot contain them. `C2894928` and `C2894966`
-appear on **no** assembly line.
+All three fabrication ZIP copies have SHA-256:
+`3c7f69c2c7b750161fc85158ed65d419ccb4bab6caa4bb250927cd59229c645f`.
+Source/export details are machine-readable in `../verification/release-hashes.json`
+and `manifest.json`. Version and PCB silk are 1.3.13; slot/project/rules are
+byte-identical to the reviewed authority. The complete original POWER rationale
+is retained unchanged under `../POWER-HISTORICAL-pre-1.3.12.md`.
 
-### 2. The builder hand-solders (44 of the 163 references)
+## Current upload set / actual derived counts
 
-Machine-readable list: **`hand-solder.csv`** (one row per reference: `Qty` is 1
-per row, `GroupQty` is that group's size). Policy, parts and the stack-height
-specification: **`hand-solder.json`**.
+Only `../jlcpcb/base/base-gerbers.zip`, `bom.csv`, `positions.csv` in that directory
+are the JLCPCB upload set. **115 populated SMD placements / 35 grouped BOM rows**.
+ZIP: 9 Gerbers + separate PTH/NPTH Excellon; **438 PTH + 2 NPTH drill/slot features**.
+`base.zip`, `../jlcpcb/production_files/GERBER-base.zip` and all loose Gerber/drill
+files are byte-identical copies, not different revisions.
 
-| Group | Refs | Qty | Part to fit |
-|---|---|---:|---|
-| Per-slot rail socket | `VSUPPLY_1` … `VSUPPLY_12` | 12 | **female** 1x05 2.54 mm socket |
-| Per-slot ground socket | `GND1` … `GND12` | 12 | **female** 1x05 2.54 mm socket |
-| Auxiliary input socket | `INPUT1` | 1 | **female** 1x05 2.54 mm socket |
-| Power-expansion socket | `5V14` (2x05) | 1 | **female** 2x05 2.54 mm socket |
-| Rail-select jumper | `J7` … `J18` | 12 | **male** 1x02 2.00 mm header, `C2905948` |
-| 3.5 mm audio jacks | `J1`, `J2`, `J4`, `J6` | 4 | `WQP-PJ366ST` |
-| RV09 panel pots | `RV1`, `RV2` | 2 | `RV09-50K` |
+Production BOM/CPL/designators/assembly-policy inventory **160 physical refs =
+115 SMD + 44 hand-solder + 1 DNP J23**, exactly THREE populated capacitors
+more than 1.3.12. DNP remains physically accounted for, excluded from assembly.
+The full physical CPL also uses J5's documented body datum; native anchors are
+retained separately in geometry and orientation evidence. Legacy male socket
+fields are not buying instructions: female sockets are builder-supplied and
+explicitly NOT-JLC in the physical BOM. J23 is not added to the hand-solder list.
+Old plugin `jlcpcb/project.db` and production backups are historical, not order data.
 
-**The socket gender requirement is not optional.** 28 module PCBs exist, 27 were
-inspected, and **25 of them carry their power and ground connection as a male
-1x05 2.54 mm header (`Conn_01x05_Pin`) on the bottom side**, so the base must
-carry **female** sockets. (4mix and imix mount the same male header on `F.Cu` and
-cannot mate downwards as drawn; `modules/32bit/32bit.kicad_pcb` cannot be loaded
-standalone.)
-The legacy `C2894928 / PZ254-1-05-Z-8.5` field is a male header and must not be
-ordered for these positions; it survives in the immutable schematic/PCB fields
-and is overridden to `NOT-JLC` in the generated `bom.csv`.
+## Genuinely completed software checks
 
-### 3. Recommended builder parts (buy separately — not JLC lines)
+- Real saved/refilled KiCad CLI DRC with parity/all severities: **0 errors,
+  0 unrouted, 0 parity**, **70 visible library-copy warnings only**.
+  No severity suppression/exclusions. 67/70 installed pad sets match; J5
+  contact renumbering and INPUT1/5V14 annulus flags remain intentional/preserved.
+- Power verifier: **4068 assertions, 160 footprints, 515 physical pad-net
+  assignments**, no PCB_PENDING. All owner power/input/audio decisions retained.
+- Bounded delta proof: **all 523 old schematic pin memberships/types retained**,
+  only six added supply/GND pins; all 164 old component metadata retained except
+  J5's two deliberate native fields. **All 157 old pad/anchor sets, all 1109 old
+  copper items, outline and all 28 mounting holes unchanged**.
+- ERC identities unchanged: **7 errors + 4 warnings**, explicitly explained in
+  `../verification/warnings.md`; not zero ERC.
+- Stack: **63 assertions; 5.0 mm nominal / 3.8 mm calculated worst case**; nine
+  freshness-mutation selftest cases PASS. Not a physical mating trial.
+- Exporter: **37 unit + real CLI integration tests PASS**, including actual BASE
+  J5/body-CPL and three-cap inventory. **Six independent datum mutation tests PASS**.
+- Libraries: **47 projects / 7 libraries / 2914 loads / 528 custom references PASS**.
+- Original R58/R59 protection verifier rerun: PASS to exact imported 1.3.12 XML;
+  bounded live proof extends that unchanged input topology to 1.3.13. Current
+  report distinguishes historical delta from current full-source validation.
+- Exact BOM/CPL eligibility/parts/positions/policy/references, drills/slots, ZIP
+  CRC/entries/copies/source hashes checked. **13 aspect-correct review renders**
+  include new J5, bypass and J23 views; real ZIP independently parsed by Gerbonara.
 
-| Use | LCSC | MPN | Key dimensions | Stock (2026-09-17) | Price band |
-|---|---|---|---|---|---|
-| Slot sockets (25 pcs: 24 slot + `INPUT1`) | **C2897368** | `PM254-1-05-Z-8.5` (HCTL) | 8.5 mm insulator, 11.7 mm overall, square holes, top entry, 3 A | 6 155 | $0.1168 @5+ / $0.0826 @150+ |
-| Shunts (12 pcs, spare set recommended) | **C5664** | `2.0 Short circuit cap` (BOOMELE) | 2.00 mm open-top, 3.5 mm tall, 1.5 A | 126 400 | $0.0122 @50+ |
+## Residual release holds — not hidden by generated files
 
-Minimum socket insulator height: **6.3 mm requirement, 6.6 mm nominal part to
-buy** (calculated in `../verification/stack-height.json`). The `5V14` 2x05 socket
-needs a **straight** 2x05 female part and **its part number is still open**:
-`C2897425 / PM254-2-05-W-8.5` is the right-angle family member and must not be
-substituted for a top-entry socket.
+Targeted Astra confirmation, **JLCPCB library/portal placement preview**, bench
+reset/startup/load/audio/headphone checks, physical socket/module/shunt mating,
+current quote/stock qualification and order authorization are **unperformed**.
+No push, merge or order. One complete package commit is authorized **only on the
+isolated workspace branch**; the original base branch stays at ab9fd44.
 
-### 4. Stock and pre-order warnings
+Accepted limitations unchanged: no per-slot ILIM; shared rails/upstream limits;
+TVS/surge qualification gap; residual powered-off backfeed with R58/R59; module
+header PN/contact-depth assumptions; slot-1 offset preserved; 4mix/imix top-side
+headers cannot mate downward as drawn; line_in has only one matching connector.
+`cost-estimate.json` is explicitly **STALE**, not a current quote.
 
-* **TPS2111APWR `C471060` — 2 482 in stock ≈ 206 boards** (12 per board). This is
-  the single longest-lead, extended-part item; pre-order it or accept a JLCPCB
-  part-sourcing delay.
-* `C2897368` (6 155) and `C5664` (126 400) are plentiful but are **not** ordered
-  from JLCPCB; buy them from LCSC.
-* Everything else in the 32-row BOM was in stock at the time of the previous
-  sourcing pass; re-check at order time, because JLCPCB stock and part status
-  change daily.
+## Recheck
 
-### 5. Per-board cost estimate (partial, components only)
+```sh
+PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 modules/base/tools/regenerate_production.py --verify-only
+KICAD_JLCPCB_INTEGRATION=1 python3 -B -m unittest discover -s opt/kicad-jlcpcb/tests -v
+/usr/bin/python3 -B -m unittest discover -s modules/base/tools -p 'test_*.py' -v
+```
 
-`cost-estimate.json` is a reproducible estimate generated by
-`../tools/estimate_cost.py`: it prices the parts in the JLCPCB BOM plus the
-builder-supplied C2897368 sockets, C5664 shunts and C2905948 headers from live
-LCSC tier prices, at a stated batch size, attrition and tier policy. Re-run with
-`--refresh` to re-fetch prices.
-
-For a **50-board batch** (5 % attrition, buy max(needed, MOQ) at the largest tier reached):
-
-| | USD / board |
-|---|---:|
-| JLCPCB-assembled parts (119 placements, 31 of 32 BOM rows priced) | **19.94** |
-| Builder-supplied board parts (25 x C2897368 sockets + 12 x C2905948 headers) | **2.01** |
-| **Components subtotal** | **21.96** |
-| Separate accessory order (12 x C5664 shunts, user-fit, not a board designator) | 0.12 |
-
-This is a **partial subtotal, not the board cost**, and it is deliberately
-labelled as one:
-
-* **154 of the 163 designators are priced.** The nine that are not are listed in
-  the file: `5V14` (straight 2x05 female part still unselected), the four 3.5 mm
-  jacks and the two RV09 pots (no LCSC number at all) and `FB1`/`FB2` (`C12389`
-  has no parsable LCSC price ladder).
-* **Excluded entirely, because only a real quote can give them:** the bare
-  2-layer PCB (223.52 × 160.02 mm = 357.6 cm²), the JLCPCB SMT assembly and setup
-  charge for 119 placements, the stencil, shipping and taxes.
-* The single dominant item is **TPS2111APWR `C471060` at ≈$16.45/board**
-  (12 pieces x ≈$1.37).
-
-### 6. Remaining physical assumption
-
-**No assembled stack has been measured.** The clearance figure (5.0 mm nominal /
-3.8 mm worst case) is a datasheet calculation with the assumed values listed in
-POWER.md section 9.6. A **mating trial of one base plus one module is still
-advised** before committing to a large order — in particular because the module
-male-header part number is not annotated on the module PCBs and because slot 1's
-socket row carries its pre-existing −0.12 mm / −0.10 mm registration offset.
-
-## Artifacts
-
-* `base.zip` is identical to `../jlcpcb/base/base-gerbers.zip` and
-  `../jlcpcb/production_files/GERBER-base.zip`.
-* Full hand-assembly BOM/CPL and designators: **163 references**.
-  The four socket rows read `NOT-JLC` (see `hand-solder.json`); this value is
-  generated, not a KiCad field.
-* `manifest.json` records the release status, the source and artifact SHA-256
-  hashes, the hand-solder override hash and the pending physical validations.
-* `cost-estimate.json` is the partial component subtotal of section 5,
-  including the per-part LCSC price, tier and stock snapshot it was computed
-  from, the list of designators it could not price, and the method.
-* The regenerated gerbers/drills differ from the previously committed ones only
-  in their two KiCad export-date comment lines each.
-* The old plugin database and `backups/` are historical, not order inputs.
-* Preview diode/IC orientation and all placements in the assembler's system
-  before approving an order; native CPL generation is not assembly approval.
+`--refresh-manifest-only` revalidates exact current exports and updates final
+published hashes after intentionally refreshed docs/evidence; it does not refill,
+re-export or authorize ordering. `--verify-only` never regenerates payloads.

@@ -13510,6 +13510,10 @@
 		(pin "A5"
 			(uuid "5fa065c2-4773-4f4f-8782-0d71c3e3b13a")
 		)
+		(property "JLCPCB Position Offset X" "3.675" (at 226.06 66.04 0)
+			(hide yes) (effects (font (size 1.27 1.27))))
+		(property "JLCPCB Position Offset Y" "0" (at 226.06 66.04 0)
+			(hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "base"
 				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
@@ -25980,4 +25984,374 @@
 		(effects (font (size 1.27 1.27)) (justify left top))
 		(uuid "4e908346-c010-4670-b7ec-215f7e0ff0a7")
 	)
+
+	(symbol
+		(lib_id "Device:C")
+		(at 553.7200 144.7800 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "63d027df-6c72-5bdc-9c6c-17b8d7d7f048")
+		(property "Reference" "C50"
+			(at 554.9900 138.4300 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1uf"
+			(at 554.9900 140.5300 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 557.5300 143.8148 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 553.7200 144.7800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 553.7200 144.7800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
+			(at 3.8100 -161.2900 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 3.8100 -161.2900 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung"
+			(at 3.8100 -161.2900 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "f9f0e872-4bb1-5a9c-8e70-439946042010")
+		)
+		(pin "1"
+			(uuid "f12eee5b-5627-530e-ac95-5276160cca61")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "C50")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "GND" (shape input) (at 549.9100 144.7800 0)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "d05883af-76cc-5106-9306-762632ba390a"))
+	(global_label "+3.3V" (shape input) (at 557.5300 144.7800 180)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "58f91529-d105-5d8e-8001-8c54055a44a9"))
+	(text "C50: U2 pin 8 supply bypass, 100 nF" (at 554.7200 152.4000 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "6825d5cd-6acc-5f2c-a342-fddd88b99a02"))
+	(symbol
+		(lib_id "Device:C")
+		(at 553.7200 194.3100 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "76dbb4bf-43f2-553e-80e6-f1ab42ff32d3")
+		(property "Reference" "C51"
+			(at 554.9900 187.9600 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1uf"
+			(at 554.9900 190.0600 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 557.5300 193.3448 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 553.7200 194.3100 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 553.7200 194.3100 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
+			(at 3.8100 -111.7600 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 3.8100 -111.7600 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung"
+			(at 3.8100 -111.7600 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "f51e4082-f4eb-5dd6-9de4-21ed84fb22f2")
+		)
+		(pin "1"
+			(uuid "25dc2072-a52c-5e2e-9645-edfbd6cd5bc4")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "C51")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "GND" (shape input) (at 549.9100 194.3100 0)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "fa226f3c-9651-5d78-84e7-99d2047f9279"))
+	(global_label "+3.3V" (shape input) (at 557.5300 194.3100 180)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "d78df47c-0e7c-5010-a548-ce31e8bacdee"))
+	(text "C51: U3 pin 8 supply bypass, 100 nF" (at 554.7200 201.9300 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "45a85c8e-1d68-562f-85c2-78d46340d089"))
+	(symbol
+		(lib_id "Device:C")
+		(at 553.7200 246.3800 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "270fc362-9f79-51d0-801a-3483285f7fec")
+		(property "Reference" "C52"
+			(at 554.9900 240.0300 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1uf"
+			(at 554.9900 242.1300 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 557.5300 245.4148 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 553.7200 246.3800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 553.7200 246.3800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
+			(at 3.8100 -59.6900 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 3.8100 -59.6900 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung"
+			(at 3.8100 -59.6900 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "7267e185-ed77-5468-9cbe-e71519ef132d")
+		)
+		(pin "1"
+			(uuid "9f180995-2ee4-58a0-8a0f-d6de34da91c4")
+		)
+		(instances
+			(project "base"
+				(path "/b63493d3-5f6d-47e3-845b-87e7090fc1ab"
+					(reference "C52")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "GND" (shape input) (at 549.9100 246.3800 0)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "3eafa318-5c2a-57f2-a981-d5719db620c5"))
+	(global_label "+3.3V" (shape input) (at 557.5300 246.3800 180)
+		(effects (font (size 1.27 1.27)) (justify left bottom))
+		(uuid "1461cfb7-09c2-5f69-9558-2a4486ae0dfe"))
+	(text "C52: U4 pin 8 supply bypass, 100 nF" (at 554.7200 254.0000 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "e2e810ec-797d-54ab-9c2d-6adb07662010"))
 )

@@ -1,4 +1,74 @@
+## 1.3.13 — bounded post-review improvement candidate (2026-10-01)
+
+- Imported and hash-verified the complete 79-path 1.3.12 candidate binary patch
+  against ab9fd44 in isolated workspace 265; initial --verify-only PASS.
+- Prior Astra 1.3.12 copper/connectivity/fabrication PASS; assembly HOLD J5.
+  Current targeted confirmation pending; no advisors/other models invoked.
+- J5 C165948 HRO drawing: nominal 8.94 x 7.35 mm shell body centre, not pad
+  average. Assembly-only native XY deltas +3.675/0 mm in exported X-right/Y-up
+  board frame; CPL 4.035/130.810 mm, unchanged 270 deg top. Matching schematic/
+  PCB fields, F.Fab-only body art, independent expected-datum verification and
+  finite/conflict/overflow handling/tests. All physical pads/drills/anchor fixed.
+  Portal/library placement preview remains genuinely unperformed.
+- Added ONLY C50-C52, exact sourced C1525 100nF/0402, +3.3V-to-GND near U2/U3/U4
+  pin8 with short GND via returns. C14/C15/C20 stay on +2.5V bias. Not a proven
+  oscillation fix or bench claim. All 523 old pin memberships and 164 old
+  component metadata preserved except two J5 fields; only six new supply pins.
+- Corrected hand-solder VBUS_PROT selector/jack/coverage notes; no exclusions
+  changed. Truthful J23 LINE MONO / OPEN=STEREO silk, no headphone-mono promise.
+- Actual final counts 160 physical / 115 SMD / 35 BOM rows / 44 hand-solder / DNP
+  J23. 0 DRC errors/opens/parity, 70 unsuppressed library-copy warnings, existing
+  7 ERC errors +4 warnings unchanged by identity. 37 exporter tests +6 independent
+  datum mutation tests PASS; stack/power/protection/library checks PASS.
+- All 157 old pad/anchor sets, all 1109 old copper items, outline/28 holes and
+  stack assumptions retained. Synchronized final exports/renders/hashes and
+  complete path inventory/binary backup for one authorized workspace-only commit.
+  Original POWER history retained; no merge/push/order. Review/bench/mating/
+  placement-preview and current quote/stock holds remain explicit.
+
 # Changelog
+
+## 1.3.12 — PCB finalization and verified manufacturing candidate (NOT order authorization)
+
+* Synchronized/routed the saved PCB to the unchanged latest root + hierarchical
+  slot schematics, including all 1.3.11 changes. The actual branch VERSION was
+  stale at 1.3.10 although CHANGELOG already contained 1.3.11; VERSION and board
+  silkscreen now identify manufacturing candidate 1.3.12.
+* U6–U17 now use real SOT-583-8 TPS2116 land patterns. Removed all twelve ILIM
+  resistors/copper; MODE and J7–J18 pin 1 are VBUS_PROT. Rail headers retain
+  approved coordinates and logic-only leaves. Local output decouplers moved
+  closer, broad row trunks retained, slot 6/12 feeds locally detoured.
+* Added/routed approved U18/J23/R55/C48 mono selector (J23 DNP, stereo default),
+  R57 100-ohm return and R58/R59 10k protected inputs. Withdrew PCB remnants
+  J20/J21/J22/R53/R54 and gain/ILIM ghost nets. No U19/J24/R56/C49 reinstatement.
+* U2/U3/U4 plain SOIC-8, no fictitious exposed/paste pads; U3 TS922IDT. External
+  SOIC pads and all other fixed hardware/mechanical geometry preserved. Copied
+  actual native symbol supplier fields/flags/Datasheet/Description to the PCB.
+* Actual saved-board KiCad CLI 10.0.6 DRC: zero errors/opens/parity, 67 visible
+  library-copy warnings; ERC remains 7 errors + 4 warnings, unchanged. Strong
+  full pad/net/metadata checks replace every PCB_PENDING exemption.
+* Frozen final hashes only after DRC/parity and separate input mechanical proof:
+  114 preserved footprint/pad sets, 28 mounting holes, 223.52 × 160.02 mm outline.
+  Drill/place origin set to the lower-left corner. No DRC minima/severities or
+  source circuit/project rules weakened.
+* Regenerated Gerber + PTH/NPTH ZIP and all published copies. JLCPCB BOM/CPL:
+  112 populated SMD refs in 35 rows; 44 builder THT refs and DNP J23 excluded.
+  Physical inventory counts all 157 footprints, including DNP. All 435 PTH and
+  2 NPTH drill/slot features independently checked against PCB geometry.
+* Exporter repaired for KiCad 10 excluded-from-BOM metadata via native XML;
+  private CLI copies prevent source PRL/cache rewrites. Full 31-test unit/real
+  integration suite, library checks and protection/stack/geometry checks pass.
+* Aspect-correct front/back/critical-region renders and independent actual-ZIP
+  Gerber/drill views; preliminary stretched audio render replaced without any
+  mechanical change. Historical pricing explicitly stale, no live stock research.
+* Software-checked candidate only: independent Astra review, bench reset/startup/
+  load/audio checks, physical mating and JLCPCB placement preview unperformed.
+  No advisor invocation, order, commit, push or merge. No per-slot ILIM and
+  residual input-backfeed/surge limitations remain accepted/documented.
+
+**Historical entries below are chronology, not current order-file instructions.
+Use production/manifest.json and RELEASE_STATUS.md for the current candidate.**
+
 
 ## 1.3.11 — modest input-injection protection for U18/U2 (schematic only, PCB pending)
 

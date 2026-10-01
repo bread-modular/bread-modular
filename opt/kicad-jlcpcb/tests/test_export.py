@@ -245,6 +245,44 @@ class AssemblyTests(unittest.TestCase):
             result = self.assemble(fps, {'R1': position(Side=side)})
             self.assertEqual(result[1][0][3], '180.000000')
 
+    def test_xy_offsets_are_export_frame_not_rotated_or_bottom_mirrored(self):
+        for side, layer in [('top', 'F.Cu'), ('bottom', 'B.Cu')]:
+            for rotation in ['0', '90', '180', '270']:
+                fp = footprint(layer=layer, LCSC='C1', **{
+                    'JLCPCB Position Offset X': '3.675',
+                    'JLCPCB Position Offset Y': '-1.5',
+                    'JLCPCB Rotation Offset': '90'})
+                _, cpl, *_ = self.assemble({'R1': fp}, {'R1': position(Side=side, Rot=rotation)})
+                self.assertEqual(cpl[0][1:3], ('4.925000', '-4.000000'))
+                self.assertEqual(cpl[0][3], f'{(float(rotation)+90)%360:.6f}')
+
+    def test_xy_native_numeric_merge_and_zero(self):
+        fp = footprint(LCSC='C1', **{'JLCPCB Position Offset X': '0', 'JLCPCB Position Offset Y': '1.5'})
+        _, cpl, *_ = self.assemble({'R1': fp}, symbols={'R1': {
+            'JLCPCB_Position_Offset_X': '-0.0', 'JLCPCB Position Offset Y': '1.50e0'}})
+        self.assertEqual(cpl[0][1:3], ('1.250000', '-1.000000'))
+        _, cpl, *_ = self.assemble(symbols={'R1': {'JLCPCB Position Offset X': '', 'JLCPCB Position Offset Y': '~'}})
+        self.assertEqual(cpl[0][1:3], ('1.250000', '-2.500000'))
+
+    def test_xy_conflicts_stop_export(self):
+        for axis in ['X', 'Y']:
+            key = 'JLCPCB Position Offset '+axis
+            with self.subTest(axis=axis), self.assertRaisesRegex(jlc.ExportError, 'conflicting position'):
+                self.assemble({'R1': footprint(LCSC='C1', **{key: '1'})}, symbols={'R1': {key: '2'}})
+            with self.subTest(axis=axis), self.assertRaisesRegex(jlc.ExportError, 'conflicting position'):
+                self.assemble({'R1': footprint(LCSC='C1', **{key: '1', key.replace(' ', '_'): '2'})})
+
+    def test_xy_invalid_and_nonfinite_rejected(self):
+        for axis in ['X', 'Y']:
+            for value in ['nan', 'inf', '-inf', 'bad', '1e999']:
+                with self.subTest(axis=axis, value=value), self.assertRaises(jlc.ExportError):
+                    self.assemble(symbols={'R1': {'JLCPCB Position Offset '+axis: value}})
+
+    def test_xy_overflow_rejected(self):
+        with self.assertRaisesRegex(jlc.ExportError, 'non-finite placement'):
+            self.assemble(positions={'R1': position(PosX='1e308')},
+                          symbols={'R1': {'JLCPCB Position Offset X': '1e308'}})
+
     def test_bad_position_and_offset_values_fail(self):
         for key, value in [('PosX', 'nan'), ('PosY', 'inf'), ('Rot', 'bad'), ('Side', 'back')]:
             with self.subTest(key=key), self.assertRaises(jlc.ExportError):
@@ -352,6 +390,32 @@ class PipelineTests(unittest.TestCase):
             self.run_export()
 
 
+class NativeXmlMetadataTests(unittest.TestCase):
+    def read(self, body):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'symbols.xml'
+            path.write_text('<export><components>'+body+'</components></export>')
+            return jlc.read_xml_symbols(path)
+
+    def test_retains_all_native_exclusion_flags_and_supplier_fields(self):
+        result = self.read('<comp ref="R8"><value>10k</value><footprint>R_0402</footprint>'
+                           '<fields><field name="LCSC">C123</field></fields>'
+                           '<property name="exclude_from_bom"/><property name="exclude_from_board"/>'
+                           '<property name="dnp"/></comp>')
+        self.assertEqual(result['R8']['LCSC'], 'C123')
+        self.assertEqual([result['R8'][key] for key in ['__DNP','__EXCLUDE_FROM_BOM','__EXCLUDE_FROM_BOARD']], ['1']*3)
+
+    def test_duplicate_reference_or_conflicting_field_is_rejected(self):
+        with self.assertRaises(jlc.ExportError):
+            self.read('<comp ref="R1"/><comp ref="R1"/>')
+        with self.assertRaises(jlc.ExportError):
+            self.read('<comp ref="R1"><fields><field name="LCSC">C1</field><field name="LCSC">C2</field></fields></comp>')
+
+    def test_empty_native_metadata_is_rejected(self):
+        with self.assertRaises(jlc.ExportError):
+            self.read('')
+
+
 @unittest.skipUnless(os.environ.get('KICAD_JLCPCB_INTEGRATION') == '1' and shutil.which('kicad-cli'),
                      'set KICAD_JLCPCB_INTEGRATION=1 with kicad-cli installed')
 class KiCadIntegrationTests(unittest.TestCase):
@@ -393,6 +457,23 @@ class KiCadIntegrationTests(unittest.TestCase):
                     self.assertTrue(any(row['LCSC Part #'] == 'C7377' for row in bom))
                 self.assertEqual(before, {p: hashlib.sha256(p.read_bytes()).digest() for p in before})
 
+    def test_base_documented_J5_datum_and_three_caps(self):
+        source = REPO / 'modules/base'
+        before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in source.glob('*.kicad_*')}
+        output = self.directory/'base'
+        report = self.run_export(source, '--output', str(output), '--require-part-numbers')
+        bom, cpl = self.assert_csv_parity(output)
+        self.assertEqual(report['component_count'], 115)
+        self.assertEqual(report['bom_row_count'], 35)
+        placements = {q['Designator']: q for q in cpl}
+        self.assertEqual(tuple(placements['J5'][k] for k in ['Mid X','Mid Y','Rotation','Layer']),
+                         ('4.035000','130.810000','270.000000','top'))
+        self.assertTrue({'C50','C51','C52'} <= set(placements))
+        for ref in ['C50','C51','C52']:
+            row = next(q for q in bom if ref in [r.strip() for r in q['Designator'].split(',')])
+            self.assertEqual((row['LCSC Part #'],row['MPN']), ('C1525','CL05B104KO5NNNC'))
+        self.assertEqual(before,{p:hashlib.sha256(p.read_bytes()).hexdigest() for p in before})
+
     def test_native_fields_exclusions_mixed_sides_and_nonzero_origin(self):
         entries = [
             ('R1', 'smd', 'F.Cu', ''),
@@ -409,6 +490,8 @@ class KiCadIntegrationTests(unittest.TestCase):
         comps = [(ref, {'LCSC PN': 'C123', 'MPN': 'PART-X', 'Manufacturer': 'ACME'}, {})
                  for ref, *_ in entries]
         comps[1][1]['JLCPCB Rotation Offset'] = '90'
+        comps[0][1].update({'JLCPCB Position Offset X': '2.25', 'JLCPCB Position Offset Y': '-1.125'})
+        comps[1][1].update({'JLCPCB Position Offset X': '-0.75', 'JLCPCB Position Offset Y': '2.0'})
         comps[6][2]['dnp'] = 'yes'
         comps[7][2]['in_bom'] = 'no'
         comps[8][2]['on_board'] = 'no'
@@ -420,7 +503,7 @@ class KiCadIntegrationTests(unittest.TestCase):
         self.assertEqual(bom[0]['LCSC Part #'], 'C123')
         self.assertEqual(bom[0]['MPN'], 'PART-X')
         self.assertEqual(bom[0]['Quantity'], '2')
-        self.assertEqual([(r['Mid X'], r['Mid Y']) for r in cpl], [('2.000000', '2.000000'), ('5.000000', '2.000000')])
+        self.assertEqual([(r['Mid X'], r['Mid Y']) for r in cpl], [('4.250000', '0.875000'), ('4.250000', '4.000000')])
         self.assertEqual(cpl[1]['Layer'], 'bottom')
         self.assertEqual(cpl[1]['Rotation'], '0.000000')
         self.assertEqual(len(report['excluded']), 7)
