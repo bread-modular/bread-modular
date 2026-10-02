@@ -1,0 +1,19 @@
+# Open this macro from FreeCAD's Macro menu, with studies.py beside it.
+from pathlib import Path
+import sys
+R=Path(__file__).resolve().parent
+sys.path.insert(0,str(R))
+import studies
+import FreeCAD as App
+d=App.openDocument(str(R/'cad/lock-studies.FCStd'))
+for o in d.Objects:
+    if isinstance(getattr(o,'Proxy',None),studies.Coupon): o.touch()
+d.recompute()
+for kind in studies.KINDS:
+    o=d.getObject(kind)
+    assert o.Shape.isValid() and len(o.Shape.Solids)==1,kind
+if App.GuiUp:
+    import FreeCADGui as Gui
+    Gui.activeDocument().activeView().viewAxonometric()
+    Gui.activeDocument().activeView().fitAll()
+print('Reopened/recomputed standalone kit. Parameters.HardwareTotalGap is live; rebuild STLs after edits.')

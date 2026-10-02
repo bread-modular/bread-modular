@@ -1,5 +1,10 @@
 # Bread Modular travel case
 
+**Current print-test direction:** [standalone lock studies](lock-studies/README.md)
+— gauge first, then two small mechanisms (8 pieces total), **UNSLICED / UNPRINTED**.
+The slide clip physically “barely slips in”; the earlier flush latch also failed.
+No new full case or shell retrofit; historical CAD/STLs below remain unchanged.
+
 ## Current simple version
 
 Use **[slide-clips](slide-clips/README.md)**: full original-sized repaired shells
