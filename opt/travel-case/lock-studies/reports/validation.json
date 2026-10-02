@@ -1,0 +1,2776 @@
+{
+  "status": "PASS_GEOMETRIC_ONLY_UNSLICED_UNPRINTED",
+  "checks": [
+    {
+      "test": "FCStd belongs to completed build",
+      "pass": true
+    },
+    {
+      "test": "export_names: invariant C names and updated A/B at G0.60",
+      "pass": true,
+      "hardware_total_gap_mm": 0.6,
+      "hook_overlap_mm": 0.4,
+      "export_names": {
+        "C_MALE": "C_male_8.00",
+        "C_FEMALE": "C_female_G0.40_G0.60_G0.80",
+        "A_BASE": "A_base_G0.60",
+        "A_LID": "A_lid_G0.60",
+        "A_CLASP": "A_clasp_E0.40_G0.60",
+        "B_BASE": "B_base_G0.60",
+        "B_LID": "B_lid_G0.60",
+        "B_KEY": "B_key_G0.60"
+      }
+    },
+    {
+      "test": "export_names: invariant C names and updated A/B at G0.80",
+      "pass": true,
+      "hardware_total_gap_mm": 0.8,
+      "hook_overlap_mm": 0.6,
+      "export_names": {
+        "C_MALE": "C_male_8.00",
+        "C_FEMALE": "C_female_G0.40_G0.60_G0.80",
+        "A_BASE": "A_base_G0.80",
+        "A_LID": "A_lid_G0.80",
+        "A_CLASP": "A_clasp_E0.60_G0.80",
+        "B_BASE": "B_base_G0.80",
+        "B_LID": "B_lid_G0.80",
+        "B_KEY": "B_key_G0.80"
+      }
+    },
+    {
+      "test": "Exactly eight baseline STL pieces",
+      "pass": true
+    },
+    {
+      "test": "Reopened/recomputed single valid closed solid C_MALE",
+      "pass": true,
+      "bounds_mm": [
+        -2.0000000000000004,
+        -11.000000000000002,
+        -1.4155343563970746e-15,
+        10.000000000000002,
+        20.0,
+        5.0
+      ],
+      "volume_mm3": 1448.6979582226636
+    },
+    {
+      "test": "Reopened shape matches analytical recipe including orientation C_MALE",
+      "pass": true
+    },
+    {
+      "test": "Small coupon / CAD bed Z0 C_MALE",
+      "pass": true,
+      "bed_dimensions_mm": [
+        12.000000000000002,
+        31.0,
+        5.000000000000002
+      ]
+    },
+    {
+      "test": "Written STL belongs to this build C_MALE",
+      "pass": true
+    },
+    {
+      "test": "ACTUAL STL watertight / manifold / connected / no self-intersections / outward / bed0 C_MALE",
+      "pass": true,
+      "file": "stl/C_male_8.00.stl",
+      "sha256": "41417f6ec1293273334d46177fb2e2ccdd681792b3aa45ba3813d7d084dc584c",
+      "vertices": 142,
+      "triangles": 280,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 1448.697963188836,
+      "cad_volume_mm3": 1448.6979582226631,
+      "bed_bounds_mm": [
+        4.440892098500626e-16,
+        1.7763568394002505e-15,
+        1.27675647831893e-15,
+        12.0,
+        31.0,
+        5.0
+      ]
+    },
+    {
+      "test": "Written STL matches CAD bed orientation C_MALE",
+      "pass": true
+    },
+    {
+      "test": "Reopened/recomputed single valid closed solid C_FEMALE",
+      "pass": true,
+      "bounds_mm": [
+        -8.881784197001252e-16,
+        -5.551115123125783e-16,
+        -3.858025010572419e-15,
+        35.400000000000006,
+        29.0,
+        5.0
+      ],
+      "volume_mm3": 2523.388298333331
+    },
+    {
+      "test": "Reopened shape matches analytical recipe including orientation C_FEMALE",
+      "pass": true
+    },
+    {
+      "test": "Small coupon / CAD bed Z0 C_FEMALE",
+      "pass": true,
+      "bed_dimensions_mm": [
+        35.400000000000006,
+        29.0,
+        5.0000000000000036
+      ]
+    },
+    {
+      "test": "Written STL belongs to this build C_FEMALE",
+      "pass": true
+    },
+    {
+      "test": "ACTUAL STL watertight / manifold / connected / no self-intersections / outward / bed0 C_FEMALE",
+      "pass": true,
+      "file": "stl/C_female_G0.40_G0.60_G0.80.stl",
+      "sha256": "e7259a3562c8fe48ac05f2b6b613382ee7e5da2d70e661c298df409315951ed9",
+      "vertices": 340,
+      "triangles": 676,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 2523.3886261299376,
+      "cad_volume_mm3": 2523.388298333331,
+      "bed_bounds_mm": [
+        8.881784197001252e-16,
+        5.273559366969494e-16,
+        1.3877787807814457e-15,
+        35.400001525878906,
+        29.0,
+        5.0
+      ]
+    },
+    {
+      "test": "Written STL matches CAD bed orientation C_FEMALE",
+      "pass": true
+    },
+    {
+      "test": "Reopened/recomputed single valid closed solid A_BASE",
+      "pass": true,
+      "bounds_mm": [
+        -18.0,
+        -17.0,
+        -0.400000000000001,
+        -0.39999999999999947,
+        2.7755575615628914e-17,
+        8.4
+      ],
+      "volume_mm3": 1520.4892183333343
+    },
+    {
+      "test": "Reopened shape matches analytical recipe including orientation A_BASE",
+      "pass": true
+    },
+    {
+      "test": "Small coupon / CAD bed Z0 A_BASE",
+      "pass": true,
+      "bed_dimensions_mm": [
+        17.6,
+        17.0,
+        8.8
+      ]
+    },
+    {
+      "test": "Written STL belongs to this build A_BASE",
+      "pass": true
+    },
+    {
+      "test": "ACTUAL STL watertight / manifold / connected / no self-intersections / outward / bed0 A_BASE",
+      "pass": true,
+      "file": "stl/A_base_G0.80.stl",
+      "sha256": "103a617d0397e4743bb57f2d0b9b35126f98a835609e55d85f67cb7c455ff98d",
+      "vertices": 200,
+      "triangles": 396,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 1520.4892811469601,
+      "cad_volume_mm3": 1520.4892183333345,
+      "bed_bounds_mm": [
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        17.600000381469727,
+        17.0,
+        8.800000190734863
+      ]
+    },
+    {
+      "test": "Written STL matches CAD bed orientation A_BASE",
+      "pass": true
+    },
+    {
+      "test": "Reopened/recomputed single valid closed solid A_LID",
+      "pass": true,
+      "bounds_mm": [
+        -18.0,
+        -2.7755575615628914e-17,
+        -0.4000000000000017,
+        -0.4000000000000003,
+        39.0,
+        8.4
+      ],
+      "volume_mm3": 2631.141588333333
+    },
+    {
+      "test": "Reopened shape matches analytical recipe including orientation A_LID",
+      "pass": true
+    },
+    {
+      "test": "Small coupon / CAD bed Z0 A_LID",
+      "pass": true,
+      "bed_dimensions_mm": [
+        17.6,
+        39.0,
+        8.800000000000002
+      ]
+    },
+    {
+      "test": "Written STL belongs to this build A_LID",
+      "pass": true
+    },
+    {
+      "test": "ACTUAL STL watertight / manifold / connected / no self-intersections / outward / bed0 A_LID",
+      "pass": true,
+      "file": "stl/A_lid_G0.80.stl",
+      "sha256": "51c91afebc1210bad77a9028f08344d47cb5b865477382726a72a142c6de5035",
+      "vertices": 172,
+      "triangles": 340,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 2631.141684943206,
+      "cad_volume_mm3": 2631.141588333331,
+      "bed_bounds_mm": [
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        17.600000381469727,
+        39.0,
+        8.800000190734863
+      ]
+    },
+    {
+      "test": "Written STL matches CAD bed orientation A_LID",
+      "pass": true
+    },
+    {
+      "test": "Reopened/recomputed single valid closed solid A_CLASP",
+      "pass": true,
+      "bounds_mm": [
+        -5.800000000000001,
+        -4.800000000000001,
+        -1.3877787807814457e-16,
+        8.000000000000002,
+        34.0,
+        8.0
+      ],
+      "volume_mm3": 1442.5404601441392
+    },
+    {
+      "test": "Reopened shape matches analytical recipe including orientation A_CLASP",
+      "pass": true
+    },
+    {
+      "test": "Small coupon / CAD bed Z0 A_CLASP",
+      "pass": true,
+      "bed_dimensions_mm": [
+        13.800000000000002,
+        38.8,
+        8.0
+      ]
+    },
+    {
+      "test": "Written STL belongs to this build A_CLASP",
+      "pass": true
+    },
+    {
+      "test": "ACTUAL STL watertight / manifold / connected / no self-intersections / outward / bed0 A_CLASP",
+      "pass": true,
+      "file": "stl/A_clasp_E0.60_G0.80.stl",
+      "sha256": "d514b4ffe80866ceeee275483a891db84aa30a3d414846d828378696d337f419",
+      "vertices": 161,
+      "triangles": 318,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 1442.5458060328626,
+      "cad_volume_mm3": 1442.5404601441392,
+      "bed_bounds_mm": [
+        0.0,
+        8.881784197001252e-16,
+        0.0,
+        13.800000190734863,
+        38.79999923706055,
+        8.0
+      ]
+    },
+    {
+      "test": "Written STL matches CAD bed orientation A_CLASP",
+      "pass": true
+    },
+    {
+      "test": "Reopened/recomputed single valid closed solid B_BASE",
+      "pass": true,
+      "bounds_mm": [
+        -15.000000000000004,
+        -30.0,
+        3.5999999999999943,
+        15.000000000000002,
+        14.0,
+        6.800000000000001
+      ],
+      "volume_mm3": 3849.6445594260335
+    },
+    {
+      "test": "Reopened shape matches analytical recipe including orientation B_BASE",
+      "pass": true
+    },
+    {
+      "test": "Small coupon / CAD bed Z0 B_BASE",
+      "pass": true,
+      "bed_dimensions_mm": [
+        30.000000000000007,
+        44.0,
+        3.2000000000000064
+      ]
+    },
+    {
+      "test": "Written STL belongs to this build B_BASE",
+      "pass": true
+    },
+    {
+      "test": "ACTUAL STL watertight / manifold / connected / no self-intersections / outward / bed0 B_BASE",
+      "pass": true,
+      "file": "stl/B_base_G0.80.stl",
+      "sha256": "ece0b6dc713131d1a2935137904d0045931fc423c83e0d520e64d86fcc6591d4",
+      "vertices": 390,
+      "triangles": 780,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 3849.6607884691543,
+      "cad_volume_mm3": 3849.6445594260317,
+      "bed_bounds_mm": [
+        3.552713678800501e-15,
+        0.0,
+        4.884981308350689e-15,
+        30.0,
+        44.0,
+        3.200000047683716
+      ]
+    },
+    {
+      "test": "Written STL matches CAD bed orientation B_BASE",
+      "pass": true
+    },
+    {
+      "test": "Reopened/recomputed single valid closed solid B_LID",
+      "pass": true,
+      "bounds_mm": [
+        -15.000000000000004,
+        -14.000000000000004,
+        -9.076073226310655e-15,
+        15.000000000000004,
+        30.0,
+        3.2
+      ],
+      "volume_mm3": 3899.66662104318
+    },
+    {
+      "test": "Reopened shape matches analytical recipe including orientation B_LID",
+      "pass": true
+    },
+    {
+      "test": "Small coupon / CAD bed Z0 B_LID",
+      "pass": true,
+      "bed_dimensions_mm": [
+        30.000000000000007,
+        44.0,
+        3.200000000000009
+      ]
+    },
+    {
+      "test": "Written STL belongs to this build B_LID",
+      "pass": true
+    },
+    {
+      "test": "ACTUAL STL watertight / manifold / connected / no self-intersections / outward / bed0 B_LID",
+      "pass": true,
+      "file": "stl/B_lid_G0.80.stl",
+      "sha256": "64ff0b959ab87eea0cc7947aee4cba73c9c924e89dbe06bc461281056116e7df",
+      "vertices": 346,
+      "triangles": 692,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 3899.6884194473782,
+      "cad_volume_mm3": 3899.6666210431795,
+      "bed_bounds_mm": [
+        3.552713678800501e-15,
+        3.552713678800501e-15,
+        8.215650382226158e-15,
+        30.0,
+        44.0,
+        3.200000047683716
+      ]
+    },
+    {
+      "test": "Written STL matches CAD bed orientation B_LID",
+      "pass": true
+    },
+    {
+      "test": "Reopened/recomputed single valid closed solid B_KEY",
+      "pass": true,
+      "bounds_mm": [
+        -2.000000000000001,
+        -11.0,
+        -12.000000000000002,
+        2.0000000000000036,
+        11.0,
+        9.000000000000002
+      ],
+      "volume_mm3": 887.1510183333334
+    },
+    {
+      "test": "Reopened shape matches analytical recipe including orientation B_KEY",
+      "pass": true
+    },
+    {
+      "test": "Small coupon / CAD bed Z0 B_KEY",
+      "pass": true,
+      "bed_dimensions_mm": [
+        22.0,
+        21.000000000000004,
+        4.000000000000009
+      ]
+    },
+    {
+      "test": "Written STL belongs to this build B_KEY",
+      "pass": true
+    },
+    {
+      "test": "ACTUAL STL watertight / manifold / connected / no self-intersections / outward / bed0 B_KEY",
+      "pass": true,
+      "file": "stl/B_key_G0.80.stl",
+      "sha256": "621e2b5a6d9f5284ac2009acd7c5d3eb89d731b12da7c8c1734537f22de0e8bc",
+      "vertices": 128,
+      "triangles": 252,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 887.1510331862252,
+      "cad_volume_mm3": 887.1510183333327,
+      "bed_bounds_mm": [
+        0.0,
+        8.881784197001252e-16,
+        3.552713678800501e-15,
+        22.0,
+        21.0,
+        4.0
+      ]
+    },
+    {
+      "test": "Written STL matches CAD bed orientation B_KEY",
+      "pass": true
+    },
+    {
+      "test": "Gauge rail 8.00 mm measured on bearing lands",
+      "pass": true,
+      "width_mm": 8.0
+    },
+    {
+      "test": "Open channel empty at specified width 8.4",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge channel measured 8.4",
+      "pass": true,
+      "female_width_mm": 8.4,
+      "total_gap_mm": 0.4,
+      "centred_per_side_mm": 0.2
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @-20.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @-17.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @-15.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @-12.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @-10.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @-7.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @-5.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @-2.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.4 @0.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Open channel empty at specified width 8.6",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge channel measured 8.6",
+      "pass": true,
+      "female_width_mm": 8.6,
+      "total_gap_mm": 0.6,
+      "centred_per_side_mm": 0.3
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @-20.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @-17.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @-15.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @-12.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @-10.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @-7.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @-5.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @-2.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.6 @0.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Open channel empty at specified width 8.8",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge channel measured 8.8",
+      "pass": true,
+      "female_width_mm": 8.799999999999997,
+      "total_gap_mm": 0.8,
+      "centred_per_side_mm": 0.4
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @-20.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @-17.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @-15.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @-12.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @-10.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @-7.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @-5.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @-2.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Gauge entry/withdrawal G0.8 @0.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Live reopened parameter actually changes A_BASE",
+      "pass": true,
+      "old_volume_mm3": 1520.4892183333343,
+      "new_volume_mm3": 1493.3989033333323
+    },
+    {
+      "test": "Live reopened parameter actually changes A_LID",
+      "pass": true,
+      "old_volume_mm3": 2631.141588333333,
+      "new_volume_mm3": 2582.5072733333323
+    },
+    {
+      "test": "Live reopened parameter actually changes A_CLASP",
+      "pass": true,
+      "old_volume_mm3": 1442.5404601441392,
+      "new_volume_mm3": 1442.7884601441658
+    },
+    {
+      "test": "Live reopened parameter actually changes B_BASE",
+      "pass": true,
+      "old_volume_mm3": 3849.6445594260335,
+      "new_volume_mm3": 3867.178639798592
+    },
+    {
+      "test": "Live reopened parameter actually changes B_LID",
+      "pass": true,
+      "old_volume_mm3": 3899.66662104318,
+      "new_volume_mm3": 3915.0271883046394
+    },
+    {
+      "test": "Live reopened parameter actually changes B_KEY",
+      "pass": true,
+      "old_volume_mm3": 887.1510183333334,
+      "new_volume_mm3": 883.9830183333336
+    },
+    {
+      "test": "Changed parameter updates rotational bore",
+      "pass": true
+    },
+    {
+      "test": "Parameter restoration C_MALE",
+      "pass": true
+    },
+    {
+      "test": "Parameter restoration C_FEMALE",
+      "pass": true
+    },
+    {
+      "test": "Parameter restoration A_BASE",
+      "pass": true
+    },
+    {
+      "test": "Parameter restoration A_LID",
+      "pass": true
+    },
+    {
+      "test": "Parameter restoration A_CLASP",
+      "pass": true
+    },
+    {
+      "test": "Parameter restoration B_BASE",
+      "pass": true
+    },
+    {
+      "test": "Parameter restoration B_LID",
+      "pass": true
+    },
+    {
+      "test": "Parameter restoration B_KEY",
+      "pass": true
+    },
+    {
+      "test": "A halves close without material overlap",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "A relaxed locked clasp has no preload interference",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A positive hook overlap distinct from G",
+      "pass": true,
+      "hook_engagement_mm": 0.6,
+      "total_gap_mm": 0.8
+    },
+    {
+      "test": "A load path blocks lid +Y",
+      "pass": true,
+      "intersection_mm3": 0.9599999999920609,
+      "meaning": "positive geometric bearing overlap after taking up slack; NOT a force or strength metric"
+    },
+    {
+      "test": "A load path blocks base -Y",
+      "pass": true,
+      "intersection_mm3": 7.98399999998058,
+      "meaning": "positive geometric bearing overlap after taking up slack; NOT a force or strength metric"
+    },
+    {
+      "test": "A release travel below positive stop",
+      "pass": true,
+      "release_mm": 0.8999999999999999,
+      "stop_mm": 1.2
+    },
+    {
+      "test": "A release surrogate remains connected",
+      "pass": true
+    },
+    {
+      "test": "A press surrogate @0.00",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.10",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.20",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.30",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.40",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.50",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.60",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.70",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.80",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A press surrogate @0.90",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A self-contained release stop terminal position",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "A physical stop blocks overtravel",
+      "pass": true,
+      "overtravel_mm": 0.1,
+      "intersection_mm3": 0.6093076923076807
+    },
+    {
+      "test": "A pressed upper peel @0.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @0.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @1.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @1.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @2.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @2.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @3.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @3.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @4.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @4.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A pressed upper peel @5.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @0.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-0.25",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-0.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-0.75",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-1.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-1.25",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-1.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-1.75",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-2.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-2.25",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-2.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-2.75",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A rigid toe disengage @-3.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @0.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @0.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @1.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @1.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @2.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @2.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @3.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @3.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @4.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @4.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @5.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @5.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @6.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @6.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @7.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @7.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @8.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @8.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @9.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @9.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @10.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @10.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @11.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @11.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A normal withdrawal @12.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "A deflected upper hook permits lid separation",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "A released halves genuinely separate @0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "A released halves genuinely separate @1",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "A released halves genuinely separate @4",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "A released halves genuinely separate @12",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "A released halves genuinely separate @30",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "B rotational neck bore AND full head sweep include diagonal + G",
+      "pass": true,
+      "g": 0.8,
+      "front_t": 3.2,
+      "base_front": 3.6,
+      "rear": 6.800000000000001,
+      "floor": 6.000000000000001,
+      "bore": 6.45685424949238,
+      "sweep": 19.239088914585775,
+      "slot_l": 18.8,
+      "slot_w": 4.8,
+      "push": 1.2,
+      "collar_top": -1.2,
+      "head_z": 6.000000000000001
+    },
+    {
+      "test": "B lid keyhole fully enclosed in its own tab",
+      "pass": true,
+      "closed_apertures": 1
+    },
+    {
+      "test": "B base keyhole fully enclosed in its own tab",
+      "pass": true,
+      "closed_apertures": 1
+    },
+    {
+      "test": "B overlapping tabs have axial clearance",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-18.000",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-17.520",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-17.040",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-16.560",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-16.080",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-15.600",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-15.120",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-14.640",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-14.160",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-13.680",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-13.200",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-12.720",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-12.240",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-11.760",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-11.280",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-10.800",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-10.320",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-9.840",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-9.360",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-8.880",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-8.400",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-7.920",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-7.440",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-6.960",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-6.480",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-6.000",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-5.520",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-5.040",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-4.560",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-4.080",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-3.600",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-3.120",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-2.640",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-2.160",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-1.680",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-1.200",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-0.720",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @-0.240",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @0.240",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @0.720",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B straight entry/removal @1.200",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @0.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @2.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @5.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @7.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @10.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @12.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @15.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @17.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @20.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @22.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @25.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @27.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @30.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @32.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @35.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @37.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @40.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @42.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @45.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @47.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @50.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @52.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @55.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @57.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @60.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @62.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @65.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @67.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @70.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @72.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @75.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @77.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @80.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @82.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @85.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @87.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B unparked rotation @90.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B full circular head sweep is clear, including unsampled angles",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B complete circumscribed neck rotation clear in both closed bores",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @1.2",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @1.0999999999999999",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @1.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.8999999999999999",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.8",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.7",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.6",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.5",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.4",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.30000000000000004",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.20000000000000007",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.10000000000000009",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B outward parking / inward unpark @0.0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B locked key parked without interference",
+      "pass": true,
+      "intersection_mm3": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "test": "B seated parking walls block rotation -10",
+      "pass": true,
+      "intersection_mm3": 5.485393033273438
+    },
+    {
+      "test": "B seated parking walls block rotation -5",
+      "pass": true,
+      "intersection_mm3": 1.0417128302232426
+    },
+    {
+      "test": "B seated parking walls block rotation 5",
+      "pass": true,
+      "intersection_mm3": 1.041712830205623
+    },
+    {
+      "test": "B seated parking walls block rotation 10",
+      "pass": true,
+      "intersection_mm3": 5.48539303326607
+    },
+    {
+      "test": "B locked rear head prevents withdrawal through base tab",
+      "pass": true
+    },
+    {
+      "test": "B neck blocks independent lid separation along Y",
+      "pass": true,
+      "translation_mm": 1
+    },
+    {
+      "test": "B neck blocks independent base separation along Y",
+      "pass": true,
+      "translation_mm": -1
+    },
+    {
+      "test": "B front collar captures lid axially",
+      "pass": true
+    },
+    {
+      "test": "B rear T-head captures base axially",
+      "pass": true
+    },
+    {
+      "test": "B released halves genuinely separate @0",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "B released halves genuinely separate @2",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "B released halves genuinely separate @10",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "B released halves genuinely separate @25",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "B released halves genuinely separate @45",
+      "pass": true,
+      "intersection_mm3": [
+        0.0
+      ]
+    },
+    {
+      "test": "Bounded section support screen C_MALE",
+      "pass": true,
+      "max_new_area_beyond_45degree_growth_mm2": 0.03831645260304077
+    },
+    {
+      "test": "Bounded section support screen C_FEMALE",
+      "pass": true,
+      "max_new_area_beyond_45degree_growth_mm2": 0.08673713867201417
+    },
+    {
+      "test": "Bounded section support screen A_BASE",
+      "pass": true,
+      "max_new_area_beyond_45degree_growth_mm2": 0.06938971093754344
+    },
+    {
+      "test": "Bounded section support screen A_LID",
+      "pass": true,
+      "max_new_area_beyond_45degree_growth_mm2": 0.0693897109375507
+    },
+    {
+      "test": "Bounded section support screen A_CLASP",
+      "pass": true,
+      "max_new_area_beyond_45degree_growth_mm2": 0.008673713867187606
+    },
+    {
+      "test": "Bounded section support screen B_BASE",
+      "pass": true,
+      "max_new_area_beyond_45degree_growth_mm2": 0.050746497972412485
+    },
+    {
+      "test": "Bounded section support screen B_LID",
+      "pass": true,
+      "max_new_area_beyond_45degree_growth_mm2": 0.05074629726130249
+    },
+    {
+      "test": "Bounded section support screen B_KEY",
+      "pass": true,
+      "max_new_area_beyond_45degree_growth_mm2": 0.08673713867193647
+    }
+  ],
+  "motion": {
+    "A": {
+      "locked": {
+        "unloaded_beam": true,
+        "positive_overlap_mm": 0.6,
+        "axial_slack_each_end_mm": 0.4
+      },
+      "approximation": "w(y)=delta*y^2*(3L-y)/(2L^3); y unchanged; head x shear from tip slope. Root/toe rigid. No FEA/material/force prediction.",
+      "press_states": [
+        {
+          "press_mm": 0.0,
+          "tip_slope_radians": 0.0
+        },
+        {
+          "press_mm": 0.09999999999999999,
+          "tip_slope_radians": 0.0062499999999999995
+        },
+        {
+          "press_mm": 0.19999999999999998,
+          "tip_slope_radians": 0.012499999999999999
+        },
+        {
+          "press_mm": 0.3,
+          "tip_slope_radians": 0.01875
+        },
+        {
+          "press_mm": 0.39999999999999997,
+          "tip_slope_radians": 0.024999999999999998
+        },
+        {
+          "press_mm": 0.49999999999999994,
+          "tip_slope_radians": 0.031249999999999997
+        },
+        {
+          "press_mm": 0.6,
+          "tip_slope_radians": 0.0375
+        },
+        {
+          "press_mm": 0.7,
+          "tip_slope_radians": 0.04374999999999999
+        },
+        {
+          "press_mm": 0.7999999999999999,
+          "tip_slope_radians": 0.049999999999999996
+        },
+        {
+          "press_mm": 0.8999999999999999,
+          "tip_slope_radians": 0.056249999999999994
+        }
+      ],
+      "release_press_mm": 0.8999999999999999,
+      "stop_mm": 1.2,
+      "peel_degrees": 5,
+      "pivot_xy_mm": [
+        -4.4,
+        -3.0
+      ],
+      "toe_disengage_y_mm": -3,
+      "withdraw_x_mm": 12,
+      "insertion": "Reverse withdraw/down/peel sequence with upper pad pressed; seat rigid toe, pivot upper hook behind square shoulder, release pad."
+    },
+    "B": {
+      "entry_head_axis": "X parallel to seam",
+      "locked_head_axis": "Y, 90 degrees",
+      "push_to_rotate_mm": 1.2,
+      "pocket_depth_mm": 0.8,
+      "free_rotation_rear_gap_mm": 0.3999999999999999,
+      "collar_bar_mm": [
+        22,
+        4,
+        2.8
+      ],
+      "head_mm": [
+        18,
+        4,
+        3
+      ],
+      "neck_mm": [
+        4,
+        4
+      ],
+      "front_collar_captures_lid": true,
+      "rear_head_captures_base": true,
+      "closed_bores_couple_both_halves": true,
+      "axial_no_spring": "Pull outward to park; no spring maintains parking. Gravity/vibration can unpark. Push+turn accidental resistance UNPROVEN."
+    }
+  },
+  "stl": {
+    "C_MALE": {
+      "file": "stl/C_male_8.00.stl",
+      "sha256": "41417f6ec1293273334d46177fb2e2ccdd681792b3aa45ba3813d7d084dc584c",
+      "vertices": 142,
+      "triangles": 280,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 1448.697963188836,
+      "cad_volume_mm3": 1448.6979582226631,
+      "bed_bounds_mm": [
+        4.440892098500626e-16,
+        1.7763568394002505e-15,
+        1.27675647831893e-15,
+        12.0,
+        31.0,
+        5.0
+      ]
+    },
+    "C_FEMALE": {
+      "file": "stl/C_female_G0.40_G0.60_G0.80.stl",
+      "sha256": "e7259a3562c8fe48ac05f2b6b613382ee7e5da2d70e661c298df409315951ed9",
+      "vertices": 340,
+      "triangles": 676,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 2523.3886261299376,
+      "cad_volume_mm3": 2523.388298333331,
+      "bed_bounds_mm": [
+        8.881784197001252e-16,
+        5.273559366969494e-16,
+        1.3877787807814457e-15,
+        35.400001525878906,
+        29.0,
+        5.0
+      ]
+    },
+    "A_BASE": {
+      "file": "stl/A_base_G0.80.stl",
+      "sha256": "103a617d0397e4743bb57f2d0b9b35126f98a835609e55d85f67cb7c455ff98d",
+      "vertices": 200,
+      "triangles": 396,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 1520.4892811469601,
+      "cad_volume_mm3": 1520.4892183333345,
+      "bed_bounds_mm": [
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        17.600000381469727,
+        17.0,
+        8.800000190734863
+      ]
+    },
+    "A_LID": {
+      "file": "stl/A_lid_G0.80.stl",
+      "sha256": "51c91afebc1210bad77a9028f08344d47cb5b865477382726a72a142c6de5035",
+      "vertices": 172,
+      "triangles": 340,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 2631.141684943206,
+      "cad_volume_mm3": 2631.141588333331,
+      "bed_bounds_mm": [
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        17.600000381469727,
+        39.0,
+        8.800000190734863
+      ]
+    },
+    "A_CLASP": {
+      "file": "stl/A_clasp_E0.60_G0.80.stl",
+      "sha256": "d514b4ffe80866ceeee275483a891db84aa30a3d414846d828378696d337f419",
+      "vertices": 161,
+      "triangles": 318,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 1442.5458060328626,
+      "cad_volume_mm3": 1442.5404601441392,
+      "bed_bounds_mm": [
+        0.0,
+        8.881784197001252e-16,
+        0.0,
+        13.800000190734863,
+        38.79999923706055,
+        8.0
+      ]
+    },
+    "B_BASE": {
+      "file": "stl/B_base_G0.80.stl",
+      "sha256": "ece0b6dc713131d1a2935137904d0045931fc423c83e0d520e64d86fcc6591d4",
+      "vertices": 390,
+      "triangles": 780,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 3849.6607884691543,
+      "cad_volume_mm3": 3849.6445594260317,
+      "bed_bounds_mm": [
+        3.552713678800501e-15,
+        0.0,
+        4.884981308350689e-15,
+        30.0,
+        44.0,
+        3.200000047683716
+      ]
+    },
+    "B_LID": {
+      "file": "stl/B_lid_G0.80.stl",
+      "sha256": "64ff0b959ab87eea0cc7947aee4cba73c9c924e89dbe06bc461281056116e7df",
+      "vertices": 346,
+      "triangles": 692,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 3899.6884194473782,
+      "cad_volume_mm3": 3899.6666210431795,
+      "bed_bounds_mm": [
+        3.552713678800501e-15,
+        3.552713678800501e-15,
+        8.215650382226158e-15,
+        30.0,
+        44.0,
+        3.200000047683716
+      ]
+    },
+    "B_KEY": {
+      "file": "stl/B_key_G0.80.stl",
+      "sha256": "621e2b5a6d9f5284ac2009acd7c5d3eb89d731b12da7c8c1734537f22de0e8bc",
+      "vertices": 128,
+      "triangles": 252,
+      "closed_solid": true,
+      "connected_components": 1,
+      "non_manifold": false,
+      "nonuniform_orientation": false,
+      "self_intersection": false,
+      "signed_volume_mm3": 887.1510331862252,
+      "cad_volume_mm3": 887.1510183333327,
+      "bed_bounds_mm": [
+        0.0,
+        8.881784197001252e-16,
+        3.552713678800501e-15,
+        22.0,
+        21.0,
+        4.0
+      ]
+    }
+  },
+  "limitations": [
+    "UNPRINTED / UNSLICED: no installed Bambu/Orca/Prusa CLI found; no G-code generated.",
+    "Snap motion is an explicit small-deflection kinematic surrogate with unchanged y and tip-slope head shear, NOT FEA; no material/force/strain claims.",
+    "Finite motion samples do not prove arbitrary 3D manipulation; key neck/head rotational envelopes additionally checked analytically.",
+    "No certified strength, retention, accidental push+turn resistance, fatigue, creep or case integration.",
+    "Standalone analytical tabs/keepers, NOT faithful shell crops. Later real-section test mandatory."
+  ],
+  "build": {
+    "status": "REOPENED_AND_EXPORTED; independent validation required",
+    "cad_sha256": "8c9b3765a204a1c1c4728a3ab71f9d6294ac4c6f6b0846714ff0eb6f980c1f2f",
+    "parameters": {
+      "HardwareTotalGap": 0.8,
+      "GaugeRailWidth": 8.0,
+      "GaugeEngagement": 20.0,
+      "GaugeGaps": [
+        0.4,
+        0.6,
+        0.8
+      ],
+      "BedRelief": 0.4,
+      "BeamLength": 24.0,
+      "BeamWidth": 8.0,
+      "BeamRootThickness": 1.6,
+      "BeamTipThickness": 1.2,
+      "BeamRootRadius": 1.4,
+      "HookOverlap": 0.6,
+      "ReleaseStopTravel": 1.2,
+      "HeadLength": 18.0,
+      "HeadWidth": 4.0,
+      "HeadThickness": 3.0,
+      "NeckSize": 4.0,
+      "TabThickness": 3.2,
+      "PocketDepth": 0.8,
+      "PushTravel": 1.2,
+      "MeshLinearDeflection": 0.025,
+      "MeshAngularDeflection": 0.12
+    },
+    "toolchain": {
+      "FreeCAD": [
+        "1",
+        "1",
+        "3",
+        "20260725 (Git shallow)",
+        "Unknown",
+        "2026/07/25 04:52:02",
+        "grafted,grafted",
+        "145529fe741292ff0b3977a01195bf0247425794"
+      ],
+      "OCC": "7.8.1"
+    },
+    "exports": {
+      "C_MALE": {
+        "file": "stl/C_male_8.00.stl",
+        "sha256": "41417f6ec1293273334d46177fb2e2ccdd681792b3aa45ba3813d7d084dc584c",
+        "volume_mm3": 1448.6979582226631
+      },
+      "C_FEMALE": {
+        "file": "stl/C_female_G0.40_G0.60_G0.80.stl",
+        "sha256": "e7259a3562c8fe48ac05f2b6b613382ee7e5da2d70e661c298df409315951ed9",
+        "volume_mm3": 2523.388298333331
+      },
+      "A_BASE": {
+        "file": "stl/A_base_G0.80.stl",
+        "sha256": "103a617d0397e4743bb57f2d0b9b35126f98a835609e55d85f67cb7c455ff98d",
+        "volume_mm3": 1520.4892183333345
+      },
+      "A_LID": {
+        "file": "stl/A_lid_G0.80.stl",
+        "sha256": "51c91afebc1210bad77a9028f08344d47cb5b865477382726a72a142c6de5035",
+        "volume_mm3": 2631.141588333331
+      },
+      "A_CLASP": {
+        "file": "stl/A_clasp_E0.60_G0.80.stl",
+        "sha256": "d514b4ffe80866ceeee275483a891db84aa30a3d414846d828378696d337f419",
+        "volume_mm3": 1442.5404601441392
+      },
+      "B_BASE": {
+        "file": "stl/B_base_G0.80.stl",
+        "sha256": "ece0b6dc713131d1a2935137904d0045931fc423c83e0d520e64d86fcc6591d4",
+        "volume_mm3": 3849.6445594260317
+      },
+      "B_LID": {
+        "file": "stl/B_lid_G0.80.stl",
+        "sha256": "64ff0b959ab87eea0cc7947aee4cba73c9c924e89dbe06bc461281056116e7df",
+        "volume_mm3": 3899.6666210431795
+      },
+      "B_KEY": {
+        "file": "stl/B_key_G0.80.stl",
+        "sha256": "621e2b5a6d9f5284ac2009acd7c5d3eb89d731b12da7c8c1734537f22de0e8bc",
+        "volume_mm3": 887.1510183333327
+      }
+    }
+  },
+  "seconds": 95.276,
+  "parameters": {
+    "BeamLength": 24.0,
+    "BeamRootRadius": 1.4,
+    "BeamRootThickness": 1.6,
+    "BeamTipThickness": 1.2,
+    "BeamWidth": 8.0,
+    "BedRelief": 0.4,
+    "GaugeEngagement": 20.0,
+    "GaugeGaps": [
+      0.4,
+      0.6,
+      0.8
+    ],
+    "GaugeRailWidth": 8.0,
+    "HardwareTotalGap": 0.8,
+    "HeadLength": 18.0,
+    "HeadThickness": 3.0,
+    "HeadWidth": 4.0,
+    "HookOverlap": 0.6,
+    "MeshAngularDeflection": 0.12,
+    "MeshLinearDeflection": 0.025,
+    "NeckSize": 4.0,
+    "PocketDepth": 0.8,
+    "PushTravel": 1.2,
+    "ReleaseStopTravel": 1.2,
+    "TabThickness": 3.2
+  },
+  "gauge": [
+    {
+      "label": "G0.40",
+      "male": 8,
+      "female": 8.4,
+      "engagement": 20,
+      "per_side": 0.2
+    },
+    {
+      "label": "G0.60",
+      "male": 8,
+      "female": 8.6,
+      "engagement": 20,
+      "per_side": 0.3
+    },
+    {
+      "label": "G0.80",
+      "male": 8,
+      "female": 8.799999999999997,
+      "engagement": 20,
+      "per_side": 0.4
+    }
+  ],
+  "editable_update": {
+    "tested_gap": 0.6,
+    "old_gap": 0.8,
+    "new_key_dimensions": {
+      "g": 0.6,
+      "front_t": 3.2,
+      "base_front": 3.5,
+      "rear": 6.7,
+      "floor": 5.9,
+      "bore": 6.25685424949238,
+      "sweep": 19.039088914585776,
+      "slot_l": 18.6,
+      "slot_w": 4.6,
+      "push": 1.0999999999999999,
+      "collar_top": -1.0999999999999999,
+      "head_z": 5.9
+    },
+    "saved_baseline_not_overwritten": true
+  },
+  "key_dimensions": {
+    "g": 0.8,
+    "front_t": 3.2,
+    "base_front": 3.6,
+    "rear": 6.800000000000001,
+    "floor": 6.000000000000001,
+    "bore": 6.45685424949238,
+    "sweep": 19.239088914585775,
+    "slot_l": 18.8,
+    "slot_w": 4.8,
+    "push": 1.2,
+    "collar_top": -1.2,
+    "head_z": 6.000000000000001
+  },
+  "support": {
+    "status": "UNSLICED_GEOMETRIC_SCREEN",
+    "slicer_cli_available": false,
+    "searched": "PATH and bounded /usr/bin /usr/local/bin /opt /home/azero/Applications; no Bambu/Orca/Prusa CLI found",
+    "assumed_layer_height_mm": 0.2,
+    "allowed_lateral_growth_per_layer_mm": 0.2,
+    "section_curve_deflection_mm": 0.015,
+    "method": "Native bed-oriented CAD horizontal sections at layer centres. New area outside previous layer buffered 0.20 mm (~45-degree growth) is flagged. No toolpaths, cooling, bridge strategy or material simulation.",
+    "parts": {
+      "C_MALE": {
+        "first_layer_section_area_mm2": 266.509705626907,
+        "max_new_area_beyond_growth_mm2": 0.03831645260304077,
+        "flagged_regions": [],
+        "geometric_result": "NO_FLAGGED_OVERHANGS"
+      },
+      "C_FEMALE": {
+        "first_layer_section_area_mm2": 436.32000000000005,
+        "max_new_area_beyond_growth_mm2": 0.08673713867201417,
+        "flagged_regions": [],
+        "geometric_result": "NO_FLAGGED_OVERHANGS"
+      },
+      "A_BASE": {
+        "first_layer_section_area_mm2": 152.8,
+        "max_new_area_beyond_growth_mm2": 0.06938971093754344,
+        "flagged_regions": [],
+        "geometric_result": "NO_FLAGGED_OVERHANGS"
+      },
+      "A_LID": {
+        "first_layer_section_area_mm2": 264.56,
+        "max_new_area_beyond_growth_mm2": 0.0693897109375507,
+        "flagged_regions": [],
+        "geometric_result": "NO_FLAGGED_OVERHANGS"
+      },
+      "A_CLASP": {
+        "first_layer_section_area_mm2": 175.7135107558753,
+        "max_new_area_beyond_growth_mm2": 0.008673713867187606,
+        "flagged_regions": [],
+        "geometric_result": "NO_FLAGGED_OVERHANGS"
+      },
+      "B_BASE": {
+        "first_layer_section_area_mm2": 1166.1298254766195,
+        "max_new_area_beyond_growth_mm2": 0.050746497972412485,
+        "flagged_regions": [],
+        "geometric_result": "NO_FLAGGED_OVERHANGS"
+      },
+      "B_LID": {
+        "first_layer_section_area_mm2": 1166.129825433368,
+        "max_new_area_beyond_growth_mm2": 0.05074629726130249,
+        "flagged_regions": [],
+        "geometric_result": "NO_FLAGGED_OVERHANGS"
+      },
+      "B_KEY": {
+        "first_layer_section_area_mm2": 190.55999999999997,
+        "max_new_area_beyond_growth_mm2": 0.08673713867193647,
+        "flagged_regions": [],
+        "geometric_result": "NO_FLAGGED_OVERHANGS"
+      }
+    },
+    "manual_preview_required": true
+  },
+  "support_status": "UNSLICED_GEOMETRIC_SCREEN"
+}

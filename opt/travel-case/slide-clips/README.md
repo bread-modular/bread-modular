@@ -1,5 +1,10 @@
 # Simple slide-on C-clip travel case — FINAL geometry / physical test required
 
+**Physical-test warning:** the printed slide clip “barely slips in”; this is not
+an acceptable fit or validated carrying lock. Do not proceed to full shells from
+this result. Use the new [small standalone lock studies](../lock-studies/README.md)
+(gauge first); all historical exports and sources here are preserved unchanged.
+
 ![Actual final assembly and measured section](previews/assembly.png)
 
 **One removable printed part per clip.** Seat the original lid, push a C clip
