@@ -1,0 +1,24 @@
+# Portable opener: no project imports or Python feature proxies are required.
+# Change VIEW to 'print' or 'exploded' for the other saved native orientations.
+from pathlib import Path
+import FreeCAD as App
+VIEW = 'assembly'
+root = Path(__file__).resolve().parent
+doc = App.openDocument(str(root / 'cad' / 'original-magnet-case.FCStd'))
+doc.recompute()
+assert doc.Base.Shape.isValid() and doc.Lid.Shape.isValid()
+if App.GuiUp:
+    import FreeCADGui as Gui
+    groups = {'assembly': ('Assembly', {'Base', 'Lid'}),
+              'print': ('PrintOrientations', {'BasePrint', 'LidPrint'}),
+              'exploded': ('Exploded', {'BaseExploded', 'LidExploded'})}
+    group, visible = groups[VIEW]
+    for obj in doc.Objects:
+        if obj.ViewObject:
+            obj.ViewObject.Visibility = obj.Name in visible or obj.Name == group
+            if hasattr(obj.ViewObject, 'ShapeColor'):
+                obj.ViewObject.ShapeColor = (0.84, 0.53, 0.18) if 'Base' in obj.Name else (0.32, 0.55, 0.71)
+                obj.ViewObject.LineColor = (0.18, 0.19, 0.21)
+                obj.ViewObject.DisplayMode = 'Flat Lines' if obj.Name in visible else obj.ViewObject.DisplayMode
+    Gui.activeDocument().activeView().viewAxonometric()
+    Gui.activeDocument().activeView().fitAll()

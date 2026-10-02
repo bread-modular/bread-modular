@@ -1,8 +1,0 @@
-# Geometry build + mandatory validation. Any exception stops; no presentation cuts.
-import sys,runpy
-from pathlib import Path
-root=Path(__file__).resolve().parent
-sys.path.insert(0,str(root))
-runpy.run_path(str(root/'build.py'),run_name='__main__')
-runpy.run_path(str(root/'validate.py'),run_name='__main__')
-runpy.run_path(str(root/'Open.FCMacro'),run_name='__main__')
