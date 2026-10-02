@@ -1,0 +1,1691 @@
+{
+  "status": "PASS_GEOMETRIC_ONLY_UNSLICED_UNPRINTED",
+  "checks": [
+    {
+      "test": "Exactly ONE additional female STL; no duplicate male",
+      "passed": true
+    },
+    {
+      "test": "Saved inputs preserve requested total-gap order and fixed dimensions",
+      "passed": true,
+      "parameters": {
+        "BedRelief": 0.4,
+        "GaugeEngagement": 20.0,
+        "GaugeGaps": [
+          0.4,
+          0.2,
+          0.0
+        ],
+        "GaugeRailWidth": 8.0,
+        "MeshAngularDeflection": 0.12,
+        "MeshLinearDeflection": 0.025
+      }
+    },
+    {
+      "test": "Reopened/recomputed live female: single valid closed CAD solid",
+      "passed": true,
+      "volume_mm3": 2469.6916683333343,
+      "bed_bounds_mm": [
+        -8.881784197001252e-16,
+        -5.551115123125783e-16,
+        -2.6645352591003757e-15,
+        34.2,
+        29.0,
+        5.0
+      ]
+    },
+    {
+      "test": "Small female dimensions 34.2 x 29 x 5 mm at bed Z0",
+      "passed": true
+    },
+    {
+      "test": "Saved geometry matches fresh helper recipe including labels",
+      "passed": true
+    },
+    {
+      "test": "Reopened GaugeGaps edit changes live channel geometry",
+      "passed": true
+    },
+    {
+      "test": "Edit restoration exact; delivered CAD not overwritten",
+      "passed": true
+    },
+    {
+      "test": "Original male actual STL connected/watertight/manifold/outward/no self-intersections/bed Z0",
+      "passed": true,
+      "file": "stl/C_male_8.00.stl",
+      "sha256": "41417f6ec1293273334d46177fb2e2ccdd681792b3aa45ba3813d7d084dc584c",
+      "vertices": 142,
+      "triangles": 280,
+      "watertight": true,
+      "components": 1,
+      "nonmanifold": false,
+      "nonuniform_orientation": false,
+      "self_intersections": false,
+      "signed_volume_mm3": 1448.697963188836,
+      "cad_volume_mm3": 1448.6979582226631,
+      "bed_bounds_mm": [
+        4.440892098500626e-16,
+        1.7763568394002505e-15,
+        1.27675647831893e-15,
+        12.0,
+        31.0,
+        5.0
+      ]
+    },
+    {
+      "test": "Original male STL/CAD bounds match",
+      "passed": true
+    },
+    {
+      "test": "Original male actual mesh BRep valid",
+      "passed": true
+    },
+    {
+      "test": "Original male actual STL matches complete CAD (not just volume/bounds)",
+      "passed": true,
+      "symmetric_difference_mm3": 0.0,
+      "comparison_boolean_tolerance_mm": 1e-06,
+      "surface_sample_max_distance_mm": 3.8146972514141453e-07,
+      "surface_samples": 564
+    },
+    {
+      "test": "New female actual STL connected/watertight/manifold/outward/no self-intersections/bed Z0",
+      "passed": true,
+      "file": "c-tight/stl/C_female_G0.40_G0.20_G0.00.stl",
+      "sha256": "91d426c26f8fd093d44de017c4af5a17b6dee73ec046a2346cb7fddfacdc9e21",
+      "vertices": 332,
+      "triangles": 660,
+      "watertight": true,
+      "components": 1,
+      "nonmanifold": false,
+      "nonuniform_orientation": false,
+      "self_intersections": false,
+      "signed_volume_mm3": 2469.6917862776636,
+      "cad_volume_mm3": 2469.6916683333343,
+      "bed_bounds_mm": [
+        -2.7755575615628914e-17,
+        -2.7755575615628914e-17,
+        -1.6375789613221059e-15,
+        34.20000076293945,
+        29.0,
+        5.0
+      ]
+    },
+    {
+      "test": "New female STL/CAD bounds match",
+      "passed": true
+    },
+    {
+      "test": "New female actual mesh BRep valid",
+      "passed": true
+    },
+    {
+      "test": "New female actual STL matches complete CAD (not just volume/bounds)",
+      "passed": true,
+      "symmetric_difference_mm3": 0.0,
+      "comparison_boolean_tolerance_mm": 1e-06,
+      "surface_sample_max_distance_mm": 1.2947511874604955e-06,
+      "surface_samples": 1324
+    },
+    {
+      "test": "Existing rail measured 8.00 on CAD AND actual STL full-size lands",
+      "passed": true,
+      "cad_width_mm": 8.0,
+      "stl_width_mm": 8.0
+    },
+    {
+      "test": "Actual original male enclosed by rail/handle bounds",
+      "passed": true
+    },
+    {
+      "test": "Four full-size walls remain 2.4 mm",
+      "passed": true
+    },
+    {
+      "test": "G0.40 measured widths on full-size CAD/STL lands",
+      "passed": true,
+      "cad_widths_mm": [
+        8.4,
+        8.4,
+        8.4,
+        8.4,
+        8.4,
+        8.4,
+        8.4,
+        8.4,
+        8.4
+      ],
+      "stl_widths_mm": [
+        8.400000095367433,
+        8.400000095367433,
+        8.400000095367433,
+        8.400000095367433,
+        8.400000095367433,
+        8.400000095367433,
+        8.400000095367433,
+        8.400000095367433,
+        8.400000095367433
+      ]
+    },
+    {
+      "test": "G0.40 retained 0.4 mm / 45-degree bottom-edge relief",
+      "passed": true
+    },
+    {
+      "test": "G0.40 complete 20 mm channel open floor/roof-free",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 entire continuous straight insertion/withdrawal envelope clear",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-20.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-19.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-19.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-18.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-18.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-17.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-17.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-16.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-16.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-15.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-15.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-14.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-14.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-13.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-13.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-12.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-12.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-11.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-11.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-10.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-10.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-9.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-9.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-8.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-8.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-7.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-7.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-6.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-6.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-5.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-5.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-4.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-4.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-3.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-3.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-2.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-2.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-1.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-1.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=-0.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 straight path y=0.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.40 expected centred land distance (zero contact allowed)",
+      "passed": true,
+      "distance_mm": 0.20000000000000018
+    },
+    {
+      "test": "G0.20 measured widths on full-size CAD/STL lands",
+      "passed": true,
+      "cad_widths_mm": [
+        8.199999999999998,
+        8.199999999999998,
+        8.199999999999998,
+        8.199999999999998,
+        8.199999999999998,
+        8.199999999999998,
+        8.199999999999998,
+        8.199999999999998,
+        8.199999999999998
+      ],
+      "stl_widths_mm": [
+        8.199999809265135,
+        8.199999809265135,
+        8.199999809265135,
+        8.199999809265135,
+        8.199999809265135,
+        8.199999809265135,
+        8.199999809265135,
+        8.199999809265135,
+        8.199999809265135
+      ]
+    },
+    {
+      "test": "G0.20 retained 0.4 mm / 45-degree bottom-edge relief",
+      "passed": true
+    },
+    {
+      "test": "G0.20 complete 20 mm channel open floor/roof-free",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 entire continuous straight insertion/withdrawal envelope clear",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-20.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-19.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-19.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-18.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-18.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-17.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-17.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-16.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-16.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-15.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-15.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-14.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-14.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-13.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-13.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-12.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-12.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-11.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-11.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-10.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-10.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-9.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-9.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-8.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-8.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-7.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-7.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-6.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-6.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-5.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-5.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-4.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-4.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-3.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-3.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-2.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-2.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-1.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-1.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=-0.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 straight path y=0.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.20 expected centred land distance (zero contact allowed)",
+      "passed": true,
+      "distance_mm": 0.09999999999999787
+    },
+    {
+      "test": "G0.00 measured widths on full-size CAD/STL lands",
+      "passed": true,
+      "cad_widths_mm": [
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0
+      ],
+      "stl_widths_mm": [
+        8.000000000000004,
+        8.000000000000004,
+        8.000000000000004,
+        8.000000000000004,
+        8.000000000000004,
+        8.000000000000004,
+        8.000000000000004,
+        8.000000000000004,
+        8.000000000000004
+      ]
+    },
+    {
+      "test": "G0.00 retained 0.4 mm / 45-degree bottom-edge relief",
+      "passed": true
+    },
+    {
+      "test": "G0.00 complete 20 mm channel open floor/roof-free",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 entire continuous straight insertion/withdrawal envelope clear",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-20.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-19.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-19.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-18.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-18.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-17.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-17.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-16.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-16.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-15.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-15.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-14.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-14.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-13.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-13.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-12.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-12.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-11.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-11.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-10.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-10.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-9.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-9.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-8.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-8.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-7.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-7.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-6.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-6.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-5.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-5.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-4.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-4.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-3.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-3.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-2.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-2.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-1.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-1.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=-0.50",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 straight path y=0.00",
+      "passed": true,
+      "positive_volume_intersection_mm3": 0.0
+    },
+    {
+      "test": "G0.00 expected centred land distance (zero contact allowed)",
+      "passed": true,
+      "distance_mm": 0.0
+    },
+    {
+      "test": "G0.40 / G0.20 / G0.00 and C-F engraved off all contact lands",
+      "passed": true,
+      "removed_mm3": 9.681665000000015,
+      "engraving_bounds_mm": [
+        0.7849999999999999,
+        22.985,
+        4.65,
+        31.615000000000002,
+        28.315,
+        5.0
+      ]
+    },
+    {
+      "test": "Minimal 0.20 mm layer / 45-degree growth support screen",
+      "passed": true,
+      "max_new_area_mm2": 0.08673713867194693
+    },
+    {
+      "test": "All 20 immutable parent artifacts and original male hash unchanged; 22 current parent checksums verified",
+      "passed": true
+    }
+  ],
+  "channels": [
+    {
+      "label": "G0.40",
+      "total_gap_mm": 0.4,
+      "per_side_mm": 0.2,
+      "female_width_mm": 8.4,
+      "male_width_mm": 8,
+      "engagement_mm": 20,
+      "continuous_sweep_intersection_mm3": 0.0,
+      "samples": [
+        {
+          "y_mm": -20.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.42426406871192796
+        },
+        {
+          "y_mm": -19.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -19.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -18.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -18.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -17.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -17.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -16.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -16.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -15.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -15.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -14.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -14.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -13.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -13.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -12.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -12.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -11.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -11.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -10.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -10.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -9.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -9.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -8.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -8.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -7.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -7.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -6.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -6.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -5.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -5.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -4.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -4.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -3.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -3.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -2.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -2.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -1.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -1.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": -0.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.20000000000000018
+        },
+        {
+          "y_mm": 0.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        }
+      ]
+    },
+    {
+      "label": "G0.20",
+      "total_gap_mm": 0.2,
+      "per_side_mm": 0.1,
+      "female_width_mm": 8.2,
+      "male_width_mm": 8,
+      "engagement_mm": 20,
+      "continuous_sweep_intersection_mm3": 0.0,
+      "samples": [
+        {
+          "y_mm": -20.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.3535533905932725
+        },
+        {
+          "y_mm": -19.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -19.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -18.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -18.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -17.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -17.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -16.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -16.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -15.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -15.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -14.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -14.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -13.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -13.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -12.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -12.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -11.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -11.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -10.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -10.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -9.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -9.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -8.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -8.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -7.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -7.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -6.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -6.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -5.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -5.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -4.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -4.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -3.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -3.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -2.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -2.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -1.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -1.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": -0.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.09999999999999787
+        },
+        {
+          "y_mm": 0.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        }
+      ]
+    },
+    {
+      "label": "G0.00",
+      "total_gap_mm": 0.0,
+      "per_side_mm": 0.0,
+      "female_width_mm": 8.0,
+      "male_width_mm": 8,
+      "engagement_mm": 20,
+      "continuous_sweep_intersection_mm3": 0.0,
+      "samples": [
+        {
+          "y_mm": -20.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.282842712474618
+        },
+        {
+          "y_mm": -19.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -19.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -18.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -18.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -17.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -17.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -16.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -16.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -15.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -15.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -14.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -14.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -13.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -13.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -12.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -12.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -11.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -11.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -10.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -10.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -9.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -9.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -8.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -8.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -7.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -7.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -6.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -6.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -5.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -5.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -4.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -4.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -3.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -3.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -2.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -2.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -1.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -1.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": -0.5,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        },
+        {
+          "y_mm": 0.0,
+          "intersection_mm3": 0.0,
+          "distance_mm": 0.0
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "New female UNSLICED/UNPRINTED; filament unknown. No G-code, printer operation or physical fit guarantee.",
+    "CAD continuous straight-path enclosure and samples do not simulate extrusion, seam bumps, warping or material.",
+    "Zero nominal clearance has expected zero contact distances, NOT evidence of physical sliding. Never force or sand contact lands.",
+    "Support screen uses assumed 0.20 mm layers and 45-degree growth; not slicer toolpaths. Preview locally with unchanged material/profile."
+  ],
+  "baseline_before": {
+    ".gitignore": "1dcc49c4d54293b613faaeca90028cecd63ed844da9bcbef09d224325ed6e767",
+    "Open.FCMacro": "bdc49f2b8470540a377da24eab8b00f9fb17b5c41a280247e3ce4c73a5a1d260",
+    "RESEARCH.md": "34b9983a22c5522ec16e8bdc5a7e46ee99f0581fb721ff167553c955e0a045f1",
+    "build.py": "d414aa9d73e439ee1ee75d3be47a176fb908aa3455aa1719314208cd95a22edd",
+    "cad/lock-studies.FCStd": "8c9b3765a204a1c1c4728a3ab71f9d6294ac4c6f6b0846714ff0eb6f980c1f2f",
+    "comparison.svg": "a2422b824026a760ccd33ef8f7e34b031b9c04914231ec886e09c160e4a9ce91",
+    "diagram.py": "aeee38f6478d81126e39fe76fe2295bdf7cbf7c31016f491a000db774a0226de",
+    "parameters.json": "fd711ca3be8e052d19e17e3d346fcdb7d0caf3aa077657cab01e170064b76d55",
+    "reports/validation.json": "565ebe7be037d0bec93e16b7ca911137372afe35452c5c228d2f5e59f5075744",
+    "run.sh": "eb608592dc733117ecaa2ae4c7bb06c4706ee417f2f7041c2031b6bba954871d",
+    "stl/A_base_G0.80.stl": "103a617d0397e4743bb57f2d0b9b35126f98a835609e55d85f67cb7c455ff98d",
+    "stl/A_clasp_E0.60_G0.80.stl": "d514b4ffe80866ceeee275483a891db84aa30a3d414846d828378696d337f419",
+    "stl/A_lid_G0.80.stl": "51c91afebc1210bad77a9028f08344d47cb5b865477382726a72a142c6de5035",
+    "stl/B_base_G0.80.stl": "ece0b6dc713131d1a2935137904d0045931fc423c83e0d520e64d86fcc6591d4",
+    "stl/B_key_G0.80.stl": "621e2b5a6d9f5284ac2009acd7c5d3eb89d731b12da7c8c1734537f22de0e8bc",
+    "stl/B_lid_G0.80.stl": "64ff0b959ab87eea0cc7947aee4cba73c9c924e89dbe06bc461281056116e7df",
+    "stl/C_female_G0.40_G0.60_G0.80.stl": "e7259a3562c8fe48ac05f2b6b613382ee7e5da2d70e661c298df409315951ed9",
+    "stl/C_male_8.00.stl": "41417f6ec1293273334d46177fb2e2ccdd681792b3aa45ba3813d7d084dc584c",
+    "studies.py": "1c77dd24a5604d0ef679cf83747d3465bcdaae7dabb9e865e0cfe553923bce98",
+    "validate.py": "5856d58bc4ab9d1c32d67c2a6e017b40ee415a6ab4b94291bee90b03d6e3b9ef"
+  },
+  "existing_male_stl": {
+    "file": "stl/C_male_8.00.stl",
+    "sha256": "41417f6ec1293273334d46177fb2e2ccdd681792b3aa45ba3813d7d084dc584c",
+    "vertices": 142,
+    "triangles": 280,
+    "watertight": true,
+    "components": 1,
+    "nonmanifold": false,
+    "nonuniform_orientation": false,
+    "self_intersections": false,
+    "signed_volume_mm3": 1448.697963188836,
+    "cad_volume_mm3": 1448.6979582226631,
+    "bed_bounds_mm": [
+      4.440892098500626e-16,
+      1.7763568394002505e-15,
+      1.27675647831893e-15,
+      12.0,
+      31.0,
+      5.0
+    ],
+    "comparison_boolean_tolerance_mm": 1e-06,
+    "symmetric_difference_mm3": 0.0,
+    "surface_sample_max_distance_mm": 3.8146972514141453e-07,
+    "surface_samples": 564
+  },
+  "female_stl": {
+    "file": "c-tight/stl/C_female_G0.40_G0.20_G0.00.stl",
+    "sha256": "91d426c26f8fd093d44de017c4af5a17b6dee73ec046a2346cb7fddfacdc9e21",
+    "vertices": 332,
+    "triangles": 660,
+    "watertight": true,
+    "components": 1,
+    "nonmanifold": false,
+    "nonuniform_orientation": false,
+    "self_intersections": false,
+    "signed_volume_mm3": 2469.6917862776636,
+    "cad_volume_mm3": 2469.6916683333343,
+    "bed_bounds_mm": [
+      -2.7755575615628914e-17,
+      -2.7755575615628914e-17,
+      -1.6375789613221059e-15,
+      34.20000076293945,
+      29.0,
+      5.0
+    ],
+    "comparison_boolean_tolerance_mm": 1e-06,
+    "symmetric_difference_mm3": 0.0,
+    "surface_sample_max_distance_mm": 1.2947511874604955e-06,
+    "surface_samples": 1324
+  },
+  "support": {
+    "status": "UNSLICED_GEOMETRIC_SCREEN",
+    "layer_height_mm": 0.2,
+    "roofs": false,
+    "supports_planned": false,
+    "max_new_area_mm2": 0.08673713867194693,
+    "local_slicer_preview_required": true
+  },
+  "baseline_after": {
+    ".gitignore": "1dcc49c4d54293b613faaeca90028cecd63ed844da9bcbef09d224325ed6e767",
+    "Open.FCMacro": "bdc49f2b8470540a377da24eab8b00f9fb17b5c41a280247e3ce4c73a5a1d260",
+    "RESEARCH.md": "34b9983a22c5522ec16e8bdc5a7e46ee99f0581fb721ff167553c955e0a045f1",
+    "build.py": "d414aa9d73e439ee1ee75d3be47a176fb908aa3455aa1719314208cd95a22edd",
+    "cad/lock-studies.FCStd": "8c9b3765a204a1c1c4728a3ab71f9d6294ac4c6f6b0846714ff0eb6f980c1f2f",
+    "comparison.svg": "a2422b824026a760ccd33ef8f7e34b031b9c04914231ec886e09c160e4a9ce91",
+    "diagram.py": "aeee38f6478d81126e39fe76fe2295bdf7cbf7c31016f491a000db774a0226de",
+    "parameters.json": "fd711ca3be8e052d19e17e3d346fcdb7d0caf3aa077657cab01e170064b76d55",
+    "reports/validation.json": "565ebe7be037d0bec93e16b7ca911137372afe35452c5c228d2f5e59f5075744",
+    "run.sh": "eb608592dc733117ecaa2ae4c7bb06c4706ee417f2f7041c2031b6bba954871d",
+    "stl/A_base_G0.80.stl": "103a617d0397e4743bb57f2d0b9b35126f98a835609e55d85f67cb7c455ff98d",
+    "stl/A_clasp_E0.60_G0.80.stl": "d514b4ffe80866ceeee275483a891db84aa30a3d414846d828378696d337f419",
+    "stl/A_lid_G0.80.stl": "51c91afebc1210bad77a9028f08344d47cb5b865477382726a72a142c6de5035",
+    "stl/B_base_G0.80.stl": "ece0b6dc713131d1a2935137904d0045931fc423c83e0d520e64d86fcc6591d4",
+    "stl/B_key_G0.80.stl": "621e2b5a6d9f5284ac2009acd7c5d3eb89d731b12da7c8c1734537f22de0e8bc",
+    "stl/B_lid_G0.80.stl": "64ff0b959ab87eea0cc7947aee4cba73c9c924e89dbe06bc461281056116e7df",
+    "stl/C_female_G0.40_G0.60_G0.80.stl": "e7259a3562c8fe48ac05f2b6b613382ee7e5da2d70e661c298df409315951ed9",
+    "stl/C_male_8.00.stl": "41417f6ec1293273334d46177fb2e2ccdd681792b3aa45ba3813d7d084dc584c",
+    "studies.py": "1c77dd24a5604d0ef679cf83747d3465bcdaae7dabb9e865e0cfe553923bce98",
+    "validate.py": "5856d58bc4ab9d1c32d67c2a6e017b40ee415a6ab4b94291bee90b03d6e3b9ef"
+  },
+  "cad_sha256": "8ee02815fbbaf1f583cbb52ac6e9c30184c03cf8d6d0710cd923684a94ca52c5",
+  "toolchain": {
+    "FreeCAD": [
+      "1",
+      "1",
+      "3",
+      "20260725 (Git shallow)",
+      "Unknown",
+      "2026/07/25 04:52:02",
+      "grafted,grafted",
+      "145529fe741292ff0b3977a01195bf0247425794"
+    ],
+    "OCC": "7.8.1"
+  },
+  "seconds": 30.211
+}

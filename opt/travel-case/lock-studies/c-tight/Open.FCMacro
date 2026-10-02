@@ -1,0 +1,14 @@
+# Open from FreeCAD's Macro menu with c-tight and its parent intact.
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import tight_gauge as T
+import FreeCAD as App
+T.baseline_guard()
+d = T.reopened()
+assert d.Female.Shape.isValid() and d.Female.Shape.isClosed() and len(d.Female.Shape.Solids) == 1
+if App.GuiUp:
+    import FreeCADGui as Gui
+    Gui.activeDocument().activeView().viewAxonometric()
+    Gui.activeDocument().activeView().fitAll()
+print('Live female reopened. GaugeGaps edits TOTAL gaps; rebuild exports from defaults for this fixed labelled experiment.')

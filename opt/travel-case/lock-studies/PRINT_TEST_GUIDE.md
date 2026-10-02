@@ -74,6 +74,18 @@ XY hole compensation does not fix these OPEN grooves. Change one setting or
 Default mechanism hardware is G0.80 because the earlier clip barely fitted;
 this is an exploratory fit allowance, not a universal printer tolerance.
 
+## Additional C-only tight test — do not reprint the kit
+
+Original C reportedly slides comfortably. Print only the new
+[C-tight female](c-tight/README.md), **34.2 × 29 × 5 mm**, reusing your existing
+8.00 mm male. Left → right: **0.20 / 0.10 / 0.00 per side** → engraved
+**G0.40 / G0.20 / G0.00 total gaps** → **8.40 / 8.20 / 8.00 mm** channel widths.
+Print flat, labels up, 100% scale, assumed 0.20 mm layers; keep the same material
+and profile (filament unknown). Supports not planned; preview locally, without
+hole-compensation assumptions. Stop if 0.10 per side or zero binds; **never force
+or sand contact lands**. Record as-printed fit. CAD zero contact is expected,
+not a promise of sliding. Original A/B/C artifacts remain unchanged.
+
 ## Stage 2 — press-release bridge clasp A
 
 Assembly axes in diagram: **+X press/withdraw, +Y lid separation, Z width**.
