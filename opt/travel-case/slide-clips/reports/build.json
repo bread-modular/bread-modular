@@ -1,0 +1,82 @@
+{
+  "status": "Built/reopened/recomputed; independent validate.py REQUIRED",
+  "build_seconds": 23.08123053199961,
+  "exports": {
+    "case_bottom": [
+      "Bottom",
+      "Bottom"
+    ],
+    "case_lid": [
+      "Top",
+      "Top"
+    ],
+    "clip_nominal": [
+      "UniversalClip",
+      "Clip"
+    ],
+    "clip_looser_throat_plus0.24": [
+      "ClipLooser",
+      "Clip"
+    ],
+    "clip_tighter_throat_minus0.24": [
+      "ClipTighter",
+      "Clip"
+    ],
+    "coupon_bottom": [
+      "CouponBottom",
+      "CouponBottom"
+    ],
+    "coupon_lid": [
+      "CouponTop",
+      "CouponTop"
+    ]
+  },
+  "source_provenance": {
+    "Bottom": {
+      "raw_stl": "original/case_1.0.0/bm_case_bottom_1.0.0.stl",
+      "source_sha256": "9b54e84fa84387984ac3beb4655cf139c6941f3c05d1e52d41358828d4c607b3",
+      "volume_mm3": 390457.4192328597,
+      "reference": "fresh raw mesh to faceted BRep; no native Fusion history imported",
+      "cache_sha256": "52d3c5847c120236ef6900de01e6119c7ca6ee676f3279cb069237241a8fea9e"
+    },
+    "Top": {
+      "raw_stl": "original/case_1.0.0/bm_case_top_1.0.0.stl",
+      "source_sha256": "61a508e86d91a2fc7d8b43a006bd4d7f8b676c8fd83ab89cb2c56ee5cb6eb609",
+      "volume_mm3": 282876.9920199194,
+      "reference": "fresh raw mesh to faceted BRep; no native Fusion history imported",
+      "cache_sha256": "9e3fb86b98dd9bdbd237c5a1e8c175841e4455ca2be79bbecfb69ddfc6878155"
+    }
+  },
+  "transform": [
+    1.0,
+    0.0,
+    0.0,
+    -20.68,
+    0.0,
+    0.0,
+    -1.0,
+    -7.98,
+    0.0,
+    1.0,
+    0.0,
+    15.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "toolchain": {
+    "FreeCAD": [
+      "1",
+      "1",
+      "3",
+      "20260725 (Git shallow)",
+      "Unknown",
+      "2026/07/25 04:52:02",
+      "grafted,grafted",
+      "145529fe741292ff0b3977a01195bf0247425794"
+    ],
+    "OCC": "7.8.1"
+  },
+  "cad_sha256": "9a7a5d2ef306d7d8d3d5895f3e1ecbd4856eba137c1c3d26943ceedb8cbec0f0"
+}

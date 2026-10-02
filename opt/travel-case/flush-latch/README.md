@@ -1,3 +1,6 @@
+> **Superseded after failed physical print/assembly; use [../slide-clips](../slide-clips).**
+> Historical files are retained; do not print this mechanism as the current version.
+
 # Original-size flush press-and-slide closure — final CAD delivery
 
 **Computational geometry validated; physical fit, strength and fatigue UNTESTED. Print the latch coupon first.** This is the implemented four-latch assembly, not the historic concept handoff. No screws, magnets, glue, external tabs or larger case envelope.
