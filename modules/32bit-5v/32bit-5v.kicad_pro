@@ -76,16 +76,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        [
-          "clearance|69132000|49039000|99f605ca-ce3a-478b-895b-ffd72bea5547|ec04dbca-c8c1-4f3f-885a-1a5f367211b3",
-          ""
-        ],
-        [
-          "clearance|74807000|49039000|c665b10e-904a-4de6-b6cf-605e0f3e9a9f|f1990acf-8489-4281-b45f-edafab5658b8",
-          ""
-        ]
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -106,7 +97,7 @@
         "footprint_filters_mismatch": "ignore",
         "footprint_symbol_field_mismatch": "warning",
         "footprint_symbol_mismatch": "warning",
-        "footprint_type_mismatch": "ignore",
+        "footprint_type_mismatch": "warning",
         "hole_clearance": "error",
         "hole_near_hole": "error",
         "hole_to_hole": "error",

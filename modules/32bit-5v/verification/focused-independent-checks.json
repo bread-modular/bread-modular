@@ -1,0 +1,176 @@
+{
+  "owner": "Sol Max own independent cross-check; no advisors or new external-review approval",
+  "workspace": "/home/azero/.okbrain/workspaces/bread-modular-kicad/277",
+  "branch": "okbrain/bread-modular-kicad/277-ec67874c",
+  "head": "65e1d7202f22f0ef8b387e9f1e0c1b6740731ead",
+  "physical_refs": 61,
+  "physical_sides": {
+    "front": 57,
+    "back": 4
+  },
+  "top_smd_refs": 55,
+  "manual_tht_refs": [
+    "GND1",
+    "INPUT1",
+    "OUTPUT1",
+    "RV1",
+    "RV2",
+    "V_SUPPLY1"
+  ],
+  "bom_cpl": {
+    "full": {
+      "refs": 61,
+      "cpl_rows": 61,
+      "u4_identity": {
+        "Comment": "ES8388",
+        "Designator": "U4",
+        "Footprint": "QFN-28-1EP_4x4mm_P0.45mm_EP2.4x2.4mm_ThermalVias",
+        "LCSC Part #": "",
+        "Quantity": "1",
+        "Manufacturer": "Everest Semiconductor",
+        "MPN": "ES8388"
+      }
+    },
+    "assembly": {
+      "refs": 55,
+      "cpl_rows": 55,
+      "u4_identity": {
+        "Comment": "ES8388",
+        "Designator": "U4",
+        "Footprint": "QFN-28-1EP_4x4mm_P0.45mm_EP2.4x2.4mm_ThermalVias",
+        "LCSC Part #": "",
+        "Quantity": "1",
+        "Manufacturer": "Everest Semiconductor",
+        "MPN": "ES8388"
+      }
+    }
+  },
+  "source_positions_rotations_sides_exact": true,
+  "fresh_pad_to_schematic_net_checks": 251,
+  "net_mismatches": 0,
+  "copper_layers": [
+    "F.Cu",
+    "In1.Cu",
+    "In2.Cu",
+    "B.Cu"
+  ],
+  "filled_copper_zones": [
+    {
+      "layer": "In1.Cu",
+      "net": "GND",
+      "filled": true
+    },
+    {
+      "layer": "In2.Cu",
+      "net": "+3V3_8388",
+      "filled": true
+    }
+  ],
+  "mount_holes_3_2_mm": 2,
+  "u4_thermal_holes": 9,
+  "j5_actual_rectangular_clearance_mm": 0.2,
+  "zip_members": [
+    "32bit-5v-B_Cu.gbr",
+    "32bit-5v-B_Mask.gbr",
+    "32bit-5v-B_Paste.gbr",
+    "32bit-5v-B_Silkscreen.gbr",
+    "32bit-5v-Edge_Cuts.gbr",
+    "32bit-5v-F_Cu.gbr",
+    "32bit-5v-F_Mask.gbr",
+    "32bit-5v-F_Paste.gbr",
+    "32bit-5v-F_Silkscreen.gbr",
+    "32bit-5v-In1_Cu.gbr",
+    "32bit-5v-In2_Cu.gbr",
+    "32bit-5v-NPTH.drl",
+    "32bit-5v-PTH.drl"
+  ],
+  "zip_fresh_export_differences": [],
+  "timestamp_comment_normalization_only": [
+    "TF.CreationDate",
+    "G04 Created by KiCad",
+    "; Created by KiCad",
+    "; DRILL file KiCad"
+  ],
+  "only_fabrication_member_changed_from_port": [
+    "32bit-5v-F_Silkscreen.gbr"
+  ],
+  "pth_npth_features": [
+    124,
+    2
+  ],
+  "ipc_numeric_records": 329,
+  "ipc_fresh_match": true,
+  "drc": {
+    "errors": 0,
+    "opens": 0,
+    "parity": 0,
+    "warnings": 99
+  },
+  "erc": {
+    "errors": 0,
+    "warnings": 16
+  },
+  "expanded_temp_checks": {
+    "auditor": "Sol Max own independent cross-check, not external-review approval",
+    "workspace": "/home/azero/.okbrain/workspaces/bread-modular-kicad/277",
+    "temp_source": "/tmp/solmax-32-277-20261002/independent-source",
+    "ignored_drc_checks_raised_on_temp_only": [
+      "footprint_filters_mismatch",
+      "missing_courtyard",
+      "npth_inside_courtyard",
+      "pth_inside_courtyard",
+      "track_not_centered_on_via",
+      "tuning_profile_track_geometries"
+    ],
+    "ignored_erc_checks_raised_on_temp_only": [
+      "footprint_filter",
+      "four_way_junction",
+      "simulation_model_issue",
+      "single_global_label"
+    ],
+    "drc": {
+      "errors": 0,
+      "warnings": 107,
+      "warning_types": {
+        "silk_over_copper": 26,
+        "text_height": 16,
+        "lib_footprint_mismatch": 49,
+        "footprint_type_mismatch": 1,
+        "silk_edge_clearance": 3,
+        "missing_courtyard": 4,
+        "pth_inside_courtyard": 4,
+        "via_dangling": 1,
+        "track_dangling": 3
+      },
+      "opens": 0,
+      "parity_errors": 0,
+      "parity_warning_count": 4,
+      "parity_warning_types": {
+        "footprint_filters_mismatch": 4
+      }
+    },
+    "erc": {
+      "errors": 0,
+      "warnings": 21,
+      "warning_types": {
+        "lib_symbol_mismatch": 16,
+        "footprint_filter": 4,
+        "four_way_junction": 1
+      }
+    }
+  },
+  "project_rules_and_exclusions_unchanged": true,
+  "old274_and_original_bytes_inventory_unchanged": true,
+  "original_checkpoint_and_existing_refs_unchanged": true,
+  "shared_exporter_sha256": "17fbfbea2cf1319ca5a130a8c8e9609602ed6c965dc20b493bd9625d2a99547a",
+  "actual_zip_artwork": {
+    "input_zip_sha256": "72d02b0ad9d589d1c17b2c6047ef93603919ead416eaba588a12b797c7156988",
+    "renderer": "gerbonara LayerStack opened actual delivered ZIP; rsvg-convert",
+    "svg_sha256": "bf92e368ab5cd09c7b26c1d776d15881ac38874e29af1eb1d1de7c152c67ba5e",
+    "png_sha256": "d4db67fec5cc12560551e1cb4cb4ac86325156e9bf251ea506ad0bbb0fa3a5ef",
+    "image_url": "/uploads/f25036c8-a76b-4d36-a40a-90bd23f8db87.webp",
+    "visual_result": "C40 readable and separate from unchanged BOOT; actual ZIP fabrication art, not native SVG"
+  },
+  "scope_ordering_hold": true,
+  "physical_fit_hold": true
+}

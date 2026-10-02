@@ -1,0 +1,36 @@
+{
+  "u4": {
+    "mpn": "ES8388",
+    "manufacturer": "Everest Semiconductor",
+    "package": "QFN-28",
+    "datasheet": "verification/evidence/ES8388-intended-datasheet.pdf",
+    "datasheet_sha256": "db9300f79df430d022b754b29eb1b6b17ca08e3b91d3ba833606dadc65898258",
+    "evidence": "Cached ES8388 datasheet p35 package outline: D/E 3.924..4.076mm, pitch e=0.450mm, exposed device pad D1/E1=2.500..2.700mm. No recommended PCB land/stencil drawing found in cached intended data. Old 2.40mm PCB thermal land was not demonstrated invalid electrically, but had no explicit cached qualification. Project-selected nominal 2.60mm copper/2.65mm mask with retained segmented paste; not manufacturer approval. See es8388-ep-delta.json.",
+    "source_url": "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121449_Everest-semi-Everest-Semiconductor-ES8388_C365736.pdf",
+    "historical_footprint_before_ep_correction": "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.45mm_EP2.4x2.4mm_ThermalVias",
+    "actual_footprint": "Module32:ES8388_QFN28_4x4_P0.45_EP2.6_ThermalVias"
+  },
+  "j5": {
+    "drawing": "verification/evidence/HRO-TYPE-C-31-M-12-drawing.pdf",
+    "drawing_sha256": "6ae33d50ac47820114661138dc4e4659f40fdc5d4f485b46685dfec338da1a9e",
+    "source_url": "https://datasheet.lcsc.com/datasheet/pdf/9e56b777c022540fcce7c7f67825f55e.pdf?productCode=C165948",
+    "page": 1,
+    "identity": "HRO TYPE-C-31-M-12, drawing sheet 1 OF 1, drawn 2020.12.08",
+    "dimension": "Recommended P.C.B layout (component side): 4-0.60 mm wide lands",
+    "tolerance_literal": "TOLERANCE FOR PCB LAYOUT IS \u00b1 0.05",
+    "nominal_width_mm": 0.6,
+    "drawing_width_range_mm": [
+      0.55,
+      0.65
+    ],
+    "retained_actual_width_mm": 0.575,
+    "affected_pads": [
+      "A1",
+      "A4",
+      "A9",
+      "A12"
+    ],
+    "actual_adjacent_clearance_mm": 0.2,
+    "status": "Specific dimension/tolerance claim revalidated from cached exact part drawing; not blanket mating/physical fit or ordering sign-off. All ported J5 geometry preserved; centers/drills protected, not a claim that all original pad widths are unchanged."
+  }
+}
