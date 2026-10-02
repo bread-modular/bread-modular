@@ -1,0 +1,73 @@
+{
+  "design": "Original magnet case with explicitly authorized base-exterior and lid-backside surface fills; no alternative closure",
+  "release_url": "https://github.com/bread-modular/bread-modular/releases/tag/case_1.0.0",
+  "tag_commit": "4bf18d99c3bf07a0d0a7c33ffb2b1b0f9e1d4337",
+  "release_metadata": "../original/case_1.0.0/release.json",
+  "tag_ref": "../original/case_1.0.0/tag-ref.json",
+  "upstream_license": "../original/case_1.0.0/LICENSE (MIT)",
+  "live_release_API_digests_checked_during_restoration": true,
+  "source_and_metadata_sha256": {
+    "LICENSE": "e1aaf7c7f14ea7c5cf91bc900811289e557e109a46512b428ede67a8408e9b6d",
+    "bm_case_bottom_1.0.0.stl": "9b54e84fa84387984ac3beb4655cf139c6941f3c05d1e52d41358828d4c607b3",
+    "bm_case_top_1.0.0.stl": "61a508e86d91a2fc7d8b43a006bd4d7f8b676c8fd83ab89cb2c56ee5cb6eb609",
+    "breadmodular-case-1.0.0.f3z": "f9c1daa038b2a73d891daa4cbb9b789b00389e58ce3e191e65417187f31e56fe",
+    "native-archive-inventory.json": "659dd22f7b601a4e39a4c57473c989ceba131b52558b5193738c8bf68d3041c3",
+    "release.json": "e16d055e6f77c69d35d6c30913621ea0a1dcad16638af7d5168672d0b6af8c41",
+    "tag-ref.json": "240a97d8e2aea9f7f6c546f471965a3922b635b4d1a0beb16c58c9245a450fe8"
+  },
+  "native_archive_inventory": "../original/case_1.0.0/native-archive-inventory.json",
+  "native_archive_formats": {
+    "smb": 1413,
+    "smbh": 1411,
+    "f3d": 3,
+    "usable_analytic_exchange_files": []
+  },
+  "source_decision": "Verified archive inventory has proprietary Fusion SMB/SMBH, no STEP/IGES/BRep exchange. No Fusion translation claim; verified original STL only.",
+  "assembly_transform": {
+    "X": "releaseX - 20.68",
+    "Y": "-releaseZ - 7.98",
+    "Z": "releaseY + 15"
+  },
+  "geometry_path": "Verified original STL -> frozen faceted source solids. Exact two base exterior face-bounded fills to Z0; one explicitly authorized measured lid-logo bounding region Z75..75.5. Valid direct-OCC filled shells stored as labelled Part::Feature; live native magnet-pocket rebuild downstream.",
+  "runtime": "Existing extracted FreeCAD AppImage, read-only outside this workspace, selected with FREECAD_APPDIR. No install.",
+  "preview": {
+    "path": "previews/filled-surfaces.png",
+    "sha256": "9351f56d6032e5e973ae7cb02ea32354f401271325a68524e6446315b3a06f3b",
+    "uploaded_url": "/uploads/32c10017-a1df-48e2-bd0a-c5b7f5491e65.webp",
+    "input_native_document_sha256": "bdb5b7495e28e1e8bb7003e729682140f5337376b58361c3175c0598b885a492",
+    "method": "One orthographic measured two-surface before/after raster of saved native FreeCAD ReleaseBase/ReleaseLid/Base/Lid BRep tessellations; green outlines are annotations, not raised geometry. Not a GUI screenshot or conceptual/source-STL substitute."
+  },
+  "limitations": "Frozen faceted shells, no recovered Fusion history or smooth fully-parametric shell; script-rebuilt surface fills, native editable pockets. Final lid mesh is closed/manifold with zero self intersections. Base inner engraving unchanged: 13 final vs 12 source localized flags remain failed. No physical/slicer qualification.",
+  "restoration_reused_from": "Read-only worktree 284, branch okbrain/bread-modular-kicad/284-f08b9562; staged/uncommitted restoration copied as files, never merged or mutated.",
+  "authorized_surface_regions": {
+    "base": [
+      20.04662322998047,
+      20.0,
+      0.0,
+      223.07337951660156,
+      159.62001037597656,
+      1.0
+    ],
+    "lid": [
+      61.975433349609375,
+      81.88633728027344,
+      75.0,
+      177.03688049316406,
+      97.43074035644531,
+      75.5
+    ]
+  },
+  "surface_history": "Fills rebuild via build.py; evidence profiles/extrusions are not falsely advertised as live shell drivers. Native pocket depth edits still propagate and reopen tests restore defaults.",
+  "source_to_final_material_mm3": {
+    "base": {
+      "added": 15555.070342294297,
+      "removed": 0.0,
+      "added_outside_authorized_region": 0.0
+    },
+    "lid": {
+      "added": 197.0054142060576,
+      "removed": 0.0,
+      "added_outside_authorized_region": 0.0
+    }
+  }
+}

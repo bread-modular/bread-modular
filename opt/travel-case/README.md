@@ -1,34 +1,10 @@
-# Bread Modular travel case
+# Original magnet travel case
 
-**New B integration / small test coupons:** [quarter-turn-case](quarter-turn-case/README.md)
-— full live original-profile CAD, one common key + .20/.10/.00 per-side actual-case
-coupon pairs (7 STLs), strict CAD/mesh checks; **UNSLICED / UNPRINTED**, no full-case print approval.
+Only the original **case_1.0.0 magnet closure** is retained, with the two explicitly requested surface edits:
 
-**Earlier print-test direction:** [standalone lock studies](lock-studies/README.md)
-— gauge first, then two small mechanisms (8 pieces total), **UNSLICED / UNPRINTED**.
-The slide clip physically “barely slips in”; the earlier flush latch also failed.
-No new full case or shell retrofit; historical CAD/STLs below remain unchanged.
+- [`original/case_1.0.0/`](original/case_1.0.0/): pristine release STL/F3Z, metadata, inventory, checksums and MIT license; bytes unchanged.
+- [`magnet-case/`](magnet-case/): one final FreeCAD design with the lid backside logo filled flush and the base EXTERIOR underside bays filled flat. Original profile, dimensions, magnets, seam, connector openings and PCB mounting retained.
 
-## Current simple version
+Start with [`magnet-case/README.md`](magnet-case/README.md) and [`VALIDATION.md`](magnet-case/VALIDATION.md). Surface shells are script-rebuilt frozen faceted BReps; native pocket-depth features remain editable. Final lid mesh checks pass. **Preserved inner base engraving still has 13 final vs 12 original self-intersection flags; no all-mesh-pass or print qualification is claimed.**
 
-Use **[slide-clips](slide-clips/README.md)**: full original-sized repaired shells
-with shallow tapered open-ended grooves and completely removable one-piece C clips.
-Start with its **two real shell-crop coupon halves + one nominal clip**; no jig,
-fasteners, magnets, glue, gates or hidden assembly. Includes editable final FCStd,
-bed-oriented full shells/fit variants/coupons, two previews and enforced geometry/
-written-STL/hash evidence. Physical friction, force, fit, creep, carrying and
-rocking remain untested; not a safety-rated lock.
-
-- [`slide-clips/Open.FCMacro`](slide-clips/Open.FCMacro) opens FINAL CAD.
-- [`slide-clips/run.sh`](slide-clips/run.sh) clean-builds and validates FINAL CAD.
-- [`slide-clips/PRINT_AND_ASSEMBLY.md`](slide-clips/PRINT_AND_ASSEMBLY.md) has the
-  concise BOM, fit choices and close/push/pull procedure.
-
-## Preserved history and sources
-
-- **[flush-latch](flush-latch/README.md)**: superseded after failed physical
-  print/assembly; historical files retained, not the current printing direction.
-- **[slide-clips/concept](slide-clips/concept/README.md)**: earlier measured local
-  approval handoff, not a complete case or final print coupon.
-- **[original/case_1.0.0](original/case_1.0.0/README.md)**: untouched upstream STLs,
-  native archive, license and verified provenance. Never overwrite with revisions.
+Rejected alternative closures/studies were removed from this working tree, not from Git history. Full deletion and pristine-source hash audit: [`magnet-case/reports/cleanup.json`](magnet-case/reports/cleanup.json).
