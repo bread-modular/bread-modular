@@ -64,3 +64,11 @@ Strength, force, cycles, creep and accidental push+turn remain unproven. Later
 real-section integration must revisit original 243.12 × 179.62 × 77.5, seam Z15,
 floor 8 and curved lid shoulder; avoid underfloor projections and fiddly captive
 parts. This kit does not authorize any case-body change or loaded travel.
+
+## Additional C-only experiment — separate from the baseline kit
+
+[C-tight](c-tight/README.md) adds **one female**, reusing your already printed
+`C_male_8.00.stl`: left → right **0.20 / 0.10 / 0.00 mm per side** = engraved
+**G0.40 / G0.20 / G0.00 total gaps**, widths **8.40 / 8.20 / 8.00 mm**.
+It has its own live CAD, strict build, validation and hashes under `c-tight/`;
+no A/B or original C rebuild. Zero nominal clearance may bind: **never force**.
