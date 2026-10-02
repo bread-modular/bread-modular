@@ -1,0 +1,11 @@
+# Open the LOCAL approval concept with its editable feature module loaded.
+import os, sys
+import FreeCAD as App
+import FreeCADGui as Gui
+root=os.path.dirname(__file__)
+if root not in sys.path:sys.path.insert(0,root)
+import clip_features
+doc=App.openDocument(os.path.join(root,'cad','slide-clip-concept.FCStd'))
+doc.recompute()
+Gui.activeDocument().activeView().viewAxonometric()
+Gui.activeDocument().activeView().fitAll()
