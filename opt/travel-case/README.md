@@ -1,6 +1,10 @@
 # Bread Modular travel case
 
-**Current print-test direction:** [standalone lock studies](lock-studies/README.md)
+**New B integration / small test coupons:** [quarter-turn-case](quarter-turn-case/README.md)
+— full live original-profile CAD, one common key + .20/.10/.00 per-side actual-case
+coupon pairs (7 STLs), strict CAD/mesh checks; **UNSLICED / UNPRINTED**, no full-case print approval.
+
+**Earlier print-test direction:** [standalone lock studies](lock-studies/README.md)
 — gauge first, then two small mechanisms (8 pieces total), **UNSLICED / UNPRINTED**.
 The slide clip physically “barely slips in”; the earlier flush latch also failed.
 No new full case or shell retrofit; historical CAD/STLs below remain unchanged.
