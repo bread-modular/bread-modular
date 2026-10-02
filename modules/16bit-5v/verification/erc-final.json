@@ -1,0 +1,218 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-02T12:32:13",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/94683f5c-9cd9-448e-be96-9792537b5cb8",
+            "violations": [
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Vertical Wire, length 0.0254 mm",
+                            "pos": {
+                                "x": 0.23495,
+                                "y": 1.3462
+                            },
+                            "uuid": "1b721132-da30-4f7f-81c8-7ce6b51a7818"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Horizontal Wire, length 0.1206 mm",
+                            "pos": {
+                                "x": 0.3556,
+                                "y": 1.3462
+                            },
+                            "uuid": "61198e49-8dce-4849-9db5-a3855bb47660"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol SW3 Pin 2 [B, Passive, Line]",
+                            "pos": {
+                                "x": 0.23495,
+                                "y": 1.3716
+                            },
+                            "uuid": "c2d9e188-d9d0-477c-a833-49de3ba97782"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Vertical Wire, length 0.0254 mm",
+                            "pos": {
+                                "x": 0.23495,
+                                "y": 1.4732
+                            },
+                            "uuid": "9acd5e51-9b2a-4789-9156-f2deb138992f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR017 Hidden pin 1 [GND, Power input, Line]",
+                            "pos": {
+                                "x": 0.23495,
+                                "y": 1.4986
+                            },
+                            "uuid": "1ff516f2-60d6-4f8d-9d61-b0dd38345ed1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol 'Crystal_GND24' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol Y1 [Crystal_GND24]",
+                            "pos": {
+                                "x": 0.4318,
+                                "y": 2.6162
+                            },
+                            "uuid": "dd0fdcaf-56ed-460c-beac-ca6cbfc74af7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Footprint 'SOIC-8_5.23x5.23mm_P1.27mm' not found in library 'Package_SO'",
+                    "items": [
+                        {
+                            "description": "Symbol U2 [W25Q128JVS]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 1.4224
+                            },
+                            "uuid": "23fa27b6-0854-44d9-b666-32cff62cd951"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "Symbol 'W25Q128JVS' doesn't match copy in library 'Memory_Flash'",
+                    "items": [
+                        {
+                            "description": "Symbol U2 [W25Q128JVS]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 1.4224
+                            },
+                            "uuid": "23fa27b6-0854-44d9-b666-32cff62cd951"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'W25Q128JVS' doesn't match copy in library 'Memory_Flash'",
+                    "items": [
+                        {
+                            "description": "Symbol U5 [W25Q128JVS]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 2.1209
+                            },
+                            "uuid": "0227e10b-f481-4c62-af94-c83c70056bb4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV1 [R_Potentiometer]",
+                            "pos": {
+                                "x": 0.9271,
+                                "y": 3.2131
+                            },
+                            "uuid": "35ac245c-25e9-4f8e-afc5-7d18ac4c0777"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV2 [R_Potentiometer]",
+                            "pos": {
+                                "x": 0.9271,
+                                "y": 3.7084
+                            },
+                            "uuid": "07e113f9-a9f5-431d-8c4d-1da0526d7029"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'LED' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol D1 [LED]",
+                            "pos": {
+                                "x": 2.6162,
+                                "y": 1.5748
+                            },
+                            "uuid": "a3862680-f24c-4f5f-a828-5732f9960c10"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                }
+            ]
+        }
+    ],
+    "source": "16bit-5v.kicad_sch"
+}

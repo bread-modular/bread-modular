@@ -1,0 +1,36 @@
+{
+  "pcb_sha256": "b9b0f86c2d5b1c00687cba598cd96abf086c61910456b3b049d5a8d3206dd745",
+  "zip_sha256": "22af114ecc2707c94c7880f8994d29becf768ff1857cb9dd5941d926211981e6",
+  "copper_layers": [
+    [
+      "top",
+      "copper"
+    ],
+    [
+      "bottom",
+      "copper"
+    ]
+  ],
+  "package_paste": {
+    "U3": {
+      "central_paste_features": 0,
+      "external_leads_with_paste": 8
+    },
+    "U4": {
+      "central_paste_features": 0,
+      "external_leads_with_paste": 8
+    }
+  },
+  "pth_features": 153,
+  "npth_features": 2,
+  "thermal_holes_matched_in_PTH": 9,
+  "mounts_matched_in_PTH": 2,
+  "USB_NPTH_locator_holes": 2,
+  "coordinate_tolerance_mm": 0.000501,
+  "coordinate_note": "Excellon output quantizes to 0.001mm; <=0.000501mm comparison tolerance is numeric serialization only, NOT a DRC clearance relaxation. Original via-modeled mounts are PTH; NPTH entries are USB locators.",
+  "gerber_renders": "production-top/bottom.svg/png parsed from exact FINAL ZIP",
+  "parser_notes": [
+    "KiCad G90 after end-of-header Excellon SyntaxWarning; geometry/units parsed and original mechanical registration verified."
+  ],
+  "release_status": "HOLD"
+}

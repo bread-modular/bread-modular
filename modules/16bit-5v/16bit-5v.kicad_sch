@@ -264,7 +264,7 @@
 				)
 			)
 		)
-		(symbol "Audio:PT8211"
+		(symbol "Bread16bit:PT8211"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -388,7 +388,7 @@
 						)
 					)
 				)
-				(pin input line
+				(pin power_in line
 					(at 3.81 -8.89 90)
 					(length 2.54)
 					(name "GND"
@@ -406,7 +406,7 @@
 						)
 					)
 				)
-				(pin input line
+				(pin power_in line
 					(at 3.81 7.62 270)
 					(length 2.54)
 					(name "VDD"
@@ -424,7 +424,7 @@
 						)
 					)
 				)
-				(pin input line
+				(pin output line
 					(at 1.27 7.62 270)
 					(length 2.54)
 					(name "L"
@@ -442,7 +442,7 @@
 						)
 					)
 				)
-				(pin input line
+				(pin no_connect line
 					(at -1.27 7.62 270)
 					(length 2.54)
 					(name "NC"
@@ -460,7 +460,7 @@
 						)
 					)
 				)
-				(pin input line
+				(pin output line
 					(at -3.81 7.62 270)
 					(length 2.54)
 					(name "R"
@@ -1051,7 +1051,7 @@
 				)
 			)
 		)
-		(symbol "Connector:USB_C_Receptacle_USB2.0_14P"
+		(symbol "Bread16bit:USB_C_HRO_TYPE_C_31_M_12"
 			(pin_names
 				(offset 1.016)
 			)
@@ -1092,7 +1092,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "USB 2.0-only 14P Type-C Receptacle connector"
+			(property "Description" "HRO TYPE-C-31-M-12: 12 solder terminals; A1/B12, A12/B1, A4/B9, A9/B4 share lands; A8/B8 are unused SBU"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1119,7 +1119,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "USB_C_Receptacle_USB2.0_14P_0_0"
+			(symbol "USB_C_HRO_TYPE_C_31_M_12_0_0"
 				(rectangle
 					(start -0.254 -17.78)
 					(end 0.254 -16.764)
@@ -1209,7 +1209,7 @@
 					)
 				)
 			)
-			(symbol "USB_C_Receptacle_USB2.0_14P_0_1"
+			(symbol "USB_C_HRO_TYPE_C_31_M_12_0_1"
 				(rectangle
 					(start -10.16 17.78)
 					(end 10.16 -17.78)
@@ -1410,7 +1410,7 @@
 					)
 				)
 			)
-			(symbol "USB_C_Receptacle_USB2.0_14P_1_1"
+			(symbol "USB_C_HRO_TYPE_C_31_M_12_1_1"
 				(pin passive line
 					(at 0 -22.86 90)
 					(length 5.08)
@@ -1537,60 +1537,9 @@
 						)
 					)
 				)
-				(pin passive line
-					(at 0 -22.86 90)
-					(length 5.08) hide
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "B1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -22.86 90)
-					(length 5.08) hide
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "B12"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 15.24 15.24 180)
-					(length 5.08) hide
-					(name "VBUS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "B4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
+
+
+
 				(pin bidirectional line
 					(at 15.24 7.62 180)
 					(length 5.08)
@@ -1645,24 +1594,7 @@
 						)
 					)
 				)
-				(pin passive line
-					(at 15.24 15.24 180)
-					(length 5.08) hide
-					(name "VBUS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "B9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
+
 				(pin passive line
 					(at -7.62 -22.86 90)
 					(length 5.08)
@@ -1681,7 +1613,9 @@
 						)
 					)
 				)
-			)
+
+(pin no_connect line (at -15.24 0 0) (length 2.54) (name "SBU1" (effects (font (size 1.27 1.27)))) (number "A8" (effects (font (size 1.27 1.27)))))
+(pin no_connect line (at -15.24 -5.08 0) (length 2.54) (name "SBU2" (effects (font (size 1.27 1.27)))) (number "B8" (effects (font (size 1.27 1.27))))))
 		)
 		(symbol "Device:C"
 			(pin_numbers hide)
@@ -12503,7 +12437,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x08_Socket"
+		(property "Value" "Conn_01x05_Socket"
 			(at 455.93 121.158 90)
 			(effects
 				(font
@@ -13304,7 +13238,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Audio:PT8211")
+		(lib_id "Bread16bit:PT8211")
 		(at 262.89 317.5 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13321,7 +13255,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "PT8211"
+		(property "Value" "PT8211-S"
 			(at 248.666 320.294 0)
 			(effects
 				(font
@@ -13330,7 +13264,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm"
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 			(at 262.89 332.74 0)
 			(effects
 				(font
@@ -14300,7 +14234,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm"
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 			(at 66.04 321.31 0)
 			(effects
 				(font
@@ -14997,7 +14931,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:USB_C_Receptacle_USB2.0_14P")
+		(lib_id "Bread16bit:USB_C_HRO_TYPE_C_31_M_12")
 		(at 40.64 46.99 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -15040,7 +14974,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "USB 2.0-only 14P Type-C Receptacle connector"
+		(property "Description" "HRO TYPE-C-31-M-12: 12 solder terminals; A1/B12, A12/B1, A4/B9, A9/B4 share lands; A8/B8 are unused SBU"
 			(at 40.64 46.99 0)
 			(effects
 				(font
@@ -15055,9 +14989,7 @@
 		(pin "B7"
 			(uuid "02681bce-0dfc-4f81-83bd-53ad8bb0ddad")
 		)
-		(pin "B9"
-			(uuid "efb7027f-58d1-402b-9265-bb849a065e13")
-		)
+
 		(pin "B5"
 			(uuid "82a56c0e-ac13-4b02-abbf-31ce99c62c12")
 		)
@@ -15067,12 +14999,8 @@
 		(pin "A6"
 			(uuid "460e6a64-83b0-4c51-b195-b67f451938a5")
 		)
-		(pin "B12"
-			(uuid "b535eb1a-43c4-4861-9471-24046d4b6d78")
-		)
-		(pin "B4"
-			(uuid "ae779172-66c7-41b8-9ce1-6951edee4265")
-		)
+
+
 		(pin "A1"
 			(uuid "ab78e6ea-7663-4a75-84b8-8a63df8cc0a1")
 		)
@@ -15082,9 +15010,7 @@
 		(pin "A9"
 			(uuid "105992ba-1e3e-499d-857b-aec3d7acc128")
 		)
-		(pin "B1"
-			(uuid "08f8ffad-5035-4384-8b60-62d0a495119e")
-		)
+
 		(pin "S1"
 			(uuid "59549a0d-3c60-468c-b1ab-bb60eb1b600d")
 		)
@@ -15094,7 +15020,9 @@
 		(pin "A4"
 			(uuid "131b7045-ebec-4e62-ba45-d1c4fea63055")
 		)
-		(instances
+		(property "JLCPCB Position Offset X" "0" (at 40.64 46.99 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(property "JLCPCB Position Offset Y" "-3.675" (at 40.64 46.99 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(instances
 			(project "RP2350_60QFN_minimal"
 				(path "/94683f5c-9cd9-448e-be96-9792537b5cb8"
 					(reference "J5")
@@ -15102,7 +15030,9 @@
 				)
 			)
 		)
-	)
+
+(pin "A8" (uuid "5d52461f-5d71-4c67-b9b1-c2cc6c019e26"))
+(pin "B8" (uuid "c09f3e35-3551-48d2-b5f1-534ee83d7f7e")))
 	(symbol
 		(lib_id "power:GND")
 		(at 528.32 52.07 0)
@@ -15461,7 +15391,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm"
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 			(at 532.13 201.93 0)
 			(effects
 				(font
@@ -16186,7 +16116,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm"
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 			(at 66.04 370.84 0)
 			(effects
 				(font
@@ -17043,7 +16973,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x08_Socket"
+		(property "Value" "Conn_01x05_Socket"
 			(at 516.382 120.142 90)
 			(effects
 				(font
@@ -17888,4 +17818,220 @@
 			(page "1")
 		)
 	)
+
+(no_connect (at 166.37 176.53) (uuid "980762d0-4791-4813-8131-1fcaa0113b41"))
+(no_connect (at 166.37 179.07) (uuid "1e18abb7-e7bc-4133-8e52-738e79f35097"))
+(no_connect (at 229.87 127.0) (uuid "10bb854c-84cb-4165-a180-b8963b5c4ca1"))
+(no_connect (at 229.87 129.54) (uuid "231c51c3-f428-4be8-80ee-32d4c1d87207"))
+(no_connect (at 229.87 132.08) (uuid "2363248c-5552-4dcd-8985-4fe89ca0bcb0"))
+(no_connect (at 229.87 134.62) (uuid "47357c91-6c68-4cd4-b40f-cd806eaced9a"))
+(no_connect (at 229.87 137.16) (uuid "85fa5377-d206-4070-a2a7-666e08d633cf"))
+(no_connect (at 229.87 139.7) (uuid "a95d4bf5-bd20-48ab-911c-38bf907c8d27"))
+(no_connect (at 229.87 147.32) (uuid "23915137-ffc2-4a04-8371-26504fca1650"))
+(no_connect (at 229.87 149.86) (uuid "6806dd7d-c227-45aa-9c56-8571d386cd4c"))
+(no_connect (at 229.87 152.4) (uuid "6a701204-ea14-461d-a16e-e0032e168b94"))
+(no_connect (at 229.87 154.94) (uuid "c614eccb-f6e6-49f8-88a5-c3fa734a7a2c"))
+(no_connect (at 229.87 157.48) (uuid "ab579cdd-eae8-4eb2-9837-259de83fb2ec"))
+(no_connect (at 229.87 165.1) (uuid "97492b59-5c42-4e25-b7dd-ee71127b4e53"))
+(no_connect (at 229.87 167.64) (uuid "2ef06fa8-6067-48bc-bbb4-a31c4709576f"))
+(no_connect (at 229.87 170.18) (uuid "27961dbf-c876-422b-a68a-608c44eaf19d"))
+(no_connect (at 229.87 172.72) (uuid "e76093e8-9978-449f-8b72-53f307b4669f"))
+(no_connect (at 229.87 175.26) (uuid "8c68476a-cb0b-4bc3-84de-1d54fabf6c67"))
+(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 267.9700 144.7800 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "0537dd9f-e3a8-4755-850d-3992809e8253")
+		(property "Reference" "#FLG0301"
+			(at 267.9700 146.6850 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 267.9700 140.9700 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 267.9700 144.7800 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 267.9700 144.7800 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 267.9700 144.7800 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f303d22a-7863-4ad7-8a92-42b7a268961a")
+		)
+		(instances
+			(project "RP2350_60QFN_minimal"
+				(path "/94683f5c-9cd9-448e-be96-9792537b5cb8"
+					(reference "#FLG0301")
+					(unit 1)
+				)
+			)
+		)
+	)
+(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 119.3800 101.6000 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "21277b09-5acd-412d-9960-406b7d1c513f")
+		(property "Reference" "#FLG0302"
+			(at 119.3800 103.5050 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 119.3800 97.7900 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 119.3800 101.6000 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 119.3800 101.6000 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 119.3800 101.6000 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "57f92a6a-a9f3-4f21-8919-66d6752f481d")
+		)
+		(instances
+			(project "RP2350_60QFN_minimal"
+				(path "/94683f5c-9cd9-448e-be96-9792537b5cb8"
+					(reference "#FLG0302")
+					(unit 1)
+				)
+			)
+		)
+	)
+(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 166.3700 105.4100 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b0330ce3-d63c-446e-8ef1-4aaa12c3d514")
+		(property "Reference" "#FLG0303"
+			(at 166.3700 107.3150 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 166.3700 101.6000 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 166.3700 105.4100 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 166.3700 105.4100 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 166.3700 105.4100 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "47f9a7f8-8897-4074-86d7-1c705c0d553c")
+		)
+		(instances
+			(project "RP2350_60QFN_minimal"
+				(path "/94683f5c-9cd9-448e-be96-9792537b5cb8"
+					(reference "#FLG0303")
+					(unit 1)
+				)
+			)
+		)
+	)
+
+(label "USB_VBUS_UNUSED" (at 55.88 31.75 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "3831bfd6-f93e-4b4d-b08f-b28ca9db45e8"))
 )
