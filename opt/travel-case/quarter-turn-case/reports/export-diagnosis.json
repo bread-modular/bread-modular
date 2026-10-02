@@ -1,0 +1,275 @@
+{
+  "diagnosis": "Four exact valence-4 vertical edges at diagonal bitmap B-label contacts, not T-junction or quantization. Other three lid meshes had no edge errors.",
+  "prior_CAD_core_checks": 377,
+  "prior_CAD_core_failures": 0,
+  "bootstrap_note": "FreeCAD must initialize before importing Mesh; diagnostics here used ordinary Python binary STL parsing instead.",
+  "correction": "Same non-bearing B engraving, continuous chamfered outline with two disjoint counters. No mechanism geometry changed. No export welding, dropped facets, epsilon-gap patch or tolerance relaxation.",
+  "required_acceptance": "Complete strict CAD revalidation + seven WRITTEN mesh topology/volume/extents/orientation/hash checks; no success inferred from this diagnosis.",
+  "failed_label_source_sha256": "c34edcbdebabb94a3e47a794cbd183bb809fb277f61d5915f85fb2718733e5cd",
+  "failed_meshes": [
+    {
+      "failed_export": "B_key_common.stl",
+      "sha256_failed_bytes": "b7eb6d113f5002ecb9fbcd9f27760fa5315f637e7ebfcc920c0eef93d4b99cf8",
+      "edge_errors": [
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              9.3,
+              3.1,
+              3.6
+            ],
+            [
+              9.3,
+              3.1,
+              4.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              9.3,
+              3.7,
+              3.6
+            ],
+            [
+              9.3,
+              3.7,
+              4.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              9.3,
+              4.3,
+              3.6
+            ],
+            [
+              9.3,
+              4.3,
+              4.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              9.3,
+              4.9,
+              3.6
+            ],
+            [
+              9.3,
+              4.9,
+              4.0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "failed_export": "B_base_c020.stl",
+      "sha256_failed_bytes": "8cc3320a35446a99aaa2f5988b62d4163b5d5f7820a8a99320e5efe25ec396d2",
+      "edge_errors": [
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              15.3,
+              7.6
+            ],
+            [
+              10.0,
+              15.3,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              16.1,
+              7.6
+            ],
+            [
+              10.0,
+              16.1,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              16.9,
+              7.6
+            ],
+            [
+              10.0,
+              16.9,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              17.700001,
+              7.6
+            ],
+            [
+              10.0,
+              17.700001,
+              8.0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "failed_export": "B_base_c010.stl",
+      "sha256_failed_bytes": "a091fc0a0553e418c8a90497c0b2e2f04bc7b745555648423ec6325d102836d5",
+      "edge_errors": [
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              15.3,
+              7.6
+            ],
+            [
+              10.0,
+              15.3,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              16.1,
+              7.6
+            ],
+            [
+              10.0,
+              16.1,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              16.9,
+              7.6
+            ],
+            [
+              10.0,
+              16.9,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              17.700001,
+              7.6
+            ],
+            [
+              10.0,
+              17.700001,
+              8.0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "failed_export": "B_base_c000.stl",
+      "sha256_failed_bytes": "50c5ad6143da1e49442428e40bc6d50e6051c4623f92853e3e31365e4c197736",
+      "edge_errors": [
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              15.3,
+              7.6
+            ],
+            [
+              10.0,
+              15.3,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              16.1,
+              7.6
+            ],
+            [
+              10.0,
+              16.1,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              16.9,
+              7.6
+            ],
+            [
+              10.0,
+              16.9,
+              8.0
+            ]
+          ]
+        },
+        {
+          "multiplicity": 4,
+          "vertices_mm": [
+            [
+              10.0,
+              17.700001,
+              7.6
+            ],
+            [
+              10.0,
+              17.700001,
+              8.0
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
