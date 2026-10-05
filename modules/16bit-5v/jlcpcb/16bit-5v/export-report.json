@@ -1,11 +1,11 @@
 {
   "generator": "bread-modular/kicad-jlcpcb",
   "kicad_version": "10.0.6",
-  "board": "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_pcb",
-  "schematic": "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_sch",
+  "board": "/home/azero/data/projects/bread-modular/modules/16bit-5v/16bit-5v.kicad_pcb",
+  "schematic": "/home/azero/data/projects/bread-modular/modules/16bit-5v/16bit-5v.kicad_sch",
   "source_sha256": {
-    "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_pcb": "836ce806d4727241807eecd486c6134daf85f6e29b9f2c88ee7e5b5ce16408cd",
-    "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_sch": "e2a7747990654ff0a9928fead7c5d970905c74495af72a2c083a8a9b4d842fed"
+    "/home/azero/data/projects/bread-modular/modules/16bit-5v/16bit-5v.kicad_pcb": "a004f5770bb75a903d32d18d4ead40c8f5aebaddb1a67138db1923f48701b6e0",
+    "/home/azero/data/projects/bread-modular/modules/16bit-5v/16bit-5v.kicad_sch": "a39d636a99b2d361bec07abc1f05d396760a6ee1aa9dfb9e1bad7b3c5e4e963c"
   },
   "layers": [
     "F.Cu",
@@ -33,14 +33,8 @@
     "RV2": "Not an SMD footprint (use --include-through-hole)",
     "V_SUPPLY1": "Not an SMD footprint (use --include-through-hole)"
   },
-  "missing_part_numbers": [
-    "D1",
-    "R7",
-    "R8",
-    "U5"
-  ],
+  "missing_part_numbers": [],
   "warnings": [
-    "Missing LCSC part numbers: D1, R7, R8, U5. Match these parts manually before ordering.",
     "Export is not a DRC or assembly approval: refill zones and save before export; review Gerbers, holes, part matches, centroids and rotations in JLCPCB's preview."
   ],
   "files": [
