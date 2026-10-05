@@ -2,6 +2,15 @@
 
 A standalone, offline exporter for a directory containing a KiCad project. It generates a Gerber ZIP (including drills), a grouped assembly BOM, and a pick-and-place / CPL CSV.
 
+## Read-only sourcing and assembly gates
+
+Use the [shared catalog/audit/passive-planning CLI and API](ASSEMBLY.md) before
+module sourcing/design changes. It extends this tool directory and reuses this
+exporter's native/CSV parsers; it does not replace the exporter or modify
+boards/production files. The discoverable [JLCPCB assembly skill](../../.agents/skills/jlcpcb-assembly/SKILL.md)
+covers actual Basic versus Preferred/Extended, independent Economy evidence,
+conservative alternatives and manual production/order signoff.
+
 ## Requirements
 
 - Python **3.8+**, standard library only.

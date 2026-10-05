@@ -29,6 +29,7 @@ submodules instead of cloning them. See [library setup and verification](opt/REA
 * [Modular MIDI](https://github.com/bread-modular/bread-modular/wiki/Modular-MIDI)
 * [PCB Assembly](https://github.com/bread-modular/bread-modular/wiki/PCB-Assembly)
 * [KiCad → JLCPCB Export Tool](opt/kicad-jlcpcb/README.md) — Gerber ZIP, BOM and pick-and-place CSV; no extra Python packages or plugins.
+* [JLCPCB sourcing/audit tools](opt/kicad-jlcpcb/ASSEMBLY.md) and [assembly skill](.agents/skills/jlcpcb-assembly/SKILL.md) — common-tool-first Basic/Economy checks, read-only passive planning and honest release gates.
 
 ## KiCad assembly export
 
