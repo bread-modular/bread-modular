@@ -1,0 +1,41 @@
+{
+  "assertions_passed": 1747,
+  "original_ref": "39f70c646d854e1e43779866c62bead5ab3f003d",
+  "pcb_sha256": "b9b0f86c2d5b1c00687cba598cd96abf086c61910456b3b049d5a8d3206dd745",
+  "schematic_sha256": "02bf0cc0f562dbf30c11cb170befee5777e2d689ea028fc0de98a6a12fc30dfe",
+  "copper_layers": 2,
+  "component_count": 62,
+  "component_body_sides": {
+    "F.Cu": 58,
+    "B.Cu": 4
+  },
+  "back_body_refs": [
+    "GND1",
+    "J1",
+    "J2",
+    "V_SUPPLY1"
+  ],
+  "mounts_preserved": 2,
+  "thermal_holes_preserved": 9,
+  "unchanged_original_copper_items": 679,
+  "removed_documented_local_segments": 42,
+  "modified_original_copper_items": 7,
+  "added_tracks_vias": 77,
+  "functional_pin_memberships_preserved": 235,
+  "physical_pad_count": 265,
+  "filled_net_zones": 2,
+  "VREG_LX_length_mm": 1.895373,
+  "VREG_LX_before_length_mm": 10.048756,
+  "VREG_LX_widths_mm": [
+    0.15,
+    0.4,
+    0.7
+  ],
+  "power_note": "Targeted short front LX + local input/output/PGND return; original inductor retained. Bench/ripple/inductor winding validation remains a release gate.",
+  "assembly_note": "All 56 SMD bodies top; 2 top pots + 4 downward underside connector bodies retained and placement approved by user. Existing 2Cu preserved; routing/export data integration-ready. Physical header lead/pot-case clearance, sourcing/assembler and final production review still needed before ordering; no order authorized. Prior Astra corrections are historical evidence.",
+  "j5_nominal_body_center_board_mm": [
+    72.136,
+    44.294
+  ],
+  "release_status": "INTEGRATION-READY \u2014 user-approved THT/underside placement; existing 2Cu preserved; ORDERING HOLD, no order authorized"
+}

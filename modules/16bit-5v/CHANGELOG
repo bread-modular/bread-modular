@@ -1,0 +1,86 @@
+## 1.7.0-5v
+5 V-input hardware variant (modules/16bit-5v), derived from 16bit 1.6.0 (hardware) /
+1.7.0 (firmware history below is unchanged - the same apps and binaries run on both).
+
+- The module's supply socket (V_SUPPLY1, all five pins) now takes the **5 V** slot rail
+  instead of 3.3 V. Nothing on the module runs from 5 V after the new regulator.
+- New **U6 AP2112K-3.3** (Diodes, SOT-23-5, LCSC C51118, MPN AP2112K-3.3TRG1), 600 mA
+  low-dropout LDO: VIN and EN from the new +5V net, VOUT onto the existing +3V3 rail,
+  which keeps every load the original 3.3 V net drove.
+- New input decoupling next to the regulator: **C25 10 uF/25 V 0805** (C15850) and
+  **C26 100 nF 0402** (C1525); new output capacitor **C27 1 uF/50 V 0805** (C28323).
+  The 3.3 V rail keeps its existing local bulk (C19 10 uF, C21 100 uF).
+  A PWR_FLAG documents that +5V is externally supplied by the base slot.
+- PCB: the 5 V input path is routed on B.Cu - 0.8 mm bus across the five supply pins and
+  the trunk to the regulator, 0.6 mm taps to VIN/EN and the input capacitors; the old
+  3.3 V feed from the supply pins is removed and the +3V3 distribution is now fed by the
+  LDO (one short B.Cu bridge re-joins the two pre-existing +3V3 pour pockets).
+- `modules/16bit/code` (firmware) is intentionally **not** copied: the firmware is
+  unchanged by this variant and `code/16bit/lib/lfs` is a git submodule.
+- `production/` holds this variant's own BOM/CPL/IPC netlist/gerbers (`16bit-5v.*`);
+  the original module's historical `production/backups/` archives are not carried over.
+- The board file is saved by the KiCad 10 toolchain (same generator version as
+  modules/32bit); the schematic keeps its original KiCad 8 format with minimal edits.
+
+## 1.7.0
+Add the MIDI-clock-synced motion recorder (MODE button) to the polysynth app.
+It records 4 bars of CV1/CV2 + MCC Bank A (CC20..23) per take and loops it.
+Move the shared recorder header to `includes/audio/apps/motion_recorder.h`
+(previously under `monosynth/`) so both synth apps use the same state machine.
+
+## 1.6.0
+Change the filter of the Delay FX into an Highpass filter
+
+## 1.5.3
+Make sure rumble is disabled by default
+
+## 1.5.2
+Fix delay logic issues with low FPS values.
+
+## 1.5.1
+Rumble FX was not allowed to configure from the 16bit firmware.
+It's added now
+
+## 1.5.0
+Introduce a Techno Rumble FX for the Sampler App
+
+
+## 1.4.0
+Introduce performance improvement for all the apps.
+This is done my marking hot/cold paths of the codebase
+to run audiocallack as fast as possible.
+
+## 1.3.0
+Introduce the Elab app on 16bit
+
+## 1.2.1
+Fix the envelope not functioning issue in the polysynth app.
+
+## 1.2.0
+Introduce the FxRack app.
+Basically it accepts audio-in and send them through our selectable
+fx section and send the audio-out.
+
+## 1.1.0
+Introduce the 16bit firmware with apps.
+There's no hardware changes in this version.
+
+## 1.0.0
+Revert the Digital In/Out support.
+And add more space for captions. So, they look a bit more visible.
+
+## 0.3.0
+Add Digital Audio In/Out Support
+Add some hardware support for digital audio in/out via some 
+custom pio based protocol between 16bits.
+This allows us to send audio between 16 bits instances digitally.
+
+## 0.2.0
+
+Add PSRAM support.
+Use 1k resistor for the DAC low pass filter.
+This sets output impedance to 1k and the put -3db cutoff points to 15k
+Currently it's around 1500hz and that's not good.
+
+## 0.1.0
+Initialize Release

@@ -1,0 +1,8222 @@
+{
+  "revision": "1e50e798d68e3d8d3167fb5fb47bdcb7ee436b83",
+  "path": "modules/16bit-5v",
+  "groups": [
+    {
+      "bom": {
+        "Comment": "0.1uf",
+        "Designator": "C1, C5",
+        "Footprint": "C_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "2",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C1": {
+          "schematic": {
+            "props": {
+              "Reference": "C1",
+              "Value": "0.1uf",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C1",
+              "Value": "0.1uf",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "53.975",
+              "54.638",
+              "90"
+            ]
+          }
+        },
+        "C5": {
+          "schematic": {
+            "props": {
+              "Reference": "C5",
+              "Value": "0.1uf",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C5",
+              "Value": "0.1uf",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "64.516",
+              "59.845",
+              "-90"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "3V3 local IC decoupling; preserve local high-frequency current loops.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "100n",
+        "Designator": "C2, C8, C11, C12, C13, C14, C15, C16, C17, C18, C24",
+        "Footprint": "C_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "11",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C2": {
+          "schematic": {
+            "props": {
+              "Reference": "C2",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C2",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "60.551",
+              "74.3712",
+              "180"
+            ]
+          }
+        },
+        "C8": {
+          "schematic": {
+            "props": {
+              "Reference": "C8",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C8",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+1V1"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "59.464",
+              "70.993",
+              "180"
+            ]
+          }
+        },
+        "C11": {
+          "schematic": {
+            "props": {
+              "Reference": "C11",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C11",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+1V1"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "70.965",
+              "71.882"
+            ]
+          }
+        },
+        "C12": {
+          "schematic": {
+            "props": {
+              "Reference": "C12",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C12",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "69.2",
+              "59.3"
+            ]
+          }
+        },
+        "C13": {
+          "schematic": {
+            "props": {
+              "Reference": "C13",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C13",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "59.789",
+              "73.152",
+              "180"
+            ]
+          }
+        },
+        "C14": {
+          "schematic": {
+            "props": {
+              "Reference": "C14",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C14",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "71.402",
+              "73.025"
+            ]
+          }
+        },
+        "C15": {
+          "schematic": {
+            "props": {
+              "Reference": "C15",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C15",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "62.512",
+              "66.167",
+              "180"
+            ]
+          }
+        },
+        "C16": {
+          "schematic": {
+            "props": {
+              "Reference": "C16",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C16",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "62.512",
+              "65.151",
+              "180"
+            ]
+          }
+        },
+        "C17": {
+          "schematic": {
+            "props": {
+              "Reference": "C17",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C17",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "69.624",
+              "76.2"
+            ]
+          }
+        },
+        "C18": {
+          "schematic": {
+            "props": {
+              "Reference": "C18",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C18",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "63.782",
+              "76.934",
+              "-90"
+            ]
+          }
+        },
+        "C24": {
+          "schematic": {
+            "props": {
+              "Reference": "C24",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C24",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "60.9092",
+              "77.4928",
+              "-90"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "3V3 decoupling except C8/C11 on 1V1; retain individual local placement, not a single distant equivalent.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "15p",
+        "Designator": "C3, C4",
+        "Footprint": "C_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "2",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C3": {
+          "schematic": {
+            "props": {
+              "Reference": "C3",
+              "Value": "15p",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C3",
+              "Value": "15p",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "/XIN"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "67.0586",
+              "78.613"
+            ]
+          }
+        },
+        "C4": {
+          "schematic": {
+            "props": {
+              "Reference": "C4",
+              "Value": "15p",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C4",
+              "Value": "15p",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "Net-(C4-Pad1)"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "64.6964",
+              "78.5876",
+              "180"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "Y1 crystal load capacitors; preserve 15pF, low loss/stable dielectric and oscillator layout; R2 is its damping resistor.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "4.7u",
+        "Designator": "C6, C7",
+        "Footprint": "C_0402_1005Metric_small_pads",
+        "LCSC Part #": "",
+        "Quantity": "2",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C6": {
+          "schematic": {
+            "props": {
+              "Reference": "C6",
+              "Value": "4.7u",
+              "Footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C6",
+              "Value": "4.7u",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "69.9",
+              "66.099999"
+            ]
+          }
+        },
+        "C7": {
+          "schematic": {
+            "props": {
+              "Reference": "C7",
+              "Value": "4.7u",
+              "Footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C7",
+              "Value": "4.7u",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+1V1"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "68.3",
+              "62.3"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "C6 RP2350 switching-regulator VIN bulk; C7 1V1 output bulk. Custom reduced lands: package change needs explicit electrical/layout review.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "4.7u",
+        "Designator": "C9, C10",
+        "Footprint": "C_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "2",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C9": {
+          "schematic": {
+            "props": {
+              "Reference": "C9",
+              "Value": "4.7u",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C9",
+              "Value": "4.7u",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "/VREG_AVDD"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "72",
+              "66.3"
+            ]
+          }
+        },
+        "C10": {
+          "schematic": {
+            "props": {
+              "Reference": "C10",
+              "Value": "4.7u",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C10",
+              "Value": "4.7u",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+1V1"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "67.1576",
+              "77.1932",
+              "-90"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "C9 VREG_AVDD bypass behind R5 33ohm; C10 far-side 1V1 bulk. Preserve filtering and regulator output/feedback network.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "10u",
+        "Designator": "C19",
+        "Footprint": "C_0805_2012Metric",
+        "LCSC Part #": "",
+        "Quantity": "1",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C19": {
+          "schematic": {
+            "props": {
+              "Reference": "C19",
+              "Value": "10u",
+              "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C19",
+              "Value": "10u",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0805_2012Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "63.693",
+              "53.975"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "3V3 bulk; evaluate effective capacitance, ESR and transient support.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "10nf",
+        "Designator": "C20",
+        "Footprint": "C_0805_2012Metric",
+        "LCSC Part #": "",
+        "Quantity": "1",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C20": {
+          "schematic": {
+            "props": {
+              "Reference": "C20",
+              "Value": "10nf",
+              "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C20",
+              "Value": "10nf",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0805_2012Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "Net-(J5-SHIELD)"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "65.913",
+              "43.749",
+              "90"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "USB shield-to-GND AC coupling; not a supply decoupler. Review dielectric/voltage for the shield application.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "100uf",
+        "Designator": "C21",
+        "Footprint": "C_1206_3216Metric",
+        "LCSC Part #": "",
+        "Quantity": "1",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C21": {
+          "schematic": {
+            "props": {
+              "Reference": "C21",
+              "Value": "100uf",
+              "Footprint": "Capacitor_SMD:C_1206_3216Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C21",
+              "Value": "100uf",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_1206_3216Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "62.865",
+              "60.501",
+              "-90"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "3V3 100uF bulk; voltage, dielectric, effective capacitance, inrush/ESR not specified natively.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "10nf",
+        "Designator": "C22, C23",
+        "Footprint": "C_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "2",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "C22": {
+          "schematic": {
+            "props": {
+              "Reference": "C22",
+              "Value": "10nf",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C22",
+              "Value": "10nf",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "GND"
+              ],
+              "2": [
+                "AOUT_1"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "59.718",
+              "53.594"
+            ]
+          }
+        },
+        "C23": {
+          "schematic": {
+            "props": {
+              "Reference": "C23",
+              "Value": "10nf",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C23",
+              "Value": "10nf",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "ki_fp_filters": "C_*"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "GND"
+              ],
+              "2": [
+                "AOUT_2"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "57.376",
+              "53.594"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "Audio low-pass shunts on AOUT_1/2; pair with R17/R18 1k, nominal pole about 15.9kHz; preserve stereo matching.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "10u",
+        "Designator": "C25",
+        "Footprint": "C_0805_2012Metric",
+        "LCSC Part #": "C15850",
+        "Quantity": "1",
+        "Manufacturer": "Samsung",
+        "MPN": "CL21A106KAYNNNE"
+      },
+      "parts": {
+        "C25": {
+          "schematic": {
+            "props": {
+              "Reference": "C25",
+              "Value": "10u",
+              "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor",
+              "LCSC": "C15850",
+              "MPN": "CL21A106KAYNNNE",
+              "Manufacturer": "Samsung"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C25",
+              "Value": "10u",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "KiLib_Generator": "SMD_2terminal_chip_molded",
+              "LCSC": "C15850",
+              "MPN": "CL21A106KAYNNNE",
+              "Manufacturer": "Samsung"
+            },
+            "footprint": "Capacitor_SMD:C_0805_2012Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+5V"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "75.35",
+              "51.55"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "AP2112 input bulk on +5V; retain voltage headroom and effective capacitance.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": {
+        "mpn": "CL21A106KAYNNNE",
+        "rating": "25V X5R +/-10%",
+        "url": "https://jlcpcb.com/partdetail/16287-CL21A106KAYNNNE/C15850",
+        "classification": "Not reliably exposed in retrieved page; do not infer Basic/Extended.",
+        "recorded": "16bit CHANGELOG records 25V; 32bit POWER.md records 25V X5R; native rating/tolerance fields absent."
+      }
+    },
+    {
+      "bom": {
+        "Comment": "100n",
+        "Designator": "C26",
+        "Footprint": "C_0402_1005Metric",
+        "LCSC Part #": "C1525",
+        "Quantity": "1",
+        "Manufacturer": "Samsung",
+        "MPN": "CL05B104KO5NNNC"
+      },
+      "parts": {
+        "C26": {
+          "schematic": {
+            "props": {
+              "Reference": "C26",
+              "Value": "100n",
+              "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor",
+              "LCSC": "C1525",
+              "MPN": "CL05B104KO5NNNC",
+              "Manufacturer": "Samsung"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C26",
+              "Value": "100n",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "KiLib_Generator": "SMD_2terminal_chip_molded",
+              "LCSC": "C1525",
+              "MPN": "CL05B104KO5NNNC",
+              "Manufacturer": "Samsung"
+            },
+            "footprint": "Capacitor_SMD:C_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+5V"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "74.05",
+              "50.1"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "AP2112 +5V input high-frequency bypass.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": {
+        "mpn": "CL05B104KO5NNNC",
+        "rating": "16V X7R +/-10%",
+        "url": "https://jlcpcb.com/partdetail/1877-CL05B104KO5NNNC/C1525",
+        "classification": "Public page shows Basic, SMT, Economic and Standard; no stock claim.",
+        "recorded": "32bit POWER.md records 16V X7R; native rating/tolerance fields absent."
+      }
+    },
+    {
+      "bom": {
+        "Comment": "1u",
+        "Designator": "C27",
+        "Footprint": "C_0805_2012Metric",
+        "LCSC Part #": "C28323",
+        "Quantity": "1",
+        "Manufacturer": "Samsung",
+        "MPN": "CL21B105KBFNNNE"
+      },
+      "parts": {
+        "C27": {
+          "schematic": {
+            "props": {
+              "Reference": "C27",
+              "Value": "1u",
+              "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+              "Datasheet": "~",
+              "Description": "Unpolarized capacitor",
+              "LCSC": "C28323",
+              "MPN": "CL21B105KBFNNNE",
+              "Manufacturer": "Samsung"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "C27",
+              "Value": "1u",
+              "Datasheet": "",
+              "Description": "Unpolarized capacitor",
+              "KiLib_Generator": "SMD_2terminal_chip_molded",
+              "LCSC": "C28323",
+              "MPN": "CL21B105KBFNNNE",
+              "Manufacturer": "Samsung"
+            },
+            "footprint": "Capacitor_SMD:C_0805_2012Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "75.35",
+              "58.5"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "AP2112 local +3V3 output capacitor; manufacturer 1uF stability basis must survive tolerance/DC bias; do not rely on nominal value alone.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": {
+        "mpn": "CL21B105KBFNNNE",
+        "rating": "50V X7R +/-10%",
+        "url": "https://jlcpcb.com/partdetail/29074-CL21B105KBFNNNE/C28323",
+        "classification": "Public page shows Basic, SMT, Economic and Standard; no stock claim.",
+        "recorded": "16bit CHANGELOG records 50V; native rating/tolerance fields absent."
+      }
+    },
+    {
+      "bom": {
+        "Comment": "1k",
+        "Designator": "R2, R4, R6, R9, R17, R18",
+        "Footprint": "R_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "6",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "R2": {
+          "schematic": {
+            "props": {
+              "Reference": "R2",
+              "Value": "1k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R2",
+              "Value": "1k",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "/XOUT"
+              ],
+              "2": [
+                "Net-(C4-Pad1)"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "65.8622",
+              "77.1378",
+              "-90"
+            ]
+          }
+        },
+        "R4": {
+          "schematic": {
+            "props": {
+              "Reference": "R4",
+              "Value": "1k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R4",
+              "Value": "1k",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "Net-(SW1-A)"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "56.9912",
+              "41.783",
+              "180"
+            ]
+          }
+        },
+        "R6": {
+          "schematic": {
+            "props": {
+              "Reference": "R6",
+              "Value": "1k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R6",
+              "Value": "1k",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "QSPI_SS"
+              ],
+              "2": [
+                "/~{USB_BOOT}"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "50.544",
+              "41.783",
+              "180"
+            ]
+          }
+        },
+        "R9": {
+          "schematic": {
+            "props": {
+              "Reference": "R9",
+              "Value": "1k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R9",
+              "Value": "1k",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "GND"
+              ],
+              "2": [
+                "Net-(D1-K)"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "51.052",
+              "97.282",
+              "180"
+            ]
+          }
+        },
+        "R17": {
+          "schematic": {
+            "props": {
+              "Reference": "R17",
+              "Value": "1k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Resistor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R17",
+              "Value": "1k",
+              "Datasheet": "",
+              "Description": "Resistor",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "AOUT_1"
+              ],
+              "2": [
+                "Net-(U4-L)"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "59.688",
+              "55.753"
+            ]
+          }
+        },
+        "R18": {
+          "schematic": {
+            "props": {
+              "Reference": "R18",
+              "Value": "1k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Resistor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R18",
+              "Value": "1k",
+              "Datasheet": "",
+              "Description": "Resistor",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "AOUT_2"
+              ],
+              "2": [
+                "Net-(U4-R)"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "57.402",
+              "55.753",
+              "180"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "R2 crystal damping; R4 RUN switch series-to-GND; R6 USB_BOOT/QSPI protection; R9 LED current limit; R17/R18 audio series low-pass legs.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "5.1k",
+        "Designator": "R3, R11",
+        "Footprint": "R_0603_1608Metric",
+        "LCSC Part #": "",
+        "Quantity": "2",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "R3": {
+          "schematic": {
+            "props": {
+              "Reference": "R3",
+              "Value": "5.1k",
+              "Footprint": "Resistor_SMD:R_0603_1608Metric",
+              "Datasheet": "~",
+              "Description": "Resistor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R3",
+              "Value": "5.1k",
+              "Datasheet": "",
+              "Description": "Resistor",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0603_1608Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "Net-(J5-CC1)"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "60.008",
+              "48.26",
+              "180"
+            ]
+          }
+        },
+        "R11": {
+          "schematic": {
+            "props": {
+              "Reference": "R11",
+              "Value": "5.1k",
+              "Footprint": "Resistor_SMD:R_0603_1608Metric",
+              "Datasheet": "~",
+              "Description": "Resistor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R11",
+              "Value": "5.1k",
+              "Datasheet": "",
+              "Description": "Resistor",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0603_1608Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "Net-(J5-CC2)"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "64.072",
+              "48.26"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "USB-C CC1/CC2 Rd pulldowns; preserve 5.1k and separately review chosen tolerance/compliance.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "33",
+        "Designator": "R5",
+        "Footprint": "R_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "1",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "R5": {
+          "schematic": {
+            "props": {
+              "Reference": "R5",
+              "Value": "33",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R5",
+              "Value": "33",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "/VREG_AVDD"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "69.9",
+              "63.7"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "RP2350 VREG_AVDD 33ohm feed/filter with C9; preserve isolation and noise performance.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "27",
+        "Designator": "R7, R8",
+        "Footprint": "R_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "2",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "R7": {
+          "schematic": {
+            "props": {
+              "Reference": "R7",
+              "Value": "27",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R7",
+              "Value": "27",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "USB_D+"
+              ],
+              "2": [
+                "Net-(U1-USB_DP)"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "64.77",
+              "63.375",
+              "-90"
+            ]
+          }
+        },
+        "R8": {
+          "schematic": {
+            "props": {
+              "Reference": "R8",
+              "Value": "27",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R8",
+              "Value": "27",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "USB_D-"
+              ],
+              "2": [
+                "Net-(U1-USB_DM)"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "65.913",
+              "63.375",
+              "-90"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "RP2350 USB D+/D- series terminations; preserve 27ohm and close-to-MCU placement.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "100k",
+        "Designator": "R10, R12, R15, R16",
+        "Footprint": "R_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "4",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "R10": {
+          "schematic": {
+            "props": {
+              "Reference": "R10",
+              "Value": "100k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Resistor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R10",
+              "Value": "100k",
+              "Datasheet": "",
+              "Description": "Resistor",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "CV1"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "52.707",
+              "57.023",
+              "90"
+            ]
+          }
+        },
+        "R12": {
+          "schematic": {
+            "props": {
+              "Reference": "R12",
+              "Value": "100k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Resistor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R12",
+              "Value": "100k",
+              "Datasheet": "",
+              "Description": "Resistor",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "CV2"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "54.862",
+              "57.025",
+              "90"
+            ]
+          }
+        },
+        "R15": {
+          "schematic": {
+            "props": {
+              "Reference": "R15",
+              "Value": "100k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Resistor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R15",
+              "Value": "100k",
+              "Datasheet": "",
+              "Description": "Resistor",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "AIN_2"
+              ],
+              "2": [
+                "GND"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "49.4518",
+              "77.4192",
+              "180"
+            ]
+          }
+        },
+        "R16": {
+          "schematic": {
+            "props": {
+              "Reference": "R16",
+              "Value": "100k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": "Resistor"
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R16",
+              "Value": "100k",
+              "Datasheet": "",
+              "Description": "Resistor",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "GND"
+              ],
+              "2": [
+                "AIN_1"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "49.401",
+              "79.7814"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "R10/R12 CV pullups; R15/R16 AIN pulldowns; preserve input bias/load impedance.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    },
+    {
+      "bom": {
+        "Comment": "10k",
+        "Designator": "R14",
+        "Footprint": "R_0402_1005Metric",
+        "LCSC Part #": "",
+        "Quantity": "1",
+        "Manufacturer": "",
+        "MPN": ""
+      },
+      "parts": {
+        "R14": {
+          "schematic": {
+            "props": {
+              "Reference": "R14",
+              "Value": "10k",
+              "Footprint": "Resistor_SMD:R_0402_1005Metric",
+              "Datasheet": "~",
+              "Description": ""
+            },
+            "flags": {
+              "dnp": [
+                "no"
+              ],
+              "in_bom": [
+                "yes"
+              ],
+              "on_board": [
+                "yes"
+              ]
+            }
+          },
+          "pcb": {
+            "props": {
+              "Reference": "R14",
+              "Value": "10k",
+              "Datasheet": "",
+              "Description": "",
+              "ki_fp_filters": "R_*"
+            },
+            "footprint": "Resistor_SMD:R_0402_1005Metric",
+            "layer": [
+              "F.Cu"
+            ],
+            "pins": {
+              "1": [
+                "+3V3"
+              ],
+              "2": [
+                "PSRAM_CS"
+              ]
+            },
+            "attr": [
+              "smd"
+            ],
+            "position": [
+              "49.4264",
+              "75.0316"
+            ]
+          }
+        }
+      },
+      "role_and_review_constraints": "PSRAM chip-select pullup; preserve startup/boot behavior.",
+      "native_rating_tolerance_fields": "Not recorded",
+      "catalog_spec_reference": null
+    }
+  ],
+  "schematic": {
+    "#PWR04": {
+      "props": {
+        "Reference": "#PWR04",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR05": {
+      "props": {
+        "Reference": "#PWR05",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R1": {
+      "props": {
+        "Reference": "R1",
+        "Value": "10k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "yes"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "no"
+        ]
+      }
+    },
+    "C2": {
+      "props": {
+        "Reference": "C2",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR06": {
+      "props": {
+        "Reference": "#PWR06",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR021": {
+      "props": {
+        "Reference": "#PWR021",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R7": {
+      "props": {
+        "Reference": "R7",
+        "Value": "27",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R8": {
+      "props": {
+        "Reference": "R8",
+        "Value": "27",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR022": {
+      "props": {
+        "Reference": "#PWR022",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C12": {
+      "props": {
+        "Reference": "C12",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C13": {
+      "props": {
+        "Reference": "C13",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C14": {
+      "props": {
+        "Reference": "C14",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C15": {
+      "props": {
+        "Reference": "C15",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C16": {
+      "props": {
+        "Reference": "C16",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C17": {
+      "props": {
+        "Reference": "C17",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR027": {
+      "props": {
+        "Reference": "#PWR027",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C19": {
+      "props": {
+        "Reference": "C19",
+        "Value": "10u",
+        "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR028": {
+      "props": {
+        "Reference": "#PWR028",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "U5": {
+      "props": {
+        "Reference": "U5",
+        "Value": "PSRAM",
+        "Footprint": "BreadModular_MISC:SOIC-8 Generic",
+        "Datasheet": "https://www.winbond.com/resource-files/w25q128jv_dtr%20revc%2003272018%20plus.pdf",
+        "Description": "128Mb Serial Flash Memory, Standard/Dual/Quad SPI, SOIC-8"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R9": {
+      "props": {
+        "Reference": "R9",
+        "Value": "1k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R14": {
+      "props": {
+        "Reference": "R14",
+        "Value": "10k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C23": {
+      "props": {
+        "Reference": "C23",
+        "Value": "10nf",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "RV2": {
+      "props": {
+        "Reference": "RV2",
+        "Value": "1M",
+        "Footprint": "BreadModular_Pots:Potentiometer_RV09",
+        "Datasheet": "~",
+        "Description": "Potentiometer",
+        "Sim.Device": "R",
+        "Sim.Type": "POT",
+        "Sim.Pins": "1=r0 2=wiper 3=r1",
+        "Sim.Params": "pos=0.0",
+        "Comment": "CV2_GAIN"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR013": {
+      "props": {
+        "Reference": "#PWR013",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "SW3": {
+      "props": {
+        "Reference": "SW3",
+        "Value": "K2-1808SN-A4SW-01",
+        "Footprint": "BreadModular_MISC:K2-1808SN-A4SW-01",
+        "Datasheet": "~",
+        "Description": "Single Pole Single Throw (SPST) switch",
+        "Comment": "BOOT"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C11": {
+      "props": {
+        "Reference": "C11",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R17": {
+      "props": {
+        "Reference": "R17",
+        "Value": "1k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Resistor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "SW1": {
+      "props": {
+        "Reference": "SW1",
+        "Value": "K2-1808SN-A4SW-01",
+        "Footprint": "BreadModular_MISC:K2-1808SN-A4SW-01",
+        "Datasheet": "~",
+        "Description": "Single Pole Single Throw (SPST) switch",
+        "Comment": "RESET"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R4": {
+      "props": {
+        "Reference": "R4",
+        "Value": "1k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR017": {
+      "props": {
+        "Reference": "#PWR017",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR031": {
+      "props": {
+        "Reference": "#PWR031",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR019": {
+      "props": {
+        "Reference": "#PWR019",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "U1": {
+      "props": {
+        "Reference": "U1",
+        "Value": "RP2350_60QFN",
+        "Footprint": "RP2350_60QFN_minimal:RP2350-QFN-60-1EP_7x7_P0.4mm_EP3.4x3.4mm_ThermalVias",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "U2": {
+      "props": {
+        "Reference": "U2",
+        "Value": "W25Q128JVS",
+        "Footprint": "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm",
+        "Datasheet": "https://www.winbond.com/resource-files/w25q128jv_dtr%20revc%2003272018%20plus.pdf",
+        "Description": "128Mb Serial Flash Memory, Standard/Dual/Quad SPI, SOIC-8"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR038": {
+      "props": {
+        "Reference": "#PWR038",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C18": {
+      "props": {
+        "Reference": "C18",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R10": {
+      "props": {
+        "Reference": "R10",
+        "Value": "100k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Resistor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "J1": {
+      "props": {
+        "Reference": "J1",
+        "Value": "Conn_01x05_Socket",
+        "Footprint": "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical",
+        "Datasheet": "~",
+        "Description": "Generic connector, single row, 01x05, script generated"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR040": {
+      "props": {
+        "Reference": "#PWR040",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "SW2": {
+      "props": {
+        "Reference": "SW2",
+        "Value": "K2-1808SN-A4SW-01",
+        "Footprint": "BreadModular_MISC:K2-1808SN-A4SW-01",
+        "Datasheet": "~",
+        "Description": "Single Pole Single Throw (SPST) switch",
+        "Comment": "MODE"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR07": {
+      "props": {
+        "Reference": "#PWR07",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR08": {
+      "props": {
+        "Reference": "#PWR08",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"+5V\""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "RV1": {
+      "props": {
+        "Reference": "RV1",
+        "Value": "1M",
+        "Footprint": "BreadModular_Pots:Potentiometer_RV09",
+        "Datasheet": "~",
+        "Description": "Potentiometer",
+        "Sim.Device": "R",
+        "Sim.Type": "POT",
+        "Sim.Pins": "1=r0 2=wiper 3=r1",
+        "Sim.Params": "pos=0.0",
+        "Comment": "CV1_GAIN"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R6": {
+      "props": {
+        "Reference": "R6",
+        "Value": "1k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "V_SUPPLY1": {
+      "props": {
+        "Reference": "V_SUPPLY1",
+        "Value": "Conn_01x05_Pin",
+        "Footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+        "Datasheet": "~",
+        "Description": "Generic connector, single row, 01x05, script generated"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR037": {
+      "props": {
+        "Reference": "#PWR037",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "GND1": {
+      "props": {
+        "Reference": "GND1",
+        "Value": "Conn_01x05_Pin",
+        "Footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+        "Datasheet": "~",
+        "Description": "Generic connector, single row, 01x05, script generated"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R5": {
+      "props": {
+        "Reference": "R5",
+        "Value": "33",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "U4": {
+      "props": {
+        "Reference": "U4",
+        "Value": "PT8211-S",
+        "Footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C6": {
+      "props": {
+        "Reference": "C6",
+        "Value": "4.7u",
+        "Footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C22": {
+      "props": {
+        "Reference": "C22",
+        "Value": "10nf",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R18": {
+      "props": {
+        "Reference": "R18",
+        "Value": "1k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Resistor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR012": {
+      "props": {
+        "Reference": "#PWR012",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR030": {
+      "props": {
+        "Reference": "#PWR030",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR018": {
+      "props": {
+        "Reference": "#PWR018",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R12": {
+      "props": {
+        "Reference": "R12",
+        "Value": "100k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Resistor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C4": {
+      "props": {
+        "Reference": "C4",
+        "Value": "15p",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR01": {
+      "props": {
+        "Reference": "#PWR01",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C7": {
+      "props": {
+        "Reference": "C7",
+        "Value": "4.7u",
+        "Footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR024": {
+      "props": {
+        "Reference": "#PWR024",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"+5V\""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C24": {
+      "props": {
+        "Reference": "C24",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C9": {
+      "props": {
+        "Reference": "C9",
+        "Value": "4.7u",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "U3": {
+      "props": {
+        "Reference": "U3",
+        "Value": "MCP6002-xSN",
+        "Footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "Datasheet": "http://ww1.microchip.com/downloads/en/DeviceDoc/21733j.pdf",
+        "Description": "1MHz, Low-Power Op Amp, SOIC-8",
+        "Sim.Library": "${KICAD8_SYMBOL_DIR}/Simulation_SPICE.sp",
+        "Sim.Name": "kicad_builtin_opamp_dual",
+        "Sim.Device": "SUBCKT",
+        "Sim.Pins": "1=out1 2=in1- 3=in1+ 4=vee 5=in2+ 6=in2- 7=out2 8=vcc"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C21": {
+      "props": {
+        "Reference": "C21",
+        "Value": "100uf",
+        "Footprint": "Capacitor_SMD:C_1206_3216Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR035": {
+      "props": {
+        "Reference": "#PWR035",
+        "Value": "+5V",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"+5V\""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R16": {
+      "props": {
+        "Reference": "R16",
+        "Value": "100k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Resistor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R3": {
+      "props": {
+        "Reference": "R3",
+        "Value": "5.1k",
+        "Footprint": "Resistor_SMD:R_0603_1608Metric",
+        "Datasheet": "~",
+        "Description": "Resistor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR020": {
+      "props": {
+        "Reference": "#PWR020",
+        "Value": "+1V1",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR011": {
+      "props": {
+        "Reference": "#PWR011",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"GND\" , ground"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR010": {
+      "props": {
+        "Reference": "#PWR010",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"GND\" , ground"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R2": {
+      "props": {
+        "Reference": "R2",
+        "Value": "1k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR032": {
+      "props": {
+        "Reference": "#PWR032",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"GND\" , ground"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "J5": {
+      "props": {
+        "Reference": "J5",
+        "Value": "USB_C_Receptacle_USB2.0_14P",
+        "Footprint": "BreadModular_TypeC:HRO-TYPE-C-31-M-12",
+        "Datasheet": "https://www.usb.org/sites/default/files/documents/usb_type-c.zip",
+        "Description": "HRO TYPE-C-31-M-12: 12 solder terminals; A1/B12, A12/B1, A4/B9, A9/B4 share lands; A8/B8 are unused SBU",
+        "JLCPCB Position Offset X": "0",
+        "JLCPCB Position Offset Y": "-3.675"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR034": {
+      "props": {
+        "Reference": "#PWR034",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"GND\" , ground"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR025": {
+      "props": {
+        "Reference": "#PWR025",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"GND\" , ground"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C8": {
+      "props": {
+        "Reference": "C8",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR036": {
+      "props": {
+        "Reference": "#PWR036",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "D1": {
+      "props": {
+        "Reference": "D1",
+        "Value": "LED",
+        "Footprint": "LED_SMD:LED_0603_1608Metric",
+        "Datasheet": "~",
+        "Description": "Light emitting diode"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C1": {
+      "props": {
+        "Reference": "C1",
+        "Value": "0.1uf",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R11": {
+      "props": {
+        "Reference": "R11",
+        "Value": "5.1k",
+        "Footprint": "Resistor_SMD:R_0603_1608Metric",
+        "Datasheet": "~",
+        "Description": "Resistor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C10": {
+      "props": {
+        "Reference": "C10",
+        "Value": "4.7u",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C5": {
+      "props": {
+        "Reference": "C5",
+        "Value": "0.1uf",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR03": {
+      "props": {
+        "Reference": "#PWR03",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"+5V\""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR02": {
+      "props": {
+        "Reference": "#PWR02",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR09": {
+      "props": {
+        "Reference": "#PWR09",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR023": {
+      "props": {
+        "Reference": "#PWR023",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR033": {
+      "props": {
+        "Reference": "#PWR033",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Power symbol creates a global label with name \"GND\" , ground"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR039": {
+      "props": {
+        "Reference": "#PWR039",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "L1": {
+      "props": {
+        "Reference": "L1",
+        "Value": "AOTA-B201610S3R3-101-T",
+        "Footprint": "RP2350_60QFN_minimal:L_pol_2016",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "Y1": {
+      "props": {
+        "Reference": "Y1",
+        "Value": "ABM8-272-T3",
+        "Footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "R15": {
+      "props": {
+        "Reference": "R15",
+        "Value": "100k",
+        "Footprint": "Resistor_SMD:R_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Resistor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C20": {
+      "props": {
+        "Reference": "C20",
+        "Value": "10nf",
+        "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR041": {
+      "props": {
+        "Reference": "#PWR041",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR015": {
+      "props": {
+        "Reference": "#PWR015",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR014": {
+      "props": {
+        "Reference": "#PWR014",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR029": {
+      "props": {
+        "Reference": "#PWR029",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C3": {
+      "props": {
+        "Reference": "C3",
+        "Value": "15p",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR016": {
+      "props": {
+        "Reference": "#PWR016",
+        "Value": "+1V1",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "J2": {
+      "props": {
+        "Reference": "J2",
+        "Value": "Conn_01x05_Socket",
+        "Footprint": "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical",
+        "Datasheet": "~",
+        "Description": "Generic connector, single row, 01x05, script generated"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C25": {
+      "props": {
+        "Reference": "C25",
+        "Value": "10u",
+        "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor",
+        "LCSC": "C15850",
+        "MPN": "CL21A106KAYNNNE",
+        "Manufacturer": "Samsung"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C26": {
+      "props": {
+        "Reference": "C26",
+        "Value": "100n",
+        "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor",
+        "LCSC": "C1525",
+        "MPN": "CL05B104KO5NNNC",
+        "Manufacturer": "Samsung"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "C27": {
+      "props": {
+        "Reference": "C27",
+        "Value": "1u",
+        "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+        "Datasheet": "~",
+        "Description": "Unpolarized capacitor",
+        "LCSC": "C28323",
+        "MPN": "CL21B105KBFNNNE",
+        "Manufacturer": "Samsung"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR042": {
+      "props": {
+        "Reference": "#PWR042",
+        "Value": "+5V",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR043": {
+      "props": {
+        "Reference": "#PWR043",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR044": {
+      "props": {
+        "Reference": "#PWR044",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR045": {
+      "props": {
+        "Reference": "#PWR045",
+        "Value": "+3V3",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#PWR046": {
+      "props": {
+        "Reference": "#PWR046",
+        "Value": "GND",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#FLG01": {
+      "props": {
+        "Reference": "#FLG01",
+        "Value": "PWR_FLAG",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Special symbol for telling ERC where power comes from"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "U6": {
+      "props": {
+        "Reference": "U6",
+        "Value": "AP2112K-3.3",
+        "Footprint": "Package_TO_SOT_SMD:SOT-23-5",
+        "Datasheet": "https://www.diodes.com/assets/Datasheets/AP2112.pdf",
+        "Description": "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5",
+        "LCSC": "C51118",
+        "MPN": "AP2112K-3.3TRG1",
+        "Manufacturer": "Diodes"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#FLG0301": {
+      "props": {
+        "Reference": "#FLG0301",
+        "Value": "PWR_FLAG",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Special symbol for telling ERC where power comes from"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#FLG0302": {
+      "props": {
+        "Reference": "#FLG0302",
+        "Value": "PWR_FLAG",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Special symbol for telling ERC where power comes from"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    },
+    "#FLG0303": {
+      "props": {
+        "Reference": "#FLG0303",
+        "Value": "PWR_FLAG",
+        "Footprint": "",
+        "Datasheet": "",
+        "Description": "Special symbol for telling ERC where power comes from"
+      },
+      "flags": {
+        "dnp": [
+          "no"
+        ],
+        "in_bom": [
+          "yes"
+        ],
+        "on_board": [
+          "yes"
+        ]
+      }
+    }
+  },
+  "pcb": {
+    "R9": {
+      "props": {
+        "Reference": "R9",
+        "Value": "1k",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "GND"
+        ],
+        "2": [
+          "Net-(D1-K)"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "51.052",
+        "97.282",
+        "180"
+      ]
+    },
+    "R6": {
+      "props": {
+        "Reference": "R6",
+        "Value": "1k",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "QSPI_SS"
+        ],
+        "2": [
+          "/~{USB_BOOT}"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "50.544",
+        "41.783",
+        "180"
+      ]
+    },
+    "D1": {
+      "props": {
+        "Reference": "D1",
+        "Value": "LED",
+        "Datasheet": "",
+        "Description": "Light emitting diode",
+        "ki_fp_filters": "LED* LED_SMD:* LED_THT:*"
+      },
+      "footprint": "LED_SMD:LED_0603_1608Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "Net-(D1-K)"
+        ],
+        "2": [
+          "/GPIO13"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "51.6445",
+        "96.012"
+      ]
+    },
+    "R18": {
+      "props": {
+        "Reference": "R18",
+        "Value": "1k",
+        "Datasheet": "",
+        "Description": "Resistor",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "AOUT_2"
+        ],
+        "2": [
+          "Net-(U4-R)"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "57.402",
+        "55.753",
+        "180"
+      ]
+    },
+    "C7": {
+      "props": {
+        "Reference": "C7",
+        "Value": "4.7u",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+1V1"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "68.3",
+        "62.3"
+      ]
+    },
+    "SW2": {
+      "props": {
+        "Reference": "SW2",
+        "Value": "K2-1808SN-A4SW-01",
+        "Datasheet": "",
+        "Description": "Single Pole Single Throw (SPST) switch",
+        "Comment": "MODE"
+      },
+      "footprint": "BreadModular_MISC:K2-1808SN-A4SW-01",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "/GPIO12"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "51.435",
+        "99.695"
+      ]
+    },
+    "SW3": {
+      "props": {
+        "Reference": "SW3",
+        "Value": "K2-1808SN-A4SW-01",
+        "Datasheet": "",
+        "Description": "Single Pole Single Throw (SPST) switch",
+        "Comment": "BOOT"
+      },
+      "footprint": "BreadModular_MISC:K2-1808SN-A4SW-01",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "GND"
+        ],
+        "2": [
+          "/~{USB_BOOT}"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "50.546",
+        "43.942",
+        "180"
+      ]
+    },
+    "C9": {
+      "props": {
+        "Reference": "C9",
+        "Value": "4.7u",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "/VREG_AVDD"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "72",
+        "66.3"
+      ]
+    },
+    "U1": {
+      "props": {
+        "Reference": "U1",
+        "Value": "RP2350_60QFN",
+        "Datasheet": "",
+        "Description": ""
+      },
+      "footprint": "RP2350_60QFN_minimal:RP2350-QFN-60-1EP_7x7_P0.4mm_EP3.4x3.4mm_ThermalVias",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "": [
+          ""
+        ],
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "PSRAM_CS"
+        ],
+        "3": [
+          "BCK"
+        ],
+        "4": [
+          "WS"
+        ],
+        "5": [
+          "DIN"
+        ],
+        "6": [
+          "+1V1"
+        ],
+        "7": [
+          "MIDI_OUT"
+        ],
+        "8": [
+          "MIDI_IN"
+        ],
+        "9": [
+          "unconnected-(U1-GPIO6-Pad9)"
+        ],
+        "10": [
+          "unconnected-(U1-GPIO7-Pad10)"
+        ],
+        "11": [
+          "+3V3"
+        ],
+        "12": [
+          "unconnected-(U1-GPIO8-Pad12)"
+        ],
+        "13": [
+          "unconnected-(U1-GPIO9-Pad13)"
+        ],
+        "14": [
+          "unconnected-(U1-GPIO10-Pad14)"
+        ],
+        "15": [
+          "unconnected-(U1-GPIO11-Pad15)"
+        ],
+        "16": [
+          "/GPIO12"
+        ],
+        "17": [
+          "/GPIO13"
+        ],
+        "18": [
+          "unconnected-(U1-GPIO14-Pad18)"
+        ],
+        "19": [
+          "unconnected-(U1-GPIO15-Pad19)"
+        ],
+        "20": [
+          "+3V3"
+        ],
+        "21": [
+          "/XIN"
+        ],
+        "22": [
+          "/XOUT"
+        ],
+        "23": [
+          "+1V1"
+        ],
+        "24": [
+          "unconnected-(U1-SWCLK-Pad24)"
+        ],
+        "25": [
+          "unconnected-(U1-SWD-Pad25)"
+        ],
+        "26": [
+          "/RUN"
+        ],
+        "27": [
+          "unconnected-(U1-GPIO16-Pad27)"
+        ],
+        "28": [
+          "unconnected-(U1-GPIO17-Pad28)"
+        ],
+        "29": [
+          "unconnected-(U1-GPIO18-Pad29)"
+        ],
+        "30": [
+          "+3V3"
+        ],
+        "31": [
+          "GOUT_2"
+        ],
+        "32": [
+          "GOUT_1"
+        ],
+        "33": [
+          "unconnected-(U1-GPIO21-Pad33)"
+        ],
+        "34": [
+          "unconnected-(U1-GPIO22-Pad34)"
+        ],
+        "35": [
+          "unconnected-(U1-GPIO23-Pad35)"
+        ],
+        "36": [
+          "unconnected-(U1-GPIO24-Pad36)"
+        ],
+        "37": [
+          "unconnected-(U1-GPIO25-Pad37)"
+        ],
+        "38": [
+          "+3V3"
+        ],
+        "39": [
+          "+1V1"
+        ],
+        "40": [
+          "AIN_1"
+        ],
+        "41": [
+          "AIN_2"
+        ],
+        "42": [
+          "BUFF_CV1"
+        ],
+        "43": [
+          "BUFF_CV2"
+        ],
+        "44": [
+          "+3V3"
+        ],
+        "45": [
+          "+3V3"
+        ],
+        "46": [
+          "/VREG_AVDD"
+        ],
+        "47": [
+          "GND"
+        ],
+        "48": [
+          "/VREG_LX"
+        ],
+        "49": [
+          "+3V3"
+        ],
+        "50": [
+          "+1V1"
+        ],
+        "51": [
+          "Net-(U1-USB_DM)"
+        ],
+        "52": [
+          "Net-(U1-USB_DP)"
+        ],
+        "53": [
+          "+3V3"
+        ],
+        "54": [
+          "+3V3"
+        ],
+        "55": [
+          "/QSPI_SD3"
+        ],
+        "56": [
+          "/QSPI_SCLK"
+        ],
+        "57": [
+          "/QSPI_SD0"
+        ],
+        "58": [
+          "/QSPI_SD2"
+        ],
+        "59": [
+          "/QSPI_SD1"
+        ],
+        "60": [
+          "QSPI_SS"
+        ],
+        "61": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "65.6675",
+        "71.12"
+      ]
+    },
+    "U5": {
+      "props": {
+        "Reference": "U5",
+        "Value": "PSRAM",
+        "Datasheet": "https://www.winbond.com/resource-files/w25q128jv_dtr%20revc%2003272018%20plus.pdf",
+        "Description": "128Mb Serial Flash Memory, Standard/Dual/Quad SPI, SOIC-8",
+        "ki_fp_filters": "SOIC*5.23x5.23mm*P1.27mm*"
+      },
+      "footprint": "BreadModular_MISC:SOIC-8 Generic",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "PSRAM_CS"
+        ],
+        "2": [
+          "/QSPI_SD1"
+        ],
+        "3": [
+          "/QSPI_SD2"
+        ],
+        "4": [
+          "GND"
+        ],
+        "5": [
+          "/QSPI_SD0"
+        ],
+        "6": [
+          "/QSPI_SCLK"
+        ],
+        "7": [
+          "/QSPI_SD3"
+        ],
+        "8": [
+          "+3V3"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "55.8496",
+        "77.8358"
+      ]
+    },
+    "C15": {
+      "props": {
+        "Reference": "C15",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "62.512",
+        "66.167",
+        "180"
+      ]
+    },
+    "R4": {
+      "props": {
+        "Reference": "R4",
+        "Value": "1k",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "Net-(SW1-A)"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "56.9912",
+        "41.783",
+        "180"
+      ]
+    },
+    "J5": {
+      "props": {
+        "Reference": "J5",
+        "Value": "USB_C_Receptacle_USB2.0_14P",
+        "Datasheet": "https://www.usb.org/sites/default/files/documents/usb_type-c.zip",
+        "Description": "HRO TYPE-C-31-M-12: 12 solder terminals; A1/B12, A12/B1, A4/B9, A9/B4 share lands; A8/B8 are unused SBU",
+        "JLCPCB Position Offset X": "0",
+        "JLCPCB Position Offset Y": "-3.675",
+        "ki_fp_filters": "USB*C*Receptacle*"
+      },
+      "footprint": "BreadModular_TypeC:HRO-TYPE-C-31-M-12",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "": [
+          ""
+        ],
+        "A1": [
+          "GND"
+        ],
+        "A4": [
+          "/USB_VBUS_UNUSED"
+        ],
+        "A5": [
+          "Net-(J5-CC1)"
+        ],
+        "A6": [
+          "USB_D+"
+        ],
+        "A7": [
+          "USB_D-"
+        ],
+        "A8": [
+          "unconnected-(J5-SBU1-PadA8)"
+        ],
+        "A9": [
+          "/USB_VBUS_UNUSED"
+        ],
+        "A12": [
+          "GND"
+        ],
+        "B5": [
+          "Net-(J5-CC2)"
+        ],
+        "B6": [
+          "USB_D+"
+        ],
+        "B7": [
+          "USB_D-"
+        ],
+        "B8": [
+          "unconnected-(J5-SBU2-PadB8)"
+        ],
+        "S1": [
+          "Net-(J5-SHIELD)"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "72.136",
+        "40.619",
+        "180"
+      ]
+    },
+    "L1": {
+      "props": {
+        "Reference": "L1",
+        "Value": "AOTA-B201610S3R3-101-T",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "Choke_* *Coil* Inductor_* L_*"
+      },
+      "footprint": "RP2350_60QFN_minimal:L_pol_2016",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+1V1"
+        ],
+        "2": [
+          "/VREG_LX"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "67.8",
+        "64.599999",
+        "-90"
+      ]
+    },
+    "C10": {
+      "props": {
+        "Reference": "C10",
+        "Value": "4.7u",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+1V1"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "67.1576",
+        "77.1932",
+        "-90"
+      ]
+    },
+    "C11": {
+      "props": {
+        "Reference": "C11",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+1V1"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "70.965",
+        "71.882"
+      ]
+    },
+    "R17": {
+      "props": {
+        "Reference": "R17",
+        "Value": "1k",
+        "Datasheet": "",
+        "Description": "Resistor",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "AOUT_1"
+        ],
+        "2": [
+          "Net-(U4-L)"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "59.688",
+        "55.753"
+      ]
+    },
+    "C6": {
+      "props": {
+        "Reference": "C6",
+        "Value": "4.7u",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "69.9",
+        "66.099999"
+      ]
+    },
+    "C27": {
+      "props": {
+        "Reference": "C27",
+        "Value": "1u",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "KiLib_Generator": "SMD_2terminal_chip_molded",
+        "LCSC": "C28323",
+        "MPN": "CL21B105KBFNNNE",
+        "Manufacturer": "Samsung"
+      },
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "75.35",
+        "58.5"
+      ]
+    },
+    "C26": {
+      "props": {
+        "Reference": "C26",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "KiLib_Generator": "SMD_2terminal_chip_molded",
+        "LCSC": "C1525",
+        "MPN": "CL05B104KO5NNNC",
+        "Manufacturer": "Samsung"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+5V"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "74.05",
+        "50.1"
+      ]
+    },
+    "R5": {
+      "props": {
+        "Reference": "R5",
+        "Value": "33",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "/VREG_AVDD"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "69.9",
+        "63.7"
+      ]
+    },
+    "C13": {
+      "props": {
+        "Reference": "C13",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "59.789",
+        "73.152",
+        "180"
+      ]
+    },
+    "C24": {
+      "props": {
+        "Reference": "C24",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "60.9092",
+        "77.4928",
+        "-90"
+      ]
+    },
+    "C18": {
+      "props": {
+        "Reference": "C18",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "63.782",
+        "76.934",
+        "-90"
+      ]
+    },
+    "C5": {
+      "props": {
+        "Reference": "C5",
+        "Value": "0.1uf",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "64.516",
+        "59.845",
+        "-90"
+      ]
+    },
+    "C1": {
+      "props": {
+        "Reference": "C1",
+        "Value": "0.1uf",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "53.975",
+        "54.638",
+        "90"
+      ]
+    },
+    "R14": {
+      "props": {
+        "Reference": "R14",
+        "Value": "10k",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "PSRAM_CS"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "49.4264",
+        "75.0316"
+      ]
+    },
+    "C20": {
+      "props": {
+        "Reference": "C20",
+        "Value": "10nf",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "Net-(J5-SHIELD)"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "65.913",
+        "43.749",
+        "90"
+      ]
+    },
+    "C21": {
+      "props": {
+        "Reference": "C21",
+        "Value": "100uf",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "62.865",
+        "60.501",
+        "-90"
+      ]
+    },
+    "U3": {
+      "props": {
+        "Reference": "U3",
+        "Value": "MCP6002-xSN",
+        "Datasheet": "http://ww1.microchip.com/downloads/en/DeviceDoc/21733j.pdf",
+        "Description": "1MHz, Low-Power Op Amp, SOIC-8",
+        "KiLib_Generator": "package/gullwing",
+        "Sim.Library": "${KICAD8_SYMBOL_DIR}/Simulation_SPICE.sp",
+        "Sim.Name": "kicad_builtin_opamp_dual",
+        "Sim.Device": "SUBCKT",
+        "Sim.Pins": "1=out1 2=in1- 3=in1+ 4=vee 5=in2+ 6=in2- 7=out2 8=vcc"
+      },
+      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "Net-(U3A--)"
+        ],
+        "2": [
+          "Net-(U3A--)"
+        ],
+        "3": [
+          "CV1"
+        ],
+        "4": [
+          "GND"
+        ],
+        "5": [
+          "CV2"
+        ],
+        "6": [
+          "Net-(U3B--)"
+        ],
+        "7": [
+          "Net-(U3B--)"
+        ],
+        "8": [
+          "+3V3"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "50.685",
+        "52.005",
+        "90"
+      ]
+    },
+    "U2": {
+      "props": {
+        "Reference": "U2",
+        "Value": "W25Q128JVS",
+        "Datasheet": "https://www.winbond.com/resource-files/w25q128jv_dtr%20revc%2003272018%20plus.pdf",
+        "Description": "128Mb Serial Flash Memory, Standard/Dual/Quad SPI, SOIC-8",
+        "ki_fp_filters": "SOIC*5.23x5.23mm*P1.27mm*"
+      },
+      "footprint": "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "QSPI_SS"
+        ],
+        "2": [
+          "/QSPI_SD1"
+        ],
+        "3": [
+          "/QSPI_SD2"
+        ],
+        "4": [
+          "GND"
+        ],
+        "5": [
+          "/QSPI_SD0"
+        ],
+        "6": [
+          "/QSPI_SCLK"
+        ],
+        "7": [
+          "/QSPI_SD3"
+        ],
+        "8": [
+          "+3V3"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "55.5752",
+        "69.5638",
+        "-90"
+      ]
+    },
+    "C16": {
+      "props": {
+        "Reference": "C16",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "62.512",
+        "65.151",
+        "180"
+      ]
+    },
+    "R15": {
+      "props": {
+        "Reference": "R15",
+        "Value": "100k",
+        "Datasheet": "",
+        "Description": "Resistor",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "AIN_2"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "49.4518",
+        "77.4192",
+        "180"
+      ]
+    },
+    "C8": {
+      "props": {
+        "Reference": "C8",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+1V1"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "59.464",
+        "70.993",
+        "180"
+      ]
+    },
+    "R11": {
+      "props": {
+        "Reference": "R11",
+        "Value": "5.1k",
+        "Datasheet": "",
+        "Description": "Resistor",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "Net-(J5-CC2)"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "64.072",
+        "48.26"
+      ]
+    },
+    "R2": {
+      "props": {
+        "Reference": "R2",
+        "Value": "1k",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "/XOUT"
+        ],
+        "2": [
+          "Net-(C4-Pad1)"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "65.8622",
+        "77.1378",
+        "-90"
+      ]
+    },
+    "R10": {
+      "props": {
+        "Reference": "R10",
+        "Value": "100k",
+        "Datasheet": "",
+        "Description": "Resistor",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "CV1"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "52.707",
+        "57.023",
+        "90"
+      ]
+    },
+    "C4": {
+      "props": {
+        "Reference": "C4",
+        "Value": "15p",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "Net-(C4-Pad1)"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "64.6964",
+        "78.5876",
+        "180"
+      ]
+    },
+    "C12": {
+      "props": {
+        "Reference": "C12",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "69.2",
+        "59.3"
+      ]
+    },
+    "C25": {
+      "props": {
+        "Reference": "C25",
+        "Value": "10u",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "KiLib_Generator": "SMD_2terminal_chip_molded",
+        "LCSC": "C15850",
+        "MPN": "CL21A106KAYNNNE",
+        "Manufacturer": "Samsung"
+      },
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+5V"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "75.35",
+        "51.55"
+      ]
+    },
+    "C14": {
+      "props": {
+        "Reference": "C14",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "71.402",
+        "73.025"
+      ]
+    },
+    "C17": {
+      "props": {
+        "Reference": "C17",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "69.624",
+        "76.2"
+      ]
+    },
+    "C19": {
+      "props": {
+        "Reference": "C19",
+        "Value": "10u",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "63.693",
+        "53.975"
+      ]
+    },
+    "C3": {
+      "props": {
+        "Reference": "C3",
+        "Value": "15p",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "/XIN"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "67.0586",
+        "78.613"
+      ]
+    },
+    "C22": {
+      "props": {
+        "Reference": "C22",
+        "Value": "10nf",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "GND"
+        ],
+        "2": [
+          "AOUT_1"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "59.718",
+        "53.594"
+      ]
+    },
+    "U6": {
+      "props": {
+        "Reference": "U6",
+        "Value": "AP2112K-3.3",
+        "Datasheet": "https://www.diodes.com/assets/Datasheets/AP2112.pdf",
+        "Description": "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5",
+        "KiLib_Generator": "package/gullwing",
+        "LCSC": "C51118",
+        "MPN": "AP2112K-3.3TRG1",
+        "Manufacturer": "Diodes"
+      },
+      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+5V"
+        ],
+        "2": [
+          "GND"
+        ],
+        "3": [
+          "+5V"
+        ],
+        "4": [
+          "unconnected-(U6-NC-Pad4)"
+        ],
+        "5": [
+          "+3V3"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "75.3",
+        "55.15",
+        "90"
+      ]
+    },
+    "R16": {
+      "props": {
+        "Reference": "R16",
+        "Value": "100k",
+        "Datasheet": "",
+        "Description": "Resistor",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "GND"
+        ],
+        "2": [
+          "AIN_1"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "49.401",
+        "79.7814"
+      ]
+    },
+    "R12": {
+      "props": {
+        "Reference": "R12",
+        "Value": "100k",
+        "Datasheet": "",
+        "Description": "Resistor",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "CV2"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "54.862",
+        "57.025",
+        "90"
+      ]
+    },
+    "U4": {
+      "props": {
+        "Reference": "U4",
+        "Value": "PT8211-S",
+        "Datasheet": "",
+        "Description": "",
+        "KiLib_Generator": "package/gullwing"
+      },
+      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "BCK"
+        ],
+        "2": [
+          "WS"
+        ],
+        "3": [
+          "DIN"
+        ],
+        "4": [
+          "GND"
+        ],
+        "5": [
+          "+3V3"
+        ],
+        "6": [
+          "Net-(U4-L)"
+        ],
+        "7": [
+          "unconnected-(U4-NC-Pad7)"
+        ],
+        "8": [
+          "Net-(U4-R)"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "58.94",
+        "60.39",
+        "90"
+      ]
+    },
+    "Y1": {
+      "props": {
+        "Reference": "Y1",
+        "Value": "ABM8-272-T3",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "Crystal*"
+      },
+      "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "/XIN"
+        ],
+        "2": [
+          "GND"
+        ],
+        "3": [
+          "Net-(C4-Pad1)"
+        ],
+        "4": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "72.517",
+        "78.867",
+        "180"
+      ]
+    },
+    "C23": {
+      "props": {
+        "Reference": "C23",
+        "Value": "10nf",
+        "Datasheet": "",
+        "Description": "Unpolarized capacitor",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "GND"
+        ],
+        "2": [
+          "AOUT_2"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "57.376",
+        "53.594"
+      ]
+    },
+    "RV1": {
+      "props": {
+        "Reference": "RV1",
+        "Value": "1M",
+        "Datasheet": "",
+        "Description": "Potentiometer",
+        "Sim.Device": "R",
+        "Sim.Type": "POT",
+        "Sim.Pins": "1=r0 2=wiper 3=r1",
+        "Sim.Params": "pos=0.0",
+        "Comment": "CV1_GAIN",
+        "ki_fp_filters": "Potentiometer*"
+      },
+      "footprint": "BreadModular_Pots:Potentiometer_RV09",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "": [
+          ""
+        ],
+        "1": [
+          "GND"
+        ],
+        "2": [
+          "BUFF_CV1"
+        ],
+        "3": [
+          "Net-(U3A--)"
+        ]
+      },
+      "attr": [
+        "through_hole"
+      ],
+      "position": [
+        "55.372",
+        "86.3122"
+      ]
+    },
+    "RV2": {
+      "props": {
+        "Reference": "RV2",
+        "Value": "1M",
+        "Datasheet": "",
+        "Description": "Potentiometer",
+        "Sim.Device": "R",
+        "Sim.Type": "POT",
+        "Sim.Pins": "1=r0 2=wiper 3=r1",
+        "Sim.Params": "pos=0.0",
+        "Comment": "CV2_GAIN",
+        "ki_fp_filters": "Potentiometer*"
+      },
+      "footprint": "BreadModular_Pots:Potentiometer_RV09",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "": [
+          ""
+        ],
+        "1": [
+          "GND"
+        ],
+        "2": [
+          "BUFF_CV2"
+        ],
+        "3": [
+          "Net-(U3B--)"
+        ]
+      },
+      "attr": [
+        "through_hole"
+      ],
+      "position": [
+        "69.342",
+        "86.3122"
+      ]
+    },
+    "C2": {
+      "props": {
+        "Reference": "C2",
+        "Value": "100n",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "C_*"
+      },
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+3V3"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "60.551",
+        "74.3712",
+        "180"
+      ]
+    },
+    "R8": {
+      "props": {
+        "Reference": "R8",
+        "Value": "27",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "USB_D-"
+        ],
+        "2": [
+          "Net-(U1-USB_DM)"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "65.913",
+        "63.375",
+        "-90"
+      ]
+    },
+    "SW1": {
+      "props": {
+        "Reference": "SW1",
+        "Value": "K2-1808SN-A4SW-01",
+        "Datasheet": "",
+        "Description": "Single Pole Single Throw (SPST) switch",
+        "Comment": "RESET"
+      },
+      "footprint": "BreadModular_MISC:K2-1808SN-A4SW-01",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "Net-(SW1-A)"
+        ],
+        "2": [
+          "/RUN"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "57.0484",
+        "43.942",
+        "180"
+      ]
+    },
+    "R7": {
+      "props": {
+        "Reference": "R7",
+        "Value": "27",
+        "Datasheet": "",
+        "Description": "",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "USB_D+"
+        ],
+        "2": [
+          "Net-(U1-USB_DP)"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "64.77",
+        "63.375",
+        "-90"
+      ]
+    },
+    "R3": {
+      "props": {
+        "Reference": "R3",
+        "Value": "5.1k",
+        "Datasheet": "",
+        "Description": "Resistor",
+        "ki_fp_filters": "R_*"
+      },
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "layer": [
+        "F.Cu"
+      ],
+      "pins": {
+        "1": [
+          "Net-(J5-CC1)"
+        ],
+        "2": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "smd"
+      ],
+      "position": [
+        "60.008",
+        "48.26",
+        "180"
+      ]
+    },
+    "J2": {
+      "props": {
+        "Reference": "J2",
+        "Value": "Conn_01x05_Socket",
+        "Datasheet": "",
+        "Description": "Generic connector, single row, 01x05, script generated",
+        "ki_fp_filters": "Connector*:*_1x??_*"
+      },
+      "footprint": "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical",
+      "layer": [
+        "B.Cu"
+      ],
+      "pins": {
+        "1": [
+          "MIDI_OUT"
+        ],
+        "2": [
+          "AOUT_1"
+        ],
+        "3": [
+          "AOUT_2"
+        ],
+        "4": [
+          "GOUT_1"
+        ],
+        "5": [
+          "GOUT_2"
+        ]
+      },
+      "attr": [
+        "through_hole"
+      ],
+      "position": [
+        "74.93",
+        "60.96",
+        "180"
+      ]
+    },
+    "GND1": {
+      "props": {
+        "Reference": "GND1",
+        "Value": "Conn_01x05_Pin",
+        "Datasheet": "",
+        "Description": "Generic connector, single row, 01x05, script generated",
+        "ki_fp_filters": "Connector*:*_1x??_*"
+      },
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+      "layer": [
+        "B.Cu"
+      ],
+      "pins": {
+        "1": [
+          "GND"
+        ],
+        "2": [
+          "GND"
+        ],
+        "3": [
+          "GND"
+        ],
+        "4": [
+          "GND"
+        ],
+        "5": [
+          "GND"
+        ]
+      },
+      "attr": [
+        "through_hole"
+      ],
+      "position": [
+        "55.88",
+        "96.52",
+        "-90"
+      ]
+    },
+    "V_SUPPLY1": {
+      "props": {
+        "Reference": "V_SUPPLY1",
+        "Value": "Conn_01x05_Pin",
+        "Datasheet": "",
+        "Description": "Generic connector, single row, 01x05, script generated",
+        "ki_fp_filters": "Connector*:*_1x??_*"
+      },
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+      "layer": [
+        "B.Cu"
+      ],
+      "pins": {
+        "1": [
+          "+5V"
+        ],
+        "2": [
+          "+5V"
+        ],
+        "3": [
+          "+5V"
+        ],
+        "4": [
+          "+5V"
+        ],
+        "5": [
+          "+5V"
+        ]
+      },
+      "attr": [
+        "through_hole"
+      ],
+      "position": [
+        "55.88",
+        "50.8",
+        "-90"
+      ]
+    },
+    "J1": {
+      "props": {
+        "Reference": "J1",
+        "Value": "Conn_01x05_Socket",
+        "Datasheet": "",
+        "Description": "Generic connector, single row, 01x05, script generated",
+        "ki_fp_filters": "Connector*:*_1x??_*"
+      },
+      "footprint": "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical",
+      "layer": [
+        "B.Cu"
+      ],
+      "pins": {
+        "1": [
+          "MIDI_IN"
+        ],
+        "2": [
+          "AIN_1"
+        ],
+        "3": [
+          "AIN_2"
+        ],
+        "4": [
+          "CV1"
+        ],
+        "5": [
+          "CV2"
+        ]
+      },
+      "attr": [
+        "through_hole"
+      ],
+      "position": [
+        "49.403",
+        "60.96",
+        "180"
+      ]
+    }
+  },
+  "manifest_hash_checks": [
+    [
+      "source_sha256",
+      "16bit-5v.kicad_pcb",
+      true
+    ],
+    [
+      "source_sha256",
+      "16bit-5v.kicad_sch",
+      true
+    ],
+    [
+      "source_sha256",
+      "16bit-5v.kicad_pro",
+      true
+    ],
+    [
+      "source_sha256",
+      "Bread16bit.kicad_sym",
+      true
+    ],
+    [
+      "source_sha256",
+      "sym-lib-table",
+      true
+    ],
+    [
+      "source_sha256",
+      "fp-lib-table",
+      true
+    ],
+    [
+      "source_sha256",
+      "MCU_RaspberryPi_RP2350.kicad_sym",
+      true
+    ],
+    [
+      "files",
+      "previews/16bit-5v-B_Cu.svg",
+      true
+    ],
+    [
+      "files",
+      "previews/16bit-5v-F_Cu.svg",
+      true
+    ],
+    [
+      "files",
+      "previews/16bit-5v.svg",
+      true
+    ],
+    [
+      "files",
+      "previews/pcb-overview.png",
+      true
+    ],
+    [
+      "files",
+      "previews/pcb-overview.svg",
+      true
+    ],
+    [
+      "files",
+      "previews/production-bottom.png",
+      true
+    ],
+    [
+      "files",
+      "previews/production-bottom.svg",
+      true
+    ],
+    [
+      "files",
+      "previews/production-top.png",
+      true
+    ],
+    [
+      "files",
+      "previews/production-top.svg",
+      true
+    ],
+    [
+      "files",
+      "previews/routed-layers.png",
+      true
+    ],
+    [
+      "files",
+      "previews/routed-layers.svg",
+      true
+    ],
+    [
+      "files",
+      "previews/schematic.png",
+      true
+    ],
+    [
+      "files",
+      "previews/switching-closeup.png",
+      true
+    ],
+    [
+      "files",
+      "production/16bit-5v.zip",
+      true
+    ],
+    [
+      "files",
+      "production/RELEASE_STATUS.md",
+      true
+    ],
+    [
+      "files",
+      "production/all-components-export-report.json",
+      true
+    ],
+    [
+      "files",
+      "production/assembly/16bit-5v-gerbers.zip",
+      true
+    ],
+    [
+      "files",
+      "production/assembly/bom.csv",
+      true
+    ],
+    [
+      "files",
+      "production/assembly/export-report.json",
+      true
+    ],
+    [
+      "files",
+      "production/assembly/positions.csv",
+      true
+    ],
+    [
+      "files",
+      "production/bom.csv",
+      true
+    ],
+    [
+      "files",
+      "production/designators.csv",
+      true
+    ],
+    [
+      "files",
+      "production/manual-assembly.csv",
+      true
+    ],
+    [
+      "files",
+      "production/netlist.ipc",
+      true
+    ],
+    [
+      "files",
+      "production/positions.csv",
+      true
+    ],
+    [
+      "files",
+      "tools/apply_review_layout.py",
+      true
+    ],
+    [
+      "files",
+      "tools/finalize_pcb.py",
+      true
+    ],
+    [
+      "files",
+      "tools/jlcpcb_export.py",
+      true
+    ],
+    [
+      "files",
+      "tools/regenerate_production.py",
+      true
+    ],
+    [
+      "files",
+      "tools/verify_power.py",
+      true
+    ],
+    [
+      "files",
+      "verification/CHANGED_FILES.md",
+      true
+    ],
+    [
+      "files",
+      "verification/INVENTORY.md",
+      true
+    ],
+    [
+      "files",
+      "verification/PACKAGE_PROOF.md",
+      true
+    ],
+    [
+      "files",
+      "verification/REVIEW_RESPONSE.md",
+      true
+    ],
+    [
+      "files",
+      "verification/connectivity.json",
+      true
+    ],
+    [
+      "files",
+      "verification/drc-final.json",
+      true
+    ],
+    [
+      "files",
+      "verification/drc-original.json",
+      true
+    ],
+    [
+      "files",
+      "verification/drc-working.json",
+      true
+    ],
+    [
+      "files",
+      "verification/erc-final.json",
+      true
+    ],
+    [
+      "files",
+      "verification/erc-original.json",
+      true
+    ],
+    [
+      "files",
+      "verification/erc-working.json",
+      true
+    ],
+    [
+      "files",
+      "verification/fabrication.json",
+      true
+    ],
+    [
+      "files",
+      "verification/netlist-final.xml",
+      true
+    ],
+    [
+      "files",
+      "verification/netlist.xml",
+      true
+    ],
+    [
+      "files",
+      "verification/review-response.json",
+      true
+    ]
+  ],
+  "manifest": {
+    "generated_utc": "2026-10-02T07:24:30.469514+00:00",
+    "review_response": "verification/review-response.json",
+    "release_status": "INTEGRATION-READY \u2014 user-approved THT/underside placement; existing 2Cu preserved; ORDERING HOLD, no order authorized",
+    "authority_ref": "39f70c646d854e1e43779866c62bead5ab3f003d",
+    "workspace_branch": "okbrain/bread-modular-kicad/281-f62367ef",
+    "copper_layers": [
+      "F.Cu",
+      "B.Cu"
+    ],
+    "electrical_gates": {
+      "drc_errors": 0,
+      "unconnected": 0,
+      "parity": 0,
+      "erc_errors": 0,
+      "drc_warnings": 75,
+      "erc_warnings": 12,
+      "drc_exclusions": 0,
+      "erc_exclusions": 0,
+      "drc_warning_types": {
+        "silk_over_copper": 24,
+        "lib_footprint_mismatch": 47,
+        "lib_footprint_issues": 1,
+        "via_dangling": 3
+      },
+      "erc_warning_types": {
+        "endpoint_off_grid": 5,
+        "lib_symbol_mismatch": 6,
+        "footprint_link_issues": 1
+      },
+      "ignored_drc_checks": [
+        "missing_courtyard",
+        "track_not_centered_on_via",
+        "tuning_profile_track_geometries",
+        "footprint_filters_mismatch",
+        "pth_inside_courtyard",
+        "npth_inside_courtyard"
+      ],
+      "ignored_erc_checks": [
+        "single_global_label",
+        "four_way_junction",
+        "simulation_model_issue",
+        "footprint_filter"
+      ]
+    },
+    "component_body_sides": {
+      "F.Cu": 58,
+      "B.Cu": 4
+    },
+    "smd_assembly_refs": 56,
+    "complete_bom_refs": 62,
+    "manual_tht_refs": [
+      "GND1",
+      "J1",
+      "J2",
+      "RV1",
+      "RV2",
+      "V_SUPPLY1"
+    ],
+    "smd_missing_supplier_numbers": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C15",
+      "C16",
+      "C17",
+      "C18",
+      "C19",
+      "C20",
+      "C21",
+      "C22",
+      "C23",
+      "C24",
+      "D1",
+      "J5",
+      "L1",
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8",
+      "R9",
+      "R10",
+      "R11",
+      "R12",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "R18",
+      "SW1",
+      "SW2",
+      "SW3",
+      "U1",
+      "U2",
+      "U3",
+      "U4",
+      "U5",
+      "Y1"
+    ],
+    "all_missing_supplier_numbers": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C15",
+      "C16",
+      "C17",
+      "C18",
+      "C19",
+      "C20",
+      "C21",
+      "C22",
+      "C23",
+      "C24",
+      "D1",
+      "GND1",
+      "J1",
+      "J2",
+      "J5",
+      "L1",
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8",
+      "R9",
+      "R10",
+      "R11",
+      "R12",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "R18",
+      "RV1",
+      "RV2",
+      "SW1",
+      "SW2",
+      "SW3",
+      "U1",
+      "U2",
+      "U3",
+      "U4",
+      "U5",
+      "V_SUPPLY1",
+      "Y1"
+    ],
+    "fabrication_archive_entries": [
+      "16bit-5v-B_Cu.gbr",
+      "16bit-5v-B_Mask.gbr",
+      "16bit-5v-B_Paste.gbr",
+      "16bit-5v-B_Silkscreen.gbr",
+      "16bit-5v-Edge_Cuts.gbr",
+      "16bit-5v-F_Cu.gbr",
+      "16bit-5v-F_Mask.gbr",
+      "16bit-5v-F_Paste.gbr",
+      "16bit-5v-F_Silkscreen.gbr",
+      "16bit-5v-NPTH.drl",
+      "16bit-5v-PTH.drl"
+    ],
+    "source_sha256": {
+      "16bit-5v.kicad_pcb": "b9b0f86c2d5b1c00687cba598cd96abf086c61910456b3b049d5a8d3206dd745",
+      "16bit-5v.kicad_sch": "02bf0cc0f562dbf30c11cb170befee5777e2d689ea028fc0de98a6a12fc30dfe",
+      "16bit-5v.kicad_pro": "7675f7cf560f190cde816791539f1c68406da926e8e3461b76302dc2292a2163",
+      "Bread16bit.kicad_sym": "24c32a568b2c0aec1113569b1498547d343e9f4b80d29c36cf4da066b71e8fd9",
+      "sym-lib-table": "837bee70f1e0f8f1fe9ccc117a6d8ca9a5486b172bf458b43e6d833085e4447c",
+      "fp-lib-table": "a22f6744b19c69bbe32ca33fac024c71d0cf4da6fc1c8bae3b4af7afcdd80b10",
+      "MCU_RaspberryPi_RP2350.kicad_sym": "b1c2668f9b11d85ceab9e2583a18ee3722c96507d1a4a22a3b0998161b6ebcb2"
+    },
+    "files": {
+      "previews/16bit-5v-B_Cu.svg": "5d0640bc13df3f3fd36fbb809857433ede994abdbf6a481b74837ac32bdf6aa1",
+      "previews/16bit-5v-F_Cu.svg": "d436cc6b0e7f716ed2a8d79f9ad782990adfdd59023e68ec6e026151561eac54",
+      "previews/16bit-5v.svg": "e40a163a2362698fc573f77eaa6d9287d02fdc075c48008b2e862dbadac0a8cb",
+      "previews/pcb-overview.png": "a5efb57c8bd1fbf3f3bd4d38fb0f34f79b818b76b32a3b29986018773f8d711a",
+      "previews/pcb-overview.svg": "f0a5611a2348d9cc9200b017817b323f331d289e908c2e3cbf9aba9d52ce4e6b",
+      "previews/production-bottom.png": "2a0a60766040eff639da411d8276d21a4eb82338c42e4efaec2851e0e2384238",
+      "previews/production-bottom.svg": "bb5cfb573240aa4c58352b3271da298798ebd46dd38c1d36a0001c55825a3f28",
+      "previews/production-top.png": "d013bb533579f012bcdfa468a3c51c7e6b366412cb16c7246fc0a8fc197890cf",
+      "previews/production-top.svg": "6d7eb2527b841a91d624b6ecad3d430b04ae88ccee372648f802876ab814b591",
+      "previews/routed-layers.png": "5c293790bc8d9014acd20523e417c99105269d7e00e3b5ac7d84437f074b6df3",
+      "previews/routed-layers.svg": "f285035a887b0834fb5bc627b0de809f419dd2e24c2a3e06d48ea025c818a419",
+      "previews/schematic.png": "5131b4cc4867cd5f60acfae9b8dbf1b62b725a1a1ab8f9425bf03e570656210f",
+      "previews/switching-closeup.png": "80688ceb64f207261bf8f0f2c68819c0eb8d017a2ccd586fd882e01f98e8a894",
+      "production/16bit-5v.zip": "22af114ecc2707c94c7880f8994d29becf768ff1857cb9dd5941d926211981e6",
+      "production/RELEASE_STATUS.md": "2d933d52417a799960ab1f457a02171324c160541b76e6da40bdfcd135d030e6",
+      "production/all-components-export-report.json": "383a724a769f81889776b9aa566a4ac9c17cd3423cd9e8647f2b4afdc344ab1f",
+      "production/assembly/16bit-5v-gerbers.zip": "22af114ecc2707c94c7880f8994d29becf768ff1857cb9dd5941d926211981e6",
+      "production/assembly/bom.csv": "7b1671fbae49d821dad78f53fad584b6756b04331a5dfe4612b450348c8690d7",
+      "production/assembly/export-report.json": "b95bb2abff1fa3bf4656dbc8b63daef253b8aade5f3806295245fb435ed08365",
+      "production/assembly/positions.csv": "5eae647dac520bb9279f7499cde0acd412c27d0f76ef925685ff140babc9cd84",
+      "production/bom.csv": "1079f5561b17558727e707da1eeba25e96421714ef5d01b10dd1adbf01fb15af",
+      "production/designators.csv": "aca30a07ef87cdb56b10ed7aeede936137424935024a7106dc70b863856b08f8",
+      "production/manual-assembly.csv": "b581633c32a8ce87af5b2905283217f10b0f64046d1c8988e0fb53ff4fe7da67",
+      "production/netlist.ipc": "2d0c026caf75ad2273bf256516be8a099fce7e98d68d784a71b2d9bdc96424ce",
+      "production/positions.csv": "add84e54689561f393cd824a53ce7ea635f841ed0ccf61e405f0d1324a3c01f5",
+      "tools/apply_review_layout.py": "3f4ad84ba8b315f85d655758ad1eb6270a7a8a107b56c458f593bead1332f4d6",
+      "tools/finalize_pcb.py": "4193bff66c6a1033938b0dc685278a2c7fbe63b976e86f5d6ced2308fdb0ae63",
+      "tools/jlcpcb_export.py": "06f08a6d0e1f7883efdeb00528d656044a24f0913b19f7618f788f63a9ed394b",
+      "tools/regenerate_production.py": "3fdb1b6c93706e7ae90e4b0d433f0b4eacb6201e3894948bf7153e6460216942",
+      "tools/verify_power.py": "14d71674b8e1cf6d23d79b81f11f3372b21a2ca7929b336e87a1e0b157b95db2",
+      "verification/CHANGED_FILES.md": "0814464e1617452a3a312adb801d3c2ae4cec517e025d8ce1534b9e4f1013065",
+      "verification/INVENTORY.md": "5ae082c7fc543b5f721abda40cb80ce91f3a7034ac7d33ca201eb373f84a1a13",
+      "verification/PACKAGE_PROOF.md": "4afb4998a7d81b98d16668e5cf2e4d2cd63e7ad4e893d5ed055f07c7013ed8ef",
+      "verification/REVIEW_RESPONSE.md": "5118c0cc1e9b0dd8c9073d56826e973453333787a98ace5bbd13ff0f5c21961d",
+      "verification/connectivity.json": "050ebcbbfc88ad390358b80c254d04fc04e92b174245964586e8e6a57e7b8d73",
+      "verification/drc-final.json": "d0ad59ab45c498ba15992fb2303a33c0276bc0db1216e0ebd400908035244500",
+      "verification/drc-original.json": "96fe0158d8a4fde5bc6fc105c4593778465cbbaf10e1548261a495bb0185bbf0",
+      "verification/drc-working.json": "451772c264333328f2740a4dda54ca68bf49b06aec4364bfb4db706b2ccc95cf",
+      "verification/erc-final.json": "afe476b60ebfb6252f0dd6551511bb63e5b2a1dd164c61bcd12c41166643da66",
+      "verification/erc-original.json": "63c058023515d3cfbc020e905e2f24e682f21a3c3c50ad20a76d8e3f4e686f60",
+      "verification/erc-working.json": "112e5853a9a8b9e8038bee6b79a1508f11d1c4457b823f66b15de4dbb26b3f54",
+      "verification/fabrication.json": "69d5ac4e2d39916ebcefd52c07ec1da88817b1a2f0f480920b69487baed88fdc",
+      "verification/netlist-final.xml": "c5e92455d492ff3746235eb49c21d56024d6979d0ade3c6fd5c4eb2fc120dffd",
+      "verification/netlist.xml": "de7a68ac3da901a5a9821c30b72d06369cb5f6ddb1c086fb68c540d57667ee35",
+      "verification/review-response.json": "6639165fd22ff498a835d2de78b2ba1ad06f8e9a4f5258349acea37b094613fa"
+    },
+    "holds": [
+      "Physical header lead/protrusion and pot-case clearance, mating fit and purchased-part compatibility still require human verification; placement approval is not physical-fit approval.",
+      "Sourcing/catalog/package match and assembler centroid/rotation/polarity, process and assembly-order review still required; no sourcing or assembler-process/order approval is claimed.",
+      "Final human production review and bench power/USB/audio testing remain outstanding, including retained-inductor winding/orientation and ripple/efficiency; no order authorized."
+    ],
+    "exporter_provenance": {
+      "repository_path": "opt/kicad-jlcpcb/export.py",
+      "commit": "d86bbd573614210bc119f42224b85dd71f9d608c",
+      "local_copy": "tools/jlcpcb_export.py",
+      "sha256": "06f08a6d0e1f7883efdeb00528d656044a24f0913b19f7618f788f63a9ed394b"
+    },
+    "targeted_review_summary": {
+      "LX": {
+        "before_length_mm": 10.048756,
+        "after_length_mm": 1.895373,
+        "widths_mm": [
+          0.15,
+          0.4,
+          0.7
+        ],
+        "external_0_15_neck_length_mm": 0.518878,
+        "layer": "F.Cu",
+        "vias": 0,
+        "same_inductor": "AOTA-B201610S3R3-101-T"
+      },
+      "package_paste": {
+        "U3": {
+          "central_paste_features": 0,
+          "external_leads_with_paste": 8
+        },
+        "U4": {
+          "central_paste_features": 0,
+          "external_leads_with_paste": 8
+        }
+      },
+      "existing_serialized_net_reassignments": 0,
+      "original_copper_items_exact": 679,
+      "verifier_assertions": 1747,
+      "initial_regular_files_ported": 46,
+      "intended_staged_paths": 51,
+      "Fab_only_crowded_component_refs": [
+        "C6",
+        "C9",
+        "R5",
+        "C15",
+        "C27",
+        "C16",
+        "C17",
+        "C22",
+        "R12",
+        "C23",
+        "R6",
+        "U1",
+        "U3",
+        "C2",
+        "R8",
+        "R7",
+        "R3"
+      ],
+      "independent_fresh_export_check": {
+        "gerbers_drills_fresh_identical_ignoring_creation_comments_only": true,
+        "IPC_numeric_records_identical": true,
+        "saved_board_read_only_DRC_errors_opens_parity": [
+          0,
+          0,
+          0
+        ],
+        "manual_rows_reviewed": 6,
+        "manual_footprint_ids_real_strings": true,
+        "actual_package_paste": {
+          "U3": {
+            "central_paste_features": 0,
+            "external_leads_with_paste": 8
+          },
+          "U4": {
+            "central_paste_features": 0,
+            "external_leads_with_paste": 8
+          }
+        },
+        "pth_features": 153,
+        "npth_features": 2
+      }
+    },
+    "visible_uploads": {
+      "pcb": "/uploads/5fea91d8-7ea2-4798-9af2-ce87e92ea5cc.webp",
+      "switching_closeup": "/uploads/d2980456-e30a-41a9-99be-bb91901941fc.webp",
+      "actual_zip_top": "/uploads/c838f4cd-a07d-4e23-9150-53f03803c4f0.webp"
+    },
+    "runtime_artifacts_excluded": true
+  },
+  "assembly_bom": [
+    {
+      "Comment": "0.1uf",
+      "Designator": "C1, C5",
+      "Footprint": "C_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "2",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "100n",
+      "Designator": "C2, C8, C11, C12, C13, C14, C15, C16, C17, C18, C24",
+      "Footprint": "C_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "11",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "15p",
+      "Designator": "C3, C4",
+      "Footprint": "C_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "2",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "4.7u",
+      "Designator": "C6, C7",
+      "Footprint": "C_0402_1005Metric_small_pads",
+      "LCSC Part #": "",
+      "Quantity": "2",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "4.7u",
+      "Designator": "C9, C10",
+      "Footprint": "C_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "2",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "10u",
+      "Designator": "C19",
+      "Footprint": "C_0805_2012Metric",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "10nf",
+      "Designator": "C20",
+      "Footprint": "C_0805_2012Metric",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "100uf",
+      "Designator": "C21",
+      "Footprint": "C_1206_3216Metric",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "10nf",
+      "Designator": "C22, C23",
+      "Footprint": "C_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "2",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "10u",
+      "Designator": "C25",
+      "Footprint": "C_0805_2012Metric",
+      "LCSC Part #": "C15850",
+      "Quantity": "1",
+      "Manufacturer": "Samsung",
+      "MPN": "CL21A106KAYNNNE"
+    },
+    {
+      "Comment": "100n",
+      "Designator": "C26",
+      "Footprint": "C_0402_1005Metric",
+      "LCSC Part #": "C1525",
+      "Quantity": "1",
+      "Manufacturer": "Samsung",
+      "MPN": "CL05B104KO5NNNC"
+    },
+    {
+      "Comment": "1u",
+      "Designator": "C27",
+      "Footprint": "C_0805_2012Metric",
+      "LCSC Part #": "C28323",
+      "Quantity": "1",
+      "Manufacturer": "Samsung",
+      "MPN": "CL21B105KBFNNNE"
+    },
+    {
+      "Comment": "LED",
+      "Designator": "D1",
+      "Footprint": "LED_0603_1608Metric",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "USB_C_Receptacle_USB2.0_14P",
+      "Designator": "J5",
+      "Footprint": "HRO-TYPE-C-31-M-12",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "AOTA-B201610S3R3-101-T",
+      "Designator": "L1",
+      "Footprint": "L_pol_2016",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "1k",
+      "Designator": "R2, R4, R6, R9, R17, R18",
+      "Footprint": "R_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "6",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "5.1k",
+      "Designator": "R3, R11",
+      "Footprint": "R_0603_1608Metric",
+      "LCSC Part #": "",
+      "Quantity": "2",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "33",
+      "Designator": "R5",
+      "Footprint": "R_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "27",
+      "Designator": "R7, R8",
+      "Footprint": "R_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "2",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "100k",
+      "Designator": "R10, R12, R15, R16",
+      "Footprint": "R_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "4",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "10k",
+      "Designator": "R14",
+      "Footprint": "R_0402_1005Metric",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "K2-1808SN-A4SW-01",
+      "Designator": "SW1, SW2, SW3",
+      "Footprint": "K2-1808SN-A4SW-01",
+      "LCSC Part #": "",
+      "Quantity": "3",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "RP2350_60QFN",
+      "Designator": "U1",
+      "Footprint": "RP2350-QFN-60-1EP_7x7_P0.4mm_EP3.4x3.4mm_ThermalVias",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "W25Q128JVS",
+      "Designator": "U2",
+      "Footprint": "SOIC-8_5.23x5.23mm_P1.27mm",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "MCP6002-xSN",
+      "Designator": "U3",
+      "Footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "PT8211-S",
+      "Designator": "U4",
+      "Footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "PSRAM",
+      "Designator": "U5",
+      "Footprint": "SOIC-8 Generic",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    },
+    {
+      "Comment": "AP2112K-3.3",
+      "Designator": "U6",
+      "Footprint": "SOT-23-5",
+      "LCSC Part #": "C51118",
+      "Quantity": "1",
+      "Manufacturer": "Diodes",
+      "MPN": "AP2112K-3.3TRG1"
+    },
+    {
+      "Comment": "ABM8-272-T3",
+      "Designator": "Y1",
+      "Footprint": "Crystal_SMD_3225-4Pin_3.2x2.5mm",
+      "LCSC Part #": "",
+      "Quantity": "1",
+      "Manufacturer": "",
+      "MPN": ""
+    }
+  ],
+  "assembly_cpl": [
+    {
+      "Designator": "C1",
+      "Mid X": "53.975000",
+      "Mid Y": "-54.638000",
+      "Rotation": "90.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C2",
+      "Mid X": "60.551000",
+      "Mid Y": "-74.371200",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C3",
+      "Mid X": "67.058600",
+      "Mid Y": "-78.613000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C4",
+      "Mid X": "64.696400",
+      "Mid Y": "-78.587600",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C5",
+      "Mid X": "64.516000",
+      "Mid Y": "-59.845000",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C6",
+      "Mid X": "69.900000",
+      "Mid Y": "-66.099999",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C7",
+      "Mid X": "68.300000",
+      "Mid Y": "-62.300000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C8",
+      "Mid X": "59.464000",
+      "Mid Y": "-70.993000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C9",
+      "Mid X": "72.000000",
+      "Mid Y": "-66.300000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C10",
+      "Mid X": "67.157600",
+      "Mid Y": "-77.193200",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C11",
+      "Mid X": "70.965000",
+      "Mid Y": "-71.882000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C12",
+      "Mid X": "69.200000",
+      "Mid Y": "-59.300000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C13",
+      "Mid X": "59.789000",
+      "Mid Y": "-73.152000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C14",
+      "Mid X": "71.402000",
+      "Mid Y": "-73.025000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C15",
+      "Mid X": "62.512000",
+      "Mid Y": "-66.167000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C16",
+      "Mid X": "62.512000",
+      "Mid Y": "-65.151000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C17",
+      "Mid X": "69.624000",
+      "Mid Y": "-76.200000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C18",
+      "Mid X": "63.782000",
+      "Mid Y": "-76.934000",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C19",
+      "Mid X": "63.693000",
+      "Mid Y": "-53.975000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C20",
+      "Mid X": "65.913000",
+      "Mid Y": "-43.749000",
+      "Rotation": "90.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C21",
+      "Mid X": "62.865000",
+      "Mid Y": "-60.501000",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C22",
+      "Mid X": "59.718000",
+      "Mid Y": "-53.594000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C23",
+      "Mid X": "57.376000",
+      "Mid Y": "-53.594000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C24",
+      "Mid X": "60.909200",
+      "Mid Y": "-77.492800",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C25",
+      "Mid X": "75.350000",
+      "Mid Y": "-51.550000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C26",
+      "Mid X": "74.050000",
+      "Mid Y": "-50.100000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "C27",
+      "Mid X": "75.350000",
+      "Mid Y": "-58.500000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "D1",
+      "Mid X": "51.644500",
+      "Mid Y": "-96.012000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "J5",
+      "Mid X": "72.136000",
+      "Mid Y": "-44.294000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "L1",
+      "Mid X": "67.800000",
+      "Mid Y": "-64.599999",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R2",
+      "Mid X": "65.862200",
+      "Mid Y": "-77.137800",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R3",
+      "Mid X": "60.008000",
+      "Mid Y": "-48.260000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R4",
+      "Mid X": "56.991200",
+      "Mid Y": "-41.783000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R5",
+      "Mid X": "69.900000",
+      "Mid Y": "-63.700000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R6",
+      "Mid X": "50.544000",
+      "Mid Y": "-41.783000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R7",
+      "Mid X": "64.770000",
+      "Mid Y": "-63.375000",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R8",
+      "Mid X": "65.913000",
+      "Mid Y": "-63.375000",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R9",
+      "Mid X": "51.052000",
+      "Mid Y": "-97.282000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R10",
+      "Mid X": "52.707000",
+      "Mid Y": "-57.023000",
+      "Rotation": "90.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R11",
+      "Mid X": "64.072000",
+      "Mid Y": "-48.260000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R12",
+      "Mid X": "54.862000",
+      "Mid Y": "-57.025000",
+      "Rotation": "90.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R14",
+      "Mid X": "49.426400",
+      "Mid Y": "-75.031600",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R15",
+      "Mid X": "49.451800",
+      "Mid Y": "-77.419200",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R16",
+      "Mid X": "49.401000",
+      "Mid Y": "-79.781400",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R17",
+      "Mid X": "59.688000",
+      "Mid Y": "-55.753000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "R18",
+      "Mid X": "57.402000",
+      "Mid Y": "-55.753000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "SW1",
+      "Mid X": "57.048400",
+      "Mid Y": "-43.942000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "SW2",
+      "Mid X": "51.435000",
+      "Mid Y": "-99.695000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "SW3",
+      "Mid X": "50.546000",
+      "Mid Y": "-43.942000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "U1",
+      "Mid X": "65.667500",
+      "Mid Y": "-71.120000",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "U2",
+      "Mid X": "55.575200",
+      "Mid Y": "-69.563800",
+      "Rotation": "270.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "U3",
+      "Mid X": "50.685000",
+      "Mid Y": "-52.005000",
+      "Rotation": "90.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "U4",
+      "Mid X": "58.940000",
+      "Mid Y": "-60.390000",
+      "Rotation": "90.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "U5",
+      "Mid X": "55.849600",
+      "Mid Y": "-77.835800",
+      "Rotation": "0.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "U6",
+      "Mid X": "75.300000",
+      "Mid Y": "-55.150000",
+      "Rotation": "90.000000",
+      "Layer": "top"
+    },
+    {
+      "Designator": "Y1",
+      "Mid X": "72.517000",
+      "Mid Y": "-78.867000",
+      "Rotation": "180.000000",
+      "Layer": "top"
+    }
+  ],
+  "value_footprint_parity_mismatches": [],
+  "symlink_hash_notes": [
+    {
+      "path": "fp-lib-table",
+      "resolved_committed_target": "opt/fp-lib-table",
+      "sha256": "a22f6744b19c69bbe32ca33fac024c71d0cf4da6fc1c8bae3b4af7afcdd80b10",
+      "note": "Manifest hashes resolved target, not Git symlink text."
+    }
+  ],
+  "committed_verification_summary": [
+    {
+      "kind": "DRC",
+      "committed_path": "verification/drc-final.json",
+      "errors": 0,
+      "warnings": 75,
+      "excluded": 0,
+      "types": {
+        "silk_over_copper": 24,
+        "lib_footprint_mismatch": 47,
+        "lib_footprint_issues": 1,
+        "via_dangling": 3
+      },
+      "opens": 0,
+      "parity": 0
+    },
+    {
+      "kind": "ERC",
+      "committed_path": "verification/erc-final.json",
+      "errors": 0,
+      "warnings": 12,
+      "excluded": 0,
+      "types": {
+        "endpoint_off_grid": 5,
+        "lib_symbol_mismatch": 6,
+        "footprint_link_issues": 1
+      },
+      "opens": 0,
+      "parity": 0
+    }
+  ],
+  "snapshot_rechecked_tip": "1e50e798d68e3d8d3167fb5fb47bdcb7ee436b83"
+}

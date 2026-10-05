@@ -1,0 +1,51 @@
+{
+  "generator": "bread-modular/kicad-jlcpcb",
+  "kicad_version": "10.0.6",
+  "board": "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_pcb",
+  "schematic": "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_sch",
+  "source_sha256": {
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_pcb": "836ce806d4727241807eecd486c6134daf85f6e29b9f2c88ee7e5b5ce16408cd",
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_sch": "e2a7747990654ff0a9928fead7c5d970905c74495af72a2c083a8a9b4d842fed"
+  },
+  "layers": [
+    "F.Cu",
+    "B.Cu",
+    "F.Mask",
+    "B.Mask",
+    "F.SilkS",
+    "B.SilkS",
+    "F.Paste",
+    "B.Paste",
+    "Edge.Cuts"
+  ],
+  "copper_layer_count": 2,
+  "origin": "KiCad drill/place origin",
+  "units": "mm",
+  "side": "both",
+  "include_through_hole": false,
+  "component_count": 56,
+  "bom_row_count": 27,
+  "excluded": {
+    "GND1": "Not an SMD footprint (use --include-through-hole)",
+    "J1": "Not an SMD footprint (use --include-through-hole)",
+    "J2": "Not an SMD footprint (use --include-through-hole)",
+    "RV1": "Not an SMD footprint (use --include-through-hole)",
+    "RV2": "Not an SMD footprint (use --include-through-hole)",
+    "V_SUPPLY1": "Not an SMD footprint (use --include-through-hole)"
+  },
+  "missing_part_numbers": [
+    "D1",
+    "R7",
+    "R8",
+    "U5"
+  ],
+  "warnings": [
+    "Missing LCSC part numbers: D1, R7, R8, U5. Match these parts manually before ordering.",
+    "Export is not a DRC or assembly approval: refill zones and save before export; review Gerbers, holes, part matches, centroids and rotations in JLCPCB's preview."
+  ],
+  "files": [
+    "16bit-5v-gerbers.zip",
+    "bom.csv",
+    "positions.csv"
+  ]
+}

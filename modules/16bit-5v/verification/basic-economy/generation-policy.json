@@ -1,0 +1,29 @@
+{
+  "policy_scope": "Current 16bit file generation only; not a shared audit relaxation",
+  "file_generation_authorized": true,
+  "existing_engineering_user_accepted": true,
+  "user_steering": "Same goes for 16bit as well extends: Just don't worry about it. It was already good. The only change here is to add a 5V to 3.3V regulator. Create the JLCPCB files.",
+  "accepted_existing_reviews": [
+    "inherited LED/application design",
+    "inherited capacitor bias/ESR/application choices",
+    "inherited resistor stress/application choices"
+  ],
+  "do_not_block_file_generation_on_accepted_reviews": true,
+  "preserve_original_usb_parts_if_not_readily_verified": true,
+  "preserve_existing_basic_passive_bindings": true,
+  "no_unrelated_redesign": true,
+  "regulator_already_present": "U6 / AP2112K-3.3TRG1 / C51118 / SOT-23-5",
+  "native_source_changes_authorized_for_this_generation": [],
+  "reject_new_native_errors_or_warning_changes": true,
+  "retain_historical_warnings_and_rules": true,
+  "supplier_matching_still_required": ["R7", "R8", "D1", "U5"],
+  "required_rc_basic_economy_dated_bound": 41,
+  "required_rc_total": 43,
+  "quantity_basis_boards": 1,
+  "requested_order_quantity": null,
+  "stock_recheck_required": true,
+  "user_acceptance_is_not_documented_specification_or_supplier_approval": true,
+  "authenticated_upload_or_order_authorized": false,
+  "physical_shipping_certification_claimed": false,
+  "order_ready": false
+}

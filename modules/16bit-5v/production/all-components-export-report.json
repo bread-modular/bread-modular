@@ -1,0 +1,50 @@
+{
+  "generator": "bread-modular/kicad-jlcpcb",
+  "kicad_version": "10.0.6",
+  "board": "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_pcb",
+  "schematic": "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_sch",
+  "source_sha256": {
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_pcb": "836ce806d4727241807eecd486c6134daf85f6e29b9f2c88ee7e5b5ce16408cd",
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/292/modules/16bit-5v/16bit-5v.kicad_sch": "e2a7747990654ff0a9928fead7c5d970905c74495af72a2c083a8a9b4d842fed"
+  },
+  "layers": [
+    "F.Cu",
+    "B.Cu",
+    "F.Mask",
+    "B.Mask",
+    "F.SilkS",
+    "B.SilkS",
+    "F.Paste",
+    "B.Paste",
+    "Edge.Cuts"
+  ],
+  "copper_layer_count": 2,
+  "origin": "KiCad drill/place origin",
+  "units": "mm",
+  "side": "both",
+  "include_through_hole": true,
+  "component_count": 62,
+  "bom_row_count": 30,
+  "excluded": {},
+  "missing_part_numbers": [
+    "D1",
+    "GND1",
+    "J1",
+    "J2",
+    "R7",
+    "R8",
+    "RV1",
+    "RV2",
+    "U5",
+    "V_SUPPLY1"
+  ],
+  "warnings": [
+    "Missing LCSC part numbers: D1, GND1, J1, J2, R7, R8, RV1, RV2, U5, V_SUPPLY1. Match these parts manually before ordering.",
+    "Export is not a DRC or assembly approval: refill zones and save before export; review Gerbers, holes, part matches, centroids and rotations in JLCPCB's preview."
+  ],
+  "files": [
+    "16bit-5v-gerbers.zip",
+    "bom.csv",
+    "positions.csv"
+  ]
+}
