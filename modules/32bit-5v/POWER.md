@@ -1,5 +1,13 @@
 # 32bit-5v — 5V input, on-board 3.3V rail (v1.1.2 → v1.1.3, schematic-only)
 
+> **Current routed-board authority:** the committed board at `74db23e` is fully
+> routed, four-copper-layer, with AP2112/C41/C42 synchronized; statements below
+> about the untouched v1.1.0 PCB and pending routing are historical only.
+> See [current sourcing and release HOLD](verification/basic-economy/README.md),
+> `verification/basic-economy/native-proof.json` and `production/manifest.json`.
+> Nominal Basic catalog bindings do not establish worst-case biased capacitance,
+> ESR, regulator/codec transients, pulse derating or order readiness.
+
 This note describes the power architecture of the `32bit-5v` variant and the numbers
 behind the component choices. The schematic is the authority for the schematic and
 `32bit-5v.kicad_pcb` for the board — and as of **v1.1.2** the board still carries the

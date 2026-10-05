@@ -1,0 +1,7 @@
+{
+  "status": "HOLD; no production publication occurred",
+  "requests": 24,
+  "cause": "C11702 code-prefix lookup returned a truncated page; common audit reissued this uncached failure for its five refs and exhausted budget before U3/U4/U5. No HTTP/API retry loop was launched by a custom client.",
+  "correction": "Module orchestration prefetches each distinct code once, fail-fast on ambiguity. C11702 uses one bounded documented exact-MPN search with exact code+MPN identity check, common normalizer unchanged. This earlier failed report remains honest history.",
+  "new_final_phase_request_budget": 24
+}

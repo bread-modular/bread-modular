@@ -1,0 +1,757 @@
+{
+  "source_branch": "32bit-5v",
+  "source_baseline_commit": "74db23e0aaec4286caaf95eb2c00461ab0999e3e",
+  "generated_at_utc": "2026-10-05T06:08:41Z",
+  "catalog_requests": 23,
+  "request_budget": 24,
+  "quantity_basis": {
+    "boards": 1,
+    "requested_order_quantity": null,
+    "attrition_included": false
+  },
+  "catalog_only_basic_economy_rc_pass": true,
+  "rc_refs": 45,
+  "rc_codes": 16,
+  "max_passive_sets_stock_only_no_attrition": 362419,
+  "max_known_component_sets_stock_only_no_attrition": 6426,
+  "max_complete_economy_boards": 0,
+  "complete_stock_capacity": "unknown: D1 exact MPN/code unresolved",
+  "complete_economy_blockers": [
+    "U1 C3013946 componentProductType=2 Standard-only; choice pending",
+    "D1 exact color/MPN/code unresolved"
+  ],
+  "parts": [
+    {
+      "code": "C116706",
+      "mpn": "MCP6002-I/SN",
+      "package": "SOIC-8",
+      "refs": [
+        "U3"
+      ],
+      "per_board": 1,
+      "classification": "Extended",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 10567,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 10567,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:07:57Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C116706"
+        },
+        "sha256": "c5677d20cb6f7d6ea3d60753a55a429019555bc7281c8ae782018b93e5b285c2",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C11702",
+      "mpn": "0402WGF1001TCE",
+      "package": "0402",
+      "refs": [
+        "R1",
+        "R2",
+        "R9",
+        "R13",
+        "R17"
+      ],
+      "per_board": 5,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 7065151,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 1413030,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:07:59Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 12,
+          "keyword": "0402WGF1001TCE"
+        },
+        "sha256": "0713fd24fc525f4ef4e28d2b0018662aa2c37eb25f30332c7ab8ce78e510fbfc",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C15008",
+      "mpn": "CL31A107MQHNNNE",
+      "package": "1206",
+      "refs": [
+        "C7"
+      ],
+      "per_board": 1,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 1938855,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 1938855,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:01Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C15008"
+        },
+        "sha256": "ec102dbaaaa31479156bb05528bf1e0e08d56172458c6efce189003472bcde60",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C1525",
+      "mpn": "CL05B104KO5NNNC",
+      "package": "0402",
+      "refs": [
+        "C1",
+        "C4",
+        "C6",
+        "C21",
+        "C22",
+        "C26",
+        "C34",
+        "C36",
+        "C39",
+        "C42"
+      ],
+      "per_board": 10,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 22183285,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 2218328,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:03Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C1525"
+        },
+        "sha256": "6b6e44e8ca0c85188c8cfc14a94c5016343828e1eabfb6d0be2b8803cdb26330",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C15525",
+      "mpn": "CL05A106MQ5NUNC",
+      "package": "0402",
+      "refs": [
+        "C5",
+        "C27",
+        "C33",
+        "C35",
+        "C37",
+        "C38"
+      ],
+      "per_board": 6,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 10017149,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 1669524,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:05Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C15525"
+        },
+        "sha256": "68308fa15d5d97c5c3e62e82df0d8c7f4f8f3ed458449984141d162ab74290ed",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C15850",
+      "mpn": "CL21A106KAYNNNE",
+      "package": "0805",
+      "refs": [
+        "C40"
+      ],
+      "per_board": 1,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 4878777,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 4878777,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:07Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C15850"
+        },
+        "sha256": "78bf8510042b64233ad02093d395d222392496c14c37132b071ad43a416e7974",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C165948",
+      "mpn": "TYPE-C-31-M-12",
+      "package": "SMD",
+      "refs": [
+        "J5"
+      ],
+      "per_board": 1,
+      "classification": "Extended",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 423860,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 423860,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:10Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C165948"
+        },
+        "sha256": "81eaffc6245ba59a085b3087a00421c689b4c8c2b0f9c06f6831d3de0899cdc2",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C1710",
+      "mpn": "CL21B103KBANNNC",
+      "package": "0805",
+      "refs": [
+        "C20"
+      ],
+      "per_board": 1,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 2234840,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 2234840,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:12Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C1710"
+        },
+        "sha256": "2a4f48297a26038adbf9e6dce61a8d84289a54a987361e77ac4200dffce2494f",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C19702",
+      "mpn": "CL10A106KP8NNNC",
+      "package": "0603",
+      "refs": [
+        "C2",
+        "C8"
+      ],
+      "per_board": 2,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 10263481,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 5131740,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:14Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C19702"
+        },
+        "sha256": "7383fb557f06fd1043788cb4a7e6ed600715a464778a448f09faceaadcfacc0e",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C22859",
+      "mpn": "0603WAF100JT5E",
+      "package": "0603",
+      "refs": [
+        "R15"
+      ],
+      "per_board": 1,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 8005453,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 8005453,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:16Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C22859"
+        },
+        "sha256": "1a7eabce01e10df7ba411b53ab2e1bf9aa67a2d56c972c75b61dc921701d495d",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C23186",
+      "mpn": "0603WAF5101T5E",
+      "package": "0603",
+      "refs": [
+        "R4",
+        "R11"
+      ],
+      "per_board": 2,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 25224788,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 12612394,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:18Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C23186"
+        },
+        "sha256": "78bddfa9c258bcdae294c4929604093184aeef2098727a69a9cb5048636ea1b1",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C25105",
+      "mpn": "0402WGF330JTCE",
+      "package": "0402",
+      "refs": [
+        "R7",
+        "R8",
+        "R14",
+        "R18",
+        "R26"
+      ],
+      "per_board": 5,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 1812096,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 362419,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:20Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C25105"
+        },
+        "sha256": "51f19144b1be78d32f7d8a15d8882313f28947f3ffab4b0f210b558e6901f7d4",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C25741",
+      "mpn": "0402WGF1003TCE",
+      "package": "0402",
+      "refs": [
+        "R10",
+        "R12",
+        "R16",
+        "R19"
+      ],
+      "per_board": 4,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 8180660,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 2045165,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:22Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C25741"
+        },
+        "sha256": "e098aebc9bf59d69aed2382d7094c56b10a5282e4ad2feeb679cbec9de5abc97",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C25744",
+      "mpn": "0402WGF1002TCE",
+      "package": "0402",
+      "refs": [
+        "R3"
+      ],
+      "per_board": 1,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 21553699,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 21553699,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:24Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C25744"
+        },
+        "sha256": "c353613ef92e6f3836d9651deac76380f8a3542bf447a1b8bf339eb961884c7d",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C25867",
+      "mpn": "0402WGF1501TCE",
+      "package": "0402",
+      "refs": [
+        "R5",
+        "R6"
+      ],
+      "per_board": 2,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 2136918,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 1068459,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:26Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C25867"
+        },
+        "sha256": "779f78ddb13eb7d6deb79fe9d372cc4d3c96f5d26b2c994d29079d0567edf6eb",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C25900",
+      "mpn": "0402WGF4701TCE",
+      "package": "0402",
+      "refs": [
+        "R24",
+        "R25"
+      ],
+      "per_board": 2,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 15430204,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 7715102,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:27Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C25900"
+        },
+        "sha256": "0f9671ff5e1696de1ccba5b9e9fd057f01fc86067388e5c28e7421be67b7d836",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C3013946",
+      "mpn": "ESP32-S3-WROOM-1U-N16R8",
+      "package": "SMD,19.2x18mm",
+      "refs": [
+        "U1"
+      ],
+      "per_board": 1,
+      "classification": "Extended",
+      "componentProductType": 2,
+      "economy_eligible": false,
+      "stock": 15816,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 15816,
+      "supply_failures": [
+        "Economy eligibility false (Standard only)"
+      ],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:29Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C3013946"
+        },
+        "sha256": "e0f5256b192f227c48c40124e8eab49e2c43bac59464d4e4e5a6ce4ac6f1cb93",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C365736",
+      "mpn": "ES8388",
+      "package": "QFN-28-EP(4x4)",
+      "refs": [
+        "U4"
+      ],
+      "per_board": 1,
+      "classification": "Extended",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 44602,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 44602,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:31Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C365736"
+        },
+        "sha256": "01ea33ca450788de8fb9cc687cbb3cc3f5f426476db94c007e47f0cf127cf505",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C45783",
+      "mpn": "CL21A226MAQNNNE",
+      "package": "0805",
+      "refs": [
+        "C41"
+      ],
+      "per_board": 1,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 3968004,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 3968004,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:33Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C45783"
+        },
+        "sha256": "7c8dff5da4a40e5d95c7a42df7d1de6312fc5ffc6b3538c393bd8ccfec7e118b",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C51118",
+      "mpn": "AP2112K-3.3TRG1",
+      "package": "SOT-25-5",
+      "refs": [
+        "U5"
+      ],
+      "per_board": 1,
+      "classification": "Extended",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 37773,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 37773,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:35Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C51118"
+        },
+        "sha256": "65bb9cc9a31ce2d60bd8dd23967f7ed678ece5a5355ec55b5e6deca4f7c09056",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C52923",
+      "mpn": "CL05A105KA5NQNC",
+      "package": "0402",
+      "refs": [
+        "C3"
+      ],
+      "per_board": 1,
+      "classification": "Basic",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 8312063,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 8312063,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:38Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C52923"
+        },
+        "sha256": "eee6c1e20d025daf783f274e1461f6213d51523c722b1dfae4f283f8c17a39c0",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C5671",
+      "mpn": "GZ2012D121TF",
+      "package": "0805",
+      "refs": [
+        "FB1"
+      ],
+      "per_board": 1,
+      "classification": "Extended",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 52704,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 52704,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:39Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C5671"
+        },
+        "sha256": "141e93cf53dfe8dbaf56c5e6a3aa88dc297b9abfab4c2092cd097f70f7626dc7",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    {
+      "code": "C92589",
+      "mpn": "K2-1808SN-A4SW-01",
+      "package": "SMD,4.2x3.3mm",
+      "refs": [
+        "SW1",
+        "SW2",
+        "SW4"
+      ],
+      "per_board": 3,
+      "classification": "Extended",
+      "componentProductType": 0,
+      "economy_eligible": true,
+      "stock": 19280,
+      "stock_suffices_one_board": true,
+      "max_boards_stock_only_no_attrition": 6426,
+      "supply_failures": [],
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:08:41Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 20,
+          "keyword": "C92589"
+        },
+        "sha256": "cf840daf42d082e1a4b7d925b65d37af63a90f8c2b927db5c14e39516dcbbc83",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    }
+  ],
+  "full_audit_pass": false,
+  "order_ready": false,
+  "remaining_order_gates": [
+    "circuit/ERC/DRC/netlist/waiver and zone-refill signoff",
+    "board-level current Economy options and process restrictions",
+    "matched production source/file hashes and all-copper Gerber review",
+    "live stock/attrition/minimum-quantity recheck",
+    "manual authenticated JLCPCB part/placement preview and order acceptance"
+  ]
+}

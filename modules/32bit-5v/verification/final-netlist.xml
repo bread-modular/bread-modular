@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <export version="E">
   <design>
-    <source>/home/azero/.okbrain/workspaces/bread-modular-kicad/279/modules/32bit-5v/32bit-5v.kicad_sch</source>
-    <date>2026-10-02T13:38:27</date>
+    <source>/tmp/32bit-sourcing-proof-dm18xhgn/32bit-5v/32bit-5v.kicad_sch</source>
+    <date>2026-10-05T11:37:52</date>
     <tool>Eeschema 10.0.6-10.0.6~ubuntu26.04.1</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
@@ -27,13 +27,36 @@
     <comp ref="C1">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
@@ -52,13 +75,36 @@
     <comp ref="C2">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do</datasheet>
       <description>Unpolarized capacitor</description>
       <fields>
+        <field name="LCSC">C19702</field>
+        <field name="MPN">CL10A106KP8NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">10V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0603_1608Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do</field>
         <field name="Description">Unpolarized capacitor</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C19702"/>
+      <property name="MPN" value="CL10A106KP8NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="10V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
@@ -77,13 +123,36 @@
     <comp ref="C3">
       <value>1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05A105KA5NQN.do</datasheet>
       <description>Unpolarized capacitor</description>
       <fields>
+        <field name="LCSC">C52923</field>
+        <field name="MPN">CL05A105KA5NQNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">25V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05A105KA5NQN.do</field>
         <field name="Description">Unpolarized capacitor</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C52923"/>
+      <property name="MPN" value="CL05A105KA5NQNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="25V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
@@ -102,13 +171,36 @@
     <comp ref="C4">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
@@ -127,13 +219,36 @@
     <comp ref="C5">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C15525</field>
+        <field name="MPN">CL05A106MQ5NUNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±20%</field>
+        <field name="Voltage Rating">6.3V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15525"/>
+      <property name="MPN" value="CL05A106MQ5NUNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±20%"/>
+      <property name="Voltage Rating" value="6.3V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -152,13 +267,36 @@
     <comp ref="C6">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
@@ -177,13 +315,36 @@
     <comp ref="C7">
       <value>100uf</value>
       <footprint>Capacitor_SMD:C_1206_3216Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL31A107MQHNNN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C15008</field>
+        <field name="MPN">CL31A107MQHNNNE</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±20%</field>
+        <field name="Voltage Rating">6.3V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_1206_3216Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL31A107MQHNNN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15008"/>
+      <property name="MPN" value="CL31A107MQHNNNE"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±20%"/>
+      <property name="Voltage Rating" value="6.3V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -202,13 +363,36 @@
     <comp ref="C8">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do</datasheet>
       <description>Unpolarized capacitor</description>
       <fields>
+        <field name="LCSC">C19702</field>
+        <field name="MPN">CL10A106KP8NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">10V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0603_1608Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do</field>
         <field name="Description">Unpolarized capacitor</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C19702"/>
+      <property name="MPN" value="CL10A106KP8NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="10V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
@@ -227,13 +411,36 @@
     <comp ref="C20">
       <value>10nf</value>
       <footprint>Capacitor_SMD:C_0805_2012Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL21B103KBANNN.do</datasheet>
       <description>Unpolarized capacitor</description>
       <fields>
+        <field name="LCSC">C1710</field>
+        <field name="MPN">CL21B103KBANNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0805_2012Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL21B103KBANNN.do</field>
         <field name="Description">Unpolarized capacitor</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C1710"/>
+      <property name="MPN" value="CL21B103KBANNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
@@ -252,13 +459,36 @@
     <comp ref="C21">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -277,13 +507,36 @@
     <comp ref="C22">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -302,13 +555,36 @@
     <comp ref="C26">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -327,13 +603,36 @@
     <comp ref="C27">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C15525</field>
+        <field name="MPN">CL05A106MQ5NUNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±20%</field>
+        <field name="Voltage Rating">6.3V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15525"/>
+      <property name="MPN" value="CL05A106MQ5NUNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±20%"/>
+      <property name="Voltage Rating" value="6.3V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -352,13 +651,36 @@
     <comp ref="C33">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C15525</field>
+        <field name="MPN">CL05A106MQ5NUNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±20%</field>
+        <field name="Voltage Rating">6.3V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15525"/>
+      <property name="MPN" value="CL05A106MQ5NUNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±20%"/>
+      <property name="Voltage Rating" value="6.3V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -377,13 +699,36 @@
     <comp ref="C34">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -402,13 +747,36 @@
     <comp ref="C35">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C15525</field>
+        <field name="MPN">CL05A106MQ5NUNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±20%</field>
+        <field name="Voltage Rating">6.3V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15525"/>
+      <property name="MPN" value="CL05A106MQ5NUNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±20%"/>
+      <property name="Voltage Rating" value="6.3V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -427,13 +795,36 @@
     <comp ref="C36">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -452,13 +843,36 @@
     <comp ref="C37">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C15525</field>
+        <field name="MPN">CL05A106MQ5NUNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±20%</field>
+        <field name="Voltage Rating">6.3V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15525"/>
+      <property name="MPN" value="CL05A106MQ5NUNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±20%"/>
+      <property name="Voltage Rating" value="6.3V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -477,13 +891,36 @@
     <comp ref="C38">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C15525</field>
+        <field name="MPN">CL05A106MQ5NUNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±20%</field>
+        <field name="Voltage Rating">6.3V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05A106MQ5NUN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15525"/>
+      <property name="MPN" value="CL05A106MQ5NUNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±20%"/>
+      <property name="Voltage Rating" value="6.3V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -502,13 +939,36 @@
     <comp ref="C39">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>Unpolarized capacitor, small symbol</description>
       <fields>
+        <field name="LCSC">C1525</field>
+        <field name="MPN">CL05B104KO5NNNC</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">Unpolarized capacitor, small symbol</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="MPN" value="CL05B104KO5NNNC"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="capacitor cap"/>
@@ -527,17 +987,33 @@
     <comp ref="C40">
       <value>10uf</value>
       <footprint>Capacitor_SMD:C_0805_2012Metric</footprint>
-      <datasheet>https://www.lcsc.com/product-detail/C15850.html</datasheet>
+      <datasheet>https://product.samsungsem.com/mlcc/CL21A106KAYNNN.do</datasheet>
       <description>10uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO input bulk (needs &gt;=1uF; kept larger than base C2 1uF because the 5V arrives from the slot socket with no upstream bulk)</description>
       <fields>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">25V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="LCSC">C15850</field>
         <field name="MPN">CL21A106KAYNNNE</field>
         <field name="Manufacturer">Samsung Electro-Mechanics</field>
         <field name="Footprint">Capacitor_SMD:C_0805_2012Metric</field>
-        <field name="Datasheet">https://www.lcsc.com/product-detail/C15850.html</field>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL21A106KAYNNN.do</field>
         <field name="Description">10uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO input bulk (needs &gt;=1uF; kept larger than base C2 1uF because the 5V arrives from the slot socket with no upstream bulk)</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="25V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="LCSC" value="C15850"/>
       <property name="MPN" value="CL21A106KAYNNNE"/>
       <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
@@ -559,17 +1035,33 @@
     <comp ref="C41">
       <value>22uf</value>
       <footprint>Capacitor_SMD:C_0805_2012Metric</footprint>
-      <datasheet>https://www.lcsc.com/product-detail/C45783.html</datasheet>
+      <datasheet>https://product.samsungsem.com/mlcc/CL21A226MAQNNN.do</datasheet>
       <description>22uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO output bulk (needs &gt;=1uF; kept larger than base C4 4.7uF for the ESP32 + ES8388 load)</description>
       <fields>
+        <field name="Tolerance">±20%</field>
+        <field name="Voltage Rating">25V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X5R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +85 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="LCSC">C45783</field>
         <field name="MPN">CL21A226MAQNNNE</field>
         <field name="Manufacturer">Samsung Electro-Mechanics</field>
         <field name="Footprint">Capacitor_SMD:C_0805_2012Metric</field>
-        <field name="Datasheet">https://www.lcsc.com/product-detail/C45783.html</field>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL21A226MAQNNN.do</field>
         <field name="Description">22uF 25V X5R 0805 MLCC - AP2112K-3.3 LDO output bulk (needs &gt;=1uF; kept larger than base C4 4.7uF for the ESP32 + ES8388 load)</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Tolerance" value="±20%"/>
+      <property name="Voltage Rating" value="25V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X5R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +85 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="LCSC" value="C45783"/>
       <property name="MPN" value="CL21A226MAQNNNE"/>
       <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
@@ -591,20 +1083,36 @@
     <comp ref="C42">
       <value>0.1uf</value>
       <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
-      <datasheet>https://www.lcsc.com/product-detail/C1525.html</datasheet>
+      <datasheet>https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</datasheet>
       <description>0.1uF 16V X7R 0402 MLCC - LDO input HF decoupling (same part as base C1/C21)</description>
       <fields>
+        <field name="Tolerance">±10%</field>
+        <field name="Voltage Rating">16V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Dielectric">X7R</field>
+        <field name="Polarity">Nonpolar</field>
+        <field name="Temperature Rating">-55 to +125 C</field>
+        <field name="Effective Capacitance">UNVERIFIED at operating DC bias/temperature; not nominal capacitance</field>
+        <field name="ESR">UNVERIFIED at application frequency/temperature</field>
         <field name="LCSC">C1525</field>
         <field name="MPN">CL05B104KO5NNNC</field>
-        <field name="Manufacturer">Samsung</field>
+        <field name="Manufacturer">Samsung Electro-Mechanics</field>
         <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
-        <field name="Datasheet">https://www.lcsc.com/product-detail/C1525.html</field>
+        <field name="Datasheet">https://product.samsungsem.com/mlcc/CL05B104KO5NNN.do</field>
         <field name="Description">0.1uF 16V X7R 0402 MLCC - LDO input HF decoupling (same part as base C1/C21)</field>
       </fields>
       <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Tolerance" value="±10%"/>
+      <property name="Voltage Rating" value="16V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Dielectric" value="X7R"/>
+      <property name="Polarity" value="Nonpolar"/>
+      <property name="Temperature Rating" value="-55 to +125 C"/>
+      <property name="Effective Capacitance" value="UNVERIFIED at operating DC bias/temperature; not nominal capacitance"/>
+      <property name="ESR" value="UNVERIFIED at application frequency/temperature"/>
       <property name="LCSC" value="C1525"/>
       <property name="MPN" value="CL05B104KO5NNNC"/>
-      <property name="Manufacturer" value="Samsung"/>
+      <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
@@ -650,11 +1158,17 @@
       <footprint>Capacitor_SMD:C_0805_2012Metric</footprint>
       <description>Ferrite bead, small symbol</description>
       <fields>
+        <field name="LCSC">C5671</field>
+        <field name="MPN">GZ2012D121TF</field>
+        <field name="Manufacturer">Sunlord</field>
         <field name="Footprint">Capacitor_SMD:C_0805_2012Metric</field>
         <field name="Datasheet"/>
         <field name="Description">Ferrite bead, small symbol</field>
       </fields>
       <libsource lib="Device" part="FerriteBead_Small" description="Ferrite bead, small symbol"/>
+      <property name="LCSC" value="C5671"/>
+      <property name="MPN" value="GZ2012D121TF"/>
+      <property name="Manufacturer" value="Sunlord"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="L ferrite bead inductor filter"/>
@@ -732,11 +1246,17 @@
       <datasheet>https://www.usb.org/sites/default/files/documents/usb_type-c.zip</datasheet>
       <description>USB 2.0-only 14P Type-C Receptacle connector</description>
       <fields>
+        <field name="LCSC">C165948</field>
+        <field name="MPN">TYPE-C-31-M-12</field>
+        <field name="Manufacturer">Korean Hroparts Elec</field>
         <field name="Footprint">Module32:HRO-TYPE-C-31-M-12</field>
         <field name="Datasheet">https://www.usb.org/sites/default/files/documents/usb_type-c.zip</field>
         <field name="Description">USB 2.0-only 14P Type-C Receptacle connector</field>
       </fields>
       <libsource lib="Module32" part="HRO_TYPE_C_31_M_12" description="USB 2.0-only 14P Type-C Receptacle connector"/>
+      <property name="LCSC" value="C165948"/>
+      <property name="MPN" value="TYPE-C-31-M-12"/>
+      <property name="Manufacturer" value="Korean Hroparts Elec"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="usb universal serial bus type-C USB2.0"/>
@@ -792,13 +1312,32 @@
     <comp ref="R1">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor</description>
       <fields>
+        <field name="LCSC">C11702</field>
+        <field name="MPN">0402WGF1001TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor</field>
       </fields>
       <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C11702"/>
+      <property name="MPN" value="0402WGF1001TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
@@ -817,13 +1356,32 @@
     <comp ref="R2">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor</description>
       <fields>
+        <field name="LCSC">C11702</field>
+        <field name="MPN">0402WGF1001TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor</field>
       </fields>
       <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C11702"/>
+      <property name="MPN" value="0402WGF1001TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
@@ -842,13 +1400,32 @@
     <comp ref="R3">
       <value>10k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor</description>
       <fields>
+        <field name="LCSC">C25744</field>
+        <field name="MPN">0402WGF1002TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor</field>
       </fields>
       <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C25744"/>
+      <property name="MPN" value="0402WGF1002TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
@@ -867,13 +1444,32 @@
     <comp ref="R4">
       <value>5.1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor</description>
       <fields>
+        <field name="LCSC">C23186</field>
+        <field name="MPN">0603WAF5101T5E</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">75V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.1W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0603_1608Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor</field>
       </fields>
       <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C23186"/>
+      <property name="MPN" value="0603WAF5101T5E"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="75V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.1W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
@@ -892,13 +1488,32 @@
     <comp ref="R5">
       <value>1.5k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25867</field>
+        <field name="MPN">0402WGF1501TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25867"/>
+      <property name="MPN" value="0402WGF1501TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -917,13 +1532,32 @@
     <comp ref="R6">
       <value>1.5k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25867</field>
+        <field name="MPN">0402WGF1501TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25867"/>
+      <property name="MPN" value="0402WGF1501TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -942,13 +1576,32 @@
     <comp ref="R7">
       <value>33</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25105</field>
+        <field name="MPN">0402WGF330JTCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; pulse/load qualification HOLD</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25105"/>
+      <property name="MPN" value="0402WGF330JTCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; pulse/load qualification HOLD"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -967,13 +1620,32 @@
     <comp ref="R8">
       <value>33</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25105</field>
+        <field name="MPN">0402WGF330JTCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; pulse/load qualification HOLD</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25105"/>
+      <property name="MPN" value="0402WGF330JTCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; pulse/load qualification HOLD"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -992,12 +1664,31 @@
     <comp ref="R9">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <fields>
+        <field name="LCSC">C11702</field>
+        <field name="MPN">0402WGF1001TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description"/>
       </fields>
       <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C11702"/>
+      <property name="MPN" value="0402WGF1001TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
@@ -1016,13 +1707,32 @@
     <comp ref="R10">
       <value>100k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor</description>
       <fields>
+        <field name="LCSC">C25741</field>
+        <field name="MPN">0402WGF1003TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor</field>
       </fields>
       <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C25741"/>
+      <property name="MPN" value="0402WGF1003TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
@@ -1041,13 +1751,32 @@
     <comp ref="R11">
       <value>5.1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor</description>
       <fields>
+        <field name="LCSC">C23186</field>
+        <field name="MPN">0603WAF5101T5E</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">75V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.1W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0603_1608Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor</field>
       </fields>
       <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C23186"/>
+      <property name="MPN" value="0603WAF5101T5E"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="75V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.1W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
@@ -1066,13 +1795,32 @@
     <comp ref="R12">
       <value>100k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor</description>
       <fields>
+        <field name="LCSC">C25741</field>
+        <field name="MPN">0402WGF1003TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor</field>
       </fields>
       <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C25741"/>
+      <property name="MPN" value="0402WGF1003TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
@@ -1091,13 +1839,32 @@
     <comp ref="R13">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C11702</field>
+        <field name="MPN">0402WGF1001TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C11702"/>
+      <property name="MPN" value="0402WGF1001TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1116,13 +1883,32 @@
     <comp ref="R14">
       <value>33</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25105</field>
+        <field name="MPN">0402WGF330JTCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; pulse/load qualification HOLD</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25105"/>
+      <property name="MPN" value="0402WGF330JTCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; pulse/load qualification HOLD"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1141,13 +1927,32 @@
     <comp ref="R15">
       <value>10</value>
       <footprint>Resistor_SMD:R_0603_1608Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C22859</field>
+        <field name="MPN">0603WAF100JT5E</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">75V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.1W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; pulse/load qualification HOLD</field>
         <field name="Footprint">Resistor_SMD:R_0603_1608Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C22859"/>
+      <property name="MPN" value="0603WAF100JT5E"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="75V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.1W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; pulse/load qualification HOLD"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1166,13 +1971,32 @@
     <comp ref="R16">
       <value>100k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25741</field>
+        <field name="MPN">0402WGF1003TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25741"/>
+      <property name="MPN" value="0402WGF1003TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1191,13 +2015,32 @@
     <comp ref="R17">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C11702</field>
+        <field name="MPN">0402WGF1001TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C11702"/>
+      <property name="MPN" value="0402WGF1001TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1216,13 +2059,32 @@
     <comp ref="R18">
       <value>33</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25105</field>
+        <field name="MPN">0402WGF330JTCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; pulse/load qualification HOLD</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25105"/>
+      <property name="MPN" value="0402WGF330JTCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; pulse/load qualification HOLD"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1241,13 +2103,32 @@
     <comp ref="R19">
       <value>100k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25741</field>
+        <field name="MPN">0402WGF1003TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25741"/>
+      <property name="MPN" value="0402WGF1003TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1266,13 +2147,32 @@
     <comp ref="R24">
       <value>4.7k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25900</field>
+        <field name="MPN">0402WGF4701TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25900"/>
+      <property name="MPN" value="0402WGF4701TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1291,13 +2191,32 @@
     <comp ref="R25">
       <value>4.7k</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25900</field>
+        <field name="MPN">0402WGF4701TCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; intended rail/signal envelope only</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25900"/>
+      <property name="MPN" value="0402WGF4701TCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; intended rail/signal envelope only"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1316,13 +2235,32 @@
     <comp ref="R26">
       <value>33</value>
       <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <datasheet>https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</datasheet>
       <description>Resistor, small symbol</description>
       <fields>
+        <field name="LCSC">C25105</field>
+        <field name="MPN">0402WGF330JTCE</field>
+        <field name="Manufacturer">UNI-ROYAL(Uniroyal Elec)</field>
+        <field name="Tolerance">±1%</field>
+        <field name="Voltage Rating">50V</field>
+        <field name="Sourcing Review">HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md</field>
+        <field name="Power Rating">0.0625W at &lt;=70 C; derate above 70 C</field>
+        <field name="Temperature Rating">-55 to +155 C</field>
+        <field name="Power Derating">50% continuous at &lt;=70 C; pulse/load qualification HOLD</field>
         <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
-        <field name="Datasheet"/>
+        <field name="Datasheet">https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf</field>
         <field name="Description">Resistor, small symbol</field>
       </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="LCSC" value="C25105"/>
+      <property name="MPN" value="0402WGF330JTCE"/>
+      <property name="Manufacturer" value="UNI-ROYAL(Uniroyal Elec)"/>
+      <property name="Tolerance" value="±1%"/>
+      <property name="Voltage Rating" value="50V"/>
+      <property name="Sourcing Review" value="HOLD - exact Basic catalog binding; application/rating signoff in verification/basic-economy/README.md"/>
+      <property name="Power Rating" value="0.0625W at &lt;=70 C; derate above 70 C"/>
+      <property name="Temperature Rating" value="-55 to +155 C"/>
+      <property name="Power Derating" value="50% continuous at &lt;=70 C; pulse/load qualification HOLD"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="R resistor"/>
@@ -1415,12 +2353,18 @@
       <footprint>BreadModular_MISC:K2-1808SN-A4SW-01</footprint>
       <description>Single Pole Single Throw (SPST) switch</description>
       <fields>
+        <field name="LCSC">C92589</field>
+        <field name="MPN">K2-1808SN-A4SW-01</field>
+        <field name="Manufacturer">Korean Hroparts Elec</field>
         <field name="Comment">BOOT</field>
         <field name="Footprint">BreadModular_MISC:K2-1808SN-A4SW-01</field>
         <field name="Datasheet"/>
         <field name="Description">Single Pole Single Throw (SPST) switch</field>
       </fields>
       <libsource lib="Switch" part="SW_SPST" description="Single Pole Single Throw (SPST) switch"/>
+      <property name="LCSC" value="C92589"/>
+      <property name="MPN" value="K2-1808SN-A4SW-01"/>
+      <property name="Manufacturer" value="Korean Hroparts Elec"/>
       <property name="Comment" value="BOOT"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
@@ -1441,12 +2385,18 @@
       <footprint>BreadModular_MISC:K2-1808SN-A4SW-01</footprint>
       <description>Single Pole Single Throw (SPST) switch</description>
       <fields>
+        <field name="LCSC">C92589</field>
+        <field name="MPN">K2-1808SN-A4SW-01</field>
+        <field name="Manufacturer">Korean Hroparts Elec</field>
         <field name="Comment">RESET</field>
         <field name="Footprint">BreadModular_MISC:K2-1808SN-A4SW-01</field>
         <field name="Datasheet"/>
         <field name="Description">Single Pole Single Throw (SPST) switch</field>
       </fields>
       <libsource lib="Switch" part="SW_SPST" description="Single Pole Single Throw (SPST) switch"/>
+      <property name="LCSC" value="C92589"/>
+      <property name="MPN" value="K2-1808SN-A4SW-01"/>
+      <property name="Manufacturer" value="Korean Hroparts Elec"/>
       <property name="Comment" value="RESET"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
@@ -1467,12 +2417,18 @@
       <footprint>BreadModular_MISC:K2-1808SN-A4SW-01</footprint>
       <description>Single Pole Single Throw (SPST) switch</description>
       <fields>
+        <field name="LCSC">C92589</field>
+        <field name="MPN">K2-1808SN-A4SW-01</field>
+        <field name="Manufacturer">Korean Hroparts Elec</field>
         <field name="Comment">MODE_BUTTON</field>
         <field name="Footprint">BreadModular_MISC:K2-1808SN-A4SW-01</field>
         <field name="Datasheet"/>
         <field name="Description">Single Pole Single Throw (SPST) switch</field>
       </fields>
       <libsource lib="Switch" part="SW_SPST" description="Single Pole Single Throw (SPST) switch"/>
+      <property name="LCSC" value="C92589"/>
+      <property name="MPN" value="K2-1808SN-A4SW-01"/>
+      <property name="Manufacturer" value="Korean Hroparts Elec"/>
       <property name="Comment" value="MODE_BUTTON"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
@@ -1494,11 +2450,19 @@
       <datasheet>https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf</datasheet>
       <description>RF Module, ESP32-S3 SoC, Wi-Fi 802.11b/g/n, Bluetooth, BLE, 32-bit, 3.3V, onboard antenna, SMD</description>
       <fields>
+        <field name="LCSC">C3013946</field>
+        <field name="MPN">ESP32-S3-WROOM-1U-N16R8</field>
+        <field name="Manufacturer">Espressif Systems</field>
+        <field name="Sourcing Review">HOLD - C3013946 Standard-only componentProductType=2; exact MCU retained as JLC-assembled pending user choice</field>
         <field name="Footprint">RF_Module:ESP32-S3-WROOM-1U</field>
         <field name="Datasheet">https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf</field>
         <field name="Description">RF Module, ESP32-S3 SoC, Wi-Fi 802.11b/g/n, Bluetooth, BLE, 32-bit, 3.3V, onboard antenna, SMD</field>
       </fields>
       <libsource lib="RF_Module" part="ESP32-S3-WROOM-1" description="RF Module, ESP32-S3 SoC, Wi-Fi 802.11b/g/n, Bluetooth, BLE, 32-bit, 3.3V, onboard antenna, SMD"/>
+      <property name="LCSC" value="C3013946"/>
+      <property name="MPN" value="ESP32-S3-WROOM-1U-N16R8"/>
+      <property name="Manufacturer" value="Espressif Systems"/>
+      <property name="Sourcing Review" value="HOLD - C3013946 Standard-only componentProductType=2; exact MCU retained as JLC-assembled pending user choice"/>
       <property name="Sheetname" value="32bit-5v"/>
       <property name="Sheetfile" value="32bit-5v.kicad_sch"/>
       <property name="ki_keywords" value="RF Radio BT ESP ESP32-S3 Espressif onboard PCB antenna"/>
@@ -1559,6 +2523,9 @@
       <datasheet>http://ww1.microchip.com/downloads/en/DeviceDoc/21733j.pdf</datasheet>
       <description>1MHz, Low-Power Op Amp, SOIC-8</description>
       <fields>
+        <field name="LCSC">C116706</field>
+        <field name="MPN">MCP6002-I/SN</field>
+        <field name="Manufacturer">Microchip Tech</field>
         <field name="Sim.Library">${KICAD8_SYMBOL_DIR}/Simulation_SPICE.sp</field>
         <field name="Sim.Name">kicad_builtin_opamp_dual</field>
         <field name="Sim.Device">SUBCKT</field>
@@ -1568,6 +2535,9 @@
         <field name="Description">1MHz, Low-Power Op Amp, SOIC-8</field>
       </fields>
       <libsource lib="Amplifier_Operational" part="MCP6002-xSN" description="1MHz, Low-Power Op Amp, SOIC-8"/>
+      <property name="LCSC" value="C116706"/>
+      <property name="MPN" value="MCP6002-I/SN"/>
+      <property name="Manufacturer" value="Microchip Tech"/>
       <property name="Sim.Library" value="${KICAD8_SYMBOL_DIR}/Simulation_SPICE.sp"/>
       <property name="Sim.Name" value="kicad_builtin_opamp_dual"/>
       <property name="Sim.Device" value="SUBCKT"/>
@@ -1607,6 +2577,7 @@
       <datasheet>https://www.lcsc.com/datasheet/lcsc_datasheet_2410121449_Everest-semi-Everest-Semiconductor-ES8388_C365736.pdf</datasheet>
       <description>ES8388 low-power stereo audio CODEC with headphone amplifier; QFN-28; existing exposed-pad/thermal-via footprint retained</description>
       <fields>
+        <field name="LCSC">C365736</field>
         <field name="MPN">ES8388</field>
         <field name="Manufacturer">Everest Semiconductor</field>
         <field name="Footprint">Module32:ES8388_QFN28_4x4_P0.45_EP2.6_ThermalVias</field>
@@ -1614,6 +2585,7 @@
         <field name="Description">ES8388 low-power stereo audio CODEC with headphone amplifier; QFN-28; existing exposed-pad/thermal-via footprint retained</field>
       </fields>
       <libsource lib="Module32" part="ES8388" description="ES8388 low-power stereo audio CODEC with headphone amplifier; QFN-28; existing exposed-pad/thermal-via footprint retained"/>
+      <property name="LCSC" value="C365736"/>
       <property name="MPN" value="ES8388"/>
       <property name="Manufacturer" value="Everest Semiconductor"/>
       <property name="Sheetname" value="32bit-5v"/>
