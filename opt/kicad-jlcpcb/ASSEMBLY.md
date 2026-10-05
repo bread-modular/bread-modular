@@ -214,7 +214,11 @@ Fields observed: `componentCode`, `componentModelEn`,
 `componentSpecificationEn`, `componentLibraryType`, `preferredComponentFlag`,
 `stockCount`, `componentProductType`, and `attributes` entries
 `attribute_name_en` / `attribute_value_name`. Native attributes supply passive
-value/tolerance/power/voltage when explicitly available.
+value/tolerance/power/voltage when explicitly available. Capacitor voltage accepts
+exact `Voltage - Rated` and `Voltage Rating` keys; all present aliases must parse
+to the same voltage. Conflicts reject the record; an unparseable alias withholds
+voltage and adds a blocking issue. Missing voltage stays unknown, never inferred
+from MPN/description; the resistor rating keys remain unchanged.
 
 Frontend schema observed at **2026-10-05T04:51:32.467955Z**:
 `https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js`
