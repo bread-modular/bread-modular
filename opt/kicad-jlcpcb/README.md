@@ -46,6 +46,44 @@ python3 opt/kicad-jlcpcb/export.py modules/line_in --overwrite
 
 All KiCad export commands use private copies of circuit/project files in a fresh temporary directory before the four result files are published. This prevents CLI-created or rewritten `.kicad_prl` / project cache files in the source checkout. Project-local footprint libraries are resolved through read-only symlinks; original circuit sources and native exclusion flags are not rewritten. `--overwrite` replaces only those four filenames, not unrelated files in the output directory. Each replacement is atomic, but publishing the entire set is not a filesystem transaction; do not run concurrent exports to the same directory.
 
+## Repository production files (`add_production_files.py`)
+
+`add_production_files.py` is the convenience wrapper for “give this module its production files”. It runs the exporter above and then places the results where the repository expects them, for **any current or future module**:
+
+```sh
+python3 opt/kicad-jlcpcb/add_production_files.py modules/base   # module directory
+python3 opt/kicad-jlcpcb/add_production_files.py base           # module name under modules/
+python3 opt/kicad-jlcpcb/add_production_files.py --all          # every module that has a board
+```
+
+For each board it:
+
+1. exports `<module>/jlcpcb/<board>/` (`<board>-gerbers.zip`, `bom.csv`, `positions.csv`, `export-report.json`),
+2. copies the archive byte-identically to `<module>/jlcpcb/production_files/GERBER-<board>.zip` (the JLCPCB upload convention),
+3. unpacks the Gerber/drill members into `<module>/jlcpcb/gerber/` and prunes board-prefixed `.gbr`/`.drl` files that are no longer in the archive,
+4. verifies every mirror against the archive and prints counts, sizes and SHA-256 prefixes.
+
+Nothing else is written: sources, `verification/`, `project.db` and any `production/` release payload (hash-frozen, produced by a module's own guarded release tooling) are left alone.
+
+Useful flags:
+
+```sh
+# see the plan without writing anything
+python3 opt/kicad-jlcpcb/add_production_files.py --all --dry-run
+# ZIP + CSVs only, skip the production_files/ and gerber/ mirrors
+python3 opt/kicad-jlcpcb/add_production_files.py base --no-loose-gerbers
+# keep superseded Gerber files instead of pruning them
+python3 opt/kicad-jlcpcb/add_production_files.py base --keep-stale-gerbers
+# write the whole jlcpcb/ tree elsewhere (staging, tests)
+python3 opt/kicad-jlcpcb/add_production_files.py base --jlcpcb-root /tmp/staging
+# every board in a multi-board directory
+python3 opt/kicad-jlcpcb/add_production_files.py modules/panel --all-boards
+```
+
+Module directories with no `.kicad_pcb` are skipped (not failed) by `--all`; a directory holding several boards needs `--board NAME` or `--all-boards`. Part numbers are required by default (`--allow-missing-part-numbers` relaxes that).
+
+**Gerber archives are not byte-reproducible.** Each plot stamps `TF.CreationDate` into every Gerber/drill file, so re-exporting an unchanged board still changes the ZIP hash; `bom.csv` and `positions.csv` are byte-stable. Compare members, counts and the report's `source_sha256` instead of the archive hash when deciding whether a re-export changed anything.
+
 ## Add part numbers using built-in KiCad features
 
 You do **not** need a fabrication plugin or a custom symbol library.

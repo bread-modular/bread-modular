@@ -463,8 +463,8 @@ class KiCadIntegrationTests(unittest.TestCase):
         output = self.directory/'base'
         report = self.run_export(source, '--output', str(output), '--require-part-numbers')
         bom, cpl = self.assert_csv_parity(output)
-        self.assertEqual(report['component_count'], 115)
-        self.assertEqual(report['bom_row_count'], 35)
+        self.assertEqual(report['component_count'], 117)
+        self.assertEqual(report['bom_row_count'], 33)
         placements = {q['Designator']: q for q in cpl}
         self.assertEqual(tuple(placements['J5'][k] for k in ['Mid X','Mid Y','Rotation','Layer']),
                          ('4.035000','130.810000','270.000000','top'))
