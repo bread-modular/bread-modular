@@ -1,5 +1,5 @@
 {
-  "status": "matched_HOLD_snapshot_verified",
+  "status": "matched_Standard_package_verified",
   "order_ready": false,
   "physical_refs": 61,
   "assembly_refs": 55,
@@ -20,11 +20,16 @@
   "zip_members": 13,
   "catalog_codes": 23,
   "R_C_Basic_Economy_refs": 45,
-  "quantity_basis_boards": 1,
+  "historical_catalog_quantity_basis_boards": 1,
+  "requested_order_quantity": null,
+  "generation_is_quantity_independent": true,
   "geometry_and_CPL_unchanged_from_routed_baseline": true,
-  "manifest_source_count": 28,
-  "manifest_output_count_excluding_this_proof": 221,
-  "strict_audit_pass": false,
-  "MCU_Standard_only_HOLD": true,
-  "D1_code_unknown_HOLD": true
+  "manifest_source_count": 32,
+  "manifest_output_count_excluding_this_proof": 222,
+  "historical_strict_audit_pass": false,
+  "selected_assembly_service": "STANDARD",
+  "mcu_service_status": "ACCEPTED FOR SELECTED SERVICE",
+  "existing_engineering_user_accepted_not_newly_qualified": true,
+  "D1_upload_matching_required": true,
+  "supplier_queries": 0
 }

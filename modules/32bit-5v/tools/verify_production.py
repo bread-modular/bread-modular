@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Independent read/check of this HOLD production snapshot. No export/catalog I/O."""
+"""Independent current-source Standard package check. No export/catalog I/O."""
 from collections import Counter
 from pathlib import Path
 import hashlib
@@ -21,7 +21,9 @@ def sha(path):
 
 def verify():
     manifest = json.loads((BASE / 'production/manifest.json').read_text())
-    assert manifest['release_status'] == 'HOLD' and manifest['order_ready'] is False
+    assert manifest['release_status'] == 'FILES_GENERATED_NOT_ORDER_ACCEPTED' and manifest['order_ready'] is False
+    assert manifest['selected_assembly_service'] == 'STANDARD'
+    assert manifest['mcu_service_status'] == 'ACCEPTED FOR SELECTED SERVICE'
     for name, digest in manifest['source_sha256'].items():
         assert sha(BASE / name) == digest, ('source hash', name)
     for name, digest in manifest['outputs_sha256'].items():
@@ -83,8 +85,21 @@ def verify():
     assert not audit['catalog_and_requirements_pass'] and not audit['order_ready']
     assert len(audit['components']) == 55 and set(audit['manual']) == manual
     assert 'U1' not in audit['excluded'] and 'U1' not in audit['manual']
-    for name, digest in audit['input_sha256'].items():
-        assert sha(BASE / name) == digest, ('actual audit input', name)
+    # Original audit/summary are retained historical Economy evidence, not a fresh
+    # selected-service audit. Current production binding comes from package-review.
+    assert 'historical Economy' in manifest['conservative_audit_scope']
+    package = json.loads((BASE / manifest['package_review']).read_text())
+    assert package['status'] == 'FILES_GENERATED_NOT_ORDER_ACCEPTED' and not package['order_ready']
+    assert package['selected_assembly_service'] == 'STANDARD'
+    assert package['mcu_service_status'] == 'ACCEPTED FOR SELECTED SERVICE'
+    assert package['existing_engineering_user_accepted'] and package['supplier_requests'] == 0
+    assert package['missing_assembly_supplier_codes'] == ['D1']
+    assert package['manual'] == audit['manual'] and package['excluded'] == audit['excluded']
+    for name, digest in package['input_sha256'].items():
+        assert sha(BASE / name) == digest, ('actual package input', name)
+    assert package['quantity_basis']['requested_order_quantity'] is None
+    assert package['remaining_order_gates'] == manifest['remaining_order_gates']
+    assert manifest['unresolved_gates'] == []
     summary = json.loads((EVIDENCE / 'catalog/final-live-summary.json').read_text())
     assert summary['catalog_only_basic_economy_rc_pass']
     assert summary['rc_refs'] == 45 and summary['rc_codes'] == 16
@@ -108,14 +123,19 @@ def verify():
     for row in summary['parts']:
         assert row['evidence']['mode'] == 'live' and row['evidence']['sha256'] in raw_hashes
     output_name = 'verification/basic-economy/production-proof.json'
-    result = {'status': 'matched_HOLD_snapshot_verified', 'order_ready': False,
+    result = {'status': 'matched_Standard_package_verified', 'order_ready': False,
               'physical_refs': 61, 'assembly_refs': 55, 'manual_refs': sorted(manual),
               'copper_layers': copper, 'zip_members': 13, 'catalog_codes': 23,
-              'R_C_Basic_Economy_refs': 45, 'quantity_basis_boards': 1,
+              'R_C_Basic_Economy_refs': 45, 'historical_catalog_quantity_basis_boards': 1,
+              'requested_order_quantity': None, 'generation_is_quantity_independent': True,
               'geometry_and_CPL_unchanged_from_routed_baseline': True,
               'manifest_source_count': len(manifest['source_sha256']),
               'manifest_output_count_excluding_this_proof': len(set(manifest['outputs_sha256']) - {output_name}),
-              'strict_audit_pass': False, 'MCU_Standard_only_HOLD': True, 'D1_code_unknown_HOLD': True}
+              'historical_strict_audit_pass': False,
+              'selected_assembly_service': 'STANDARD',
+              'mcu_service_status': 'ACCEPTED FOR SELECTED SERVICE',
+              'existing_engineering_user_accepted_not_newly_qualified': True,
+              'D1_upload_matching_required': True, 'supplier_queries': 0}
     (BASE / output_name).write_text(json.dumps(result, indent=2) + '\n')
     return result
 

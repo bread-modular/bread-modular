@@ -1,3 +1,9 @@
+> **Current package-generation authority:** [STANDARD approval and upload instructions](verification/standard-service.md).
+> The existing design (including inherited D1/capacitor/resistor application concerns)
+> is user-accepted for generating current JLCPCB files. Missing evidence is not newly
+> tested/qualified; authenticated stock/order/manufacturing acceptance is unverified.
+> Earlier HOLD/MCU-choice statements below are historical, not generation blockers.
+
 # 32bit-5v — 5V input, on-board 3.3V rail (v1.1.2 → v1.1.3, schematic-only)
 
 > **Current routed-board authority:** the committed board at `74db23e` is fully

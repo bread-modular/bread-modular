@@ -1,3 +1,9 @@
+> **Current package-generation authority:** [STANDARD approval and upload instructions](standard-service.md).
+> The existing design (including inherited D1/capacitor/resistor application concerns)
+> is user-accepted for generating current JLCPCB files. Missing evidence is not newly
+> tested/qualified; authenticated stock/order/manufacturing acceptance is unverified.
+> Earlier HOLD/MCU-choice statements below are historical, not generation blockers.
+
 # Current release-status handoff - 32bit-5v
 
 ## Scope and ownership
