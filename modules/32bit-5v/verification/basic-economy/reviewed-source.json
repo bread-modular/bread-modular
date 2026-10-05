@@ -1,8 +1,8 @@
 {
-  "release_status": "HOLD",
+  "release_status": "PACKAGE_GENERATION_APPROVED",
   "order_ready": false,
   "advisor": "OFF",
-  "review_scope": "Sol Max bounded native metadata/circuit preservation review; no application/manufacturing blanket approval",
+  "review_scope": "Current-source/native-delta + approved Standard package generation; existing engineering user-accepted, not newly qualified; order/manufacturing acceptance unverified",
   "reviewed_at_utc": "2026-10-05T06:02:55Z",
   "source_base_commit": "74db23e0aaec4286caaf95eb2c00461ab0999e3e",
   "source_branch": "32bit-5v",
@@ -24,17 +24,21 @@
     "verification/basic-economy/readonly-handoff.md": "f112d2f67de6b0b61f99c093a6fb58c0d05eeca6a8c1afdca377322d5ed52569",
     "verification/basic-economy/metadata-update.json": "cc3e2bfc53701d8a909c47f1546533f2f9fde36107d285b49066fc0eb61add11",
     "verification/basic-economy/passive-plan.json": "d15ee027286a8dbe9a3999e334efb8fa20075a47b703526393a6e336136ed136",
-    "verification/basic-economy/nonpassive-plan.json": "b7ae90bc552263cf2c41379b98af904a437d26ee578c5ec0a0acf63edf909be4",
+    "verification/basic-economy/nonpassive-plan.json": "98de97f3733640a1764f72951846fd8eef519775307bbd19a85314bbe1dbb6d2",
     "verification/basic-economy/audit-requirements.json": "9924f0965ab681b9a84335ad6dc4bef94fe6706c85bbdf0bb4de394d9192c56e",
     "verification/basic-economy/manufacturer/retrievals.json": "a63b9724878640e4497ed7ec1aaeac41e8c8973970f69cc94f086aea92e0b077",
     "verification/basic-economy/refill.json": "fdb371cb115a2ef85439a0d9caa21f633ee143c3a214d3b288d936f32e68c840",
-    "verification/basic-economy/README.md": "788072e91a666b2c09fce8b785839ed3bbca70abf85c8809523292f5ce2319c2",
-    "POWER.md": "deeaf8d9c6d4b1d097f561941e28915077b8ce2f9a2470d415003ecfff88e103",
-    "verification/README.md": "0a410f51ca178c73d2529caeb9bfba622144bf897eefa4898e79aea42552fcee",
-    "tools/regenerate_production.py": "27682efe1239f7be06aef63b2191fcfe307305a29e82f1e02aaad733dced5c8a",
+    "verification/basic-economy/README.md": "b2e235487743c4bb143a386482a014ffac7109ef1b9b5d48fdc925b53b93a42e",
+    "POWER.md": "8e81f2c8bdf72ddc6b3923f30a533d71155623362a95035533e8ce49bbdf273e",
+    "verification/README.md": "0293adcdb990fcc9e6a0122005f3f23fc767e84df4ba6a456e1d8c2d3d79bce7",
+    "tools/regenerate_production.py": "612ed94fde8d9cf3e4fe4acd4e16ac597adb3d13fb7c4830e49bdffe43e487c8",
     "tools/verify_sourcing.py": "dac94a28926b5b40e5643f731f1846bc6fda9fed9ffa2099ef1e7a79c557afbd",
-    "tools/verify_production.py": "2a59ee01cba8caac0d5d4440773085b7985991e328c6823e27c3fe5a299a95fd",
-    "tools/test_sourcing_guards.py": "12dbbfc6202468c6f5b98ecefbe8d6ceb3feed50db6cebcf5a2ddc66757437c2"
+    "tools/verify_production.py": "79da57d466c7594af942e054f1278d27b7e1d5f7c786b53c1aab63b0f1334d9b",
+    "tools/test_sourcing_guards.py": "5141569a51af47bc61b826fc53be06bd8ab2100149fd11c1cc45eba56c7f33b9",
+    "verification/standard-service-policy.json": "d58533ee23e39b512382de6c2f9fb8c757e92f4f3037b1f1c4cda7721c5dc254",
+    "verification/standard-service.md": "215c450560b3bccb4859cfaed67ff4bf61dea63b052dd29eaa6becf2c0b91b84",
+    "tools/test_standard_service_policy.py": "80cdc2dde59f95b9021926a8fa93652a1e35e7ac859afeb21c3d390f274d66a1",
+    "verification/release-handoff.md": "9252984acce7ee140ad16e6c5453bbe128d1d588f6cefc09372483683297ecf7"
   },
   "common_tools_commits": [
     "f43184a620aee47aec456241646d008fb4a65bda",
@@ -114,16 +118,41 @@
     "requested_order_quantity": null,
     "attrition_included": false
   },
-  "unresolved_gates": [
-    "U1 C3013946 / ESP32-S3-WROOM-1U-N16R8 componentProductType=2 Standard-only; exact MCU still assembled; user choice manual MCU vs Standard pending, neither authorized here.",
-    "D1 generic assembled LED: exact color/MPN/catalog code not selected; strict supplier-number export fails D1.",
-    "All capacitors: exact-MPN worst-case DC-bias/temperature/aging effective capacitance and frequency ESR/ESL; C40/C41 AP2112 1uF effective target/stability; C2 ESP32 transients; C3/C4 reset; codec VREF/VMID/ADCVREF/filter qualification; C20 shield transient envelope unresolved.",
-    "R15 codec rail startup pulse/current and worst-case load; R7/R8/R14/R18/R26 clock/data dynamic/pulse dissipation unresolved. Continuous intended signal-envelope checks are not bench or fault validation.",
-    "Code/ref/footprint-specific human land/pin/ratings/role attestations incomplete; conservative audit is a genuine fail/HOLD, not waived.",
-    "Existing 98 DRC/16 ERC warnings and ignored rules remain disclosed and unchanged, not a DRC-clean or all-checks approval.",
-    "GND1 lead protrusion/trim versus RV1/RV2 pot-case clearance; U4 via-in-pad/stencil/reflow/thermal qualification; J5 and all IC/LED pin1/polarity/placement preview; physical fit/manual parts.",
-    "PCB quote options/standard four-layer stack/finish/color/quantity/process, Gerber-view/manufacturing signoff; actual final order quantity + attrition/minimum assembly/reel/stock/service recheck; no authenticated acceptance/order."
-  ],
+  "unresolved_gates": [],
   "post_export_document_artifact_binding_at_utc": "2026-10-05T06:22:57Z",
-  "post_export_binding_note": "Only reviewed documentation/tool/test/artifact bookkeeping; native sources and live catalog snapshot unchanged. No fresh stock/approval inferred."
+  "post_export_binding_note": "Rebound only directly affected policy/docs/module guard source to explicitly user-approved full offline regeneration; no native or supplier bindings changed; no new stock or engineering qualification claimed.",
+  "selected_assembly_service": "STANDARD",
+  "mcu_service_status": "ACCEPTED FOR SELECTED SERVICE",
+  "package_generation_approval": {
+    "quote": "Just don't worry about it. It was already good. The only change here is to add a 5V to 3.3V regulator. Create the JLCPCB files.",
+    "scope": "Current 32bit-5v package generation using existing design; inherited D1/capacitor/resistor engineering concerns user-accepted, not newly tested/qualified; not supplier order acceptance",
+    "existing_engineering_user_accepted": true
+  },
+  "accepted_existing_engineering_reviews": {
+    "status": "USER_ACCEPTED_EXISTING_DESIGN_FOR_PACKAGE_GENERATION_NOT_NEWLY_QUALIFIED",
+    "items": [
+      "D1 generic assembled LED: exact color/MPN/catalog code not selected; strict supplier-number export fails D1.",
+      "All capacitors: exact-MPN worst-case DC-bias/temperature/aging effective capacitance and frequency ESR/ESL; C40/C41 AP2112 1uF effective target/stability; C2 ESP32 transients; C3/C4 reset; codec VREF/VMID/ADCVREF/filter qualification; C20 shield transient envelope unresolved.",
+      "R15 codec rail startup pulse/current and worst-case load; R7/R8/R14/R18/R26 clock/data dynamic/pulse dissipation unresolved. Continuous intended signal-envelope checks are not bench or fault validation.",
+      "Code/ref/footprint-specific human land/pin/ratings/role attestations incomplete; conservative audit is a genuine fail/HOLD, not waived."
+    ]
+  },
+  "remaining_order_gates": [
+    "D1 exact identity/code must be matched by the user/assembler during upload; original assembled row/code retained.",
+    "Actual board quantity, attrition/minimum assembly/reel requirements, fresh selected-service stock/eligibility and quote options unknown.",
+    "Assembler placement/polarity/physical fit, stencil/reflow/via-in-pad/manufacturing review and authenticated order acceptance not verified."
+  ],
+  "common_tool_sha256": {
+    "opt/kicad-jlcpcb/export.py": "06f08a6d0e1f7883efdeb00528d656044a24f0913b19f7618f788f63a9ed394b",
+    "opt/kicad-jlcpcb/add_production_files.py": "a42ba2b97de799c7663fc74cd61cf9390f8baca0fe49615bc237d73a3c58c1a2",
+    "opt/kicad-jlcpcb/assembly.py": "709a0bd2a07fe7953bf5d2241f9eec9758c8c3e6884a15e52dc6ab8ddadcda14",
+    "opt/kicad-jlcpcb/catalog.py": "38e775f261bdb5b7fd432974dc81fa8cac1595a9e15c0e721346a0d9095de12a",
+    "opt/kicad-jlcpcb/bom_audit.py": "6fa1a1f9166fb3d6478450f1e7774f34568b880d68f1476078a78ee4a280300e",
+    "opt/kicad-jlcpcb/passive_planner.py": "3e15f92f39aad5c599fd914946ea87a126e7909c0fdf5d73c25dd70509a3e568",
+    "opt/kicad-jlcpcb/ASSEMBLY.md": "f8db54cc7189c201e0f89591866db3f63d6d0bc0d5a30b448c6b16439f920015",
+    ".agents/skills/jlcpcb-assembly/SKILL.md": "32a195e9f9dd47cfddc5f8012839b7847ef4f10ad88e3cdfe9a177196d75974c",
+    ".gitignore": "43f133e8be145c051de694bbf9e764b1bb711966c87bd4db19af7bd5d8fc5091",
+    "README.md": "2552733e1bb5753f36f526313469300a7cd246b1e5250aa532ef7a740296be94"
+  },
+  "package_policy_bound_at_utc": "2026-10-05T08:42:33Z"
 }

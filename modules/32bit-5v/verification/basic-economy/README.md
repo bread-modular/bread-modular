@@ -1,4 +1,10 @@
-# 32bit-5v Basic R/C catalog binding — release HOLD
+> **Current package-generation authority:** [STANDARD approval and upload instructions](../standard-service.md).
+> The existing design (including inherited D1/capacitor/resistor application concerns)
+> is user-accepted for generating current JLCPCB files. Missing evidence is not newly
+> tested/qualified; authenticated stock/order/manufacturing acceptance is unverified.
+> Earlier HOLD/MCU-choice statements below are historical, not generation blockers.
+
+# 32bit-5v Basic R/C catalog binding — user-approved STANDARD generation
 
 ## Scope and authoritative baseline
 
@@ -148,9 +154,9 @@ and one-board stock checks; Preferred Extended never counts as Basic. Full audit
 and full-board Economy are **not** thereby passed:
 
 - U1 C3013946 is explicitly `componentProductType=2` (**Standard-only**). The exact
-  N16R8/1U MCU, circuitry and assembled BOM/CPL membership are retained. The user
-  has not chosen manual MCU installation versus Standard assembly. No silent
-  manual exclusion or MCU redesign. Complete Economy capacity is **0** as configured.
+  N16R8/1U MCU, circuitry and assembled BOM/CPL membership are retained. STANDARD is explicitly user-approved; MCU service status is ACCEPTED FOR SELECTED
+  SERVICE. No manual exclusion or MCU redesign. The archived Economy-only capacity
+  **0** applies solely to hypothetical Economy, not selected STANDARD.
 - D1 still lacks an exact MPN/code; complete stock-limited board capacity is unknown.
   Known-component stock ceilings do not prove complete boards can be ordered.
 - Before any user-controlled order, recheck actual quantity + attrition/minima,
@@ -183,11 +189,11 @@ checkpoint integration was deliberately not run or satisfied by importing base.
 The module-specific guarded wrapper now binds to `reviewed-source.json`, the NEW
 in-repo baseline/proof/requirements, and no old `/tmp/.../HANDOFF.md`. All counts,
 exact MCU/U4 identity, four-layer, graph, mechanical and metadata guards remain.
-Default invocation fails HOLD before publication. Only explicit review preparation:
+Default invocation requires an explicit generation mode. Current offline package generation:
 
 ```sh
 /usr/bin/python3 -B modules/32bit-5v/tools/verify_sourcing.py
-/usr/bin/python3 -B modules/32bit-5v/tools/regenerate_production.py --review-preparation
+/usr/bin/python3 -B modules/32bit-5v/tools/regenerate_production.py --generate-package
 ```
 
 Production uses the existing shared exporter (explicit top assembly and full physical

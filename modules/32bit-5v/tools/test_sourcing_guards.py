@@ -11,11 +11,11 @@ import verify_sourcing as native
 
 
 class SourceGuards(unittest.TestCase):
-    def test_default_hold_never_calls_exporter(self):
+    def test_default_never_calls_exporter(self):
         manifest = release.PROD / 'manifest.json'
         before = manifest.read_bytes()
         with patch.object(release.shared, 'export_project') as exporter:
-            with self.assertRaisesRegex(RuntimeError, 'Reviewed release is HOLD'):
+            with self.assertRaisesRegex(RuntimeError, 'Explicit package generation required'):
                 release.prepare(False)
             exporter.assert_not_called()
         self.assertEqual(manifest.read_bytes(), before)

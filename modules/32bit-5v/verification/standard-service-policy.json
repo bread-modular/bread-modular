@@ -1,0 +1,65 @@
+{
+  "selected_assembly_service": "STANDARD",
+  "mcu_service_status": "ACCEPTED FOR SELECTED SERVICE",
+  "service_approval": {
+    "quote": "This is okay. 32bit is Standard anyway.",
+    "MCU_remains_assembled": true
+  },
+  "package_generation_approval": {
+    "quote": "Just don't worry about it. It was already good. The only change here is to add a 5V to 3.3V regulator. Create the JLCPCB files.",
+    "scope": "Current 32bit-5v package generation using existing design; inherited D1/capacitor/resistor engineering concerns user-accepted, not newly tested/qualified; not supplier order acceptance",
+    "existing_engineering_user_accepted": true
+  },
+  "release_status": "PACKAGE_GENERATION_APPROVED",
+  "order_ready": false,
+  "advisor": "OFF",
+  "requirements": {
+    "actual_basic_all_RC": true,
+    "recorded_economy_eligibility_all_RC": true,
+    "boardwide_economy_eligibility": false,
+    "RC_refs": 45,
+    "RC_codes": 16
+  },
+  "mcu": {
+    "ref": "U1",
+    "code": "C3013946",
+    "mpn": "ESP32-S3-WROOM-1U-N16R8",
+    "component_product_type": 2,
+    "economy_eligible": false,
+    "assembled": true
+  },
+  "requested_order_quantity": null,
+  "complete_standard_board_capacity": null,
+  "accepted_existing_engineering_reviews": {
+    "status": "USER_ACCEPTED_EXISTING_DESIGN_FOR_PACKAGE_GENERATION_NOT_NEWLY_QUALIFIED",
+    "items": [
+      "D1 generic assembled LED: exact color/MPN/catalog code not selected; strict supplier-number export fails D1.",
+      "All capacitors: exact-MPN worst-case DC-bias/temperature/aging effective capacitance and frequency ESR/ESL; C40/C41 AP2112 1uF effective target/stability; C2 ESP32 transients; C3/C4 reset; codec VREF/VMID/ADCVREF/filter qualification; C20 shield transient envelope unresolved.",
+      "R15 codec rail startup pulse/current and worst-case load; R7/R8/R14/R18/R26 clock/data dynamic/pulse dissipation unresolved. Continuous intended signal-envelope checks are not bench or fault validation.",
+      "Code/ref/footprint-specific human land/pin/ratings/role attestations incomplete; conservative audit is a genuine fail/HOLD, not waived."
+    ]
+  },
+  "remaining_order_gates": [
+    "D1 exact identity/code must be matched by the user/assembler during upload; original assembled row/code retained.",
+    "Actual board quantity, attrition/minimum assembly/reel requirements, fresh selected-service stock/eligibility and quote options unknown.",
+    "Assembler placement/polarity/physical fit, stencil/reflow/via-in-pad/manufacturing review and authenticated order acceptance not verified."
+  ],
+  "historical_economy_scope": "Original archived audit and zero Economy capacity are hypothetical Economy observations only; not selected Standard decisions/capacity.",
+  "native_source_sha256": {
+    "32bit-5v.kicad_sch": "846ab9cf4c14f7bfbc57d3a6f1e52595b5999ac3e6569f1ce0f43f11ab64e86b",
+    "32bit-5v.kicad_pcb": "4d327887d8f7db4f71f44068df8031433d2d174e374a8734dd6723f0d4848efc",
+    "32bit-5v.kicad_pro": "c56df2244bec73697b42a114975715ec306af0aa5114e9dbddbd0c47df822c45",
+    "32bit-5v.kicad_dru": "127c08f1d3b63550eb335e1770029d386aaba7c50e55558d570a9512be4b1c0f",
+    "Module32.kicad_sym": "5f90426327dd8bfb04193531bf7e730b55da18f855555a270472e547ecbab94d",
+    "Module32.pretty/HRO-TYPE-C-31-M-12.kicad_mod": "f93357afaf433cfa3aa8c66b9b0a6a281468e6fdbf18a8b457aa74138bca5de7",
+    "Module32.pretty/ES8388_QFN28_4x4_P0.45_EP2.6_ThermalVias.kicad_mod": "7ed893551b03d2e21e63fb5ca81f9348d89c33444027ea6bb3169e560b361546",
+    "fp-lib-table": "9460b9020656d5fd716c6530b6044d7164d728a43cb64755e830a9de88e33b77",
+    "sym-lib-table": "0c249fb9d40baba6f23c23d4f09b5789f0e3f376a86445056a777f8a71ec604e"
+  },
+  "historical_evidence_sha256": {
+    "verification/basic-economy/audit-requirements.json": "9924f0965ab681b9a84335ad6dc4bef94fe6706c85bbdf0bb4de394d9192c56e",
+    "verification/basic-economy/final-audit.json": "2bdf8947397283b1e7d2dc2c118c2f1cabaf3451cca4d03fdedc87d56184925e",
+    "verification/basic-economy/catalog/final-live-parts.json": "b5026a61d9e7dc7ea51dec2cedb7d7df0b96afbd805a5f19a0fa7e37c1b59109",
+    "verification/basic-economy/catalog/final-live-summary.json": "f1d4a831b241012b8e9060e1061ba60eb6e41b35196ddb3df5f82a90eb3fc399"
+  }
+}
