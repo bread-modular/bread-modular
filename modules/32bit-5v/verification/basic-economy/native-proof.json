@@ -1,0 +1,71 @@
+{
+  "source_commit": "74db23e0aaec4286caaf95eb2c00461ab0999e3e",
+  "status": "bounded_native_delta_pass",
+  "order_ready": false,
+  "source_sha256": {
+    "32bit-5v.kicad_sch": "846ab9cf4c14f7bfbc57d3a6f1e52595b5999ac3e6569f1ce0f43f11ab64e86b",
+    "32bit-5v.kicad_pcb": "4d327887d8f7db4f71f44068df8031433d2d174e374a8734dd6723f0d4848efc",
+    "32bit-5v.kicad_pro": "c56df2244bec73697b42a114975715ec306af0aa5114e9dbddbd0c47df822c45",
+    "32bit-5v.kicad_dru": "127c08f1d3b63550eb335e1770029d386aaba7c50e55558d570a9512be4b1c0f",
+    "Module32.kicad_sym": "5f90426327dd8bfb04193531bf7e730b55da18f855555a270472e547ecbab94d",
+    "Module32.pretty/HRO-TYPE-C-31-M-12.kicad_mod": "f93357afaf433cfa3aa8c66b9b0a6a281468e6fdbf18a8b457aa74138bca5de7",
+    "Module32.pretty/ES8388_QFN28_4x4_P0.45_EP2.6_ThermalVias.kicad_mod": "7ed893551b03d2e21e63fb5ca81f9348d89c33444027ea6bb3169e560b361546",
+    "fp-lib-table": "9460b9020656d5fd716c6530b6044d7164d728a43cb64755e830a9de88e33b77",
+    "sym-lib-table": "0c249fb9d40baba6f23c23d4f09b5789f0e3f376a86445056a777f8a71ec604e"
+  },
+  "physical_refs": 61,
+  "smd_refs": 55,
+  "smd_side": "top",
+  "manual_refs": [
+    "GND1",
+    "INPUT1",
+    "OUTPUT1",
+    "RV1",
+    "RV2",
+    "V_SUPPLY1"
+  ],
+  "metadata_refs": 54,
+  "pcb_pin_count": 222,
+  "pin_mismatches": [],
+  "combined_usb_aliases_without_separate_lands": [],
+  "graph_unchanged": true,
+  "geometry_copper_datum_and_unaffected_circuitry_unchanged": true,
+  "native_waivers_and_severities_unchanged": true,
+  "drc_errors": 0,
+  "erc_errors": 0,
+  "opens": 0,
+  "parity": 0,
+  "warning_types": {
+    "drc": {
+      "silk_over_copper": 26,
+      "text_height": 16,
+      "lib_footprint_mismatch": 48,
+      "footprint_type_mismatch": 1,
+      "silk_edge_clearance": 3,
+      "via_dangling": 1,
+      "track_dangling": 3
+    },
+    "erc": {
+      "lib_symbol_mismatch": 16
+    }
+  },
+  "refill": {
+    "tool": "10.0.6-10.0.6~ubuntu26.04.1",
+    "zones": 5,
+    "refill_executed": true,
+    "saved_fill_semantically_identical": true,
+    "source_fill_retained": "exact native polygons already equal re-filled saved board",
+    "source_pcb_sha256": "4d327887d8f7db4f71f44068df8031433d2d174e374a8734dd6723f0d4848efc",
+    "filled_polygon_counts": [
+      0,
+      0,
+      5,
+      0,
+      1
+    ]
+  },
+  "advisor": "OFF",
+  "limitations": [
+    "Not a bias/ESR/pulse, thermal, physical-fit or assembly/order approval."
+  ]
+}
