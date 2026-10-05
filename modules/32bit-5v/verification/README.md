@@ -1,5 +1,12 @@
 # `32bit-5v` verification artefacts
 
+> **Current authority:** the routed board at `74db23e` supersedes the old routing
+> status below. [Basic/Economy sourcing evidence](basic-economy/README.md) contains
+> the fresh baseline/final DRC/ERC, 222-pin/metadata/geometry proof and release HOLD.
+> `final-drc.json`, `final-erc.json`, `final-netlist.xml` and `production/manifest.json`
+> are regenerated from that reviewed native source. Lower sections retain historical
+> schematic-only revision evidence, not current placement/parity claims.
+
 Every artefact here was produced with **KiCad 10.0.6** (`kicad-cli` 9.x cannot parse
 this board's KiCad 10 format). The reproduction commands in this file are run **from the
 `modules/32bit-5v` directory** (they are shown in full below; nothing needs the

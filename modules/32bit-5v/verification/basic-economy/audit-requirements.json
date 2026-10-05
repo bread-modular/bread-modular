@@ -1,0 +1,609 @@
+{
+  "defaults": {},
+  "components": {
+    "C1": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C4": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C6": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C21": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C22": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C26": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C34": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C36": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C39": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "C1 ESP32 rail bypass; C4 CHIP_PU/EN RC; C6 main 3V3 bypass; C21/C22/C26/C39 codec rail bypass; C34 VMID and C36 ADCVREF bypass. Do not pool these by equal value.",
+      "reviews": {}
+    },
+    "C2": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 10.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "C2 ESP32 supply bulk after FB1; C8 main 3V3 bulk. C2 nominal 10uF must not be downgraded; DC-bias/transient qualification outstanding.",
+      "reviews": {}
+    },
+    "C8": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 10.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "C2 ESP32 supply bulk after FB1; C8 main 3V3 bulk. C2 nominal 10uF must not be downgraded; DC-bias/transient qualification outstanding.",
+      "reviews": {}
+    },
+    "C3": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 25.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "CHIP_PU/EN reset timing with R3 10k and C4 100nF in parallel. Nominal RC about 11ms; changes need power-up/reset review.",
+      "reviews": {}
+    },
+    "C5": {
+      "kind": "C",
+      "tolerance_fraction": 0.2,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "C5/C37/C38 codec rail bulk; C27 VREF; C33 VMID; C35 ADCVREF. 10uF in 0402: DC-bias/stability/noise review before package/value changes.",
+      "reviews": {}
+    },
+    "C27": {
+      "kind": "C",
+      "tolerance_fraction": 0.2,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "C5/C37/C38 codec rail bulk; C27 VREF; C33 VMID; C35 ADCVREF. 10uF in 0402: DC-bias/stability/noise review before package/value changes.",
+      "reviews": {}
+    },
+    "C33": {
+      "kind": "C",
+      "tolerance_fraction": 0.2,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "C5/C37/C38 codec rail bulk; C27 VREF; C33 VMID; C35 ADCVREF. 10uF in 0402: DC-bias/stability/noise review before package/value changes.",
+      "reviews": {}
+    },
+    "C35": {
+      "kind": "C",
+      "tolerance_fraction": 0.2,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "C5/C37/C38 codec rail bulk; C27 VREF; C33 VMID; C35 ADCVREF. 10uF in 0402: DC-bias/stability/noise review before package/value changes.",
+      "reviews": {}
+    },
+    "C37": {
+      "kind": "C",
+      "tolerance_fraction": 0.2,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "C5/C37/C38 codec rail bulk; C27 VREF; C33 VMID; C35 ADCVREF. 10uF in 0402: DC-bias/stability/noise review before package/value changes.",
+      "reviews": {}
+    },
+    "C38": {
+      "kind": "C",
+      "tolerance_fraction": 0.2,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "C5/C37/C38 codec rail bulk; C27 VREF; C33 VMID; C35 ADCVREF. 10uF in 0402: DC-bias/stability/noise review before package/value changes.",
+      "reviews": {}
+    },
+    "C7": {
+      "kind": "C",
+      "tolerance_fraction": 0.2,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "Codec rail +3V3_8388 bulk after R15 10ohm; review effective capacitance, supply drop/filtering, ESR and inrush.",
+      "reviews": {}
+    },
+    "C20": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "USB shield-to-GND AC coupling; not a supply decoupler.",
+      "reviews": {}
+    },
+    "C40": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 25.0,
+      "operating_voltage_v": 6.0,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "AP2112 +5V input bulk; retain effective capacitance/voltage headroom.",
+      "min_effective_capacitance_f": 1e-06,
+      "reviews": {}
+    },
+    "C41": {
+      "kind": "C",
+      "tolerance_fraction": 0.2,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 25.0,
+      "operating_voltage_v": 3.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "AP2112 +3V3 output bulk; preserve regulator stability and transient response.",
+      "min_effective_capacitance_f": 1e-06,
+      "reviews": {}
+    },
+    "C42": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 6.0,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "AP2112 +5V input high-frequency bypass.",
+      "reviews": {}
+    },
+    "R1": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0036363636363636364,
+      "reviews": {}
+    },
+    "R2": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0036363636363636364,
+      "reviews": {}
+    },
+    "R9": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0036363636363636364,
+      "reviews": {}
+    },
+    "R13": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0036363636363636364,
+      "reviews": {}
+    },
+    "R17": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0036363636363636364,
+      "reviews": {}
+    },
+    "R3": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.00036363636363636367,
+      "reviews": {}
+    },
+    "R4": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 75.0,
+      "min_power_w": 0.1,
+      "power_derating": 0.5,
+      "operating_voltage_v": 6.0,
+      "operating_current_a": 0.0011883541295306002,
+      "reviews": {}
+    },
+    "R11": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 75.0,
+      "min_power_w": 0.1,
+      "power_derating": 0.5,
+      "operating_voltage_v": 6.0,
+      "operating_current_a": 0.0011883541295306002,
+      "reviews": {}
+    },
+    "R5": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0024242424242424242,
+      "reviews": {}
+    },
+    "R6": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0024242424242424242,
+      "reviews": {}
+    },
+    "R7": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "reviews": {}
+    },
+    "R8": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "reviews": {}
+    },
+    "R14": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "reviews": {}
+    },
+    "R18": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "reviews": {}
+    },
+    "R26": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "reviews": {}
+    },
+    "R10": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 3.6363636363636364e-05,
+      "reviews": {}
+    },
+    "R12": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 3.6363636363636364e-05,
+      "reviews": {}
+    },
+    "R16": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 3.6363636363636364e-05,
+      "reviews": {}
+    },
+    "R19": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 3.6363636363636364e-05,
+      "reviews": {}
+    },
+    "R15": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 75.0,
+      "min_power_w": 0.1,
+      "power_derating": 0.5,
+      "reviews": {}
+    },
+    "R24": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0007736943907156673,
+      "reviews": {}
+    },
+    "R25": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "voltage_derating": 0.75,
+      "min_voltage_v": 50.0,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.6,
+      "operating_current_a": 0.0007736943907156673,
+      "reviews": {}
+    },
+    "GND1": {
+      "assembly": "manual",
+      "reason": "User-retained bottom THT ground header; lead trim / pot-case clearance HOLD."
+    },
+    "V_SUPPLY1": {
+      "assembly": "manual",
+      "reason": "User-retained bottom THT supply header; manual assembly."
+    },
+    "INPUT1": {
+      "assembly": "manual",
+      "reason": "User-retained bottom THT input header; manual assembly."
+    },
+    "OUTPUT1": {
+      "assembly": "manual",
+      "reason": "User-retained bottom THT output header; manual assembly."
+    },
+    "RV1": {
+      "assembly": "manual",
+      "reason": "User-retained front-facing 50k THT potentiometer; manual assembly."
+    },
+    "RV2": {
+      "assembly": "manual",
+      "reason": "User-retained front-facing 50k THT potentiometer; manual assembly."
+    },
+    "FB1": {
+      "kind": "other",
+      "package": "0805",
+      "reviews": {}
+    },
+    "J5": {
+      "kind": "other",
+      "package": "SMD",
+      "reviews": {}
+    },
+    "SW1": {
+      "kind": "other",
+      "package": "SMD,4.2x3.3mm",
+      "reviews": {}
+    },
+    "SW2": {
+      "kind": "other",
+      "package": "SMD,4.2x3.3mm",
+      "reviews": {}
+    },
+    "SW4": {
+      "kind": "other",
+      "package": "SMD,4.2x3.3mm",
+      "reviews": {}
+    },
+    "U1": {
+      "kind": "other",
+      "package": "SMD,19.2x18mm",
+      "reviews": {}
+    },
+    "U3": {
+      "kind": "other",
+      "package": "SOIC-8",
+      "reviews": {}
+    },
+    "U4": {
+      "kind": "other",
+      "package": "QFN-28-EP(4x4)",
+      "reviews": {}
+    },
+    "U5": {
+      "kind": "other",
+      "package": "SOT-25-5",
+      "reviews": {}
+    },
+    "D1": {
+      "kind": "other",
+      "reviews": {}
+    }
+  },
+  "verified_specs": {}
+}

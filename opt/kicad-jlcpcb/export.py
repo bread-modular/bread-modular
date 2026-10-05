@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+import xml.etree.ElementTree as ET
 from collections import defaultdict
 
 
@@ -25,6 +26,8 @@ PART_FIELDS = (
 MPN_FIELDS = ("MPN", "Manufacturer Part Number", "Manufacturer Part #", "Mfr Part #", "Part Number")
 MANUFACTURER_FIELDS = ("Manufacturer", "Mfr")
 ROTATION_FIELDS = ("JLCPCB Rotation Offset",)
+POSITION_X_FIELDS = ("JLCPCB Position Offset X",)
+POSITION_Y_FIELDS = ("JLCPCB Position Offset Y",)
 BOM_HEADER = ("Comment", "Designator", "Footprint", "LCSC Part #", "Quantity", "Manufacturer", "MPN")
 CPL_HEADER = ("Designator", "Mid X", "Mid Y", "Rotation", "Layer")
 SCH_FIELDS = "Reference,Value,Footprint,${DNP},${EXCLUDE_FROM_BOM},${EXCLUDE_FROM_BOARD},*"
@@ -231,11 +234,20 @@ def assembly_rows(footprints, positions, symbols, args):
         offset = field_value(ref, sources, ROTATION_FIELDS, "rotation offset",
                              lambda value: number(value, f"{ref} rotation offset"))
         angle = (number(pos["Rot"], f"{ref} rotation") + (offset or 0.0)) % 360
-        # KiCad already exports Cartesian Y and both sides in a common top-view frame.
-        # Do not flip bottom X or invent a package-specific orientation correction.
-        placements.append((ref, decimal(number(pos["PosX"], f"{ref} X")),
-                           decimal(number(pos["PosY"], f"{ref} Y")),
-                           decimal(angle), pos["Side"]))
+        # XY fields are assembly-only mm deltas in the *exported board frame*:
+        # X right, Y up, common top view for both sides. Not footprint-local,
+        # not rotated with Rot or rotation offset, never mirrored on bottom.
+        # Keep physical KiCad anchors/pads unchanged. Values/aliases from both
+        # native sources merge numerically; conflicts/nonfinite values fail.
+        dx = field_value(ref, sources, POSITION_X_FIELDS, "position X offset",
+                         lambda value: number(value, f"{ref} position X offset"))
+        dy = field_value(ref, sources, POSITION_Y_FIELDS, "position Y offset",
+                         lambda value: number(value, f"{ref} position Y offset"))
+        x = number(pos["PosX"], f"{ref} X") + (dx or 0.0)
+        y = number(pos["PosY"], f"{ref} Y") + (dy or 0.0)
+        if not math.isfinite(x) or not math.isfinite(y):
+            raise ExportError(f"{ref}: non-finite placement after position offsets.")
+        placements.append((ref, decimal(x), decimal(y), decimal(angle), pos["Side"]))
         parts.append((ref, pos["Val"], pos["Package"], part, manufacturer, mpn))
     if missing_numbers:
         message = "Missing LCSC part numbers: " + ", ".join(missing_numbers)
@@ -263,7 +275,7 @@ def assembly_rows(footprints, positions, symbols, args):
 
 def write_csv(path, header, rows):
     with path.open("w", encoding="utf-8-sig", newline="") as stream:
-        writer = csv.writer(stream)
+        writer = csv.writer(stream, lineterminator="\n")
         writer.writerow(header)
         writer.writerows(rows)
 
@@ -309,6 +321,60 @@ def select_inputs(args):
     return board, schematic, output
 
 
+def read_xml_symbols(path):
+    """KiCad 10 BOM export omits excluded-from-BOM symbols even when requested.
+
+    The native XML netlist retains their fields and exclusion properties. Using
+    that metadata prevents an excluded symbol's unflagged PCB footprint from
+    leaking into assembly. Hierarchical refs and multi-unit parts are expanded
+    by KiCad, not guessed by our S-expression parser.
+    """
+    result = {}
+    for comp in ET.parse(path).getroot().findall("components/comp"):
+        ref = comp.get("ref")
+        if not ref or ref in result:
+            raise ExportError(f"Missing/duplicate XML symbol reference: {ref!r}")
+        row = {}
+        for field in comp.findall("fields/field"):
+            name, value = field.get("name"), field.text or ""
+            if not name or (name in row and row[name] != value):
+                raise ExportError(f"{ref}: missing/conflicting duplicate XML field {name!r}")
+            row[name] = value
+        row.update(Reference=ref, Value=comp.findtext("value") or "", Footprint=comp.findtext("footprint") or "")
+        props = {q.get("name") for q in comp.findall("property")}
+        row.update(__DNP="1" if "dnp" in props else "",
+                   __EXCLUDE_FROM_BOM="1" if "exclude_from_bom" in props else "",
+                   __EXCLUDE_FROM_BOARD="1" if "exclude_from_board" in props else "")
+        result[ref] = row
+    if not result:
+        raise ExportError("Empty native XML symbol metadata")
+    return result
+
+
+def stage_cli_project(board, schematic, work):
+    """Read-only CLI boundary: KiCad may otherwise rewrite a tracked .kicad_prl.
+
+    Copy design/project/library-table files; share footprint libraries read-only
+    by resolved symlink. Outputs and any native cache/settings writes live only
+    in the export's temporary directory. Never copy production ZIPs or caches.
+    """
+    source = board.parent
+    staged = work / "inputs"
+    staged.mkdir()
+    suffixes = {".kicad_pcb", ".kicad_sch", ".kicad_pro", ".kicad_dru", ".kicad_sym"}
+    for path in source.rglob("*"):
+        rel = path.relative_to(source)
+        if any(part in {"jlcpcb", "production", "verification"} or part.endswith("-backups") for part in rel.parts):
+            continue
+        if path.is_file() and (path.suffix in suffixes or path.name in {"fp-lib-table", "sym-lib-table"}):
+            dest = staged / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(path, dest)
+    if (source / "footprints").exists():
+        (staged / "footprints").symlink_to((source / "footprints").resolve(), target_is_directory=True)
+    return staged / board.name, (staged / schematic.relative_to(source) if schematic else None)
+
+
 def export_project(args):
     board, schematic, output = select_inputs(args)
     cli = shutil.which(os.path.expanduser(args.kicad_cli))
@@ -329,16 +395,21 @@ def export_project(args):
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=".jlcpcb-export-", dir=output.parent) as temporary:
         work = Path(temporary)
+        cli_board, cli_schematic = stage_cli_project(board, schematic, work)
         symbols = None
         if schematic:
             run_cli(cli, ["sch", "export", "bom", "--fields", SCH_FIELDS, "--labels", SCH_LABELS,
                           "--group-by", "", "--include-excluded-from-bom", "--filter", "",
                           "--field-delimiter", ",", "--string-delimiter", '"',
                           "--ref-delimiter", ",", "--ref-range-delimiter", "",
-                          "--output", work / "schematic.csv", schematic], schematic.parent)
+                          "--output", work / "schematic.csv", cli_schematic], cli_schematic.parent)
             symbols = indexed(read_csv(work / "schematic.csv", SCH_LABELS.split(",")), "Reference")
+            if int(match[1]) >= 10:
+                run_cli(cli, ["sch", "export", "netlist", "--format", "kicadxml",
+                              "--output", work / "symbols.xml", cli_schematic], cli_schematic.parent)
+                symbols = read_xml_symbols(work / "symbols.xml")
         run_cli(cli, ["pcb", "export", "pos", "--format", "csv", "--units", "mm", "--side", "both",
-                      "--use-drill-file-origin", "--output", work / "raw-positions.csv", board], board.parent)
+                      "--use-drill-file-origin", "--output", work / "raw-positions.csv", cli_board], cli_board.parent)
         positions = indexed(read_csv(work / "raw-positions.csv",
                                      ("Ref", "Val", "Package", "PosX", "PosY", "Rot", "Side")), "Ref")
         bom, cpl, excluded, warnings, missing = assembly_rows(footprints, positions, symbols, args)
@@ -350,11 +421,11 @@ def export_project(args):
         run_cli(cli, ["pcb", "export", "gerbers", "--layers", ",".join(layers),
                       "--use-drill-file-origin", "--no-protel-ext", "--no-x2", "--no-netlist",
                       "--disable-aperture-macros", "--subtract-soldermask",
-                      "--output", str(gerbers) + os.sep, board], board.parent)
+                      "--output", str(gerbers) + os.sep, cli_board], cli_board.parent)
         run_cli(cli, ["pcb", "export", "drill", "--format", "excellon", "--drill-origin", "plot",
                       "--excellon-units", "mm", "--excellon-zeros-format", "decimal",
                       "--excellon-oval-format", "route", "--excellon-separate-th",
-                      "--output", str(gerbers) + os.sep, board], board.parent)
+                      "--output", str(gerbers) + os.sep, cli_board], cli_board.parent)
         plots = sorted(gerbers.glob("*.gbr"))
         drills = sorted(gerbers.glob("*.drl"))
         if len(plots) != len(layers) or not drills or any(p.stat().st_size == 0 for p in plots + drills):
