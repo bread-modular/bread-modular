@@ -1,0 +1,307 @@
+{
+  "new_queries_only": true,
+  "quantity_basis_boards": 1,
+  "requested_quantity": null,
+  "no_retry": true,
+  "requests": 2,
+  "results": {
+    "0402WGF100JTCE": {
+      "parts": [
+        {
+          "code": "C25077",
+          "mpn": "0402WGF100JTCE",
+          "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
+          "package": "0402",
+          "classification": "Basic",
+          "library_type": "base",
+          "preferred_extended": false,
+          "economy_eligible": true,
+          "component_product_type": 0,
+          "stock": 1813947,
+          "kind": "R",
+          "economy_evidence": "observed per-part componentProductType; frontend mapping is a dated observation, not authenticated order acceptance",
+          "attributes": {
+            "Resistance": "10\u03a9",
+            "Operating Temperature": "-55\u2103~+155\u2103",
+            "Power(Watts)": "62.5mW",
+            "Type": "Thick Film Resistor",
+            "Voltage-Supply(Max)": "50V",
+            "Tolerance": "\u00b11%",
+            "Temperature Coefficient": "\u00b1200ppm/\u2103"
+          },
+          "specs": {
+            "value_si": 10.0,
+            "tolerance_fraction": 0.01,
+            "power_w": 0.0625,
+            "voltage_v": 50.0
+          },
+          "prices": [
+            {
+              "start": 1,
+              "end": 999,
+              "unit_price": 0.0029
+            },
+            {
+              "start": 1000,
+              "end": 2999,
+              "unit_price": 0.0022
+            },
+            {
+              "start": 3000,
+              "end": 9999,
+              "unit_price": 0.0018
+            },
+            {
+              "start": 10000,
+              "end": 49999,
+              "unit_price": 0.0017
+            },
+            {
+              "start": 50000,
+              "end": 50199,
+              "unit_price": 0.0014
+            },
+            {
+              "start": 50200,
+              "end": -1,
+              "unit_price": 0.0014
+            }
+          ],
+          "assembly_mode": null,
+          "minimum_assembly_quantity_observed": 20,
+          "attrition_quantity_observed": 10,
+          "datasheet_url": "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0402WGF100JTCE_C25077.pdf",
+          "issues": [],
+          "evidence": {
+            "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+            "retrieved_at_utc": "2026-10-05T06:53:19Z",
+            "http_status": 200,
+            "request": {
+              "currentPage": 1,
+              "pageSize": 12,
+              "keyword": "0402WGF100JTCE"
+            },
+            "sha256": "3a86f714c2485ff7c8e213d1b2b768325c37b2e92bee824b6f62527d41517a30",
+            "mode": "live",
+            "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+            "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+          }
+        },
+        {
+          "code": "C9900163341",
+          "mpn": "0402WGF100JTCE",
+          "manufacturer": "JLCPCB Assembly",
+          "package": "0402",
+          "classification": "Extended",
+          "library_type": "expand",
+          "preferred_extended": false,
+          "economy_eligible": true,
+          "component_product_type": 0,
+          "stock": 0,
+          "kind": null,
+          "economy_evidence": "observed per-part componentProductType; frontend mapping is a dated observation, not authenticated order acceptance",
+          "attributes": {},
+          "specs": {},
+          "prices": [
+            {
+              "start": 1,
+              "end": 99,
+              "unit_price": 0.0396
+            },
+            {
+              "start": 100,
+              "end": -1,
+              "unit_price": 0.0204
+            }
+          ],
+          "assembly_mode": null,
+          "minimum_assembly_quantity_observed": 2,
+          "attrition_quantity_observed": 0,
+          "datasheet_url": null,
+          "issues": [
+            "missing:attributes"
+          ],
+          "evidence": {
+            "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+            "retrieved_at_utc": "2026-10-05T06:53:19Z",
+            "http_status": 200,
+            "request": {
+              "currentPage": 1,
+              "pageSize": 12,
+              "keyword": "0402WGF100JTCE"
+            },
+            "sha256": "3a86f714c2485ff7c8e213d1b2b768325c37b2e92bee824b6f62527d41517a30",
+            "mode": "live",
+            "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+            "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+          }
+        }
+      ],
+      "total": 2,
+      "truncated": false,
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:53:19Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 12,
+          "keyword": "0402WGF100JTCE"
+        },
+        "sha256": "3a86f714c2485ff7c8e213d1b2b768325c37b2e92bee824b6f62527d41517a30",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    },
+    "0402WGF220JTCE": {
+      "parts": [
+        {
+          "code": "C25092",
+          "mpn": "0402WGF220JTCE",
+          "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
+          "package": "0402",
+          "classification": "Basic",
+          "library_type": "base",
+          "preferred_extended": false,
+          "economy_eligible": true,
+          "component_product_type": 0,
+          "stock": 4597296,
+          "kind": "R",
+          "economy_evidence": "observed per-part componentProductType; frontend mapping is a dated observation, not authenticated order acceptance",
+          "attributes": {
+            "Resistance": "22\u03a9",
+            "Operating Temperature": "-55\u2103~+155\u2103",
+            "Power(Watts)": "62.5mW",
+            "Type": "Thick Film Resistor",
+            "Voltage-Supply(Max)": "50V",
+            "Tolerance": "\u00b11%",
+            "Temperature Coefficient": "\u00b1100ppm/\u2103"
+          },
+          "specs": {
+            "value_si": 22.0,
+            "tolerance_fraction": 0.01,
+            "power_w": 0.0625,
+            "voltage_v": 50.0
+          },
+          "prices": [
+            {
+              "start": 1,
+              "end": 999,
+              "unit_price": 0.0027
+            },
+            {
+              "start": 1000,
+              "end": 2999,
+              "unit_price": 0.0021
+            },
+            {
+              "start": 3000,
+              "end": 9999,
+              "unit_price": 0.0017
+            },
+            {
+              "start": 10000,
+              "end": 49999,
+              "unit_price": 0.0016
+            },
+            {
+              "start": 50000,
+              "end": 50199,
+              "unit_price": 0.0012
+            },
+            {
+              "start": 50200,
+              "end": -1,
+              "unit_price": 0.0012
+            }
+          ],
+          "assembly_mode": null,
+          "minimum_assembly_quantity_observed": 20,
+          "attrition_quantity_observed": 10,
+          "datasheet_url": "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF220JTCE_C25092.pdf",
+          "issues": [],
+          "evidence": {
+            "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+            "retrieved_at_utc": "2026-10-05T06:53:20Z",
+            "http_status": 200,
+            "request": {
+              "currentPage": 1,
+              "pageSize": 12,
+              "keyword": "0402WGF220JTCE"
+            },
+            "sha256": "5939a3e95855e63032eeb2c49fb0a10cf5127bac705874b6ea2b1d44ae4f1138",
+            "mode": "live",
+            "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+            "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+          }
+        },
+        {
+          "code": "C9900138539",
+          "mpn": "0402WGF220JTCE",
+          "manufacturer": "JLCPCB Assembly",
+          "package": "0402",
+          "classification": "Extended",
+          "library_type": "expand",
+          "preferred_extended": false,
+          "economy_eligible": true,
+          "component_product_type": 0,
+          "stock": 0,
+          "kind": null,
+          "economy_evidence": "observed per-part componentProductType; frontend mapping is a dated observation, not authenticated order acceptance",
+          "attributes": {},
+          "specs": {},
+          "prices": [
+            {
+              "start": 1,
+              "end": 99,
+              "unit_price": 0.0396
+            },
+            {
+              "start": 100,
+              "end": -1,
+              "unit_price": 0.0204
+            }
+          ],
+          "assembly_mode": null,
+          "minimum_assembly_quantity_observed": 5,
+          "attrition_quantity_observed": 4,
+          "datasheet_url": null,
+          "issues": [
+            "missing:attributes"
+          ],
+          "evidence": {
+            "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+            "retrieved_at_utc": "2026-10-05T06:53:20Z",
+            "http_status": 200,
+            "request": {
+              "currentPage": 1,
+              "pageSize": 12,
+              "keyword": "0402WGF220JTCE"
+            },
+            "sha256": "5939a3e95855e63032eeb2c49fb0a10cf5127bac705874b6ea2b1d44ae4f1138",
+            "mode": "live",
+            "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+            "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+          }
+        }
+      ],
+      "total": 2,
+      "truncated": false,
+      "evidence": {
+        "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+        "retrieved_at_utc": "2026-10-05T06:53:20Z",
+        "http_status": 200,
+        "request": {
+          "currentPage": 1,
+          "pageSize": 12,
+          "keyword": "0402WGF220JTCE"
+        },
+        "sha256": "5939a3e95855e63032eeb2c49fb0a10cf5127bac705874b6ea2b1d44ae4f1138",
+        "mode": "live",
+        "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+        "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+      }
+    }
+  }
+}

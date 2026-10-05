@@ -1,0 +1,548 @@
+{
+  "components": {
+    "RV1": {
+      "assembly": "manual",
+      "reason": "Retained explicit front RV09/manual solder plan; no sourcing or geometry change."
+    },
+    "RV2": {
+      "assembly": "manual",
+      "reason": "Retained explicit front RV09/manual solder plan; no sourcing or geometry change."
+    },
+    "GND1": {
+      "assembly": "manual",
+      "reason": "Retained bottom BASE-mating connector/manual solder plan; preserve pins 1..5 and purchased-part/lead clearance gates."
+    },
+    "V_SUPPLY1": {
+      "assembly": "manual",
+      "reason": "Retained bottom BASE-mating connector/manual solder plan; preserve pins 1..5 and purchased-part/lead clearance gates."
+    },
+    "J1": {
+      "assembly": "manual",
+      "reason": "Retained bottom BASE-mating connector/manual solder plan; preserve pins 1..5 and purchased-part/lead clearance gates."
+    },
+    "J2": {
+      "assembly": "manual",
+      "reason": "Retained bottom BASE-mating connector/manual solder plan; preserve pins 1..5 and purchased-part/lead clearance gates."
+    },
+    "C1": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "U3 analogue op-amp 3V3 local decoupling; retain individual loop.",
+      "operating_voltage_v": 3.366
+    },
+    "C2": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "U3/3V3 local decoupling.",
+      "operating_voltage_v": 3.366
+    },
+    "C5": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "PT8211 3V3 local high-frequency decoupling.",
+      "operating_voltage_v": 3.366
+    },
+    "C8": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "1V1 DVDD local 100nF decoupling.",
+      "operating_voltage_v": 1.1
+    },
+    "C11": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "3V3 local 100nF IC decoupling; individual placement retained; no capacitance pooling.",
+      "operating_voltage_v": 1.1
+    },
+    "C12": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "3V3 local 100nF IC decoupling; individual placement retained; no capacitance pooling.",
+      "operating_voltage_v": 3.366
+    },
+    "C13": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "3V3 local 100nF IC decoupling; individual placement retained; no capacitance pooling.",
+      "operating_voltage_v": 3.366
+    },
+    "C14": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "3V3 local 100nF IC decoupling; individual placement retained; no capacitance pooling.",
+      "operating_voltage_v": 3.366
+    },
+    "C15": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "3V3 local 100nF IC decoupling; individual placement retained; no capacitance pooling.",
+      "operating_voltage_v": 3.366
+    },
+    "C16": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "3V3 local 100nF IC decoupling; individual placement retained; no capacitance pooling.",
+      "operating_voltage_v": 3.366
+    },
+    "C17": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "3V3 local 100nF IC decoupling; individual placement retained; no capacitance pooling.",
+      "operating_voltage_v": 3.366
+    },
+    "C18": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "3V3 local 100nF IC decoupling; individual placement retained; no capacitance pooling.",
+      "operating_voltage_v": 3.366
+    },
+    "C24": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "Flash local 3V3 100nF decoupling.",
+      "operating_voltage_v": 3.366
+    },
+    "C26": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "AP2112 5V high-frequency bypass, 100nF/16V X7R; original Basic code retained.",
+      "operating_voltage_v": 5.25
+    },
+    "C3": {
+      "kind": "C",
+      "tolerance_fraction": 0.05,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "C0G"
+      ],
+      "role": "Crystal XIN shunt: 15pF C0G \u00b15%; maintain equal crystal load caps and existing trace parasitics.",
+      "operating_voltage_v": 3.366
+    },
+    "C4": {
+      "kind": "C",
+      "tolerance_fraction": 0.05,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "C0G"
+      ],
+      "role": "Crystal XOUT shunt: 15pF C0G \u00b15%; maintain equal crystal load caps and existing trace parasitics.",
+      "operating_voltage_v": 3.366
+    },
+    "C22": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "DAC L audio reconstruction low-pass shunt after R17 1k; nominal pole 1/(2*pi*1k*10nF); filter DC/AC/temperature accuracy not certified.",
+      "operating_voltage_v": 3.366
+    },
+    "C23": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "DAC R audio reconstruction low-pass shunt after R18 1k; equal value/tolerance/class to C22.",
+      "operating_voltage_v": 3.366
+    },
+    "C20": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "USB shield-to-GND 10nF shunt, 0805; preserve nonpolar isolation topology; shield surge/ESD qualification remains open.",
+      "operating_voltage_v": 5.25
+    },
+    "C19": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 25.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "3V3 bulk/local decoupling (10uF 0805); no claimed minimum under DC bias.",
+      "operating_voltage_v": 3.366
+    },
+    "C25": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 25.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "AP2112 local 5V input bulk, 10uF/25V X5R; retain original exact Basic code; manufacturer tests with CIN 1uF, worst-case effective input C unproven.",
+      "operating_voltage_v": 5.25,
+      "min_effective_capacitance_f": 1e-06
+    },
+    "C27": {
+      "kind": "C",
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "AP2112 local 3V3 COUT: original 1uF/50V X7R retained. Datasheet uses 1uF ceramic; nominal lower tolerance is 0.9uF before bias/temperature, so no >=1uF effective/stability approval.",
+      "operating_voltage_v": 3.366,
+      "min_effective_capacitance_f": 1e-06
+    },
+    "R2": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.366,
+      "operating_current_a": 0.0034000000000000002
+    },
+    "R4": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.366,
+      "operating_current_a": 0.0034000000000000002
+    },
+    "R6": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.366,
+      "operating_current_a": 0.0034000000000000002
+    },
+    "R9": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.366,
+      "operating_current_a": 0.0034000000000000002
+    },
+    "R17": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.366,
+      "operating_current_a": 0.0034000000000000002
+    },
+    "R18": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.366,
+      "operating_current_a": 0.0034000000000000002
+    },
+    "R3": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 75.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.1,
+      "power_derating": 0.5,
+      "operating_voltage_v": 5.25,
+      "operating_current_a": 0.0010398098633392751
+    },
+    "R11": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 75.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.1,
+      "power_derating": 0.5,
+      "operating_voltage_v": 5.25,
+      "operating_current_a": 0.0010398098633392751
+    },
+    "R5": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 0.007,
+      "operating_current_a": 0.00021426385062748698
+    },
+    "R10": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5
+    },
+    "R12": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5
+    },
+    "R15": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5
+    },
+    "R16": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5
+    },
+    "R14": {
+      "kind": "R",
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50.0,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "power_derating": 0.5,
+      "operating_voltage_v": 3.366,
+      "operating_current_a": 0.00034
+    },
+    "U1": {
+      "kind": "other",
+      "package": "QFN-60-EP(7x7)"
+    },
+    "U2": {
+      "kind": "other",
+      "package": "SOIC-8-208mil"
+    },
+    "U3": {
+      "kind": "other",
+      "package": "SOIC-8"
+    },
+    "U4": {
+      "kind": "other",
+      "package": "SOP-8"
+    },
+    "U6": {
+      "kind": "other",
+      "package": "SOT-25-5"
+    },
+    "L1": {
+      "kind": "other",
+      "package": "0806"
+    },
+    "SW1": {
+      "kind": "other",
+      "package": "SMD,4.2x3.3mm"
+    },
+    "SW2": {
+      "kind": "other",
+      "package": "SMD,4.2x3.3mm"
+    },
+    "SW3": {
+      "kind": "other",
+      "package": "SMD,4.2x3.3mm"
+    },
+    "Y1": {
+      "kind": "other",
+      "package": "SMD3225-4P"
+    },
+    "J5": {
+      "kind": "other",
+      "package": "SMD"
+    },
+    "R7": {
+      "kind": "R"
+    },
+    "R8": {
+      "kind": "R"
+    },
+    "C6": {
+      "kind": "C",
+      "package": "0402",
+      "tolerance_fraction": 0.2,
+      "min_voltage_v": 10.0,
+      "operating_voltage_v": 3.366,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "RP2350 switching regulator local VREG_VIN 3V3 input capacitor: HOLD exact supplier review candidate; pending effective-C/layout/impedance proof."
+    },
+    "C7": {
+      "kind": "C",
+      "package": "0402",
+      "tolerance_fraction": 0.2,
+      "min_voltage_v": 10.0,
+      "operating_voltage_v": 1.1,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "RP2350 buck output/DVDD 1V1 capacitor: HOLD exact supplier review candidate; pending effective-C/ESR/layout proof."
+    },
+    "C9": {
+      "kind": "C",
+      "package": "0402",
+      "tolerance_fraction": 0.2,
+      "min_voltage_v": 10.0,
+      "operating_voltage_v": 3.366,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "VREG_AVDD 33-ohm/4.7uF analogue supply filter; HOLD exact supplier review candidate; pending bias/cutoff requirements."
+    },
+    "C10": {
+      "kind": "C",
+      "package": "0402",
+      "tolerance_fraction": 0.2,
+      "min_voltage_v": 10.0,
+      "operating_voltage_v": 1.1,
+      "voltage_derating": 0.5,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "1V1 additional 4.7uF DVDD bulk/decoupling; HOLD exact supplier review candidate; pending biased effective-C requirement."
+    },
+    "C21": {
+      "kind": "C",
+      "package": "1206",
+      "tolerance_fraction": 0.2,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.366,
+      "voltage_derating": 0.6,
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "3V3 nominal 100uF bulk; HOLD exact supplier review candidate; pending biased effective-C/ESR bound."
+    },
+    "D1": {
+      "kind": "other"
+    },
+    "U5": {
+      "kind": "other"
+    }
+  },
+  "verified_specs": {}
+}

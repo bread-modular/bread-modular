@@ -1,0 +1,2104 @@
+{
+  "usb-27R": {
+    "target": {
+      "kind": "R",
+      "value_si": 27,
+      "tolerance_fraction": 0.01,
+      "min_voltage_v": 50,
+      "operating_voltage_v": 0.2,
+      "voltage_derating": 0.5,
+      "min_power_w": 0.0625,
+      "operating_current_a": 0.004,
+      "power_derating": 0.5,
+      "compatible_packages": [
+        "0402",
+        "0603",
+        "0805"
+      ],
+      "original_package": "0402"
+    },
+    "basis": "Replay only; conservative planner stress envelope is not a USB short-circuit or signal-integrity approval. No exact Basic 27R network proven in this bounded pool.",
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [],
+      "rejected_parts": [
+        {
+          "code": "C270650",
+          "failures": [
+            "R/C requires actual Basic, not Extended",
+            "insufficient stock: 1 < 2"
+          ]
+        },
+        {
+          "code": "C25083",
+          "failures": [
+            "R/C requires actual Basic, not Extended"
+          ]
+        },
+        {
+          "code": "C22791",
+          "failures": [
+            "R/C requires actual Basic, not Extended"
+          ]
+        },
+        {
+          "code": "C22810",
+          "failures": [
+            "R/C requires actual Basic, not Preferred Extended"
+          ]
+        },
+        {
+          "code": "C25190",
+          "failures": [
+            "R/C requires actual Basic, not Preferred Extended"
+          ]
+        },
+        {
+          "code": "C17594",
+          "failures": [
+            "R/C requires actual Basic, not Preferred Extended"
+          ]
+        }
+      ],
+      "examined_networks": 16,
+      "rejected_network_count": 16,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 3,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  },
+  "C1525": {
+    "target": {
+      "kind": "C",
+      "value_si": 1.0000000000000001e-07,
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 16.0,
+      "operating_voltage_v": 5.25,
+      "voltage_derating": 0.5,
+      "compatible_packages": [
+        "0402"
+      ],
+      "original_package": "0402",
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified."
+    },
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [
+        {
+          "nominal_si": 1.0000000000000001e-07,
+          "worst_case_interval_si": [
+            9.000000000000001e-08,
+            1.1000000000000002e-07
+          ],
+          "target_interval_si": [
+            9.000000000000001e-08,
+            1.1000000000000002e-07
+          ],
+          "effective_capacitance_min_f": null,
+          "esr_series_model_ohm": null,
+          "esl_series_model_h": null,
+          "per_part": [
+            {
+              "code": "C1525",
+              "mpn": "CL05B104KO5NNNC",
+              "specs": {
+                "value_si": 1.0000000000000001e-07,
+                "tolerance_fraction": 0.1,
+                "voltage_v": 16.0,
+                "dielectric": "X7R"
+              },
+              "checks": [
+                {
+                  "check": "passive kind",
+                  "status": "pass",
+                  "actual": "C",
+                  "expected": "C"
+                },
+                {
+                  "check": "requirement:value_si",
+                  "status": "pass",
+                  "actual": 1.0000000000000001e-07,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:tolerance_fraction",
+                  "status": "pass",
+                  "actual": 0.1,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_voltage_v",
+                  "status": "pass",
+                  "actual": 16.0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:operating_voltage_v",
+                  "status": "pass",
+                  "actual": 5.25,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:voltage_derating",
+                  "status": "pass",
+                  "actual": 0.5,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_effective_capacitance_f",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:polarity",
+                  "status": "pass",
+                  "actual": "nonpolar",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:dielectrics",
+                  "status": "pass",
+                  "actual": [
+                    "X7R"
+                  ],
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:role",
+                  "status": "pass",
+                  "actual": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified.",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "value/tolerance worst-case interval",
+                  "status": "pass",
+                  "actual": [
+                    9.000000000000001e-08,
+                    1.1000000000000002e-07
+                  ],
+                  "expected": [
+                    9.000000000000001e-08,
+                    1.1000000000000002e-07
+                  ]
+                },
+                {
+                  "check": "minimum voltage rating",
+                  "status": "pass",
+                  "actual": 16.0,
+                  "expected": 16.0
+                },
+                {
+                  "check": "derated voltage",
+                  "status": "pass",
+                  "actual": 8.0,
+                  "expected": 5.25
+                },
+                {
+                  "check": "polarity",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "nonpolar"
+                },
+                {
+                  "check": "dielectric",
+                  "status": "pass",
+                  "actual": "X7R",
+                  "expected": [
+                    "X7R"
+                  ]
+                },
+                {
+                  "check": "DC-bias effective capacitance",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": 0
+                },
+                {
+                  "check": "esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                },
+                {
+                  "check": "esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                }
+              ],
+              "supplemental_spec_evidence": null,
+              "stress": {
+                "voltage_v": 5.25,
+                "current_a": null,
+                "ripple_current_a": null
+              }
+            }
+          ],
+          "failures": [],
+          "unresolved": [
+            "C1525: DC-bias effective capacitance",
+            "C1525: esl_h",
+            "C1525: esr_ohm",
+            "C1525: polarity",
+            "C1525: requirement:max_esl_h",
+            "C1525: requirement:max_esr_ohm",
+            "frequency-dependent ESR/ESL, ripple, layout and regulator/decoupling role require review",
+            "human footprint/pad/pin map, temperature/pulse derating and routing impact review required; never an automatic edit",
+            "network DC-bias effective capacitance unverified",
+            "polarized capacitor orientation/reverse-voltage network needs circuit review"
+          ],
+          "topology": "direct",
+          "codes": [
+            "C1525"
+          ],
+          "component_count": 1,
+          "required_quantities": {
+            "C1525": 1
+          },
+          "evidence": [
+            {
+              "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+              "retrieved_at_utc": "2026-10-05T05:53:13Z",
+              "http_status": 200,
+              "request": {
+                "currentPage": 1,
+                "pageSize": 20,
+                "keyword": "C1525"
+              },
+              "sha256": "bce2a163d9950c22ba4ef5c955bf6f34813a5cd6808b4cd64dda541bc813169f",
+              "mode": "cache"
+            }
+          ],
+          "status": "review_candidate",
+          "automatic_edit_approved": false,
+          "estimated_component_cost": 0.0045,
+          "package_change_count": 0,
+          "ranking_note": "few parts, original/common package first, low component cost, low value error; placement/routing not measured"
+        }
+      ],
+      "rejected_parts": [],
+      "examined_networks": 1,
+      "rejected_network_count": 0,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 1,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  },
+  "C1548": {
+    "target": {
+      "kind": "C",
+      "value_si": 1.5e-11,
+      "tolerance_fraction": 0.05,
+      "min_voltage_v": 50.0,
+      "operating_voltage_v": 3.366,
+      "voltage_derating": 0.5,
+      "compatible_packages": [
+        "0402"
+      ],
+      "original_package": "0402",
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "C0G"
+      ],
+      "role": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified."
+    },
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [
+        {
+          "nominal_si": 1.5e-11,
+          "worst_case_interval_si": [
+            1.425e-11,
+            1.575e-11
+          ],
+          "target_interval_si": [
+            1.425e-11,
+            1.575e-11
+          ],
+          "effective_capacitance_min_f": null,
+          "esr_series_model_ohm": null,
+          "esl_series_model_h": null,
+          "per_part": [
+            {
+              "code": "C1548",
+              "mpn": "0402CG150J500NT",
+              "specs": {
+                "value_si": 1.5e-11,
+                "tolerance_fraction": 0.05,
+                "voltage_v": 50.0,
+                "dielectric": "C0G"
+              },
+              "checks": [
+                {
+                  "check": "passive kind",
+                  "status": "pass",
+                  "actual": "C",
+                  "expected": "C"
+                },
+                {
+                  "check": "requirement:value_si",
+                  "status": "pass",
+                  "actual": 1.5e-11,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:tolerance_fraction",
+                  "status": "pass",
+                  "actual": 0.05,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_voltage_v",
+                  "status": "pass",
+                  "actual": 50.0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:operating_voltage_v",
+                  "status": "pass",
+                  "actual": 3.366,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:voltage_derating",
+                  "status": "pass",
+                  "actual": 0.5,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_effective_capacitance_f",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:polarity",
+                  "status": "pass",
+                  "actual": "nonpolar",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:dielectrics",
+                  "status": "pass",
+                  "actual": [
+                    "C0G"
+                  ],
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:role",
+                  "status": "pass",
+                  "actual": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified.",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "value/tolerance worst-case interval",
+                  "status": "pass",
+                  "actual": [
+                    1.425e-11,
+                    1.575e-11
+                  ],
+                  "expected": [
+                    1.425e-11,
+                    1.575e-11
+                  ]
+                },
+                {
+                  "check": "minimum voltage rating",
+                  "status": "pass",
+                  "actual": 50.0,
+                  "expected": 50.0
+                },
+                {
+                  "check": "derated voltage",
+                  "status": "pass",
+                  "actual": 25.0,
+                  "expected": 3.366
+                },
+                {
+                  "check": "polarity",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "nonpolar"
+                },
+                {
+                  "check": "dielectric",
+                  "status": "pass",
+                  "actual": "C0G",
+                  "expected": [
+                    "C0G"
+                  ]
+                },
+                {
+                  "check": "DC-bias effective capacitance",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": 0
+                },
+                {
+                  "check": "esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                },
+                {
+                  "check": "esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                }
+              ],
+              "supplemental_spec_evidence": null,
+              "stress": {
+                "voltage_v": 3.366,
+                "current_a": null,
+                "ripple_current_a": null
+              }
+            }
+          ],
+          "failures": [],
+          "unresolved": [
+            "C1548: DC-bias effective capacitance",
+            "C1548: esl_h",
+            "C1548: esr_ohm",
+            "C1548: polarity",
+            "C1548: requirement:max_esl_h",
+            "C1548: requirement:max_esr_ohm",
+            "frequency-dependent ESR/ESL, ripple, layout and regulator/decoupling role require review",
+            "human footprint/pad/pin map, temperature/pulse derating and routing impact review required; never an automatic edit",
+            "network DC-bias effective capacitance unverified",
+            "polarized capacitor orientation/reverse-voltage network needs circuit review"
+          ],
+          "topology": "direct",
+          "codes": [
+            "C1548"
+          ],
+          "component_count": 1,
+          "required_quantities": {
+            "C1548": 1
+          },
+          "evidence": [
+            {
+              "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+              "retrieved_at_utc": "2026-10-05T05:43:01Z",
+              "http_status": 200,
+              "request": {
+                "currentPage": 1,
+                "pageSize": 20,
+                "keyword": "C1548"
+              },
+              "sha256": "e2c7332cb2ed914588efa25e6100d160cceb729f2c7eb0b9a3e1058b43b5ae85",
+              "mode": "cache"
+            }
+          ],
+          "status": "review_candidate",
+          "automatic_edit_approved": false,
+          "estimated_component_cost": 0.0038,
+          "package_change_count": 0,
+          "ranking_note": "few parts, original/common package first, low component cost, low value error; placement/routing not measured"
+        }
+      ],
+      "rejected_parts": [],
+      "examined_networks": 1,
+      "rejected_network_count": 0,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 1,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  },
+  "C23733": {
+    "target": {
+      "kind": "C",
+      "value_si": 4.7e-06,
+      "tolerance_fraction": 0.2,
+      "min_voltage_v": 10.0,
+      "operating_voltage_v": 3.366,
+      "voltage_derating": 0.5,
+      "compatible_packages": [
+        "0402"
+      ],
+      "original_package": "0402",
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified."
+    },
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [
+        {
+          "nominal_si": 4.7e-06,
+          "worst_case_interval_si": [
+            3.76e-06,
+            5.639999999999999e-06
+          ],
+          "target_interval_si": [
+            3.76e-06,
+            5.639999999999999e-06
+          ],
+          "effective_capacitance_min_f": null,
+          "esr_series_model_ohm": null,
+          "esl_series_model_h": null,
+          "per_part": [
+            {
+              "code": "C23733",
+              "mpn": "CL05A475MP5NRNC",
+              "specs": {
+                "value_si": 4.7e-06,
+                "tolerance_fraction": 0.2,
+                "voltage_v": 10.0,
+                "dielectric": "X5R"
+              },
+              "checks": [
+                {
+                  "check": "passive kind",
+                  "status": "pass",
+                  "actual": "C",
+                  "expected": "C"
+                },
+                {
+                  "check": "requirement:value_si",
+                  "status": "pass",
+                  "actual": 4.7e-06,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:tolerance_fraction",
+                  "status": "pass",
+                  "actual": 0.2,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_voltage_v",
+                  "status": "pass",
+                  "actual": 10.0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:operating_voltage_v",
+                  "status": "pass",
+                  "actual": 3.366,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:voltage_derating",
+                  "status": "pass",
+                  "actual": 0.5,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_effective_capacitance_f",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:polarity",
+                  "status": "pass",
+                  "actual": "nonpolar",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:dielectrics",
+                  "status": "pass",
+                  "actual": [
+                    "X5R"
+                  ],
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:role",
+                  "status": "pass",
+                  "actual": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified.",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "value/tolerance worst-case interval",
+                  "status": "pass",
+                  "actual": [
+                    3.76e-06,
+                    5.639999999999999e-06
+                  ],
+                  "expected": [
+                    3.76e-06,
+                    5.639999999999999e-06
+                  ]
+                },
+                {
+                  "check": "minimum voltage rating",
+                  "status": "pass",
+                  "actual": 10.0,
+                  "expected": 10.0
+                },
+                {
+                  "check": "derated voltage",
+                  "status": "pass",
+                  "actual": 5.0,
+                  "expected": 3.366
+                },
+                {
+                  "check": "polarity",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "nonpolar"
+                },
+                {
+                  "check": "dielectric",
+                  "status": "pass",
+                  "actual": "X5R",
+                  "expected": [
+                    "X5R"
+                  ]
+                },
+                {
+                  "check": "DC-bias effective capacitance",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": 0
+                },
+                {
+                  "check": "esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                },
+                {
+                  "check": "esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                }
+              ],
+              "supplemental_spec_evidence": null,
+              "stress": {
+                "voltage_v": 3.366,
+                "current_a": null,
+                "ripple_current_a": null
+              }
+            }
+          ],
+          "failures": [],
+          "unresolved": [
+            "C23733: DC-bias effective capacitance",
+            "C23733: esl_h",
+            "C23733: esr_ohm",
+            "C23733: polarity",
+            "C23733: requirement:max_esl_h",
+            "C23733: requirement:max_esr_ohm",
+            "frequency-dependent ESR/ESL, ripple, layout and regulator/decoupling role require review",
+            "human footprint/pad/pin map, temperature/pulse derating and routing impact review required; never an automatic edit",
+            "network DC-bias effective capacitance unverified",
+            "polarized capacitor orientation/reverse-voltage network needs circuit review"
+          ],
+          "topology": "direct",
+          "codes": [
+            "C23733"
+          ],
+          "component_count": 1,
+          "required_quantities": {
+            "C23733": 1
+          },
+          "evidence": [
+            {
+              "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+              "retrieved_at_utc": "2026-10-05T05:43:03Z",
+              "http_status": 200,
+              "request": {
+                "currentPage": 1,
+                "pageSize": 20,
+                "keyword": "C23733"
+              },
+              "sha256": "cee8c3d6f5b3fa01c98763b2b5ea4bd6986fe085540149bb57d887e7a3440474",
+              "mode": "cache"
+            }
+          ],
+          "status": "review_candidate",
+          "automatic_edit_approved": false,
+          "estimated_component_cost": 0.0166,
+          "package_change_count": 0,
+          "ranking_note": "few parts, original/common package first, low component cost, low value error; placement/routing not measured"
+        }
+      ],
+      "rejected_parts": [],
+      "examined_networks": 1,
+      "rejected_network_count": 0,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 1,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  },
+  "C15008": {
+    "target": {
+      "kind": "C",
+      "value_si": 9.999999999999999e-05,
+      "tolerance_fraction": 0.2,
+      "min_voltage_v": 6.3,
+      "operating_voltage_v": 3.366,
+      "voltage_derating": 0.6,
+      "compatible_packages": [
+        "1206"
+      ],
+      "original_package": "1206",
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified."
+    },
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [
+        {
+          "nominal_si": 9.999999999999999e-05,
+          "worst_case_interval_si": [
+            7.999999999999999e-05,
+            0.00011999999999999999
+          ],
+          "target_interval_si": [
+            7.999999999999999e-05,
+            0.00011999999999999999
+          ],
+          "effective_capacitance_min_f": null,
+          "esr_series_model_ohm": null,
+          "esl_series_model_h": null,
+          "per_part": [
+            {
+              "code": "C15008",
+              "mpn": "CL31A107MQHNNNE",
+              "specs": {
+                "value_si": 9.999999999999999e-05,
+                "tolerance_fraction": 0.2,
+                "voltage_v": 6.3,
+                "dielectric": "X5R"
+              },
+              "checks": [
+                {
+                  "check": "passive kind",
+                  "status": "pass",
+                  "actual": "C",
+                  "expected": "C"
+                },
+                {
+                  "check": "requirement:value_si",
+                  "status": "pass",
+                  "actual": 9.999999999999999e-05,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:tolerance_fraction",
+                  "status": "pass",
+                  "actual": 0.2,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_voltage_v",
+                  "status": "pass",
+                  "actual": 6.3,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:operating_voltage_v",
+                  "status": "pass",
+                  "actual": 3.366,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:voltage_derating",
+                  "status": "pass",
+                  "actual": 0.6,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_effective_capacitance_f",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:polarity",
+                  "status": "pass",
+                  "actual": "nonpolar",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:dielectrics",
+                  "status": "pass",
+                  "actual": [
+                    "X5R"
+                  ],
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:role",
+                  "status": "pass",
+                  "actual": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified.",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "value/tolerance worst-case interval",
+                  "status": "pass",
+                  "actual": [
+                    7.999999999999999e-05,
+                    0.00011999999999999999
+                  ],
+                  "expected": [
+                    7.999999999999999e-05,
+                    0.00011999999999999999
+                  ]
+                },
+                {
+                  "check": "minimum voltage rating",
+                  "status": "pass",
+                  "actual": 6.3,
+                  "expected": 6.3
+                },
+                {
+                  "check": "derated voltage",
+                  "status": "pass",
+                  "actual": 3.78,
+                  "expected": 3.366
+                },
+                {
+                  "check": "polarity",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "nonpolar"
+                },
+                {
+                  "check": "dielectric",
+                  "status": "pass",
+                  "actual": "X5R",
+                  "expected": [
+                    "X5R"
+                  ]
+                },
+                {
+                  "check": "DC-bias effective capacitance",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": 0
+                },
+                {
+                  "check": "esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                },
+                {
+                  "check": "esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                }
+              ],
+              "supplemental_spec_evidence": null,
+              "stress": {
+                "voltage_v": 3.366,
+                "current_a": null,
+                "ripple_current_a": null
+              }
+            }
+          ],
+          "failures": [],
+          "unresolved": [
+            "C15008: DC-bias effective capacitance",
+            "C15008: esl_h",
+            "C15008: esr_ohm",
+            "C15008: polarity",
+            "C15008: requirement:max_esl_h",
+            "C15008: requirement:max_esr_ohm",
+            "frequency-dependent ESR/ESL, ripple, layout and regulator/decoupling role require review",
+            "human footprint/pad/pin map, temperature/pulse derating and routing impact review required; never an automatic edit",
+            "network DC-bias effective capacitance unverified",
+            "polarized capacitor orientation/reverse-voltage network needs circuit review"
+          ],
+          "topology": "direct",
+          "codes": [
+            "C15008"
+          ],
+          "component_count": 1,
+          "required_quantities": {
+            "C15008": 1
+          },
+          "evidence": [
+            {
+              "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+              "retrieved_at_utc": "2026-10-05T05:43:05Z",
+              "http_status": 200,
+              "request": {
+                "currentPage": 1,
+                "pageSize": 20,
+                "keyword": "C15008"
+              },
+              "sha256": "bbc45d29b790dc1b936c9cb67a9db0c29146de01be6c149c8932c14480fe57ae",
+              "mode": "cache"
+            }
+          ],
+          "status": "review_candidate",
+          "automatic_edit_approved": false,
+          "estimated_component_cost": 0.1254,
+          "package_change_count": 0,
+          "ranking_note": "few parts, original/common package first, low component cost, low value error; placement/routing not measured"
+        }
+      ],
+      "rejected_parts": [],
+      "examined_networks": 1,
+      "rejected_network_count": 0,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 1,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  },
+  "C15195": {
+    "target": {
+      "kind": "C",
+      "value_si": 1e-08,
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 50.0,
+      "operating_voltage_v": 3.366,
+      "voltage_derating": 0.5,
+      "compatible_packages": [
+        "0402"
+      ],
+      "original_package": "0402",
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified."
+    },
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [
+        {
+          "nominal_si": 1e-08,
+          "worst_case_interval_si": [
+            9.000000000000001e-09,
+            1.1000000000000001e-08
+          ],
+          "target_interval_si": [
+            9.000000000000001e-09,
+            1.1000000000000001e-08
+          ],
+          "effective_capacitance_min_f": null,
+          "esr_series_model_ohm": null,
+          "esl_series_model_h": null,
+          "per_part": [
+            {
+              "code": "C15195",
+              "mpn": "CL05B103KB5NNNC",
+              "specs": {
+                "value_si": 1e-08,
+                "tolerance_fraction": 0.1,
+                "voltage_v": 50.0,
+                "dielectric": "X7R"
+              },
+              "checks": [
+                {
+                  "check": "passive kind",
+                  "status": "pass",
+                  "actual": "C",
+                  "expected": "C"
+                },
+                {
+                  "check": "requirement:value_si",
+                  "status": "pass",
+                  "actual": 1e-08,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:tolerance_fraction",
+                  "status": "pass",
+                  "actual": 0.1,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_voltage_v",
+                  "status": "pass",
+                  "actual": 50.0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:operating_voltage_v",
+                  "status": "pass",
+                  "actual": 3.366,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:voltage_derating",
+                  "status": "pass",
+                  "actual": 0.5,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_effective_capacitance_f",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:polarity",
+                  "status": "pass",
+                  "actual": "nonpolar",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:dielectrics",
+                  "status": "pass",
+                  "actual": [
+                    "X7R"
+                  ],
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:role",
+                  "status": "pass",
+                  "actual": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified.",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "value/tolerance worst-case interval",
+                  "status": "pass",
+                  "actual": [
+                    9.000000000000001e-09,
+                    1.1000000000000001e-08
+                  ],
+                  "expected": [
+                    9.000000000000001e-09,
+                    1.1000000000000001e-08
+                  ]
+                },
+                {
+                  "check": "minimum voltage rating",
+                  "status": "pass",
+                  "actual": 50.0,
+                  "expected": 50.0
+                },
+                {
+                  "check": "derated voltage",
+                  "status": "pass",
+                  "actual": 25.0,
+                  "expected": 3.366
+                },
+                {
+                  "check": "polarity",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "nonpolar"
+                },
+                {
+                  "check": "dielectric",
+                  "status": "pass",
+                  "actual": "X7R",
+                  "expected": [
+                    "X7R"
+                  ]
+                },
+                {
+                  "check": "DC-bias effective capacitance",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": 0
+                },
+                {
+                  "check": "esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                },
+                {
+                  "check": "esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                }
+              ],
+              "supplemental_spec_evidence": null,
+              "stress": {
+                "voltage_v": 3.366,
+                "current_a": null,
+                "ripple_current_a": null
+              }
+            }
+          ],
+          "failures": [],
+          "unresolved": [
+            "C15195: DC-bias effective capacitance",
+            "C15195: esl_h",
+            "C15195: esr_ohm",
+            "C15195: polarity",
+            "C15195: requirement:max_esl_h",
+            "C15195: requirement:max_esr_ohm",
+            "frequency-dependent ESR/ESL, ripple, layout and regulator/decoupling role require review",
+            "human footprint/pad/pin map, temperature/pulse derating and routing impact review required; never an automatic edit",
+            "network DC-bias effective capacitance unverified",
+            "polarized capacitor orientation/reverse-voltage network needs circuit review"
+          ],
+          "topology": "direct",
+          "codes": [
+            "C15195"
+          ],
+          "component_count": 1,
+          "required_quantities": {
+            "C15195": 1
+          },
+          "evidence": [
+            {
+              "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+              "retrieved_at_utc": "2026-10-05T05:43:06Z",
+              "http_status": 200,
+              "request": {
+                "currentPage": 1,
+                "pageSize": 20,
+                "keyword": "C15195"
+              },
+              "sha256": "610dede839b4269772ec09ef874cb781603d74ed6f35ee76a9248b2f68e5ff74",
+              "mode": "cache"
+            }
+          ],
+          "status": "review_candidate",
+          "automatic_edit_approved": false,
+          "estimated_component_cost": 0.005,
+          "package_change_count": 0,
+          "ranking_note": "few parts, original/common package first, low component cost, low value error; placement/routing not measured"
+        }
+      ],
+      "rejected_parts": [],
+      "examined_networks": 1,
+      "rejected_network_count": 0,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 1,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  },
+  "C1710": {
+    "target": {
+      "kind": "C",
+      "value_si": 1e-08,
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 50.0,
+      "operating_voltage_v": 5.25,
+      "voltage_derating": 0.5,
+      "compatible_packages": [
+        "0805"
+      ],
+      "original_package": "0805",
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified."
+    },
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [
+        {
+          "nominal_si": 1e-08,
+          "worst_case_interval_si": [
+            9.000000000000001e-09,
+            1.1000000000000001e-08
+          ],
+          "target_interval_si": [
+            9.000000000000001e-09,
+            1.1000000000000001e-08
+          ],
+          "effective_capacitance_min_f": null,
+          "esr_series_model_ohm": null,
+          "esl_series_model_h": null,
+          "per_part": [
+            {
+              "code": "C1710",
+              "mpn": "CL21B103KBANNNC",
+              "specs": {
+                "value_si": 1e-08,
+                "tolerance_fraction": 0.1,
+                "voltage_v": 50.0,
+                "dielectric": "X7R"
+              },
+              "checks": [
+                {
+                  "check": "passive kind",
+                  "status": "pass",
+                  "actual": "C",
+                  "expected": "C"
+                },
+                {
+                  "check": "requirement:value_si",
+                  "status": "pass",
+                  "actual": 1e-08,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:tolerance_fraction",
+                  "status": "pass",
+                  "actual": 0.1,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_voltage_v",
+                  "status": "pass",
+                  "actual": 50.0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:operating_voltage_v",
+                  "status": "pass",
+                  "actual": 5.25,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:voltage_derating",
+                  "status": "pass",
+                  "actual": 0.5,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_effective_capacitance_f",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:polarity",
+                  "status": "pass",
+                  "actual": "nonpolar",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:dielectrics",
+                  "status": "pass",
+                  "actual": [
+                    "X7R"
+                  ],
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:role",
+                  "status": "pass",
+                  "actual": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified.",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "value/tolerance worst-case interval",
+                  "status": "pass",
+                  "actual": [
+                    9.000000000000001e-09,
+                    1.1000000000000001e-08
+                  ],
+                  "expected": [
+                    9.000000000000001e-09,
+                    1.1000000000000001e-08
+                  ]
+                },
+                {
+                  "check": "minimum voltage rating",
+                  "status": "pass",
+                  "actual": 50.0,
+                  "expected": 50.0
+                },
+                {
+                  "check": "derated voltage",
+                  "status": "pass",
+                  "actual": 25.0,
+                  "expected": 5.25
+                },
+                {
+                  "check": "polarity",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "nonpolar"
+                },
+                {
+                  "check": "dielectric",
+                  "status": "pass",
+                  "actual": "X7R",
+                  "expected": [
+                    "X7R"
+                  ]
+                },
+                {
+                  "check": "DC-bias effective capacitance",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": 0
+                },
+                {
+                  "check": "esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                },
+                {
+                  "check": "esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                }
+              ],
+              "supplemental_spec_evidence": null,
+              "stress": {
+                "voltage_v": 5.25,
+                "current_a": null,
+                "ripple_current_a": null
+              }
+            }
+          ],
+          "failures": [],
+          "unresolved": [
+            "C1710: DC-bias effective capacitance",
+            "C1710: esl_h",
+            "C1710: esr_ohm",
+            "C1710: polarity",
+            "C1710: requirement:max_esl_h",
+            "C1710: requirement:max_esr_ohm",
+            "frequency-dependent ESR/ESL, ripple, layout and regulator/decoupling role require review",
+            "human footprint/pad/pin map, temperature/pulse derating and routing impact review required; never an automatic edit",
+            "network DC-bias effective capacitance unverified",
+            "polarized capacitor orientation/reverse-voltage network needs circuit review"
+          ],
+          "topology": "direct",
+          "codes": [
+            "C1710"
+          ],
+          "component_count": 1,
+          "required_quantities": {
+            "C1710": 1
+          },
+          "evidence": [
+            {
+              "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+              "retrieved_at_utc": "2026-10-05T05:43:08Z",
+              "http_status": 200,
+              "request": {
+                "currentPage": 1,
+                "pageSize": 20,
+                "keyword": "C1710"
+              },
+              "sha256": "ab16d07dffd4a8da52e069355af0c3e9f079171f5faafd74a028013c915daba9",
+              "mode": "cache"
+            }
+          ],
+          "status": "review_candidate",
+          "automatic_edit_approved": false,
+          "estimated_component_cost": 0.0114,
+          "package_change_count": 0,
+          "ranking_note": "few parts, original/common package first, low component cost, low value error; placement/routing not measured"
+        }
+      ],
+      "rejected_parts": [],
+      "examined_networks": 1,
+      "rejected_network_count": 0,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 1,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  },
+  "C15850": {
+    "target": {
+      "kind": "C",
+      "value_si": 9.999999999999999e-06,
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 25.0,
+      "operating_voltage_v": 5.25,
+      "voltage_derating": 0.5,
+      "compatible_packages": [
+        "0805"
+      ],
+      "original_package": "0805",
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X5R"
+      ],
+      "role": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified."
+    },
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [
+        {
+          "nominal_si": 9.999999999999999e-06,
+          "worst_case_interval_si": [
+            9e-06,
+            1.1e-05
+          ],
+          "target_interval_si": [
+            9e-06,
+            1.1e-05
+          ],
+          "effective_capacitance_min_f": null,
+          "esr_series_model_ohm": null,
+          "esl_series_model_h": null,
+          "per_part": [
+            {
+              "code": "C15850",
+              "mpn": "CL21A106KAYNNNE",
+              "specs": {
+                "value_si": 9.999999999999999e-06,
+                "tolerance_fraction": 0.1,
+                "voltage_v": 25.0,
+                "dielectric": "X5R"
+              },
+              "checks": [
+                {
+                  "check": "passive kind",
+                  "status": "pass",
+                  "actual": "C",
+                  "expected": "C"
+                },
+                {
+                  "check": "requirement:value_si",
+                  "status": "pass",
+                  "actual": 9.999999999999999e-06,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:tolerance_fraction",
+                  "status": "pass",
+                  "actual": 0.1,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_voltage_v",
+                  "status": "pass",
+                  "actual": 25.0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:operating_voltage_v",
+                  "status": "pass",
+                  "actual": 5.25,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:voltage_derating",
+                  "status": "pass",
+                  "actual": 0.5,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_effective_capacitance_f",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:polarity",
+                  "status": "pass",
+                  "actual": "nonpolar",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:dielectrics",
+                  "status": "pass",
+                  "actual": [
+                    "X5R"
+                  ],
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:role",
+                  "status": "pass",
+                  "actual": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified.",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "value/tolerance worst-case interval",
+                  "status": "pass",
+                  "actual": [
+                    9e-06,
+                    1.1e-05
+                  ],
+                  "expected": [
+                    9e-06,
+                    1.1e-05
+                  ]
+                },
+                {
+                  "check": "minimum voltage rating",
+                  "status": "pass",
+                  "actual": 25.0,
+                  "expected": 25.0
+                },
+                {
+                  "check": "derated voltage",
+                  "status": "pass",
+                  "actual": 12.5,
+                  "expected": 5.25
+                },
+                {
+                  "check": "polarity",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "nonpolar"
+                },
+                {
+                  "check": "dielectric",
+                  "status": "pass",
+                  "actual": "X5R",
+                  "expected": [
+                    "X5R"
+                  ]
+                },
+                {
+                  "check": "DC-bias effective capacitance",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": 0
+                },
+                {
+                  "check": "esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                },
+                {
+                  "check": "esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                }
+              ],
+              "supplemental_spec_evidence": null,
+              "stress": {
+                "voltage_v": 5.25,
+                "current_a": null,
+                "ripple_current_a": null
+              }
+            }
+          ],
+          "failures": [],
+          "unresolved": [
+            "C15850: DC-bias effective capacitance",
+            "C15850: esl_h",
+            "C15850: esr_ohm",
+            "C15850: polarity",
+            "C15850: requirement:max_esl_h",
+            "C15850: requirement:max_esr_ohm",
+            "frequency-dependent ESR/ESL, ripple, layout and regulator/decoupling role require review",
+            "human footprint/pad/pin map, temperature/pulse derating and routing impact review required; never an automatic edit",
+            "network DC-bias effective capacitance unverified",
+            "polarized capacitor orientation/reverse-voltage network needs circuit review"
+          ],
+          "topology": "direct",
+          "codes": [
+            "C15850"
+          ],
+          "component_count": 1,
+          "required_quantities": {
+            "C15850": 1
+          },
+          "evidence": [
+            {
+              "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+              "retrieved_at_utc": "2026-10-05T05:38:19Z",
+              "http_status": 200,
+              "request": {
+                "currentPage": 1,
+                "pageSize": 20,
+                "keyword": "C15850"
+              },
+              "sha256": "4d1255b438a459ec84eee6e437bf91519d31fbe6ea6eb9c2c11aa273e225af98",
+              "mode": "cache"
+            }
+          ],
+          "status": "review_candidate",
+          "automatic_edit_approved": false,
+          "estimated_component_cost": 0.0651,
+          "package_change_count": 0,
+          "ranking_note": "few parts, original/common package first, low component cost, low value error; placement/routing not measured"
+        }
+      ],
+      "rejected_parts": [],
+      "examined_networks": 1,
+      "rejected_network_count": 0,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 1,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  },
+  "C28323": {
+    "target": {
+      "kind": "C",
+      "value_si": 1e-06,
+      "tolerance_fraction": 0.1,
+      "min_voltage_v": 50.0,
+      "operating_voltage_v": 3.366,
+      "voltage_derating": 0.5,
+      "compatible_packages": [
+        "0805"
+      ],
+      "original_package": "0805",
+      "polarity": "nonpolar",
+      "dielectrics": [
+        "X7R"
+      ],
+      "role": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified."
+    },
+    "result": {
+      "order_ready": false,
+      "automatic_edit_approved": false,
+      "equations": {
+        "R_series": "R_eq = sum(R_i)",
+        "R_parallel": "R_eq = 1 / sum(1/R_i)",
+        "C_parallel": "C_eq = sum(C_i)",
+        "C_series": "C_eq = 1 / sum(1/C_i)",
+        "resistor_stress": "P_i = I_i^2 * R_i = V_i^2 / R_i; enumerate every tolerance corner for both voltage and current limits",
+        "capacitor_series_stress": "No sharing assumed: EACH capacitor checked against FULL applied voltage; balancing/leakage/transients still require review"
+      },
+      "candidates": [
+        {
+          "nominal_si": 1e-06,
+          "worst_case_interval_si": [
+            9e-07,
+            1.1e-06
+          ],
+          "target_interval_si": [
+            9e-07,
+            1.1e-06
+          ],
+          "effective_capacitance_min_f": null,
+          "esr_series_model_ohm": null,
+          "esl_series_model_h": null,
+          "per_part": [
+            {
+              "code": "C28323",
+              "mpn": "CL21B105KBFNNNE",
+              "specs": {
+                "value_si": 1e-06,
+                "tolerance_fraction": 0.1,
+                "voltage_v": 50.0,
+                "dielectric": "X7R"
+              },
+              "checks": [
+                {
+                  "check": "passive kind",
+                  "status": "pass",
+                  "actual": "C",
+                  "expected": "C"
+                },
+                {
+                  "check": "requirement:value_si",
+                  "status": "pass",
+                  "actual": 1e-06,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:tolerance_fraction",
+                  "status": "pass",
+                  "actual": 0.1,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_voltage_v",
+                  "status": "pass",
+                  "actual": 50.0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:operating_voltage_v",
+                  "status": "pass",
+                  "actual": 3.366,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:voltage_derating",
+                  "status": "pass",
+                  "actual": 0.5,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:min_effective_capacitance_f",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:max_esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:polarity",
+                  "status": "pass",
+                  "actual": "nonpolar",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:dielectrics",
+                  "status": "pass",
+                  "actual": [
+                    "X7R"
+                  ],
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "requirement:role",
+                  "status": "pass",
+                  "actual": "Nominal direct same-package candidate only; exact regulator/filter/decoupling worst-case bias/impedance is not certified.",
+                  "expected": "explicit circuit requirement"
+                },
+                {
+                  "check": "value/tolerance worst-case interval",
+                  "status": "pass",
+                  "actual": [
+                    9e-07,
+                    1.1e-06
+                  ],
+                  "expected": [
+                    9e-07,
+                    1.1e-06
+                  ]
+                },
+                {
+                  "check": "minimum voltage rating",
+                  "status": "pass",
+                  "actual": 50.0,
+                  "expected": 50.0
+                },
+                {
+                  "check": "derated voltage",
+                  "status": "pass",
+                  "actual": 25.0,
+                  "expected": 3.366
+                },
+                {
+                  "check": "polarity",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": "nonpolar"
+                },
+                {
+                  "check": "dielectric",
+                  "status": "pass",
+                  "actual": "X7R",
+                  "expected": [
+                    "X7R"
+                  ]
+                },
+                {
+                  "check": "DC-bias effective capacitance",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": 0
+                },
+                {
+                  "check": "esr_ohm",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                },
+                {
+                  "check": "esl_h",
+                  "status": "unknown",
+                  "actual": null,
+                  "expected": null
+                }
+              ],
+              "supplemental_spec_evidence": null,
+              "stress": {
+                "voltage_v": 3.366,
+                "current_a": null,
+                "ripple_current_a": null
+              }
+            }
+          ],
+          "failures": [],
+          "unresolved": [
+            "C28323: DC-bias effective capacitance",
+            "C28323: esl_h",
+            "C28323: esr_ohm",
+            "C28323: polarity",
+            "C28323: requirement:max_esl_h",
+            "C28323: requirement:max_esr_ohm",
+            "frequency-dependent ESR/ESL, ripple, layout and regulator/decoupling role require review",
+            "human footprint/pad/pin map, temperature/pulse derating and routing impact review required; never an automatic edit",
+            "network DC-bias effective capacitance unverified",
+            "polarized capacitor orientation/reverse-voltage network needs circuit review"
+          ],
+          "topology": "direct",
+          "codes": [
+            "C28323"
+          ],
+          "component_count": 1,
+          "required_quantities": {
+            "C28323": 1
+          },
+          "evidence": [
+            {
+              "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+              "retrieved_at_utc": "2026-10-05T05:38:23Z",
+              "http_status": 200,
+              "request": {
+                "currentPage": 1,
+                "pageSize": 20,
+                "keyword": "C28323"
+              },
+              "sha256": "429cf4664d5e83f5cac158dc798f2ec29ad90780443fbb6ca7408043c94322ab",
+              "mode": "cache"
+            }
+          ],
+          "status": "review_candidate",
+          "automatic_edit_approved": false,
+          "estimated_component_cost": 0.0399,
+          "package_change_count": 0,
+          "ranking_note": "few parts, original/common package first, low component cost, low value error; placement/routing not measured"
+        }
+      ],
+      "rejected_parts": [],
+      "examined_networks": 1,
+      "rejected_network_count": 0,
+      "input_truncated": false,
+      "limits": {
+        "parts_per_network": 1,
+        "catalog_candidates": 12,
+        "results": 10
+      },
+      "limitations": [
+        "positive nonzero passives only; no mixed topologies",
+        "worst-case tolerance is not RSS",
+        "capacitor ESR/ESL parallel frequency response not inferred",
+        "cost excludes assembly/feeder/attrition/shipping; public stock is not order acceptance"
+      ]
+    }
+  }
+}
