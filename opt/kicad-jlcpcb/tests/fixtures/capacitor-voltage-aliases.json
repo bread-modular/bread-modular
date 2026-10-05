@@ -1,0 +1,27 @@
+{
+  "note": "Synthetic normalization inputs, not raw supplier responses or live evidence. Base attributes reproduce the worker-reported C1525 observation; all identity/service metadata and other cases are synthetic.",
+  "part": {
+    "componentCode": "C123",
+    "componentModelEn": "TEST-ONLY-16V-CAP",
+    "componentNameEn": "Synthetic 100nF 50V X7R capacitor",
+    "componentSpecificationEn": "0402",
+    "componentLibraryType": "base",
+    "preferredComponentFlag": false,
+    "componentProductType": 0,
+    "stockCount": 100,
+    "componentPrices": []
+  },
+  "attributes": {
+    "Capacitance": "100nF",
+    "Tolerance": "±10%",
+    "Temperature Coefficient": "X7R"
+  },
+  "voltage_cases": {
+    "alias_only": {"Voltage Rating": "16V"},
+    "rated_only": {"Voltage - Rated": "16V"},
+    "equivalent": {"Voltage - Rated": "16.0V", "Voltage Rating": "16000mV"},
+    "contradictory": {"Voltage - Rated": "16V", "Voltage Rating": "25V"},
+    "malformed": {"Voltage Rating": "16V/25V"},
+    "missing": {}
+  }
+}
