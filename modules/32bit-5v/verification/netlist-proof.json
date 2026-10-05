@@ -1,0 +1,77 @@
+[
+ {
+  "check": "net '+5V' exists",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "net '+5V' == {V_SUPPLY1.1-5, U5.VI(1), C40.1}",
+  "pass": true,
+  "detail": "extra=[] missing=[]"
+ },
+ {
+  "check": "net '+5V' contains no +3V3 load",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "net '+3V3' keeps every original load (supply socket excepted)",
+  "pass": true,
+  "detail": "lost=[]"
+ },
+ {
+  "check": "net '+3V3' only gained U5.VO(3) and C41.1",
+  "pass": true,
+  "detail": "delta=[('C41', '1'), ('U5', '3')]"
+ },
+ {
+  "check": "net '+3V3_ESP32' unchanged",
+  "pass": true,
+  "detail": "lost=[] gained=[]"
+ },
+ {
+  "check": "net '+3V3_8388' unchanged",
+  "pass": true,
+  "detail": "lost=[] gained=[]"
+ },
+ {
+  "check": "net 'GND' gained only the new regulator + capacitor grounds",
+  "pass": true,
+  "detail": "lost=[] gained=[('C40', '2'), ('C41', '2'), ('U5', '2')]"
+ },
+ {
+  "check": "V_SUPPLY1 pins are no longer on '+3V3'",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "PCB: '+5V' pads == {V_SUPPLY1.1-5, U5.1, C40.1}",
+  "pass": true,
+  "detail": "actual=[('C40', '1'), ('U5', '1'), ('V_SUPPLY1', '1'), ('V_SUPPLY1', '2'), ('V_SUPPLY1', '3'), ('V_SUPPLY1', '4'), ('V_SUPPLY1', '5')]"
+ },
+ {
+  "check": "PCB: '+3V3' keeps every original load (supply socket excepted)",
+  "pass": true,
+  "detail": "lost=[]"
+ },
+ {
+  "check": "PCB: '+3V3' gained only U5.3 and C41.1",
+  "pass": true,
+  "detail": "delta=[('C41', '1'), ('U5', '3')]"
+ },
+ {
+  "check": "PCB: '+3V3_ESP32' unchanged",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "PCB: '+3V3_8388' unchanged",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "PCB: GND gained only the new regulator + capacitor grounds",
+  "pass": true,
+  "detail": "gained=[('C40', '2'), ('C41', '2'), ('U5', '2')]"
+ }
+]

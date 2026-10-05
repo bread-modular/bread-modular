@@ -1,0 +1,50 @@
+{
+  "generator": "bread-modular/kicad-jlcpcb",
+  "kicad_version": "10.0.6",
+  "board": "/home/azero/data/projects/bread-modular/modules/32bit-5v/32bit-5v.kicad_pcb",
+  "schematic": "/home/azero/data/projects/bread-modular/modules/32bit-5v/32bit-5v.kicad_sch",
+  "source_sha256": {
+    "/home/azero/data/projects/bread-modular/modules/32bit-5v/32bit-5v.kicad_pcb": "8d2facd8c4cd8e39b9878a2f809b4f9976a9b162b88430e4b85986f42e78f601",
+    "/home/azero/data/projects/bread-modular/modules/32bit-5v/32bit-5v.kicad_sch": "846ab9cf4c14f7bfbc57d3a6f1e52595b5999ac3e6569f1ce0f43f11ab64e86b"
+  },
+  "layers": [
+    "F.Cu",
+    "In1.Cu",
+    "In2.Cu",
+    "B.Cu",
+    "F.Mask",
+    "B.Mask",
+    "F.SilkS",
+    "B.SilkS",
+    "F.Paste",
+    "B.Paste",
+    "Edge.Cuts"
+  ],
+  "copper_layer_count": 4,
+  "origin": "KiCad drill/place origin",
+  "units": "mm",
+  "side": "both",
+  "include_through_hole": false,
+  "component_count": 55,
+  "bom_row_count": 24,
+  "excluded": {
+    "GND1": "Not an SMD footprint (use --include-through-hole)",
+    "INPUT1": "Not an SMD footprint (use --include-through-hole)",
+    "OUTPUT1": "Not an SMD footprint (use --include-through-hole)",
+    "RV1": "Not an SMD footprint (use --include-through-hole)",
+    "RV2": "Not an SMD footprint (use --include-through-hole)",
+    "V_SUPPLY1": "Not an SMD footprint (use --include-through-hole)"
+  },
+  "missing_part_numbers": [
+    "D1"
+  ],
+  "warnings": [
+    "Missing LCSC part numbers: D1. Match these parts manually before ordering.",
+    "Export is not a DRC or assembly approval: refill zones and save before export; review Gerbers, holes, part matches, centroids and rotations in JLCPCB's preview."
+  ],
+  "files": [
+    "32bit-5v-gerbers.zip",
+    "bom.csv",
+    "positions.csv"
+  ]
+}

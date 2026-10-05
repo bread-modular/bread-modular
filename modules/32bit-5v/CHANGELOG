@@ -1,0 +1,270 @@
+# Changelog
+
+## 1.1.3 — `C41` (the 22uF LDO output bulk) is reconnected to `+3V3`
+**Schematic-only revision.** `32bit-5v.kicad_sch` gains **one wire segment and one
+junction** (16 added lines, 0 deleted); `32bit-5v.kicad_pcb` is **byte-identical** to
+1.1.2 (same SHA-256 `0294006d…`) — **no copper was added**, because the board never lost
+the connection. This closes the pre-existing `1244ad0` defect that 1.1.2 found and
+deliberately did not fix (`POWER.md` §5, §6 item 8).
+
+* **Fix `C41` (22 µF LDO output bulk) — its `+3V3` connection was missing since
+  `1244ad0`; one segment + junction added; DRC connectivity now clean.**
+* **The defect.** Commit `1244ad0` re-placed `C41` from `(525.78, 29.21)` to
+  `(464.82, 33.02)` and left its top stub wire `(464.82, 29.21) → (464.82, 26.67)`
+  ending in mid-air: the `+3V3` run `(459.74, 24.13) → (467.36, 24.13)` passes **2.54 mm
+  above** it and never touches. The netlist therefore carried the auto net
+  `unconnected-(C41-Pad1)`, and ERC carried `+1 error pin_not_connected (Symbol C41
+  Pin 1)` plus `+1 warning unconnected_wire_endpoint (Vertical Wire, 0.0254 mm)`.
+* **The fix** — exactly the remedy scoped in `POWER.md` §5: one 2.54 mm segment, one
+  junction, no part moved, nothing else touched.
+  ```
+  (wire     (pts (xy 464.82 26.67) (xy 464.82 24.13))  ; closes the 2.54 mm gap
+  (junction (at 464.82 24.13))                          ; T onto the +3V3 run
+  ```
+* **Measured before → after** (KiCad 10.0.6 `kicad-cli`; invocations as in
+  `verification/README.md`):
+  * **netlist** — 77 → **76 nets**: the auto net `unconnected-(C41-Pad1)` is gone and
+    `+3V3` gains exactly `('C41','1')` (9 → 10 nodes). `+3V3` is the **only** net whose
+    node set changed — the other 75 shared nets are node-for-node identical, so the new
+    junction merges nothing and shorts nothing. No net was renamed, merged or split.
+  * **ERC `--severity-all`** — 56 → **54** (35/21 → **34/20**). Normalised (severity +
+    type + description + item positions) against the 1.1.2 source the diff is **exactly
+    two findings removed and none added**: the `C41` `pin_not_connected` error and the
+    `C41` `unconnected_wire_endpoint` warning, both at `(464.82, 29.21)` = `C41` pin 1.
+    The 1.1.3 report is in fact **element-for-element identical to the report shipped
+    with v1.1.1** (`verification/erc-32bit-5v-1.1.1-pre-1244ad0.json`) — the defect and
+    both of its artefacts are fully gone. Note this does **not** restore
+    `check_ldo_swap_netlist.py`: that 19/19 proof is bound to the frozen
+    1.1.0 → 1.1.1-as-released pair (unchanged by this revision).
+  * **Board DRC `--schematic-parity`** — **105 violations / 0 unconnected items, both
+    before and after** (the board is untouched), and schematic parity **19 → 18**. The
+    single removed item is exactly `Pad net (+3V3) doesn't match net given by schematic
+    (unconnected-(C41-Pad1))`, i.e. the board and the schematic now agree on `C41`'s net
+    for the first time since `1244ad0`. The other 18 parity items are the inherited ones
+    (`U5` footprint/value/LCSC, the never-placed `C42`, the `J5` B-row pins and the five
+    `C9`..`C13`) and remain the owner's routing-pass scope, not this revision's work.
+  * **`C41` on the board was never broken.** Pad 1 is `+3V3` at `(66.8, 59.85)` on
+    B.Cu, reached by the 0.8 mm track `(64.05, 60.4) → (66.8, 60.4)`; `pcbnew`
+    connectivity fits the pad into the `+3V3` cluster and DRC reports **0 unconnected
+    items**. There is no `+3V3` zone/pour anywhere on this board (the only pour is `GND`
+    on `In1.Cu`) and no dead `+3V3` stub near `C41`, so **nothing was added and nothing
+    was cleaned up on the copper**: the defect was schematic-only — i.e. it lived in the
+    netlist that a board re-sync would have been built from, not in the 1.1.0 layout.
+* **Not touched**: `32bit-5v.kicad_pcb` (byte-identical to 1.1.2), `32bit-5v.kicad_pro`,
+  `production/`, `code/`, and the **`verification/` fixture set**. Those fixtures are the
+  **1.1.2** side of the frozen trim proof — `check_bulk_cap_trim.py` consumes
+  `netlist-32bit-5v.kicadsexpr` and `erc-32bit-5v.json` as its current-revision inputs —
+  so overwriting them with 1.1.3 output would invalidate the 20/20 proof. They stay
+  exactly as they are, the same way the 1.1.0 and 1.1.1-as-released netlists stayed
+  frozen in 1.1.2.
+* `POWER.md` carries a **v1.1.3 note** at the top: its `C41` statements (§1 rail map,
+  §1.1, §1.2, §5, §6 item 8) are written against the **v1.1.2** source and are annotated
+  where they would otherwise still read as an open defect.
+
+## 1.1.2 — ESP32 rail: the five legacy 100uF bulk caps (`C9`..`C13`) are removed
+**Schematic-only revision.** `32bit-5v.kicad_sch` changes; `32bit-5v.kicad_pcb` is
+deliberately **not** touched (no placement, no routing, no zone refill, no footprint
+deletion) — the owner does the routing pass, which now also has to delete the five
+orphaned 1206 bulk-cap footprints. The `production/` BOM/CPL exports stay stale for the
+same reason (they are generated from the board). See `POWER.md` §1.3 for the full
+rationale and §6 for the hand-off table.
+
+* **Removed `C9`, `C10`, `C11`, `C12`, `C13`** — five generic **100uF 1206** capacitors
+  that sat in parallel on `+3V3_ESP32`, i.e. behind the `FB1` ferrite, directly across
+  the ESP32 module's supply. Together with the 10uF the rail carried ≈**510uF**; it now
+  carries **10.1uF**. The bank dates from the pre-regulator era (0.3.0, *"use better
+  power supply for esp32 side with ferrite beads and caps"*), when the 3.3V rail was an
+  unregulated feed and brute-force bulk was the only mitigation available. Since 1.1.0
+  the module has its own 600mA LDO, so the bank was sized against a premise that no
+  longer holds.
+* **Kept, unchanged in value/footprint/fields**: `C1` 0.1uF 0402 and `C2` 10uF 0603 on
+  `+3V3_ESP32`, `FB1` (GZ2012D121TF) and the `R3`/`C3` EN delay. The only change on the
+  rail is the deletion of the five 100uF parts plus their 20 stub/bus wires and 8
+  junctions, so nothing dangles.
+* **What the ESP32 specifies** (Espressif *ESP32-S3 Hardware Design Guidelines*,
+  schematic checklist; `ESP32-S3-WROOM-1` datasheet "Power Supply"): a **10uF + 0.1uF**
+  pair at the module's 3V3 input — which is exactly the `+3V3_ESP32` rail here and is
+  already `C2` + `C1` — an **LC circuit on the VDD3P3 rail with the inductor rated
+  ≥500mA** (`FB1`, already fitted), and **≥10uF at the main power entrance** (`C40`
+  10uF + `C42` 0.1uF on `+5V`). The five 100uF parts were an addition on top of that
+  specification, not a requirement of it. The guidelines' warning about *excessively
+  large* capacitors is about the **chip-level `VDD_SPI` rail** (internal to the module
+  here), so it is quoted for context only and is **not** the reason for this trim — see
+  `POWER.md` §1.3 for the table that separates the two levels.
+* **Margin is reduced deliberately, and the replacement is not validated.** A 500uF bank
+  also supplied charge for slow load transients; 10uF does not, even when both "meet the
+  datasheet". This revision contains **no measurement** of load-transient/brownout
+  behaviour on the trimmed rail, and no measurement of `C2`'s DC-bias-reduced effective
+  capacitance. Both are **pending bench items** (`POWER.md` §1.3 and §5); if they show
+  brownout or PSRAM-related resets, the remedy is **one** 0805/1206 bulk cap back behind
+  `FB1`, not the bank.
+* **Net effect** (proved in `verification/proof-bulk-cap-trim.json`, 20/20): `+3V3_ESP32`
+  = {`C1`.1, `C2`.1, `FB1`.1, `U1`.2}, `GND` lost only the five pin-2 nodes, every other
+  net in the design is byte-identical, and no surviving component's value, footprint or
+  fields changed. 77 nets before and after; no net was merged, split or renamed.
+* **Verification** (KiCad 10.0.6): `sch erc --severity-all` stays at **56 (35 error /
+  21 warning)** and — compared as normalised findings (severity + type + affected items
+  + positions, not just the total) — the before and after reports are **identical**, so
+  0 new and 0 changed findings. The new trim proof is **20/20** and chains
+  1.1.0 → 1.1.1-as-released → 1.1.1 source → 1.1.2 link by link. The regulator-swap
+  proof still reproduces **19/19** from the frozen artefacts.
+* **Fixture correction (worth recording).** The `verification/` artefacts shipped with
+  1.1.1 were **stale**: commit `1244ad0` ("Update the 32bit schematics a bit") changed
+  the schematic *after* they were generated, which is why the v1.1.1 note claimed 54
+  ERC findings while the same source actually produces 56. This revision freezes a
+  correct 1.1.1 baseline (`erc-32bit-5v-1.1.1.json`,
+  `netlist-32bit-5v-1.1.1.kicadsexpr`), keeps the shipped report for the record
+  (`erc-32bit-5v-1.1.1-pre-1244ad0.json`), and explains the two-finding difference.
+* **Found, NOT fixed — `C41` is disconnected (pre-existing, `1244ad0`).** That commit
+  re-placed `C41` (22uF, the LDO output bulk) and left its `+3V3` stub ending in
+  mid-air, so the netlist now contains `unconnected-(C41-Pad1)` and ERC carries exactly
+  `+1 error pin_not_connected (C41 pin 1)` and `+1 warning unconnected_wire_endpoint
+  (Vertical Wire, length 0.0254 mm)` versus the shipped 1.1.1 report. It is **not** part
+  of this revision and is **not** repaired here — it is logged in `POWER.md` §5 (with
+  the exact one-wire + one-junction remedy) and §6 item 8, and is modelled as its own
+  link in the chain proof so the history stays exact. **Do not read it as harmless:**
+  `C8`/`C6` keep the 3.3V rail decoupled so the module is expected to run, but the
+  regulator is missing 22uF of its documented output bulk and that has not been
+  validated. It should be fixed **before board synchronisation or manufacture**. Note
+  also that fixing `C41` does not restore `check_ldo_swap_netlist.py` against a 1.1.2
+  netlist — that proof belongs to the frozen 1.1.0 → 1.1.1-as-released pair.
+* **Board-side consequences (owner's routing pass)**: the board still carries `C9`..`C13`
+  footprints. Parity (`kicad-cli pcb drc --schematic-parity`) has **not been re-run**
+  since the v1.1.0 board run, so this is an expectation rather than a result: it should
+  report at least `U5` (wrong footprint, from 1.1.1), `C42` (in the schematic since
+  1.1.1, never placed), `C41` (net mismatch — see above) and the five `C9`..`C13`
+  capacitors still on the board. The `production/` exports remain the 1.1.0 ones.
+  Removing the five 1206 parts frees real estate exactly where `C1`/`C2` need to sit —
+  with no distant reservoir left, their **placement close to `U1` pin 2** is what
+  carries the decoupling (`POWER.md` §1.3, §6 items 2 and 6).
+* **Not touched**: `32bit-5v.kicad_pcb`, `32bit-5v.kicad_pro`, `production/`, `code/`,
+  and the module's outline/connectors/signal routing.
+
+## 1.1.1 — same 3.3V regulator as the base module (`AP2112K-3.3`), schematic only
+**Schematic-only revision.** `32bit-5v.kicad_sch` changes; `32bit-5v.kicad_pcb`
+is deliberately **not** touched (no placement, no routing, no zone refill, no
+footprint deletion) — the owner does the routing pass. Consequently
+`kicad-cli pcb drc --schematic-parity` now reports the regulator mismatch (the
+`schematic` has `U5` = SOT-23-5 while the board still carries the old SOT-223
+footprint): that is **expected and owned by the owner's routing pass**, not a
+defect to fix in this revision. The `production/` BOM/CPL exports are also left
+stale for the same reason (they are generated by the JLCPCB toolkit from the
+board, which did not change; regenerate them after the routing pass).
+
+* **`U5` is now the base module's regulator: `AP2112K-3.3`** (Diodes, SOT-23-5,
+  LCSC `C51118`, MPN `AP2112K-3.3TRG1`, 600mA, 250mV dropout). The Value,
+  Footprint, Datasheet, Description, LCSC, MPN and Manufacturer fields are copied
+  verbatim from the base's `U5` so both boards order the identical part
+  (machine-checked). The `AP7361C-33E-13` (SOT-223) symbol, instance and its
+  embedded library symbol are gone — the string `AP7361C` appears nowhere in the
+  schematic or the exported netlist.
+* **Pinout/net effect**: `VIN` = 1, `EN` = 3, `GND` = 2, `NC` = 4 (hidden
+  no-connect pin, exactly as in the base), `VOUT` = 5. `+3V3` still drives every
+  load it drove in 1.1.0 (`C6`, `C8`, `FB1`, `R10`, `R12`, `R15`, `R3`,
+  `U3` pin 8, `C41`) — only the regulator's own pin moved (old `VO` 3 → new
+  `VOUT` 5). `+3V3_ESP32` and `+3V3_8388` are unchanged, node for node.
+* **`+5V` is still confined to the regulator path**: {`V_SUPPLY1`.1-5, `U5` VIN,
+  `U5` EN, `C40`.1, `C42`.1} — nothing else on the board sees 5V.
+* **EN handling**: EN is wired **directly to VIN** on `+5V`, so the 3.3V rail is
+  permanently enabled. The base brings EN out to `R4` 100k + `C16` 220nF + `SW1`
+  (its user switch for the base's own 3.3V rail); that is deliberately not
+  reproduced — the module must always be on and no switch/divider is wanted.
+* **Decoupling mirrors the base's scheme** (base §1: input bulk + 0.1uF, output
+  cap(s)):
+  * **new `C42`** = 0.1uF/16V X7R **0402**, LCSC `C1525` / `CL05B104KO5NNNC` —
+    the base's own 0.1uF part (`C1`/`C21`), added as the regulator input HF cap
+    (schematic at the `+5V` node next to `C40`);
+  * **`C40` kept** = 10uF/25V X5R 0805 (`C15850`, Samsung CL21A106KAYNNNE): the
+    base fits 1uF (`C2`) at the pin but has 22uF + 0.1uF upstream of its input
+    ferrite; the module's 5V arrives on a slot socket with no upstream bulk, so the
+    larger value is kept (same Samsung CL21 0805 family as the base's caps);
+  * **`C41` kept** = 22uF/25V X5R 0805 (`C45783`, Samsung CL21A226MAQNNNE): the
+    base fits 4.7uF (`C4`) at the pin then 22uF after the ferrite; the module keeps
+    its larger bulk local to the regulator for the ESP32 + ES8388 load (same
+    Samsung CL21 family);
+  * `C6` 0.1uF / `C8` 10uF on `+3V3` and everything downstream of `FB1`/`R15` are
+    unchanged.
+* **Verification** (KiCad 10.0.6): `sch erc --severity-all` 54 → **54**
+  (34 error / 20 warning), **no new finding and no new finding kind**;
+  netlist acceptance `verification/netlist-proof-ldo-swap.json` = **19/19 pass**
+  (the `+5V`/`+3V3`/`+3V3_ESP32`/`+3V3_8388`/`GND` node sets above, no `AP7361C`
+  anywhere, and `U5`'s Value/Footprint/Datasheet/Description/LCSC/MPN/Manufacturer
+  identical to the base's `U5`). Board artefacts (DRC, parity) are left as the
+  1.1.0 runs.
+* **Headroom**: owner-confirmed that **WiFi/BT is never used** on this module, so
+  the load budget is the non-RF one — ≈0.08–0.12A typical, ≈0.15–0.2A peak
+  (ESP32-S3 with RF disabled + ES8388 + MCP6002 + LED). The 600mA AP2112K-3.3
+  covers that with ≈3x margin; no redesign required. See `POWER.md` §2/§3 for the
+  numbers and the SOT-23-5 thermal note (no exposed pad — a future RF-enabled
+  firmware would run hot).
+
+## 1.1.0 — 5V input variant (`32bit-5v`)
+New module, derived from `32bit` 1.0.0: the same board with an on-board 3.3V LDO,
+so the module can be powered from a 5V slot rail. Nothing else about the module
+changes — outline, mounting holes, connector type/pinout, mating geometry and all
+existing signal routing are untouched. See `POWER.md` for the rail map, the load
+budget and the thermal analysis.
+
+* **Supply socket `V_SUPPLY1` now carries `+5V`** (all five pins), not `+3V3`.
+  On a base v1.3.0+ board that is the slot rail with the rail-select jumper fitted
+  (`5V_SYS`); **the jumper must be fitted**, because the base's fail-safe default
+  is 3.3V and with only 3.3V in the regulator drops out and the module would run
+  below 3.0V (authoritative note in `POWER.md`).
+* **New `U5` = AP7361C-33E-13** (Diodes Inc., LCSC `C500795`), 1A low-dropout
+  linear regulator, SOT-223, 340mV dropout at 1A, 2.2–6.0V input. The SOT-223
+  (`-33E`) pinout is 1=IN, 2=GND/tab, 3=OUT, so the exposed tab — and therefore
+  the thermal path — is ground. This package has no EN pin, so no EN divider is
+  required.
+* **New `C40` = 10uF/25V X5R 0805** (LCSC `C15850`) on the regulator input and
+  **`C41` = 22uF/25V X5R 0805** (LCSC `C45783`) on its output — the values the
+  AP7361C datasheet requires (>=1uF in, >=2.2uF out) with margin, placed on the
+  back side within 2mm of the regulator. Value, MPN, Manufacturer, LCSC and
+  Datasheet are recorded on both the symbols and the footprints.
+* **Original decoupling is unchanged**: `C6`/`C8` on `+3V3`, and through `FB1`
+  (ESP32 rail) and `R15` (codec rail) the six 100uF and the codec capacitors. The
+  module has its own local bulk, so no extra bulk was added beyond `C40`/`C41`.
+* **Copper**: 0.8mm `+5V` from socket pin 4 to the regulator input; the two old
+  `+3V3` feeds out of `V_SUPPLY1` were removed and the regulator output now feeds
+  both the original `+3V3` via at (52.578, 50.038) (FB1/C8/R3) and the original
+  `In2.Cu` `+3V3` distribution trunk, so every original load is still fed.
+* **New bottom-side parts.** The top side has no room for a SOT-223 plus two
+  0805s (checked with a 0.25mm-grid free-space search), so `U5`, `C40` and `C41`
+  are placed on the back side in the free area next to `V_SUPPLY1`. The module's
+  underside keep-out is unchanged: the parts are 1.8mm tall against the 4.4mm of
+  clearance the base documents, so the mating height is unaffected.
+* **Verification** (KiCad 10.0.6, see `verification/`): ERC 55 -> 54 findings,
+  **zero new findings** (the `+3V3` net gained a power output, which removed one
+  `power_pin_not_driven`); DRC 102 -> 105 with **0 unconnected items** and
+  schematic parity 62 -> 4, and the only new findings are three
+  `lib_footprint_mismatch` warnings for the three new footprints (same class as
+  the 53 pre-existing ones: their bottom-side silkscreen was stripped and their
+  fields hidden to avoid ~40 silkscreen/text-height violations). Netlist proof:
+  the `+5V` net is exactly {`V_SUPPLY1`.1-5, `U5`.IN, `C40`.1} and every load the
+  original `+3V3` net drove is still driven (15/15 acceptance checks pass).
+* **Production outputs regenerated and renamed** (`production/32bit-5v.zip`,
+  `bom.csv`, `positions.csv`, `designators.csv`, `netlist.ipc`); no exported file
+  carries the old `32bit` name. The stale `production/backups/` snapshots of the
+  parent module were intentionally not carried over.
+* **Deliberately unchanged**: the `32BIT` / `32BIT 0.3.0` front silkscreen (no
+  new silkscreen findings) and `code/32bit` (the firmware is identical for both
+  variants — same MCU, same pinout — and renaming it would break its build).
+* Source module: `modules/32bit` 1.0.0, left byte-identical.
+
+## 1.0.0
+Fist 1.0 release with fxrack and pipe apps.
+
+## 0.3.2
+Use a known ferrite bead
+
+## 0.3.0
+Use better power supply for esp32 side with ferrite beads and caps
+
+## 0.2.0
+Introduce better routing to reduce the noise.
+
+## 0.1.1
+Moved CDATA & CCLK labels.
+They were just being marked wrongly in the ES8388 side.
+
+## 0.1.0
+Initial Release

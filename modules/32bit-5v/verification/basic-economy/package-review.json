@@ -1,0 +1,58 @@
+{
+  "status": "FILES_GENERATED_NOT_ORDER_ACCEPTED",
+  "order_ready": false,
+  "selected_assembly_service": "STANDARD",
+  "mcu_service_status": "ACCEPTED FOR SELECTED SERVICE",
+  "existing_engineering_user_accepted": true,
+  "engineering_qualification_evidence": "unchanged/unverified; user acceptance is not testing",
+  "package_generation_approval": {
+    "quote": "Just don't worry about it. It was already good. The only change here is to add a 5V to 3.3V regulator. Create the JLCPCB files.",
+    "scope": "Current 32bit-5v package generation using existing design; inherited D1/capacitor/resistor engineering concerns user-accepted, not newly tested/qualified; not supplier order acceptance",
+    "existing_engineering_user_accepted": true
+  },
+  "manual": {
+    "GND1": "User-retained bottom THT ground header; lead trim / pot-case clearance HOLD.",
+    "INPUT1": "User-retained bottom THT input header; manual assembly.",
+    "OUTPUT1": "User-retained bottom THT output header; manual assembly.",
+    "RV1": "User-retained front-facing 50k THT potentiometer; manual assembly.",
+    "RV2": "User-retained front-facing 50k THT potentiometer; manual assembly.",
+    "V_SUPPLY1": "User-retained bottom THT supply header; manual assembly."
+  },
+  "excluded": {
+    "GND1": "Not an SMD footprint (use --include-through-hole)",
+    "INPUT1": "Not an SMD footprint (use --include-through-hole)",
+    "OUTPUT1": "Not an SMD footprint (use --include-through-hole)",
+    "RV1": "Not an SMD footprint (use --include-through-hole)",
+    "RV2": "Not an SMD footprint (use --include-through-hole)",
+    "V_SUPPLY1": "Not an SMD footprint (use --include-through-hole)"
+  },
+  "quantity_basis": {
+    "requested_order_quantity": null,
+    "attrition_included": false,
+    "generation_is_quantity_independent": true
+  },
+  "missing_assembly_supplier_codes": [
+    "D1"
+  ],
+  "D1_caveat": "Original assembled D1 row/code retained exactly; match manually during JLC upload; no identity invented.",
+  "recorded_Basic_Economy_RC_refs": 45,
+  "recorded_Basic_Economy_RC_codes": 16,
+  "supplier_requests": 0,
+  "live_stock_or_authenticated_order_acceptance": "not checked",
+  "historical_economy_audit": "verification/basic-economy/final-audit.json",
+  "remaining_order_gates": [
+    "D1 exact identity/code must be matched by the user/assembler during upload; original assembled row/code retained.",
+    "Actual board quantity, attrition/minimum assembly/reel requirements, fresh selected-service stock/eligibility and quote options unknown.",
+    "Assembler placement/polarity/physical fit, stencil/reflow/via-in-pad/manufacturing review and authenticated order acceptance not verified."
+  ],
+  "input_sha256": {
+    "32bit-5v.kicad_pcb": "4d327887d8f7db4f71f44068df8031433d2d174e374a8734dd6723f0d4848efc",
+    "32bit-5v.kicad_sch": "846ab9cf4c14f7bfbc57d3a6f1e52595b5999ac3e6569f1ce0f43f11ab64e86b",
+    "production/assembly/bom.csv": "f7a83e55cb3535659929de9371466fbaaf58cbe69672fc9826e861ce2bdd7f6f",
+    "production/assembly/positions.csv": "0e5d692d9e3bc4ae58b62fe3a1d1458767fb756d1159d1205192cbcf8c461c8a",
+    "production/assembly/export-report.json": "a79d10222eccc26bd73ea8c89976cac2752bb552cb4ac5a9f3e5df1b4ec8de4a",
+    "verification/standard-service-policy.json": "d58533ee23e39b512382de6c2f9fb8c757e92f4f3037b1f1c4cda7721c5dc254",
+    "verification/basic-economy/audit-requirements.json": "9924f0965ab681b9a84335ad6dc4bef94fe6706c85bbdf0bb4de394d9192c56e",
+    "verification/basic-economy/catalog/final-live-parts.json": "b5026a61d9e7dc7ea51dec2cedb7d7df0b96afbd805a5f19a0fa7e37c1b59109"
+  }
+}

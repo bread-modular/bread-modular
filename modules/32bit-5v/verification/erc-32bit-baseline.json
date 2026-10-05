@@ -1,0 +1,863 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-09-17T18:09:21",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab",
+            "violations": [
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR019 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 0.7493,
+                                "y": 0.381
+                            },
+                            "uuid": "99205499-a3bf-496e-b626-8ddb3fc92068"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 15 [IO3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8128,
+                                "y": 0.7874
+                            },
+                            "uuid": "6dfb47c1-ed4c-43c8-baaf-389b334d453d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 4 [IO4, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8128,
+                                "y": 0.8128
+                            },
+                            "uuid": "eb0c126c-84b8-4a69-bfc4-dfae77fbffea"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 5 [IO5, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8128,
+                                "y": 0.8382
+                            },
+                            "uuid": "23c78bde-11fc-4e47-a999-457724c83b9c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 6 [IO6, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8128,
+                                "y": 0.8636
+                            },
+                            "uuid": "c13d7d69-0a02-473f-aa15-fa9a649e3f71"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 7 [IO7, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8128,
+                                "y": 0.889
+                            },
+                            "uuid": "e162b317-a84b-4183-b4a3-7c08e1e69e61"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 8 [IO15, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8128,
+                                "y": 1.0922
+                            },
+                            "uuid": "8b0453c5-c088-4d54-bc4f-2d8fe131a243"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 9 [IO16, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8128,
+                                "y": 1.1176
+                            },
+                            "uuid": "aaa70a12-e424-4094-8cf6-24d34dfb8d28"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 9 [NC, Input, Line]",
+                            "pos": {
+                                "x": 0.9779,
+                                "y": 2.2225
+                            },
+                            "uuid": "a43ce57e-03bd-427d-8dc0-7a182eaaa13a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 9 [NC, Input, Line]",
+                            "pos": {
+                                "x": 0.9779,
+                                "y": 2.2225
+                            },
+                            "uuid": "a43ce57e-03bd-427d-8dc0-7a182eaaa13a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 14 [ROUT2, Input, Line]",
+                            "pos": {
+                                "x": 0.9779,
+                                "y": 2.413
+                            },
+                            "uuid": "85e4008c-24f2-4725-8db7-9ab816a399f8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 14 [ROUT2, Input, Line]",
+                            "pos": {
+                                "x": 0.9779,
+                                "y": 2.413
+                            },
+                            "uuid": "85e4008c-24f2-4725-8db7-9ab816a399f8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 10 [IO17, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 0.7112
+                            },
+                            "uuid": "3426dccc-e6ac-4550-993d-3edfd3c7e2c2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 28 [IO35, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 0.8382
+                            },
+                            "uuid": "69c644be-15af-4a55-b121-f8a3eefb337e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 29 [IO36, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 0.8636
+                            },
+                            "uuid": "74771468-95a5-4302-beb5-ba2470d7ced6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 30 [IO37, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 0.889
+                            },
+                            "uuid": "51be732f-a3f5-43fc-8a73-7319868c084b"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 31 [IO38, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 0.9144
+                            },
+                            "uuid": "6966576d-1295-4770-9547-2b6eb32e2289"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 32 [IO39, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 0.9398
+                            },
+                            "uuid": "ded87e6b-aa88-4236-962a-cc3cbea84229"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 33 [IO40, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 0.9652
+                            },
+                            "uuid": "ca5f9db1-2acf-4f98-a144-f7b6b66f6e7a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 34 [IO41, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 0.9906
+                            },
+                            "uuid": "8227ff30-7df6-4ef0-b18c-cae745c6d04e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 35 [IO42, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 1.016
+                            },
+                            "uuid": "42e8aa59-6956-4a5a-9d4a-f5c422b9c2b1"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 26 [IO45, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 1.0414
+                            },
+                            "uuid": "426b95e4-5c2d-4d4c-89b1-2adaed6a7c79"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 16 [IO46, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 1.0668
+                            },
+                            "uuid": "8fe51060-8546-445a-9fb3-54e1e6415382"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR04 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 1.1684,
+                                "y": 3.6068
+                            },
+                            "uuid": "822f18b7-b273-4ea3-bc1b-1c87d5bc338e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 15 [LOUT2, Input, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 1.9177
+                            },
+                            "uuid": "3f726f09-474e-441b-88ca-1994fe2664a9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 15 [LOUT2, Input, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 1.9177
+                            },
+                            "uuid": "3f726f09-474e-441b-88ca-1994fe2664a9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 21 [RIN2, Input, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 2.1463
+                            },
+                            "uuid": "0f9f35b7-aebd-4a5b-8c26-5400c2e22955"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 21 [RIN2, Input, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 2.1463
+                            },
+                            "uuid": "0f9f35b7-aebd-4a5b-8c26-5400c2e22955"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 22 [LIN2, Input, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 2.1844
+                            },
+                            "uuid": "92523ea7-bdc1-4624-975e-326cb0653600"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 22 [LIN2, Input, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 2.1844
+                            },
+                            "uuid": "92523ea7-bdc1-4624-975e-326cb0653600"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 25 [NC, Input, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 2.2987
+                            },
+                            "uuid": "da458c65-adb0-414a-b291-93f47df1b0b9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol U4 Pin 25 [NC, Input, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 2.2987
+                            },
+                            "uuid": "da458c65-adb0-414a-b291-93f47df1b0b9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR015 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 1.6129,
+                                "y": 1.6383
+                            },
+                            "uuid": "c4df026a-e790-4174-a9bb-a2715faa6447"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol J5 Hidden pin B9 [VBUS, Passive, Line]",
+                            "pos": {
+                                "x": 1.9558,
+                                "y": 0.4699
+                            },
+                            "uuid": "efb7027f-58d1-402b-9265-bb849a065e13"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR01 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 5.0673,
+                                "y": 0.3556
+                            },
+                            "uuid": "066d2e05-6b66-4c40-8d90-399a8569601c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C5 [C_Small]",
+                            "pos": {
+                                "x": 0.2794,
+                                "y": 2.0955
+                            },
+                            "uuid": "caf7210d-93d8-44ff-b21d-4f05b66d0edb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C21 [C_Small]",
+                            "pos": {
+                                "x": 0.4191,
+                                "y": 2.0955
+                            },
+                            "uuid": "fe0f0188-9764-4ec9-b62a-fb145b96b00f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C22 [C_Small]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 2.0955
+                            },
+                            "uuid": "9ef1cd9c-ebd9-45da-9793-3445c9e14ebd"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Unconnected \"no connection\" flag",
+                    "items": [
+                        {
+                            "description": "No Connect",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.2667
+                            },
+                            "uuid": "4e85646a-4ef1-46c1-9a30-12e98d5e7388"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "no_connect_dangling"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C27 [C_Small]",
+                            "pos": {
+                                "x": 0.889,
+                                "y": 2.2352
+                            },
+                            "uuid": "bbb94acb-4437-497d-837e-70a6a68602b7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Unconnected wire endpoint",
+                    "items": [
+                        {
+                            "description": "Vertical Wire, length 0.0381 mm",
+                            "pos": {
+                                "x": 0.9652,
+                                "y": 0.6477
+                            },
+                            "uuid": "d587ea56-c878-4b41-809f-dcb5797785de"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "unconnected_wire_endpoint"
+                },
+                {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV1 [R_Potentiometer]",
+                            "pos": {
+                                "x": 1.0414,
+                                "y": 3.0988
+                            },
+                            "uuid": "35ac245c-25e9-4f8e-afc5-7d18ac4c0777"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV2 [R_Potentiometer]",
+                            "pos": {
+                                "x": 1.0414,
+                                "y": 3.5941
+                            },
+                            "uuid": "07e113f9-a9f5-431d-8c4d-1da0526d7029"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'BreadModular_Symbols'",
+                    "items": [
+                        {
+                            "description": "Symbol U4 [ES8388]",
+                            "pos": {
+                                "x": 1.1176,
+                                "y": 2.0955
+                            },
+                            "uuid": "f330906f-c8a4-4b75-8b98-32ba1bcf8721"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C33 [C_Small]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 2.1082
+                            },
+                            "uuid": "90941730-377d-4d9c-bf30-ecdc6c5c4f76"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C34 [C_Small]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 2.1717
+                            },
+                            "uuid": "a644e67d-d89a-4233-89bb-e7e498d3c173"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C35 [C_Small]",
+                            "pos": {
+                                "x": 1.7653,
+                                "y": 2.0701
+                            },
+                            "uuid": "ed3a350e-0b3c-4ca3-878a-0bff1d5df1ea"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C36 [C_Small]",
+                            "pos": {
+                                "x": 1.7653,
+                                "y": 2.1336
+                            },
+                            "uuid": "d96ff1ab-c849-4b88-8662-c728ee0d36c4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'USB_C_Receptacle_USB2.0_14P' doesn't match copy in library 'Connector'",
+                    "items": [
+                        {
+                            "description": "Symbol J5 [USB_C_Receptacle_USB2.0_14P]",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 0.6223
+                            },
+                            "uuid": "91d9eb05-b42f-43a6-96db-8292d5e36614"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C7 [C_Small]",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 1.7018
+                            },
+                            "uuid": "0876a02f-12ee-40b5-abf1-8b2ea4c31e45"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'LED' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol D1 [LED]",
+                            "pos": {
+                                "x": 1.8923,
+                                "y": 3.3782
+                            },
+                            "uuid": "a3862680-f24c-4f5f-a828-5732f9960c10"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C37 [C_Small]",
+                            "pos": {
+                                "x": 2.0955,
+                                "y": 2.1336
+                            },
+                            "uuid": "0bf3dced-9c1d-4fbb-bcc3-d8a6e509e2d5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C26 [C_Small]",
+                            "pos": {
+                                "x": 2.2352,
+                                "y": 2.1336
+                            },
+                            "uuid": "d7c70254-61fa-4914-a1cc-ea1ecced6357"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C38 [C_Small]",
+                            "pos": {
+                                "x": 2.413,
+                                "y": 2.1336
+                            },
+                            "uuid": "eb326cf5-920d-4d85-8f7d-bdc1c456ee0f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'C_Small' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol C39 [C_Small]",
+                            "pos": {
+                                "x": 2.5527,
+                                "y": 2.1336
+                            },
+                            "uuid": "abc5b711-4887-47cc-8012-b2451b70ddaf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                }
+            ]
+        }
+    ],
+    "source": "32bit.kicad_sch"
+}

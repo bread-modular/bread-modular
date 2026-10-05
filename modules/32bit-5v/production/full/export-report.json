@@ -1,0 +1,49 @@
+{
+  "generator": "bread-modular/kicad-jlcpcb",
+  "kicad_version": "10.0.6",
+  "board": "/home/azero/.okbrain/workspaces/bread-modular-kicad/293/modules/32bit-5v/32bit-5v.kicad_pcb",
+  "schematic": "/home/azero/.okbrain/workspaces/bread-modular-kicad/293/modules/32bit-5v/32bit-5v.kicad_sch",
+  "source_sha256": {
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/293/modules/32bit-5v/32bit-5v.kicad_pcb": "4d327887d8f7db4f71f44068df8031433d2d174e374a8734dd6723f0d4848efc",
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/293/modules/32bit-5v/32bit-5v.kicad_sch": "846ab9cf4c14f7bfbc57d3a6f1e52595b5999ac3e6569f1ce0f43f11ab64e86b"
+  },
+  "layers": [
+    "F.Cu",
+    "In1.Cu",
+    "In2.Cu",
+    "B.Cu",
+    "F.Mask",
+    "B.Mask",
+    "F.SilkS",
+    "B.SilkS",
+    "F.Paste",
+    "B.Paste",
+    "Edge.Cuts"
+  ],
+  "copper_layer_count": 4,
+  "origin": "KiCad drill/place origin",
+  "units": "mm",
+  "side": "both",
+  "include_through_hole": true,
+  "component_count": 61,
+  "bom_row_count": 27,
+  "excluded": {},
+  "missing_part_numbers": [
+    "D1",
+    "GND1",
+    "INPUT1",
+    "OUTPUT1",
+    "RV1",
+    "RV2",
+    "V_SUPPLY1"
+  ],
+  "warnings": [
+    "Missing LCSC part numbers: D1, GND1, INPUT1, OUTPUT1, RV1, RV2, V_SUPPLY1. Match these parts manually before ordering.",
+    "Export is not a DRC or assembly approval: refill zones and save before export; review Gerbers, holes, part matches, centroids and rotations in JLCPCB's preview."
+  ],
+  "files": [
+    "32bit-5v-gerbers.zip",
+    "bom.csv",
+    "positions.csv"
+  ]
+}

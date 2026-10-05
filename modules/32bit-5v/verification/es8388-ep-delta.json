@@ -1,0 +1,262 @@
+{
+  "owner_workspace": "/home/azero/.okbrain/workspaces/bread-modular-kicad/279",
+  "branch": "okbrain/bread-modular-kicad/279-57e03384",
+  "comparison_baseline": "Exact 72-file port from worker277 index, before EP amendment",
+  "ported_pcb_sha256": "a0d6095f1b218ca3235fa41416a43882127afc04cd072302e491d7bd224dd48f",
+  "after_pcb_sha256": "9474a84e034ae9df0aa8cb9f31aa39a5036cc3d9f4fcb5d5bc9974d640fe4fbe",
+  "outside_u4_byte_identical": true,
+  "outer_28_pad_nodes_byte_identical": true,
+  "thermal_9_pad_nodes_byte_identical": true,
+  "all_tracks_vias_zones_saved_fills_rules_mounts_other_60_footprints_byte_identical": true,
+  "u4_position_side_rotation_uuid_and_nets_byte_identical": true,
+  "back_ep_2_4_copper_node_byte_identical": true,
+  "four_paste_window_nodes_byte_identical": true,
+  "approved_changed_nodes": [
+    [
+      3,
+      "(descr \"QFN, 28 Pin (http://ww1.microchip.com/downloads/en/DeviceDoc/8008S.pdf#page=16), generated with kicad-footprint-generator ipc_noLead_generator.py\")",
+      "(descr \"ES8388 project-qualified nominal 2.60mm EP copper, 2.65mm mask, four retained rounded paste windows; cached package p35 D1/E1=2.50..2.70mm; not manufacturer PCB-land approval\")"
+    ],
+    [
+      83,
+      "(pad \"29\" smd rect",
+      "(pad \"29\" smd rect"
+    ]
+  ],
+  "footprint_id_before": "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.45mm_EP2.4x2.4mm_ThermalVias",
+  "footprint_id_after": "Module32:ES8388_QFN28_4x4_P0.45_EP2.6_ThermalVias",
+  "ep_copper_mm": [
+    2.6,
+    2.6
+  ],
+  "mask_expansion_per_side_mm": 0.025,
+  "ep_mask_opening_mm": [
+    2.65,
+    2.65
+  ],
+  "paste_window_count": 4,
+  "paste_window_size_mm": [
+    1.04,
+    1.04
+  ],
+  "paste_window_centers_mm": [
+    [
+      -0.6,
+      -0.6
+    ],
+    [
+      -0.6,
+      0.6
+    ],
+    [
+      0.6,
+      -0.6
+    ],
+    [
+      0.6,
+      0.6
+    ]
+  ],
+  "paste_corner_radius_mm": 0.2500004,
+  "paste_area_mm2": 4.111797476671022,
+  "paste_coverage_percent": 60.8254064596305,
+  "stencil_web_mm": 0.16,
+  "paste_to_ep_copper_edge_mm": 0.18,
+  "via_hole_count": 9,
+  "via_drill_mm": 0.2,
+  "via_annular_copper_diameter_mm": 0.5,
+  "corner_via_mouths_inside_paste_windows": 4,
+  "backside_copper_is_not_backside_component_placement": true,
+  "manufacturer_pcb_land_approval": false,
+  "process_notes": "Four corner \u00d80.20mm via mouths fully overlap apertures. Four axial mouth centers are outside apertures, but mouths slightly intersect rounded aperture edges (approximately 0.01044mm overlap depth); central mouth is clear. Eight mouths can wick paste. No fill/cap, omitted hole or drill change encoded. Assembler must validate wicking/voiding, stencil thickness, via fill/cap or suitable qualified process, reflow/thermal performance. Generic 2.4mm-name 3D model is visualization only.",
+  "native_ep_to_outer_copper_gap_mm": 0.25,
+  "native_outer_mask_margins_mm": [
+    0.0
+  ],
+  "minimum_ep_to_outer_mask_web_mm": 0.225,
+  "independent_native_pad_comparison": {
+    "baseline_pad_objects": 272,
+    "changed_uuid": [
+      "62cd9e08-1779-42f2-958d-bb1899bd1466"
+    ],
+    "only_front_ep_changed": true,
+    "native_local_library_all_43_pads_match_placed_pcb": true
+  },
+  "actual_zip_geometry": {
+    "zip_sha256": "65ec59b461c919cb4baa325d7d34966051679b4f189611abe3fc4e0b49bbc68f",
+    "ep_mask_center_mm": [
+      68.616751,
+      -83.14824899999999
+    ],
+    "mask_aperture": "((66.75327253264436, -85.01172746735564), (70.48022946735564, -81.28477053264436))",
+    "ep_paste_apertures": 4,
+    "thermal_drill_features": 9,
+    "closeup": "production/previews/es8388-ep-actual-zip.png"
+  },
+  "derived_f_silkscreen_ep_mask_knockout": {
+    "only_one_clear_polarity_region_changed": true,
+    "region_index": 42,
+    "matches_actual_new_ep_mask_region_byte_for_byte": true,
+    "all_other_gerber_program_bytes_identical_after_timestamp_only_normalization": true,
+    "all_positive_ink_objects_unchanged": true,
+    "explanation": "Exporter subtracts F.Mask openings from F.Silkscreen. Only automatic U4 EP mask-clear knockout follows new opening; no silk/source artwork edits."
+  },
+  "axial_via_mouths_partially_intersecting_paste": 4,
+  "axial_mouth_signed_aperture_clearance_mm": -0.010441863073007124,
+  "central_mouth_clear_of_paste": true,
+  "mask_corner_geometry": "KiCad positive 0.025mm mask expansion offsets the 2.60mm copper rectangle; nominal local mask width2.65mm with rounded expansion corners, not a perfect sharp-corner2.65mm square.",
+  "native_checks": {
+    "fresh_drc_errors": 0,
+    "fresh_opens": 0,
+    "fresh_parity": 0,
+    "fresh_drc_warnings": 98,
+    "fresh_erc_errors": 0,
+    "fresh_erc_warnings": 16,
+    "no_project_or_rule_changes_or_new_exclusions": true
+  },
+  "fabrication_member_delta_after_timestamp_only_normalization": [
+    "32bit-5v-F_Cu.gbr",
+    "32bit-5v-F_Mask.gbr",
+    "32bit-5v-F_Silkscreen.gbr"
+  ],
+  "fresh_ipc_numeric_record_delta": [
+    [
+      "327GND              U4    -29         A01X+027014Y-032736X0945Y0945R045S2",
+      "327GND              U4    -29         A01X+027014Y-032736X1024Y1024R045S2"
+    ]
+  ],
+  "protected_worktrees_checks": {
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/235": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/236": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/253": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/254": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/255": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/257": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/261": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/262": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/263": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/264": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/267": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/268": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/269": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/271": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/272": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/273": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/274": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/276": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/.okbrain/workspaces/bread-modular-kicad/277": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    },
+    "/home/azero/data/projects/bread-modular": {
+      "head": true,
+      "status": true,
+      "index": true,
+      "files": true
+    }
+  },
+  "all_preexisting_refs_unchanged": true,
+  "all_refs_inventory_equal": false,
+  "external_new_ref_additions_untouched": {
+    "refs/heads/okbrain/bread-modular-kicad/280-3ff7dfea": "0187c567bad065890ca18ca41305f47442600877"
+  },
+  "exact_72_port_inventory_preserved_in_source_worker": true,
+  "actual_zip_closeup_visually_inspected": true,
+  "visible_previews": {
+    "ep_closeup": "/uploads/921e9150-1bce-45ac-9ffb-e4487719257a.webp",
+    "actual_zip_top": "/uploads/f7be516c-29ed-4805-89fa-d12ce4df5559.webp",
+    "cached_package_page35": "/uploads/975a8cbc-13bd-4963-8ec9-1d2e4867fefa.webp"
+  }
+}
