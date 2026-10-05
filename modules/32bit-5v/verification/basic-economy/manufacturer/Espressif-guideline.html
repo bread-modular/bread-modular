@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-RP8SCKE54N"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-RP8SCKE54N');
+        </script><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schematic Checklist - ESP32-S3 -  &mdash; ESP Hardware Design Guidelines latest documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=a60756f2" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=949a1ff5" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=851bd809" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=becddca3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=ff8fa330"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+
+    
+        
+
+    <script type="text/javascript">
+        DOCUMENTATION_OPTIONS.PAGENAME = 'schematic-checklist';
+        DOCUMENTATION_OPTIONS.PROJECT_SLUG = 'esp-hardware-design-guidelines';
+        DOCUMENTATION_OPTIONS.LATEST_BRANCH_NAME = 'master';
+        DOCUMENTATION_OPTIONS.VERSIONS_URL = '././_static/docs_version.js';
+        DOCUMENTATION_OPTIONS.LANGUAGES = ["en", "zh_CN"];
+        DOCUMENTATION_OPTIONS.IDF_TARGET = 'esp32s3';
+        DOCUMENTATION_OPTIONS.HAS_IDF_TARGETS = ["esp32", "esp32s2", "esp32s3", "esp32c3", "esp32c6", "esp32h2", "esp32c2", "esp32c5", "esp32p4", "esp32c61", "esp32s31"]
+        DOCUMENTATION_OPTIONS.RELEASE = 'latest';
+        DOCUMENTATION_OPTIONS.LANGUAGE_URL = 'en';
+
+    </script>
+
+    <script type="text/javascript" src="././_static/docs_version.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PCB Layout Design" href="pcb-layout-design.html" />
+    <link rel="prev" title="Product Overview" href="product-overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ESP Hardware Design Guidelines
+              <img src="_static/espressif-logo.svg" class="logo" alt="Logo"/>
+          </a>
+
+          
+            <div class="selectors">
+              <select id="target-select" style="width: 150px;" hidden>
+                <option value="" disabled selected>Choose target...</option>
+              </select>
+            </div>
+          
+
+          <div class="selectors">
+            <select id="version-select" style="width: 150px;" hidden>
+              <option value="" disabled selected>Choose version...</option>
+            </select>
+          </div>
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about-this-document.html">About This Document</a></li>
+<li class="toctree-l1"><a class="reference internal" href="product-overview.html">Product Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Schematic Checklist</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#power-supply">Power Supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#digital-power-supply">Digital Power Supply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analog-power-supply">Analog Power Supply</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#chip-power-up-and-reset-timing">Chip Power-up and Reset Timing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flash-and-psram">Flash and PSRAM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#in-package-flash-and-psram">In-Package Flash and PSRAM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#off-package-flash-and-psram">Off-Package Flash and PSRAM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#clock-source">Clock Source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#external-crystal-clock-source-compulsory">External Crystal Clock Source (Compulsory)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rtc-clock-source-optional">RTC Clock Source (Optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rf">RF</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rf-circuit">RF Circuit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rf-tuning">RF Tuning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#uart">UART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spi">SPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#strapping-pins">Strapping Pins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gpio">GPIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adc">ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sdio">SDIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usb">USB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#touch-sensor">Touch Sensor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pcb-layout-design.html">PCB Layout Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download-guidelines.html">Download Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related-documentation-and-resources.html">Related Documentation and Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="revision-history.html">Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disclaimer-and-copyright.html">Disclaimer and Copyright Notice</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ESP Hardware Design Guidelines</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Schematic Checklist</li>
+    <style>
+        .download-pdf {
+            float: right;
+            margin-right: 20px; /* Adjust margin here */
+        }
+    </style>
+    <a href="./esp-hardware-design-guidelines-en-master-esp32s3.pdf" class="download-pdf fa fa-file-pdf-o"> Download PDF</a>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="schematic-checklist">
+<h1>Schematic Checklist<a class="headerlink" href="#schematic-checklist" title="Permalink to this heading"></a></h1>
+<p><a class="reference external" href="../../../zh_CN/latest/esp32s3/schematic-checklist.html">[中文]</a></p>
+<section id="overview">
+<span id="schematic-checklist-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>The integrated circuitry of ESP32-S3 requires only 20 electrical components (resistors, capacitors, and inductors) and a crystal, as well as an SPI flash. The high integration of ESP32-S3 allows for simple peripheral circuit design. This chapter details the schematic design of ESP32-S3.</p>
+<p>The following figure shows a reference schematic design of ESP32-S3. It can be used as the basis of your schematic design.</p>
+<figure class="align-center" id="fig-chip-core-schematic">
+<a class="reference internal image-reference" href="_images/esp32s3-sche-core.png"><img alt="ESP32-S3 Reference Schematic" src="_images/esp32s3-sche-core.png" style="width: 95%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 Reference Schematic</span><a class="headerlink" href="#fig-chip-core-schematic" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Note that Figure <a class="reference internal" href="#fig-chip-core-schematic"><span class="std std-ref">ESP32-S3 Reference Schematic</span></a> shows the connection for 3.3 V, quad, off-package SPI flash/PSRAM.</p>
+<ul class="simple">
+<li><p>In cases where 1.8 V or 3.3 V, octal, in-package or off-package SPI flash/PSRAM is used, GPIO33 ~ GPIO37 are occupied and cannot be used for other functions.</p></li>
+<li><p>If an in-package SPI flash/PSRAM is used and VDD_SPI is configured to 1.8 V or 3.3 V via the VDD_SPI_FORCE eFuse, the GPIO45 strapping pin no longer affects the VDD_SPI voltage. In these cases, the presence of R1 is optional. For all other cases, refer to <a class="reference external" href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf#cd-pins-strap-vdd-spi">ESP32-S3 Chip Series Datasheet</a> &gt; Section <em>VDD_SPI Voltage Control</em> &gt; Table <em>VDD_SPI Voltage Control</em> to determine whether R1 should be populated or not.</p></li>
+<li><p>The connection for 1.8 V, octal, off-package flash/PSRAM is as shown in Figure <a class="reference internal" href="#fig-esp32-s3-core-sch-external-1v8-spi8"><span class="std std-ref">ESP32-S3 Schematic for Off-Package 1.8 V Octal Flash/PSRAM</span></a>.</p></li>
+<li><p>When only in-package flash/PSRAM is used, there is no need to populate the resistor on the SPI traces or to care the SPI traces.</p></li>
+</ul>
+<figure class="align-center" id="fig-esp32-s3-core-sch-external-1v8-spi8">
+<a class="reference internal image-reference" href="_images/esp32s3-sche-ext-1v8-spi8.png"><img alt="ESP32-S3 Schematic for Off-Package 1.8 V Octal Flash/PSRAM" src="_images/esp32s3-sche-ext-1v8-spi8.png" style="width: 90%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 Schematic for Off-Package 1.8 V Octal Flash/PSRAM</span><a class="headerlink" href="#fig-esp32-s3-core-sch-external-1v8-spi8" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Any basic ESP32-S3 circuit design may be broken down into the following major building blocks:</p>
+<p><ul class="simple">
+<li><p><a class="reference internal" href="#power-supply">Power supply</a></p></li>
+<li><p><a class="reference internal" href="#chip-power-up-and-reset-timing">Chip power-up and reset timing</a></p></li>
+<li><p><a class="reference internal" href="#flash-and-psram">Flash and PSRAM</a></p></li>
+<li><p><a class="reference internal" href="#clock-source">Clock source</a></p></li>
+<li><p><a class="reference internal" href="#rf">RF</a></p></li>
+<li><p><a class="reference internal" href="#uart">UART</a></p></li>
+<li><p><a class="reference internal" href="#spi">SPI</a></p></li>
+<li><p><a class="reference internal" href="#strapping-pins">Strapping pins</a></p></li>
+<li><p><a class="reference internal" href="#gpio">GPIO</a></p></li>
+<li><p><a class="reference internal" href="#adc">ADC</a></p></li>
+<li><p><a class="reference internal" href="#sdio">SDIO</a></p></li>
+<li><p><a class="reference internal" href="#usb">USB</a></p></li>
+<li><p><a class="reference internal" href="#touch-sensor">Touch sensor</a></p></li>
+</ul>
+</p>
+<p>The rest of this chapter details the specifics of circuit design for each of these sections.</p>
+</section>
+<section id="power-supply">
+<span id="schematic-checklist-power-supply"></span><h2>Power Supply<a class="headerlink" href="#power-supply" title="Permalink to this heading"></a></h2>
+<p>The general recommendations for power supply design are:</p>
+<ul class="simple">
+<li><p>When using a single power supply, the recommended power supply voltage is 3.3 V and the output current is no less than 500 mA.</p></li>
+<li><p>It is suggested to add an ESD protection diode and at least 10 μF capacitor at the main power entrance (where the external power supply enters the PCB).</p></li>
+</ul>
+<p>The power scheme is shown in Figure <a class="reference internal" href="#fig-chip-power-scheme"><span class="std std-ref">ESP32-S3 Power Scheme</span></a>.</p>
+<figure class="align-center" id="fig-chip-power-scheme">
+<a class="reference internal image-reference" href="_images/esp32s3-sche-chip-power.png"><img alt="ESP32-S3 Power Scheme" src="_images/esp32s3-sche-chip-power.png" style="width: 100%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 Power Scheme</span><a class="headerlink" href="#fig-chip-power-scheme" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>More information about power supply pins can be found in <a class="reference external" href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf#cd-pwr-supply">ESP32-S3 Series Datasheet</a> &gt; Section <em>Power Supply</em>.</p>
+<section id="digital-power-supply">
+<span id="id1"></span><h3>Digital Power Supply<a class="headerlink" href="#digital-power-supply" title="Permalink to this heading"></a></h3>
+<p>ESP32-S3 has pin46 VDD3P3_CPU as the digital power supply pin, and pin 20 VDD3P3_RTC as the RTC and partial digital power supply pin, with an operating voltage range of 3.0 V ~ 3.6 V. It is recommended to add a 0.1 μF capacitor close to the digital power supply pins in the circuit.</p>
+<p>Pin VDD_SPI serves as the power supply for the external device at either 1.8 V or 3.3 V (default). It is recommended to add extra 0.1 μF and 1 μF decoupling capacitors close to VDD_SPI. Please do not add excessively large capacitors.</p>
+<ul class="simple">
+<li><p>When VDD_SPI operates at 1.8 V, it is powered by ESP32-S3’s internal LDO. The typical current this LDO can offer is 40 mA.</p></li>
+<li><p>When VDD_SPI operates at 3.3 V, it is driven directly by VDD3P3_RTC through a 14 Ω resistor, therefore, there will be some voltage drop from VDD3P3_RTC.</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>When using VDDVDD_SPI_SPI as the power supply pin for in-package or off-package 3.3 V flash/PSRAM, please ensure that VDD3P3_RTC remains above 3.0 V to meet the operating voltage requirements of the flash/PSRAM, considering the voltage drop mentioned earlier.</p></li>
+<li><p>Note that VDD3P3_RTC cannot supply power alone; all power supplies must be powered on at the same time.</p></li>
+</ul>
+</div>
+<p>Depending on the value of EFUSE_VDD_SPI_FORCE, the VDD_SPI voltage can be controlled in two ways, as Table <a class="reference internal" href="#tab-vdd-spi-voltage-control"><span class="std std-ref">VDD_SPI Voltage Control</span></a> shows.</p>
+<table class="docutils align-center" id="tab-vdd-spi-voltage-control">
+<caption><span class="caption-text">VDD_SPI Voltage Control</span><a class="headerlink" href="#tab-vdd-spi-voltage-control" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>EFUSE_VDD_SPI_FORCE</p></th>
+<th class="head"><p>GPIO45</p></th>
+<th class="head"><p>EFUSE_VDD_SPI_TIEH</p></th>
+<th class="head"><p>Voltage</p></th>
+<th class="head"><p>VDD_SPI Power Source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>Ignored</p></td>
+<td><p>3.3 V</p></td>
+<td><p>VDD3P3_RTC via R<sub>SPI</sub> (default)</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>Ignored</p></td>
+<td><p>1.8 V</p></td>
+<td><p>Flash Voltage Regulator</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Ignored</p></td>
+<td><p>0</p></td>
+<td><p>1.8 V</p></td>
+<td><p>Flash Voltage Regulator</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Ignored</p></td>
+<td><p>1</p></td>
+<td><p>3.3 V</p></td>
+<td><p>VDD3P3_RTC via R<sub>SPI</sub></p></td>
+</tr>
+</tbody>
+</table>
+<p>VDD_SPI can also be driven by an external power supply.</p>
+<p>It is recommended to use the VDD_SPI output to supply power to external or internal flash/PSRAM.</p>
+</section>
+<section id="analog-power-supply">
+<h3>Analog Power Supply<a class="headerlink" href="#analog-power-supply" title="Permalink to this heading"></a></h3>
+<p>ESP32-S3’s VDD3P3 pins (pin2 and pin3) and VDDA pins (pin55 and pin56) are the analog power supply pins, working at 3.0 V ~ 3.6 V.</p>
+<p>For VDD3P3, when ESP32-S3 is transmitting signals, there may be a sudden increase in the current draw, causing power rail collapse. Therefore, it is highly recommended to add a 10 μF capacitor to the power rail, which can work in conjunction with the 1 μF capacitor(s) or other capacitors.</p>
+<p>It is suggested to add an extra 10 μF capacitor at the main power entrance. If the main power entrance is close to VDD3P3, then the two 10 μF capacitors can be merged into one.</p>
+<p>Add an LC circuit to the VDD3P3 power rail to suppress high-frequency harmonics. The inductor’s rated current is preferably 500 mA and above.</p>
+<p>For the remaining capacitor circuits, please refer to <a class="reference internal" href="#fig-chip-core-schematic"><span class="std std-ref">ESP32-S3 Reference Schematic</span></a>.</p>
+</section>
+</section>
+<section id="chip-power-up-and-reset-timing">
+<h2>Chip Power-up and Reset Timing<a class="headerlink" href="#chip-power-up-and-reset-timing" title="Permalink to this heading"></a></h2>
+<p>ESP32-S3’s CHIP_PU pin can enable the chip when it is high and reset the chip when it is low.</p>
+<p>When ESP32-S3 uses a 3.3 V system power supply, the power rails need some time to stabilize before CHIP_PU is pulled up and the chip is enabled. Therefore, CHIP_PU needs to be asserted high after the 3.3 V rails have been brought up.</p>
+<p>To reset the chip, keep the reset voltage V<sub>IL_nRST</sub> in the range of (–0.3 ~ 0.25 × VDD3P3_RTC) V. To avoid reboots caused by external interferences, make the CHIP_PU trace as short as possible.</p>
+<p>Figure <a class="reference internal" href="#fig-chip-timing"><span class="std std-ref">ESP32-S3 Power-up and Reset Timing</span></a> shows the power-up and reset timing of ESP32-S3.</p>
+<figure class="align-center" id="fig-chip-timing">
+<a class="reference internal image-reference" href="_images/shared-chip-timing.png"><img alt="ESP32-S3 Power-up and Reset Timing" src="_images/shared-chip-timing.png" style="width: 90%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 Power-up and Reset Timing</span><a class="headerlink" href="#fig-chip-timing" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Table <a class="reference internal" href="#tab-chip-timing"><span class="std std-ref">Description of Timing Parameters for Power-up and Reset</span></a> provides the specific timing requirements.</p>
+<table class="docutils align-center" id="tab-chip-timing">
+<caption><span class="caption-text">Description of Timing Parameters for Power-up and Reset</span><a class="headerlink" href="#tab-chip-timing" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 60.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Minimum (µs)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>t<sub>STBL</sub></p></td>
+<td><p>Time reserved for the power rails to stabilize before the CHIP_PU pin is pulled high to activate the chip</p></td>
+<td><p>50</p></td>
+</tr>
+<tr class="row-odd"><td><p>t<sub>RST</sub></p></td>
+<td><p>Time reserved for CHIP_PU to stay below V<sub>IL_nRST</sub> to reset the chip</p></td>
+<td><p>50</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul>
+<li><p>CHIP_PU must not be left floating.</p></li>
+<li><p>To ensure the correct power-up and reset timing, it is advised to add an RC delay circuit at the CHIP_PU pin. The recommended setting for the RC delay circuit is usually R = 10 kΩ and C = 1 μF. However, specific parameters should be adjusted based on the characteristics of the actual power supply and the power-up and reset timing of the chip.</p></li>
+<li><p>If the user application has one of the following scenarios:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Slow power rise or fall, such as during battery charging.</p></li>
+<li><p>Frequent power on/off operations.</p></li>
+<li><p>Unstable power supply, such as in photovoltaic power generation.</p></li>
+</ul>
+</div></blockquote>
+<p>Then, the RC circuit alone may not meet the timing requirements, which may prevent the chip from entering normal operating mode or cause flash erase operations to occasionally fail to complete. In this case, please reserve a power monitor chip to reset the chip when the power supply is abnormal, and the threshold of the power monitor chip is recommended to be around 3.0 V.</p>
+</li>
+</ul>
+</div>
+</section>
+<section id="flash-and-psram">
+<span id="schematic-checklist-flash-psram"></span><h2>Flash and PSRAM<a class="headerlink" href="#flash-and-psram" title="Permalink to this heading"></a></h2>
+<p>ESP32-S3 requires in-package or off-package flash to store application firmware and data. In-package PSRAM or off-package PSRAM is optional.</p>
+<section id="in-package-flash-and-psram">
+<h3>In-Package Flash and PSRAM<a class="headerlink" href="#in-package-flash-and-psram" title="Permalink to this heading"></a></h3>
+<p>The tables list the pin-to-pin mapping between the chip and in-package flash/PSRAM. Please note that the following chip pins can connect at most one flash and one PSRAM. That is to say, when there is only flash in the package, the pin occupied by flash can only connect PSRAM and cannot be used for other functions; when there is only PSRAM, the pin occupied by PSRAM can only connect flash; when there are both flash and PSRAM, the pin occupied cannot connect any more flash or PSRAM.</p>
+<table class="docutils align-center" id="tab-chip-flash-pin-mapping">
+<caption><span class="caption-text">Pin-to-Pin Mapping Between Chip and In-Package Quad SPI Flash</span><a class="headerlink" href="#tab-chip-flash-pin-mapping" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ESP32-S3FN8/ESP32-S3FH4R2</p></th>
+<th class="head"><p>In-Package Flash (Quad SPI)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SPICLK</p></td>
+<td><p>CLK</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPICS0</p></td>
+<td><p>CS#</p></td>
+</tr>
+<tr class="row-even"><td><p>SPID</p></td>
+<td><p>DI</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPIQ</p></td>
+<td><p>DO</p></td>
+</tr>
+<tr class="row-even"><td><p>SPIWP</p></td>
+<td><p>WP#</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPIHD</p></td>
+<td><p>HOLD#</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-center" id="tab-chip-psram-quad-pin-mapping">
+<caption><span class="caption-text">Pin-to-Pin Mapping Between Chip and In-Package Quad SPI PSRAM</span><a class="headerlink" href="#tab-chip-psram-quad-pin-mapping" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ESP32-S3R2/ESP32-S3FH4R2</p></th>
+<th class="head"><p>In-Package PSRAM (2 MB, Quad SPI)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SPICLK</p></td>
+<td><p>CLK</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPICS1</p></td>
+<td><p>CE#</p></td>
+</tr>
+<tr class="row-even"><td><p>SPID</p></td>
+<td><p>SI/SIO0</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPIQ</p></td>
+<td><p>SO/SIO1</p></td>
+</tr>
+<tr class="row-even"><td><p>SPIWP</p></td>
+<td><p>SIO2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPIHD</p></td>
+<td><p>SIO3</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-center" id="tab-chip-psram-octal-pin-mapping">
+<caption><span class="caption-text">Pin-to-Pin Mapping Between Chip and In-Package Octal SPI PSRAM</span><a class="headerlink" href="#tab-chip-psram-octal-pin-mapping" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ESP32-S3R8/ESP32-S3R8V</p></th>
+<th class="head"><p>In-Package PSRAM (8 MB, Octal SPI)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SPICLK</p></td>
+<td><p>CLK</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPICS1</p></td>
+<td><p>CE#</p></td>
+</tr>
+<tr class="row-even"><td><p>SPID</p></td>
+<td><p>DQ0</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPIQ</p></td>
+<td><p>DQ1</p></td>
+</tr>
+<tr class="row-even"><td><p>SPIWP</p></td>
+<td><p>DQ2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPIHD</p></td>
+<td><p>DQ3</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO33</p></td>
+<td><p>DQ4</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO34</p></td>
+<td><p>DQ5</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO35</p></td>
+<td><p>DQ6</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO36</p></td>
+<td><p>DQ7</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO37</p></td>
+<td><p>DQS/DM</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="off-package-flash-and-psram">
+<h3>Off-Package Flash and PSRAM<a class="headerlink" href="#off-package-flash-and-psram" title="Permalink to this heading"></a></h3>
+<p>To reduce the risk of software compatibility issues, it is recommended to use flash and PSRAM models officially validated by Espressif. For detailed model selection, consult the sales or technical support team. If VDD_SPI is used to supply power, make sure to select the appropriate off-package flash and RAM according to the power voltage on VDD_SPI (1.8 V/3.3 V). It is recommended to add zero-ohm resistor footprints in series on the SPI communication lines. These footprints provide flexibility for future adjustments, such as tuning drive strength, mitigating RF interference, correcting signal timing, and reducing noise, if needed.</p>
+</section>
+</section>
+<section id="clock-source">
+<h2>Clock Source<a class="headerlink" href="#clock-source" title="Permalink to this heading"></a></h2>
+<p>ESP32-S3 supports two external clock sources:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#external-crystal-clock-source-compulsory">External crystal clock source (Compulsory)</a></p></li>
+<li><p><a class="reference internal" href="#rtc-clock-source-optional">RTC clock source (Optional)</a></p></li>
+</ul>
+<section id="external-crystal-clock-source-compulsory">
+<span id="schematic-checklist-external-crystal-source"></span><h3>External Crystal Clock Source (Compulsory)<a class="headerlink" href="#external-crystal-clock-source-compulsory" title="Permalink to this heading"></a></h3>
+<p>The ESP32-S3 firmware only supports 40 MHz crystal.</p>
+<p>The circuit for the crystal is shown in Figure <a class="reference internal" href="#fig-external-crystal-schematic"><span class="std std-ref">ESP32-S3 Schematic for External Crystal</span></a>. Note that the accuracy of the selected crystal should be within ±10 ppm.</p>
+<figure class="align-center" id="fig-external-crystal-schematic">
+<a class="reference internal image-reference" href="_images/esp32s3-sche-external-crystal.png"><img alt="ESP32-S3 Schematic for External Crystal" src="_images/esp32s3-sche-external-crystal.png" style="width: 65%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 Schematic for External Crystal</span><a class="headerlink" href="#fig-external-crystal-schematic" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Please add a series component on the XTAL_P clock trace. Initially, it is suggested to use an inductor of 24 nH to reduce the impact of high-frequency crystal harmonics on RF performance, and the value should be adjusted after an overall test.</p>
+<p>The initial values of external capacitors C1 and C4 can be determined according to the formula:</p>
+<div class="math notranslate nohighlight">
+\[C_L =  \frac{C1 \times C4} {C1+C4} + C_{stray}\]</div>
+<p>where the value of C<sub>L</sub> (load capacitance) can be found in the crystal’s datasheet, and the value of C<sub>stray</sub> refers to the PCB’s stray capacitance. The values of C1 and C4 need to be further adjusted after an overall test as below:</p>
+<ol class="arabic simple">
+<li><p>Select TX tone mode using the <a class="reference external" href="https://www.espressif.com/en/support/download/other-tools?keys=">Certification and Test Tool</a>.</p></li>
+<li><p>Observe the 2.4 GHz signal with a radio communication analyzer or a spectrum analyzer and demodulate it to obtain the actual frequency offset.</p></li>
+<li><p>Adjust the frequency offset to be within ±10 ppm (recommended) by adjusting the external load capacitance.</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>When the center frequency offset is positive, it means that the equivalent load capacitance is small, and the external load capacitance needs to be increased.</p></li>
+<li><p>When the center frequency offset is negative, it means the equivalent load capacitance is large, and the external load capacitance needs to be reduced.</p></li>
+<li><p>External load capacitance at the two sides are usually equal, but in special cases, they may have slightly different values.</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Defects in the manufacturing of crystal (for example, large frequency deviation of more than ±10 ppm, unstable performance within the operating temperature range, etc) may lead to the malfunction of ESP32-S3, resulting in a decrease of the RF performance.</p></li>
+<li><p>It is recommended that the amplitude of the crystal is greater than 500 mV.</p></li>
+<li><p>When Wi-Fi or Bluetooth connection fails, after ruling out software problems, you may follow the steps mentioned above to ensure that the frequency offset meets the requirements by adjusting capacitors at the two sides of the crystal.</p></li>
+</ul>
+</div>
+</section>
+<section id="rtc-clock-source-optional">
+<span id="schematic-rtc-clock-source"></span><h3>RTC Clock Source (Optional)<a class="headerlink" href="#rtc-clock-source-optional" title="Permalink to this heading"></a></h3>
+<p>ESP32-S3 supports an external 32.768 kHz crystal to act as the RTC clock. The external RTC clock source enhances timing accuracy and consequently decreases average power consumption, without impacting functionality.</p>
+<p>Figure <a class="reference internal" href="#fig-32khz-crystal-schematic"><span class="std std-ref">ESP32-S3 Schematic for 32.768 kHz Crystal</span></a> shows the schematic for the external 32.768 kHz crystal.</p>
+<figure class="align-center" id="fig-32khz-crystal-schematic">
+<a class="reference internal image-reference" href="_images/esp32s3-sche-32khz-crystal.png"><img alt="ESP32-S3 Schematic for 32.768 kHz Crystal" src="_images/esp32s3-sche-32khz-crystal.png" style="width: 90%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 Schematic for 32.768 kHz Crystal</span><a class="headerlink" href="#fig-32khz-crystal-schematic" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Please note the requirements for the 32.768 kHz crystal:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Equivalent series resistance (ESR) ≤ 70 kΩ.</p></li>
+<li><p>Load capacitance at both ends should be configured according to the crystal’s specification.</p></li>
+</ul>
+</div></blockquote>
+<p>The parallel resistor R is used for biasing the crystal circuit (5 MΩ &lt; R ≤ 10 MΩ).</p>
+<p>In general, you do not need to populate the resistor.</p>
+<p>If the RTC clock source is not required, then the pins for the 32.768 kHz crystal can be used as GPIOs.</p>
+</section>
+</section>
+<section id="rf">
+<h2>RF<a class="headerlink" href="#rf" title="Permalink to this heading"></a></h2>
+<section id="rf-circuit">
+<span id="schematic-checklist-rf-circuit"></span><h3>RF Circuit<a class="headerlink" href="#rf-circuit" title="Permalink to this heading"></a></h3>
+<p>ESP32-S3’s RF circuit is mainly composed of three parts, the RF traces on the PCB board, the chip matching circuit, the antenna and the antenna matching circuit. Each part should meet the following requirements:</p>
+<ul>
+<li><p>For the RF traces on the PCB board, 50 Ω impedance control is required.</p></li>
+<li><p>For the chip matching circuit, it must be placed close to the chip. A CLC structure is preferred.</p>
+<blockquote>
+<div><p><ul class="simple">
+<li><p>The CLC structure is mainly used to adjust the impedance point and suppress harmonics.</p></li>
+<li><p>The RF matching circuit is shown in Figure <a class="reference internal" href="#fig-rf-matching-schematic"><span class="std std-ref">ESP32-S3 Schematic for RF Matching</span></a>.</p></li>
+</ul>
+</p>
+</div></blockquote>
+</li>
+</ul>
+<ul class="simple">
+<li><p>For the antenna and the antenna matching circuit, to ensure radiation performance, the antenna’s characteristic impedance must be around 50 Ω. Adding a CLC matching circuit near the antenna is recommended to adjust the antenna. However, if the available space is limited and the antenna impedance point can be guaranteed to be 50 Ω by simulation, then there is no need to add a matching circuit near the antenna.</p></li>
+</ul>
+<ul class="simple">
+<li><p>It is recommended to include ESD protection devices for the antenna to mitigate electrostatic interference.</p></li>
+</ul>
+<figure class="align-center" id="fig-rf-matching-schematic">
+<a class="reference internal image-reference" href="_images/esp32s3-sche-rf-matching.png"><img alt="ESP32-S3 Schematic for RF Matching" src="_images/esp32s3-sche-rf-matching.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 Schematic for RF Matching</span><a class="headerlink" href="#fig-rf-matching-schematic" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="rf-tuning">
+<span id="schematic-checklist-rf-tunning"></span><h3>RF Tuning<a class="headerlink" href="#rf-tuning" title="Permalink to this heading"></a></h3>
+<p>The RF matching parameters vary with the board, so the ones used in Espressif modules could not be applied directly. Follow the instructions below to do RF tuning.</p>
+<p>Figure <a class="reference internal" href="#fig-rf-tuning"><span class="std std-ref">ESP32-S3 RF Tuning Diagram</span></a> shows the general process of RF tuning.</p>
+<figure class="align-center" id="fig-rf-tuning">
+<a class="reference internal image-reference" href="_images/shared-rf-tuning.png"><img alt="ESP32-S3 RF Tuning Diagram" src="_images/shared-rf-tuning.png" style="width: 90%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 RF Tuning Diagram</span><a class="headerlink" href="#fig-rf-tuning" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>In the matching circuit, define the port near the chip as Port 1 and the port near the antenna as Port 2. S11 describes the ratio of the signal power reflected back from Port 1 to the input signal power, the transmission performance is best if the matching impedance is conjugate to the chip impedance. S21 is used to describe the transmission loss of signal from Port 1 to Port 2. If S11 is close to the chip conjugate point 35+j0 and S21 is less than -35 dB at 4.8 GHz and 7.2 GHz, the matching circuit can satisfy transmission requirements.</p>
+<p>Connect the two ends of the matching circuit to the network analyzer, and test its signal reflection parameter S11 and transmission parameter S21. Adjust the values of the components in the circuit until S11 and S21 meet the requirements. If your PCB design of the chip strictly follows the PCB design stated in Chapter <a class="reference internal" href="pcb-layout-design.html#pcb-layout-design"><span class="std std-ref">PCB Layout Design</span></a>, you can refer to the value ranges in Table <a class="reference internal" href="#tab-recommended-value-ranges-components"><span class="std std-ref">Recommended Value Ranges for Components</span></a> to debug the matching circuit.</p>
+<table class="docutils align-center" id="tab-recommended-value-ranges-components">
+<caption><span class="caption-text">Recommended Value Ranges for Components</span><a class="headerlink" href="#tab-recommended-value-ranges-components" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Reference Designator</p></th>
+<th class="head"><p>Recommended Value Range</p></th>
+<th class="head"><p>Serial No.</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C11</p></td>
+<td><p>1.2 ~ 1.8 pF</p></td>
+<td><p>GRM0335C1H1RXBA01D</p></td>
+</tr>
+<tr class="row-odd"><td><p>L2</p></td>
+<td><p>2.0 ~ 3.0 nH</p></td>
+<td><p>LQP03TN2NXB02D</p></td>
+</tr>
+<tr class="row-even"><td><p>C12</p></td>
+<td><p>1.8 ~ 1.2 pF</p></td>
+<td><p>GRM0335C1H1RXBA01D</p></td>
+</tr>
+</tbody>
+</table>
+<p>Please use 0201 packages for RF matching components and add a stub to the first capacitor in the matching circuit at the chip end.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If RF function is not required, it is recommended not to initialize the RF stack in firmware. In this case, the RF pin can be left floating. However, if RF function is enabled, make sure an antenna is connected. Operation without an antenna may result in unstable behavior or potential damage to the RF circuit.</p>
+</div>
+</section>
+</section>
+<section id="uart">
+<span id="schematic-checklist-uart"></span><h2>UART<a class="headerlink" href="#uart" title="Permalink to this heading"></a></h2>
+<p>ESP32-S3 includes 3 UART interfaces, UART0, UART1, and UART2. U0TXD and U0RXD are GPIO43 and GPIO44 by default. Other  UART signals can be mapped to any available GPIOs by software configurations.</p>
+<p>Usually, UART0 is used as the serial port for download and log printing. For instructions on download over UART0, please refer to Section <a class="reference internal" href="download-guidelines.html#download-guidelines"><span class="std std-ref">Download Guidelines</span></a>. It is recommended to connect a 499 Ω series resistor to the U0TXD line to suppress harmonics.</p>
+<p>For application communication, use UART interfaces other than UART0 if possible. Add a series resistor on the TX line to suppress harmonics.</p>
+</section>
+<section id="spi">
+<span id="schematic-checklist-spi"></span><h2>SPI<a class="headerlink" href="#spi" title="Permalink to this heading"></a></h2>
+<p>When using the SPI function, to improve EMC performance, add a series resistor (or ferrite bead) and a capacitor to ground on the SPI_CLK trace. If space allows, it is recommended to also add a series resistor and capacitor to ground on other SPI traces. Ensure that the RC/LC components are placed close to the pins of the chip or module.</p>
+</section>
+<section id="strapping-pins">
+<span id="schematic-checklist-strapping-pins"></span><h2>Strapping Pins<a class="headerlink" href="#strapping-pins" title="Permalink to this heading"></a></h2>
+<p>At each startup or reset, a chip requires some initial configuration parameters, such as in which boot mode to load the chip, etc. These parameters are passed over via the strapping pins. After reset, the strapping pins work as normal function pins.</p>
+<p>GPIO0, GPIO3, GPIO45, and GPIO46 are strapping pins.</p>
+<p>All the information about strapping pins is covered in <a class="reference external" href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf">ESP32-S3 Series Datasheet</a> &gt; Chapter <em>Boot Configurations</em>.</p>
+<p>For strapping pin information related to VDD_SPI, please refer to Section <a class="reference internal" href="#digital-power-supply"><span class="std std-ref">Digital Power Supply</span></a>.</p>
+<p>In this section, we will mainly cover the strapping pins related to boot mode.</p>
+<p>After chip reset is released, the combination of GPIO0 and GPIO46 controls the boot mode. See Table <a class="reference internal" href="#tab-chip-boot-mode-control"><span class="std std-ref">Boot Mode Control</span></a>.</p>
+<table class="docutils align-center" id="tab-chip-boot-mode-control">
+<caption><span class="caption-text">Boot Mode Control</span><a class="headerlink" href="#tab-chip-boot-mode-control" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Boot Mode</p></th>
+<th class="head"><p>GPIO0</p></th>
+<th class="head"><p>GPIO46</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Default Config</p></td>
+<td><p>1 (Pull-up)</p></td>
+<td><p>0 (Pull-down)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI Boot (default)</p></td>
+<td><p>1</p></td>
+<td><p>Any value</p></td>
+</tr>
+<tr class="row-even"><td><p>Joint Download Boot <sup>1</sup></p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+<p><sup>1</sup> Joint Download Boot mode supports the following download methods:</p>
+<blockquote>
+<div><ul>
+<li><p>USB Download Boot:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>USB-Serial-JTAG Download Boot</p></li>
+<li><p>USB-OTG Download Boot</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>UART Download Boot</p></li>
+</ul>
+</div></blockquote>
+<p><sup>2</sup> In addition to SPI Boot and Joint Download Boot modes, ESP32-S3 also supports SPI Download Boot mode. For details, please see <a class="reference external" href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf">ESP32-S3 Technical Reference Manual</a> &gt; Chapter <em>Chip Boot Control</em>.</p>
+<p>Signals applied to the strapping pins should have specific <em>setup time</em> and <em>hold time</em>. For more information, see Figure <a class="reference internal" href="#fig-shared-strap-pin-timing"><span class="std std-ref">Setup and Hold Times for Strapping Pins</span></a> and Table <a class="reference internal" href="#tab-strap-pin-timing"><span class="std std-ref">Description of Timing Parameters for Strapping Pins</span></a>.</p>
+<figure class="align-center" id="fig-shared-strap-pin-timing">
+<a class="reference internal image-reference" href="_images/shared-strap-pin-timing.png"><img alt="Setup and Hold Times for Strapping Pins" src="_images/shared-strap-pin-timing.png" style="width: 90%;" /></a>
+<figcaption>
+<p><span class="caption-text">Setup and Hold Times for Strapping Pins</span><a class="headerlink" href="#fig-shared-strap-pin-timing" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<table class="docutils align-center" id="tab-strap-pin-timing">
+<caption><span class="caption-text">Description of Timing Parameters for Strapping Pins</span><a class="headerlink" href="#tab-strap-pin-timing" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 60.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Minimum (ms)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>t<sub>SU</sub></p></td>
+<td><p>Time reserved for the power rails to stabilize before the chip enable pin (CHIP_PU) is pulled high to activate the chip.</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>t<sub>H</sub></p></td>
+<td><p>Time reserved for the chip to read the strapping pin values after CHIP_PU is already high and before these pins start operating as regular IO pins.</p></td>
+<td><p>3</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>It is recommended to place a pull-up resistor at the GPIO0 pin.</p></li>
+<li><p>Do not add high-value capacitors at GPIO0, or the chip may enter download mode.</p></li>
+</ul>
+</div>
+</section>
+<section id="gpio">
+<span id="schematic-checklist-gpio"></span><h2>GPIO<a class="headerlink" href="#gpio" title="Permalink to this heading"></a></h2>
+<p>The pins of ESP32-S3 can be configured via IO MUX or GPIO matrix. IO MUX provides the default pin configurations (see <a class="reference external" href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf#cd-append-consolid-pin-overview">ESP32-S3 Series Datasheet</a> &gt; Appendix <em>ESP32-S3 Consolidated Pin Overview</em>), whereas the GPIO matrix is used to route signals from peripherals to GPIO pins. For more information about IO MUX and GPIO matrix, please refer to <a class="reference external" href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf">ESP32-S3 Technical Reference Manual</a> &gt; Chapter <em>IO MUX and GPIO Matrix</em>.</p>
+<p>Some peripheral signals have already been routed to certain GPIO pins, while some can be routed to any available GPIO pins. For details, please refer to <a class="reference external" href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf">ESP32-S3 Series Datasheet</a> &gt; Section <em>Peripherals</em>.</p>
+<p>When using GPIOs, please:</p>
+<p><ul class="simple">
+<li><p>Pay attention to the states of strapping pins during power-up.</p></li>
+<li><p>Pay attention to the default GPIO configurations after reset (see the table below). For unused pins in the high-impedance state without an internal pull-up or pull-down, it is recommended to add a pull-up or pull-down resistor or enable the internal pull during software initialization to avoid extra power consumption, selecting the direction as required by the external circuit.</p></li>
+<li><p>Avoid using the pins already occupied by flash/PSRAM.</p></li>
+<li><p>Some pins will have glitches during power-up. Refer to Table <a class="reference internal" href="#tab-glitches-on-pins"><span class="std std-ref">Power-Up Glitches on Pins</span></a> for details.</p></li>
+<li><p>When USB-OTG Download Boot mode is enabled, some pins will have level output. Refer to Table <a class="reference internal" href="#io-pad-status-after-chip-initialization-in-the-usb-otg-download-boot-mode">IO Pad Status After Chip Initialization in the USB-OTG Download Boot Mode</a> for details.</p></li>
+<li><p>SPICLK_N, SPICLK_P, and GPIO33 ~ GPIO37 work in the same power domain, so if octal 1.8 V flash/PSRAM is used, then SPICLK_P and SPICLK_N also work in the 1.8 V power domain.</p></li>
+<li><p>Only GPIOs in the VDD3P3_RTC power domain can be controlled in Deep-sleep mode.</p></li>
+</ul>
+</p>
+<span id="io-mux-pin-functions"></span><table class="docutils align-default" id="id7">
+<caption><span class="caption-text">IO Pin Default Configuration</span><a class="headerlink" href="#id7" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>No.</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Power</p></th>
+<th class="head"><p>At Reset</p></th>
+<th class="head"><p>After Reset</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>LNA_IN</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>VDD3P3</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>VDD3P3</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>CHIP_PU</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>GPIO0</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>GPIO1</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td><p>IE</p></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>GPIO2</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td><p>IE</p></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>GPIO3</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td><p>IE</p></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>GPIO4</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>GPIO5</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>GPIO6</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>GPIO7</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>GPIO8</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>GPIO9</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>GPIO10</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>GPIO11</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><p>GPIO12</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>18</p></td>
+<td><p>GPIO13</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>19</p></td>
+<td><p>GPIO14</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>20</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>21</p></td>
+<td><p>XTAL_32K_P</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p>XTAL_32K_N</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>23</p></td>
+<td><p>GPIO17</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>24</p></td>
+<td><p>GPIO18</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>25</p></td>
+<td><p>GPIO19</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>26</p></td>
+<td><p>GPIO20</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td><p>USB_PU</p></td>
+<td><p>USB_PU</p></td>
+</tr>
+<tr class="row-even"><td><p>27</p></td>
+<td><p>GPIO21</p></td>
+<td><p>VDD3P3_RTC</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>28</p></td>
+<td><p>SPICS1</p></td>
+<td><p>VDD_SPI</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-even"><td><p>29</p></td>
+<td><p>VDD_SPI</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>30</p></td>
+<td><p>SPIHD</p></td>
+<td><p>VDD_SPI</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-even"><td><p>31</p></td>
+<td><p>SPIWP</p></td>
+<td><p>VDD_SPI</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-odd"><td><p>32</p></td>
+<td><p>SPICS0</p></td>
+<td><p>VDD_SPI</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-even"><td><p>33</p></td>
+<td><p>SPICLK</p></td>
+<td><p>VDD_SPI</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-odd"><td><p>34</p></td>
+<td><p>SPIQ</p></td>
+<td><p>VDD_SPI</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-even"><td><p>35</p></td>
+<td><p>SPID</p></td>
+<td><p>VDD_SPI</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-odd"><td><p>36</p></td>
+<td><p>SPICLK_N</p></td>
+<td><p>VDD_SPI / VDD3P3_CPU</p></td>
+<td><p>IE</p></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>37</p></td>
+<td><p>SPICLK_P</p></td>
+<td><p>VDD_SPI / VDD3P3_CPU</p></td>
+<td><p>IE</p></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>38</p></td>
+<td><p>GPIO33</p></td>
+<td><p>VDD_SPI / VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>39</p></td>
+<td><p>GPIO34</p></td>
+<td><p>VDD_SPI / VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>40</p></td>
+<td><p>GPIO35</p></td>
+<td><p>VDD_SPI / VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>41</p></td>
+<td><p>GPIO36</p></td>
+<td><p>VDD_SPI / VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>42</p></td>
+<td><p>GPIO37</p></td>
+<td><p>VDD_SPI / VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>43</p></td>
+<td><p>GPIO38</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>44</p></td>
+<td><p>MTCK</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>45</p></td>
+<td><p>MTDO</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>46</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>47</p></td>
+<td><p>MTDI</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-odd"><td><p>48</p></td>
+<td><p>MTMS</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td></td>
+<td><p>IE</p></td>
+</tr>
+<tr class="row-even"><td><p>49</p></td>
+<td><p>U0TXD</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-odd"><td><p>50</p></td>
+<td><p>U0RXD</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td><p>IE, WPU</p></td>
+<td><p>IE, WPU</p></td>
+</tr>
+<tr class="row-even"><td><p>51</p></td>
+<td><p>GPIO45</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td><p>IE, WPD</p></td>
+<td><p>IE, WPD</p></td>
+</tr>
+<tr class="row-odd"><td><p>52</p></td>
+<td><p>GPIO46</p></td>
+<td><p>VDD3P3_CPU</p></td>
+<td><p>IE, WPD</p></td>
+<td><p>IE, WPD</p></td>
+</tr>
+<tr class="row-even"><td><p>53</p></td>
+<td><p>XTAL_N</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>54</p></td>
+<td><p>XTAL_P</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>55</p></td>
+<td><p>VDDA</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>56</p></td>
+<td><p>VDDA</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>57</p></td>
+<td><p>GND</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>IE – input enabled</p></li>
+<li><p>WPU – internal weak pull-up resistor enabled</p></li>
+<li><p>WPD – internal weak pull-down resistor enabled</p></li>
+<li><p>USB_PU – USB pull-up resistor enabled</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>By default, the USB function is enabled for USB pins (i.e., GPIO19 and GPIO20), and the pin pull-up is decided by the USB pull-up resistor. The USB pull-up resistor is controlled by USB_SERIAL_JTAG_DP/DM_PULLUP and the pull-up value is controlled by USB_SERIAL_JTAG_PULLUP_VALUE. For details, see <a class="reference external" href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf">ESP32-S3 Technical Reference Manual</a> &gt; Chapter <em>USB Serial/JTAG Controller</em>.</p></li>
+<li><p>When the USB function is disabled, USB pins are used as regular GPIOs and the pin’s internal weak pull-up and pull-down resistors are disabled by default (configurable by IO_MUX_FUN_WPU/WPD)</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<table class="docutils align-center" id="tab-glitches-on-pins">
+<caption><span class="caption-text">Power-Up Glitches on Pins</span><a class="headerlink" href="#tab-glitches-on-pins" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 50.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin</p></th>
+<th class="head"><p>Glitch <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></th>
+<th class="head"><p>Typical Time (µs)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GPIO1</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO2</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO3</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO4</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO5</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO6</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO7</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO8</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO9</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO10</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO11</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO12</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO13</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO14</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>XTAL_32K_P</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>XTAL_32K_N</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO17</p></td>
+<td><p>Low-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO18</p></td>
+<td><p>Low-level/High-level glitch</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO19</p></td>
+<td><p>Low-level glitch/High-level glitch <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO20</p></td>
+<td><p>Pull-down glitch/High-level glitch <a class="footnote-reference brackets" href="#id6" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p></td>
+<td><p>60</p></td>
+</tr>
+</tbody>
+</table>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id5" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
+<ul class="simple">
+<li><p>Low-level glitch: the pin is at a low level output status during the time period;</p></li>
+<li><p>High-level glitch: the pin is at a high level output status during the time period;</p></li>
+<li><p>Pull-down glitch: the pin is at an internal weak pulled-down status during the time period;</p></li>
+<li><p>Pull-up glitch: the pin is at an internal weak pulled-up status during the time period.</p></li>
+</ul>
+</aside>
+<aside class="footnote brackets" id="id6" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id4">2</a>)</span>
+<p>GPIO19 and GPIO20 pins both have two high-level glitches during chip power-up, each lasting for about 60 µs. The total duration for the glitches and the delay are 3.2 ms and 2 ms respectively for GPIO19 and GPIO20.</p>
+</aside>
+</aside>
+</section>
+<section id="adc">
+<span id="schematic-checklist-adc"></span><h2>ADC<a class="headerlink" href="#adc" title="Permalink to this heading"></a></h2>
+<p>Table below shows the correspondence between ADC channels and GPIOs.</p>
+<table class="docutils align-center" id="tab-adc-gpio">
+<caption><span class="caption-text">ADC Functions</span><a class="headerlink" href="#tab-adc-gpio" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO Pin Name</p></th>
+<th class="head"><p>ADC Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GPIO1</p></td>
+<td><p>ADC1_CH0</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO2</p></td>
+<td><p>ADC1_CH1</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO3</p></td>
+<td><p>ADC1_CH2</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO4</p></td>
+<td><p>ADC1_CH3</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO5</p></td>
+<td><p>ADC1_CH4</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO6</p></td>
+<td><p>ADC1_CH5</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO7</p></td>
+<td><p>ADC1_CH6</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO8</p></td>
+<td><p>ADC1_CH7</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO9</p></td>
+<td><p>ADC1_CH8</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO10</p></td>
+<td><p>ADC1_CH9</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO11</p></td>
+<td><p>ADC2_CH0</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO12</p></td>
+<td><p>ADC2_CH1</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO13</p></td>
+<td><p>ADC2_CH2</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO14</p></td>
+<td><p>ADC2_CH3</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO15</p></td>
+<td><p>ADC2_CH4</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO16</p></td>
+<td><p>ADC2_CH5</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO17</p></td>
+<td><p>ADC2_CH6</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO18</p></td>
+<td><p>ADC2_CH7</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO19</p></td>
+<td><p>ADC2_CH8</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO20</p></td>
+<td><p>ADC2_CH9</p></td>
+</tr>
+</tbody>
+</table>
+<p>Please add a 0.1 μF filter capacitor between ESP pins and ground when using the ADC function to improve accuracy.</p>
+<p>ADC1 is recommended for use.</p>
+<p>The calibrated ADC results after hardware calibration and <a class="reference external" href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/api-reference/peripherals/adc_calibration.html">software calibration</a> are shown in the list below. For higher accuracy, you may implement your own calibration methods.</p>
+<p><ul class="simple">
+<li><p>When ATTEN=0 and the effective measurement range is 0 ~ 850 mV, the total error is ±5 mV.</p></li>
+<li><p>When ATTEN=1 and the effective measurement range is 0 ~ 1100 mV, the total error is ±6 mV.</p></li>
+<li><p>When ATTEN=2 and the effective measurement range is 0 ~ 1600 mV, the total error is ±10 mV.</p></li>
+<li><p>When ATTEN=3 and the effective measurement range is 0 ~ 2900 mV, the total error is ±50 mV.</p></li>
+</ul>
+</p>
+</section>
+<section id="sdio">
+<h2>SDIO<a class="headerlink" href="#sdio" title="Permalink to this heading"></a></h2>
+<p>ESP32-S3 only has one SD/MMC Host controller, which cannot be used as a slave device.</p>
+<p>The SDIO interface can be configured to any free GPIO by software. Please add pull-up resistors to the SDIO GPIO pins, and it is recommended to reserve a series resistor on each trace.</p>
+</section>
+<section id="usb">
+<span id="schematic-checklist-usb"></span><h2>USB<a class="headerlink" href="#usb" title="Permalink to this heading"></a></h2>
+<p>ESP32-S3 has a full-speed USB On-The-Go (OTG) peripheral with integrated transceivers. The USB peripheral is compliant with the USB 2.0 specification.</p>
+<p>ESP32-S3 integrates a USB Serial/JTAG controller that supports USB 2.0 full-speed device.</p>
+<p>GPIO19 and GPIO20 can be used as D- and D+ of USB respectively. It is recommended to reserve series resistors (initial value can be 22/33 Ω) and capacitors to ground on the traces (initially can be unpopulated), and place them close to the chip.</p>
+<p>The USB RC circuit is shown in Figure <a class="reference internal" href="#fig-usb-rc-schematic"><span class="std std-ref">ESP32-S3 USB RC Schematic</span></a>.</p>
+<figure class="align-center" id="fig-usb-rc-schematic">
+<a class="reference internal image-reference" href="_images/esp32s3-sche-usb-rc.png"><img alt="ESP32-S3 USB RC Schematic" src="_images/esp32s3-sche-usb-rc.png" style="width: 55%;" /></a>
+<figcaption>
+<p><span class="caption-text">ESP32-S3 USB RC Schematic</span><a class="headerlink" href="#fig-usb-rc-schematic" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Note that upon power-up, the USB_D+ signal will fluctuate between high and low states. The high-level signal is relatively strong and requires a robust pull-down resistor to drive it low. Therefore, if you need a stable initial state, adding an external pull-up resistor is recommended to ensure a consistent high-level output voltage at startup.</p>
+<p>ESP32-S3 also supports download functions and log message printing via USB. For details please refer to Section <a class="reference internal" href="download-guidelines.html#download-guidelines"><span class="std std-ref">Download Guidelines</span></a>.</p>
+<p>When USB-OTG Download Boot mode is enabled, the chip initializes the IO pad connected to the external PHY in ROM when starts up. The status of each IO pad after initialization is as follows.</p>
+<span id="io-pad-status-after-chip-initialization-in-the-usb-otg-download-boot-mode"></span><table class="docutils align-center" id="id8">
+<caption><span class="caption-text">IO Pad Status After Chip Initialization in the USB-OTG Download Boot Mode</span><a class="headerlink" href="#id8" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>IO Pad</p></th>
+<th class="head"><p>Input/Output Mode</p></th>
+<th class="head"><p>Level Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>VP (MTMS)</p></td>
+<td><p>INPUT</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>VM (MTDI)</p></td>
+<td><p>INPUT</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>RCV (GPIO21)</p></td>
+<td><p>INPUT</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>OEN (MTDO)</p></td>
+<td><p>OUTPUT</p></td>
+<td><p>HIGH</p></td>
+</tr>
+<tr class="row-even"><td><p>VPO (MTCK)</p></td>
+<td><p>OUTPUT</p></td>
+<td><p>LOW</p></td>
+</tr>
+<tr class="row-odd"><td><p>VMO(GPIO38)</p></td>
+<td><p>OUTPUT</p></td>
+<td><p>LOW</p></td>
+</tr>
+</tbody>
+</table>
+<p>If the USB-OTG Download Boot mode is not needed, it is suggested to disable the USB-OTG Download Boot mode by setting the eFuse bit EFUSE_DIS_USB_OTG_DOWNLOAD_MODE to avoid IO pad state change.</p>
+</section>
+<section id="touch-sensor">
+<span id="schematic-checklist-touch"></span><h2>Touch Sensor<a class="headerlink" href="#touch-sensor" title="Permalink to this heading"></a></h2>
+<p>ESP32-S3 has 14 capacitive-sensing GPIOs, which detect variations induced by touching or approaching the GPIOs with a finger or other objects. The low-noise nature of the design and the high sensitivity of the circuit allow relatively small pads to be used. Arrays of pads can also be used, so that a larger area or more points can be detected.</p>
+<p>The touch sensing performance is further enhanced by the waterproof design and digital filtering feature.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>ESP32-S3 touch sensor has not passed the Conducted Susceptibility (CS) test for now, and thus has limited application scenarios.</p>
+</div>
+<p>Table below shows the correspondence between touch sensor channels and GPIOs.</p>
+<table class="docutils align-center" id="tab-touch-gpio">
+<caption><span class="caption-text">Touch Sensor Functions</span><a class="headerlink" href="#tab-touch-gpio" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO Pin Name</p></th>
+<th class="head"><p>Touch Sensor Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GPIO1</p></td>
+<td><p>TOUCH1</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO2</p></td>
+<td><p>TOUCH2</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO3</p></td>
+<td><p>TOUCH3</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO4</p></td>
+<td><p>TOUCH4</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO5</p></td>
+<td><p>TOUCH5</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO6</p></td>
+<td><p>TOUCH6</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO7</p></td>
+<td><p>TOUCH7</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO8</p></td>
+<td><p>TOUCH8</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO9</p></td>
+<td><p>TOUCH9</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO10</p></td>
+<td><p>TOUCH10</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO11</p></td>
+<td><p>TOUCH11</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO12</p></td>
+<td><p>TOUCH12</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO13</p></td>
+<td><p>TOUCH13</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO14</p></td>
+<td><p>TOUCH14</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that only GPIO14 (TOUCH14) can drive the shield electrode.</p>
+<p>When using the touch function, it is recommended to populate a series resistor at the chip side to reduce the coupling noise and interference on the line, and to strengthen the ESD protection. The recommended resistance is from 470 Ω to 2 kΩ, preferably 510 Ω. The specific value depends on the actual test results of the product.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pcb-layout-design.html" class="btn btn-neutral float-right" title="PCB Layout Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="product-overview.html" class="btn btn-neutral float-left" title="Product Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr />
+  <div style="display: flex; justify-content: space-between;">
+  <div class="f5 contribution" style="height:100px;width:200px;float:left;"><b>Suggestion on this document?</b><br><br><font size=2>
+    
+    
+    <a id="feedback" class="btn btn-neutral" href="https://www.espressif.com/en/company/documents/documentation_feedback?docId=5419&sections=Schematic Checklist (schematic-checklist)&version=">
+      <svg aria-hidden="true" role="img" class="octicon mr-1" viewBox="2 2 16 16" width="12" height="12" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;overflow:visible">
+        <path fill-rule="evenodd" d="M17.218,2.268L2.477,8.388C2.13,8.535,2.164,9.05,2.542,9.134L9.33,10.67l1.535,6.787c0.083,0.377,0.602,0.415,0.745,0.065l6.123-14.74C17.866,2.46,17.539,2.134,17.218,2.268 M3.92,8.641l11.772-4.89L9.535,9.909L3.92,8.641z M11.358,16.078l-1.268-5.613l6.157-6.157L11.358,16.078z"></path>
+      </svg>&nbsp;Provide feedback
+    </a>
+  </font></div>
+
+  <div style="height:100px;width:200px;margin:0 auto;"><b>Help improve this document?</b><br><br><font size=2>
+    <a id="edit-on-github" class="btn btn-neutral" href="https://github.com/espressif/esp-hardware-design-guidelines/blob/6babf3e/docs/en/schematic-checklist.rst">
+      <svg aria-hidden="true" role="img" class="octicon mr-1" viewBox="2 2 16 16" width="12" height="12" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;overflow:visible">
+        <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.1 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.52-1.04 2.2-.82 2.2-.82.44 1.09.16 1.9.08 2.1.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+      </svg>&nbsp;Edit on GitHub
+    </a>
+  </font></div>
+
+  <div style="height:100px;width:180px;float:right;"><b>Need more information?</b>
+    <div><font size = 2><br><a id="ESP forum" href="https://www.esp32.com/viewforum.php?f=23"><svg aria-hidden="true" role="img" class="octicon mr-1" viewBox="2 0 16 16" width="12" height="12" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;overflow:visible"><path fill-rule="evenodd" d="M17.659,3.681H8.468c-0.211,0-0.383,0.172-0.383,0.383v2.681H2.341c-0.21,0-0.383,0.172-0.383,0.383v6.126c0,0.211,0.172,0.383,0.383,0.383h1.532v2.298c0,0.566,0.554,0.368,0.653,0.27l2.569-2.567h4.437c0.21,0,0.383-0.172,0.383-0.383v-2.681h1.013l2.546,2.567c0.242,0.249,0.652,0.065,0.652-0.27v-2.298h1.533c0.211,0,0.383-0.172,0.383-0.382V4.063C18.042,3.853,17.87,3.681,17.659,3.681 M11.148,12.87H6.937c-0.102,0-0.199,0.04-0.27,0.113l-2.028,2.025v-1.756c0-0.211-0.172-0.383-0.383-0.383H2.724V7.51h5.361v2.68c0,0.21,0.172,0.382,0.383,0.382h2.68V12.87z M17.276,9.807h-1.533c-0.211,0-0.383,0.172-0.383,0.383v1.755L13.356,9.92c-0.07-0.073-0.169-0.113-0.27-0.113H8.851v-5.36h8.425V9.807z"></path></svg>&nbsp;Check ESP forum</a></font>
+    </div>
+     <div><font size = 2><a id="sales-questions" href="https://www.espressif.com/en/contact-us/sales-questions"><svg aria-hidden="true" role="img" class="octicon mr-1" viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;overflow:visible"><path fill-rule="evenodd" d="M15.573,11.624c0.568-0.478,0.947-1.219,0.947-2.019c0-1.37-1.108-2.569-2.371-2.569s-2.371,1.2-2.371,2.569c0,0.8,0.379,1.542,0.946,2.019c-0.253,0.089-0.496,0.2-0.728,0.332c-0.743-0.898-1.745-1.573-2.891-1.911c0.877-0.61,1.486-1.666,1.486-2.812c0-1.79-1.479-3.359-3.162-3.359S4.269,5.443,4.269,7.233c0,1.146,0.608,2.202,1.486,2.812c-2.454,0.725-4.252,2.998-4.252,5.685c0,0.218,0.178,0.396,0.395,0.396h16.203c0.218,0,0.396-0.178,0.396-0.396C18.497,13.831,17.273,12.216,15.573,11.624 M12.568,9.605c0-0.822,0.689-1.779,1.581-1.779s1.58,0.957,1.58,1.779s-0.688,1.779-1.58,1.779S12.568,10.427,12.568,9.605 M5.06,7.233c0-1.213,1.014-2.569,2.371-2.569c1.358,0,2.371,1.355,2.371,2.569S8.789,9.802,7.431,9.802C6.073,9.802,5.06,8.447,5.06,7.233 M2.309,15.335c0.202-2.649,2.423-4.742,5.122-4.742s4.921,2.093,5.122,4.742H2.309z M13.346,15.335c-0.067-0.997-0.382-1.928-0.882-2.732c0.502-0.271,1.075-0.429,1.686-0.429c1.828,0,3.338,1.385,3.535,3.161H13.346z"></path></svg>&nbsp;Sales Questions</a>
+      </font></div>
+     <div><font size = 2><a id="technical-inquiries" href="https://www.espressif.com/en/contact-us/technical-inquiries"><svg aria-hidden="true" role="img" class="octicon mr-1" viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;overflow:visible"><path fill-rule="evenodd" d="M15.573,11.624c0.568-0.478,0.947-1.219,0.947-2.019c0-1.37-1.108-2.569-2.371-2.569s-2.371,1.2-2.371,2.569c0,0.8,0.379,1.542,0.946,2.019c-0.253,0.089-0.496,0.2-0.728,0.332c-0.743-0.898-1.745-1.573-2.891-1.911c0.877-0.61,1.486-1.666,1.486-2.812c0-1.79-1.479-3.359-3.162-3.359S4.269,5.443,4.269,7.233c0,1.146,0.608,2.202,1.486,2.812c-2.454,0.725-4.252,2.998-4.252,5.685c0,0.218,0.178,0.396,0.395,0.396h16.203c0.218,0,0.396-0.178,0.396-0.396C18.497,13.831,17.273,12.216,15.573,11.624 M12.568,9.605c0-0.822,0.689-1.779,1.581-1.779s1.58,0.957,1.58,1.779s-0.688,1.779-1.58,1.779S12.568,10.427,12.568,9.605 M5.06,7.233c0-1.213,1.014-2.569,2.371-2.569c1.358,0,2.371,1.355,2.371,2.569S8.789,9.802,7.431,9.802C6.073,9.802,5.06,8.447,5.06,7.233 M2.309,15.335c0.202-2.649,2.423-4.742,5.122-4.742s4.921,2.093,5.122,4.742H2.309z M13.346,15.335c-0.067-0.997-0.382-1.928-0.882-2.732c0.502-0.271,1.075-0.429,1.686-0.429c1.828,0,3.338,1.385,3.535,3.161H13.346z"></path></svg>&nbsp;Technical Inquiries </a>
+      </font></div>
+  </div>
+</div>
+  <div role="contentinfo">
+  </div>
+  <ul class="footer">
+    <li>
+      <br> <!-- Separate Feedback/Information part with Copyright/Sphinx -->
+        
+        &copy; Copyright 2023 - 2026, Espressif Systems (Shanghai) Co., Ltd
+    <p>
+      
+      
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/espressif/sphinx_idf_theme">theme</a>  based on <a href="https://github.com/readthedocs/sphinx_rtd_theme">Read the Docs Sphinx Theme</a>.
+    </li></p> 
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
