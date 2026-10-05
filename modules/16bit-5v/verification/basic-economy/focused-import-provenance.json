@@ -1,0 +1,1353 @@
+{
+  "source": "/home/azero/.okbrain/workspaces/bread-modular-kicad/288",
+  "destination": "/home/azero/.okbrain/workspaces/bread-modular-kicad/291",
+  "base_head": "1e50e798d68e3d8d3167fb5fb47bdcb7ee436b83",
+  "patch_sha256": "712e6081a0505aeb8618f8989408833ed23543abc8391632cb897e0d76520c62",
+  "tracked_diff_paths": [
+    "README.md",
+    "modules/16bit-5v/16bit-5v.kicad_pcb",
+    "modules/16bit-5v/16bit-5v.kicad_sch",
+    "modules/16bit-5v/production/16bit-5v.zip",
+    "modules/16bit-5v/production/RELEASE_STATUS.md",
+    "modules/16bit-5v/production/all-components-export-report.json",
+    "modules/16bit-5v/production/assembly/16bit-5v-gerbers.zip",
+    "modules/16bit-5v/production/assembly/bom.csv",
+    "modules/16bit-5v/production/assembly/export-report.json",
+    "modules/16bit-5v/production/bom.csv",
+    "modules/16bit-5v/production/manifest.json",
+    "modules/16bit-5v/tools/regenerate_production.py",
+    "modules/16bit-5v/tools/verify_power.py",
+    "opt/kicad-jlcpcb/README.md",
+    "opt/kicad-jlcpcb/export.py",
+    "opt/kicad-jlcpcb/tests/test_export.py"
+  ],
+  "untracked_paths": [
+    ".agents/skills/jlcpcb-assembly/SKILL.md",
+    "modules/16bit-5v/.gitignore",
+    "modules/16bit-5v/jlcpcb/16bit-5v/16bit-5v-gerbers.zip",
+    "modules/16bit-5v/jlcpcb/16bit-5v/bom.csv",
+    "modules/16bit-5v/jlcpcb/16bit-5v/export-report.json",
+    "modules/16bit-5v/jlcpcb/16bit-5v/positions.csv",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-B_Cu.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-B_Mask.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-B_Paste.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-B_Silkscreen.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-Edge_Cuts.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-F_Cu.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-F_Mask.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-F_Paste.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-F_Silkscreen.gbr",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-NPTH.drl",
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-PTH.drl",
+    "modules/16bit-5v/jlcpcb/production_files/GERBER-16bit-5v.zip",
+    "modules/16bit-5v/verification/basic-economy/README.md",
+    "modules/16bit-5v/verification/basic-economy/audit-final-bom.json",
+    "modules/16bit-5v/verification/basic-economy/audit-final-native.json",
+    "modules/16bit-5v/verification/basic-economy/audit-initial.json",
+    "modules/16bit-5v/verification/basic-economy/audit-status.json",
+    "modules/16bit-5v/verification/basic-economy/baseline-provenance.json",
+    "modules/16bit-5v/verification/basic-economy/bounded-final-candidate-check.json",
+    "modules/16bit-5v/verification/basic-economy/candidate-searches-extra.json",
+    "modules/16bit-5v/verification/basic-economy/candidate-searches-last.json",
+    "modules/16bit-5v/verification/basic-economy/candidate-searches.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-exact-candidates.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-exact.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/0dfab3e38d25316cd7ba25f2844074945f7826ff3a251ccf7311422fe124b136.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/1172a2e4618df685919f27cdb1e3789e7911f1380cdb6bc7f02263b64555d10e.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/1e911dec4682fefbd7a68ede2fafad832f368919537325c5ea42f974392e9645.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/24fe8d57ded73d2d96affb48d3fd44192a39778a5c59920ac818d3a605a0e9ce.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/28a248e9e7c711a78a9f91a87b0b305e4824405886be1a78966cc8bec73f52bf.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/5e7d9d0fa2be6fe92f6f2efb7c9d9de930dc8f023103baf04c7bfcb0192cf347.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/665ee06d3b3a8544dea324ad9017ab2f595e823ea0e8a5f8f31bd74735b5f534.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/7b406f3b07419e33653023fe74c65cda4678568c585e9fdc713ca0f88623ade7.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/81c29c6330bad3b941df1b470aed7d7f7c618b6c6b29e9696f254cac4060ca46.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/837b42445e3102c7063fe134038d8fd22812ca94fe0135944740703fc03c226a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/92c0af84f70b98886205002980d05e7803fc2e0c42f6f6a98c4c6ec3f9d91d9a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/9d531eebad82604da93a9f00ea8f8fa00e2a778c48b05804d90370d606836f7a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/a7712d6319e7525783bb506c2aa1f217499c4b62062201f95960d55fd020ed3d.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/ac9d523b7e07025613a075e50038478fd5f8f60acdcf7e22bcd5bdb42c0abcc1.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/b00f7dcf806be0dccc2ea4b87a781c6876ebdcfadccb768c58fae51764333df0.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/b453ee110f6297db8014d3a1b1fa7bff4822de0858562f49bd9ef1f5346018e3.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/b8e244117e4277b838a2a5726bbbcdd1bce71544aa8073868f172a5c34cabeec.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/c4374b8381d424a2b5001f297158f5e2e9917765c8df3b6a58543c98a09ab303.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/c7b7010addbeb613081da163f3779e43678f9013ca35e432310e4c0faedc34ce.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/cb4fd61e8474aa4b782ccd2fa16f731bdc841fb30b32b3655a115d740db5f830.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/e9bcdcf9191b750ce3d9d850ffa1bcd80c9fdd106b4062df2a4733c221b771ee.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/ec00a4ea7d75708a9849a4aec16219e40a5e77d0aa0c4f317621c58aee430f69.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/ec605da13942f8da72af2e9cb6793959dcc17fbb0c6f62aa5e3577aa8fd4ade5.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/f26484e4c34aefa37ca14d0765a9f3ed7193fc22141af06e702e06424ba091cb.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/f9f403891dc3baf796eb2ff74bcc3d9089e309b2a0d67de2ad95b6ab9b14dd0c.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-final-request-budget.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/0ce30d23e1bafc5423eb0db9673666af8df134fab13d3c1f6fe4814acd1c712d.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/0dfab3e38d25316cd7ba25f2844074945f7826ff3a251ccf7311422fe124b136.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1172a2e4618df685919f27cdb1e3789e7911f1380cdb6bc7f02263b64555d10e.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/124361e6bcb6217e9e67f5ef7fb9ce42c1105c2e92667d78d46e5b23e33f40e9.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/18f536c9d7835eaaf5e83475aa134e675098dce27b8c44b2625b6cc3cdb55336.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1ac60b345794795c4075033a3380ae122c90087c9da5e33293c05c8293bf8645.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1e911dec4682fefbd7a68ede2fafad832f368919537325c5ea42f974392e9645.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1ef74c2067bf4baea0a74cc0c17e7737f2b44b3c7cff7487930bc50c2f1fa9c2.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1ffc2f749d12cee3a4d29484a5f7023d9e191725a75b5a499375025699a22d73.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/24fe8d57ded73d2d96affb48d3fd44192a39778a5c59920ac818d3a605a0e9ce.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/28a248e9e7c711a78a9f91a87b0b305e4824405886be1a78966cc8bec73f52bf.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/2c803ed282ce999a4d837376c100461fb91ed06e004b4548b227705614689813.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/38243f96022d4765f00f43cf2c22b0d9c71f9ad27be8a056259b792dcb968ac4.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/3be57bc6193d7eaa190cd411dc67e170ed473e34ab9bb53f9257409bdf785c9c.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/503d55034e6fe6cd6a1c56a573d4328e03e7669e9c2f1759c9d91da9ba91f743.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/593c6b7a22cdd75ec46a1119a983715b75ef207f8c9fc1a91d19102d4d02eb65.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/5e7d9d0fa2be6fe92f6f2efb7c9d9de930dc8f023103baf04c7bfcb0192cf347.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/665ee06d3b3a8544dea324ad9017ab2f595e823ea0e8a5f8f31bd74735b5f534.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/6f55e34536210392efb36fc6aac1ee43e51fc85b5e6f2a24a75e004e6ab14a2c.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/73d70d6abe3fd1e7113c1c368521c704c010ecfabf82c84a35d7d503683d4179.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/793d3c947c98e8da4204ebe910ce411418390937a289ce55ba783d519815337e.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/7b406f3b07419e33653023fe74c65cda4678568c585e9fdc713ca0f88623ade7.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/7ba4302c345144edfbb0d6d2d0dc2cab7b8d7dbb28a77fd823669e34c3978130.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/7d59f6044fe2c8c1cc2b4b1be6487a6e6311271c2ef43946bc2ec973a64d0b1c.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/81c29c6330bad3b941df1b470aed7d7f7c618b6c6b29e9696f254cac4060ca46.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/834c4859147935083dcf1307559871195bfaf23c71046d973708780676fa97c1.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/837b42445e3102c7063fe134038d8fd22812ca94fe0135944740703fc03c226a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/862a071a88323475c5b0e2d068332bfebed83dcd0a305c5f886e9f28e2f0b461.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/8637873639aa0de67ac2e78c1b2d52788a8d906b5076f4e92f71a4a035cc762d.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/88dcfbfe1740a9ebbb6af67b1a72da2078c2c21f67c3f002f793c376879fefc1.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/8a820be76b44c4dc8e17da7e7c944c26b1b83995a4920a9865869519bb32df32.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/92c0af84f70b98886205002980d05e7803fc2e0c42f6f6a98c4c6ec3f9d91d9a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/97b6a0d2ea3adcb0b4d4274025adc7f068c4ea3efb136dc9af695e14771aa2fa.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/9d531eebad82604da93a9f00ea8f8fa00e2a778c48b05804d90370d606836f7a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/a584ad5e9b88d146c27a157702366007c5a914bf85136e6ccf7bd74b65336271.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/a7712d6319e7525783bb506c2aa1f217499c4b62062201f95960d55fd020ed3d.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/ac0802440ffa7332499c5a4460816e76d1581af83a44a12ffe11cf0254c809e6.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/ac9d523b7e07025613a075e50038478fd5f8f60acdcf7e22bcd5bdb42c0abcc1.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/af0fa4173f2b68028bc06891a4d47ded96039b6f5d507e1939d3d97bde574199.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/b00f7dcf806be0dccc2ea4b87a781c6876ebdcfadccb768c58fae51764333df0.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/b19e03fac79f23c1f613cfe5a79e4fb31afc3d0e78cabbedff148c4e2920dc17.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/b453ee110f6297db8014d3a1b1fa7bff4822de0858562f49bd9ef1f5346018e3.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/b8e244117e4277b838a2a5726bbbcdd1bce71544aa8073868f172a5c34cabeec.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/bb18b6fc169301e9463f1dd36c0ec7fcf510b608b6947069f068330a54bedf16.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/bd7b07aa986c215c6216a83992ac2f53940bfdfa8d737c2baae931784bb83d9a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/bf3f10805eede9e226d2427af605c9c44b9635d3dfee048f48a6f27b8578da01.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/c4374b8381d424a2b5001f297158f5e2e9917765c8df3b6a58543c98a09ab303.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/c7b7010addbeb613081da163f3779e43678f9013ca35e432310e4c0faedc34ce.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/c83574da1c9ccab97fd3c9b5c184f26e2555e5dad1472d99e746656a228c79c6.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/c872770f2dc010eed0b3117fc6b1b3258e5d6fc2818c2180defd721c1bce36fd.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/cb4fd61e8474aa4b782ccd2fa16f731bdc841fb30b32b3655a115d740db5f830.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/d54ba7e10c4a1954642174a71c8cec398ac296bd35a0f686be05a510a0536682.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/e2ee6e802530c8daf45fcdda741a2f9e765192149f96ae384303f509ce5e28a6.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/e9bcdcf9191b750ce3d9d850ffa1bcd80c9fdd106b4062df2a4733c221b771ee.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/ec00a4ea7d75708a9849a4aec16219e40a5e77d0aa0c4f317621c58aee430f69.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/ec605da13942f8da72af2e9cb6793959dcc17fbb0c6f62aa5e3577aa8fd4ade5.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/f26484e4c34aefa37ca14d0765a9f3ed7193fc22141af06e702e06424ba091cb.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/f9f403891dc3baf796eb2ff74bcc3d9089e309b2a0d67de2ad95b6ab9b14dd0c.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/fb500b8abe82ee3c1d5126c99ecd4fab56df4d3260b5ba4a59055b3bd17d6792.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/fd38f13e5adcc8fe094532c95f96db133d3a617ba7fc63189150c94210331c35.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/1172a2e4618df685919f27cdb1e3789e7911f1380cdb6bc7f02263b64555d10e.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/1e911dec4682fefbd7a68ede2fafad832f368919537325c5ea42f974392e9645.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/24fe8d57ded73d2d96affb48d3fd44192a39778a5c59920ac818d3a605a0e9ce.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/5e7d9d0fa2be6fe92f6f2efb7c9d9de930dc8f023103baf04c7bfcb0192cf347.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/7b406f3b07419e33653023fe74c65cda4678568c585e9fdc713ca0f88623ade7.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/81c29c6330bad3b941df1b470aed7d7f7c618b6c6b29e9696f254cac4060ca46.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/837b42445e3102c7063fe134038d8fd22812ca94fe0135944740703fc03c226a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/92c0af84f70b98886205002980d05e7803fc2e0c42f6f6a98c4c6ec3f9d91d9a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/9d531eebad82604da93a9f00ea8f8fa00e2a778c48b05804d90370d606836f7a.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/a7712d6319e7525783bb506c2aa1f217499c4b62062201f95960d55fd020ed3d.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/ac9d523b7e07025613a075e50038478fd5f8f60acdcf7e22bcd5bdb42c0abcc1.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/b00f7dcf806be0dccc2ea4b87a781c6876ebdcfadccb768c58fae51764333df0.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/b453ee110f6297db8014d3a1b1fa7bff4822de0858562f49bd9ef1f5346018e3.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/b8e244117e4277b838a2a5726bbbcdd1bce71544aa8073868f172a5c34cabeec.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/c4374b8381d424a2b5001f297158f5e2e9917765c8df3b6a58543c98a09ab303.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/c7b7010addbeb613081da163f3779e43678f9013ca35e432310e4c0faedc34ce.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/e9bcdcf9191b750ce3d9d850ffa1bcd80c9fdd106b4062df2a4733c221b771ee.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/ec605da13942f8da72af2e9cb6793959dcc17fbb0c6f62aa5e3577aa8fd4ade5.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/f26484e4c34aefa37ca14d0765a9f3ed7193fc22141af06e702e06424ba091cb.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/f9f403891dc3baf796eb2ff74bcc3d9089e309b2a0d67de2ad95b6ab9b14dd0c.json",
+    "modules/16bit-5v/verification/basic-economy/catalog-reviewed-replay.json",
+    "modules/16bit-5v/verification/basic-economy/common-tests-final.log",
+    "modules/16bit-5v/verification/basic-economy/common-tests.log",
+    "modules/16bit-5v/verification/basic-economy/connectivity-final.json",
+    "modules/16bit-5v/verification/basic-economy/drc-baseline.json",
+    "modules/16bit-5v/verification/basic-economy/drc-final.json",
+    "modules/16bit-5v/verification/basic-economy/erc-baseline.json",
+    "modules/16bit-5v/verification/basic-economy/erc-final.json",
+    "modules/16bit-5v/verification/basic-economy/failed-fetches.json",
+    "modules/16bit-5v/verification/basic-economy/gerber-baseline-geometry-parity.json",
+    "modules/16bit-5v/verification/basic-economy/guard-negative-tests.json",
+    "modules/16bit-5v/verification/basic-economy/handoff-inventory-16bit.json",
+    "modules/16bit-5v/verification/basic-economy/last-bounded-passive-results.json",
+    "modules/16bit-5v/verification/basic-economy/live-supply-summary.json",
+    "modules/16bit-5v/verification/basic-economy/manufacturer-evidence.json",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/AP2112.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/AP2112.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-100n.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-100n.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-10n-spec.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-10n-spec.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-4u7-characteristics.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-4u7-characteristics.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-4u7-spec.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-4u7-spec.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-10n-primary.html",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-10u-characteristics.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-10u-characteristics.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-1u-spec.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-1u-spec.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL31-100u-characteristics.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL31-100u-characteristics.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/FH-series.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/FH-series.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/PT8211.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/PT8211.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/RP2350-hardware.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/RP2350-hardware.txt",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/uniroyal-series.pdf",
+    "modules/16bit-5v/verification/basic-economy/manufacturer/uniroyal-series.txt",
+    "modules/16bit-5v/verification/basic-economy/native-sourcing-plan.json",
+    "modules/16bit-5v/verification/basic-economy/netlist-baseline.xml",
+    "modules/16bit-5v/verification/basic-economy/netlist-final.xml",
+    "modules/16bit-5v/verification/basic-economy/planner-final-live.json",
+    "modules/16bit-5v/verification/basic-economy/planner-replay.json",
+    "modules/16bit-5v/verification/basic-economy/production-generation.log",
+    "modules/16bit-5v/verification/basic-economy/requirements-final.json",
+    "modules/16bit-5v/verification/basic-economy/requirements-initial.json",
+    "modules/16bit-5v/verification/basic-economy/reviewed-source.json",
+    "modules/16bit-5v/verification/basic-economy/shared-import-parity.json",
+    "modules/16bit-5v/verification/basic-economy/synthetic-integration-tests-final.log",
+    "modules/16bit-5v/verification/basic-economy/synthetic-integration-tests.log",
+    "modules/16bit-5v/verification/basic-economy/usb-network-search.json",
+    "modules/16bit-5v/verification/basic-economy/warning-waiver-parity.json",
+    "modules/16bit-5v/verification/basic-economy/zone-refill.json",
+    "opt/kicad-jlcpcb/ASSEMBLY.md",
+    "opt/kicad-jlcpcb/add_production_files.py",
+    "opt/kicad-jlcpcb/assembly.py",
+    "opt/kicad-jlcpcb/bom_audit.py",
+    "opt/kicad-jlcpcb/catalog.py",
+    "opt/kicad-jlcpcb/examples/audit-requirements.json",
+    "opt/kicad-jlcpcb/examples/capacitor-target.json",
+    "opt/kicad-jlcpcb/examples/resistor-target.json",
+    "opt/kicad-jlcpcb/passive_planner.py",
+    "opt/kicad-jlcpcb/tests/fixtures/capacitor-voltage-aliases.json",
+    "opt/kicad-jlcpcb/tests/fixtures/catalog-C25744.json",
+    "opt/kicad-jlcpcb/tests/fixtures/catalog-C25804.json",
+    "opt/kicad-jlcpcb/tests/test_add_production_files.py",
+    "opt/kicad-jlcpcb/tests/test_assembly.py",
+    "opt/kicad-jlcpcb/tests/test_catalog_voltage.py",
+    "opt/kicad-jlcpcb/tests/test_shared_handoff.py"
+  ],
+  "path_signatures": {
+    "README.md": {
+      "type": "file",
+      "sha256": "c299aa563014f5e78692984dd821c219b1fdc496d07ba7136181efed7697cc1b",
+      "mode": 436
+    },
+    "modules/16bit-5v/16bit-5v.kicad_pcb": {
+      "type": "file",
+      "sha256": "841c196388f6d6cf15f08bcba73556d5397e5a33fc5a659a0baf8334ace76412",
+      "mode": 436
+    },
+    "modules/16bit-5v/16bit-5v.kicad_sch": {
+      "type": "file",
+      "sha256": "5ca54523b0d8e0f1ddc052155ea124a7e6cd7a14db2c3732bd6bab105111415f",
+      "mode": 436
+    },
+    "modules/16bit-5v/production/16bit-5v.zip": {
+      "type": "file",
+      "sha256": "a439fa5d08fa7684bce2013413a750067727590e6f721ecbbba640a202fd2f48",
+      "mode": 436
+    },
+    "modules/16bit-5v/production/RELEASE_STATUS.md": {
+      "type": "file",
+      "sha256": "251e21e911b10f3e0c2972be0654ab2293fda0362f3a707063425034b256b4a9",
+      "mode": 436
+    },
+    "modules/16bit-5v/production/all-components-export-report.json": {
+      "type": "file",
+      "sha256": "bbc654610a8833a865649ad4cac6cadd7eb3d6dbbcc86c6f108d343d4ce5c8a3",
+      "mode": 436
+    },
+    "modules/16bit-5v/production/assembly/16bit-5v-gerbers.zip": {
+      "type": "file",
+      "sha256": "a439fa5d08fa7684bce2013413a750067727590e6f721ecbbba640a202fd2f48",
+      "mode": 436
+    },
+    "modules/16bit-5v/production/assembly/bom.csv": {
+      "type": "file",
+      "sha256": "208cae8ef3cb7dad7655ae9365db8728059e8b39c1a0a9f00182adcfc6fa622e",
+      "mode": 436
+    },
+    "modules/16bit-5v/production/assembly/export-report.json": {
+      "type": "file",
+      "sha256": "0ff6dcf2a491eb5f5e5ffd698b1faa321a3f3b045cfe430c4db9b1e9beede4b6",
+      "mode": 436
+    },
+    "modules/16bit-5v/production/bom.csv": {
+      "type": "file",
+      "sha256": "9d5fa7735bcc06c4bd8d514c96d685380b45fa9bd431e50410324c7d1187a967",
+      "mode": 436
+    },
+    "modules/16bit-5v/production/manifest.json": {
+      "type": "file",
+      "sha256": "1e65ed7c604bb0ceef22c4279c63fa43b975a71e8b629efb04586d28243dbf5c",
+      "mode": 436
+    },
+    "modules/16bit-5v/tools/regenerate_production.py": {
+      "type": "file",
+      "sha256": "a897272e091d1a17104c5e3f74081b76e79859646d31e8a499d81b3ae37bf251",
+      "mode": 436
+    },
+    "modules/16bit-5v/tools/verify_power.py": {
+      "type": "file",
+      "sha256": "e92f2074b5e3404dc5f79a8328a74b5aa47e16ebedaa3a56c3aa2c1c26184570",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/README.md": {
+      "type": "file",
+      "sha256": "53688987d26d41de4ca5190e1cb8a30d16bdf22120ff1464519d990dcf81b215",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/export.py": {
+      "type": "file",
+      "sha256": "06f08a6d0e1f7883efdeb00528d656044a24f0913b19f7618f788f63a9ed394b",
+      "mode": 509
+    },
+    "opt/kicad-jlcpcb/tests/test_export.py": {
+      "type": "file",
+      "sha256": "297df2700589374f287bfa57b686dd9feca0b4eebd7a8f16e9dfedee81b6ece2",
+      "mode": 436
+    },
+    ".agents/skills/jlcpcb-assembly/SKILL.md": {
+      "type": "file",
+      "sha256": "32a195e9f9dd47cfddc5f8012839b7847ef4f10ad88e3cdfe9a177196d75974c",
+      "mode": 436
+    },
+    "modules/16bit-5v/.gitignore": {
+      "type": "file",
+      "sha256": "5fbe7c854d184f1e7e90114605cbb7b54af88b62bad2afe2aa8d067bddc60163",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/16bit-5v/16bit-5v-gerbers.zip": {
+      "type": "file",
+      "sha256": "a439fa5d08fa7684bce2013413a750067727590e6f721ecbbba640a202fd2f48",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/16bit-5v/bom.csv": {
+      "type": "file",
+      "sha256": "208cae8ef3cb7dad7655ae9365db8728059e8b39c1a0a9f00182adcfc6fa622e",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/16bit-5v/export-report.json": {
+      "type": "file",
+      "sha256": "0ff6dcf2a491eb5f5e5ffd698b1faa321a3f3b045cfe430c4db9b1e9beede4b6",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/16bit-5v/positions.csv": {
+      "type": "file",
+      "sha256": "5eae647dac520bb9279f7499cde0acd412c27d0f76ef925685ff140babc9cd84",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-B_Cu.gbr": {
+      "type": "file",
+      "sha256": "d0494f26b4a530ba7bc0c899a4a56e380d2ee68ce4502ac2b3643bf66a1f692a",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-B_Mask.gbr": {
+      "type": "file",
+      "sha256": "907b65cd5a22e02cb6c068410e89059da89f52787e3a67f60149b94b70993d33",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-B_Paste.gbr": {
+      "type": "file",
+      "sha256": "bdfe13888a441db69ea47cef23c6b195ca770f532e7eded7f2ff0086a8baef6a",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-B_Silkscreen.gbr": {
+      "type": "file",
+      "sha256": "69d28666abb85acea567bc6595e36853be2ea80fcb6f9f14dc98de81be869f10",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-Edge_Cuts.gbr": {
+      "type": "file",
+      "sha256": "ef66e11fcaf348798bdb63b197711d944f1bc6801d3d4892b2ba340d4e8cf682",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-F_Cu.gbr": {
+      "type": "file",
+      "sha256": "aea50b335f40e320241a7bf590efd39e667689569cdf69f507212c82994607fb",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-F_Mask.gbr": {
+      "type": "file",
+      "sha256": "c191c2c40f78e29cb13e5df97fd6530092f99563cff1fcee8b53800419155d63",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-F_Paste.gbr": {
+      "type": "file",
+      "sha256": "7f4688d3c6bcd5c76dbc1d984d4d0969820be45105c14a08a111e94ccef9d90a",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-F_Silkscreen.gbr": {
+      "type": "file",
+      "sha256": "ff37d6bea8dd8d4a482430868b39a7f402b42dab0c7cfb0f1836f2a582df9fa4",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-NPTH.drl": {
+      "type": "file",
+      "sha256": "1c24d86ec72862351847343463fe4a26859fe2c62e11a1ccfe3beb43adfffb4b",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/gerber/16bit-5v-PTH.drl": {
+      "type": "file",
+      "sha256": "81190e29c7775cebbd9c41d97ae0a7e47fe499977b6ef6584fb0580cd70801a9",
+      "mode": 436
+    },
+    "modules/16bit-5v/jlcpcb/production_files/GERBER-16bit-5v.zip": {
+      "type": "file",
+      "sha256": "a439fa5d08fa7684bce2013413a750067727590e6f721ecbbba640a202fd2f48",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/README.md": {
+      "type": "file",
+      "sha256": "0b57087523c667a3ac6ed686b3b814f917e257e0e7e760a39b55b1669de33b9a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/audit-final-bom.json": {
+      "type": "file",
+      "sha256": "34fad0f3298c4eea58dea5bc542aff300e7880788c0e9af0320188c7dadc3825",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/audit-final-native.json": {
+      "type": "file",
+      "sha256": "523a1a1bc5d5a50900c614f3710a121f8edf2237bd4a21ca966a7f90e2696f31",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/audit-initial.json": {
+      "type": "file",
+      "sha256": "ad046d829b605252094fcb198f3506d85caaaf41af7a114a9812a8989e7bdce3",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/audit-status.json": {
+      "type": "file",
+      "sha256": "cd061263bbb2fbdfff9a74f793e90cf3684f77f6154fcb9aec4d80245ba4e1f4",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/baseline-provenance.json": {
+      "type": "file",
+      "sha256": "b116556913361f1d7edc001d2b6a897e3b41f73b11b5ef7ba641e2c82bc29437",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/bounded-final-candidate-check.json": {
+      "type": "file",
+      "sha256": "f421b698d98e9c140b7f6f9b4baca6f4b238e1c3bdbabcaa6474eaed238dc0ad",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/candidate-searches-extra.json": {
+      "type": "file",
+      "sha256": "7e0e4b6506bc6bae0947e92bcfcf7d7b3aae6377757b61e0893ce96b56958828",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/candidate-searches-last.json": {
+      "type": "file",
+      "sha256": "bb366b488877ebc4205b516ca14e5149faafda84da7c6b8957e9bc54c37982ae",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/candidate-searches.json": {
+      "type": "file",
+      "sha256": "7252e933e2296ee5ffc12dc52669ba7347d8dd526549844d78aa098e93f82d61",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-exact-candidates.json": {
+      "type": "file",
+      "sha256": "a43ec9eddd2127ed501b2443c53a9dc990a073b5e354ad84adb64d1a2ff783ea",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-exact.json": {
+      "type": "file",
+      "sha256": "a1f58ee914ea95cd5d0428fd5f4b99d1a1cc46ee3adaebfd6f40c63c23285b18",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/0dfab3e38d25316cd7ba25f2844074945f7826ff3a251ccf7311422fe124b136.json": {
+      "type": "file",
+      "sha256": "49f8edf35d2a6d652fc084d5f64909c5617ede3e11d89d74374c76a0d3825170",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/1172a2e4618df685919f27cdb1e3789e7911f1380cdb6bc7f02263b64555d10e.json": {
+      "type": "file",
+      "sha256": "82337a59b118c88d24a8fbf7ff62d280aaf41f37f569f596b0ea48b2e0e29c8d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/1e911dec4682fefbd7a68ede2fafad832f368919537325c5ea42f974392e9645.json": {
+      "type": "file",
+      "sha256": "2012313a090f7079c878f0bc34eea555d60a198c555672b051999bf3e339abad",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/24fe8d57ded73d2d96affb48d3fd44192a39778a5c59920ac818d3a605a0e9ce.json": {
+      "type": "file",
+      "sha256": "3a48641c5f76cfb1a918b6419c9780376316b851457dd471dd6012de06399cbf",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/28a248e9e7c711a78a9f91a87b0b305e4824405886be1a78966cc8bec73f52bf.json": {
+      "type": "file",
+      "sha256": "6111d4bc9f65103da0a1a595f44405db23f370a2daaa1d03c775285365566968",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/5e7d9d0fa2be6fe92f6f2efb7c9d9de930dc8f023103baf04c7bfcb0192cf347.json": {
+      "type": "file",
+      "sha256": "47c05bfeb12c6fc78c110d6982cc6885b5b8b17118dd7fbb7b7b3e659d75f15c",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/665ee06d3b3a8544dea324ad9017ab2f595e823ea0e8a5f8f31bd74735b5f534.json": {
+      "type": "file",
+      "sha256": "2a9e2caf6a1ef2f607cab78af9327c70193dbf5c2cab2745dd1fee0e4a5cd75a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/7b406f3b07419e33653023fe74c65cda4678568c585e9fdc713ca0f88623ade7.json": {
+      "type": "file",
+      "sha256": "742ae0476efe60184684be4c009e7df8216d5a76f03971beec96f73c7a80b879",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/81c29c6330bad3b941df1b470aed7d7f7c618b6c6b29e9696f254cac4060ca46.json": {
+      "type": "file",
+      "sha256": "faf40fa1ba740e879b979fbb2aae755800f50d39f7f54c932a6446917b507b3a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/837b42445e3102c7063fe134038d8fd22812ca94fe0135944740703fc03c226a.json": {
+      "type": "file",
+      "sha256": "d7ac15ede6fe4570d821e4353ee07b20f94bcdde285bdb92eb887077eda4e743",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/92c0af84f70b98886205002980d05e7803fc2e0c42f6f6a98c4c6ec3f9d91d9a.json": {
+      "type": "file",
+      "sha256": "fa23fb4ff15a5152c7febbc0b0cb1d7d9b3755a7407c0e7ea3122af24ef8a675",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/9d531eebad82604da93a9f00ea8f8fa00e2a778c48b05804d90370d606836f7a.json": {
+      "type": "file",
+      "sha256": "03c1d6c9efaf529bbd75d25597a53db091ae723bc599c028f28cdfc86f7c52d3",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/a7712d6319e7525783bb506c2aa1f217499c4b62062201f95960d55fd020ed3d.json": {
+      "type": "file",
+      "sha256": "d9c71dc12434dda7fca274de00873ccfb96c18610758ce64f9f8cf1b8342d661",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/ac9d523b7e07025613a075e50038478fd5f8f60acdcf7e22bcd5bdb42c0abcc1.json": {
+      "type": "file",
+      "sha256": "7abc072bf66af75c0454d8ab930d2239f2ae68965a9d18a5d979cb99f49c5563",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/b00f7dcf806be0dccc2ea4b87a781c6876ebdcfadccb768c58fae51764333df0.json": {
+      "type": "file",
+      "sha256": "92c296a2d1167d29dc57cb25866325f52f0610f9a63e5b8afb1f57a91300f68e",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/b453ee110f6297db8014d3a1b1fa7bff4822de0858562f49bd9ef1f5346018e3.json": {
+      "type": "file",
+      "sha256": "3d4c5b0db95f68c1d4a45a3e12711a7bff7a0e5e929ca9c422261f4b67011a47",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/b8e244117e4277b838a2a5726bbbcdd1bce71544aa8073868f172a5c34cabeec.json": {
+      "type": "file",
+      "sha256": "fb9735da810f634887ce3ad2ef662afad3f6f6a195628efadf1909d729dacf4b",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/c4374b8381d424a2b5001f297158f5e2e9917765c8df3b6a58543c98a09ab303.json": {
+      "type": "file",
+      "sha256": "707d57854b95457e097d66ad08baa5c6080c98c6d5ac33bc2311ecb0986b09ce",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/c7b7010addbeb613081da163f3779e43678f9013ca35e432310e4c0faedc34ce.json": {
+      "type": "file",
+      "sha256": "f2c117824abf1d3c2974e9252c210e25e6dbbef73b3abf4b787310d78a300c13",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/cb4fd61e8474aa4b782ccd2fa16f731bdc841fb30b32b3655a115d740db5f830.json": {
+      "type": "file",
+      "sha256": "67ee0f56f828f3f1477884b0d214ad12072012850b0f3919171baa3a237ea1ff",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/e9bcdcf9191b750ce3d9d850ffa1bcd80c9fdd106b4062df2a4733c221b771ee.json": {
+      "type": "file",
+      "sha256": "a74e77fe364cbf6976769f3af4e3a68283ab351f36775d66fe499837b75c1246",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/ec00a4ea7d75708a9849a4aec16219e40a5e77d0aa0c4f317621c58aee430f69.json": {
+      "type": "file",
+      "sha256": "b9468d5992a6b1be0166a70146aa2b60690a35fd38e337c5be7d3aaad438c724",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/ec605da13942f8da72af2e9cb6793959dcc17fbb0c6f62aa5e3577aa8fd4ade5.json": {
+      "type": "file",
+      "sha256": "4a86f9fc1723cc5568e29ee8d2b36ce89f8b758d45056bc9b891a0e2fd570d54",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/f26484e4c34aefa37ca14d0765a9f3ed7193fc22141af06e702e06424ba091cb.json": {
+      "type": "file",
+      "sha256": "80a5082047cafcb0656ed350b8c470e0a4fcdb93aaedde237b5f515a357b4a39",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-raw/f9f403891dc3baf796eb2ff74bcc3d9089e309b2a0d67de2ad95b6ab9b14dd0c.json": {
+      "type": "file",
+      "sha256": "267fc661fbb16b9b540d1f034a8c4da22931ad8a1ed46a73f1d2f064eefd46f0",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-final-request-budget.json": {
+      "type": "file",
+      "sha256": "233bf8daf5700f7e6bca79c3e750b86ce62efef819032b2fd475c449f1631dfc",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/0ce30d23e1bafc5423eb0db9673666af8df134fab13d3c1f6fe4814acd1c712d.json": {
+      "type": "file",
+      "sha256": "3f29f279f693ba05d7e7138ec456a66a85432a7132932e92a8b0fd88fa8b6b86",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/0dfab3e38d25316cd7ba25f2844074945f7826ff3a251ccf7311422fe124b136.json": {
+      "type": "file",
+      "sha256": "84cc480c36fbb52994c93b0525b739ab7a8d990e7582c80b31c9c1aec86239da",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1172a2e4618df685919f27cdb1e3789e7911f1380cdb6bc7f02263b64555d10e.json": {
+      "type": "file",
+      "sha256": "371b4cbbcf8efdbb2cb73bf890dccecfaa1f47066bedbc0b1e43678dc8c6ef78",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/124361e6bcb6217e9e67f5ef7fb9ce42c1105c2e92667d78d46e5b23e33f40e9.json": {
+      "type": "file",
+      "sha256": "cdfb6a3ef39a9d9bd0188907568dea98b13e2f04fc5cdf87cb5f818f74ccff46",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/18f536c9d7835eaaf5e83475aa134e675098dce27b8c44b2625b6cc3cdb55336.json": {
+      "type": "file",
+      "sha256": "0b65a441902ee10cea06daeffd0523e3aef4c91c722ba11add2d74565620fc1a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1ac60b345794795c4075033a3380ae122c90087c9da5e33293c05c8293bf8645.json": {
+      "type": "file",
+      "sha256": "9620352610df6a856a1c0e43eec6bc5c60b19880a27d9d3c3ef4b7310a2b4f2a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1e911dec4682fefbd7a68ede2fafad832f368919537325c5ea42f974392e9645.json": {
+      "type": "file",
+      "sha256": "d83b3b548c69699658a720befe99caa6e4c7196f546017f4a24b7cd92ee9edcb",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1ef74c2067bf4baea0a74cc0c17e7737f2b44b3c7cff7487930bc50c2f1fa9c2.json": {
+      "type": "file",
+      "sha256": "b33f78b39f4e1693a599d6df07667ba9d72e3607d0a7babbe3e17da2968ed0af",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/1ffc2f749d12cee3a4d29484a5f7023d9e191725a75b5a499375025699a22d73.json": {
+      "type": "file",
+      "sha256": "cb1c74f43938f8bc35799ed23071308d3218b48127cf82848226e0a6cbf4b0eb",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/24fe8d57ded73d2d96affb48d3fd44192a39778a5c59920ac818d3a605a0e9ce.json": {
+      "type": "file",
+      "sha256": "3bbd6d2cffc426b4f9d79d8c49d20abe0f9e6ae0d4d6914e5b2378bab3ff7cf1",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/28a248e9e7c711a78a9f91a87b0b305e4824405886be1a78966cc8bec73f52bf.json": {
+      "type": "file",
+      "sha256": "913c0a83a5786df58e0ba8558b28cb2622440e15efa0dda488966cd46f696e82",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/2c803ed282ce999a4d837376c100461fb91ed06e004b4548b227705614689813.json": {
+      "type": "file",
+      "sha256": "0882f994a90829bef15291130b66798cffcb8c1581f7740ea07ce28cd7bb2d1d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/38243f96022d4765f00f43cf2c22b0d9c71f9ad27be8a056259b792dcb968ac4.json": {
+      "type": "file",
+      "sha256": "12ac3ecf6fae810b6ad4571126e7dbda7b0c626171ceab2f43171ea0c91edf79",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/3be57bc6193d7eaa190cd411dc67e170ed473e34ab9bb53f9257409bdf785c9c.json": {
+      "type": "file",
+      "sha256": "7be2bfe2fd8dbb957c677cabb1adaa3601714ece9b47862a1815f1bf72494458",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/503d55034e6fe6cd6a1c56a573d4328e03e7669e9c2f1759c9d91da9ba91f743.json": {
+      "type": "file",
+      "sha256": "22ea3effefd723deb829d563415d39f522e5024b2b0125f155e8e5fd288ba421",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/593c6b7a22cdd75ec46a1119a983715b75ef207f8c9fc1a91d19102d4d02eb65.json": {
+      "type": "file",
+      "sha256": "a84cfee8526ff247b5d9e1b226724f200e90ad881f0be9e97386d69a70f4f8f4",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/5e7d9d0fa2be6fe92f6f2efb7c9d9de930dc8f023103baf04c7bfcb0192cf347.json": {
+      "type": "file",
+      "sha256": "3ce5a393fdd9927d0e893c317f90f4cd550bb290738f8898cf1d590aeed34641",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/665ee06d3b3a8544dea324ad9017ab2f595e823ea0e8a5f8f31bd74735b5f534.json": {
+      "type": "file",
+      "sha256": "63dad81f310ca97cd2044674aaf17d4451d32f6dfb02220226ffe8a219497749",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/6f55e34536210392efb36fc6aac1ee43e51fc85b5e6f2a24a75e004e6ab14a2c.json": {
+      "type": "file",
+      "sha256": "bbfff37765c138132bc221b15ba70ae5679c7cc0b2cc68ab842e1aa35d185468",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/73d70d6abe3fd1e7113c1c368521c704c010ecfabf82c84a35d7d503683d4179.json": {
+      "type": "file",
+      "sha256": "25f67bc12a36892544d4d61395adc2764ecf03fa7e61bb7479dadb3beab779c3",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/793d3c947c98e8da4204ebe910ce411418390937a289ce55ba783d519815337e.json": {
+      "type": "file",
+      "sha256": "2bcacf1cd4b42f5a5b38f9ef5e96fb429aa922651de9a5722cc2f365c94e3b83",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/7b406f3b07419e33653023fe74c65cda4678568c585e9fdc713ca0f88623ade7.json": {
+      "type": "file",
+      "sha256": "f7371186681f4fa6115930918f113a3c9bb39923ef4e70622bb23dbb6bdef4e6",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/7ba4302c345144edfbb0d6d2d0dc2cab7b8d7dbb28a77fd823669e34c3978130.json": {
+      "type": "file",
+      "sha256": "0d3b28ca9167225c26cfd07e1b703d9177f5af896341b294a986e64939ea0beb",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/7d59f6044fe2c8c1cc2b4b1be6487a6e6311271c2ef43946bc2ec973a64d0b1c.json": {
+      "type": "file",
+      "sha256": "98228fab3bd20dce112dfb6fe64f846fdf8cd0ce047d161720966eb70e255d2d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/81c29c6330bad3b941df1b470aed7d7f7c618b6c6b29e9696f254cac4060ca46.json": {
+      "type": "file",
+      "sha256": "7d98c3f87ef874641476bb7a8fba68aa9007bfb83e2b58cde355fc454611909d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/834c4859147935083dcf1307559871195bfaf23c71046d973708780676fa97c1.json": {
+      "type": "file",
+      "sha256": "30d6aebc2a1ba9fdbe8de73dd0e669b1a4767da3a20fc9ecc4d464ad932fa5d8",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/837b42445e3102c7063fe134038d8fd22812ca94fe0135944740703fc03c226a.json": {
+      "type": "file",
+      "sha256": "bc935b1f53bbad1b25f38efcac59503a54cae641edac7a2ae7f4993c9c4c94f3",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/862a071a88323475c5b0e2d068332bfebed83dcd0a305c5f886e9f28e2f0b461.json": {
+      "type": "file",
+      "sha256": "5f81aa91017c2f8a6225b73ee175f2aa85aad1ccecff08b49908c2e11a447120",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/8637873639aa0de67ac2e78c1b2d52788a8d906b5076f4e92f71a4a035cc762d.json": {
+      "type": "file",
+      "sha256": "e3869ac92e90ce7cbe0c212278dedeebcae111e537bef0ebca1a45e2f2cb2ad6",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/88dcfbfe1740a9ebbb6af67b1a72da2078c2c21f67c3f002f793c376879fefc1.json": {
+      "type": "file",
+      "sha256": "b597fd8d021fbdea259072584af3a35a4c653f036a142eb3469fd758f6c15f2b",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/8a820be76b44c4dc8e17da7e7c944c26b1b83995a4920a9865869519bb32df32.json": {
+      "type": "file",
+      "sha256": "cbc3e038adeddfcaa7563e796463cd5cb93763ace6336f3cb3d7090e2d9a94fb",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/92c0af84f70b98886205002980d05e7803fc2e0c42f6f6a98c4c6ec3f9d91d9a.json": {
+      "type": "file",
+      "sha256": "499188121e958eb666eaf88d21f3c07cf7eaabc6ed0364e3aa3152a37dbf0026",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/97b6a0d2ea3adcb0b4d4274025adc7f068c4ea3efb136dc9af695e14771aa2fa.json": {
+      "type": "file",
+      "sha256": "6dd9f3501de30c601c8e657fdcb0c9a72f0abbe1e4c748128b72e3f37647b558",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/9d531eebad82604da93a9f00ea8f8fa00e2a778c48b05804d90370d606836f7a.json": {
+      "type": "file",
+      "sha256": "294d9dc14c5fb1276579a12cebc4fac288bd8b0de6abd11f5449f08c1d91bdb6",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/a584ad5e9b88d146c27a157702366007c5a914bf85136e6ccf7bd74b65336271.json": {
+      "type": "file",
+      "sha256": "0591fbc418092315ddb7fb82e84afb4949012372d28676820f3e57df9c4b81a2",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/a7712d6319e7525783bb506c2aa1f217499c4b62062201f95960d55fd020ed3d.json": {
+      "type": "file",
+      "sha256": "70c9d0e9e4a5aaeb821ff816def0fa76556347503f72073f36f3467131b1d6c6",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/ac0802440ffa7332499c5a4460816e76d1581af83a44a12ffe11cf0254c809e6.json": {
+      "type": "file",
+      "sha256": "72b731f07aba830db816518a8c149563e75c3d940ed12ed955422d96f56b3344",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/ac9d523b7e07025613a075e50038478fd5f8f60acdcf7e22bcd5bdb42c0abcc1.json": {
+      "type": "file",
+      "sha256": "beb91e4cdc9473265f990e73f4df5d21fc46e15d9744665be0e54d7a8fa6adf5",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/af0fa4173f2b68028bc06891a4d47ded96039b6f5d507e1939d3d97bde574199.json": {
+      "type": "file",
+      "sha256": "eb6f660dc14d93d887ad37dd4b83623f9836af52bd72d8706b33e580da691270",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/b00f7dcf806be0dccc2ea4b87a781c6876ebdcfadccb768c58fae51764333df0.json": {
+      "type": "file",
+      "sha256": "b7aec08672a794b9a1a1755ae7e2c39bcec6f72a567fd3aa18f57891afda042f",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/b19e03fac79f23c1f613cfe5a79e4fb31afc3d0e78cabbedff148c4e2920dc17.json": {
+      "type": "file",
+      "sha256": "62904af2e1929bcc5c32392054145430e15417e3fd49550aea28998743a556f8",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/b453ee110f6297db8014d3a1b1fa7bff4822de0858562f49bd9ef1f5346018e3.json": {
+      "type": "file",
+      "sha256": "e9302e46fdc8d88d248db0bde6f1aff2d4b96b01b9bbbb5bc730b59d5d9e229b",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/b8e244117e4277b838a2a5726bbbcdd1bce71544aa8073868f172a5c34cabeec.json": {
+      "type": "file",
+      "sha256": "494c73f89b4085fc8698be166e7519ad122f5f9f227488480f538aa72e93d9d9",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/bb18b6fc169301e9463f1dd36c0ec7fcf510b608b6947069f068330a54bedf16.json": {
+      "type": "file",
+      "sha256": "3149b1c27d82d4ffbac2f107296384fe60d0ae86f9215f2ad013dab97325535e",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/bd7b07aa986c215c6216a83992ac2f53940bfdfa8d737c2baae931784bb83d9a.json": {
+      "type": "file",
+      "sha256": "6ffd27cf7128dc034a7bbae924c664081ba076882c240ab66b8de784cdfc4bd7",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/bf3f10805eede9e226d2427af605c9c44b9635d3dfee048f48a6f27b8578da01.json": {
+      "type": "file",
+      "sha256": "33470e6b8b92fd85562d7f1923b936322b35b8d2b767e94d78117a2b5f83367f",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/c4374b8381d424a2b5001f297158f5e2e9917765c8df3b6a58543c98a09ab303.json": {
+      "type": "file",
+      "sha256": "52ffc56dfe127d332cdafb774e2b0074556ecc4693b556efac0ae7ef8929957a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/c7b7010addbeb613081da163f3779e43678f9013ca35e432310e4c0faedc34ce.json": {
+      "type": "file",
+      "sha256": "8a12ce6701e816e47562d679319ea61db89cead869d6c6d1b74ff5ae530b55d4",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/c83574da1c9ccab97fd3c9b5c184f26e2555e5dad1472d99e746656a228c79c6.json": {
+      "type": "file",
+      "sha256": "9fdba4fdfd1c52fdda7d2912d3c528daeaf6825b6e6f3b830a0f90e7057ceb82",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/c872770f2dc010eed0b3117fc6b1b3258e5d6fc2818c2180defd721c1bce36fd.json": {
+      "type": "file",
+      "sha256": "8f619d6c768750d5e09f64046c71633bd786e2f4b1ffe08e5f529d29e7c7e14c",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/cb4fd61e8474aa4b782ccd2fa16f731bdc841fb30b32b3655a115d740db5f830.json": {
+      "type": "file",
+      "sha256": "280913615ea80efb9c6564d98a2ba16877b6474d98dc01b512215f5b0da74f42",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/d54ba7e10c4a1954642174a71c8cec398ac296bd35a0f686be05a510a0536682.json": {
+      "type": "file",
+      "sha256": "e69c4c0c1044443f7ab9d6252bb5e8c23171bfcedad741d888daa1863329344c",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/e2ee6e802530c8daf45fcdda741a2f9e765192149f96ae384303f509ce5e28a6.json": {
+      "type": "file",
+      "sha256": "e148dd100821a4ffd0f3b9e39181db301127a0ade47897459bb569db6213e078",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/e9bcdcf9191b750ce3d9d850ffa1bcd80c9fdd106b4062df2a4733c221b771ee.json": {
+      "type": "file",
+      "sha256": "4b9cf5483e97ed910daba6922702859de0e93705ca2771c872a305458999326c",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/ec00a4ea7d75708a9849a4aec16219e40a5e77d0aa0c4f317621c58aee430f69.json": {
+      "type": "file",
+      "sha256": "cd0a6ddaa4d5a0df44aab00d0046092990faadd6d14e3500730531b4daad4c98",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/ec605da13942f8da72af2e9cb6793959dcc17fbb0c6f62aa5e3577aa8fd4ade5.json": {
+      "type": "file",
+      "sha256": "6ce4684ce5f2062648a0d0780d142c319e3efd953e913c89f09a0bdc454e5556",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/f26484e4c34aefa37ca14d0765a9f3ed7193fc22141af06e702e06424ba091cb.json": {
+      "type": "file",
+      "sha256": "0545c6ced72cb386a688382cecacb6e845abe407762d9fda9d204a2b363404af",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/f9f403891dc3baf796eb2ff74bcc3d9089e309b2a0d67de2ad95b6ab9b14dd0c.json": {
+      "type": "file",
+      "sha256": "2d825994cf6d206df38b6ec48667f74853fe927283c73f75d016651684e1835b",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/fb500b8abe82ee3c1d5126c99ecd4fab56df4d3260b5ba4a59055b3bd17d6792.json": {
+      "type": "file",
+      "sha256": "4ab951a830c035cca34960af53e13cb2c7a571775c45f6afdc7e3a4b30632dc7",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-raw/fd38f13e5adcc8fe094532c95f96db133d3a617ba7fc63189150c94210331c35.json": {
+      "type": "file",
+      "sha256": "411902398bad32e9e81111b2b6f2a2e41e11c642f1d45dd226cee46ee806eec9",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/1172a2e4618df685919f27cdb1e3789e7911f1380cdb6bc7f02263b64555d10e.json": {
+      "type": "file",
+      "sha256": "b99ae449b249952be738bf8db0f82c5ac41540a496dc5dc447b71dc6e4a25675",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/1e911dec4682fefbd7a68ede2fafad832f368919537325c5ea42f974392e9645.json": {
+      "type": "file",
+      "sha256": "3bc55c7ddc790df002f7eb92e9dcd6ccebaef31dd017268dfe514c619abc579a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/24fe8d57ded73d2d96affb48d3fd44192a39778a5c59920ac818d3a605a0e9ce.json": {
+      "type": "file",
+      "sha256": "56cf6ea821280532bb67586bab9583b143a602db08744cc86b1d791c71328c4f",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/5e7d9d0fa2be6fe92f6f2efb7c9d9de930dc8f023103baf04c7bfcb0192cf347.json": {
+      "type": "file",
+      "sha256": "e3ad4e441236b79dcb6f18f741de3bad0517e0b03c5c30a51ae73d5e41148f5a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/7b406f3b07419e33653023fe74c65cda4678568c585e9fdc713ca0f88623ade7.json": {
+      "type": "file",
+      "sha256": "eddf453c1e900e4c644d7e991b0bf5a829e370f8e89baaf68ebd015706ceaa9e",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/81c29c6330bad3b941df1b470aed7d7f7c618b6c6b29e9696f254cac4060ca46.json": {
+      "type": "file",
+      "sha256": "ea6af6fdbaf6fb3191487d29f03f7f796c27ffbbfae804a1e7bc251db5b9d783",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/837b42445e3102c7063fe134038d8fd22812ca94fe0135944740703fc03c226a.json": {
+      "type": "file",
+      "sha256": "a73a8e1c9b42bbed7eedec0ce7adde92b109f94c3958c13ffc4b675015ecad10",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/92c0af84f70b98886205002980d05e7803fc2e0c42f6f6a98c4c6ec3f9d91d9a.json": {
+      "type": "file",
+      "sha256": "85618a343e4fc65899706ab01210407fe1d1b7fcc538a776ccf1f91fdc1606f1",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/9d531eebad82604da93a9f00ea8f8fa00e2a778c48b05804d90370d606836f7a.json": {
+      "type": "file",
+      "sha256": "c2fee4980140a562e36b1969a3535dc2260d92b5c1dc1f0b5d7834ffdc87e6d6",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/a7712d6319e7525783bb506c2aa1f217499c4b62062201f95960d55fd020ed3d.json": {
+      "type": "file",
+      "sha256": "f681affb268d2b54219aec870773f217d539a2793e0d537406830d7648648c7b",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/ac9d523b7e07025613a075e50038478fd5f8f60acdcf7e22bcd5bdb42c0abcc1.json": {
+      "type": "file",
+      "sha256": "6cf974a478a89e6f117af6e365e0c0627a74dc6ec2a4621d9edd2235c0fa6f7f",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/b00f7dcf806be0dccc2ea4b87a781c6876ebdcfadccb768c58fae51764333df0.json": {
+      "type": "file",
+      "sha256": "cabbcc5e30766a1e2afdd1faff7b1ec404383272d94852f2bb16db00c7f544e1",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/b453ee110f6297db8014d3a1b1fa7bff4822de0858562f49bd9ef1f5346018e3.json": {
+      "type": "file",
+      "sha256": "65fce848189e00bc5831fbc77f1a6234f3fb364311a68b2e88f8bc1025c1007d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/b8e244117e4277b838a2a5726bbbcdd1bce71544aa8073868f172a5c34cabeec.json": {
+      "type": "file",
+      "sha256": "4a687431bfb6e58685e860af42beb6d3ffb105fb7480c83a315a88721e46e645",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/c4374b8381d424a2b5001f297158f5e2e9917765c8df3b6a58543c98a09ab303.json": {
+      "type": "file",
+      "sha256": "caffe81feefca493573f3738c467146fd1ef12dd862aa291832257bf489b649f",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/c7b7010addbeb613081da163f3779e43678f9013ca35e432310e4c0faedc34ce.json": {
+      "type": "file",
+      "sha256": "dcb768756bed0d4b1a7c4768465b0530816f61ff9d067f85c547d7e392bb2646",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/e9bcdcf9191b750ce3d9d850ffa1bcd80c9fdd106b4062df2a4733c221b771ee.json": {
+      "type": "file",
+      "sha256": "1fdeca98700baf75e519b47ffc60980f1224866948abb25cc0c0e2866e1a8dbf",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/ec605da13942f8da72af2e9cb6793959dcc17fbb0c6f62aa5e3577aa8fd4ade5.json": {
+      "type": "file",
+      "sha256": "0312b09cf057dccf7a6a14ffe6795cd2741bf8a054a07fa5e7b36616f0162fb5",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/f26484e4c34aefa37ca14d0765a9f3ed7193fc22141af06e702e06424ba091cb.json": {
+      "type": "file",
+      "sha256": "12241e00c215cdfeadc2a3c3293bf49f5df25ad4052d8a2dc1607fbae2953680",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-release-raw/f9f403891dc3baf796eb2ff74bcc3d9089e309b2a0d67de2ad95b6ab9b14dd0c.json": {
+      "type": "file",
+      "sha256": "53728f55b3bc61eb9fe6a1c1314e22c2ec1ebaf9b3ec74f16055b322ba14bd45",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/catalog-reviewed-replay.json": {
+      "type": "file",
+      "sha256": "d84d40a4b913ee1dcdc07ab93ff6592a26218ce8e8eb59071cffd93a9a6345dc",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/common-tests-final.log": {
+      "type": "file",
+      "sha256": "4d29b93d3c36ed7c3256241df9d28f8d1feeb23f8c97925ceee43c1381aa657c",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/common-tests.log": {
+      "type": "file",
+      "sha256": "006dc1aac30421885643ada300ab2419f7bd91a613d654d01405725c1702942d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/connectivity-final.json": {
+      "type": "file",
+      "sha256": "988fd6e588d326b2d594f9f4a1056a91ff90828634016e78faf29cb0aa889a4d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/drc-baseline.json": {
+      "type": "file",
+      "sha256": "689f3ed330569010a1ad6d5e14215c803d6bbc0639f2fa246fe73cbe58b2efde",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/drc-final.json": {
+      "type": "file",
+      "sha256": "8cc64273f458a47c993da33858c860248fdba8a114865cb48e50b9d4ebd5d3d6",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/erc-baseline.json": {
+      "type": "file",
+      "sha256": "7c64320a908d05d2633715c9a888d93f79f7d343569d80f943face00cc3fb7c9",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/erc-final.json": {
+      "type": "file",
+      "sha256": "0f1cc4994446d6dbe2ff85b54507b91333ff924b9e581c45668ce888594b54ea",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/failed-fetches.json": {
+      "type": "file",
+      "sha256": "dea015a58d84ba033dbb42f70026be1add43327314b65e17ec29ff2bda42cbe1",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/gerber-baseline-geometry-parity.json": {
+      "type": "file",
+      "sha256": "cfa9e342308d6ba2bfd945bd9b05e246f23b451fe2d1676b22dfe7f3cde0e206",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/guard-negative-tests.json": {
+      "type": "file",
+      "sha256": "3ddc2da2f72c0365e87d9d9e5998469220df4fb4efd01a88d18384e119aa77d6",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/handoff-inventory-16bit.json": {
+      "type": "file",
+      "sha256": "58201a241e6f8cf3ed620248a832754987fe522978b85685c7b647da766d30f3",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/last-bounded-passive-results.json": {
+      "type": "file",
+      "sha256": "f8440a7a43f07ef8117f54f88cd67aecc4f2d3c78485c77eb9fdf5cc5e9d1df1",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/live-supply-summary.json": {
+      "type": "file",
+      "sha256": "1098e2e6ce4debdc2b64a3df38c0632da546eeb81dab2ede24e745c8e46792bf",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer-evidence.json": {
+      "type": "file",
+      "sha256": "7bc6853058e6656c35d38b43d3bc6dc781dea8172e06c00fbc850d9ecd834fd8",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/AP2112.pdf": {
+      "type": "file",
+      "sha256": "ef8d376f2ec356e29172eb9e053819a0ebdcc576dba7fc9ab0505c568427920f",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/AP2112.txt": {
+      "type": "file",
+      "sha256": "507a0fb82f64e37a02e155b5156cde2353355ca2c10399c3f8c76a5a87dfb570",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-100n.pdf": {
+      "type": "file",
+      "sha256": "15246a554bc21ea32ddc8f4a217d7c18822dd84ab6cfbbd9ff02612b3d0572d9",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-100n.txt": {
+      "type": "file",
+      "sha256": "02c337918d1be85187121ff84fb2717659361ca9d46d16ad21ae3405d070cb53",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-10n-spec.pdf": {
+      "type": "file",
+      "sha256": "856ba23e2ed70bea73271997564970b86a934bfaff05c7b84f61ee0a5065bf64",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-10n-spec.txt": {
+      "type": "file",
+      "sha256": "60c82fc440bf4635c7cb7baf775b1e208204f650a156bee8532eaa535924fc40",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-4u7-characteristics.pdf": {
+      "type": "file",
+      "sha256": "871884e157af8a9d889b7c9a5b9e75aa3edd41e03852ccaaed5890dd1c3c6c71",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-4u7-characteristics.txt": {
+      "type": "file",
+      "sha256": "6f2237fc6acdf5bfb3ad55e6236c5f7ba433c5d10d9d6e9a5e2d26d8c33cc6ec",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-4u7-spec.pdf": {
+      "type": "file",
+      "sha256": "9e4a47eeaa4bd4a3f5d628906c0945bcfaeb5e82418052577317e8c90643e061",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL05-4u7-spec.txt": {
+      "type": "file",
+      "sha256": "97e07b52fa50c1cc1e9b5ac1150ea10523f878e7d13614e1f2779eede940ef7d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-10n-primary.html": {
+      "type": "file",
+      "sha256": "fb95d2f3313db74524e6dd59bfd598cc17473d37b4ba487d00f9cc78badd76b5",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-10u-characteristics.pdf": {
+      "type": "file",
+      "sha256": "8a03285c8b7134980b9d12c67fe0ac6567633109c859dd37628c462b41e4f80f",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-10u-characteristics.txt": {
+      "type": "file",
+      "sha256": "d9deb127f82e8ef1cb70f6fdad87a4f6e94713a8e35f6e55765d70ae94dc391a",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-1u-spec.pdf": {
+      "type": "file",
+      "sha256": "d1d7a96c458cda2bad2893fe5023fdf827315879c9ebacc07c12df27039672ae",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL21-1u-spec.txt": {
+      "type": "file",
+      "sha256": "a1b42eb81758568229a9fff21fb36c04208abaebcf61482b92d3ad498553091d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL31-100u-characteristics.pdf": {
+      "type": "file",
+      "sha256": "d45c167b9315227ffb39bfe5d1095a7e07ba9d718dac485247b1e3367b0e05be",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/CL31-100u-characteristics.txt": {
+      "type": "file",
+      "sha256": "7cc0fa29057356672d018df10b4d716ec93048b7dc153309077e00bf7daabc81",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/FH-series.pdf": {
+      "type": "file",
+      "sha256": "705023d3be0454148a96fc2715d249a32d8ff442e70b64d1116d3490ed1d8136",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/FH-series.txt": {
+      "type": "file",
+      "sha256": "39859d7c3daf5c18ad11eb1b05f9ba9c09d85b265bc564b6594a3cc9976ca467",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/PT8211.pdf": {
+      "type": "file",
+      "sha256": "254d8f3122128c6c587c2926a0aa237baa5098a1fbeb1570fa12770e503b6897",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/PT8211.txt": {
+      "type": "file",
+      "sha256": "aa81cf33048fa96caf0ef5239944152b5a17ce6b827fc93fa407d828086d1619",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/RP2350-hardware.pdf": {
+      "type": "file",
+      "sha256": "cef88bc7d87e67b4262ee15f2b94b03566667143f4e8daf6931828bef6408059",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/RP2350-hardware.txt": {
+      "type": "file",
+      "sha256": "a7238ad8bc3508fa93bc7f3140e9b71f779b89e36df071ee1ec3b17ac25a8a1d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/uniroyal-series.pdf": {
+      "type": "file",
+      "sha256": "11cd644d5d8a34a6d12775afb80bf58d8fc11f0c3b700dbd0f7a59942ceaa5ef",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/manufacturer/uniroyal-series.txt": {
+      "type": "file",
+      "sha256": "c9c272b1676c1e91833deee4bc1aa29c2b9ce254a47250ee3125a9ff62cd171b",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/native-sourcing-plan.json": {
+      "type": "file",
+      "sha256": "cd7edf1f89661f4390f523972a4861139ab61deea1c503e1778bb72b33dc31b8",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/netlist-baseline.xml": {
+      "type": "file",
+      "sha256": "a538fa28515f0fac11a5d88270def238837bbbf4d72bf1b602bb0246cfd76673",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/netlist-final.xml": {
+      "type": "file",
+      "sha256": "20500b26b017a61b2e41c2fbfe2722754ef4da99dc40fb57ea787dac5f4332b1",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/planner-final-live.json": {
+      "type": "file",
+      "sha256": "19d5fc427c51542ecda0b5c1300681e822725705bd8e320d98ba5adc06856077",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/planner-replay.json": {
+      "type": "file",
+      "sha256": "1a437f8b08081a8846e36feb43d818299078577a0957ea3ce1dfc323f54b6a48",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/production-generation.log": {
+      "type": "file",
+      "sha256": "b1269d6cf9ec2d206e27622489218e6224659cdfb37a7d580471877432ed3232",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/requirements-final.json": {
+      "type": "file",
+      "sha256": "09ad91927961cbd2d384f19fdfd0c07fd7e4efca3baf5c4a570cdf73f3213c15",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/requirements-initial.json": {
+      "type": "file",
+      "sha256": "e8c6c58a547c4427b4a4763173cb4db670a75d2a26919accc65e67826383172c",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/reviewed-source.json": {
+      "type": "file",
+      "sha256": "9abdad059c0badea5dfaccf750d6eaf30781ea678a3be83d29233d0b0c17c005",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/shared-import-parity.json": {
+      "type": "file",
+      "sha256": "c2ef1da9ef768b8577e1c627bf5116bd1e07d15b72bde7442c346813e6ac6fd0",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/synthetic-integration-tests-final.log": {
+      "type": "file",
+      "sha256": "184243a91c091f57441c41a50ef75b89bfa19b35b342e0814cbf792ce7bbd19f",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/synthetic-integration-tests.log": {
+      "type": "file",
+      "sha256": "612b0e901d6d212997c42e86ee49bbfe7d6e2db7debff4166f11b001434fe559",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/usb-network-search.json": {
+      "type": "file",
+      "sha256": "131af1747b072897def074f0038465e66485a792185ddd238360219c5208c10d",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/warning-waiver-parity.json": {
+      "type": "file",
+      "sha256": "33f9e2675aa0633ee3bea1b48a8f448c20d9832e4e0286e8e049672645f79c98",
+      "mode": 436
+    },
+    "modules/16bit-5v/verification/basic-economy/zone-refill.json": {
+      "type": "file",
+      "sha256": "7300efaca4e0ee9b084a99bafebd503ca944e689637f6c53dbb9934e5d2a4319",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/ASSEMBLY.md": {
+      "type": "file",
+      "sha256": "f8db54cc7189c201e0f89591866db3f63d6d0bc0d5a30b448c6b16439f920015",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/add_production_files.py": {
+      "type": "file",
+      "sha256": "a42ba2b97de799c7663fc74cd61cf9390f8baca0fe49615bc237d73a3c58c1a2",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/assembly.py": {
+      "type": "file",
+      "sha256": "709a0bd2a07fe7953bf5d2241f9eec9758c8c3e6884a15e52dc6ab8ddadcda14",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/bom_audit.py": {
+      "type": "file",
+      "sha256": "6fa1a1f9166fb3d6478450f1e7774f34568b880d68f1476078a78ee4a280300e",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/catalog.py": {
+      "type": "file",
+      "sha256": "38e775f261bdb5b7fd432974dc81fa8cac1595a9e15c0e721346a0d9095de12a",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/examples/audit-requirements.json": {
+      "type": "file",
+      "sha256": "6d3a27135ff501505e98e72908ec0111a2c87e598a75e7b08f73be69a43d31d9",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/examples/capacitor-target.json": {
+      "type": "file",
+      "sha256": "538b8fa400f5e0ebb5e7539169a98a19bb997b16b6d9e87ded0a8d8bc53e78ea",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/examples/resistor-target.json": {
+      "type": "file",
+      "sha256": "337baf6ae75d5f42ce002b282dc098b7969d38a5a1b8805d0308685f16cbf835",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/passive_planner.py": {
+      "type": "file",
+      "sha256": "3e15f92f39aad5c599fd914946ea87a126e7909c0fdf5d73c25dd70509a3e568",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/tests/fixtures/capacitor-voltage-aliases.json": {
+      "type": "file",
+      "sha256": "ec6395957dc3c81bb6387b6cdd77e0b29f9914554a7817a13b9caae55c073a58",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/tests/fixtures/catalog-C25744.json": {
+      "type": "file",
+      "sha256": "5c22e454169a09389d68c3a2710cd565c695bd4528f0046165de2ece34a36c1f",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/tests/fixtures/catalog-C25804.json": {
+      "type": "file",
+      "sha256": "5cca5b9246a333c8fc6fef9509fee89174f1b2d4506405ada9bd86fd4528a99d",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/tests/test_add_production_files.py": {
+      "type": "file",
+      "sha256": "54e61b0eee62db11ee9214099c11f5a482f1b770b7fb66d91a0698bd20f785ef",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/tests/test_assembly.py": {
+      "type": "file",
+      "sha256": "ebcefbe71e03fd8729f2b96e4651e963fe5969c81b19680b07b9902403a0ee36",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/tests/test_catalog_voltage.py": {
+      "type": "file",
+      "sha256": "edc37919a034b9cac0a5385dba0b92fa97d402abe6eb08b1eaf06ab74c4f4fec",
+      "mode": 436
+    },
+    "opt/kicad-jlcpcb/tests/test_shared_handoff.py": {
+      "type": "file",
+      "sha256": "233cb66801b553547f9a77920b15481be2b13e6c8409bb6feea580845a9d8e7b",
+      "mode": 436
+    }
+  },
+  "source_unchanged": true,
+  "destination_matches_source": true,
+  "unstaged": true
+}

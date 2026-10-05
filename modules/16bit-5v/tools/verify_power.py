@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 """Bounded native verification against the committed routed 16bit-5v baseline.
 
-Rebound for the focused Basic/Economy metadata-only review in workspace 291. Historical
-39f70c6/281 evidence is retained but is NOT replayed. This is not supplier,
-manufacturing, physical-fit, thermal or bench approval. Sources/HEAD/workspace,
-evidence hashes and the common tools remain guarded; no geometry changes are
-permitted by this review.
+Rebound to the restored 17102ba checkpoint in isolated workspace 292. The user
+accepts existing engineering and authorizes file generation, not invented supplier
+identities or authenticated order acceptance. Historical reviews remain history.
+Sources/HEAD/workspace, evidence hashes and common tools remain guarded; every
+unchanged circuit, copper, placement and mechanical assertion is retained.
 """
 from pathlib import Path
 import argparse
@@ -21,7 +21,7 @@ import pcbnew as p
 
 MOD = Path(__file__).resolve().parents[1]
 ROOT = MOD.parents[1]
-REF = '1e50e798d68e3d8d3167fb5fb47bdcb7ee436b83'
+REF = '17102ba4701cc24b2798b80a08f1f0180c1226aa'
 NAME = '16bit-5v'
 EVIDENCE = MOD/'verification/basic-economy'
 parser = argparse.ArgumentParser(description=__doc__)
@@ -35,7 +35,10 @@ assert Path.cwd().resolve() == ROOT.resolve()
 assert str(ROOT) == review['workspace']
 assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip() == REF == review['authority_ref']
 assert subprocess.check_output(['git','branch','--show-current'],text=True).strip() == review['branch']
-assert review['release_status'] == 'HOLD'
+assert review['release_status'] == 'FILE_GENERATION_AUTHORIZED'
+policy = json.loads((EVIDENCE/'generation-policy.json').read_text())
+assert policy['file_generation_authorized'] is True and policy['existing_engineering_user_accepted'] is True
+assert policy['native_source_changes_authorized_for_this_generation'] == [] and policy['order_ready'] is False
 assert {name:sha(MOD/name) for name in review['final_source_sha256']} == review['final_source_sha256'], 'Reviewed source changed'
 assert all(hashlib.sha256(original(name)).hexdigest() == digest for name,digest in review['baseline_source_sha256'].items()), 'Wrong committed baseline'
 assert all(sha(MOD/name) == digest for name,digest in review['evidence_sha256'].items()), 'Review evidence changed'
@@ -136,6 +139,6 @@ with tempfile.TemporaryDirectory(prefix='16bit-routed-baseline-') as temp:
     check(expected==oldmembers,'Changed committed functional pin membership')
     j=fps['J5']; check(j.GetFieldText('JLCPCB Position Offset X')=='0' and j.GetFieldText('JLCPCB Position Offset Y')=='-3.675','Changed verified J5 body datum')
     lx=sum(math.hypot(t.GetEnd().x-t.GetStart().x,t.GetEnd().y-t.GetStart().y)/1e6 for t in b.GetTracks() if t.GetClass()=='PCB_TRACK' and t.GetNetname()=='/VREG_LX')
-    report={'assertions_passed':checks,'baseline_ref':REF,'reviewed_source':'verification/basic-economy/reviewed-source.json','source_sha256':review['final_source_sha256'],'copper_layers':2,'component_count':62,'component_body_sides':dict(collections.Counter(b.GetLayerName(f.GetLayer()) for f in fps.values())),'back_body_refs':sorted(r for r,f in fps.items() if f.GetLayer()==p.B_Cu),'mounts_preserved':2,'thermal_holes_preserved':9,'unchanged_baseline_copper_items':len(tracks),'functional_pin_memberships_preserved':len(oldmembers),'physical_pad_count':sum(len(list(f.Pads())) for f in fps.values()),'filled_net_zones':sum(bool(z.GetNetname()) and z.IsFilled() for z in b.Zones()),'supplier_rating_metadata_refs':len(plan['allocations']),'VREG_LX_length_mm':round(lx,6),'release_status':'HOLD','scope':'Native refs/pins/metadata/unchanged geometry only; no human supplier/impedance/manufacturing/bench approval','remaining_blocked_refs':review['hold_refs']}
+    report={'assertions_passed':checks,'baseline_ref':REF,'reviewed_source':'verification/basic-economy/reviewed-source.json','source_sha256':review['final_source_sha256'],'copper_layers':2,'component_count':62,'component_body_sides':dict(collections.Counter(b.GetLayerName(f.GetLayer()) for f in fps.values())),'back_body_refs':sorted(r for r,f in fps.items() if f.GetLayer()==p.B_Cu),'mounts_preserved':2,'thermal_holes_preserved':9,'unchanged_baseline_copper_items':len(tracks),'functional_pin_memberships_preserved':len(oldmembers),'physical_pad_count':sum(len(list(f.Pads())) for f in fps.values()),'filled_net_zones':sum(bool(z.GetNetname()) and z.IsFilled() for z in b.Zones()),'supplier_rating_metadata_refs':len(plan['allocations']),'VREG_LX_length_mm':round(lx,6),'release_status':'FILE_GENERATION_AUTHORIZED','order_ready':False,'scope':'Native refs/pins/metadata/unchanged geometry; user accepts existing engineering for file generation only; supplier/order matching separate','remaining_blocked_refs':review['hold_refs']}
     args.report.parent.mkdir(parents=True,exist_ok=True); args.report.write_text(json.dumps(report,indent=2)+'\n')
-    print(f'PASS {checks} assertions; 62 refs; {len(tracks)} routed copper items exact; {len(oldmembers)} functional pin memberships exact; {len(plan["allocations"])} sourcing/rating refs synchronized; HOLD.')
+    print(f'PASS {checks} assertions; 62 refs; {len(tracks)} routed copper items exact; {len(oldmembers)} functional pin memberships exact; {len(plan["allocations"])} sourcing/rating refs synchronized; file generation authorized, order matching pending.')

@@ -1,0 +1,233 @@
+                                                                                                PT8211
+                                                                     16-Bit Digital to Analog Converter
+
+DESCRIPTION                                                    FEATURES
+PT8211 is a dual channel, 16 bit Digital-to-Analog               •   CMOS technology
+Converter IC utilizing CMOS technology specially                 •   Support 3.3V bus input level
+designed for the digital audio applications. The internal        •   Low power consumption
+conversion architecture is based on a R-2R resister              •   Two audio channel output in the same chip
+ladder network, internal circuit is well matched and a           •   16-bit dynamic range
+16 bit dynamic range is achieved even in whole supply            •   Low total harmonic distortion
+voltage range. PT8211 also enhanced the                          •   No phase shift between both output channel
+performance of timing responsibility in digital serial
+                                                                 •   Available in 8 pins, SOP or DIP
+bus, in a company with the fast switching R-2R
+network that make 8X oversampling audio signal is
+also supported.                                                APPLICATIONS
+PT8211 can be supported wide range of sample                     •   Digital audio equipment
+frequency; it is compatible with TDA1311 by                      •   CD ROM/VCD
+functionally. Its digital input timing format is Least           •   Multimedia sound card
+Significant Bit Justified (LSBJ), or so called Japanese          •   MPEG decoder card
+input format. Digital code format is two’s complement
+and MSB first. PT8211 is available in 8-pin SOP or
+DIP.
+
+
+
+
+BLOCK DIAGRAM
+
+
+
+
+Tel: 886-66296288‧Fax: 886-29174598‧ http://www.princeton.com.tw‧2F, 233-1, Baociao Road, Sindian, Taipei 23145, Taiwan
+                                                                                                              PT8211
+
+APPLICATION CIRCUIT AND NOTE
+To further suppress residual noise, we suggest placing an additional low pass filter after the analog output of PT8211.
+Please refer to the circuit diagram below. This is a simple second-order analog post filter. If low noise output is very
+important for your circuit design we suggest using a regulated power supply.
+
+
+
+
+V1.6                                                     2                                                 February 2012
+                                                                                   PT8211
+
+ORDER INFORMATION
+         Valid Part Number              Package Type              Top Code
+             PT8211-S                 8 Pins, SOP, 150mil         PT8211-S
+               PT8211                 8 Pins, DIP, 300mil          PT8211
+
+
+PIN CONFIGURATION
+
+
+
+
+PIN DESCRIPTION
+       Pin Name          I/O                        Description              Pin No.
+         BCK               I    Serial Bit Clock Input                          1
+          WS               I    Word Select Clock Input Pin                     2
+          DIN              I    Data Input Pin                                  3
+         GND               -    Ground                                          4
+         VDD            Power   Positive Power Supply                           5
+          LCH             O     Left Channel Output                             6
+          NC               -    No Connection                                   7
+         RCH              O     Right Channel Output                            8
+
+
+
+
+V1.6                                      3                                      February 2012
+                                                                                                                   PT8211
+
+FUNCTION DESCRIPTION
+The serial bus input data format of PT8211 is Japanese or called LSBJ (Least Significant Bit Justified) format. Each valid
+DIN data will be shifted to the input register in the rising edge of the BCK, only the first 16bit data ( from MSB) is valid if
+the input data length is more than 16bits, other data bit will be truncated. The clock frequency of the BCK could run up to
+20MHz and supported to 8× over-sampling in 48KHz WS clock rate. Both left and right data words are time multiplexed.
+Please refer to the diagrams for timing and input signal formats.
+
+
+
+
+                                          Figure 1. Japanese Input Signal Format
+
+
+
+
+                                        Figure 2. Timing and Input Signal Formats
+
+The DIN data must be the 2’s complementary format and the MSB (Most Significant Bit) must be the first. When the Word
+Select (WS) clock in the Low level, the DIN data will be shifted to the right input register. likewise, the DIN data will be
+shifted to the left input register when WS clock in the High level. The buffered DIN data then feeding to the DAC after
+both input register are all settled down, this can eliminated the phase shift happened between two channel output. DAC
+output is generated by a 16 bit R-2R resistor ladder network. This signal is driven to the Right/Left Channel (RCH/LCH)
+via the buffer operational amplifier.
+
+
+
+
+V1.6                                                        4                                                   February 2012
+                                                                                                                          PT8211
+
+ABSOLUTE MAXIMUM RATINGS
+                      Parameter                                Symbol            Rating                       Unit
+           Power supply voltage                                  VDD            -0.3 ~ 7.0                     V
+           Input voltage                                          VI         -0.3 ~ VDD+0.3                    V
+           Operating temperature                                Topr            -40 ~ +85                      ℃
+           Storage temperature                                  Tstg           -65 ~ +150                      ℃
+
+
+DC CHARACTERISTICS
+(Test Conditions: Ta=25℃, VDD=5.0V, unless otherwise specified)
+                  Parameter             Symbol       Condition                    Min            Typ          Max.           Unit
+  Power supply voltage                    VDD         THD<1%                        3             5             6             V
+  Operating current                         Is        VDD=5V                       10             13           18            mA
+  Digital input high level (see Note)      VIH                                     1.8           2.2          Vcc             V
+  Digital input low level (see Note)       VIL                                    GND            1.2           1.8            V
+Note: Digital input level will change due to supply voltage.
+
+
+
+TIMING CHARACTERISTICS
+(Please refer to the Figure 1)
+              Parameter                       Symbol            Condition   Min            Typ              Max            Unit
+    Bit clock frequency                        Fbck               BCK        -              -               18.4           MHz
+    Word clock frequency                       Fws                WS         -              -               384            KHz
+    Input data rate                            Fdin               DIN        -              -               18.4          Mbits/s
+    H Level time                                tH                          25                                              ns
+    Rise time                                   tR                                                          20              ns
+    Fall time                                   tF                                                          20              ns
+
+
+ANALOG AUDIO CHARACTERISTICS
+(Unless otherwise specified, Test Condition: Ta=25℃, VDD=5V)
+          Parameter            Symbol                Condition                      Min.           Typ             Max.       Unit
+  Maximum output level            VO                                                2.2            2.5             2.7        VPP
+                                                  1KHz, 0dB FS                        -            0.13            0.3         %
+  Total harmonic distortion       THD            1KHz, -10dB FS                     0.08            0.1            0.2
+                                                                                                                               %
+                                                 1KHz,-60dB FS                        -              3              6
+  Monotonicity                     Mt                                                                               16        Bit
+  Dynamic range                   DR                                                 85                89            -        dB
+                                                   Data=0000H                        89                93            -
+  Signal to noise ratio           S/N                                                                                         dB
+                                                   No clock input                     -                95           97
+                                  CTa          Both Output Channel                   80                89           92
+  Cross talk                                                                                                                  dB
+                                  CTd         Digital in to Analog out               75                80            -
+  Phase shift                      Pd          Both Output Channel                    -                0           0.2         μs
+
+
+
+
+V1.6                                                                    5                                             February 2012
+                                                                        PT8211
+
+PACKAGE INFORMATION
+8 PINS, SOP, 150MIL
+
+
+
+
+                                              Dimensions(MM)
+                          Symbol
+                                   Min.           Nom.         Max.
+                             A     1.35             -          1.75
+                             A1    0.10             -          0.25
+                             A2    1.25             -          1.65
+                             b     0.31             -          0.51
+                              c    0.17             -          0.25
+                             e                   1.27 BSC
+                             D     4.80             -          5.00
+                             E     5.80             -          6.20
+                             E1    3.80             -          4.00
+                             L     0.40             -          1.27
+                              θ     0°              -           8°
+Note: Refer to JEDEC MS-012 AA
+
+
+
+
+V1.6                                      6                           February 2012
+                                                                                 PT8211
+
+8 PINS, DIP, 300MIL
+
+
+
+
+                                                     Dimension(Inch)
+                            Symbol
+                                         Min.             Nom.         Max.
+                               A           -                -           0.21
+                               A1        0.015              -             -
+                               A2        0.115            0.130        0.195
+                                b        0.014            0.018        0.022
+                               b2        0.045            0.060        0.070
+                               D         0.355            0.365        0.400
+                               E         0.300            0.310        0.325
+                               E1        0.240            0.250        0.280
+                                e                       0.100 BSC
+                               eB        0.300              -          0.430
+                                L        0.115            0.130        0.150
+Notes:
+1. Refer to JEDEC MS-001, Variation BA
+2. All dimensions are in Inch
+
+
+
+
+V1.6                                             7                             February 2012
+                                                                                                          PT8211
+
+IMPORTANT NOTICE
+Princeton Technology Corporation (PTC) reserves the right to make corrections, modifications, enhancements,
+improvements, and other changes to its products and to discontinue any product without notice at any time.
+PTC cannot assume responsibility for use of any circuitry other than circuitry entirely embodied in a PTC product. No
+circuit patent licenses are implied.
+
+Princeton Technology Corp.
+2F, 233-1, Baociao Road,
+Sindian, Taipei 23145, Taiwan
+Tel: 886-2-66296288
+Fax: 886-2-29174598
+http://www.princeton.com.tw
+
+
+
+
+V1.6                                                   8                                               February 2012
+

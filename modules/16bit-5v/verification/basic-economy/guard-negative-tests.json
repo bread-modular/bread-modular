@@ -1,0 +1,81 @@
+{
+  "tests": [
+    {
+      "script": "verify_power.py",
+      "tampered_binding": "workspace",
+      "blocked_before_output": true,
+      "assertion_line": 35
+    },
+    {
+      "script": "verify_power.py",
+      "tampered_binding": "branch",
+      "blocked_before_output": true,
+      "assertion_line": 37
+    },
+    {
+      "script": "verify_power.py",
+      "tampered_binding": "authority_ref",
+      "blocked_before_output": true,
+      "assertion_line": 36
+    },
+    {
+      "script": "verify_power.py",
+      "tampered_binding": "final_source_sha256",
+      "blocked_before_output": true,
+      "assertion_line": 39
+    },
+    {
+      "script": "verify_power.py",
+      "tampered_binding": "evidence_sha256",
+      "blocked_before_output": true,
+      "assertion_line": 41
+    },
+    {
+      "script": "verify_power.py",
+      "tampered_binding": "common_tool_sha256",
+      "blocked_before_output": true,
+      "assertion_line": 42
+    },
+    {
+      "script": "regenerate_production.py",
+      "tampered_binding": "workspace",
+      "blocked_before_output": true,
+      "assertion_line": 44
+    },
+    {
+      "script": "regenerate_production.py",
+      "tampered_binding": "branch",
+      "blocked_before_output": true,
+      "assertion_line": 46
+    },
+    {
+      "script": "regenerate_production.py",
+      "tampered_binding": "authority_ref",
+      "blocked_before_output": true,
+      "assertion_line": 45
+    },
+    {
+      "script": "regenerate_production.py",
+      "tampered_binding": "final_source_sha256",
+      "blocked_before_output": true,
+      "assertion_line": 48
+    },
+    {
+      "script": "regenerate_production.py",
+      "tampered_binding": "evidence_sha256",
+      "blocked_before_output": true,
+      "assertion_line": 50
+    },
+    {
+      "script": "regenerate_production.py",
+      "tampered_binding": "common_tool_sha256",
+      "blocked_before_output": true,
+      "assertion_line": 51
+    }
+  ],
+  "passed": 12,
+  "source_and_production_unchanged": true,
+  "no_network_or_order_work_reached": true,
+  "current_workspace": "/home/azero/.okbrain/workspaces/bread-modular-kicad/291",
+  "mutations": "In-memory review binding only; native sources and backup never edited"
+}

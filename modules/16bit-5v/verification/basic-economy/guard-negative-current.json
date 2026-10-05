@@ -1,0 +1,21 @@
+{
+  "method": "In-memory injected board mutations against current full verify_power.py; saved native files never changed",
+  "verified_run_provenance": "First ten cases completed and rejected in grouped command 7. The last two cases did NOT complete: the group-8 in-memory footprint-removal harness triggered a pcbnew SWIG object failure and segmentation fault (exit 139). No saved PCB/SCH/PRO write or new native electrical error occurred; the earlier guarded generation passed.",
+  "completion_status": "STOPPED_AT_EIGHT_COMMAND_BOUND; generation/export succeeded, supplemental negative harness incomplete",
+  "suite_complete": false,
+  "tests": [
+    {"case":"placement","rejected":true,"observed_assertion":"R2: changed placement","group":7},
+    {"case":"rotation","rejected":true,"observed_assertion":"R2: changed rotation","group":7},
+    {"case":"native-value","rejected":true,"observed_assertion":"R2: undocumented field change","group":7},
+    {"case":"native-supplier-code","rejected":true,"observed_assertion":"R2: stale sourcing/rating metadata","group":7},
+    {"case":"regulator-pin-net","rejected":true,"observed_assertion":"('U6', '5'): wrong net","group":7},
+    {"case":"unrelated-power-copper","rejected":true,"observed_assertion":"Changed routed copper","group":7},
+    {"case":"mechanical-outline","rejected":true,"observed_assertion":"Changed outline","group":7},
+    {"case":"assembly-datum","rejected":true,"observed_assertion":"Changed assembly/drill datum","group":7},
+    {"case":"thermal-pad-role","rejected":true,"observed_assertion":"Changed thermal pad roles","group":7},
+    {"case":"USB-shield-role","rejected":true,"observed_assertion":"Changed shield-leg role","group":7}
+  ],
+  "passed": 10,
+  "remaining_cases": ["missing-footprint", "assembly-side"],
+  "source_bytes_untouched": true
+}

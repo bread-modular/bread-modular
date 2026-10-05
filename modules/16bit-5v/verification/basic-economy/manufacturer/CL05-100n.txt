@@ -1,0 +1,1646 @@
+                                            SPECIFICATION                          (Reference sheet)
+
+
+
+· Supplier : Samsung electro-mechanics                      · Samsung P/N:             CL05B104KO5NNNC
+· Product : Multi-layer Ceramic Capacitor                   · Description :            CAP, 100nF, 16V, ±10%, X7R, 0402
+
+A. Samsung Part Number
+
+                               CL      05     B   104   K        O   5     N       N   N    C
+                               ①       ②      ③    ④    ⑤        ⑥   ⑦     ⑧       ⑨   ⑩    ⑪
+
+① Series               Samsung Multi-layer Ceramic Capacitor
+② Size                  0402 (inch code)          L: 1.00 ± 0.05 ㎜                     W: 0.50 ± 0.05 ㎜
+
+③ Dielectric            X7R                             ⑧ Inner electrode                  Ni
+④ Capacitance           100 nF                            Termination                      Cu
+⑤ Capacitance           ±10 %                             Plating                          Sn 100%        (Pb Free)
+  tolerance                                             ⑨ Product                          Normal
+⑥ Rated Voltage            16 V                         ⑩ Special                          Reserved for future use
+⑦ Thickness            0.50 ± 0.05 ㎜                    ⑪ Packaging                        Cardboard Type, 7" reel
+
+
+
+B. Structure & Dimension
+
+
+
+
+                                                                Dimension(㎜)
+          Samsung P/N
+                                       L                W                      T                   BW
+
+
+      CL05B104KO5NNNC           1.00 ± 0.05        0.50 ± 0.05           0.50 ± 0.05            0.25 ± 0.10
+
+
+
+
+                                                            1
+C. Samsung Reliablility Test and Judgement Condition
+
+                                             Judgement                                              Test condition
+Capacitance                Within specified tolerance                        1㎑ ±10% / 1.0±0.2Vrms
+
+                                                                             *A capacitor prior to measuring the capacitance is heat
+Tan δ (DF)                    0.05 max.                                      treated at 150℃+0/-10℃ for 1 hour and maintained in
+                                                                             ambient air for 24±2 hours.
+Insulation                 10,000Mohm or 100Mohm×㎌               Rated Voltage         60~120 sec.
+Resistance                  Whichever is smaller
+Appearance                 No abnormal exterior appearance       Microscope (×10)
+Withstanding               No dielectric breakdown or              250% of the rated voltage
+Voltage                    mechanical breakdown
+Temperature                X7R
+Characteristics            (From-55℃ to 125℃, Capacitance change should be within ±15%)
+Adhesive Strength          No peeling shall be occur on the      500g·f, for 10±1 sec.
+of Termination             terminal electrode
+Bending Strength           Capacitance change : within ±12.5%    Bending to the limit (1㎜)
+                                                                              with 1.0mm/sec.
+Solderability              More than 75% of terminal surface                 SnAg3.0Cu0.5 solder
+                           is to be soldered newly                           245±5℃, 3±0.3sec.
+                                                                             (preheating : 80~120℃ for 10~30sec.)
+
+Resistance to              Capacitance change :         within ±7.5%         Solder pot : 270±5℃, 10±1sec.
+Soldering Heat             Tan δ, IR : initial spec.
+Vibration Test             Capacitance change :         within ± 5%          Amplitude : 1.5mm
+                           Tan δ, IR : initial spec.                         From 10㎐ to 55㎐ (return : 1min.)
+                                                                             2hours × 3 direction (x, y, z)
+Moisture                   Capacitance change : within ±12.5%                With rated voltage
+Resistance                 Tan δ : 0.075 max                                 40±2℃, 90~95%RH, 500+12/-0hrs
+                           IR :   500Mohm or 25Mohm × ㎌
+                                  Whichever is smaller
+High Temperature           Capacitance change : within ±12.5%                With 200% of the rated voltage
+Resistance                 Tan δ : 0.075 max                                 Max. operating temperature
+                           IR :   1,000Mohm or 50Mohm × ㎌                    1000+48/-0hrs
+                                  Whichever is smaller
+Temperature                Capacitance change :         within ±7.5%        1 cycle condition
+Cycling                    Tan δ, IR : initial spec.                        Min. operating temperature               →   25℃
+                                                                            →     Max. operating temperature         →   25℃
+
+
+                                                                            5 cycle test
+※ The reliability test condition can be replaced by the corresponding accelerated test condition.
+
+
+D. Recommended Soldering method :
+    Reflow ( Reflow Peak Temperature : 260+0/-5℃, 10sec. Max )
+
+     Product specifications included in the specifications are effective as of March 1, 2013.
+     Please be advised that they are standard product specifications for reference only.
+     We may change, modify or discontinue the product specifications without notice at any time.
+     So, you need to approve the product specifications before placing an order.
+     Should you have any question regarding the product specifications,
+     please contact our sales personnel or application engineers.
+
+
+
+
+                                                                      2
+E. Recommended TEST PCB
+
+
+
+
+                                     ( Adhesive strength of termination)
+                            Size code            Size (mm)            a          b    c
+                                02               0.4 × 0.2           0.20    0.17    0.26
+                                03               0.6 × 0.3           0.30    0.30    0.30
+                                05               1.0. × 0.5          0.40    0.55    0.50
+                                10               1.6 × 0.8           1.00    1.00    1.20
+                                21               2.0 × 1.25          1.20    1.40    1.65
+                                31               3.2 × 1.6           2.20    1.40    2.00
+                                32               3.2 × 2.5           2.20    1.40    2.90
+                                43               4.5 × 3.2           3.50    1.75    3.70
+                                55               5.7 × 5.0           4.50    1.75    5.60
+
+
+
+                                                                                                           c
+
+
+
+
+                                                               b                                               a
+
+
+                                                               d
+
+                                                                                                          e
+      (Substrate for bending strength test)                                 (Substrate for Reliability test)
+                    Size code           Size (mm)             a       b          c    d       e
+                       02               0.4 × 0.2             0.2    0.6     0.2     5.0     5.5
+                       03               0.6 × 0.3             0.3    0.9     0.3     5.0     5.5
+                       05               1.0 × 0.5             0.4    1.5     0.5     5.0     5.5
+                       10               1.6 × 0.8             1.0    3.0     1.2     5.0     5.5
+                       21               2.0 × 1.25            1.2    4.0     1.65    5.0     5.5
+                       31               3.2 × 1.6             2.2    5.0     2.0     5.0     5.5
+                       32               3.2 × 2.5             2.2    5.0     2.9     5.0     5.5
+                       43               4.5 × 3.2             3.5    7.0     3.7     5.0     5.5
+                       55               5.7 × 5.0             4.5    8.0     5.6     5.0     5.5
+
+
+☞   Material : Glass epoxy substrate        ☞ Thickness : T=1.6 ㎜ (T= 0.8 ㎜ for 03/05)
+☞           : Copper foil (T=0.035 ㎜)        ☞                 : Solder resist
+☞ Caution : Abnormality can occur if lead-based solder (KSD 6704) with 3% silver is used.
+
+
+
+
+                                                         3
+MLCC Product Manual
+
+1. Packaging
+
+
+   This specification applies to taping of MLCC
+  When customers require, the specification may be changed under the agreement.
+
+
+
+
+1-1. Figure
+
+
+
+
+1-2. Quantity
+                                                                                                      [unit:pcs]
+              Size Code        Chip                               Plastic         Plastic          Plastic
+     Type                                Taping Type   Pitch
+              Inch(mm)       Thickness                         7 inches reel   10 inches reel   13 inches reel
+            0402 (01005)     0.2 mm        PAPER       2mm         20k               -              100K
+              0603 (0201)    0.3 mm        PAPER       2mm         10K               -               50K
+              1005 (0402)    0.5 mm        PAPER       2mm         10K               -               50K
+              1608 (0603)    0.8 mm        PAPER       4mm          4K              10K           15K / 10K
+                            T≤0.85 mm      PAPER       4mm          4K              10K           15K / 10K
+              2012 (0805)
+                            T≥1.0 mm     EMBOSSED      4mm          2K              6K               10K
+                            T≤0.85 mm      PAPER       4mm          4K              10K              10K
+              3216 (1206)
+    MLCC                    T≥1.0 mm     EMBOSSED      4mm          2K              4K               10K
+                            T≤1.6 mm     EMBOSSED      4mm          2K              4K               10K
+              3225 (1210)
+                            T≥2.0 mm     EMBOSSED      4mm          1K              4K               4K
+                            T≤1.6 mm     EMBOSSED      8mm          2k               -               8k
+              4520 (1808)
+                            T≥2.0 mm     EMBOSSED      8mm          1k               -               4k
+                            T≤2.0 mm     EMBOSSED      8mm           -               -               4K
+              4532 (1812)
+                            T>2.0 mm     EMBOSSED      8mm           -               -               2K
+              5750 (2220)   T≥2.5 mm     EMBOSSED      8mm           -               -               2K
+
+
+
+
+                                                         4
+MLCC Product Manual
+1-3. Tape Size
+
+
+1-3-1. Cardboard(Paper) tape : 4mm pitch
+
+
+
+
+                                                                                                 [unit:mm]
+         Size
+                    A       B       W          F    E        P1      P2       P0         D              t
+      Inch(mm)
+         0603      1.00    1.90
+        (1608)    ±0.10   ±0.10
+         0805      1.55    2.30     8.00    3.50    1.75     4.00    2.00     4.00     φ1.50        1.1
+        (2012)    ±0.10   ±0.10    ±0.30   ±0.05   ±0.10    ±0.10   ±0.05    ±0.10    +0.10/-0     Below
+         1206      2.05    3.60
+        (3216)    ±0.10   ±0.10
+        ※ The A, B in the table above are based on normal dimensions. The data may be changed
+           with the special size tolerances.
+
+
+1-3-2. Cardboard(Paper) tape : 2mm pitch
+
+
+
+
+                                                                                                 [unit:mm]
+        Size
+                   A        B        W         F        E     P1      P2       P0        D          t
+     Inch(mm)
+       01005     0.25     0.46                                                                    0.25
+       (0402)    ±0.02    ±0.02                                                                   ±0.02
+        0201     0.38     0.68                                                                    0.35
+       (0603)    ±0.03    ±0.03                                                        φ1.50      ±0.03
+                                    8.00    3.50    1.75     2.00     2.00     4.00
+        0402     0.62     1.12                                                         +0.10      0.60
+                                   ±0.30   ±0.05   ±0.10    ±0.05    ±0.05    ±0.10
+       (1005)    ±0.05    ±0.05                                                        /-0.03     ±0.05
+                  0.62     1.12
+        0204                                                                                      0.37
+                 +0.05    +0.05
+       (0510)                                                                                     ±0.03
+                 /-0.10   /-0.10
+        ※ The A, B in the table above are based on normal dimensions. The data may be changed
+           with the special size tolerances.
+
+
+
+                                                    5
+MLCC Product Manual
+1-3-3. Embossed(Plastic) tape
+
+
+
+
+                                                                                                        [unit:mm]
+
+      Size
+                    A        B       W       F       E          P1      P2      P0       D       t1        t0
+   Inch(mm)
+      01005        0.23    0.45     4.00    1.80    0.90       1.00    1.00    2.00    φ0.80
+     (0402)       ±0.02    ±0.02    ±0.05   ±0.02   ±0.05      ±0.02   ±0.02   ±0.03   ±0.04
+                                                                                                0.35      0.50
+                                                                                       φ1.50
+     015008        0.32    0.58                                2.00                             Below    Below
+                                                                                       +0.10
+     (05025)      ±0.03    ±0.03                               ±0.05
+                                                                                       /-0.03
+      0603         1.05    1.90
+     (1608)       ±0.15    ±0.15
+                                    8.00    3.50
+      0805         1.45    2.30
+                                    ±0.30   ±0.05
+     (2012)       ±0.20    ±0.20                               4.00                             2.50
+      1206         1.90    3.50                                ±0.10                            Below
+     (3216)       ±0.20    ±0.20
+
+      1210         2.80    3.60
+     (3225)       ±0.20    ±0.20                    1.75               2.00    4.00
+      1808         2.30    4.90                     ±0.10              ±0.05   ±0.10   φ1.50
+                                                                                                          0.60
+     (4520)       ±0.20    ±0.20                                                       +0.10
+                                                                                                         Below
+                                                                                        /-0
+      1812         3.60    4.90     12.0    5.60               8.00                             3.80
+     (4532)       ±0.20    ±0.20    ±0.30   ±0.05              ±0.10                            Below
+
+      2220         5.50    6.20
+     (5750)       ±0.20    ±0.20
+                   0.62    1.12
+      0204
+                  +0.05    +0.05
+     (0510)                         8.00    3.50               4.00                             2.50
+                  /-0.10   /-0.10
+                                    ±0.30   ±0.05              ±0.10                            Below
+      0306         1.10    1.90
+     (0816)       ±0.20    ±0.20
+
+        ※ The A, B in the table above are based on normal dimensions. The data may be changed
+              with the special size tolerances.
+
+
+
+
+                                                           6
+MLCC Product Manual
+1-3-4. Reel Size
+
+
+
+
+                                                                                             [unit:mm]
+    Symbol    Tape Width      A          B           C          D           E          W        t
+                   4mm     φ178±2.0   MINφ50     φ13±0.5     21±0.8     2.0±0.5      5±0.5   1.2±0.2
+    7”Reel         8mm     φ178±2.0   MINφ50     φ13±0.5     21±0.8     2.0±0.5     10±1.5   0.9±0.2
+                   12mm    φ178±2.0   MINφ50     φ13±0.5     21±0.8     2.0±0.5     13±0.5   1.2±0.2
+    10”Reel        8mm     φ258±2.0   MINφ70     φ13±0.5     21±0.8     2.0±0.5     10±1.5   1.8±0.2
+                   8mm     φ330±2.0   MINφ70     φ13±0.5     21±0.8     2.0±0.5     10±1.5   1.8±0.2
+    13”Reel
+                   12mm    φ330±2.0   MINφ70     φ13±0.5     21±0.8     2.0±0.5     13±0.5   2.2±0.2
+
+
+
+
+1-4. Cover tape peel-off force
+
+
+1-4-1. Peel-off force
+      10 g.f ≤ peel-off force ≤ 70 g.f
+1-4-2. Measurement Method
+
+
+
+
+       -Taping Packaging design : Packaging design follows IEC 60286-3 standard.
+         (IEC 60286-3 Packaging of componen ts for automatic handling - parts 3)
+      * If the static electricity of SMT process causes any problems, please contact us.
+
+
+
+
+                                                    7
+MLCC Product Manual
+1-5. BOX package
+
+
+1-5-1. Packaging Label
+      REEL & Box Type
+      Label includes the information as below.
+        1) Chip size
+        2) Temperature Characteristics
+        3) Nominal Capacitance
+        4) Model Name
+        5) LOT Number & Reel Number
+        6) Q’ty
+
+
+
+
+1-5-2. Box Packaging
+    1) Double packaging with the paper type of inner box and outer box.
+    2) Avoid any damages during transportation by car, airplane and ship.
+    3) Remark information of contents on inner box and outer box
+    ※ If special packaging is required, please contact us.
+
+
+
+
+1-5-3. 7" Box packaging
+                                                                                          [ Unit : mm ]
+    - Inner Box (7" x 5 REEL )                           - Inner Box (7" x 10 REEL)
+
+
+
+
+    - Outer Box (7" x 20 REEL)                               - Outer Box (7" x 60 REEL)
+
+
+
+
+                                                     8
+MLCC Product Manual
+1-5-4. 13” Box packaging
+    - Inner Box (13" x 4 REEL)                           - Outer Box (13" x 20 REEL)
+
+
+
+
+1-6. Chip Weight
+
+
+     Size(L/W)     Size(T)                Weight        Size(L/W)    Size(T)                Weight
+                                 Temp.                                          Temp.
+     Inch(mm)      (mm)                   (mg/pc)       Inch(mm)     (mm)                   (mg/pc)
+                    0.20         C0G       0.082                      0.30        C0G           0.233
+       01005                                              0201
+                    0.20         X7R       0.083                      0.30        X7R           0.285
+       (0402)                                            (0603)
+                    0.20         X5R       0.093                      0.30        X5R           0.317
+                    0.50         C0G       1.182                      0.80        C0G           4.615
+       0402                                               0603
+                    0.50         X7R       1.559                      0.80        X7R           5.522
+       (1005)                                            (1608)
+                    0.50         X5R       1.560                      0.80        X5R           5.932
+                    0.65         C0G       7.192                      1.25        C0G           28.086
+       0805                                               1206
+                    1.25         X7R       16.523                     1.60        X7R           54.050
+       (2012)                                            (3216)
+                    1.25         X5R       16.408                     1.60        X5R           45.600
+       1210         2.50         X7R      116.197         1808        1.25        C0G           47.382
+       (3225)       2.50         X5R      121.253        (4520)       1.25        X7R           63.136
+       1812                                               2220
+                    1.25         X7R       96.697                     1.60        X7R       260.897
+       (4532)                                            (5750)
+        The weight of product is typical value per size, for more details, please contact us.
+
+
+
+
+                                                    9
+MLCC Product Manual
+
+2. Product Characteristic data
+
+
+2-1. Capacitance
+
+
+      The capacitance is the ratio of the change in an electric charge according to voltage change.
+      Due to the fact that the capacitance may be subject to change with the measured voltage and
+      frequency, it is highly recommended to measure the capacitance based on the following
+      conditions.
+
+
+2-1-1. Measure capacitance with voltage and frequency specified in this document.
+      Regarding the voltage/frequency condition for capacitance measurement of each MLCC model,
+      please make sure to follow a section “C. Reliability test Condition - Capacitance” in this document.
+
+
+      The following table shows the voltage and frequency condition according to the capacitance
+      range.
+
+
+               [The voltage and frequency condition according to MLCC the capacitance range]
+                    ◆ Class I
+
+                         Capacitance                Frequency                     Voltage
+
+                          ≤ 1,000 pF              1 MHz ± 10%
+                                                                             0.5 ~ 5 Vrms
+                          > 1,000 pF              1 kHz ± 10%
+
+
+                    ◆ Class II
+
+                         Capacitance                Frequency                     Voltage
+
+                           ≤ 10 ㎌                 1 kHz ± 10%               1.0 ± 0.2 Vrms
+
+                           > 10 ㎌                 120 Hz ± 20%              0.5 ± 0.1 Vrms
+
+                          Exception*              1 kHz ± 10%               0.5 ± 0.1 Vrms
+
+                    Capacitance shall be measured after the heat treatment of 150+0/-10℃
+                    for 1hr, leaving at room temperature for 24±2hr. (Class II)
+
+
+2-1-2. It is recommended to use measurement equipment with the ALC (Auto Level Control) option.
+      The reason is that when capacitance or measurement frequency is high, the output voltage of
+      measurement equipment can be lower than the setting voltage due to the equipment limitation.
+      Note that when capacitance or measurement frequency is excessively high, the measurement
+      equipment may show ALC off warning and provide a lower output voltage than the setting
+      voltage even with ALC option selected. It is necessary to ensure the output voltage of
+      measurement equipment is the same as the setting voltage before measuring capacitance.
+
+
+
+
+                                                      10
+MLCC Product Manual
+2-1-3. Capacitance value of high dielectric constant (Class II) MLCC changes with applied AC and DC
+      voltage. Therefore, it is necessary to take into account MLCC’s AC voltage characteristics and DC-
+      bias voltage characteristics when applying MLCC to the actual circuit.
+
+
+2-1-4. The capacitance is in compliance with the EIA RS-198-1-F-2002.
+
+
+
+
+2-2. Tan δ (DF)
+
+
+2-2-1. An ideal MLCC’s energy loss is zero, but real MLCC has dielectric loss and resistance loss of
+      electrode. DF (Dissipation Factor) is defined as the ratio of loss energy to stored energy and
+      typically being calculated as percentage.
+
+
+2-2-2. Quality factor (Q factor) is defined as the ratio of stored energy to loss energy.
+      The equation can be described as 1/DF. Normally the loss characteristic of Class I MLCC is
+      presented in Q, since the DF value is so small whereas the loss characteristic of Class II MLCC is
+      presented in DF.
+
+
+2-2-3. It is recommended to use Class I MLCC for applications to require good linearity and low loss
+      such as coupling circuit, filter circuit and time constant circuit.
+
+
+
+
+2-3. Insulation Resistance
+
+
+      Ceramic dielectric has a low leakage current with DC voltage due to the high insulating properties.
+      Insulation resistance is defined as the ratio of a leakage current to DC voltage.
+
+
+2-3-1. When applying DC voltage to MLCC, a charging current and a leakage current flow together at
+      the initial stage of measurement. While the charging current decreases, and insulation resistance
+      (IR) in MLCC is saturated by time. Therefore, insulation resistance shall be measured 1 minute after
+      applying the rated voltage.
+
+
+
+
+2-4. Capacitance Aging
+
+
+      The aging characteristic is that the high dielectric (Class II) MLCC decreases capacitance
+      value over time. It is also necessary to consider the aging characteristic with voltage and
+      temperature characteristics when Class II MLCC is used in circuitry.
+
+
+
+
+                                                      11
+MLCC Product Manual
+2-4-1. In general, aging causes capacitance to decrease linearly with the log of time as shown in the
+      following graph. Please check with SEMCO for more details, since the value may vary between
+      different models.
+
+
+2-4-2. After heat treatment (150 °C, 1hour), the capacitance decreased by aging is recovered, so aging
+      should be considered again from the time of heat treatment.
+
+
+
+
+                                     [ Example of Capacitance Aging ]
+                                         * Sample : C0G, X7R, X5R
+
+
+
+
+2-5. Temperature Characteristics of Capacitance (TCC)
+
+
+     Please consider temperature characteristi cs of capacitance since the electrical characteristics such as
+     capacitance changes which is caused by a change in ceramic dielectric constant by temperature.
+
+
+2-5-1. It is necessary to check the values speci fied in section “C. Reliability test Condition–Temperature
+      Characteristics” for the temperature and capacitance change range of MLCC.
+
+
+
+
+    [ Example of Temperature Characteristics (X5R) ]                 [ Example of Bias TCC ]
+             * Sample : 10uF, Rated voltage 6.3V           * Sample : 10uF, Rated voltage 6.3V
+
+
+
+
+                                                     12
+MLCC Product Manual
+2-5-2. When selecting MLCC, it is necessary to consider the heat characteristics of a system, room
+      temperature and TCC of MLCC, since the applied temperature may change the capacitance of
+      MLCC.
+
+
+2-5-3. In addition, Bias TCC of MLCC should be taken into account when DC volta ge is applied to MLCC.
+
+
+
+
+2-6. Self-heating Temperature
+
+
+      It is necessary to design the system, with considering self-heating generated by the ESR
+      (Equivalent Series Resistance) of MLCC when AC voltage or pulse voltage is applied to MLCC.
+
+
+
+
+2-6-1. When MLCC is used in an AC voltage or pulse voltage circuit, self-heating i s generated when AC
+      or pulse current flows through MLCC. Short-circuit may be occurred by the degradation of MLCC’s
+      insulating properties.
+
+
+2-6-2. The reliability of MLCC may be affected by MLCC being used in an AC voltage or pulse voltage
+      circuit, even the AC voltage or the pulse voltage is within the range of rated voltage.
+      Therefore, make sure to check the following conditions.
+
+
+      1) The surface temperature of MLCC must stay within the maximum operating temperature after
+        AC or Pulse voltage is applied.
+
+
+      2) The rise in increase by self-heating of MLCC must not exceed 20℃
+
+
+
+
+                                      [ Examp le of Ripple current ]
+                                * Sample : X5R 10uF, Rated voltage 6.3V
+
+
+
+
+                                                    13
+MLCC Product Manual
+2-7. DC & AC Voltage Characteristics
+
+
+      It is required to consider voltage characteristics in the circuit since the capacitance value of high
+      dielectric constant MLCC(Class II) is changed by applied DC & AC voltage.
+
+
+2-7-1. Please ensure the capacitance change is within the allowed operating range of a system. In
+      particular, when high dielectric constant type MLCC (Class II) is used in circuit with narrow allowed
+      capacitance tolerance, a system should be designed with considering DC voltage, temperature
+      characteristics and aging characteristics of MLCC.
+
+
+
+
+                                    [ Example of DC Bias characteristics ]
+                                  * Sample : X5 R 10uF, Rated voltage 6.3V
+
+
+2-7-2. It is necessary to consider the AC voltage characteristics of MLCC and the AC voltage of a system,
+      since the capacitance value of high dielectric constant type MLCC (Class II) varies with the applied
+      AC voltage.
+
+
+
+
+                                 [ Example of AC voltage characteristics ]
+                                 * Sample : X5R 10uF, Rated voltage 6.3V
+
+
+
+
+                                                     14
+MLCC Product Manual
+2-8. Impedance Characteristic
+
+
+      Electrical impedance (Z) of MLCC is the measurement of the opposition that MLCC presents to a
+      current (I) when a voltage (V) is applied. It is defined as the ratio of the voltage to the current
+      (Z=V/I). Impedance extends the concept of resistance to AC circuits and is a complex number
+      consisting of the real part of resistance (R) and the imaginary part of reactance (X) as Z=R+jX.
+      Therefore, it is required to design circuit with consideration of the impedance characteristics of
+      MLCC based on the frequency ( Z = R + jX )
+
+
+
+
+2-8-1. MLCC operates as a capacitor in the low frequency and its reactance (XC) decreases as frequency
+      increases ( X_C=1/j2πfC ) where f is frequency and C is capacitance.
+      The resistance (ESR; Equivalent Series Resistance) of MLCC in the low frequency mainly comes
+      from the loss of its dielectric material.
+
+
+2-8-2. MLCC operates as an inductor in the high frequency and the inductance of MLCC is called ESL
+      (Equivalent Series Inductance). The reactance (XL) of MLCC in the high frequency increases as
+      frequency increases ( X_L=j2πf∙ESL ). The resistance (ESR) of MLCC in the high frequency mainly
+      comes from the loss of its electrode metal.
+
+
+2-8-3. SRF (Self Resonant Frequency) of MLCC is the frequency where its capacitive reactance (XC) and
+      inductive reactance(XL) cancel each other and the impedance of MLCC has only ESR at SRF.
+
+
+
+
+2-8-4. The impedance of MLCC can be measured by a network analyzer or an impedance analyzer.
+      When using the network analyzer, pleas e note that the small-signal input may lead to the
+      impedance of low capacitance caused by the AC voltage characteristic of MLCC.
+
+
+
+
+                                   [ Example of Impedance characteristics ]
+                                   * Sample : X5R 1uF, Rated voltage 6.3V
+
+
+
+
+                                                     15
+MLCC Product Manual
+
+3. Electrical & Mechanical Caution
+
+
+3-1. Derating
+
+
+     MLCC with the test voltage at 100% of the rated voltage in the high temperature resistance test
+     are labeled as “derated MLCC.” For this type of MLCC, the voltage and temperature should be
+     derated as shown in the following graph for the equivalent life time of a normal MLCC with the
+     test voltage at 150% of the rated voltage in the high temperature resistance test.
+
+
+3-1-1. The derated MLCC should be applied with the derating voltage and tempe rature as shown in the
+      following graph.
+
+
+3-1-2. The “Temperature of MLCC” in the x-axis of the graph below indicates the surface temperature of
+      MLCC including self-heating effect. The “Voltage Derating Ratio” in the y-axis of the graph below
+      gives the maximum operating voltage of MLCC with reference to the maximum voltage (Vmax) as
+      defined in section “3-2. Applied Voltage.”
+
+
+
+
+                             [Example of derating graph for derated MLCC]
+                                       * Vmax ≤ Derated Voltage
+                                  * Only the Derating marked models
+
+
+
+
+                                                   16
+MLCC Product Manual
+3-2. Applied Voltage
+
+
+      The actual applied voltage on MLCC should not exceed the rated voltage set in the specifications.
+3-2-1. Cautions by types of voltage applied to MLCC
+
+
+      · For DC voltage or DC+AC voltage, DC voltage or the maximum value of DC + AC voltage should
+         not exceed the rated voltage of MLCC.
+      · For AC voltage or pulse voltage, the p eak-to-peak value of AC voltage or pulse voltage
+         should not exceed the rated voltage of MLCC.
+      · Abnormal voltage such as surge voltage, static electricity should not exceed the rated voltage of
+         MLCC.
+
+
+                                [Types of Voltage Applied to the Capacitor]
+     DC Voltage            AC Voltage          DC+AC Voltage 1      DC+AC Voltage 2       DC+Pulse Voltage
+
+
+
+
+3-2-2. Effect of EOS (Electrical Overstress)
+
+
+      · Electrical Overstress such as a surge voltage or EOS can cause damages to MLCC, resulting in
+         the electrical short failure caused by the dielectric breakdown in MLCC.
+      · Down time of MLCC is varied with the applied voltage and the room temperature and a
+      dielectric shock caused by EOS can accelerate heating on the dielectric. Therefore, it can bring
+      about a failure of MLCC in a market at the early stage.
+      · Please use caution not to apply excess ive electrical overstress including spike voltage MLCC when
+        preparing MLCC for testing or evaluating.
+
+
+   (1) Surge
+      When the overcurrent caused by surge is applied to MLCC, the influx of current into MLCC can
+      induce the overshooting phenomenon of voltage as shown in the graph below and result in the
+      electrical short failure in MLCC. Therefore, it is necessary to be careful to prevent the influx of
+      surge current into MLCC.
+
+
+   (2) ESD (Electrostatic Discharge)
+
+
+      Since the voltage of the static electricity is very high but the quantity of electric charge is small
+      compared to the surge, ESD can cause damage to MLCC with low capacitance as shown in the
+
+
+
+
+                                                      17
+MLCC Product Manual
+     following graph, whereas surge with lots of electric charge quantity can cause damages to even
+     high capacitance MLCC.
+
+
+
+
+      [ Example of Surge applied to MLCC ]               [ Example of ESD appl ied to MLCC ]
+                                                                     * Simulation for ESD 8kV
+
+
+
+
+3-3. Vibration
+
+
+     Please check the types of vibration and shock, and the status of resonance.
+     Manage MLCC not to generate resonance and avoid any kind of impact to terminals.
+     When MLCC is used in a vibration environment, please make sure to contact us for the situation
+     and consider special MLCC such as Soft-term, etc.
+
+
+
+
+3-4. Shock
+
+
+    Mechanical stress caused by a drop may cause damages to a dielectric or a crack in MLCC
+    Do not use a dropped MLCC to avoid any quality and reliability deterioration.
+    When piling up or handling printed circu it boards, do not hit MLCC with the corners of a PCB to
+    prevent cracks or any other damages to the MLCC.
+
+
+
+
+3-5. Piezo-electric Phenomenon
+
+
+    MLCC may generate a noise due to vibra tion at specific frequency when using the high dielectric
+    constant MLCC (Class Ⅱ) at AC or Pulse circuits.
+    MLCC may cause a noise if MLCC is affected by any mechanical vibrations or shocks.
+
+
+
+
+                                                  18
+MLCC Product Manual
+
+4. Process of Mounting and Soldering
+
+
+4-1. Mounting
+
+
+4-1-1. Mounting position
+      It is recommended to locate the major axis of MLCC in parallel to the direction in which the stress
+      is applied.
+
+
+
+
+                    Not recommended                              Recommended
+
+
+4-1-2. Cautions during mounting near the cutout
+      Please take the following measures to effectively reduce the stress generated from the cutting of
+      PCB. Select the mounting location shown below, since the mechanical stress is affected by a
+      location and a direction of MLCC mounted near the cutting line.
+
+
+
+
+4-1-3. Cautions during mounting near screw
+      If MLCC is mounted near a screw hole, the board deflection may be occurred by screw torque.
+      Mount MLCC as far from the screw holes as possible.
+
+
+
+
+                                 Not recommended             Recommended
+
+
+
+
+                                                   19
+MLCC Product Manual
+4-2. Caution before Mounting
+
+
+4-2-1. It is recommended to store and use MLCC in a reel. Do not re-use MLCC that was isolated from
+      the reel.
+4-2-2. Check the capacitance characteristics under actual applied voltage.
+4-2-3. Check the mechanical stress when actual process and equipment is in use.
+4-2-4. Check the rated capacitance, rated voltage and other electrical characteristics before assembly.
+      Heat treatment must be done prior to measurement of capacitance.
+4-2-5. Check the solderability of MLCC that has passed shelf life before use.
+4-2-6. The use of Sn-Zn based solder may deteriorate the reliability of MLCC.
+
+
+
+
+4-3. Cautions during Mounting with Mounting (pick-and-place) Machines
+
+
+4-3-1. Mounting Head Pressure
+      Excessive pressure may cause cracks in MLCC.
+      It is recommended to adjust the nozzle pressure within the maximum value of 300g.f.
+      Additional conditions must be set for both thin film and special purpose MLCC.
+4-3-2. Bending Stress
+      When using a two-sided substrate, it is required to mount MLCC on one side first before
+      mounting on the other side due to the bending of the substrate caused by the mounting head.
+      Support the substrate as shown in the picture below when MLCC is mounted on the other side.
+      If the substrate is not supported, bending of the substrate may cause cracks in MLCC.
+
+
+
+
+4-3-3. Suction nozzle
+      Dust accumulated in a suction nozzle and suction mechanism can impede a smooth movement of
+      the nozzle. This may cause cracks in MLCC due to the excessive force during mounting.
+      If the mounting claw is worn out, it may cause cracks in MLCC due to the uneven force during
+      positioning.
+      A regular inspection such as maintenance, monitor and replacement for the suction nozzle and
+      mounting claw should be conducted.
+
+
+
+                                                    20
+MLCC Product Manual
+4-4. Reflow soldering
+
+
+     MLCC is in a direct contact with the dissolved solder during soldering, which may be exposed to
+     potential mechanical stress caused by the sudden temperature change.
+     Therefore, MLCC may be contaminated by the location movement and flux.
+     For the reason, the mounting process must be closely monitored.
+
+
+                                 Method                               Classification
+                                                                      Infrared rays
+                                         Overall heating                Hot plate
+                                                                   VPS(Vapor phase)
+                  Reflow soldering
+                                                                       Air heater
+                                          Local heating                   Laser
+                                                                       Light beam
+
+
+4-4-1. Reflow Profile
+
+
+
+
+                                      [Reflow Soldering Conditions]
+
+
+      Use caution not to exceed the peak temperature (260℃) and time (30sec) as shown.
+      Pre-heating is necessary for all constituents including the PCB to prevent the mechanical damages
+      on MLCC. The temperature difference between the PCB and the component surface must be kept
+      to the minimum.
+
+
+      As for reflow soldering, it is recommended to keep the number of reflow soldering to less than
+      three times. Please check with us when the number of reflow soldering needs to exceed three
+      times. Care must be exercised especially for the ultra-small size, thin film and high capacitance
+      MLCC as they can be affected by thermal stress more easily.
+
+
+
+                                                    21
+MLCC Product Manual
+4-4-2. Reflow temperature
+      The following quality problem may occur when MLCC is mounted with a lower temperature than
+      the reflow temperature recommended by a solder manufacturer. The specified peak temperature
+      must be maintained after taking into consideration the factors such as the placement of
+      peripheral constituent and the reflow temperature.
+
+
+      ･Drop in solder wettability
+      ･Solder voids
+      ･Potential occurrence of whisker
+      ･Drop in adhesive strength
+      ･Drop in self-alignment properties
+      ･Potential occurrence of tombstones
+
+
+4-4-3. Cooling
+      Natural cooling with air is recommended.
+
+
+4-4-4. Optimum solder flux for reflow soldering
+      · Overly the thick application of solder pastes results in an excessive solder fillet height.
+        This makes MLCC more vulnerable to the mechanical and thermal stress from the board, which
+        may cause cracks in MLCC.
+      · Too little solder paste results in a lack of the adhesive strength, which may cause MLCC to
+        isolate from PCB
+      · Check if solder has been applied uniformly after soldering is completed.
+
+
+
+
+                      Too Much Solder                                       Not enough solder
+          large stress may cause cracks                       Weak holding force may cause bad
+                                                              connections or detaching of the capacitor
+
+
+      · It is required to design a PCB with consideration of a solder land pattern and its size to apply an
+       appropriate amount of solder to MLCC. The amount of the solder at the edge may impact
+       directly on cracks in MLCC.
+
+
+      · The design of a suitable solder land is necessary since the more the solder amount is,
+        the larger the force MLCC experiences and the higher the chance MLCC cracks.
+
+
+
+
+                                                     22
+MLCC Product Manual
+4-5. Flow soldering
+
+
+4-5-1. Flow profile
+
+
+
+
+                                       [Flow Soldering Conditions]
+
+
+          Take caution not to exceed peak temperature (260℃) and time (5sec) as shown.
+          In case of flow soldering, only 1608(0603inch), 2012(0805inch), 3216(1206inch) case size are
+          recommended to use.
+
+
+          Please contact us before use the typ e of high capacitance and thin film MLCC for some
+          exceptions that may be caused.
+
+
+4-5-2. Caution before Flow soldering
+
+
+      · When a sudden heat is applied to MLCC, the mechanical rigidity of MLCC is deteriorated by the
+      internal deformation of MLCC. Preheating all the constituents including PCB is required to prevent
+      the mechanical damages on MLCC. The temperature difference between the solder and the
+      surface of MLCC must be kept to the m inimum.
+
+
+      · If the flow time is too long or the flow temperature is too high, the adhesive strength with PCB
+      may be deteriorated by the leaching ph enomenon of the outer termination, or the capacitance
+      value may be dropped by weak adhesion between the internal termination and the outer
+      termination.
+
+
+
+
+                                                   23
+MLCC Product Manual
+4-6. Soldering Iron
+
+
+      Manual soldering can pose a great risk on creating thermal cracks in MLCC. The high temperature
+      soldering iron tip may come into a direct contact with the ceramic body of MLCC due to the
+      carelessness of an operator. Therefore, the soldering iron must be handled carefully, and close
+      attention must be paid to the selection of the soldering iron tip and to temperature control of the
+      tip.
+
+
+4-6-1. How to use a soldering Iron
+      · In order to minimize damages on MLCC, preheating MLCC and PCB is necessary.
+        A hot plate and a hot air type preheater should be used for preheating
+      . Do not cool down MLCC and PCB rapidly after soldering.
+      · Keep the contact time between the outer termination of MLCC and the soldering iron as short as
+        possible. Long soldering time may cause problems such as adhesion deterioration by the
+        leaching phenomenon of the outer termination.
+
+
+         Variation of          Soldering        Pre-heating         Soldering              Cooling
+              Temp.            Temp.(℃)          Time(sec)          Time(sec)          Time(sec)
+
+             ΔT ≤ 130       300±10℃ max              ≥60                ≤4                    -
+
+        * Control Δ T in the solder iron and preheating temperature.
+
+
+                                         Condition of Iron facilities
+
+                  Wattage                       Tip diameter                  Soldering time
+
+                  20W max                         3 ㎜ max                        4sec max
+
+                      * Caution - Iron tip should not contact with ceramic body directly
+                                                      Lead-free solder: Sn-3.0Ag-0.5CU
+
+
+4-6-2. How to use a spot heater
+       Compared to local heating using a solder iron, heat by a spot heater heats the overall MLCC and
+       the PCB, which is likely to lessen the thermal shocks.
+       For a high density PCB, a spot heater can prevent the problem to connect between a solder iron
+       and MLCC directly.
+
+
+      · If the distance from the air nozzle outlet to MLCC is too close, MLCC may be cracked due to the
+        thermal stress. Follow the conditions set in the table below to prevent this problem.
+      · The spot heater application angle as shown in the figure is recommended to create a suitable
+        solder fillet shape.
+
+
+
+
+                                                     24
+MLCC Product Manual
+
+         Distance                               5㎜ ≤
+
+
+         Hot Air Application angle              45℃
+
+
+         Hot Air Temperature Nozzle Outlet      400℃ ≥
+
+
+         Application Time                       10s＞
+
+
+
+
+4-6-3. Cautions for re-work
+         · Too much solder amount will increase the risk of PCB bending or cause other damages.
+         · Too little solder amount will result in MLCC breaking loose from the PCB due to the
+           inadequate adhesive strength.
+         · Check if the solder has been applied properly and ensure the solder fillet has a proper shape.
+
+
+
+
+                         * Soldering wire below ø0.5mm is required for soldering.
+
+
+
+
+4-7. Cleaning
+
+
+4-7-1. In general, cleaning is unnecessary if rosin flux is used.
+      When acidic flux is used strongly, chlorine in the flux may dissolve into some types of cleaning
+      fluids, thereby affecting the performance of MLCC.
+      This means that the cleansing solution must be carefully selected and should always be new.
+
+
+4-7-2. Cautions for cleaning
+      MLCC or solder joint may be cracked with the vibration of PCB, if ultrasonic vibration is too strong
+      during cleaning. When high pressure cleaning equipment is used, test should be done for the
+      cleaning equipment and its process before the cleaning in order to avoid damages on MLCC.
+
+
+
+
+                                                       25
+MLCC Product Manual
+4-8. Cautions for using electrical measuring probes
+
+
+    · Confirm the position of the support pin or jig when checking the electrical performance of MLCC
+      after mounting on the PCB.
+    · Watch for PCB bending caused by the pressure of a test-probe or other equipment.
+    · If the PCB is bent by the force from the test probe, MLCC may be cracked or the solder joint may
+      be damaged.
+    · Avoid PCB flexing by using the support pin on the back side of the PCB.
+    · Place equipment with the support pin as close to the test-probe as possible.
+    · Prevent shock vibrations of the board when the test-probe contacts a PCB.
+
+
+
+
+                      Not recommended                                      Recommended
+
+
+
+
+4-9. Printed Circuit Board Cropping
+
+
+    · Do not apply any stress to MLCC such as bending or twisting the board after mounting MLCC
+    on the PCB.
+    · The stress as shown may cause cracks in MLCC when cutting the board.
+    · Cracked MLCC may cause degradation to the insulation resistance, thereby causing short circuit.
+    · Avoid these types of stresses applied to MLCC.
+
+
+                         [Bending]                                     [Twisting]
+
+
+
+
+4-9-1. Cautions for cutting PCB
+      Check a cutting method of PCB in advance.
+
+
+      The high density board is separated into many individual boards after the completion of soldering.
+      If the board is bent or deformed during separation, MLCC may be cracked.
+      Carefully select a separation method that minimizes the deformation of the PCB.
+
+
+
+
+                                                   26
+MLCC Product Manual
+4-10. Assembly Handling
+
+
+4-10-1. Cautions for PCB handling
+        Hold the edges of the board mounted with MLCC with both hands since holding with one hand
+        may bend the board.
+        Do not use dropped boards, which may degrade the quality of MLCC.
+
+
+4-10-2. Mounting other components
+       Pay attention to the following conditions when mounting other components on the back side of
+       The board after MLCC has been mounted on the front side.
+       When the suction nozzle is placed too close to the board, board deflection stress may be
+       applied to MLCC on the back side, resulting in cracks in MLCC.
+        Check if proper value is set on each chip mounter for a suction location, a mounting gap and a
+        suction gap by the thickness of components.
+
+
+
+
+4-10-3. Board mounting components with leads
+        If the board is bent when inserting components (transformer, IC, etc.) into it, MLCC or solder
+       joint may be cracked.
+
+
+       Pay attention to the following:
+       · Reduce the stress on the board during insertion by increasing the size of the lead insertion
+          hole.
+       · Insert components with leads into the board after fixing the board with support pins or a
+          dedicated jig.
+       · Support the bottom side of the board to avoid bending the board.
+       · Check the status of the height of each support pin regularly when the support pins are used.
+
+
+
+
+                  Not recommended                                   Recommended
+
+
+
+
+                                                   27
+MLCC Product Manual
+4-10-4. Socket and / or connector attach / detach
+       Since the insertion or removal from sockets and connectors may cause the board to bent, make
+       sure that MLCC mounted on the board should not be damaged in this process.
+
+
+
+
+4-10-5. Fastening screw
+       When attaching a shield on a board, the board may be bent during a screw tightening work
+
+
+       Pay attention to the following conditions before performing the work.
+        · Plan the work to prevent the board from bending
+        · Use a torque driver to prevent over-tightening of the screw.
+        · Since the board may be bent by soldering, use caution in tightening the screw.
+
+
+
+
+4-11. Adhesive selection
+
+
+      Pay attention to the following if an adhesive is used to position MLCC on the board before
+      soldering.
+
+
+4-11-1. Requirements for Adhesives
+        · They must have enough adhesive strength to prevent MLCC from slipping or moving during
+          the handling the board.
+        · They must maintain their adhesive strength when exposed to soldering temperatures.
+        · They should not spread when applied to the PCB.
+        · They should have a long pot life.
+        · They should hardened quickly.
+        · They should not corrode the board or MLCC materials.
+        · They should be an insulator type that does not affect the characteristic of MLCC.
+        · They should be non-toxic, not harmful, and particularly safe when workers touch the adhesives.
+
+
+4-11-2. Caution before Applying Adhesive
+        Check the correct application conditions before attaching MLCC to the board with an adhesive.
+       If the dimension of land, the type of adhesives, the amount of coating, the contact surface areas,
+       the curing temperature, or other conditions are not appropriate, it may degrade the MLCC
+       performance.
+
+
+
+
+                                                    28
+MLCC Product Manual
+
+
+4-11-3. Cautions for selecting Adhesive
+        Depending on the type of the chosen adhesive, MLCC insulation resistance may be degraded.
+        In addition, MLCC may be cracked by the difference in contractile stress caused by the different
+       contraction rate between MLCC and the adhesive.
+
+
+4-11-4. Cautions for the amount of applied adhesive and curing temperature
+        · The inappropriate amount of the adhesive cause the weak adhesive strength, resulting in the a
+           mounting defect in MLCC
+        · Excessive use of the adhesive may cause a soldering defect, loss of electrical connection,
+           incorrect curing, or slippage of a mounting position, thereby an inflow of the adhesive onto a
+           land section should be avoided.
+        · If the curing temperature is too high or the curing time is too long, the adhesive strength will
+           be degraded. In addition, oxidation both on the outer termination (Sn) of MLCC and the
+           surface of the board may deteriorate the solderability.
+
+
+
+
+4-12. Flux
+
+
+4-12-1. The excessive amount of flux generates excessive flux gases which may deteriorate solderability.
+       Therefore, apply the flux thin and evenly as a whole.
+4-12-2. Flux with a high ratio of halogen may oxidize the outer termination of MLCC, if cleaning is not
+       done properly. Therefore, use flux with a halogen content of 0.1% max.
+4-12-3. Strong acidic flux can degrade the MLCC performance
+4-12-4. Check the solder quality of MLCC and the amount of remaining flux surrounding MLCC after the
+       mounting process.
+
+
+
+
+4-13. Coating
+
+
+4-13-1. Crack caused by Coating
+        A crack may be caused in the MLCC due to amount of the resin and stress of thermal
+        contraction of the resin during coating process.
+        During the coating process, the amount of resin and the stress of thermal contraction of the
+        resin may cause cracks in MLCC
+        The difference of thermal expansion coefficient between the coating, or a molding resin may
+        cause destruction, deterioration of insulation resistance or dielectric breakdown of MLCC such
+        as cracks or detachment, etc.
+
+
+
+
+                                                    29
+MLCC Product Manual
+4-13-2. Recommended Coating material
+       · A thermal expansion coefficient should be as close to that of MLCC as possible.
+       · A silicone resin can be used as an under-coating to buffer the stress.
+       · The resin should have a minimum curing contraction rate.
+       · The resin should have a minimum sensitivity (ex. Epoxy resin).
+       · The insulation resistance of MLCC can be deteriorated if a high hygroscopic property resin is
+         used in a high humidity condition.
+       · Do not use strong acid substances due to the fact that coating materials inducing a family of
+         halogen substances and organic acid may corrode MLCC.
+
+
+
+
+                                                  30
+MLCC Product Manual
+
+5. Design
+
+
+5-1. Circuit design
+
+
+     When the board is dropped or bent, MLCC mounted on the board may be short-circuited by the
+     drop in insulation resistance. Therefore, it is required to install safety equipment such as a fuse to
+     prevent additional accidents when MLCC is short-circuited, otherwise, electric short and fire may
+     occur. This product is not a safety guaranteed product..
+
+
+
+
+5-2. PCB Design
+
+
+5-2-1. Unlike lead type components, SMD type components that are designed to be mounted directly
+      on the board are fragile to the stress. In addition, they are more sensitive to mechanical and
+      thermal stress than lead type components.
+
+
+
+
+5-2-2. MLCC crack by PCB material type
+       A great difference of the thermal expansion coefficient between PCB and MLCC causes thermal
+       expansion and contraction, resulting in cracks in MLCC. Even though MLCC is mounted on a
+       board with a fluorine resin or on a single-layered glass epoxy, cracks in MLCC may occur.
+
+
+
+
+5-3. Design system evaluation
+
+
+5-3-1. Evaluate the actual design with MLCC to make sure there is no functional issue or violation of
+      specifications of the finished goods.
+
+
+5-3-2. Please note that the capacitance may differ based on the operating condition of the actual system
+      since Class 2 MLCC capacitance varies with applied voltage and temperature.
+
+
+5-3-3. Surge resistance must be evaluated since the excessive surge caused by the inductance of the
+      actual system may apply to MLCC.
+
+
+5-3-4. Note the actual MLCC size and the termination shape.
+
+
+
+
+                                                     31
+MLCC Product Manual
+5-4 Land dimension
+   The recommended land dimension is determined by evaluating the actual SET and a board.
+
+
+
+
+        Reflow Footprint
+         Chip Size   Chip Tol.      a           b           c        (a+2b)     (a+2b)
+           [mm]       [mm]        [mm]        [mm]        [mm]        min        max
+           0402       ± 0.02     0.14~0.20   0.14~0.22   0.20~0.26    0.42       0.64
+                      ± 0.03     0.16~0.20   0.24~0.32   0.30~0.35    0.64       0.84
+                      ± 0.05     0.18~0.26   0.24~0.32   0.32~0.37    0.66       0.9
+           0603
+                      ± 0.07     0.20~0.28   0.25~0.35   0.35~0.39    0.7        0.98
+                      ± 0.09     0.22~0.30   0.25~0.35   0.35~0.39    0.72        1
+                      ± 0.05     0.35~0.40   0.37~0.47   0.50~0.55    1.09       1.34
+                      ± 0.07     0.37~0.42   0.37~0.47   0.52~0.58    1.11       1.36
+                      ± 0.10     0.40~0.45   0.37~0.47   0.55~0.60    1.14       1.39
+           1005       ± 0.15     0.40~0.45   0.40~0.50   0.60~0.65    1.2        1.45
+                      ± 0.20     0.45~0.50   0.40~0.50   0.65~0.70    1.25       1.5
+                      ± 0.30     0.45~0.50   0.42~0.52   0.70~0.75    1.29       1.54
+                      ± 0.40     0.50~0.55   0.45~0.55   0.75~0.80    1.4        1.65
+                      ± 0.10     0.50~0.55   0.60~0.65   0.80~0.85    1.7        1.85
+                      ± 0.15     0.55~0.60   0.62~0.67   0.85~0.90    1.79       1.94
+           1608       ± 0.20     0.60~0.65   0.65~0.70   0.90~0.95    1.9        2.05
+                      ± 0.25     0.65~0.70   0.70~0.75   0.95~1.00    2.05       2.2
+                      ± 0.30     0.70~0.75   0.75~0.80   1.00~1.05    2.2        2.35
+                      ±0.10      0.70~0.75   0.75~0.80   1.25~1.30    2.2        2.35
+                      ±0.15      0.75~0.80   0.80~0.85   1.30~1.35    2.35       2.5
+           2012       ±0.20      0.80~0.85   0.85~0.90   1.35~1.40    2.5        2.65
+                      ±0.25      0.85~0.90   0.95~1.00   1.40~1.45    2.75       2.9
+                      ±0.30      0.90~0.95   1.05~1.10   1.45~1.50     3         3.15
+                      ±0.20      1.70~1.90   0.85~1.00   1.60~1.80    3.4        3.9
+           3216
+                      ±0.30      1.80~2.00   0.95~1.10   1.70~1.90    3.7        4.2
+           3225          -       2.00~2.40   1.00~1.40   1.80~2.20     4         5.2
+           4532          -       2.80~3.20   1.40~1.80   2.40~3.00    5.6        6.8
+           5750          -       4.00~4.60   1.70~2.30   4.10~4.90    7.4        9.2
+
+
+        Flow Footprint
+         Chip Size   Chip Tol.      a           b           c        (a+2b)     (a+2b)
+           [mm]       [mm]        [mm]        [mm]        [mm]        min        max
+           1608          -       0.60~1.00   0.60~0.80   0.60~0.80    1.8        2.6
+           2012          -       1.00~1.20   0.80~1.20   0.80~1.20    2.6        3.6
+           3216          -       2.00~2.40   1.00~1.20   1.00~1.40    4.0        4.8
+
+
+
+
+                                                32
+MLCC Product Manual
+
+6. Others
+
+
+6-1. Storage environment
+
+
+6-1-1. Recommendation for temperature/humidity
+        Even taping and packaging materials are designed to endure a long-term storage, they should
+        be stored with a temperature of 0~40°C and an RH of 0~70% otherwise, too high temperatures
+        or humidity may deteriorate the quality of the product rapidly.
+
+
+        As oxidization is accelerated when relative humidity is above 70%RH, the lower the humidity is,
+        the better the solderability is.
+        As the temperature difference may cause dew condensation during the storage of the product,
+        it is a must to maintain a temperature control environment
+
+
+6-1-2. Shelf Life
+       An allowable storage period should be within 6 months from the outgoing date of delivery in
+       consideration of solderability. As for products in storage over 6 months, please check solderability
+       before use.
+
+
+
+
+6-2. Caution for corrosive environment
+
+
+       As corrosive gases may deteriorate the solderability of MLCC outer termination, it is a must to
+       store MLCC in an environment without gases. MLCC that is exposed to corrosive gases may cause
+       its quality issues due to the corrosion of plating layers and the penetration of moisture.
+
+
+
+
+6-3. Equipment in operation
+
+
+6-3-1. Do not touch MLCC directly with bare hands to prevent an electric shock or damage.
+
+
+6-3-2. The termination of MLCC shall not be contacted with a conductive object (short –circuit).
+       Do not expose MLCC to conductive liquid containing acidic or alkaline material.
+
+
+6-3-3. Do not use the equipment in the following conditions.
+
+
+
+
+                                                     33
+MLCC Product Manual
+        (1) Exposure to water or oil
+        (2) Exposure to direct sunlight
+        (3) Exposure to Ozone or ultra-violet radiation.
+        (4) Exposure to corrosive gas (e.g. hydrogen sulfide, sulfur dioxide, chlorine, ammonia gas)
+        (5) Exposure to vibration or mechanical shock exceeding specified limit
+        (6) Exposure to high humidity
+
+
+6-3-4. If the equipment starts generating any smoke, fire or smell, immediately switch it off or unplug
+      from the power source.
+      If the equipment is not switched off or unplugged, serious damage may occur due to the
+      continuous power supply. Please be careful with the high temperature in this condition.
+
+
+
+
+6-4. Waste treatment
+
+
+     In case of scrapping MLCC, it is incinerated or buried by a licensed industrial waste company.
+     When scrapping MLCC, it is recommended to incinerate or bury the scrappage by a licensed
+     industrial waste company.
+
+
+
+
+6-5. Operating temperature
+
+
+      The operating temperature limit is determined by the specification of each models.
+
+
+6-5-1. Do not use MLCC over the maximum operating temperature.
+      Pay attention to equipment’s temperature distribution and the seasonal fluctuation of ambient
+      temperature.
+
+
+6-5-2. The surface temperature of MLCC cannot exceed the maximum operating temperature including
+      self-heating effects.
+
+
+
+
+6-6. Transportation
+
+
+      The performance of MLCC may be affected by transportation conditions.
+
+
+
+
+                                                    34
+MLCC Product Manual
+
+
+6-6-1. MLCC shall be protected from excessive temperature, humidity and a mechanical force during
+      transportation.
+      During transportation, the cartons shall not be deformed and the inner packaging shall be
+      protected from excessive external forces.
+
+
+6-6-2. Do not apply excessive vibrations, shocks or excessive forces to MLCC.
+      · If excessive mechanical shock or stress are applied, MLCC’s ceramic body may crack.
+      · When the surface of MLCC is hit with the sharp edge of an air driver, a soldering iron, or a
+        tweezer, etc, MLCC may crack or become short-circuited.
+
+
+6-6-3. MLCC may crack and become non-functional due to the excessive shocks or dropping during
+      transportation.
+
+
+
+
+6-7. Notice
+
+
+    Some special products are excluded from this document.
+    Please be advised that this is a standard product specification for a reference only.
+    We may change, modify or discontinue the product specifications without notice at any time.
+    So, you need to approve the product specifications before placing an order.
+    Should you have any question regarding the product specifications,
+    please contact our sales personnel or application engineers.
+
+
+
+
+                                                    35
+MLCC Product Manual
+Caution of Application
+
+
+Disclaimer
+
+
+The products listed as follows are NOT designed and manufactured for any use and applications set
+forth below.
+Please note that any misuse of the products deviating from products specifications or information
+provided in this Spec sheet may cause serious property damages or personal injury.
+
+
+ ① Aerospace/Aviation equipment
+ ② Automotive of Transportation equipment (vehicles，trains，ships，etc)
+ ③ Military equipment
+ ④ Atomic energy-related equipment
+ ⑤ Undersea equipment
+ ⑥ Any other applications with the same as or similar complexity or reliability to the applications
+
+
+
+
+Limitation
+
+
+Please contact us with usage environment information such as voltage, current, temperature, or other
+special conditions before using our products for the applications listed below. The below application
+conditions require especially high reliability products to prevent defects that may directly cause damages
+or loss to third party's life, body or property.
+If you have any questions regarding this 'Limitation'，you should first contact our sales
+personnel or application engineers.
+
+
+ ① Medical equipment
+ ② Disaster prevention/crime prevention equipment
+ ③ Power plant control equipment
+ ④ Traffic signal equipment
+ ⑤ Data-processing equipment
+ ⑥ Electric heating apparatus，burning equipment
+ ⑦ Safety equipment
+ ⑧ Any other applications with the same as or similar complexity or reliability to the applications
+
+
+
+
+                                                    36
+
