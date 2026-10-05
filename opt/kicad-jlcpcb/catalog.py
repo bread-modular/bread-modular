@@ -156,14 +156,26 @@ def normalize_part(data, evidence):
     if kind:
         conversions = {"value_si": ("Resistance" if kind == "R" else "Capacitance", lambda v: quantity(v, kind)),
                        "tolerance_fraction": ("Tolerance", tolerance),
-                       "power_w": ("Power(Watts)", lambda v: quantity(v, "W")),
-                       "voltage_v": ("Voltage-Supply(Max)" if kind == "R" else "Voltage - Rated", lambda v: quantity(v, "V"))}
+                       "power_w": ("Power(Watts)", lambda v: quantity(v, "W"))}
         for dest, (name, convert) in conversions.items():
             if name in attrs:
                 try:
                     specs[dest] = convert(attrs[name])
                 except (CatalogError, OverflowError):
                     issues.append("unparsed_attribute:" + name)
+        # Publish voltage only when every explicit, observed alias parses and agrees.
+        voltage_names = ("Voltage-Supply(Max)",) if kind == "R" else ("Voltage - Rated", "Voltage Rating")
+        voltage_attrs = [name for name in voltage_names if name in attrs]
+        voltages = []
+        for name in voltage_attrs:
+            try:
+                voltages.append(quantity(attrs[name], "V"))
+            except (CatalogError, OverflowError):
+                issues.append("unparsed_attribute:" + name)
+        if voltages and len(voltages) == len(voltage_attrs):
+            if any(value != voltages[0] for value in voltages[1:]):
+                raise CatalogError("Conflicting capacitor voltage attributes")
+            specs["voltage_v"] = voltages[0]
         # Only explicit attribute keys; no MPN/description-based dielectric guesses.
         for name in ("Dielectric Material", "Temperature Coefficient"):
             if kind == "C" and name in attrs:
