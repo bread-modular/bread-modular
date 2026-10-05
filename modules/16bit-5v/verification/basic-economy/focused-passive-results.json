@@ -1,0 +1,63 @@
+{
+  "scope": "Five exact supplier review-candidate metadata bindings only; USB network blocked without design changes",
+  "refs": [
+    "C6",
+    "C7",
+    "C9",
+    "C10",
+    "C21"
+  ],
+  "before_source_sha256": {
+    "16bit-5v.kicad_sch": "5ca54523b0d8e0f1ddc052155ea124a7e6cd7a14db2c3732bd6bab105111415f",
+    "16bit-5v.kicad_pcb": "841c196388f6d6cf15f08bcba73556d5397e5a33fc5a659a0baf8334ace76412"
+  },
+  "after_source_sha256": {
+    "16bit-5v.kicad_sch": "e2a7747990654ff0a9928fead7c5d970905c74495af72a2c083a8a9b4d842fed",
+    "16bit-5v.kicad_pcb": "836ce806d4727241807eecd486c6134daf85f6e29b9f2c88ee7e5b5ce16408cd"
+  },
+  "no_topology_or_geometry_changes": true,
+  "required_rc_bound": 41,
+  "required_rc_total": 43,
+  "new_bindings": {
+    "C6": {
+      "code": "C23733",
+      "mpn": "CL05A475MP5NRNC",
+      "value": "4.7u",
+      "footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+      "status": "review_candidate / application HOLD"
+    },
+    "C7": {
+      "code": "C23733",
+      "mpn": "CL05A475MP5NRNC",
+      "value": "4.7u",
+      "footprint": "RP2350_60QFN_minimal:C_0402_1005Metric_small_pads",
+      "status": "review_candidate / application HOLD"
+    },
+    "C9": {
+      "code": "C23733",
+      "mpn": "CL05A475MP5NRNC",
+      "value": "4.7u",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "status": "review_candidate / application HOLD"
+    },
+    "C10": {
+      "code": "C23733",
+      "mpn": "CL05A475MP5NRNC",
+      "value": "4.7u",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "status": "review_candidate / application HOLD"
+    },
+    "C21": {
+      "code": "C15008",
+      "mpn": "CL31A107MQHNNNE",
+      "value": "100uF",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "status": "review_candidate / application HOLD"
+    }
+  },
+  "caps_effective_C_guarantees_invented": false,
+  "no_waivers_added": true,
+  "nominal_unit_correction": "C21 100uf -> 100uF, same 100uF nominal in both native sources",
+  "prior_36_assignments_reused": true,
+  "catalog_reuse": "Existing dated common-API raw evidence reused; no new capacitor research or supplier requests."
+}

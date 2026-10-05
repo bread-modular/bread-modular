@@ -1,0 +1,97 @@
+test_ambiguity_requires_board_or_all_boards (test_add_production_files.BoardSelection.test_ambiguity_requires_board_or_all_boards) ... [32mok[0m
+test_discovery_ignores_autosave_and_backups (test_add_production_files.BoardSelection.test_discovery_ignores_autosave_and_backups) ... [32mok[0m
+test_empty_directory_is_an_error (test_add_production_files.BoardSelection.test_empty_directory_is_an_error) ... [32mok[0m
+test_single_board_by_default (test_add_production_files.BoardSelection.test_single_board_by_default) ... [32mok[0m
+test_all_takes_no_targets (test_add_production_files.CommandLine.test_all_takes_no_targets) ... [32mok[0m
+test_dry_run_writes_nothing (test_add_production_files.CommandLine.test_dry_run_writes_nothing) ... [32mok[0m
+test_exporter_arguments_honour_flags (test_add_production_files.CommandLine.test_exporter_arguments_honour_flags) ... [32mok[0m
+test_unknown_target_fails_without_starting_the_exporter (test_add_production_files.CommandLine.test_unknown_target_fails_without_starting_the_exporter) ... [32mok[0m
+test_exports_a_real_module_into_a_temporary_root (test_add_production_files.Integration.test_exports_a_real_module_into_a_temporary_root) ... [33mskipped[0m 'set KICAD_JLCPCB_INTEGRATION=1 to run real kicad-cli exports'
+test_dry_run_prune_keeps_files (test_add_production_files.Mirroring.test_dry_run_prune_keeps_files) ... [32mok[0m
+test_keep_stale_gerbers (test_add_production_files.Mirroring.test_keep_stale_gerbers) ... [32mok[0m
+test_mirrors_archive_and_prunes_only_stale_board_files (test_add_production_files.Mirroring.test_mirrors_archive_and_prunes_only_stale_board_files) ... [32mok[0m
+test_rejects_foreign_members_and_missing_archive (test_add_production_files.Mirroring.test_rejects_foreign_members_and_missing_archive) ... [32mok[0m
+test_directory_file_and_module_name (test_add_production_files.ModuleResolution.test_directory_file_and_module_name) ... [32mok[0m
+test_rejects_unknown_targets (test_add_production_files.ModuleResolution.test_rejects_unknown_targets) ... [32mok[0m
+test_aggregated_quantities_zero_stock_extended_and_unknown (test_assembly.AuditTests.test_aggregated_quantities_zero_stock_extended_and_unknown) ... [32mok[0m
+test_basic_policy_cannot_be_bypassed (test_assembly.AuditTests.test_basic_policy_cannot_be_bypassed) ... [32mok[0m
+test_bom_csv_reuses_existing_parser_and_quantity (test_assembly.AuditTests.test_bom_csv_reuses_existing_parser_and_quantity) ... [32mok[0m
+test_complete_limited_gates_pass_never_order_ready (test_assembly.AuditTests.test_complete_limited_gates_pass_never_order_ready) ... [32mok[0m
+test_cpl_parity_side_and_export_warnings_fail (test_assembly.AuditTests.test_cpl_parity_side_and_export_warnings_fail) ... [32mok[0m
+test_exclusions_manual_explicit_not_silently_smd_filtered (test_assembly.AuditTests.test_exclusions_manual_explicit_not_silently_smd_filtered) ... [32mok[0m
+test_explicit_resistor_current_limit_not_ignored (test_assembly.AuditTests.test_explicit_resistor_current_limit_not_ignored) ... [32mok[0m
+test_mpn_value_and_package_conflicts (test_assembly.AuditTests.test_mpn_value_and_package_conflicts) ... [32mok[0m
+test_native_metadata_conflict_and_no_design_writes (test_assembly.AuditTests.test_native_metadata_conflict_and_no_design_writes) ... [32mok[0m
+test_nonpassive_still_service_audited (test_assembly.AuditTests.test_nonpassive_still_service_audited) ... [32mok[0m
+test_reviews_are_bound_not_blanket_waivers (test_assembly.AuditTests.test_reviews_are_bound_not_blanket_waivers) ... [32mok[0m
+test_supplemental_specs_bound_conflict_and_bias (test_assembly.AuditTests.test_supplemental_specs_bound_conflict_and_bias) ... [32mok[0m
+test_unknown_requirements_reviews_and_mpn_fail (test_assembly.AuditTests.test_unknown_requirements_reviews_and_mpn_fail) ... [32mok[0m
+test_ambiguous_attributes_and_json_rejected (test_assembly.CatalogTests.test_ambiguous_attributes_and_json_rejected) ... [32mok[0m
+test_basic_preferred_extended_extended_are_separate (test_assembly.CatalogTests.test_basic_preferred_extended_extended_are_separate) ... [32mok[0m
+test_cache_roundtrip_no_fallback_and_tamper (test_assembly.CatalogTests.test_cache_roundtrip_no_fallback_and_tamper) ... [32mok[0m
+test_dated_fixture_integrity_and_schema (test_assembly.CatalogTests.test_dated_fixture_integrity_and_schema) ... [32mok[0m
+test_economy_true_false_unknown_not_inferred_from_basic (test_assembly.CatalogTests.test_economy_true_false_unknown_not_inferred_from_basic) ... [32mok[0m
+test_freshness_offline_and_timestamp_syntax (test_assembly.CatalogTests.test_freshness_offline_and_timestamp_syntax) ... [32mok[0m
+test_http_failure_wrong_content_redirect_and_byte_bound (test_assembly.CatalogTests.test_http_failure_wrong_content_redirect_and_byte_bound) ... [32mok[0m
+test_invalid_codes_before_network (test_assembly.CatalogTests.test_invalid_codes_before_network) ... [32mok[0m
+test_malformed_fields_fail_closed (test_assembly.CatalogTests.test_malformed_fields_fail_closed) ... [32mok[0m
+test_memo_budget_and_bounded_search (test_assembly.CatalogTests.test_memo_budget_and_bounded_search) ... [32mok[0m
+test_missing_fields_unknown_and_zero_stock_not_missing (test_assembly.CatalogTests.test_missing_fields_unknown_and_zero_stock_not_missing) ... [32mok[0m
+test_rejected_missing_duplicate_truncated_responses (test_assembly.CatalogTests.test_rejected_missing_duplicate_truncated_responses) ... [32mok[0m
+test_si_value_parser_conservative (test_assembly.CatalogTests.test_si_value_parser_conservative) ... [32mok[0m
+test_errors_json_and_no_traceback (test_assembly.CliTests.test_errors_json_and_no_traceback) ... [32mok[0m
+test_lookup_search_and_missing_fields_nonzero (test_assembly.CliTests.test_lookup_search_and_missing_fields_nonzero) ... [32mok[0m
+test_suggest_cli_and_api_import (test_assembly.CliTests.test_suggest_cli_and_api_import) ... [32mok[0m
+test_bounded_search_and_ranking (test_assembly.PlannerTests.test_bounded_search_and_ranking) ... [32mok[0m
+test_capacitor_parallel_effective_and_series_no_sharing (test_assembly.PlannerTests.test_capacitor_parallel_effective_and_series_no_sharing) ... [32mok[0m
+test_equations_all_four_networks (test_assembly.PlannerTests.test_equations_all_four_networks) ... [32mok[0m
+test_extended_unknown_service_zero_stock_rejected (test_assembly.PlannerTests.test_extended_unknown_service_zero_stock_rejected) ... [32mok[0m
+test_power_and_tolerance_unsafe_candidates_rejected (test_assembly.PlannerTests.test_power_and_tolerance_unsafe_candidates_rejected) ... [32mok[0m
+test_resistor_per_part_corner_stress_voltage_and_current (test_assembly.PlannerTests.test_resistor_per_part_corner_stress_voltage_and_current) ... [32mok[0m
+test_two_resistors_series_parallel_candidates (test_assembly.PlannerTests.test_two_resistors_series_parallel_candidates) ... [32mok[0m
+test_unknown_capacitor_bias_and_regulator_role_review (test_assembly.PlannerTests.test_unknown_capacitor_bias_and_regulator_role_review) ... [32mok[0m
+test_worst_case_tolerance_not_rss (test_assembly.PlannerTests.test_worst_case_tolerance_not_rss) ... [32mok[0m
+test_all_native_exclusions_apply_to_both_csvs (test_export.AssemblyTests.test_all_native_exclusions_apply_to_both_csvs) ... [32mok[0m
+test_bad_position_and_offset_values_fail (test_export.AssemblyTests.test_bad_position_and_offset_values_fail) ... [32mok[0m
+test_blank_schematic_field_falls_back_to_pcb (test_export.AssemblyTests.test_blank_schematic_field_falls_back_to_pcb) ... [32mok[0m
+test_conflicting_part_codes_fail (test_export.AssemblyTests.test_conflicting_part_codes_fail) ... [32mok[0m
+test_custom_catalog_field (test_export.AssemblyTests.test_custom_catalog_field) ... [32mok[0m
+test_grouping_is_mpn_sensitive (test_export.AssemblyTests.test_grouping_is_mpn_sensitive) ... [32mok[0m
+test_grouping_is_natural_and_part_sensitive (test_export.AssemblyTests.test_grouping_is_natural_and_part_sensitive) ... [32mok[0m
+test_invalid_catalog_numbers_fail_not_mpn (test_export.AssemblyTests.test_invalid_catalog_numbers_fail_not_mpn) ... [32mok[0m
+test_missing_positions_fail_but_excluded_missing_positions_do_not (test_export.AssemblyTests.test_missing_positions_fail_but_excluded_missing_positions_do_not) ... [32mok[0m
+test_require_numbers_fails (test_export.AssemblyTests.test_require_numbers_fails) ... [32mok[0m
+test_rotation_offset_is_additive_on_both_sides (test_export.AssemblyTests.test_rotation_offset_is_additive_on_both_sides) ... [32mok[0m
+test_schematic_only_fields_and_mpn (test_export.AssemblyTests.test_schematic_only_fields_and_mpn) ... [32mok[0m
+test_through_hole_and_side_filters (test_export.AssemblyTests.test_through_hole_and_side_filters) ... [32mok[0m
+test_value_and_footprint_mismatch_warn_and_use_actual_board (test_export.AssemblyTests.test_value_and_footprint_mismatch_warn_and_use_actual_board) ... [32mok[0m
+test_xy_conflicts_stop_export (test_export.AssemblyTests.test_xy_conflicts_stop_export) ... [32mok[0m
+test_xy_invalid_and_nonfinite_rejected (test_export.AssemblyTests.test_xy_invalid_and_nonfinite_rejected) ... [32mok[0m
+test_xy_native_numeric_merge_and_zero (test_export.AssemblyTests.test_xy_native_numeric_merge_and_zero) ... [32mok[0m
+test_xy_offsets_are_export_frame_not_rotated_or_bottom_mirrored (test_export.AssemblyTests.test_xy_offsets_are_export_frame_not_rotated_or_bottom_mirrored) ... [32mok[0m
+test_xy_overflow_rejected (test_export.AssemblyTests.test_xy_overflow_rejected) ... [32mok[0m
+test_base_documented_J5_datum_and_three_caps (test_export.KiCadIntegrationTests.test_base_documented_J5_datum_and_three_caps) ... [33mskipped[0m 'set KICAD_JLCPCB_INTEGRATION=1 with kicad-cli installed'
+test_native_fields_exclusions_mixed_sides_and_nonzero_origin (test_export.KiCadIntegrationTests.test_native_fields_exclusions_mixed_sides_and_nonzero_origin) ... [33mskipped[0m 'set KICAD_JLCPCB_INTEGRATION=1 with kicad-cli installed'
+test_repeated_hierarchical_sheet_part_numbers (test_export.KiCadIntegrationTests.test_repeated_hierarchical_sheet_part_numbers) ... [33mskipped[0m 'set KICAD_JLCPCB_INTEGRATION=1 with kicad-cli installed'
+test_repository_boards_two_four_layers_and_existing_lcsc (test_export.KiCadIntegrationTests.test_repository_boards_two_four_layers_and_existing_lcsc) ... [33mskipped[0m 'set KICAD_JLCPCB_INTEGRATION=1 with kicad-cli installed'
+test_duplicate_reference_or_conflicting_field_is_rejected (test_export.NativeXmlMetadataTests.test_duplicate_reference_or_conflicting_field_is_rejected) ... [32mok[0m
+test_empty_native_metadata_is_rejected (test_export.NativeXmlMetadataTests.test_empty_native_metadata_is_rejected) ... [32mok[0m
+test_retains_all_native_exclusion_flags_and_supplier_fields (test_export.NativeXmlMetadataTests.test_retains_all_native_exclusion_flags_and_supplier_fields) ... [32mok[0m
+test_bad_csv_and_duplicate_references_fail (test_export.ParsingTests.test_bad_csv_and_duplicate_references_fail) ... [32mok[0m
+test_board_fields_layers_and_mechanical_exclusion (test_export.ParsingTests.test_board_fields_layers_and_mechanical_exclusion) ... [32mok[0m
+test_csv_quotes_unicode_and_bom (test_export.ParsingTests.test_csv_quotes_unicode_and_bom) ... [32mok[0m
+test_duplicate_and_unannotated_board_references_fail (test_export.ParsingTests.test_duplicate_and_unannotated_board_references_fail) ... [32mok[0m
+test_input_discovery_ambiguity_and_explicit_selection (test_export.ParsingTests.test_input_discovery_ambiguity_and_explicit_selection) ... [32mok[0m
+test_malformed_sexpr (test_export.ParsingTests.test_malformed_sexpr) ... [32mok[0m
+test_sexpr_escaped_strings_and_unicode (test_export.ParsingTests.test_sexpr_escaped_strings_and_unicode) ... [32mok[0m
+test_command_failure_preserves_old_export (test_export.PipelineTests.test_command_failure_preserves_old_export) ... [32mok[0m
+test_complete_pipeline_outputs_and_common_origin (test_export.PipelineTests.test_complete_pipeline_outputs_and_common_origin) ... [32mok[0m
+test_missing_cli_and_old_cli_errors (test_export.PipelineTests.test_missing_cli_and_old_cli_errors) ... [32mok[0m
+test_overwrite_is_explicit_and_leaves_unrelated_files (test_export.PipelineTests.test_overwrite_is_explicit_and_leaves_unrelated_files) ... [32mok[0m
+test_real_base_export_and_fail_closed_offline_audit (test_shared_handoff.BaseHandoffIntegration.test_real_base_export_and_fail_closed_offline_audit) ... [33mskipped[0m 'set KICAD_JLCPCB_INTEGRATION=1 with kicad-cli installed'
+test_assembly_and_skill_command_examples_parse_without_execution (test_shared_handoff.DocumentedCliTests.test_assembly_and_skill_command_examples_parse_without_execution) ... [32mok[0m
+
+----------------------------------------------------------------------
+Ran 92 tests in 0.054s
+
+[32mOK[0m ([33mskipped=6[0m)

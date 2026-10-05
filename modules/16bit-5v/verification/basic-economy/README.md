@@ -1,4 +1,8 @@
-# 16bit-5v Basic/Economy sourcing — partial implementation, HOLD
+# 16bit-5v Basic/Economy evidence — current file generation authorized
+
+> **Current workspace 292 policy supersedes the historical engineering HOLDs below.** The user accepts the existing LED/capacitor/resistor application engineering and explicitly authorizes JLCPCB file generation. U6 already provides +5V → +3V3 and remains included; no circuit/USB redesign was applied. 41/43 R/C retain dated Basic+Economy bindings; original R7/R8, D1 and U5 remain present with their original blank supplier codes. Supplier matching, current stock/quantity and portal acceptance are separate upload/order requirements, not reasons to stall exports. See `generation-policy.json`, `usb-implementation/restore-checkpoint.json`, and [current upload instructions](../../production/RELEASE_STATUS.md). `order_ready=false` is retained; no undocumented facts or human catalog review attestations are invented.
+
+The following sections are preserved historical evidence from workspace 291; their prior engineering HOLD language does **not** revoke the current user's file-generation acceptance.
 
 ## Scope and authority
 
