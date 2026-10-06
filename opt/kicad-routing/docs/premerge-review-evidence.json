@@ -1,0 +1,265 @@
+{
+  "changes": {
+    "groups": "GROUP_UNSUPPORTED for any board/footprint group, whether locked or unlocked; inherited locks are not inferred.",
+    "local_uris": "${KIPRJMOD}/ and canonical project-dir-relative paths, including bounded ../Libraries; absolute/variable/URL/link/alias/escaping/missing paths rejected.",
+    "native_cwd": "Read-only Bubblewrap and every applied CLI/pcbnew stage use the matching PCB parent; bounded runner validates/logs optional cwd; omitted cwd retains TOOL default.",
+    "original_tables_rules": "Never rewritten; real editing automation handoff belongs to integrator."
+  },
+  "current_tool_hashes": {
+    "general_flow.py": "2e68229cc30fa3d502d7f14a953e17d7b2b0b04ec33e913be5140e5c0e8318e7",
+    "general_native.py": "9c7bedd29528b47bb7db0754d2d2d6c49caa61a0c9100c3ccec20f6eb7c0a704",
+    "project_contract.py": "fd548fb3ae4016068064a1e563eacd79d2d20e692f46ddcff1c3f564c513e01f",
+    "runtime.py": "a8678bc5048431337a01b605fff2afc335ade97a362dd959a59265aeaf7d17d9",
+    "safety.py": "62799cf0b189ee16064c66e1af5c2df7f9ae84130bf65a404b1caeddf9e1d552",
+    "tests/native_project_checks.py": "87b8407bc27ea479b4852f16e364057d6de45a6ae1e46911659cc8385e88bfbe",
+    "tests/test_project.py": "14eaf3426c957f5127d587ef783c457a13905c486727a451ce412cf8eae73f89",
+    "tests/test_routing.py": "9164323e961a508566ca6cd8d9dc4c1976a63f76b33977382bcd9f162ed11c89"
+  },
+  "limitations": [
+    "Same conservative v1 subset; all board/footprint groups explicitly unsupported.",
+    "No added engine, feature expansion, table/rule rewriting, released input or production approval."
+  ],
+  "native_tests": {
+    "command": "/usr/bin/python3 -B opt/kicad-routing/tests/native_project_checks.py --run-prefix premerge-cwd-final",
+    "errors": 0,
+    "failures": 0,
+    "group_rejection": "Board/footprint × locked/unlocked, for inspect and plan before native/routing.",
+    "new_review_tests": 2,
+    "passed": 15,
+    "relative_parity": "Copied Orchard with both adjacent and ../Libraries fp/sym table URIs: native invariants, rules, DRC/parity and planned opens unchanged; context/source digests correctly differ.",
+    "source_immutable": true,
+    "subprocess_commands": 42,
+    "summary_sha256": "5e24d89260e3d288c4089741fa315227b1c22125ddf8afaeeab8dad1efaeb6f3"
+  },
+  "probe_history": "Initial native probes retained under ignored work.tmp: fixture table-name collision and native CLI CWD-dependent library findings. Final checks use explicit validated/logged cwd, not a launcher workaround.",
+  "runs": [
+    {
+      "after": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 0
+      },
+      "before": {
+        "schematic_parity": 0,
+        "unconnected_items": 1,
+        "violations": 0
+      },
+      "forced_via": {
+        "count": 1,
+        "diameter_iu": 700000,
+        "drill_iu": 350000,
+        "layers": [
+          0,
+          2
+        ]
+      },
+      "invariant_deltas": [],
+      "metrics": {
+        "after": {
+          "via_count": 1,
+          "wirelength_mm": 58.684619
+        },
+        "before": {
+          "via_count": 0,
+          "wirelength_mm": 28.3
+        }
+      },
+      "run_id": "premerge-cwd-final-via",
+      "run_json_sha256": "b09e3a8355e5f171074d589db0d46fbb4f5ee3b0b0a613141a7b960d8be380bb",
+      "source_immutable": true,
+      "status": "passed"
+    },
+    {
+      "after": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 0
+      },
+      "before": {
+        "schematic_parity": 0,
+        "unconnected_items": 1,
+        "violations": 0
+      },
+      "endpoint_command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/run.py",
+        "route-project",
+        "--snapshot",
+        "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/native-tests-premerge-cwd-final/Relative sibling libraries",
+        "--pcb",
+        "Bench A/Orchard Controller.kicad_pcb",
+        "--plan",
+        "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/native-tests-premerge-cwd-final/relative-approved-plan.json",
+        "--run-id",
+        "premerge-cwd-final-relative",
+        "--apply"
+      ],
+      "invariant_deltas": [],
+      "metrics": {
+        "after": {
+          "via_count": 1,
+          "wirelength_mm": 58.684619
+        },
+        "before": {
+          "via_count": 0,
+          "wirelength_mm": 28.3
+        }
+      },
+      "native_stage_cwd": [
+        {
+          "command": [
+            "/usr/bin/kicad-cli",
+            "pcb",
+            "drc",
+            "--format",
+            "json",
+            "--severity-all",
+            "--all-track-errors",
+            "--schematic-parity",
+            "--exit-code-violations",
+            "--refill-zones",
+            "--save-board",
+            "-o",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before-drc.json",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before/Bench A/Orchard Controller.kicad_pcb"
+          ],
+          "cwd": "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before/Bench A"
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "-X",
+            "faulthandler",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/general_native.py",
+            "inspect",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before",
+            "Bench A/Orchard Controller.kicad_pcb",
+            "{\"authorized\":[\"DATA\"]}"
+          ],
+          "cwd": "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before/Bench A"
+        },
+        {
+          "command": [
+            "/usr/bin/kicad-cli",
+            "sch",
+            "export",
+            "netlist",
+            "--format",
+            "kicadxml",
+            "-o",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/schematic-nets.xml",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before/Bench A/Orchard Controller.kicad_sch"
+          ],
+          "cwd": "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before/Bench A"
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "-X",
+            "faulthandler",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/general_native.py",
+            "export",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before",
+            "Bench A/Orchard Controller.kicad_pcb",
+            "{\"dsn\":\"/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/input-premerge-cwd-final-relative.dsn\",\"plan\":{\"authorized_reroute_nets\":[\"DATA\"],\"baseline_open_pairs\":[{\"net\":\"DATA\",\"uuids\":[\"03b26fe8-291d-5920-8cc3-d69f4e6365a9\",\"5d7b9a95-8332-565d-aa36-e16557954c50\"]}],\"context_digest\":\"290781603930f3470c135eb0dd2923ed8fc64235eec2f61904fbc2dfa668c6c9\",\"ignored_checks\":[],\"pcb\":\"Bench A/Orchard Controller.kicad_pcb\",\"pcb_sha256\":\"9008167bbb9ba8a435b5b427b526d512bb47bfebb7af47bc43cc3b399eae1c8c\",\"protected_nets\":[\"SENSITIVE\"],\"schema\":\"bread-local-route-plan/v1\",\"source_digest\":\"2883f64e83398c7835309a215f5b9da46ef6692ff4f7d0e248ba1530d8c48198\",\"supported_subset\":\"kicad-10.0.6-two-layer-scalar-v1\"},\"admission\":{\"files\":{\"Bench A/Orchard Controller.kicad_dru\":{\"sha256\":\"d8fafc0ef5372f404c2806a756a3f67507ecef83bbb7a62b22b5b680d191fd72\",\"mode\":436},\"Bench A/Orchard Controller.kicad_pcb\":{\"sha256\":\"9008167bbb9ba8a435b5b427b526d512bb47bfebb7af47bc43cc3b399eae1c8c\",\"mode\":436},\"Bench A/Orchard Controller.kicad_pro\":{\"sha256\":\"b69f85c349208eb1b07deed202d8b3766ddf3ce1fa62f232d859f16cc25f6030\",\"mode\":436},\"Bench A/Orchard Controller.kicad_sch\":{\"sha256\":\"d50afc1fb1bf8eb60fd178bf2001ce586d768484497ae182223e054b05f97f45\",\"mode\":436},\"Bench A/fp-lib-table\":{\"sha256\":\"41c534f9f029cc353b5c7ef63e6035de4dd2013bd502696b09287678043b31cc\",\"mode\":436},\"Bench A/sym-lib-table\":{\"sha256\":\"9cd1172a73764090e0ae292bbc904d50455cd26000473cae5e8c2b69145a9b15\",\"mode\":436},\"Libraries/Orchard.kicad_sym\":{\"sha256\":\"9b58528bd891c894656577d3022db4edd5b6910cf132357cd309becfabb005e9\",\"mode\":436},\"Libraries/Orchard.pretty/Oval.kicad_mod\":{\"sha256\":\"026b0c945c44bebecb6a1cb65a4a1e55944dab1c42d792ec4b313600e89a454d\",\"mode\":436},\"Libraries/Orchard.pretty/Rect.kicad_mod\":{\"sha256\":\"430ee05ad39bd32592c7abc82cbc20d1fddc79c00d4b69465051dc5ddac49876\",\"mode\":436},\"Libraries/Orchard.pretty/Round.kicad_mod\":{\"sha256\":\"8d1257ef82b088905291bd14432e9a28bb732e4dbda45ff6b2b306f147ccc813\",\"mode\":436}},\"source_digest\":\"2883f64e83398c7835309a215f5b9da46ef6692ff4f7d0e248ba1530d8c48198\",\"context_digest\":\"290781603930f3470c135eb0dd2923ed8fc64235eec2f61904fbc2dfa668c6c9\",\"pcb_sha256\":\"9008167bbb9ba8a435b5b427b526d512bb47bfebb7af47bc43cc3b399eae1c8c\",\"rules\":{\"clearance\":0.24,\"track_width\":0.32,\"via_diameter\":0.7,\"via_drill\":0.35,\"edge_clearance\":0.65,\"minima\":{\"min_clearance\":0.2,\"min_track_width\":0.25,\"min_via_diameter\":0.6,\"min_through_hole_diameter\":0.3}},\"outline\":[[0.0,0.0],[0.0,30.0],[40.0,0.0],[40.0,30.0]]}}"
+          ],
+          "cwd": "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before/Bench A"
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "-X",
+            "faulthandler",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/general_native.py",
+            "import",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before",
+            "Bench A/Orchard Controller.kicad_pcb",
+            "{\"dsn\":\"/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/input-premerge-cwd-final-relative.dsn\",\"ses\":\"/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/result.ses\",\"candidate\":\"/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/after/Bench A/Orchard Controller.kicad_pcb\",\"plan\":{\"authorized_reroute_nets\":[\"DATA\"],\"baseline_open_pairs\":[{\"net\":\"DATA\",\"uuids\":[\"03b26fe8-291d-5920-8cc3-d69f4e6365a9\",\"5d7b9a95-8332-565d-aa36-e16557954c50\"]}],\"context_digest\":\"290781603930f3470c135eb0dd2923ed8fc64235eec2f61904fbc2dfa668c6c9\",\"ignored_checks\":[],\"pcb\":\"Bench A/Orchard Controller.kicad_pcb\",\"pcb_sha256\":\"9008167bbb9ba8a435b5b427b526d512bb47bfebb7af47bc43cc3b399eae1c8c\",\"protected_nets\":[\"SENSITIVE\"],\"schema\":\"bread-local-route-plan/v1\",\"source_digest\":\"2883f64e83398c7835309a215f5b9da46ef6692ff4f7d0e248ba1530d8c48198\",\"supported_subset\":\"kicad-10.0.6-two-layer-scalar-v1\"},\"association\":{\"dsn_header\":\"/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/input-premerge-cwd-final-relative.dsn\",\"dsn_sha256\":\"189d3170759dffb5058749a377934597be8a955e73810cea943ac6c7aab3a6fa\",\"dsn_translation_verified\":true,\"fixed_copper_count\":2,\"removed_authorized_unlocked_count\":1,\"session_design\":\"input-premerge-cwd-final-relative\",\"session_id\":\"premerge-cwd-final-relative\",\"session_nonce\":\"dc7f77d07fbf4325859784ec49895959\",\"plan_sha256\":\"a591e0b19569f15a00e8cebc5f8ab3d316c42862c1843215c87fe951f475e558\",\"plan_file_sha256\":\"bf58dd84ba18c026d0d712e8efd1043de6a9ca6de2c07c3dc09a1946b1180377\",\"pcb\":\"Bench A/Orchard Controller.kicad_pcb\",\"pcb_sha256\":\"9008167bbb9ba8a435b5b427b526d512bb47bfebb7af47bc43cc3b399eae1c8c\",\"source_digest\":\"2883f64e83398c7835309a215f5b9da46ef6692ff4f7d0e248ba1530d8c48198\",\"source_hashes\":{\"Bench A/Orchard Controller.kicad_dru\":{\"sha256\":\"d8fafc0ef5372f404c2806a756a3f67507ecef83bbb7a62b22b5b680d191fd72\",\"mode\":436},\"Bench A/Orchard Controller.kicad_pcb\":{\"sha256\":\"9008167bbb9ba8a435b5b427b526d512bb47bfebb7af47bc43cc3b399eae1c8c\",\"mode\":436},\"Bench A/Orchard Controller.kicad_pro\":{\"sha256\":\"b69f85c349208eb1b07deed202d8b3766ddf3ce1fa62f232d859f16cc25f6030\",\"mode\":436},\"Bench A/Orchard Controller.kicad_sch\":{\"sha256\":\"d50afc1fb1bf8eb60fd178bf2001ce586d768484497ae182223e054b05f97f45\",\"mode\":436},\"Bench A/fp-lib-table\":{\"sha256\":\"41c534f9f029cc353b5c7ef63e6035de4dd2013bd502696b09287678043b31cc\",\"mode\":436},\"Bench A/sym-lib-table\":{\"sha256\":\"9cd1172a73764090e0ae292bbc904d50455cd26000473cae5e8c2b69145a9b15\",\"mode\":436},\"Libraries/Orchard.kicad_sym\":{\"sha256\":\"9b58528bd891c894656577d3022db4edd5b6910cf132357cd309becfabb005e9\",\"mode\":436},\"Libraries/Orchard.pretty/Oval.kicad_mod\":{\"sha256\":\"026b0c945c44bebecb6a1cb65a4a1e55944dab1c42d792ec4b313600e89a454d\",\"mode\":436},\"Libraries/Orchard.pretty/Rect.kicad_mod\":{\"sha256\":\"430ee05ad39bd32592c7abc82cbc20d1fddc79c00d4b69465051dc5ddac49876\",\"mode\":436},\"Libraries/Orchard.pretty/Round.kicad_mod\":{\"sha256\":\"8d1257ef82b088905291bd14432e9a28bb732e4dbda45ff6b2b306f147ccc813\",\"mode\":436}},\"context_digest\":\"290781603930f3470c135eb0dd2923ed8fc64235eec2f61904fbc2dfa668c6c9\",\"context_hashes\":{\"Bench A/Orchard Controller.kicad_dru\":{\"sha256\":\"d8fafc0ef5372f404c2806a756a3f67507ecef83bbb7a62b22b5b680d191fd72\",\"mode\":436},\"Bench A/Orchard Controller.kicad_pro\":{\"sha256\":\"b69f85c349208eb1b07deed202d8b3766ddf3ce1fa62f232d859f16cc25f6030\",\"mode\":436},\"Bench A/Orchard Controller.kicad_sch\":{\"sha256\":\"d50afc1fb1bf8eb60fd178bf2001ce586d768484497ae182223e054b05f97f45\",\"mode\":436},\"Bench A/fp-lib-table\":{\"sha256\":\"41c534f9f029cc353b5c7ef63e6035de4dd2013bd502696b09287678043b31cc\",\"mode\":436},\"Bench A/sym-lib-table\":{\"sha256\":\"9cd1172a73764090e0ae292bbc904d50455cd26000473cae5e8c2b69145a9b15\",\"mode\":436},\"Libraries/Orchard.kicad_sym\":{\"sha256\":\"9b58528bd891c894656577d3022db4edd5b6910cf132357cd309becfabb005e9\",\"mode\":436},\"Libraries/Orchard.pretty/Oval.kicad_mod\":{\"sha256\":\"026b0c945c44bebecb6a1cb65a4a1e55944dab1c42d792ec4b313600e89a454d\",\"mode\":436},\"Libraries/Orchard.pretty/Rect.kicad_mod\":{\"sha256\":\"430ee05ad39bd32592c7abc82cbc20d1fddc79c00d4b69465051dc5ddac49876\",\"mode\":436},\"Libraries/Orchard.pretty/Round.kicad_mod\":{\"sha256\":\"8d1257ef82b088905291bd14432e9a28bb732e4dbda45ff6b2b306f147ccc813\",\"mode\":436}},\"ses_sha256\":\"374f7acb20e322877f77cde20fc5a69c7037ff790bc59b85c14ecbfe11151f7d\"},\"source_hashes\":{\"Bench A/Orchard Controller.kicad_dru\":{\"sha256\":\"d8fafc0ef5372f404c2806a756a3f67507ecef83bbb7a62b22b5b680d191fd72\",\"mode\":436},\"Bench A/Orchard Controller.kicad_pcb\":{\"sha256\":\"9008167bbb9ba8a435b5b427b526d512bb47bfebb7af47bc43cc3b399eae1c8c\",\"mode\":436},\"Bench A/Orchard Controller.kicad_pro\":{\"sha256\":\"b69f85c349208eb1b07deed202d8b3766ddf3ce1fa62f232d859f16cc25f6030\",\"mode\":436},\"Bench A/Orchard Controller.kicad_sch\":{\"sha256\":\"d50afc1fb1bf8eb60fd178bf2001ce586d768484497ae182223e054b05f97f45\",\"mode\":436},\"Bench A/fp-lib-table\":{\"sha256\":\"41c534f9f029cc353b5c7ef63e6035de4dd2013bd502696b09287678043b31cc\",\"mode\":436},\"Bench A/sym-lib-table\":{\"sha256\":\"9cd1172a73764090e0ae292bbc904d50455cd26000473cae5e8c2b69145a9b15\",\"mode\":436},\"Libraries/Orchard.kicad_sym\":{\"sha256\":\"9b58528bd891c894656577d3022db4edd5b6910cf132357cd309becfabb005e9\",\"mode\":436},\"Libraries/Orchard.pretty/Oval.kicad_mod\":{\"sha256\":\"026b0c945c44bebecb6a1cb65a4a1e55944dab1c42d792ec4b313600e89a454d\",\"mode\":436},\"Libraries/Orchard.pretty/Rect.kicad_mod\":{\"sha256\":\"430ee05ad39bd32592c7abc82cbc20d1fddc79c00d4b69465051dc5ddac49876\",\"mode\":436},\"Libraries/Orchard.pretty/Round.kicad_mod\":{\"sha256\":\"8d1257ef82b088905291bd14432e9a28bb732e4dbda45ff6b2b306f147ccc813\",\"mode\":436}}}"
+          ],
+          "cwd": "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/before/Bench A"
+        },
+        {
+          "command": [
+            "/usr/bin/kicad-cli",
+            "pcb",
+            "drc",
+            "--format",
+            "json",
+            "--severity-all",
+            "--all-track-errors",
+            "--schematic-parity",
+            "--exit-code-violations",
+            "--refill-zones",
+            "--save-board",
+            "-o",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/after-drc.json",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/after/Bench A/Orchard Controller.kicad_pcb"
+          ],
+          "cwd": "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/after/Bench A"
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "-X",
+            "faulthandler",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/general_native.py",
+            "inspect",
+            "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/after",
+            "Bench A/Orchard Controller.kicad_pcb",
+            "{\"authorized\":[\"DATA\"]}"
+          ],
+          "cwd": "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/runs/premerge-cwd-final-relative/after/Bench A"
+        }
+      ],
+      "run_id": "premerge-cwd-final-relative",
+      "run_json_sha256": "b403105dced391b089e44aebbee8f0a0d423fec5087aaa387e3d1d34b8b41673",
+      "source_immutable": true,
+      "status": "passed"
+    },
+    {
+      "after": {
+        "ignored_checks": [],
+        "opens": 0,
+        "parity": 0,
+        "violations": 0
+      },
+      "before": {
+        "ignored_checks": [],
+        "opens": 2,
+        "parity": 0,
+        "violations": 0
+      },
+      "invariant_deltas": [],
+      "metrics": {
+        "after": {
+          "via_count": 0,
+          "wirelength_mm": 91.287654
+        },
+        "before": {
+          "via_count": 0,
+          "wirelength_mm": 28.0
+        }
+      },
+      "run_id": "premerge-review-smoke",
+      "run_json_sha256": "c2de0c116d4cdbab84298a53de95fc37a03fa9c31f6701ea0eb43643e88684cd",
+      "source_immutable": true,
+      "status": "passed"
+    }
+  ],
+  "runtime_provenance_sha256": "790ef3a9212d3346206e4430c010ae0672bb1333b134fbf3bcb59327e526699c",
+  "schema": "bread-local-route-premerge-review/v1",
+  "scope": "Only bounded relative local URI compatibility, matching native stage cwd, and fail-closed board/footprint groups; generated inputs only.",
+  "unit_tests": {
+    "command": "/usr/bin/python3 -B -m unittest discover -s opt/kicad-routing/tests -v",
+    "log_sha256": "32dbd70eff8eb521947101405df0529cdd747b7f52af8df644ed9ff93acec7ea",
+    "new_review_tests": 11,
+    "passed": 75,
+    "previous_total": 64,
+    "unchanged_historical_baseline": 32
+  }
+}

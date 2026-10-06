@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Stdlib facade: read-only doctor, opt-in prepare-runtime, synthetic-only smoke."""
+"""Local native DSN/SES routing: bounded projects plus unchanged historical smoke."""
 import sys
 sys.dont_write_bytecode = True
 import argparse
@@ -230,6 +230,19 @@ def main(argv=None):
     smoke_parser = sub.add_parser('smoke',help='Offline synthetic-only native DSN/SES + saved-board DRC; NO board input')
     smoke_parser.add_argument('--run-id',help='New evidence directory label (not a path); never reuse an existing label')
     smoke_parser.add_argument('--route-timeout',type=int,default=120,help='Java job deadline seconds (1..120), default 120; max 10 passes')
+    for name in ['inspect-project','plan-project','route-project']:
+        command = sub.add_parser(name,help='Bounded standalone project '+name+'; see API.md/SUPPORTED_SUBSET.md')
+        command.add_argument('--snapshot',required=True,help='Immutable bounded snapshot directory (caller-independent)')
+        command.add_argument('--pcb',required=True,help='Canonical snapshot-relative .kicad_pcb path')
+        if name in ['inspect-project','plan-project']:
+            command.add_argument('--reroute-net',action='append',default=[],help='Explicit ordinary net name; repeat for each authorization')
+        else:
+            command.add_argument('--plan',required=True,help='Reviewed strict v1 JSON plan file OUTSIDE snapshot')
+            command.add_argument('--run-id',required=True,help='Unique new output/evidence label, not a path')
+            command.add_argument('--route-timeout',type=int,default=120,help='Offline Java deadline 1..120 seconds')
+            mode=command.add_mutually_exclusive_group()
+            mode.add_argument('--apply',action='store_true',help='Explicit plan approval: create NEW candidate/evidence only')
+            mode.add_argument('--dry-run',action='store_true',help='Read-only plan validation (default); no filesystem writes')
     args = parser.parse_args(argv)
     try:
         if args.command == 'doctor':
@@ -238,6 +251,19 @@ def main(argv=None):
             data = runtime.prepare(args.allow_downloads)
             result = {'status':data['status'],'directory':str(runtime.RUNTIME), 'pins':runtime.PINS,
                       'downloads':data['downloads'],'notice_files':len(data['notices']),'execution':'NONE'}
+        elif args.command in ['inspect-project','plan-project','route-project']:
+            import general_flow
+            if args.command=='plan-project':
+                result=general_flow.plan_project(args.snapshot,args.pcb,args.reroute_net)
+            elif args.command=='inspect-project':
+                admission,info,drc=general_flow.inspect_project(args.snapshot,args.pcb,args.reroute_net)
+                result={'status':'inspected','admission':admission,'native':info,'drc':drc,
+                        'limitations':general_flow.LIMITATIONS}
+            else:
+                data=general_flow.route_project(args.snapshot,args.pcb,args.plan,args.run_id,args.route_timeout,args.apply)
+                result=data if data['status']=='dry-run' else {k:data.get(k) for k in [
+                    'operation','status','error','run_directory','candidate','session_id','source_immutable',
+                    'before_counts','after_counts','invariant_deltas','metrics','duration_seconds','manufacturing_status']}
         else:
             data = smoke(args.run_id,args.route_timeout)
             result = {key:data.get(key) for key in ['status','error','run_directory','duration_seconds',
@@ -245,7 +271,7 @@ def main(argv=None):
         print(json.dumps(result,indent=2,sort_keys=True))
         return 1 if result.get('status') == 'failed' else 0
     except (GateError,OSError,ValueError) as exc:
-        print(json.dumps({'status':'failed','error':f'{type(exc).__name__}: {exc}'}),file=sys.stderr)
+        print(json.dumps({'status':'failed','error':exc.record() if hasattr(exc,'record') else {'code':'INPUT_OR_RUNTIME','message':f'{type(exc).__name__}: {exc}'}}),file=sys.stderr)
         return 1
 
 
