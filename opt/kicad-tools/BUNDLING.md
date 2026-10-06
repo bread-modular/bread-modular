@@ -46,7 +46,7 @@ python3 -B '/tmp/Portable KiCad Toolkit/opt/kicad-tools/kicad_tools.py' doctor
 The destination must be **new**, outside the distribution source tree, with no
 symlink destination ancestors or overwrite/alias. Dry-run creates **nothing**,
 including parent directories. Fixed reviewed payload: toolkit source, stdlib
-tests/template/docs, canonical JLCPCB scripts/docs/examples/tests, both canonical
+tests/template/docs, ALL automation/schematic source/docs/tests, canonical JLCPCB scripts/docs/examples/tests, both canonical
 skills, MIT LICENSE and a portable root README. Exactly the three relative
 compatibility directory symlinks above are recreated; no alias file payloads
 are copied or hashed a second time.
@@ -100,17 +100,22 @@ unreviewed links added to a distribution do not enter the next bundle.
 
 ## Optional routing payload (separately owned)
 
-`bundle --include-routing` retains the existing **fixed reviewed allowlist**:
-six Python source files, README, `tests/test_routing.py`, root research doc and
-exactly the historical `smoke-summary.json`. No glob/recursive discovery,
-arbitrary JSON, runtime/JAR/vendor files or `*.tmp` is copied. An optional
-`bundle-files.json` must include the complete reviewed payload (only the exact
-routing skill path may be added); it is copied so re-bundling preserves that
-contract. Paths are unique repo-relative files, at most 128, with no symlinks,
-runtime, secret or temporary trees. The two exact routing JSON paths are not
-general JSON permission. The three core aliases grant **no** routing exceptions.
-Missing sibling is reported gracefully. No routing implementation, acquisition
-or runtime changes are part of this consolidation.
+`bundle --include-routing` uses a **fixed reviewed allowlist** for historical
+and ordinary-project source, tests and detailed docs: `general_flow.py`,
+`general_native.py`, `project_contract.py`, independent project fixture/native
+checks, `API.md`, `SUPPORTED_SUBSET.md`, `SAFETY.md`, `TESTING.md`, `SMOKE.md`,
+root research and the exact compact evidence files `smoke-summary.json`,
+`docs/project-evidence.json`, `docs/premerge-review-evidence.json`.
+Core allowlists include all automation/schematic sources, docs, tests and
+[CLI handoff regression](tests/native_handoff.py). No broad glob/copy, arbitrary
+JSON, runtime/JAR/vendor, work/logs or `*.tmp` payload is authorized.
+
+An optional `bundle-files.json` must include the complete reviewed routing payload
+(only the exact routing skill path may be added); it is copied so re-bundling
+preserves that contract. Paths are unique repo-relative files, at most 128, with
+no symlinks, runtime, secrets or temporary trees. The named JSON files grant no
+general JSON permission. The three core aliases grant no routing exceptions.
+Missing optional sibling is reported gracefully, never installed automatically.
 
 ## Regressions
 

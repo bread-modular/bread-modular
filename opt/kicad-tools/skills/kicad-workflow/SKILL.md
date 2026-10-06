@@ -1,6 +1,6 @@
 ---
 name: kicad-workflow
-description: Common-tool-first portable KiCad native hierarchy/netlist inspection, private ERC/DRC, JLCPCB exports and optional bounded routing without source or approval policy changes.
+description: Common-tool-first portable KiCad native hierarchy/netlist inspection, offline PCB/schematic edits, private ERC/DRC, JLCPCB exports and optional bounded routing without source or approval policy changes.
 ---
 
 # Portable KiCad workflow
@@ -13,7 +13,9 @@ See [layout and portability](../../BUNDLING.md).
 
 Read the [toolkit documentation](../../README.md) and actual
 `--help` first. Use `opt/kicad-tools/kicad_tools.py` for doctor, private checks,
-netlist inspection/comparison and install-by-copy. Use the unchanged shared
+netlist inspection/comparison, `pcb inspect|plan|apply`, flat
+`schematic inspect|plan|apply` and install-by-copy. Discover only the relevant
+command first; [workflow/API](../../API.md) links the detailed schemas. Use the unchanged shared
 [JLCPCB exporter](../../jlcpcb/README.md) and
 [assembly tools](../../jlcpcb/ASSEMBLY.md) directly or through its
 transparent facade. Do not generate a new exporter/catalog/parser/router unless
@@ -56,6 +58,22 @@ python3 -B opt/kicad-tools/kicad_tools.py netlist inspect '/tmp/new actual check
   intentionally frozen exporter duplicates. See the
   [migration inventory](../../MIGRATION.md).
 
+## Candidate edits before routing
+
+Use [PCB](../../automation/docs/api.md) geometry operations for explicit native
+move/rotate/flip, copper/vias/zones, outline/text and bounded deletion. They are
+not live GUI/IPC push/shove and do not automatically place components; moving a
+footprint does **not** drag traces. Keep requests/plans separate, inspect first,
+review plan then apply to a NEW output. Only a completed `completion.json`
+candidate with explicit `--allow-draft-opens` may hand off connectivity opens;
+shorts, clearances, ERC and parity are never waived. Do not call drafts accepted.
+
+[Flat schematic primitives](../../schematic/docs/api.md) add only wire polylines,
+junctions and local labels. Review native pin/net delta/ERC/save-reload evidence.
+They never load or synchronize a PCB: perform explicit downstream synchronization
+and PCB DRC/parity before accepting a circuit change. Existing approval policies
+still govern every operation; no source overwrite or frozen migration.
+
 ## Routing sequence (optional, never automatic)
 
 Manually inspect and constrain critical nets **before** optional autorouting:
@@ -74,9 +92,19 @@ python3 -B opt/kicad-tools/kicad_tools.py route --help
 
 The facade only delegates when the optional sibling `opt/kicad-routing/run.py`
 exists; otherwise it reports unavailable. Consult the sibling's actual help for
-`doctor|prepare-runtime|smoke`. Native synthetic DSN/SES smoke is offline; runtime
+`doctor|prepare-runtime|inspect-project|plan-project|route-project|smoke`. Ordinary supported-project DSN/SES routing is offline; runtime
 downloads must be explicit opt-in. No fallback installation or network fetching
 is introduced by this skill. Runtime/JAR/temporary files are not bundled.
+
+Use the completed PCB candidate's **`inputs/` subtree** as `--snapshot`; derive
+`--pcb` from its completion record relative to `inputs/`. No hand-edits to board,
+rules or library tables are needed. Inspect and `plan-project --reroute-net NAME`
+from actual planned nets, review the hash-bound plan outside that subtree, then
+explicit offline `route-project --apply`. The sibling accepts bounded relative
+or `${KIPRJMOD}` local library URIs and uses the PCB parent's cwd. Read its subset:
+groups, zones, complex rules/stackups are rejected. Verify source hashes, locked
+and non-authorized copper, placements/settings and final native DRC/parity/opens.
+See the [exact CLI handoff](../../API.md).
 
 ## Export, assembly and portability
 
@@ -103,5 +131,6 @@ relative layout. Dry-run writes nothing. Exact source-file hashes plus LICENSE
 are tooling provenance, not hardware approval or signatures. No global install,
 projects, histories, credentials, outputs, vendor code or runtime is copied.
 Run unit/CLI/no-write tests and opt-in **synthetic-only** native relocation tests
-as documented before reuse; report passes/skips/failures honestly. Real combined
-optional routing code needs its own post-merge integration verification.
+as documented before reuse; report passes/skips/failures honestly. Combined source/relocation and real CLI handoff evidence is retained in
+[verification](../../VERIFICATION.md); earlier synthetic-only routing evidence
+is historical, not a current capability limit.

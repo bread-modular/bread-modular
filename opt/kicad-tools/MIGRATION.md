@@ -15,7 +15,8 @@ migration/finalizer is replayed by this toolkit.
 | ERC/DRC orchestration | `check`, private dependency closure, explicit raw reports/logs/hashes | No edits to rules, exclusions, ignores, connectivity or component placement |
 | `modules/{base,16bit-5v,32bit-5v}/tools` | **Nothing executed or modified** by toolkit implementation/tests | Hash-frozen finalizers, regenerators, engineering verifiers and sourcing guards are board evidence, not templates |
 | `modules/16bit-5v/tools/jlcpcb_export.py` | **No extraction/replacement** | Intentional frozen duplicate required by guarded evidence |
-| `opt/kicad-routing` / `docs/kicad-routing-research.md` | Optional transparent `route` facade and source-only bundle hook | Separately owned routing/runtime/synthetic DSN/SES implementation; no edits, rebases, downloads or router implementation here |
+| `automation` / `schematic` | Subprocess-isolated `pcb` / `schematic` inspect/plan/apply and existing Python APIs | Explicit NEW geometry/draft outputs; no live GUI push/shove, automatic placement, trace drag or silent PCB synchronization |
+| `opt/kicad-routing` / `docs/kicad-routing-research.md` | Optional transparent ordinary-project `route` facade and explicit source/docs/tests/evidence bundle | Supported subset gates and offline sandbox remain; historical smoke stays historical. Runtime downloads require explicit authorization, never occur during routing |
 | Libraries / projects / production / firmware / `.history` | Not bundled; source native dependencies copied privately only during checks | User approval/source policies and unrelated main/workspace dirt unchanged |
 
 ## Moving to another KiCad project
@@ -28,7 +29,8 @@ migration/finalizer is replayed by this toolkit.
    source hashes and all pre-existing findings. Native hierarchical annotation
    and ref/pin/net identity outrank regex-only flattened comparisons.
 4. Apply only user-approved design edits to distinct review outputs. Use native
-   GUI/Python per the project's policies; never weaken frozen guards or run a
+   `pcb` / `schematic` candidate workflows or native GUI/Python per the project's
+   policies; schematic edits require explicit PCB sync. Never weaken frozen guards or run a
    copied module finalizer on a different board.
 5. Manually constrain and route critical nets before optional bounded autorouting.
    Verify source hashes, ERC/DRC/parity and visual output afterward. Export through

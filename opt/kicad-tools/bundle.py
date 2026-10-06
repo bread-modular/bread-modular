@@ -12,9 +12,15 @@ from project import new_output
 ROOT = Path(__file__).resolve().parents[2]
 TOOLKIT_FILES = (
     "kicad_tools.py", "native.py", "project.py", "bundle.py", "README.md", "GUIDE.md", "BUNDLING.md", "MIGRATION.md",
-    "VERIFICATION.md", "BUNDLE_README.md", "examples/project.json",
+    "VERIFICATION.md", "BUNDLE_README.md", "API.md", "examples/project.json",
     "tests/fixtures.py", "tests/test_native.py", "tests/test_project.py", "tests/test_cli.py", "tests/test_integration.py",
-    "tests/test_consolidation.py",
+    "tests/test_consolidation.py", "tests/test_facade.py", "tests/native_handoff.py",
+    "automation/__init__.py", "automation/run.py", "automation/api.py",
+    "automation/_bridge.py", "automation/_worker.py", "automation/schema.py",
+    "automation/README.md", "automation/VERIFICATION.md", "automation/docs/api.md", "automation/docs/safety.md",
+    "automation/tests/fixtures.py", "automation/tests/test_unit.py", "automation/tests/test_native.py",
+    "schematic/__init__.py", "schematic/cli.py", "schematic/api.py", "schematic/geometry.py",
+    "schematic/README.md", "schematic/docs/api.md", "schematic/tests/synthetic.py", "schematic/tests/test_primitives.py",
 )
 SHARED_FILES = (
     "export.py", "add_production_files.py", "assembly.py", "bom_audit.py", "catalog.py", "passive_planner.py",
@@ -39,6 +45,12 @@ ROUTING_FILES = (
     "opt/kicad-routing/safety.py", "opt/kicad-routing/sandbox.py",
     "opt/kicad-routing/README.md", "opt/kicad-routing/tests/test_routing.py",
     "opt/kicad-routing/smoke-summary.json", "docs/kicad-routing-research.md",
+    "opt/kicad-routing/general_flow.py", "opt/kicad-routing/general_native.py", "opt/kicad-routing/project_contract.py",
+    "opt/kicad-routing/API.md", "opt/kicad-routing/SUPPORTED_SUBSET.md", "opt/kicad-routing/SAFETY.md",
+    "opt/kicad-routing/TESTING.md", "opt/kicad-routing/SMOKE.md",
+    "opt/kicad-routing/tests/project_fixture.py", "opt/kicad-routing/tests/test_project.py",
+    "opt/kicad-routing/tests/native_project_checks.py",
+    "opt/kicad-routing/docs/project-evidence.json", "opt/kicad-routing/docs/premerge-review-evidence.json",
 )
 ROUTING_ALLOWED = set(ROUTING_FILES) | {".agents/skills/kicad-routing/SKILL.md"}
 ROUTING_FORBIDDEN = {"runtime", "runtimes", "downloads", "vendor", ".git", ".history", "node_modules", "__pycache__", "tmp", "build", "out", "secrets", "credentials"}
@@ -102,7 +114,7 @@ def routing_files(root):
     for name in files:
         path = Path(name)
         if path.is_absolute() or ".." in path.parts or name not in ROUTING_ALLOWED or any(part.lower() in ROUTING_FORBIDDEN or part.endswith(".tmp") for part in path.parts):
-            raise Error(f"Routing bundle allows reviewed code/docs/tests and exact smoke-summary.json only, never runtime/temporary files: {name}")
+            raise Error(f"Routing bundle allows reviewed code/docs/tests and exact named evidence JSON only, never runtime/temporary files: {name}")
         regular(root / path, root)
     if not set(ROUTING_FILES).issubset(files):
         raise Error("Routing bundle contract must include the complete reviewed source/docs/tests/evidence payload")

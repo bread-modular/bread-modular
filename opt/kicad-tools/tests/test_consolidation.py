@@ -174,7 +174,10 @@ class ConsolidationTests(unittest.TestCase):
     def test_current_docs_and_canonical_skills_links_in_repository_and_core_bundle(self):
         distribution, _ = self.make_distribution()
         docs = ("README.md", "opt/kicad-tools/README.md", "opt/kicad-tools/GUIDE.md",
-                "opt/kicad-tools/BUNDLING.md", "opt/kicad-tools/jlcpcb/README.md",
+                "opt/kicad-tools/BUNDLING.md", "opt/kicad-tools/API.md",
+                "opt/kicad-tools/automation/README.md", "opt/kicad-tools/automation/docs/api.md",
+                "opt/kicad-tools/automation/docs/safety.md", "opt/kicad-tools/schematic/README.md",
+                "opt/kicad-tools/schematic/docs/api.md", "opt/kicad-tools/jlcpcb/README.md",
                 "opt/kicad-tools/jlcpcb/ASSEMBLY.md",
                 "opt/kicad-tools/skills/kicad-workflow/SKILL.md",
                 "opt/kicad-tools/skills/jlcpcb-assembly/SKILL.md",

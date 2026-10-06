@@ -249,8 +249,10 @@ class BundleTests(unittest.TestCase):
             self.assertEqual(sha256(distribution / name), digest)
         readme = distribution / "opt/kicad-routing/README.md"
         links = re.findall(r"\]\(([^)]+)\)", readme.read_text())
-        self.assertIn("../../docs/kicad-routing-research.md", links)
-        self.assertIn("smoke-summary.json", links)
+        self.assertIn("API.md", links)
+        self.assertIn("SMOKE.md", links)
+        historical = distribution / "opt/kicad-routing/SMOKE.md"
+        self.assertIn("smoke-summary.json", re.findall(r"\]\(([^)]+)\)", historical.read_text()))
         for link in links:
             self.assertTrue((readme.parent / link).is_file(), link)
         help_result = subprocess.run([sys.executable, "-B", str(distribution / "opt/kicad-tools/kicad_tools.py"),
@@ -267,7 +269,7 @@ class BundleTests(unittest.TestCase):
         third = self.root / "third distribution"
         again = bundle.bundle(third, include_routing=True, root=second)
         self.assertEqual(again["manifest"]["files_sha256"], copied["manifest"]["files_sha256"])
-        # The one reviewed evidence JSON is not general JSON permission.
+        # Named reviewed evidence JSON is not general JSON permission.
         for extra in ("opt/kicad-routing/arbitrary.json", "opt/kicad-routing/helper.py",
                       "opt/kicad-routing/runtime.tmp/provenance.json"):
             contract.write_text(json.dumps({"schema_version": 1, "files": list(bundle.ROUTING_FILES) + [extra]}))

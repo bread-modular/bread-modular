@@ -1,6 +1,151 @@
 # Scoped verification and handoff
 
-## File consolidation — isolated main-based workspace 298
+## Final bounded integration — main `9291e420`, isolated workspace 302
+
+Source, physically relocated/re-bundled suites and actual CLI handoffs passed. No delegation/advisors, released input, frozen module
+migration, real manufacturing export, global install, commit/merge/push or other
+worker-workspace access. Installed Linux x86_64 / Python 3.14.4 / KiCad CLI +
+pcbnew 10.0.6 / Bubblewrap 0.11.1. Older versions/platforms were not tested.
+
+### Current source results (separate processes)
+
+| Suite | Run | Pass | Skip | Failure/error |
+| --- | ---: | ---: | ---: | ---: |
+| Core default (50 existing + 5 facade/payload regressions) | 55 | 53 | 2 native opt-in | 0 |
+| Core native | 55 | 55 | 0 | 0 |
+| PCB automation unit / native | 13 / 13 | 13 / 13 | 0 | 0 |
+| Schematic (15 unit + 12 native) | 27 | 27 | 0 | 0 |
+| Router unit (75 existing + same-nickname regression) / native | 76 / 15 | 76 / 15 | 0 | 0 |
+| Shared canonical / legacy, each | 103 | 97 | 6 native opt-in | 0 |
+| Explicit real facade PCB→router + schematic handoff | 1 runner, 2 workflows | passed | 0 | 0 |
+
+Exact commands (repository root; unset shared native opt-in for **all discovery**):
+
+```sh
+unset KICAD_JLCPCB_INTEGRATION PYTHONPATH
+python3 -B -m unittest discover -s opt/kicad-tools/tests -v
+KICAD_TOOLS_INTEGRATION=1 python3 -B -m unittest discover -s opt/kicad-tools/tests -v
+python3 -B -m unittest discover -s opt/kicad-tools/automation/tests -p test_unit.py -v
+KICAD_AUTOMATION_INTEGRATION=1 python3 -B -m unittest discover -s opt/kicad-tools/automation/tests -p test_native.py -v
+KICAD_SCHEMATIC_INTEGRATION=1 python3 -B -m unittest discover -s opt/kicad-tools/schematic/tests -v
+python3 -B -m unittest discover -s opt/kicad-routing/tests -v
+python3 -B -m unittest discover -s opt/kicad-tools/jlcpcb/tests -v
+python3 -B -m unittest discover -s opt/kicad-jlcpcb/tests -v
+python3 -B opt/kicad-routing/run.py prepare-runtime --allow-downloads
+python3 -B opt/kicad-routing/tests/native_project_checks.py --run-prefix final302-src3
+python3 -B opt/kicad-tools/tests/native_handoff.py --run-id final302-handoff3
+```
+
+Core native tests invoke ONLY
+`KiCadIntegrationTests.test_native_fields_exclusions_mixed_sides_and_nonzero_origin`
+and `KiCadIntegrationTests.test_repeated_hierarchical_sheet_part_numbers`, through
+canonical and legacy paths (4 nested synthetic passes per core-native run).
+Shared all-native discovery includes released boards and was **never enabled**.
+
+### Real cross-component proof and narrow fixes
+
+The independent routing generator creates Orchard Controller with opposite-side
+SMDs, a real local symbol/footprint context, locked **and unlocked** SENSITIVE
+copper. Facade inspect/plan/apply moves J2 `[34,10]` → `[33,11]` and adds non-copper
+text. Original copper UUID/geometry/lock records stay identical: moves do not drag traces.
+Explicit `--allow-draft-opens` gives exit 1 / `draft` / `accepted: false` with a
+hash-bound completion marker, no ERC findings and equal ref/pin/net parity.
+Its **complete `inputs/` subtree**, unchanged by hand, is the actual router
+snapshot; CLI derives the fresh DATA net plan then dry-run and offline apply.
+Final native DRC violations / schematic parity / opens = **0 / 0 / 0**, one real
+DATA through-via, invariant deltas `[]`, original and handoff sources immutable,
+locked/non-authorized copper and placements/settings protected.
+
+First handoff correctly rejected the generator's off-grid pins/missing symbol
+context. Fix: generate on-grid pins and matching symbol library/table at source,
+not hand-repair the generated input or waive ERC. That exposed symbol and
+footprint nickname shadowing in router admission. Fix: validate both URI closures,
+resolve PCB FPIDs only through the footprint table. One unit regression covers
+same nicknames with bounded relative/`${KIPRJMOD}` URIs and proves missing
+footprints still fail. Existing 75 unit + 15 native routing gates still pass.
+Current help/doctor reports ordinary supported routing; historical smoke evidence
+is retained, not rewritten as a general-board claim.
+
+Separate schematic facade inspect/plan/apply adds an actual wire, verifies changed
+pin/net identities and native force-save/reload, and honestly returns
+`draft_erc_findings`, exit 1, `accepted: false`. An unrelated input PCB sentinel
+is neither read/copied nor changed: no silent PCB synchronization claim. Both
+real Python APIs also inspect these fixtures from an unrelated cwd in a fresh
+process. Standalone/facade help, JSON, exact nonzero stdout/stderr/return codes,
+missing optional controllers and subprocess module isolation have regressions.
+
+Runtime preparation used only the explicit existing downloader in this workspace:
+Freerouting SHA-256 `f6f51bb02245e8e717f9359bd260cc9c5c0b1bc0acc8b7cb2cd5b8ffeb5de3c7`;
+JRE SHA-256 `1731a34baadec5479258ea0202e4d5d865d2efeee60cb0c7d7eb056fe96ca219`.
+Trusted metadata/checksums matched; preparation executed **nothing**. Java routing
+runs only inside offline Bubblewrap. Runtime/JAR/work/logs never enter bundles.
+Native PROPERTY_ENUM and read-only lock diagnostics remain retained in raw logs.
+
+Evidence is local and ignored: `.integration.tmp/suites-source-final.json`,
+`opt/kicad-tools/integration.tmp/final302-handoff3/summary.json` and full hashed
+command logs; router `work.tmp/native-tests-final302-src3/summary.json` / runs.
+The current runner and detailed [workflow/API](API.md) reproduce the proof.
+
+### Completed relocation, exact payload and protected audit
+
+All rows in the source table also passed from the **physically relocated and
+re-bundled combined distribution**, separate processes, quoted absolute paths
+and unrelated cwd; no original checkout/Git/modules tree was required. Copied
+core native **55/55**, automation **13+13**, schematic **27** (12 native), router
+**76+15**, shared canonical/legacy **97 pass + 6 skip each**, actual PCB→router
+and schematic facade workflows all passed. Each core-native run also passed
+both named synthetic shared methods through both paths, never all-native discovery.
+Core-only default: **55 run / 51 pass / 4 intentional skips** (2 native opt-in,
+2 optional-routing cases); missing route reports JSON exit 2, no installation.
+
+The exact source commands above were repeated with absolute paths rooted at
+`.integration.tmp/Rebundled Toolkit with spaces`, from
+`.integration.tmp/Unrelated cwd with spaces`; router native prefix `final302-copy`,
+handoff ID `final302-copyflow`. Pinned runtime was independently prepared there,
+**inside this own workspace**, not copied from or accessed in another worker.
+Exact argv/env/cwd/results live in `.integration.tmp/suites-copied.json`.
+
+Bundles: **64 core / 87 combined regular files + exactly 3 validated relative
+symlinks + schema-2 manifest**. All automation/schematic source/docs/tests,
+router general source/new tests/detailed docs including SMOKE and exact compact
+evidence are covered by literal allowlists. Physical relocation, unrelated-cwd
+CLI/Python APIs, actual native suites, exact file/link hashes and identical
+re-bundle manifests passed. No runtime/work/logs/arbitrary JSON or symlink
+traversal permission. Unknown secrets/aliases stay excluded; unsafe/changed owned
+links and sources fail. Final evidence refresh re-bundles source again; only
+workflow/verification docs and expanded doc-link regression differ from the
+full-suite tested copy, never native/assembly/business logic. Final core native
+suites are re-run on source and that final copy; manifest integrity/re-bundling
+are rechecked after the evidence refresh.
+
+Protected tracked audit before/after: **2142 entries, zero changed/added/removed**:
+1982 regular file SHA-256s, 153 literal symlink texts (no dereference), 7 gitlink
+pins (not an inventory of untracked submodule contents). Designs/libraries/releases
+and all non-owned tracked paths included. Both sorted manifests have SHA-256:
+`651d496a093625bf784404d5a64ab564d99aa4b4a630e3ff04cc691097270cb7`.
+Evidence: `.integration.tmp/{protected-before,protected-after,protected-audit}.json`.
+All canonical JLCPCB source/docs/tests, core `native.py` / `project.py` and ALL
+merged automation/schematic tracked files remain byte-identical. Router diff is
+only its current doctor limit, fixture/ERC context, same-nickname resolution +
+regression, and the fixture test-doc note. No settings/rules/scope gate relaxed.
+
+Source handoff summary SHA-256: `b71ef4e0062f627067a08171af80ebc977278c26e029d95c586cba3734fa66d9`.
+Copied handoff summary SHA-256: `495e7d98d7cb2728da2b6f88e1921fffa1f7e34abf9cd51750ef9f8e3d93a011`.
+Both retain full command stdout/stderr hashes and original/snapshot inventories;
+raw reports/logs/runtime stay ignored and out of the bundle. Early failing probes
+remain local evidence; only the fresh successful IDs above are completion proofs.
+Repeat native runners with NEW IDs; existing candidates/runs are never overwritten.
+
+### Limits
+
+Real geometry is not live GUI/IPC push-and-shove; no automatic placement, trace
+drag, net inference or PCB synchronization. Supported flat schematic and ordinary
+router subset only (groups/zones/complex rules reject). Acceptance is native
+checks within scope, never electrical, physical, fabrication, release or order
+approval. Historical evidence below records earlier capabilities, not current
+limits. Tool hashes are provenance, not signatures/concurrent-writer security.
+
+## Historical file consolidation — isolated main-based workspace 298
 
 Scope: canonical files in `opt/kicad-tools`, three relative compatibility links,
 facade/bundle/tests/docs and concise root/toolkit landing pages. Detailed content
@@ -87,7 +232,7 @@ execution evidence, not bundle payload. Symlinks must be preserved when copying;
 no hostile concurrent-writer security guarantee, full installation provenance,
 new editing API or electrical/release/order approval is claimed.
 
-## Post-merge combined verification — main `55e8a204`, workspace 297
+## Historical post-merge combined verification — main `55e8a204`, workspace 297
 
 Synthetic-only integration, isolated workspace 297; no advisors/subagents,
 other jobs/projects, frozen migration execution, released-board tests/exports,
