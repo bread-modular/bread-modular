@@ -1,52 +1,45 @@
 # Portable KiCad toolkit
 
-Common tools for **private ERC/DRC, native netlist inspection, JLCPCB export and
-read-only assembly sourcing**. Canonical home: `opt/kicad-tools/`. No board
-migration, global install or automatic production/order approval.
+Native checks, **offline PCB/schematic candidate edits**, bounded routing, JLCPCB
+export and assembly sourcing. Canonical home: `opt/kicad-tools/`; no global install
+or hardware approval. Agents and humans: start with task `--help`, then its API.
 
-## Quick start
-
-From the repository or portable distribution root:
+## Quickstart
 
 ```sh
 python3 -B opt/kicad-tools/kicad_tools.py --help
 python3 -B opt/kicad-tools/kicad_tools.py doctor
-python3 -B opt/kicad-tools/kicad_tools.py export --help
-python3 -B opt/kicad-tools/kicad_tools.py assembly --help
+python3 -B opt/kicad-tools/kicad_tools.py pcb --help
+python3 -B opt/kicad-tools/kicad_tools.py schematic --help
+python3 -B opt/kicad-tools/kicad_tools.py route --help
 ```
 
-Python **3.8+**, stdlib only. Private checks need **KiCad CLI 10+**; the standalone
-exporter retains **KiCad 9+** support. `pcbnew` is optional for core commands;
-[routing](GUIDE.md#optional-routing-integration) has separate requirements.
-No new third-party packages are installed by this toolkit.
+## Capabilities
 
-## Choose a task
+| Task | Command | Details |
+| --- | --- | --- |
+| Dependencies / private ERC, DRC, parity | `doctor`, `check` | [Guide](GUIDE.md), [profile template](examples/project.json) |
+| Exact native ref/pin/net comparison | `netlist inspect\|compare` | [Native helpers](GUIDE.md#native-schematicnetlist-helpers) |
+| Move/rotate/flip/add footprints; copper, vias, zones, outlines, text, selected deletion | `pcb inspect\|plan\|apply` | [PCB API](automation/docs/api.md) |
+| Flat-sheet wires, junctions, local labels | `schematic inspect\|plan\|apply` | [Schematic API](schematic/docs/api.md) |
+| Supported ordinary-project DSN/SES routing | `route inspect-project\|plan-project\|route-project` | [Handoff workflow](API.md), [subset](../kicad-routing/SUPPORTED_SUBSET.md) (optional sibling) |
+| Gerber ZIP / BOM / CPL | `export` | [Standalone exporter](jlcpcb/README.md) |
+| Catalog / BOM audit / passive planning | `assembly` | [Assembly API](jlcpcb/ASSEMBLY.md) |
+| Copy / relocate / re-bundle | `bundle [--include-routing]` | [Bundle contract](BUNDLING.md) |
 
-| Task | Command / guide |
-| --- | --- |
-| Select a project, diagnose dependencies, run private checks | [`doctor` / `check`](GUIDE.md#select-inputs-not-an-entire-repository), [profile template](examples/project.json) |
-| Inspect or compare exact ref/pin/net identities | [`netlist`](GUIDE.md#native-schematicnetlist-helpers) |
-| Produce Gerber ZIP, BOM and CPL | [`export`](jlcpcb/README.md) |
-| Catalog lookup, BOM audit, passive planning / existing Python APIs | [`assembly`](jlcpcb/ASSEMBLY.md) |
-| Install by copy, relocate or re-bundle | [`bundle`](BUNDLING.md) |
-| Optional separately owned routing | [`route`](GUIDE.md#optional-routing-integration) |
+Core Python 3.8+, stdlib only; checks/schematic apply need KiCad CLI 10+.
+PCB editing needs matching CLI + pcbnew 10.0.x; routing has separate Linux/native
+requirements. Operations edit actual geometry in **NEW private candidates**, not
+live GUI push/shove. No automatic placement; a move does **not** drag traces.
+Schematic edits need explicit downstream PCB synchronization. See [workflow and
+status gates](API.md); a draft is not acceptance or manufacturing approval.
 
-## Locations and safety
+## Useful links
 
-- **JLCPCB tools:** `jlcpcb/`; historical `opt/kicad-jlcpcb` is a relative symlink.
-- **Agent skills:** [KiCad workflow](skills/kicad-workflow/SKILL.md) and
-  [JLCPCB assembly](skills/jlcpcb-assembly/SKILL.md) live in `skills/`;
-  `.agents/skills/{name}` are relative discovery symlinks, not duplicate skills.
-- Checks use private copies and fresh external reports, keep source hashes and
-  native findings, and never weaken rules/exclusions. Export/assembly delegates
-  preserve their own output, overwrite and explicit network options.
-- Frozen module scripts, designs and production releases stay untouched.
-  No generic source-edit API is introduced here; manual electrical/release/order
-  approval remains separate.
+[Detailed guide](GUIDE.md) · [Workflow/API](API.md) · [Verification](VERIFICATION.md) ·
+[Migration boundaries](MIGRATION.md) · [Workflow skill](skills/kicad-workflow/SKILL.md) ·
+[Assembly skill](skills/jlcpcb-assembly/SKILL.md)
 
-## Read more
-
-[Detailed command/safety guide](GUIDE.md) · [Layout and bundle contract](BUNDLING.md) ·
-[Migration boundaries](MIGRATION.md) · [Tests and verification](VERIFICATION.md)
-
-Agents: read the relevant skill and actual subcommand `--help` before acting.
+Historical `opt/kicad-jlcpcb` and both `.agents/skills` discovery paths are the
+three validated relative aliases. Designs, frozen module scripts and releases
+are never migrated by these tools; standalone CLIs and Python APIs remain available.

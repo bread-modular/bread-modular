@@ -121,7 +121,28 @@ spans of direct children independent of indentation. `replace_paths` changes
 only matching URI/Sheetfile string atoms and returns text in memory. Any caller
 writing an edited schematic must use a distinct explicitly new output;
 `write_new_text(source, destination, text)` refuses overwrite/aliases. There is
-no generic schematic generator, circuit-migration replay or source-edit CLI.
+no generic schematic generator or circuit-migration replay. The explicit flat-sheet
+`schematic inspect|plan|apply` primitives are documented below.
+
+## Offline PCB and flat schematic editing
+
+The facade exposes `pcb inspect|plan|apply` and `schematic inspect|plan|apply`
+without importing either controller into its process. Read their own `--help`:
+
+```sh
+python3 -B opt/kicad-tools/kicad_tools.py pcb plan --help
+python3 -B opt/kicad-tools/kicad_tools.py schematic plan --help
+```
+
+See [candidate-to-routing workflow and Python APIs](API.md),
+[PCB operation schema](automation/docs/api.md) / [safety](automation/docs/safety.md),
+and [flat schematic schema](schematic/docs/api.md). Both plan operations are
+write-free; only explicit apply makes a NEW private output. Plans/requests belong
+outside source/dependency directories; a completion marker is required for PCB
+candidates. Draft opens need explicit opt-in, never waive shorts/ERC/parity.
+Geometry edits are real native operations, **not live GUI/IPC push-and-shove**.
+No automatic placement or net inference; footprint moves leave traces in place.
+Schematic wires are not PCB traces and never silently synchronize a board.
 
 ## Shared export and assembly pass-through
 
@@ -162,12 +183,15 @@ When `../kicad-routing/run.py` exists, `route <args>` is a transparent pass-thro
 with the same interpreter/arguments/exit status. Otherwise it returns an
 explicit unavailable diagnostic (2); it does not create runtime files, fetch,
 route a board, or try an alternative router. The sibling owns
-`doctor|prepare-runtime|smoke` semantics; consult its real `--help` before use.
+`doctor|prepare-runtime|inspect-project|plan-project|route-project|smoke` semantics; consult its real `--help` before use.
 Downloads must remain explicit opt-in in that tool. Unlike the core's Python
 3.8+ support, routing requires **Python 3.9+** (`Path.is_relative_to`), **Linux
 x86_64**, the supported **KiCad 10.0.6 system `pcbnew` binding**, matching native
 CLI and `/usr/bin/bwrap`; see the [routing README](../kicad-routing/README.md).
-Routing runtime/JAR/temp files are never bundled. Read optional
+Only supported ordinary snapshots route; groups, zones and complex rules are
+rejected, not simplified. Use a completed PCB candidate's `inputs/` subtree, not
+its reports/runtime directory; see [handoff](API.md). Routing runtime/JAR/temp
+files are never bundled. Read optional
 [routing research](../../docs/kicad-routing-research.md) when installed; absent
 code/research in a core-only distribution is not a failed electrical gate.
 

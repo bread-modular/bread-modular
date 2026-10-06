@@ -17,6 +17,7 @@ Use a new native prefix/smoke ID on every run. Nothing commits, merges or pushes
 
 `tests/project_fixture.py` independently generates **Orchard Controller**, a normal
 same-stem project in nested paths with spaces, embedded single-sheet schematic,
+local symbol library/table and on-grid pins (ERC-clean for PCB editor handoff),
 local rect/oval SMD and round PTH footprints, rectangular outline, scalar Default
 rules (0.32 mm track, 0.24 mm gap, 0.70/0.35 mm via, 0.65 mm edge). Opposite-layer
 SMD terminals force a **real through-via/layer-change**. An existing DATA stub is

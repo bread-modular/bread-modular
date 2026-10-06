@@ -21,7 +21,7 @@ from safety import (GateError, STATE, TOOL, assert_same, checked, digest, requir
                     run_process, safe_path, tree_hashes, write_json)
 
 LIMITATIONS = [
-    'Synthetic fixture only; no arbitrary board input or production approval.',
+    'Ordinary projects only within SUPPORTED_SUBSET.md; historical smoke remains synthetic; no production approval.',
     'KiCad 10.0.6 native SWIG compatibility; binding PROPERTY_ENUM stderr assertions retained.',
     'No proof for arbitrary custom rules, differential pairs, tuning, pad overrides or other stackups.',
     'Native DRC/zone connectivity is not an electrical, return-path, thermal or manufacturing review.',

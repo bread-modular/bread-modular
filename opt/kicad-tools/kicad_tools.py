@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Thin portable KiCad toolkit: private checks, native inspection, shared exports."""
+"""Portable KiCad checks, PCB/schematic candidate edits, routing and shared exports."""
 import argparse
 from collections import Counter
 import json
@@ -19,6 +19,13 @@ from project import Plan, new_output, select_project
 
 
 HERE = Path(__file__).resolve().parent
+# Controllers have deliberately different native/api module namespaces. Never
+# import them into the facade interpreter; preserve their stdout/stderr/exit codes.
+DELEGATES = {
+    "pcb": "automation/run.py", "schematic": "schematic/cli.py",
+    "export": "jlcpcb/export.py", "assembly": "jlcpcb/assembly.py",
+    "route": "../kicad-routing/run.py",
+}
 
 
 def emit(data):
@@ -181,15 +188,17 @@ def delegate(command, arguments):
     """Exact pass-through. Shared scripts/semantics are not patched or reimplemented."""
     if arguments[:1] == ["--"]:
         arguments = arguments[1:]
+    script = HERE / DELEGATES[command]
     if command == "route":
         script = HERE.parent / "kicad-routing" / "run.py"
-        if not script.is_file():
-            emit({"error": "Optional sibling opt/kicad-routing/run.py is unavailable; no routing/runtime action taken", "order_ready": False})
-            return 2
-    else:
-        filename = "export.py" if command == "export" else "assembly.py"
-        script = HERE / "jlcpcb" / filename
-    return subprocess.run([sys.executable, "-B", str(script), *arguments]).returncode
+    if not script.is_file():
+        emit({"error": f"{command} command unavailable ({script}); no action or installation taken", "order_ready": False})
+        return 2
+    try:
+        return subprocess.run([sys.executable, "-B", str(script), *arguments]).returncode
+    except OSError as error:
+        emit({"error": str(error), "order_ready": False})
+        return 2
 
 
 def selection(parser):
@@ -202,7 +211,7 @@ def selection(parser):
 
 
 def parser():
-    cli = argparse.ArgumentParser(description=__doc__, epilog="No board migrations, auto-routing, approvals or global installation. See README.md.")
+    cli = argparse.ArgumentParser(description=__doc__, epilog="Explicit NEW candidates only; no automatic placement, approval or global installation. See README.md.")
     commands = cli.add_subparsers(dest="command", required=True)
     doc = commands.add_parser("doctor", help="read-only dependency/native CLI/optional pcbnew interpreter diagnostics")
     selection(doc)
@@ -212,8 +221,8 @@ def parser():
     checks.add_argument("--reports", required=True, help="NEW directory outside source/dependency directories")
     checks.add_argument("--only", choices=("both", "erc", "drc"), default="both")
     checks.add_argument("--dry-run", action="store_true", help="resolve/hash inputs; no native commands or filesystem writes")
-    for name in ("export", "assembly", "route"):
-        sub = commands.add_parser(name, help="unchanged shared " + name + " pass-through (use this subcommand --help)", add_help=False)
+    for name in DELEGATES:
+        sub = commands.add_parser(name, help=("inspect/plan/apply private candidate edits" if name in ("pcb", "schematic") else name + " direct pass-through") + " (use --help)", add_help=False)
         sub.add_argument("arguments", nargs=argparse.REMAINDER)
     nets = commands.add_parser("netlist", help="read-only native XML inspect/compare; net codes/dates ignored")
     operations = nets.add_subparsers(dest="operation", required=True)
@@ -233,7 +242,7 @@ def parser():
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     # Do not let this parser consume or reinterpret shared flags, including --help.
-    if argv and argv[0] in ("export", "assembly", "route"):
+    if argv and argv[0] in DELEGATES:
         return delegate(argv[0], argv[1:])
     args = parser().parse_args(argv)
     try:

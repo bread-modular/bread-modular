@@ -27,10 +27,19 @@ def project(name):
             'netclass_assignments':{},'netclass_patterns':[]}}
 
 
+TERMINAL_SYMBOL = '''(symbol "Orchard:Terminal" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+        (property "Reference" "J" (at 0 4 0) (effects (font (size 1.27 1.27))))
+        (property "Value" "Terminal" (at 0 2 0) (effects (font (size 1.27 1.27))))
+        (symbol "Terminal_0_1" (rectangle (start -2.54 1.27) (end 2.54 -1.27)
+          (stroke (width 0.254) (type default)) (fill (type background))))
+        (symbol "Terminal_1_1" (pin passive line (at -5.08 0 0) (length 2.54)
+          (name "P1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))))'''
+
+
 def schematic(name):
     root=uid('schematic'); symbols=[]
     for i,(ref,net) in enumerate(NETS.items()):
-        x,y=60+30*(i%2),60+30*(i//2)
+        x,y=60.96+30.48*(i%2),60.96+30.48*(i//2)
         symbols.append(f'''(symbol (lib_id "Orchard:Terminal") (at {x} {y} 0) (unit 1)
           (in_bom yes) (on_board yes) (dnp no) (uuid "{uid(ref)}")
           (property "Reference" "{ref}" (at {x} {y-6} 0) (effects (font (size 1.27 1.27))))
@@ -42,13 +51,7 @@ def schematic(name):
           (global_label "{net}" (shape bidirectional) (at {x-5.08} {y} 0)
             (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "{uid(ref+'label')}"))''')
     return f'''(kicad_sch (version 20250114) (generator "eeschema") (uuid "{root}") (paper "A4")
-      (lib_symbols (symbol "Orchard:Terminal" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
-        (property "Reference" "J" (at 0 4 0) (effects (font (size 1.27 1.27))))
-        (property "Value" "Terminal" (at 0 2 0) (effects (font (size 1.27 1.27))))
-        (symbol "Terminal_0_1" (rectangle (start -2.54 1.27) (end 2.54 -1.27)
-          (stroke (width 0.254) (type default)) (fill (type background))))
-        (symbol "Terminal_1_1" (pin passive line (at -5.08 0 0) (length 2.54)
-          (name "P1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))))))
+      (lib_symbols {TERMINAL_SYMBOL})
       {''.join(symbols)} (embedded_fonts no))\n'''
 
 
@@ -58,6 +61,11 @@ def generate(directory, name=NAME, handoff_shift=0):
     (directory/(name+'.kicad_pro')).write_text(json.dumps(project(name),indent=2)+'\n')
     (directory/(name+'.kicad_sch')).write_text(schematic(name))
     (directory/(name+'.kicad_dru')).write_text('(version 1)\n(rule "Covered minima" (constraint track_width (min 0.25mm)) (constraint via_diameter (min 0.60mm)) (constraint hole_size (min 0.30mm)))\n')
+    # Complete ERC-clean context from generation, not post-generation repairs.
+    (directory/'Orchard.kicad_sym').write_text(
+        '(kicad_symbol_lib (version 20250114) (generator "kicad_symbol_editor") '+
+        TERMINAL_SYMBOL.replace('"Orchard:Terminal"','"Terminal"',1)+')\n')
+    (directory/'sym-lib-table').write_text('(sym_lib_table (version 7) (lib (name "Orchard") (type "KiCad") (uri "${KIPRJMOD}/Orchard.kicad_sym") (options "") (descr "Local ordinary test context")))\n')
     lib=directory/'Orchard.pretty'; lib.mkdir()
     for item,shape,kind,size,drill,layers in [
         ('Rect','rect','smd','1.6 1.2','','"F.Cu" "F.Paste" "F.Mask"'),

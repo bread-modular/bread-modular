@@ -230,7 +230,10 @@ def admit(root, rel):
             for lib in entries:
                 gate(child(lib, 'type')[1] == 'KiCad', 'LIBRARY_TYPE', 'Only native local KiCad libraries admitted.')
                 dest = local_uri(child(lib, 'uri')[1], pcb.parent, root)
-                tables[child(lib, 'name')[1]] = dest
+                # Symbol and footprint nicknames are separate native namespaces.
+                # Validate both URI closures, but only footprints resolve PCB FPIDs.
+                if name == 'fp-lib-table':
+                    tables[child(lib, 'name')[1]] = dest
     uuids = set()
     def walk(node):
         if not isinstance(node, list):

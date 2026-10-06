@@ -130,6 +130,21 @@ class ProjectTests(unittest.TestCase):
         table.write_text(t);(self.lib/'Term.kicad_mod').unlink()
         self.rejected('LIBRARY_MISSING',contract.admit,self.snapshot,self.rel)
 
+    def test_same_symbol_and_footprint_nickname_do_not_shadow_fpid(self):
+        symbol = self.snapshot/'Local.kicad_sym'
+        symbol.write_text('(kicad_symbol_lib (version 20250114))')
+        for prefix in ['', '${KIPRJMOD}/']:
+            with self.subTest(prefix=prefix):
+                (self.snapshot/'sym-lib-table').write_text(
+                    '(sym_lib_table (lib (name "Local") (type "KiCad") (uri "'+prefix+'Local.kicad_sym")))')
+                before = tree_hashes(self.snapshot)
+                admission = contract.admit(self.snapshot, self.rel)
+                self.assertIn('Local.kicad_sym', admission['files'])
+                self.assertEqual(admission['rules'], self.admission['rules'])
+                self.assertEqual(tree_hashes(self.snapshot), before)
+        (self.lib/'Term.kicad_mod').unlink()
+        self.rejected('LIBRARY_MISSING', contract.admit, self.snapshot, self.rel)
+
     def test_relative_local_library_uri_and_legacy_same_target(self):
         for uri in ['Local.pretty', '${KIPRJMOD}/Local.pretty']:
             with self.subTest(uri=uri):
