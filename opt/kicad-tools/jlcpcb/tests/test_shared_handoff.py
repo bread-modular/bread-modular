@@ -17,7 +17,7 @@ from unittest import mock
 import shlex
 
 TOOLS = Path(__file__).resolve().parents[1]
-REPO = TOOLS.parents[1]
+REPO = TOOLS.parents[2]
 sys.path.insert(0, str(TOOLS))
 import add_production_files as production
 import assembly
@@ -33,10 +33,10 @@ def digest(path):
 class DocumentedCliTests(unittest.TestCase):
     def test_assembly_and_skill_command_examples_parse_without_execution(self):
         count = 0
-        for doc in (TOOLS / "ASSEMBLY.md", REPO / ".agents/skills/jlcpcb-assembly/SKILL.md"):
+        for doc in (TOOLS / "ASSEMBLY.md", TOOLS.parent / "skills/jlcpcb-assembly/SKILL.md"):
             text = doc.read_text().replace("\\\n", " ")
             for line in text.splitlines():
-                if line.startswith("python3 -B opt/kicad-jlcpcb/assembly.py "):
+                if line.startswith("python3 -B opt/kicad-tools/jlcpcb/assembly.py "):
                     argv = shlex.split(line)[3:]
                     with contextlib.redirect_stdout(io.StringIO()):
                         if "--help" in argv:

@@ -5,12 +5,16 @@ description: Common-tool-first JLCPCB Basic/Economy sourcing, read-only BOM audi
 
 # JLCPCB assembly: common tools before design edits
 
+Canonical skill home: `opt/kicad-tools/skills/jlcpcb-assembly`.
+`.agents/skills/jlcpcb-assembly` is a relative discovery symlink, not a second copy.
+See [layout and portability](../../BUNDLING.md).
+
 ## Scope and safety
 
 Use for any Bread Modular KiCad/assembly sourcing task, especially the 16bit-5v
 and 32bit-5v branches. Read [tool commands/API/policy and dated supplier
-schema evidence](../../../opt/kicad-jlcpcb/ASSEMBLY.md) and the
-[existing exporter README](../../../opt/kicad-jlcpcb/README.md) first.
+schema evidence](../../jlcpcb/ASSEMBLY.md) and the
+[existing exporter README](../../jlcpcb/README.md) first.
 
 Work only in the assigned isolated worktree. Never switch branches or change
 files in another job's checkout. Common tooling/skill commits must be made
@@ -60,14 +64,14 @@ manual/user-controlled and must not be claimed done by this tooling.
 Run from each isolated branch's repository root after the common commit lands:
 
 ```sh
-python3 -B opt/kicad-jlcpcb/assembly.py lookup C25804 --strict-live --max-requests 1
-python3 -B opt/kicad-jlcpcb/assembly.py search '10k 0603' --basic-only --limit 12 --strict-live
-python3 -B opt/kicad-jlcpcb/assembly.py audit \
+python3 -B opt/kicad-tools/jlcpcb/assembly.py lookup C25804 --strict-live --max-requests 1
+python3 -B opt/kicad-tools/jlcpcb/assembly.py search '10k 0603' --basic-only --limit 12 --strict-live
+python3 -B opt/kicad-tools/jlcpcb/assembly.py audit \
   --bom /tmp/build/bom.csv --cpl /tmp/build/positions.csv \
   --export-report /tmp/build/export-report.json \
   --requirements /tmp/requirements.json --boards 10 --side top --strict-live
-python3 -B opt/kicad-jlcpcb/assembly.py suggest --codes C25804 \
-  --target opt/kicad-jlcpcb/examples/resistor-target.json --boards 10 --max-parts 2 --strict-live
+python3 -B opt/kicad-tools/jlcpcb/assembly.py suggest --codes C25804 \
+  --target opt/kicad-tools/jlcpcb/examples/resistor-target.json --boards 10 --max-parts 2 --strict-live
 ```
 
 Examples are illustrative, not approvals. For native board/reference/field

@@ -5,13 +5,17 @@ description: Common-tool-first portable KiCad native hierarchy/netlist inspectio
 
 # Portable KiCad workflow
 
+Canonical skill home: `opt/kicad-tools/skills/kicad-workflow`.
+`.agents/skills/kicad-workflow` is a relative discovery symlink, not a second copy.
+See [layout and portability](../../BUNDLING.md).
+
 ## First choice: common tools, not copied board scripts
 
-Read the [toolkit documentation](../../../opt/kicad-tools/README.md) and actual
+Read the [toolkit documentation](../../README.md) and actual
 `--help` first. Use `opt/kicad-tools/kicad_tools.py` for doctor, private checks,
 netlist inspection/comparison and install-by-copy. Use the unchanged shared
-[JLCPCB exporter](../../../opt/kicad-jlcpcb/README.md) and
-[assembly tools](../../../opt/kicad-jlcpcb/ASSEMBLY.md) directly or through its
+[JLCPCB exporter](../../jlcpcb/README.md) and
+[assembly tools](../../jlcpcb/ASSEMBLY.md) directly or through its
 transparent facade. Do not generate a new exporter/catalog/parser/router unless
 the existing common tool genuinely lacks the narrow required operation.
 
@@ -50,7 +54,7 @@ python3 -B opt/kicad-tools/kicad_tools.py netlist inspect '/tmp/new actual check
 - Frozen module finalizers/regenerators/engineering verifiers are board-specific
   evidence, not generic migrations. Don't replay, weaken guards, or replace
   intentionally frozen exporter duplicates. See the
-  [migration inventory](../../../opt/kicad-tools/MIGRATION.md).
+  [migration inventory](../../MIGRATION.md).
 
 ## Routing sequence (optional, never automatic)
 

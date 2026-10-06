@@ -1,29 +1,36 @@
 # Portable KiCad toolkit
 
-This is an allowlisted install-by-copy distribution, not a Bread project or a
-KiCad/runtime installer. The MIT [LICENSE](LICENSE) and exact copied-source
-SHA-256 are in `toolkit-manifest.json`; those hashes are not signed approvals.
+Private native checks, netlist inspection, JLCPCB export and read-only assembly
+sourcing. This allowlisted install-by-copy distribution is **not** a Bread
+project, KiCad/runtime installer or hardware approval.
 
 ```sh
 python3 -B opt/kicad-tools/kicad_tools.py --help
 python3 -B opt/kicad-tools/kicad_tools.py doctor
-python3 -B opt/kicad-tools/kicad_tools.py doctor --project-dir '/path/to/My project'
+python3 -B opt/kicad-tools/kicad_tools.py export --help
 ```
 
-- [Toolkit commands, private checks, profile template and limitations](opt/kicad-tools/README.md)
-- [Generic common-tool-first KiCad workflow skill](.agents/skills/kicad-workflow/SKILL.md)
-- [Standalone unmodified JLCPCB exporter](opt/kicad-jlcpcb/README.md)
-- [Assembly/catalog/audit/planning docs](opt/kicad-jlcpcb/ASSEMBLY.md)
-- [Assembly approval/evidence skill](.agents/skills/jlcpcb-assembly/SKILL.md)
-- [Migration inventory](opt/kicad-tools/MIGRATION.md) and [verification](opt/kicad-tools/VERIFICATION.md)
+- [Start here: commands, requirements and safety](opt/kicad-tools/README.md)
+- [Detailed command guide](opt/kicad-tools/GUIDE.md)
+- [Canonical layout, manifest, compatibility symlinks and re-bundling](opt/kicad-tools/BUNDLING.md)
+- [KiCad workflow skill](opt/kicad-tools/skills/kicad-workflow/SKILL.md) and
+  [assembly skill](opt/kicad-tools/skills/jlcpcb-assembly/SKILL.md)
+- [Standalone exporter](opt/kicad-tools/jlcpcb/README.md) and
+  [assembly/catalog/audit/planning APIs](opt/kicad-tools/jlcpcb/ASSEMBLY.md)
+- [Migration boundaries](opt/kicad-tools/MIGRATION.md) and
+  [verification](opt/kicad-tools/VERIFICATION.md)
 
-Python stdlib + installed KiCad CLI only; no Git or original checkout is needed.
-Local checks need no network; catalog/live sourcing and optional routing runtime
-commands retain their own explicit policies. Optional routing source/research is
-included only when requested and available, with reviewed tests and compact
-historical smoke evidence; never its runtime/JAR/temp files. Core Python is 3.8+;
-routing separately needs Python 3.9+, Linux x86_64, KiCad 10.0.6 system bindings
-and Bubblewrap (see `opt/kicad-routing/README.md`).
+Canonical files live under `opt/kicad-tools/`. Historical `opt/kicad-jlcpcb` and
+both `.agents/skills/{name}` paths are validated relative directory symlinks;
+preserve them when relocating. [LICENSE](LICENSE) and `toolkit-manifest.json`
+cover tooling file/link-text provenance, not signed design/release approval.
+
+Core Python 3.8+, stdlib + installed KiCad CLI; no Git or original checkout
+needed. Local checks/bundling are offline. Catalog/live sourcing retains its
+explicit policies. Optional routing is included only when requested and
+available, with reviewed code/tests/research/historical evidence, **never** its
+runtime/JAR/temp files. Routing separately needs Python 3.9+, Linux x86_64,
+KiCad 10.0.6 system bindings and Bubblewrap (see `opt/kicad-routing/README.md`).
 No project/library/production/credentials/history/vendor files are installed.
-Always use fresh outputs, retain source hashes and native findings, and obtain
-manual design/production/order approval under the target project's own policies.
+Use fresh outputs, keep source hashes/native findings and obtain manual
+electrical/production/order approval under your own project's policies.

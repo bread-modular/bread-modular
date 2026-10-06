@@ -39,7 +39,7 @@ class CliTests(unittest.TestCase):
             argv = ["--", "path with spaces", "--require-part-numbers", "--output", "out with spaces"]
             with mock.patch.object(tools.subprocess, "run", return_value=SimpleNamespace(returncode=7)) as run:
                 self.assertEqual(tools.main([command, *argv]), 7)
-            self.assertEqual(run.call_args.args[0], [sys.executable, "-B", str(tools.HERE.parent / "kicad-jlcpcb" / script), *argv[1:]])
+            self.assertEqual(run.call_args.args[0], [sys.executable, "-B", str(tools.HERE / "jlcpcb" / script), *argv[1:]])
 
     def test_route_unavailable_and_present_passthrough_without_downloads(self):
         fake_here = self.root / "distribution/opt/kicad-tools"
@@ -183,7 +183,7 @@ class BundleTests(unittest.TestCase):
         self.assertFalse(result["manifest"]["routing"]["included"])
         names = result["manifest"]["files_sha256"]
         self.assertIn("LICENSE", names)
-        self.assertIn(".agents/skills/kicad-workflow/SKILL.md", names)
+        self.assertIn("opt/kicad-tools/skills/kicad-workflow/SKILL.md", names)
         self.assertNotIn("modules/base/base.kicad_pcb", names)
         self.assertFalse(any(".history" in p or p.endswith(".tmp") for p in names))
 
@@ -192,7 +192,7 @@ class BundleTests(unittest.TestCase):
         result = bundle.bundle(destination)
         for name, digest in result["manifest"]["files_sha256"].items():
             self.assertEqual(sha256(destination / name), digest)
-        self.assertEqual((destination / "opt/kicad-jlcpcb/export.py").read_bytes(), (bundle.ROOT / "opt/kicad-jlcpcb/export.py").read_bytes())
+        self.assertEqual((destination / "opt/kicad-tools/jlcpcb/export.py").read_bytes(), (bundle.ROOT / "opt/kicad-tools/jlcpcb/export.py").read_bytes())
         with self.assertRaises(Error):
             bundle.bundle(destination)
         cmd = [sys.executable, "-B", str(destination / "opt/kicad-tools/kicad_tools.py"), "--help"]

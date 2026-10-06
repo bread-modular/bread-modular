@@ -1,5 +1,92 @@
 # Scoped verification and handoff
 
+## File consolidation — isolated main-based workspace 298
+
+Scope: canonical files in `opt/kicad-tools`, three relative compatibility links,
+facade/bundle/tests/docs and concise root/toolkit landing pages. Detailed content
+is retained in [GUIDE.md](GUIDE.md), [BUNDLING.md](BUNDLING.md), JLCPCB docs and
+both canonical skills. No advisors/delegation, board migrations, real-board
+exports, routing implementation/runtime work, global installs, commits, merges
+or pushes. The original checkout and unrelated `.history` dirt are not edited.
+Observed local Python **3.14.4** and KiCad CLI **10.0.6**; older Python/platforms
+were not executed. Historical verification sections below remain historical.
+
+### Actual regression results
+
+| Scope | Run | Passed | Skipped | Failures/errors |
+| --- | ---: | ---: | ---: | ---: |
+| Source toolkit default discovery | 50 | 48 | 2 native opt-in | 0 |
+| Source toolkit `KICAD_TOOLS_INTEGRATION=1` (synthetic only) | 50 | 50 | 0 | 0 |
+| Source shared suite, canonical and legacy paths (each) | 103 | 97 | 6 native opt-in | 0 |
+| Relocated/rebundled core-only toolkit default | 50 | 47 | 2 native + 1 optional routing | 0 |
+| Relocated/rebundled combined toolkit default | 50 | 48 | 2 native opt-in | 0 |
+| Relocated/rebundled shared suite, canonical and legacy paths (each) | 103 | 97 | 6 native opt-in | 0 |
+
+Source commands (separate processes, `KICAD_JLCPCB_INTEGRATION` unset for discovery):
+
+```sh
+python3 -B -m unittest discover -s opt/kicad-tools/tests -v
+KICAD_TOOLS_INTEGRATION=1 python3 -B -m unittest discover -s opt/kicad-tools/tests -v
+python3 -B -m unittest discover -s opt/kicad-tools/jlcpcb/tests -v
+python3 -B -m unittest discover -s opt/kicad-jlcpcb/tests -v
+```
+
+The toolkit native test explicitly invokes only the two named **synthetic**
+shared methods for fields/exclusions/sides/nonzero origin and repeated hierarchy,
+through both canonical and legacy paths (**4 nested passes**, no skips).
+Never discover the shared suite with its native opt-in during tooling-only work;
+that legacy switch also includes repository-board methods.
+
+### Path, export and bundle checks
+
+- `test_consolidation.py`: exact three links, canonical parser import, identical
+  old/new/facade help, frozen-style sibling imports without executing frozen
+  scripts, corrected wrapper root and synthetic-only module/sweep dry-runs.
+- Link rejection: missing/directory-replaced/broken/retargeted/absolute/equivalent
+  nonallowlisted/escaping aliases; symlinked canonical targets, skill ancestors,
+  source files and roots. Unknown links/secret-like files are not copied.
+  `regular()` still rejects even owned alias traversal; routing receives no new
+  symlink exception. Mutation during copy fails and cleans only the new output.
+- Core bundle: **40 regular payload files + 3 relative links + manifest**.
+  Combined bundle: **50 regular payload files + 3 relative links + manifest**,
+  using the unchanged reviewed routing allowlist. Schema **2** separately hashes
+  canonical file bytes and UTF-8 link text. Exact inventory and every hash match.
+- Physical relocation, re-bundling twice, spaces in distribution/output/cwd and
+  no Git/`modules/`/original-checkout assumptions succeed. Combined re-bundle
+  manifests match exactly; core payload/link hashes match even when source
+  routing availability diagnostics change. Dry-run writes nothing; overwrite
+  refusal is exit **2**. Current README/guide/skill links work from canonical and
+  compatibility locations; routing/research remain explicitly optional.
+- On a temporary non-Bread fixture, the re-bundled facade and direct canonical /
+  legacy exporter produce byte-identical BOM/CPL and equal component/count/side/
+  exclusion/warning/source-hash semantics; ZIP member sets validate. Gerber ZIP
+  timestamps are intentionally not treated as byte-reproducible.
+- Native checks retain expected restrictive-rule/open findings (exit **1**),
+  equal ref/pin/net parity and unchanged fixture sources. No production readiness
+  inferred. Optional routing is only bundled/help-tested; no downloads or smoke
+  execution as part of this consolidation.
+
+### Protected-file and byte-preservation audit
+
+Before/after SHA-256 plus no-dereference link inventories cover **2315 protected
+file/link entries**, including designs, local submodule libraries, frozen tools,
+release/evidence and routing: **0 changed/added/removed**. The sole extra root
+change is a narrow `.gitignore` exception for canonical tool sources previously
+hidden by `**/jlcpcb/`; module outputs and bytecode remain ignored.
+
+`export.py`, `assembly.py`, `catalog.py`, `bom_audit.py`, `passive_planner.py` match
+the pre-move bytes/hashes. The entire wrapper matches its pre-move bytes except
+exactly `REPO = HERE.parents[1]` → `REPO = HERE.parents[2]`. Tests/docs adjust root
+and canonical paths. Frozen hash manifests are not refreshed or executed: path
+compatibility does not assert unchanged hashes for revised wrapper/docs/tests.
+Git whitespace/scope checks pass; changes remain uncommitted for parent diff.
+
+Host-local evidence: `/tmp/kicad-consolidation-298-wjrfaarp/` contains baseline,
+protected hash audit, portable-proof JSON and copied-suite logs. These are
+execution evidence, not bundle payload. Symlinks must be preserved when copying;
+no hostile concurrent-writer security guarantee, full installation provenance,
+new editing API or electrical/release/order approval is claimed.
+
 ## Post-merge combined verification — main `55e8a204`, workspace 297
 
 Synthetic-only integration, isolated workspace 297; no advisors/subagents,

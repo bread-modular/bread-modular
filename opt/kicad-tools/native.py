@@ -10,7 +10,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 
-_SHARED = Path(__file__).resolve().parent.parent / "kicad-jlcpcb" / "export.py"
+_SHARED = Path(__file__).resolve().parent / "jlcpcb" / "export.py"
 _spec = importlib.util.spec_from_file_location("_toolkit_jlc_export", _SHARED)
 kicad = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(kicad)

@@ -2,12 +2,18 @@
 
 A standalone, offline exporter for a directory containing a KiCad project. It generates a Gerber ZIP (including drills), a grouped assembly BOM, and a pick-and-place / CPL CSV.
 
+Canonical tools live in **`opt/kicad-tools/jlcpcb`**. The historical
+`opt/kicad-jlcpcb` directory is a relative compatibility symlink to this one;
+existing commands/imports remain valid, with no second exporter. Start with the
+[toolkit landing page](../README.md) or [layout/bundle contract](../BUNDLING.md).
+Examples below use canonical paths; `export.py` itself remains byte-for-byte unchanged.
+
 ## Read-only sourcing and assembly gates
 
 Use the [shared catalog/audit/passive-planning CLI and API](ASSEMBLY.md) before
 module sourcing/design changes. It extends this tool directory and reuses this
 exporter's native/CSV parsers; it does not replace the exporter or modify
-boards/production files. The discoverable [JLCPCB assembly skill](../../.agents/skills/jlcpcb-assembly/SKILL.md)
+boards/production files. The discoverable [JLCPCB assembly skill](../skills/jlcpcb-assembly/SKILL.md)
 covers actual Basic versus Preferred/Extended, independent Economy evidence,
 conservative alternatives and manual production/order signoff.
 
@@ -24,7 +30,7 @@ KiCad itself is required to interpret and plot the board correctly. “No depend
 From the repository root:
 
 ```sh
-python3 opt/kicad-jlcpcb/export.py modules/line_in
+python3 opt/kicad-tools/jlcpcb/export.py modules/line_in
 ```
 
 Or copy the single `export.py` file anywhere and use an absolute project path:
@@ -50,7 +56,7 @@ Upload `line_in-gerbers.zip` as the PCB fabrication file, `bom.csv` as the assem
 Existing files are protected by default. Regenerate them explicitly:
 
 ```sh
-python3 opt/kicad-jlcpcb/export.py modules/line_in --overwrite
+python3 opt/kicad-tools/jlcpcb/export.py modules/line_in --overwrite
 ```
 
 All KiCad export commands use private copies of circuit/project files in a fresh temporary directory before the four result files are published. This prevents CLI-created or rewritten `.kicad_prl` / project cache files in the source checkout. Project-local footprint libraries are resolved through read-only symlinks; original circuit sources and native exclusion flags are not rewritten. `--overwrite` replaces only those four filenames, not unrelated files in the output directory. Each replacement is atomic, but publishing the entire set is not a filesystem transaction; do not run concurrent exports to the same directory.
@@ -60,9 +66,9 @@ All KiCad export commands use private copies of circuit/project files in a fresh
 `add_production_files.py` is the convenience wrapper for “give this module its production files”. It runs the exporter above and then places the results where the repository expects them, for **any current or future module**:
 
 ```sh
-python3 opt/kicad-jlcpcb/add_production_files.py modules/base   # module directory
-python3 opt/kicad-jlcpcb/add_production_files.py base           # module name under modules/
-python3 opt/kicad-jlcpcb/add_production_files.py --all          # every module that has a board
+python3 opt/kicad-tools/jlcpcb/add_production_files.py modules/base   # module directory
+python3 opt/kicad-tools/jlcpcb/add_production_files.py base           # module name under modules/
+python3 opt/kicad-tools/jlcpcb/add_production_files.py --all          # every module that has a board
 ```
 
 For each board it:
@@ -78,15 +84,15 @@ Useful flags:
 
 ```sh
 # see the plan without writing anything
-python3 opt/kicad-jlcpcb/add_production_files.py --all --dry-run
+python3 opt/kicad-tools/jlcpcb/add_production_files.py --all --dry-run
 # ZIP + CSVs only, skip the production_files/ and gerber/ mirrors
-python3 opt/kicad-jlcpcb/add_production_files.py base --no-loose-gerbers
+python3 opt/kicad-tools/jlcpcb/add_production_files.py base --no-loose-gerbers
 # keep superseded Gerber files instead of pruning them
-python3 opt/kicad-jlcpcb/add_production_files.py base --keep-stale-gerbers
+python3 opt/kicad-tools/jlcpcb/add_production_files.py base --keep-stale-gerbers
 # write the whole jlcpcb/ tree elsewhere (staging, tests)
-python3 opt/kicad-jlcpcb/add_production_files.py base --jlcpcb-root /tmp/staging
+python3 opt/kicad-tools/jlcpcb/add_production_files.py base --jlcpcb-root /tmp/staging
 # every board in a multi-board directory
-python3 opt/kicad-jlcpcb/add_production_files.py modules/panel --all-boards
+python3 opt/kicad-tools/jlcpcb/add_production_files.py modules/panel --all-boards
 ```
 
 Module directories with no `.kicad_pcb` are skipped (not failed) by `--all`; a directory holding several boards needs `--board NAME` or `--all-boards`. Part numbers are required by default (`--allow-missing-part-numbers` relaxes that).
@@ -126,7 +132,7 @@ LCSC values must be **`C` followed by digits**; a lowercase `c` is normalized to
 Already using a different field name? No project migration is necessary:
 
 ```sh
-python3 opt/kicad-jlcpcb/export.py modules/line_in \
+python3 opt/kicad-tools/jlcpcb/export.py modules/line_in \
   --part-field "Supplier Code" --require-part-numbers
 ```
 
@@ -138,30 +144,30 @@ Components with no LCSC number remain in both CSVs with a blank `LCSC Part #` an
 
 ```sh
 # Non-default destination; relative output paths are relative to the current shell directory.
-python3 opt/kicad-jlcpcb/export.py modules/line_in --output /tmp/line-in-assembly
+python3 opt/kicad-tools/jlcpcb/export.py modules/line_in --output /tmp/line-in-assembly
 
 # Directory contains multiple boards: select the filename or stem.
-python3 opt/kicad-jlcpcb/export.py /path/to/project --board control.kicad_pcb
+python3 opt/kicad-tools/jlcpcb/export.py /path/to/project --board control.kicad_pcb
 
 # Root schematic has a different filename (paths here are relative to project_dir).
-python3 opt/kicad-jlcpcb/export.py /path/to/project \
+python3 opt/kicad-tools/jlcpcb/export.py /path/to/project \
   --board control --schematic main.kicad_sch
 
 # Include through-hole / other electrical footprints as well as SMD.
-python3 opt/kicad-jlcpcb/export.py modules/line_in --include-through-hole
+python3 opt/kicad-tools/jlcpcb/export.py modules/line_in --include-through-hole
 
 # Only one assembly side; still exports all fabrication layers for the board.
-python3 opt/kicad-jlcpcb/export.py modules/line_in --side bottom
+python3 opt/kicad-tools/jlcpcb/export.py modules/line_in --side bottom
 
 # Intentionally ignore the schematic and use only board fields/flags.
-python3 opt/kicad-jlcpcb/export.py /path/to/project --pcb-only
+python3 opt/kicad-tools/jlcpcb/export.py /path/to/project --pcb-only
 
 # Choose the KiCad CLI executable, e.g. on macOS.
-python3 opt/kicad-jlcpcb/export.py /path/to/project \
+python3 opt/kicad-tools/jlcpcb/export.py /path/to/project \
   --kicad-cli /Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli
 
 # Full built-in help, including the native-field setup summary.
-python3 opt/kicad-jlcpcb/export.py --help
+python3 opt/kicad-tools/jlcpcb/export.py --help
 ```
 
 Alternatively, set the `KICAD_CLI` environment variable. On Windows, use the appropriate Python command (`py -3` or `python`) and pass the installed `kicad-cli.exe` path if it is not on `PATH`.
@@ -225,11 +231,11 @@ Review the ZIP in a Gerber viewer and check outline, layer count, copper, mask, 
 The unit tests use only Python's standard library and mocked CLI calls:
 
 ```sh
-python3 -B -m unittest discover -s opt/kicad-jlcpcb/tests -v
+python3 -B -m unittest discover -s opt/kicad-tools/jlcpcb/tests -v
 ```
 
 The optional integration suite invokes the installed KiCad CLI on temporary project fixtures and existing repository boards; it leaves the source projects untouched:
 
 ```sh
-KICAD_JLCPCB_INTEGRATION=1 python3 -B -m unittest discover -s opt/kicad-jlcpcb/tests -v
+KICAD_JLCPCB_INTEGRATION=1 python3 -B -m unittest discover -s opt/kicad-tools/jlcpcb/tests -v
 ```
