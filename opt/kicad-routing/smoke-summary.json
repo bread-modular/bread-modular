@@ -1,0 +1,401 @@
+{
+  "binding_warnings": {
+    "assertion_count": 18,
+    "example": "./kicad/include/properties/property.h(607): assert \"m_choices.GetCount() > 0\" failed in PROPERTY_ENUM(): No enum choices defined",
+    "processes": 6,
+    "stderr_not_suppressed": true
+  },
+  "bwrap_prefix": "/usr/bin/bwrap --die-with-parent --new-session --unshare-net --unshare-pid --unshare-ipc --unshare-uts --cap-drop ALL --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 --hostname routing-smoke --dir /etc --ro-bind '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/hosts' /etc/hosts --ro-bind '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/nsswitch.conf' /etc/nsswitch.conf --ro-bind /etc/ld.so.cache /etc/ld.so.cache --ro-bind '${WORKSPACE}/opt/kicad-routing/runtime.tmp' /runtime --bind '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke' /run --ro-bind '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/source' /run/source --ro-bind '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/before' /run/before --ro-bind '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/input-final-smoke.dsn' /run/input-final-smoke.dsn --proc /proc --dev /dev --remount-ro /proc --clearenv --setenv PATH /usr/bin --setenv LANG C.UTF-8 --setenv TZ UTC --setenv HOME /run/home --setenv XDG_CONFIG_HOME /run/xdg/config --setenv XDG_CACHE_HOME /run/xdg/cache --setenv XDG_DATA_HOME /run/xdg/data --setenv TMPDIR /run/tmp --chdir /run --remount-ro / --",
+  "commands": [
+    {
+      "command": "/usr/bin/python3 -B -X faulthandler '${WORKSPACE}/opt/kicad-routing/pcbnew_adapter.py' create '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke'",
+      "exit": 0,
+      "seconds": 0.232,
+      "stderr_sha256": "ecfdabc9a488fbdbeb42728b58080ecf903a12f0cabcb48d0622d8aa9f2d1a1e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "/usr/bin/python3 -B -X faulthandler '${WORKSPACE}/opt/kicad-routing/pcbnew_adapter.py' snapshot-source '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke'",
+      "exit": 0,
+      "seconds": 0.151,
+      "stderr_sha256": "ecfdabc9a488fbdbeb42728b58080ecf903a12f0cabcb48d0622d8aa9f2d1a1e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "/usr/bin/kicad-cli pcb drc --format json --severity-all --all-track-errors --schematic-parity --refill-zones --save-board --exit-code-violations -o '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/before-drc.json' '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/before/synthetic.kicad_pcb'",
+      "exit": 5,
+      "seconds": 0.488,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c534ed26516a7de90a57f5ec0f3554670845676beef564d9af502a50ec120099"
+    },
+    {
+      "command": "/usr/bin/python3 -B -X faulthandler '${WORKSPACE}/opt/kicad-routing/pcbnew_adapter.py' snapshot-before '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke'",
+      "exit": 0,
+      "seconds": 0.157,
+      "stderr_sha256": "ecfdabc9a488fbdbeb42728b58080ecf903a12f0cabcb48d0622d8aa9f2d1a1e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "/usr/bin/kicad-cli sch export netlist --format kicadxml -o '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/schematic-nets.xml' '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/before/synthetic.kicad_sch'",
+      "exit": 0,
+      "seconds": 0.151,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "/usr/bin/python3 -B -X faulthandler '${WORKSPACE}/opt/kicad-routing/pcbnew_adapter.py' export '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke'",
+      "exit": 0,
+      "seconds": 0.153,
+      "stderr_sha256": "ecfdabc9a488fbdbeb42728b58080ecf903a12f0cabcb48d0622d8aa9f2d1a1e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "'${BWRAP_PREFIX}' /usr/bin/python3 -I /run/network-probe.py 'net:[4026531833]' 58629",
+      "exit": 0,
+      "seconds": 0.024,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "4265daf72426d44d4ffbd960b0c12b074d6c968e0076def7216f0b0fc7a379c2"
+    },
+    {
+      "command": "'${BWRAP_PREFIX}' /runtime/extracted/jdk-25.0.4.1+1-jre/bin/java -Xmx512m -XX:ActiveProcessorCount=2 -Djava.awt.headless=true -Duser.home=/run/home -Djava.io.tmpdir=/run/tmp -jar /runtime/freerouting-2.5.0.jar -da --user_data_path=/run/freerouting-config --gui.enabled=false --api_server.enabled=false --mcp_server.enabled=false --usage_and_diagnostic_data.disable_analytics=true --profile.allow_telemetry=false --logging.console.level=DEBUG --logging.file.enabled=false --router.autorouter.max_passes=10 --router.optimizer.enabled=false --router.fanout.enabled=false --router.copperToEdgeClearanceUm=500 --router.automatic_neckdown=false --help",
+      "exit": 0,
+      "seconds": 1.855,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "df7cf72559972565355ca8db062e630d7dae454f6915986342ed8273792f4eb3"
+    },
+    {
+      "command": "'${BWRAP_PREFIX}' /runtime/extracted/jdk-25.0.4.1+1-jre/bin/java -Xmx512m -XX:ActiveProcessorCount=2 -Djava.awt.headless=true -Duser.home=/run/home -Djava.io.tmpdir=/run/tmp -jar /runtime/freerouting-2.5.0.jar -da --user_data_path=/run/freerouting-config --gui.enabled=false --api_server.enabled=false --mcp_server.enabled=false --usage_and_diagnostic_data.disable_analytics=true --profile.allow_telemetry=false --logging.console.level=DEBUG --logging.file.enabled=false --router.autorouter.max_passes=10 --router.optimizer.enabled=false --router.fanout.enabled=false --router.copperToEdgeClearanceUm=500 --router.automatic_neckdown=false --router.result_json_path=/run/freerouting-result.json -de /run/input-final-smoke.dsn -do /run/result.ses",
+      "exit": 0,
+      "seconds": 2.369,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "1a1a185bd1a6b94fbbe57cf7c79f7c25e969b5c17843ee8338359f9122210c19"
+    },
+    {
+      "command": "/usr/bin/python3 -B -X faulthandler '${WORKSPACE}/opt/kicad-routing/pcbnew_adapter.py' import '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke'",
+      "exit": 0,
+      "seconds": 0.237,
+      "stderr_sha256": "ecfdabc9a488fbdbeb42728b58080ecf903a12f0cabcb48d0622d8aa9f2d1a1e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "/usr/bin/kicad-cli pcb drc --format json --severity-all --all-track-errors --schematic-parity --refill-zones --save-board --exit-code-violations -o '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/after-drc.json' '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke/after/synthetic.kicad_pcb'",
+      "exit": 0,
+      "seconds": 0.516,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e97734605af736f563414b76c0a0a1447c71a1784bdf1c5215a70a4b2e832bc9"
+    },
+    {
+      "command": "/usr/bin/python3 -B -X faulthandler '${WORKSPACE}/opt/kicad-routing/pcbnew_adapter.py' snapshot-after '${WORKSPACE}/opt/kicad-routing/work.tmp/runs/final-smoke'",
+      "exit": 0,
+      "seconds": 0.156,
+      "stderr_sha256": "ecfdabc9a488fbdbeb42728b58080ecf903a12f0cabcb48d0622d8aa9f2d1a1e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "commands_to_reproduce": [
+    "python3 opt/kicad-routing/run.py doctor",
+    "python3 opt/kicad-routing/run.py prepare-runtime --allow-downloads",
+    "python3 opt/kicad-routing/run.py smoke",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s opt/kicad-routing/tests -v"
+  ],
+  "compatibility_notes": [
+    "Initialize brand-new BOARD via native save/load before SetProject (direct new-BOARD SetProject segfaulted in initial probe).",
+    "Explicit UnloadProject(aSave=False); PRL view state and transient locks are not rule/geometry authority.",
+    "Freerouting SES base_design is the unique input stem; full DSN header/source/session byte association is checked.",
+    "Automatic neckdown was disabled after an early probe emitted a 0.1874 mm segment; final native DRC is clean.",
+    "This completed run uses F.Cu detours and zero vias; actual layer-changing/via import is not proved."
+  ],
+  "effective_settings": {
+    "analytics_disabled_logged": true,
+    "final_state": "COMPLETED",
+    "passes": 2,
+    "requested": {
+      "api_server.enabled": false,
+      "gui.enabled": false,
+      "logging.console.level": "DEBUG",
+      "logging.file.enabled": false,
+      "mcp_server.enabled": false,
+      "profile.allow_telemetry": false,
+      "router.automatic_neckdown": false,
+      "router.autorouter.max_passes": 10,
+      "router.copperToEdgeClearanceUm": 500,
+      "router.fanout.enabled": false,
+      "router.optimizer.enabled": false,
+      "usage_and_diagnostic_data.disable_analytics": true
+    },
+    "router": {
+      "automatic_neckdown": false,
+      "autorouter": {
+        "algorithm": "freerouting-router",
+        "enabled": true,
+        "ignore_net_classes": [],
+        "max_items": 2147483647,
+        "max_passes": 10,
+        "max_threads": 1,
+        "save_intermediate_stages": false
+      },
+      "copper_to_edge_clearance_um": 500.0,
+      "fanout": {
+        "enabled": false,
+        "end_via_diameter_mm": 0.25,
+        "fallback_to_board_vias": true,
+        "max_escape_length_mm": 4.5,
+        "max_items": 2147483647,
+        "max_milliseconds_per_pin": 10000,
+        "max_passes": 20,
+        "min_escape_length_mm": 2.5,
+        "pin_sorting_order": "outer_first",
+        "ripup_allowed": true,
+        "start_via_diameter_mm": 0.25
+      },
+      "optimizer": {
+        "additional_ripup_cost_factor_at_start": 10,
+        "algorithm": "freerouting-optimizer",
+        "enable_preflight_guards": true,
+        "enabled": false,
+        "improvement_threshold": 2.5,
+        "max_autoroute_passes": 6,
+        "max_consecutive_failures": 50,
+        "max_consecutive_failures_pass1": 12,
+        "max_items": 2147483647,
+        "max_passes": 100,
+        "max_threads": 1,
+        "trace_ripup_cost_factor": 0.6
+      },
+      "validation_warnings": []
+    }
+  },
+  "limitations": [
+    "Synthetic fixture only; no arbitrary board input or production approval.",
+    "KiCad 10.0.6 native SWIG compatibility; binding PROPERTY_ENUM stderr assertions retained.",
+    "No proof for arbitrary custom rules, differential pairs, tuning, pad overrides or other stackups.",
+    "Native DRC/zone connectivity is not an electrical, return-path, thermal or manufacturing review.",
+    "Pinned upstream checksums/metadata are reproducibility checks, not an independent security audit."
+  ],
+  "observed_at_utc": "2026-10-06T01:56:47.135287390Z",
+  "platform": {
+    "architecture": "x86_64",
+    "bubblewrap": "0.11.1",
+    "kicad": "10.0.6",
+    "python": "3.14.4",
+    "system": "Linux",
+    "system_java_on_path": false
+  },
+  "production_ready": false,
+  "raw_evidence": {
+    "ignored_logs": "opt/kicad-routing/work.tmp/runs/final-smoke/logs",
+    "run_json": "opt/kicad-routing/work.tmp/runs/final-smoke/run.json",
+    "run_json_sha256": "21af47c7dd297785fa174e9dfa86388374133734a28b360c1be1ad74dfc6acf6",
+    "runtime": "opt/kicad-routing/runtime.tmp/provenance.json"
+  },
+  "runtime": {
+    "downloaded_artifacts": {
+      "freerouting": {
+        "bytes": 64599107,
+        "seconds": 12.546,
+        "sha256": "f6f51bb02245e8e717f9359bd260cc9c5c0b1bc0acc8b7cb2cd5b8ffeb5de3c7"
+      },
+      "freerouting-metadata": {
+        "bytes": 35834,
+        "seconds": 1.087,
+        "sha256": "8f3ac3ad97e00a3e8745b996d5677ca8529ac38d0f0df6448046c9222c69117d"
+      },
+      "jre": {
+        "bytes": 61718288,
+        "seconds": 12.343,
+        "sha256": "1731a34baadec5479258ea0202e4d5d865d2efeee60cb0c7d7eb056fe96ca219"
+      },
+      "jre-metadata": {
+        "bytes": 559715,
+        "seconds": 1.346,
+        "sha256": "3d10d292bd5cec6c9d691666f0adee142bdd2fbf497f7daa40071d008c10d839"
+      },
+      "license": {
+        "bytes": 35121,
+        "seconds": 0.583,
+        "sha256": "e1c0ad728983d8a57335e52cf1064f1affd1d454173d8cebd3ed8b4a72b48704"
+      }
+    },
+    "freerouting_license": {
+      "sha256": "e1c0ad728983d8a57335e52cf1064f1affd1d454173d8cebd3ed8b4a72b48704",
+      "url": "https://raw.githubusercontent.com/freerouting/freerouting/v2.5.0/LICENSE"
+    },
+    "notice_files": 184,
+    "pins": {
+      "freerouting": {
+        "license": "GPL-3.0",
+        "metadata": "https://api.github.com/repos/freerouting/freerouting/releases/tags/v2.5.0",
+        "name": "freerouting-2.5.0.jar",
+        "sha256": "f6f51bb02245e8e717f9359bd260cc9c5c0b1bc0acc8b7cb2cd5b8ffeb5de3c7",
+        "size": 64599107,
+        "tag": "v2.5.0",
+        "url": "https://github.com/freerouting/freerouting/releases/download/v2.5.0/freerouting-2.5.0.jar",
+        "version": "2.5.0"
+      },
+      "jre": {
+        "license": "GPL-2.0 with Classpath Exception + bundled notices",
+        "metadata": "https://api.github.com/repos/adoptium/temurin25-binaries/releases/tags/jdk-25.0.4.1%2B1",
+        "name": "OpenJDK25U-jre_x64_linux_hotspot_25.0.4.1_1.tar.gz",
+        "sha256": "1731a34baadec5479258ea0202e4d5d865d2efeee60cb0c7d7eb056fe96ca219",
+        "size": 61718288,
+        "tag": "jdk-25.0.4.1+1",
+        "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_x64_linux_hotspot_25.0.4.1_1.tar.gz",
+        "version": "25.0.4.1+1"
+      }
+    },
+    "provenance_sha256": "03df24d749037217d320bab0b2564eaf880a1699b942f62539a01fff6f77e02b",
+    "verified_metadata": {
+      "freerouting": {
+        "asset_id": 613070298,
+        "asset_updated_at": "2026-10-05T16:21:34Z",
+        "published_at": "2026-10-05T15:58:39Z",
+        "release_id": 403879512
+      },
+      "jre": {
+        "asset_id": 523665431,
+        "asset_updated_at": "2026-08-21T11:40:55Z",
+        "published_at": "2026-08-19T14:49:26Z",
+        "release_id": 373132790
+      }
+    }
+  },
+  "sandbox": {
+    "connection_errors": {
+      "egress": 101,
+      "host_loopback": 111
+    },
+    "home": "/run/home",
+    "host_net_namespace": "net:[4026531833]",
+    "interfaces": [
+      "lo"
+    ],
+    "net_namespace": "net:[4026532871]",
+    "readonly_errors": {
+      "/outside-write": 30,
+      "/runtime/provenance.json": 30,
+      "/usr/probe-write": 30
+    },
+    "status": "verified",
+    "tmp": "/run/tmp"
+  },
+  "schema": 1,
+  "smoke": {
+    "after_drc": {
+      "ignored_checks": [],
+      "opens": 0,
+      "parity": 0,
+      "violations": 0
+    },
+    "before_drc": {
+      "ignored_checks": [],
+      "opens": 2,
+      "parity": 0,
+      "violations": 0
+    },
+    "budget": {
+      "java_heap_mb": 512,
+      "log_bytes_per_stream": 4194304,
+      "max_passes": 10,
+      "processors": 2,
+      "routing_timeout_seconds": 120,
+      "total_seconds": 240
+    },
+    "candidate_sha256": "3d59b1ab380bd7fe604c0deb0603360b35d29d63ba8ca64d28476a7332cb5ab8",
+    "drc_report_hashes": {
+      "after": "40e81f10b3fa95731b43b842c8ef4459fd9e95ad5ded953f526b58a1fbbb758e",
+      "before": "c5138c33c1094e8fbd1f827e775f71dc02d5f1cefa71de7d3f8b267cbedd19bd"
+    },
+    "dsn_sha256": "33b423716a035aca0e173d9119e77ef55bc807badd91cf9b295f2c91cbeb4de8",
+    "fixture": "bread-routing-synthetic-v1",
+    "invariant_deltas": [],
+    "invariant_hashes": {
+      "after": "91e244d36a597fa1663a57d9525ee090f786c797e654177b73cccaefc8d6f834",
+      "before": "91e244d36a597fa1663a57d9525ee090f786c797e654177b73cccaefc8d6f834",
+      "source": "91e244d36a597fa1663a57d9525ee090f786c797e654177b73cccaefc8d6f834"
+    },
+    "metrics": {
+      "after": {
+        "via_count": 0,
+        "wirelength_mm": 91.287654
+      },
+      "before": {
+        "via_count": 0,
+        "wirelength_mm": 28.0
+      }
+    },
+    "schematic_nodes": [
+      [
+        "J1",
+        "1",
+        "CRITICAL"
+      ],
+      [
+        "J1",
+        "2",
+        "SIG_A"
+      ],
+      [
+        "J1",
+        "3",
+        "SIG_B"
+      ],
+      [
+        "J1",
+        "4",
+        "GND"
+      ],
+      [
+        "J2",
+        "1",
+        "CRITICAL"
+      ],
+      [
+        "J2",
+        "2",
+        "SIG_B"
+      ],
+      [
+        "J2",
+        "3",
+        "SIG_A"
+      ],
+      [
+        "J2",
+        "4",
+        "GND"
+      ]
+    ],
+    "seconds": 6.601,
+    "ses_sha256": "b8f23fc643851708b05606386bb212453b3ab3f818805f0a4d92a1b06b749a93",
+    "source_hashes": {
+      "RoutingSmoke.pretty/Header4.kicad_mod": "0e95e88a264d794e805954b4c3999bb5a95eba63b8d6ae681fee5c03782eef7b",
+      "fp-lib-table": "f3225702350809af97583719c86352eba9cc87a7b3443f6e57b59aaed915a101",
+      "synthetic.kicad_dru": "0cc587ae3212e82d8de15737dcd6f7c06c8afac43e2dd73a9309e372d1cf80f7",
+      "synthetic.kicad_pcb": "d8e38d914a4a6dab0c415fccfb3c507bfb1a1f73a201dc9574368b39625f8938",
+      "synthetic.kicad_pro": "b5908cc52d6c8f6a1b585920b2bb7e43d73b2d51b1fe17c6db9f50296a843b94",
+      "synthetic.kicad_sch": "732a673773cb8362dc45d6538bd011dd92cdeeb6f9e8cec8e6e1fd5a43463c85"
+    },
+    "source_immutable": true,
+    "type_fix_export_verified": true
+  },
+  "status": "passed-synthetic-only",
+  "tests": {
+    "command": "/usr/bin/python3 -B -m unittest discover -s '${WORKSPACE}/opt/kicad-routing/tests' -v",
+    "count": 32,
+    "coverage": "Native/process mocks for missing runtime/API, export/import failure, no overwrite, malformed/stale SES/source/header, placement/net/rule/locked-copper changes, paths/tar symlinks and timeout; installed Python real timeout probe.",
+    "failures": 0,
+    "seconds": 0.329,
+    "stderr_sha256": "dcee7e705a6f5712354232aa0b4a36fa2c993b251663ec5660bf7bbe3a45a775"
+  },
+  "tool_hashes": {
+    "/usr/bin/bwrap": "523da3e7399044be5163aee6f57a77a6bef7454376e28f0a0627920bae1b76b6",
+    "/usr/bin/kicad-cli": "855024e35f2ca023e1d7ce6a1f347b1dc0fce48d13755ab2946af081c7e9beee",
+    "/usr/bin/python3": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+    "fixture.py": "1f81602128b2b86d01141935f31fcbbe8fb6e856b8108c363244fcef105d87b2",
+    "pcbnew_adapter.py": "d0ef984d8189afb611d158663c428a283a8dc2bba221f38b584563d42a0e615d",
+    "run.py": "9df488e601b6a2dcf71616350392ac5ec2d9063828d7ed0af15bcc6cdc06da01",
+    "runtime.py": "a8678bc5048431337a01b605fff2afc335ade97a362dd959a59265aeaf7d17d9",
+    "safety.py": "c78c6d267a5370e59d667471a119bb2015bcf235cd1052db86c417f2655d7bf6",
+    "sandbox.py": "0463078cc908e772d5885c6c3c58476426afd9abd202b05ccb3bdb6b33c3f768"
+  }
+}
