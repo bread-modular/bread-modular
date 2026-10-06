@@ -47,3 +47,6 @@ modules/*/code/*/sim/test_*
 !modules/32bit-5v/jlcpcb/
 !modules/32bit-5v/jlcpcb/**
 opt/kicad-jlcpcb/**/__pycache__/
+
+# Portable KiCad toolkit bytecode only (reports require explicit external paths)
+opt/kicad-tools/**/__pycache__/
