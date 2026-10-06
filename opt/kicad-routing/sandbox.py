@@ -78,7 +78,8 @@ def command(run, executable):
     return argv + list(map(str, executable))
 
 
-def setup(run, timeout=15):
+def setup(run, timeout=15, settings=None):
+    settings = SETTINGS if settings is None else settings
     for name in ['home', 'tmp', 'xdg/config', 'xdg/cache', 'xdg/data', 'freerouting-config']:
         safe_path(run/name).mkdir(parents=True, exist_ok=False)
     (run/'network-probe.py').write_text(PROBE)
@@ -87,7 +88,7 @@ def setup(run, timeout=15):
     config = {"version": "2.5.0", "profile": {
         "id": "e2e3ee44-369d-4f7e-8d35-78275e33c54d", "email": "",
         "allow_telemetry": False, "allow_contact": False}}
-    for key,value in SETTINGS.items():
+    for key,value in settings.items():
         target = config
         parts = key.split('.')
         for part in parts[:-1]:
@@ -113,10 +114,11 @@ def java_command(run, java, jar, flags):
                          '-Duser.home=/run/home', '-Djava.io.tmpdir=/run/tmp', '-jar', a] + flags)
 
 
-def flags():
+def flags(settings=None):
+    settings = SETTINGS if settings is None else settings
     return ['-da', '--user_data_path=/run/freerouting-config'] + [
         '--'+key+'='+ (str(value).lower() if isinstance(value, bool) else str(value))
-        for key,value in SETTINGS.items()]
+        for key,value in settings.items()]
 
 
 def validate_logs(run, name):
@@ -130,9 +132,10 @@ def validate_logs(run, name):
     return logs
 
 
-def preflight(run, java, jar, timeout=30):
+def preflight(run, java, jar, timeout=30, settings=None):
+    settings = SETTINGS if settings is None else settings
     # Help exercises GlobalSettings' actual reflection parser without routing.
-    rec = run_process(java_command(run, java, jar, flags()+['--help']), run/'logs', 'freerouting-help', timeout)
+    rec = run_process(java_command(run, java, jar, flags(settings)+['--help']), run/'logs', 'freerouting-help', timeout)
     checked(rec); logs = validate_logs(run, 'freerouting-help')
     require('Usage:' in logs or '-de' in logs, 'missing actual help output')
     # Default JSON is saved BEFORE CLI flags are applied in 2.5.0. Do not
@@ -140,7 +143,7 @@ def preflight(run, java, jar, timeout=30):
     # as an additional opt-out; real merged router settings are checked in result JSON.
     config = safe_path(run/'freerouting-config/freerouting.json')
     data = json.loads(config.read_text())
-    for key,value in SETTINGS.items():
+    for key,value in settings.items():
         target = data
         parts = key.split('.')
         for part in parts[:-1]:
@@ -150,19 +153,20 @@ def preflight(run, java, jar, timeout=30):
     return rec
 
 
-def route(run, java, jar, timeout=120):
+def route(run, java, jar, timeout=120, settings=None):
+    settings = SETTINGS if settings is None else settings
     require(not safe_path(run/'result.ses').exists(), 'SES output overwrite refused')
     extra = ['--router.result_json_path=/run/freerouting-result.json']
-    rec = run_process(java_command(run, java, jar, flags()+extra+
+    rec = run_process(java_command(run, java, jar, flags(settings)+extra+
                       ['-de', '/run/input-'+run.name+'.dsn', '-do', '/run/result.ses']),
                       run/'logs', 'freerouting-route', timeout)
     checked(rec); validate_logs(run, 'freerouting-route')
     result = json.loads(safe_path(run/'freerouting-result.json').read_text())
-    settings = result['settings_snapshot']
-    for key,value in SETTINGS.items():
+    actual = result['settings_snapshot']
+    for key,value in settings.items():
         if not key.startswith('router.'):
             continue
-        target = settings
+        target = actual
         for part in key.split('.')[1:]:
             part = {'copperToEdgeClearanceUm': 'copper_to_edge_clearance_um'}.get(part,part)
             require(part in target, f'effective router field missing: {key}')
@@ -172,7 +176,7 @@ def route(run, java, jar, timeout=120):
             result['app_version'] == '2.5.0' and result['output_written'], 'Freerouting job did not succeed')
     require(result['fixture']['sha256'] == digest(run/('input-'+run.name+'.dsn')) and
             result['fixture']['filename'] == 'input-'+run.name+'.dsn', 'router result/DSN association mismatch')
-    require(not settings.get('validation_warnings'), 'router settings validation warnings')
-    write_json(run/'effective-settings.json', {"requested": SETTINGS, "actual_router": settings,
+    require(not actual.get('validation_warnings'), 'router settings validation warnings')
+    write_json(run/'effective-settings.json', {"requested": settings, "actual_router": actual,
                "verification": "native Freerouting merged job result; help parser verified non-router flags"}, exclusive=True)
     return rec, result

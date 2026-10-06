@@ -1,0 +1,317 @@
+{
+  "historical_smoke_command": "/usr/bin/python3 -B opt/kicad-routing/run.py smoke --run-id ordinary-final-smoke --route-timeout 120",
+  "limitations": [
+    "Two layers, Default scalar rules, rectangular outline, frozen local single-sheet context only.",
+    "General zones/keepouts/hierarchy/conditional rules/arcs/pad overrides/differential intent/other stackups rejected.",
+    "No auto-placement algorithm, arbitrary selected-net CLI, manufacturing status, commits/merge/push."
+  ],
+  "native_tests": {
+    "command": "/usr/bin/python3 -B opt/kicad-routing/tests/native_project_checks.py --run-prefix local-final",
+    "errors": 0,
+    "failures": 0,
+    "passed": 13,
+    "source_immutable": true,
+    "subprocess_commands": 27,
+    "summary_sha256": "f5d15e76feeb864bb922cd3c946961693087dce637308e3c04634d6f044e3e81"
+  },
+  "observed": "2026-10-06",
+  "probe_notes": [
+    "Early SWIG Remove() ownership crash/stdout warnings and test-harness failures retained locally; final source uses process-bounded RemoveNative()/primitive export checks.",
+    "Extra caller-independent remount probe was not accepted as evidence: this host denied nested Bubblewrap namespace creation. No fallback or additional engine was used."
+  ],
+  "routing_runs": [
+    {
+      "after": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 0
+      },
+      "association": {
+        "context_digest": "5b1279b989c91dab5b82e2912db457c601ade050e0d997fd847835a7fe69ba05",
+        "dsn_sha256": "f3c03aa5e7728d4a6dc8dbf95c0a9ca9914487b29f4c2efa811236e56b28e654",
+        "plan_sha256": "4617a48c9120b1da250576cbc3339e6f939a6dc4e8822f537d8730108600abe2",
+        "ses_sha256": "13a4e35d77c83a24ffd769beafd53cacd08319cc77ff9f9bae61784068c7b8a5",
+        "session_id": "local-final-via",
+        "source_digest": "b7d108b05179ebb64e6ff5285857f85b6a1f7a662241c6bac8df2077d035c6c6"
+      },
+      "before": {
+        "schematic_parity": 0,
+        "unconnected_items": 1,
+        "violations": 0
+      },
+      "duration_seconds": 6.07,
+      "endpoint_command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/run.py",
+        "route-project",
+        "--snapshot",
+        "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/native-tests-local-final/Input snapshots",
+        "--pcb",
+        "Bench A/Orchard Controller.kicad_pcb",
+        "--plan",
+        "/home/azero/.okbrain/workspaces/bread-modular-kicad/301/opt/kicad-routing/work.tmp/native-tests-local-final/approved-plan.json",
+        "--run-id",
+        "local-final-via",
+        "--route-timeout",
+        "120",
+        "--apply"
+      ],
+      "error": null,
+      "export": {
+        "dsn_sha256": "f3c03aa5e7728d4a6dc8dbf95c0a9ca9914487b29f4c2efa811236e56b28e654",
+        "dsn_translation_verified": true,
+        "fixed_copper_count": 2,
+        "removed_authorized_unlocked_count": 1
+      },
+      "forced_layer_change": {
+        "DATA_track_layers": [
+          0,
+          2
+        ],
+        "diameter_iu": 700000,
+        "drill_iu": 350000,
+        "via_count": 1,
+        "via_layers": [
+          0,
+          2
+        ]
+      },
+      "invariant_deltas": [],
+      "metrics": {
+        "after": {
+          "via_count": 1,
+          "wirelength_mm": 58.684619
+        },
+        "before": {
+          "via_count": 0,
+          "wirelength_mm": 28.3
+        }
+      },
+      "run_id": "local-final-via",
+      "run_json_sha256": "faf41970bad5b01e0771b17a0401f3f747bda9d35e8f65988857724cca70a7ae",
+      "source_immutable": true,
+      "status": "passed"
+    },
+    {
+      "after": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 0
+      },
+      "association": {
+        "context_digest": "5b1279b989c91dab5b82e2912db457c601ade050e0d997fd847835a7fe69ba05",
+        "dsn_sha256": "b4051cfbc475346d579e263ec88ea560f15ca434afe3c6d802fcc9b36a1bd3c7",
+        "plan_sha256": "9eae1d8b4bfcb160c2e388263b5c0b1ba9c26dc088ce046ab442e63c83cbfd20",
+        "ses_sha256": "1e87c4af4fea53fbfe38596ae565c8ba9a5786ed09a19c82cfa4a217fd00b611",
+        "session_id": "local-final-reroute",
+        "source_digest": "b7d108b05179ebb64e6ff5285857f85b6a1f7a662241c6bac8df2077d035c6c6"
+      },
+      "before": {
+        "schematic_parity": 0,
+        "unconnected_items": 1,
+        "violations": 0
+      },
+      "duration_seconds": 6.1,
+      "error": null,
+      "export": {
+        "dsn_sha256": "b4051cfbc475346d579e263ec88ea560f15ca434afe3c6d802fcc9b36a1bd3c7",
+        "dsn_translation_verified": true,
+        "fixed_copper_count": 1,
+        "removed_authorized_unlocked_count": 2
+      },
+      "invariant_deltas": [],
+      "metrics": {
+        "after": {
+          "via_count": 1,
+          "wirelength_mm": 59.007067
+        },
+        "before": {
+          "via_count": 0,
+          "wirelength_mm": 28.3
+        }
+      },
+      "run_id": "local-final-reroute",
+      "run_json_sha256": "0095d37c4c646f53c6956e64a55d9fe8c061649de1de7df7c249bfca04a0d2b9",
+      "source_immutable": true,
+      "status": "passed"
+    },
+    {
+      "after": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 0
+      },
+      "association": {
+        "context_digest": "5b1279b989c91dab5b82e2912db457c601ade050e0d997fd847835a7fe69ba05",
+        "dsn_sha256": "b76cbbf4d411e0cc8849bd5fc9053bc999c77d8dc0bd264d1a00b10ee9b47d0d",
+        "plan_sha256": "cf01f5bf3bab63a212ea4df80f3d1834bff5a825755ac1cd4d865d8e20927749",
+        "ses_sha256": "63fd8528afbc77056342e2cd65b0a95923a99370f0f1b38f50fbfc649698d0d1",
+        "session_id": "local-final-handoff",
+        "source_digest": "c526bed3c9356a8ea3d6c0e53055ddf94aa9aec6bcadace9de3015df6ec5e501"
+      },
+      "before": {
+        "schematic_parity": 0,
+        "unconnected_items": 1,
+        "violations": 0
+      },
+      "duration_seconds": 6.149,
+      "error": null,
+      "export": {
+        "dsn_sha256": "b76cbbf4d411e0cc8849bd5fc9053bc999c77d8dc0bd264d1a00b10ee9b47d0d",
+        "dsn_translation_verified": true,
+        "fixed_copper_count": 2,
+        "removed_authorized_unlocked_count": 1
+      },
+      "invariant_deltas": [],
+      "metrics": {
+        "after": {
+          "via_count": 1,
+          "wirelength_mm": 58.284619
+        },
+        "before": {
+          "via_count": 0,
+          "wirelength_mm": 28.3
+        }
+      },
+      "run_id": "local-final-handoff",
+      "run_json_sha256": "c74155f8a363c39bda45302e17f820b0fc2d03ed5c22bf771b1fd4e5219d91f4",
+      "source_immutable": true,
+      "status": "passed"
+    },
+    {
+      "after": null,
+      "before": {
+        "schematic_parity": 0,
+        "unconnected_items": 1,
+        "violations": 0
+      },
+      "duration_seconds": 3.931,
+      "error": {
+        "code": "PROCESS_TIMEOUT",
+        "hint": "Inspect this unique run's retained logs; no automatic retry.",
+        "message": "GateError: process timeout; see retained logs"
+      },
+      "export": {
+        "dsn_sha256": "e3b1928780f05019d1e516bae99dbc04fb17ecc577c9f8a6af4aae485c6bf30a",
+        "dsn_translation_verified": true,
+        "fixed_copper_count": 2,
+        "removed_authorized_unlocked_count": 1
+      },
+      "invariant_deltas": null,
+      "metrics": null,
+      "run_id": "local-final-timeout",
+      "run_json_sha256": "1d5feeda27553c6295c9202d6431150ced146e8546b9bbe4f87adc870fbdc093",
+      "source_immutable": true,
+      "status": "failed"
+    },
+    {
+      "after": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 0
+      },
+      "association": {
+        "context_digest": "5b1279b989c91dab5b82e2912db457c601ade050e0d997fd847835a7fe69ba05",
+        "dsn_sha256": "9a950c302fc5f7c4e2d6f6977cc8b9e48318bd90749bbd88054edbd4cb5fb1e5",
+        "plan_sha256": "44f66d894c63c5f01ae575c69533f82a3c8eda4f7e7fef754a7fdb4081b11b09",
+        "ses_sha256": "a536447d07c982a05cec607169eb8f03e6f7670d745d0beaa159e9371b202c88",
+        "session_id": "local-final-fixed-via",
+        "source_digest": "843b2a4384c1a71edea6b41fab7a8f38430475b6a5ef005181df9831298ebb0c"
+      },
+      "before": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 0
+      },
+      "duration_seconds": 6.066,
+      "error": null,
+      "export": {
+        "dsn_sha256": "9a950c302fc5f7c4e2d6f6977cc8b9e48318bd90749bbd88054edbd4cb5fb1e5",
+        "dsn_translation_verified": true,
+        "fixed_copper_count": 7,
+        "removed_authorized_unlocked_count": 1
+      },
+      "invariant_deltas": [],
+      "metrics": {
+        "after": {
+          "via_count": 1,
+          "wirelength_mm": 58.684619
+        },
+        "before": {
+          "via_count": 1,
+          "wirelength_mm": 58.684619
+        }
+      },
+      "run_id": "local-final-fixed-via",
+      "run_json_sha256": "1000e54bd0769bf732cc857cdd0c9d06fba07efbccc7b7e1bfb7dd88a51867e6",
+      "source_immutable": true,
+      "status": "passed"
+    },
+    {
+      "after": {
+        "ignored_checks": [],
+        "opens": 0,
+        "parity": 0,
+        "violations": 0
+      },
+      "association": {
+        "dsn_sha256": "a0c9a9f19eaa6f2d4180660a8850dcf42782e7d23e095bbcdef3daf5bf5654cd",
+        "ses_sha256": "f264058cff36579d1028fe549fddf9fd081b4a623b1a5af39356a7667b40860e"
+      },
+      "before": {
+        "ignored_checks": [],
+        "opens": 2,
+        "parity": 0,
+        "violations": 0
+      },
+      "duration_seconds": 6.636,
+      "error": null,
+      "export": {
+        "dsn_sha256": "a0c9a9f19eaa6f2d4180660a8850dcf42782e7d23e095bbcdef3daf5bf5654cd",
+        "dsn_translation_verified": null,
+        "fixed_copper_count": null,
+        "removed_authorized_unlocked_count": null
+      },
+      "invariant_deltas": [],
+      "metrics": {
+        "after": {
+          "via_count": 0,
+          "wirelength_mm": 91.287654
+        },
+        "before": {
+          "via_count": 0,
+          "wirelength_mm": 28.0
+        }
+      },
+      "run_id": "ordinary-final-smoke",
+      "run_json_sha256": "c4dda207c2095eeff204bffb18e3d517eb69b1548c5b61b597b8504f6fe4de84",
+      "source_immutable": true,
+      "status": "passed"
+    }
+  ],
+  "runtime_provenance_sha256": "790ef3a9212d3346206e4430c010ae0672bb1333b134fbf3bcb59327e526699c",
+  "schema": "bread-local-route-evidence/v1",
+  "scope": "Bounded ordinary-project CLI on generated inputs only; no released module inputs or production approval.",
+  "tool_hashes": {
+    "fixture.py": "1f81602128b2b86d01141935f31fcbbe8fb6e856b8108c363244fcef105d87b2",
+    "general_flow.py": "912df1a4e1fb8542fed321ee16bf449e5c1d14d8b79b7e7fd6007c527b9987b5",
+    "general_native.py": "9c7bedd29528b47bb7db0754d2d2d6c49caa61a0c9100c3ccec20f6eb7c0a704",
+    "pcbnew_adapter.py": "6052e314cc0b6666375e16f0035d0123c148ffbb8260ae7aa3f30eec9e8fa31a",
+    "project_contract.py": "91464de557ba79949db41d03941e35ec1b45d5cafb30126683e984194eda36aa",
+    "run.py": "e32b188e150d6a472135521a413e8396cf4e5450bf9b2b820bdd0dfbdbba281a",
+    "runtime.py": "a8678bc5048431337a01b605fff2afc335ade97a362dd959a59265aeaf7d17d9",
+    "safety.py": "c78c6d267a5370e59d667471a119bb2015bcf235cd1052db86c417f2655d7bf6",
+    "sandbox.py": "6af31d220b00b059355cd983c79eb81389c97be2497666b9dbfca0567cea13cc",
+    "tests/native_project_checks.py": "526d5091d15ef62f059d300047e66b1723670efb6c39912627acefc432e67126",
+    "tests/project_fixture.py": "83aaa2d56f100eb2eebfa66888325d9c4fb0ae2ba82822917691e594482135dc",
+    "tests/test_project.py": "f9494ab4113c377d7edf5b17d5b1e85a6bef69a3fb982bfdd8e0b7753116398d",
+    "tests/test_routing.py": "9164323e961a508566ca6cd8d9dc4c1976a63f76b33977382bcd9f162ed11c89"
+  },
+  "unit_tests": {
+    "command": "/usr/bin/python3 -B -m unittest discover -s opt/kicad-routing/tests -v",
+    "new_project_tests": 32,
+    "passed": 64,
+    "unchanged_baseline": 32
+  }
+}

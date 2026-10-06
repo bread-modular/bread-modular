@@ -48,7 +48,7 @@ def live_snapshot(board, api):
         via = isinstance(track, api.PCB_VIA)
         value = {"uuid": track.m_Uuid.AsString(), "kind": track.GetClass(),
                  "start": vec(track.GetStart()), "end": vec(track.GetEnd()),
-                 "width": track.GetWidth(), "layer": track.GetLayer(),
+                 "width": track.GetWidth(track.GetLayer()) if via else track.GetWidth(), "layer": track.GetLayer(),
                  "net": track.GetNetname(), "locked": track.IsLocked()}
         if via:
             value.update(drill=track.GetDrillValue(), layers=list(track.GetLayerSet().Seq()),
@@ -70,13 +70,13 @@ def live_snapshot(board, api):
             "copper_layers": board.GetCopperLayerCount()}
 
 
-def saved_definitions(pcb):
+def saved_definitions(pcb, text=None):
     """Whole native saved definitions preserve mechanics, pad overrides, zones and origins.
 
     Only filled zone polygons/segments may change. All unknown top-level objects
     stay in the invariant rather than being silently dropped.
     """
-    root = sexpr(text_file(pcb))
+    root = sexpr(text_file(pcb) if text is None else text)
     require(root[0] == 'kicad_pcb', 'not a native KiCad board')
     immutable = []
     zones = []

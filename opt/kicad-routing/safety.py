@@ -118,11 +118,13 @@ def child(node, key):
     return values[0]
 
 
-def run_process(command, log_dir, name, timeout=120, env=None, limit=4*1024*1024):
+def run_process(command, log_dir, name, timeout=120, env=None, limit=4*1024*1024, cwd=None):
     """Kill the whole process group on timeout/log overflow; retain bounded raw stderr."""
+    working_dir = safe_path(TOOL if cwd is None else cwd)
+    require(working_dir.is_dir(), f"working directory missing/not a directory: {working_dir}")
     log_dir = safe_path(log_dir)
     log_dir.mkdir(parents=True, exist_ok=True)
-    record = {"command": list(map(str, command)), "timeout_seconds": timeout}
+    record = {"command": list(map(str, command)), "timeout_seconds": timeout, "cwd": str(working_dir)}
     start = time.monotonic()
     paths = {n: log_dir / f"{name}.{n}.log" for n in ("stdout", "stderr")}
     for path in paths.values():
@@ -135,7 +137,7 @@ def run_process(command, log_dir, name, timeout=120, env=None, limit=4*1024*1024
         cpu = max(1, math.ceil(timeout)+1)
         resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu))
     proc = subprocess.Popen(record["command"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            env=env, start_new_session=True, cwd=TOOL, preexec_fn=limits)
+                            env=env, start_new_session=True, cwd=working_dir, preexec_fn=limits)
     selector = selectors.DefaultSelector()
     files = {n: path.open("xb") for n, path in paths.items()}
     counts = {n: 0 for n in files}
