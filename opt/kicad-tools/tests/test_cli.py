@@ -176,7 +176,9 @@ class BundleTests(unittest.TestCase):
 
     def test_dry_run_writes_nothing_exact_files_and_graceful_optional_routing(self):
         destination = self.root / "missing parent/toolkit"
-        result = bundle.bundle(destination, dry_run=True, include_routing=True)
+        distribution = self.root / "core-only distribution"
+        bundle.bundle(distribution)
+        result = bundle.bundle(destination, dry_run=True, include_routing=True, root=distribution)
         self.assertFalse(destination.parent.exists())
         self.assertFalse(result["manifest"]["routing"]["included"])
         names = result["manifest"]["files_sha256"]
@@ -210,25 +212,72 @@ class BundleTests(unittest.TestCase):
         bundle.bundle(distribution)
         sibling = distribution / "opt/kicad-routing"
         sibling.mkdir()
-        (sibling / "run.py").write_text("print('synthetic routing facade')")
-        (sibling / "helper.py").write_text("# source only")
-        (sibling / "README.md").write_text("# synthetic routing docs")
+        for name in bundle.ROUTING_FILES:
+            path = distribution / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("# synthetic reviewed payload")
+        (sibling / "helper.py").write_text("# unreviewed source, never discover")
         (sibling / "credentials.json").write_text("never bundle")
         (sibling / "run.py.tmp").write_text("never bundle")
         (sibling / "runtime").mkdir()
         (sibling / "runtime/freerouting.jar").write_text("never bundle")
-        (distribution / "docs").mkdir()
+        (distribution / "docs").mkdir(exist_ok=True)
         (distribution / "docs/kicad-routing-research.md").write_text("# synthetic research")
         result = bundle.bundle(self.root / "combined", include_routing=True, root=distribution)
         names = result["manifest"]["files_sha256"]
-        self.assertIn("opt/kicad-routing/helper.py", names)
+        self.assertNotIn("opt/kicad-routing/helper.py", names)
+        self.assertIn("opt/kicad-routing/tests/test_routing.py", names)
+        self.assertIn("opt/kicad-routing/smoke-summary.json", names)
         self.assertIn("docs/kicad-routing-research.md", names)
         self.assertNotIn("opt/kicad-routing/credentials.json", names)
         self.assertFalse(any("runtime/" in p or p.endswith(".tmp") for p in names))
         (sibling / "bundle-files.json").write_text(json.dumps({"schema_version": 1, "files": ["opt/kicad-routing/run.py", "opt/kicad-routing/runtime/freerouting.jar"]}))
-        with self.assertRaisesRegex(Error, "code/docs"):
+        with self.assertRaisesRegex(Error, "reviewed code/docs"):
             bundle.bundle(self.root / "invalid", include_routing=True, root=distribution)
         self.assertFalse((self.root / "invalid").exists())
+
+    @unittest.skipUnless((bundle.ROOT / "opt/kicad-routing/run.py").is_file(), "optional routing sibling not installed")
+    def test_real_routing_contract_relocation_links_and_rebundling(self):
+        import re
+        distribution = self.root / "combined distribution with spaces"
+        result = bundle.bundle(distribution, include_routing=True)
+        names = result["manifest"]["files_sha256"]
+        self.assertTrue(result["manifest"]["routing"]["included"])
+        self.assertEqual({p for p in names if p.startswith("opt/kicad-routing/") or p.startswith("docs/")},
+                         set(bundle.ROUTING_FILES))
+        for name, digest in names.items():
+            self.assertEqual(sha256(distribution / name), digest)
+        readme = distribution / "opt/kicad-routing/README.md"
+        links = re.findall(r"\]\(([^)]+)\)", readme.read_text())
+        self.assertIn("../../docs/kicad-routing-research.md", links)
+        self.assertIn("smoke-summary.json", links)
+        for link in links:
+            self.assertTrue((readme.parent / link).is_file(), link)
+        help_result = subprocess.run([sys.executable, "-B", str(distribution / "opt/kicad-tools/kicad_tools.py"),
+                                      "route", "--help"], cwd=self.root, capture_output=True, text=True)
+        self.assertEqual(help_result.returncode, 0, help_result.stderr)
+        self.assertIn("prepare-runtime", help_result.stdout)
+        # A local contract is copied, not silently discarded on the next bundle.
+        contract = distribution / "opt/kicad-routing/bundle-files.json"
+        contract.write_text(json.dumps({"schema_version": 1, "files": list(bundle.ROUTING_FILES)}))
+        second = self.root / "rebundled distribution with spaces"
+        copied = bundle.bundle(second, include_routing=True, root=distribution)
+        self.assertEqual({k: v for k, v in copied["manifest"]["files_sha256"].items()
+                          if k != "opt/kicad-routing/bundle-files.json"}, names)
+        third = self.root / "third distribution"
+        again = bundle.bundle(third, include_routing=True, root=second)
+        self.assertEqual(again["manifest"]["files_sha256"], copied["manifest"]["files_sha256"])
+        # The one reviewed evidence JSON is not general JSON permission.
+        for extra in ("opt/kicad-routing/arbitrary.json", "opt/kicad-routing/helper.py",
+                      "opt/kicad-routing/runtime.tmp/provenance.json"):
+            contract.write_text(json.dumps({"schema_version": 1, "files": list(bundle.ROUTING_FILES) + [extra]}))
+            with self.subTest(extra=extra), self.assertRaisesRegex(Error, "reviewed code/docs"):
+                bundle.bundle(self.root / "rejected", include_routing=True, root=distribution)
+            self.assertFalse((self.root / "rejected").exists())
+        contract.write_text(json.dumps({"schema_version": 1, "files": ["opt/kicad-routing/run.py"]}))
+        with self.assertRaisesRegex(Error, "complete reviewed"):
+            bundle.bundle(self.root / "incomplete", include_routing=True, root=distribution)
+        self.assertFalse((self.root / "incomplete").exists())
 
 
 if __name__ == "__main__":

@@ -21,6 +21,16 @@ SHARED_FILES = (
     "tests/fixtures/capacitor-voltage-aliases.json", "tests/fixtures/catalog-C25744.json", "tests/fixtures/catalog-C25804.json",
 )
 CORE_FILES = ("LICENSE", ".agents/skills/kicad-workflow/SKILL.md", ".agents/skills/jlcpcb-assembly/SKILL.md")
+# Reviewed routing payload only: tests and compact historical evidence are
+# intentional; no glob/recursive discovery or general JSON/runtime permission.
+ROUTING_FILES = (
+    "opt/kicad-routing/run.py", "opt/kicad-routing/fixture.py",
+    "opt/kicad-routing/pcbnew_adapter.py", "opt/kicad-routing/runtime.py",
+    "opt/kicad-routing/safety.py", "opt/kicad-routing/sandbox.py",
+    "opt/kicad-routing/README.md", "opt/kicad-routing/tests/test_routing.py",
+    "opt/kicad-routing/smoke-summary.json", "docs/kicad-routing-research.md",
+)
+ROUTING_ALLOWED = set(ROUTING_FILES) | {".agents/skills/kicad-routing/SKILL.md"}
 ROUTING_FORBIDDEN = {"runtime", "runtimes", "downloads", "vendor", ".git", ".history", "node_modules", "__pycache__", "tmp", "build", "out", "secrets", "credentials"}
 
 
@@ -51,23 +61,18 @@ def routing_files(root):
         if not all(isinstance(p, str) for p in files) or len(files) > 128 or len(set(files)) != len(files):
             raise Error("Routing allowlist must be <=128 unique paths")
     else:
-        # Small interoperability default for the announced run.py facade: root
-        # Python source files only, never recursive runtime/vendor/test discovery.
-        files = [str(p.relative_to(root)) for p in sorted(sibling.glob("*.py"))]
-        if len(files) > 32:
-            raise Error("Routing source bound exceeded; provide a reviewed bundle-files.json")
-        if (sibling / "README.md").is_file():
-            files.append("opt/kicad-routing/README.md")
-    research = root / "docs/kicad-routing-research.md"
-    if research.is_file() and "docs/kicad-routing-research.md" not in files:
-        files.append("docs/kicad-routing-research.md")
+        files = list(ROUTING_FILES)
     for name in files:
         path = Path(name)
-        allowed_root = path.parts[:2] == ("opt", "kicad-routing") or name == "docs/kicad-routing-research.md" or name == ".agents/skills/kicad-routing/SKILL.md"
-        if path.is_absolute() or ".." in path.parts or not allowed_root or path.suffix not in {".py", ".md"} or any(part.lower() in ROUTING_FORBIDDEN or part.endswith(".tmp") for part in path.parts):
-            raise Error(f"Routing bundle allows code/docs only, never runtime/temporary files: {name}")
+        if path.is_absolute() or ".." in path.parts or name not in ROUTING_ALLOWED or any(part.lower() in ROUTING_FORBIDDEN or part.endswith(".tmp") for part in path.parts):
+            raise Error(f"Routing bundle allows reviewed code/docs/tests and exact smoke-summary.json only, never runtime/temporary files: {name}")
         regular(root / path, root)
-    return sorted(files), {"available": True, "allowlist": "bundle-files.json" if manifest.is_file() else "bounded root Python sources + README + research", "runtime_included": False}
+    if not set(ROUTING_FILES).issubset(files):
+        raise Error("Routing bundle contract must include the complete reviewed source/docs/tests/evidence payload")
+    # Preserve a supplied contract so re-bundling uses the same reviewed payload.
+    if manifest.is_file():
+        files.append("opt/kicad-routing/bundle-files.json")
+    return sorted(files), {"available": True, "allowlist": "bundle-files.json" if manifest.is_file() else "fixed reviewed routing source/docs/tests/evidence", "runtime_included": False}
 
 
 def bundle(destination, dry_run=False, include_routing=False, root=ROOT):

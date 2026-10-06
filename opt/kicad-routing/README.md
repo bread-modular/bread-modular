@@ -27,8 +27,9 @@ assertions remain visible on stderr. `doctor` is read-only (no board load,
 Java/download or output-directory creation); it reports unavailable capabilities
 without failing the diagnostic command. Preparation returns `prepared`; smoke
 returns `passed`/`failed` with nonzero exit on failure. Invalid arguments exit 2.
-Normal commands **never auto-download**. Requires Linux x86_64, matching system
-Python/`pcbnew`, **KiCad 10.0.6**, `kicad-cli`, installed `/usr/bin/bwrap`; other
+Normal commands **never auto-download**. Routing requires **Python 3.9+**
+(`Path.is_relative_to`; core toolkit alone supports 3.8+), Linux x86_64,
+matching system Python/`pcbnew`, **KiCad 10.0.6**, `kicad-cli`, installed `/usr/bin/bwrap`; other
 architectures/bindings fail closed, without an alternative engine.
 
 ## Runtime provenance and offline boundary
@@ -100,7 +101,9 @@ per-process JSON retain commands/durations, tool/artifact/log hashes, full DRC,
 invariants, actual settings, sandbox proof, metrics and honest failure status.
 Native subprocesses contain SWIG crashes **without hiding stderr assertions**.
 [`smoke-summary.json`](smoke-summary.json) retains compact reviewable evidence
-independently of ignored-directory cleanup. Tests are native/process mocks plus
+independently of ignored-directory cleanup. The optional toolkit bundle ships
+this exact historical evidence file and `tests/test_routing.py`, not raw logs or
+runtime provenance/binaries. Tests are native/process mocks plus
 an installed-Python timeout probe: no download or Java execution.
 
 ## Limits and future/manual external projects
