@@ -162,8 +162,11 @@ with the same interpreter/arguments/exit status. Otherwise it returns an
 explicit unavailable diagnostic (2); it does not create runtime files, fetch,
 route a board, or try an alternative router. The sibling owns
 `doctor|prepare-runtime|smoke` semantics; consult its real `--help` before use.
-Downloads must remain explicit opt-in in that tool. Routing runtime/JAR/temp
-files are never bundled. Read optional
+Downloads must remain explicit opt-in in that tool. Unlike the core's Python
+3.8+ support, routing requires **Python 3.9+** (`Path.is_relative_to`), **Linux
+x86_64**, the supported **KiCad 10.0.6 system `pcbnew` binding**, matching native
+CLI and `/usr/bin/bwrap`; see the [routing README](../kicad-routing/README.md).
+Routing runtime/JAR/temp files are never bundled. Read optional
 [routing research](../../docs/kicad-routing-research.md) when installed; absent
 code/research in a core-only distribution is not a failed electrical gate.
 
@@ -184,15 +187,16 @@ layout is retained for imports and skill links. No Git, original checkout,
 Bread circuit, project, history, credentials, outputs, vendor code, global
 installation or automatic runtime download is needed. Hashes are not signatures.
 
-Optional routing copies only immediate sibling Python source files (maximum 32),
-README and the root research doc if present, **not** runtime or `*.tmp`. A sibling
-with nested packages/docs can provide a reviewed `bundle-files.json` containing
-`{"schema_version": 1, "files": ["opt/kicad-routing/run.py", ...]}`. Those paths
-must be unique repo-relative `.py` / `.md` files under routing (or the explicit
-research/optional routing skill paths), maximum 128, no symlinks/runtime/vendor/
-secret/temporary trees. This manifest is an allowlist contract, not an executable
-hook. Missing sibling is reported gracefully. Real combined sibling integration
-must be tested after merge; the core suite only exercises synthetic stubs.
+Optional routing uses a **fixed reviewed allowlist**: six Python source files,
+README, `tests/test_routing.py`, root research doc, and exactly the historical
+`smoke-summary.json` evidence file. No glob/recursive discovery, arbitrary JSON,
+runtime or `*.tmp` is copied. An optional `bundle-files.json` must include the full
+reviewed payload (only the explicit routing skill path may be added); it is copied so
+re-bundling preserves the contract. Paths are unique repo-relative files, at
+most 128, no symlinks/runtime/vendor/secret/temporary trees. The two exact JSON
+paths are not general JSON permission. Missing sibling is reported gracefully.
+Combined facade/bundle/native synthetic verification is recorded separately
+from historical core-only results in [VERIFICATION.md](VERIFICATION.md).
 
 See [migration inventory](MIGRATION.md), the discoverable
 [workflow skill](../../.agents/skills/kicad-workflow/SKILL.md), and
