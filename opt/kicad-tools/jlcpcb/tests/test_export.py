@@ -16,7 +16,7 @@ import uuid
 import zipfile
 
 SCRIPT = Path(__file__).resolve().parents[1] / "export.py"
-REPO = SCRIPT.parents[2]
+REPO = SCRIPT.parents[3]
 spec = importlib.util.spec_from_file_location("jlc_export", SCRIPT)
 jlc = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(jlc)

@@ -6,9 +6,10 @@ migration/finalizer is replayed by this toolkit.
 
 | Area | Portable operation | What deliberately stays where it is |
 | --- | --- | --- |
-| `opt/kicad-jlcpcb/export.py` | Facade `export`, exact pass-through; copy unmodified | Export selection, filtering, field/exclusion semantics and its original isolation/provenance limits |
+| `opt/kicad-tools/jlcpcb/export.py` (legacy `opt/kicad-jlcpcb` symlink) | Facade `export`, exact pass-through; exporter bytes unchanged | Export selection, filtering, field/exclusion semantics and its original isolation/provenance limits |
 | `assembly.py`, `catalog.py`, `bom_audit.py`, `passive_planner.py` | Facade `assembly`, common-tool-first API/CLI | Live/offline evidence, request bounds, Basic/Economy gates, no-order-approval policy |
-| `add_production_files.py` | Packaged unchanged; existing standalone command supported | Module selection/production mirrors remain repository-oriented, not a generic project installer |
+| `add_production_files.py` | Moved with one repository-root depth correction; old/new standalone paths supported | Module selection/production mirrors unchanged and repository-oriented, not a generic project installer |
+| Both workflow/assembly skills | Canonical `opt/kicad-tools/skills/{name}`; relative `.agents/skills/{name}` discovery links | All sourcing/approval policies retained; no duplicate authoritative skill files |
 | Repeated balanced-block operations in `modules/base/tools/build_slot_template.py` and migration scripts | `native.source_blocks`, matching-path rebinding in memory, exclusive separate-output helper | Original generators/migrations, reference/UUID/layout assumptions, native engineering decisions |
 | Repeated native XML netlist/ref/pin validation in engineering verifiers | `native.read_netlist`, exact identity comparison and conservative PCB ref/pin/net parity; reuse shared XML component parser | Board-specific pin-role/polarity/rail/datum/sourcing/engineering assertions and tolerances |
 | ERC/DRC orchestration | `check`, private dependency closure, explicit raw reports/logs/hashes | No edits to rules, exclusions, ignores, connectivity or component placement |

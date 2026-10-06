@@ -36,7 +36,7 @@ import zipfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]
+REPO = HERE.parents[2]
 MODULES = REPO / "modules"
 GERBER_SUFFIXES = (".gbr", ".drl")
 SKIP_DIRS = ("_", ".")

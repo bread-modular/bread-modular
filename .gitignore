@@ -42,6 +42,9 @@ modules/*/code/*/sim/test_*
 
 # KiCad-to-JLCPCB exporter outputs and Python bytecode
 **/jlcpcb/
+# Canonical JLCPCB tool sources are not generated board output.
+!opt/kicad-tools/jlcpcb/
+!opt/kicad-tools/jlcpcb/**
 # Expose the reviewed 32bit-5v HOLD mirrors for the orchestrator's native diff.
 # Ordinary exporter trees for every other module remain ignored.
 !modules/32bit-5v/jlcpcb/

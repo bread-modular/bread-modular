@@ -12,8 +12,12 @@ the orchestrator before design work. Run the same commands below from either
 branch's repository root; no module names or checkout paths are hard-coded.
 Do not switch/edit the shared main checkout or run another worker's board job.
 
-The main-based integration preserves checkpoint `7ae0192`'s `export.py`,
-`add_production_files.py`, their tests and assembly-datum documentation unchanged.
+At the original main-based integration, checkpoint `7ae0192`'s `export.py`,
+`add_production_files.py`, their tests and assembly-datum documentation were preserved.
+Tools now live canonically in `opt/kicad-tools/jlcpcb`; `opt/kicad-jlcpcb` is a
+relative compatibility symlink. Consolidation keeps the exporter and assembly
+business code byte-for-byte; only the wrapper's relocated repository-root line,
+test roots and documentation paths change. See [layout and bundle safety](../BUNDLING.md).
 Use the wrapper's actual `--help` / [README workflow](README.md#repository-production-files-add_production_filespy)
 for production regeneration and mirrors. `assembly.py` consumes its existing
 exporter BOM/CPL/report without replacing that workflow. Tooling verification
@@ -26,41 +30,41 @@ From repository root (replace illustrative paths/quantities with your files):
 
 ```sh
 # Exact code lookup; optional dated raw snapshots outside the repository.
-python3 -B opt/kicad-jlcpcb/assembly.py lookup C25804 \
+python3 -B opt/kicad-tools/jlcpcb/assembly.py lookup C25804 \
   --strict-live --max-requests 1 --cache-dir /tmp/jlcpcb-catalog
 
 # One page only, actual Basic filter after schema validation (NOT Preferred).
-python3 -B opt/kicad-jlcpcb/assembly.py search '10k 0603' \
+python3 -B opt/kicad-tools/jlcpcb/assembly.py search '10k 0603' \
   --basic-only --limit 12 --strict-live --max-requests 1
 
 # Exported grouped BOM, existing CPL, explicit circuit requirements.
-python3 -B opt/kicad-jlcpcb/assembly.py audit \
+python3 -B opt/kicad-tools/jlcpcb/assembly.py audit \
   --bom /tmp/build/bom.csv --cpl /tmp/build/positions.csv \
   --export-report /tmp/build/export-report.json \
   --requirements /tmp/requirements.json --boards 10 --side top --strict-live
 
 # Native module audit includes all electrical footprints, even THT/bottom.
 # Supply existing native KiCad XML netlist: no CLI is invoked by the auditor.
-python3 -B opt/kicad-jlcpcb/assembly.py audit \
+python3 -B opt/kicad-tools/jlcpcb/assembly.py audit \
   --project-dir /path/to/isolated/project --board board.kicad_pcb \
   --symbols-xml /tmp/build/symbols.xml --cpl /tmp/build/positions.csv \
   --requirements /tmp/requirements.json --boards 10 --side top --strict-live
 
 # Direct + up to two-part homogeneous series/parallel review candidates.
-python3 -B opt/kicad-jlcpcb/assembly.py suggest --codes C25804 \
-  --target opt/kicad-jlcpcb/examples/resistor-target.json \
+python3 -B opt/kicad-tools/jlcpcb/assembly.py suggest --codes C25804 \
+  --target opt/kicad-tools/jlcpcb/examples/resistor-target.json \
   --boards 10 --max-parts 2 --strict-live
 
 # Or one bounded search, allowing explicitly compatible alternative packages.
-python3 -B opt/kicad-jlcpcb/assembly.py suggest --query '100nF' \
-  --target opt/kicad-jlcpcb/examples/capacitor-target.json \
+python3 -B opt/kicad-tools/jlcpcb/assembly.py suggest --query '100nF' \
+  --target opt/kicad-tools/jlcpcb/examples/capacitor-target.json \
   --max-candidates 12 --max-parts 2 --strict-live
 
 # Deliberate replay: preserves original timestamp; cannot pass --strict-live.
-python3 -B opt/kicad-jlcpcb/assembly.py lookup C25804 \
+python3 -B opt/kicad-tools/jlcpcb/assembly.py lookup C25804 \
   --offline --cache-dir /tmp/jlcpcb-catalog
 
-python3 -B opt/kicad-jlcpcb/assembly.py audit --help
+python3 -B opt/kicad-tools/jlcpcb/assembly.py audit --help
 ```
 
 JSON is printed to stdout, diagnostics to stderr. Exit 1 means a failed/unknown
@@ -86,7 +90,7 @@ response does not guarantee available inventory after its retrieval instant.
 ```python
 from pathlib import Path
 import sys
-sys.path.insert(0, str(Path("opt/kicad-jlcpcb").resolve()))
+sys.path.insert(0, str(Path("opt/kicad-tools/jlcpcb").resolve()))
 from catalog import Catalog, load_json
 from bom_audit import bom_components, board_components, audit_components
 from passive_planner import suggest, equivalent, worst_case_interval
@@ -101,7 +105,7 @@ report = audit_components(
     export_report=load_json("/tmp/build/export-report.json"), strict_live=True,
 )
 candidates = suggest([part], load_json(
-    "opt/kicad-jlcpcb/examples/resistor-target.json"), boards=10, strict_live=True)
+    "opt/kicad-tools/jlcpcb/examples/resistor-target.json"), boards=10, strict_live=True)
 assert not report["order_ready"]
 ```
 
@@ -307,9 +311,9 @@ No module/base or production files were written, no advisor was invoked,
 and no wrapper/exporter edits were included.
 
 ```sh
-python3 -B -m unittest discover -s opt/kicad-jlcpcb/tests -v
+python3 -B -m unittest discover -s opt/kicad-tools/jlcpcb/tests -v
 # Real exporter integration using synthetic temp boards only; no module writes:
-KICAD_JLCPCB_INTEGRATION=1 PYTHONPATH=opt/kicad-jlcpcb/tests \
+KICAD_JLCPCB_INTEGRATION=1 PYTHONPATH=opt/kicad-tools/jlcpcb/tests \
   python3 -B -m unittest -v \
   test_export.KiCadIntegrationTests.test_native_fields_exclusions_mixed_sides_and_nonzero_origin \
   test_export.KiCadIntegrationTests.test_repeated_hierarchical_sheet_part_numbers
@@ -326,7 +330,7 @@ common-tool verification did not run repository/base board integration.
 
 ```sh
 # Exactly one real base export through the preserved wrapper, temporary root only:
-KICAD_JLCPCB_INTEGRATION=1 PYTHONPATH=opt/kicad-jlcpcb/tests \
+KICAD_JLCPCB_INTEGRATION=1 PYTHONPATH=opt/kicad-tools/jlcpcb/tests \
   python3 -B -m unittest -v \
   test_shared_handoff.BaseHandoffIntegration.test_real_base_export_and_fail_closed_offline_audit
 ```
@@ -345,4 +349,4 @@ document and the skill are parsed by the combined unit suite without execution.
 Basic/Preferred Extended and Economy true/false/unknown gates are unchanged.
 
 For complete design/production release gates, read the discoverable
-[assembly skill](../../.agents/skills/jlcpcb-assembly/SKILL.md).
+[assembly skill](../skills/jlcpcb-assembly/SKILL.md).

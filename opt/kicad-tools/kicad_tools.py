@@ -53,7 +53,7 @@ def cli_info(executable):
 
 def doctor(args):
     info = {"native_cli": cli_info(args.kicad_cli), "check_requirement": "KiCad CLI 10+; shared exporter retains its own 9+ requirement",
-            "shared_exporter": str(HERE.parent / "kicad-jlcpcb" / "export.py"),
+            "shared_exporter": str(HERE / "jlcpcb" / "export.py"),
             "source_writes": False, "order_ready": False}
     interpreter = shutil.which(os.path.expanduser(args.pcbnew_python or sys.executable))
     info["pcbnew"] = {"interpreter": interpreter or args.pcbnew_python, "available": False,
@@ -188,7 +188,7 @@ def delegate(command, arguments):
             return 2
     else:
         filename = "export.py" if command == "export" else "assembly.py"
-        script = HERE.parent / "kicad-jlcpcb" / filename
+        script = HERE / "jlcpcb" / filename
     return subprocess.run([sys.executable, "-B", str(script), *arguments]).returncode
 
 

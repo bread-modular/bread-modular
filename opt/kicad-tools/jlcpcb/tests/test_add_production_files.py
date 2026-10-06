@@ -10,12 +10,13 @@ import importlib.util
 import io
 import os
 from pathlib import Path
+from unittest import mock
 import tempfile
 import unittest
 import zipfile
 
 SCRIPT = Path(__file__).resolve().parents[1] / "add_production_files.py"
-REPO = SCRIPT.parents[2]
+REPO = SCRIPT.parents[3]
 spec = importlib.util.spec_from_file_location("jlc_production", SCRIPT)
 tool = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(tool)
@@ -47,7 +48,11 @@ class ModuleResolution(unittest.TestCase):
             board = write_board(tmp, "demo")
             self.assertEqual(tool.module_dir_for(tmp), Path(tmp).resolve())
             self.assertEqual(tool.module_dir_for(board), Path(tmp).resolve())
-        self.assertEqual(tool.module_dir_for("base"), REPO / "modules" / "base")
+        with tempfile.TemporaryDirectory(prefix="synthetic module root ") as tmp:
+            modules = Path(tmp) / "modules"
+            (modules / "base").mkdir(parents=True)
+            with mock.patch.object(tool, "MODULES", modules):
+                self.assertEqual(tool.module_dir_for("base"), modules / "base")
 
     def test_rejects_unknown_targets(self):
         with tempfile.TemporaryDirectory() as tmp:

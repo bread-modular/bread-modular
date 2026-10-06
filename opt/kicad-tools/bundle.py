@@ -1,5 +1,7 @@
 """Portable install-by-copy, with a fixed core allowlist and file-hash manifest."""
+import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 
@@ -9,9 +11,10 @@ from project import new_output
 
 ROOT = Path(__file__).resolve().parents[2]
 TOOLKIT_FILES = (
-    "kicad_tools.py", "native.py", "project.py", "bundle.py", "README.md", "MIGRATION.md",
+    "kicad_tools.py", "native.py", "project.py", "bundle.py", "README.md", "GUIDE.md", "BUNDLING.md", "MIGRATION.md",
     "VERIFICATION.md", "BUNDLE_README.md", "examples/project.json",
     "tests/fixtures.py", "tests/test_native.py", "tests/test_project.py", "tests/test_cli.py", "tests/test_integration.py",
+    "tests/test_consolidation.py",
 )
 SHARED_FILES = (
     "export.py", "add_production_files.py", "assembly.py", "bom_audit.py", "catalog.py", "passive_planner.py",
@@ -20,7 +23,14 @@ SHARED_FILES = (
     "tests/test_catalog_voltage.py", "tests/test_shared_handoff.py",
     "tests/fixtures/capacitor-voltage-aliases.json", "tests/fixtures/catalog-C25744.json", "tests/fixtures/catalog-C25804.json",
 )
-CORE_FILES = ("LICENSE", ".agents/skills/kicad-workflow/SKILL.md", ".agents/skills/jlcpcb-assembly/SKILL.md")
+CORE_FILES = ("LICENSE", "opt/kicad-tools/skills/kicad-workflow/SKILL.md", "opt/kicad-tools/skills/jlcpcb-assembly/SKILL.md")
+# Exact directory aliases owned by this toolkit. Never infer links from a source
+# manifest, recurse through them, or include duplicate authoritative skill files.
+COMPATIBILITY_LINKS = {
+    "opt/kicad-jlcpcb": "kicad-tools/jlcpcb",
+    ".agents/skills/kicad-workflow": "../../opt/kicad-tools/skills/kicad-workflow",
+    ".agents/skills/jlcpcb-assembly": "../../opt/kicad-tools/skills/jlcpcb-assembly",
+}
 # Reviewed routing payload only: tests and compact historical evidence are
 # intentional; no glob/recursive discovery or general JSON/runtime permission.
 ROUTING_FILES = (
@@ -34,15 +44,42 @@ ROUTING_ALLOWED = set(ROUTING_FILES) | {".agents/skills/kicad-routing/SKILL.md"}
 ROUTING_FORBIDDEN = {"runtime", "runtimes", "downloads", "vendor", ".git", ".history", "node_modules", "__pycache__", "tmp", "build", "out", "secrets", "credentials"}
 
 
-def regular(path, root):
-    """Bundle only regular reviewed files; never dereference symlinks into secrets."""
+def no_symlink_path(path, root):
+    """Validate a lexical in-root path, including its root, without resolving links."""
+    try:
+        relative = path.relative_to(root)
+    except ValueError:
+        raise Error(f"Bundle allowlist escapes distribution root: {path}")
+    if ".." in relative.parts:
+        raise Error(f"Bundle allowlist escapes distribution root: {path}")
     for parent in (path, *path.parents):
-        if parent == root:
-            break
         if parent.is_symlink():
             raise Error(f"Bundle allowlist traverses a symlink: {parent}")
+        if parent == root:
+            break
+
+
+def regular(path, root):
+    """Bundle only regular reviewed files; never dereference even owned aliases."""
+    no_symlink_path(path, root)
     if not path.is_file():
         raise Error(f"Missing allowlisted bundle source: {path}")
+
+
+def compatibility_links(root):
+    """Validate ONLY the three exact relative aliases; hash link text, not files."""
+    records = {}
+    for name, target in sorted(COMPATIBILITY_LINKS.items()):
+        link = root / name
+        no_symlink_path(link.parent, root)
+        if not link.is_symlink() or os.readlink(link) != target:
+            raise Error(f"Expected exact relative compatibility symlink: {name} -> {target}")
+        canonical = Path(os.path.abspath(link.parent / target))
+        no_symlink_path(canonical, root)
+        if not canonical.is_dir():
+            raise Error(f"Missing canonical compatibility directory: {canonical}")
+        records[name] = {"target": target, "link_text_sha256": hashlib.sha256(target.encode("utf-8")).hexdigest()}
+    return records
 
 
 def routing_files(root):
@@ -76,10 +113,11 @@ def routing_files(root):
 
 
 def bundle(destination, dry_run=False, include_routing=False, root=ROOT):
-    root = Path(root)
+    root = Path(os.path.abspath(root))  # lexical: do not conceal a symlink root
     destination = new_output(destination)
+    links = compatibility_links(root)
     files = ["opt/kicad-tools/" + p for p in TOOLKIT_FILES]
-    files += ["opt/kicad-jlcpcb/" + p for p in SHARED_FILES]
+    files += ["opt/kicad-tools/jlcpcb/" + p for p in SHARED_FILES]
     files += list(CORE_FILES)
     routing = {"requested": include_routing, "available": (root / "opt/kicad-routing/run.py").is_file(), "included": False}
     if include_routing:
@@ -95,11 +133,11 @@ def bundle(destination, dry_run=False, include_routing=False, root=ROOT):
         hashes[target] = sha256(source)
     if destination == root or root in destination.parents:
         raise Error("Bundle destination must be outside the toolkit distribution source tree")
-    manifest = {"schema_version": 1, "kind": "kicad-toolkit-install-by-copy", "files_sha256": hashes,
-                "routing": routing, "order_ready": False,
-                "limits": "Tool source provenance only; no board/project/production or runtime provenance, signatures or approval."}
+    manifest = {"schema_version": 2, "kind": "kicad-toolkit-install-by-copy", "files_sha256": hashes,
+                "symlinks": links, "routing": routing, "order_ready": False,
+                "limits": "Tool source/link-text provenance only; no board/project/production or runtime provenance, signatures or approval."}
     result = {"destination": str(destination), "dry_run": dry_run, "file_count": len(hashes),
-              "manifest": manifest, "source_writes": False}
+              "symlink_count": len(links), "manifest": manifest, "source_writes": False}
     if dry_run:
         return result
     destination.mkdir(parents=True, exist_ok=False)
@@ -107,9 +145,20 @@ def bundle(destination, dry_run=False, include_routing=False, root=ROOT):
         for target, name in sorted(mapping.items()):
             output = destination / target
             output.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(root / name, output)
-            if sha256(output) != hashes[target] or sha256(root / name) != hashes[target]:
+            source = root / name
+            regular(source, root)
+            shutil.copyfile(source, output)
+            regular(source, root)
+            if sha256(output) != hashes[target] or sha256(source) != hashes[target]:
                 raise Error(f"Bundle hash changed while copying: {name}")
+        if compatibility_links(root) != links:
+            raise Error("Bundle compatibility symlinks changed while copying")
+        for name, record in links.items():
+            output = destination / name
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.symlink_to(record["target"], target_is_directory=True)
+        if compatibility_links(destination) != links:
+            raise Error("Bundle compatibility symlinks failed validation after copying")
         with (destination / "toolkit-manifest.json").open("x", encoding="utf-8") as stream:
             json.dump(manifest, stream, indent=2, sort_keys=True)
             stream.write("\n")
