@@ -1,0 +1,405 @@
+{
+  "base_commit": "6715058b7243edee80da15b57e802f15fd126806",
+  "bundles": [
+    {
+      "files": 65,
+      "hashes_verified": true,
+      "include_routing": false,
+      "include_tracemaker": false,
+      "relocated_rebundle_hashes_equal": true,
+      "runtime_included": false,
+      "symlinks": 3,
+      "unrelated_cwd_help_exit": 2
+    },
+    {
+      "files": 76,
+      "hashes_verified": true,
+      "include_routing": false,
+      "include_tracemaker": true,
+      "relocated_rebundle_hashes_equal": true,
+      "runtime_included": false,
+      "symlinks": 3,
+      "unrelated_cwd_help_exit": 0
+    },
+    {
+      "files": 88,
+      "hashes_verified": true,
+      "include_routing": true,
+      "include_tracemaker": false,
+      "relocated_rebundle_hashes_equal": true,
+      "runtime_included": false,
+      "symlinks": 3,
+      "unrelated_cwd_help_exit": 2
+    },
+    {
+      "core_source_only_tests": {
+        "all_passed_no_skips": true,
+        "exit_code": 0,
+        "log_sha256": "0f28f7b55601eb3e079926db45f86d9c4641d954a1b547fe7ee4ef0714a28645",
+        "seconds": 11.76,
+        "tests": 55
+      },
+      "files": 99,
+      "hashes_verified": true,
+      "include_routing": true,
+      "include_tracemaker": true,
+      "relocated_rebundle_hashes_equal": true,
+      "runtime_included": false,
+      "symlinks": 3,
+      "tracemaker_source_only_tests": {
+        "all_passed_no_skips": true,
+        "exit_code": 0,
+        "log_sha256": "476afa1252ebf6dd64cd6e15c2ca1269e697a7de8214a54cbb0606d335be17b0",
+        "seconds": 30.356,
+        "tests": 45
+      },
+      "unrelated_cwd_help_exit": 0
+    }
+  ],
+  "hybrid": {
+    "command_records_sha256": "967deb4c2de39cc9504a06845d4ff6d8066a636f6e475aed2edee02a7886e54e",
+    "engine_report_log_hashes": [
+      {
+        "command": [
+          "engine",
+          "inspect"
+        ],
+        "exit_code": 0,
+        "log_sha256": "75b27b7905af5903e054ba8b07c94eb92af90941af50367c71d2bd0bbd63f88c",
+        "report_sha256": "e1e7ed95deced40952229d9f20c33f77b316789ac1d3c60f8db6fe402c18fc6b"
+      },
+      {
+        "command": [
+          "engine",
+          "route"
+        ],
+        "exit_code": 0,
+        "log_sha256": "9a00ba7e17f188aa6c17815ac52b98544075d0a2a4e654427a48b09987f7bca6",
+        "report_sha256": "2a3566f84d4760c6e39c4aa10c38d503be6d7ef63e2acdb262e30c308df6bf01"
+      },
+      {
+        "command": [
+          "engine",
+          "drc"
+        ],
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "report_sha256": "b486c613e4a5bd10499a104ad656835320a4fd794af46c369327e5bf03993bc2"
+      },
+      {
+        "command": [
+          "engine",
+          "drc"
+        ],
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "report_sha256": "b486c613e4a5bd10499a104ad656835320a4fd794af46c369327e5bf03993bc2"
+      }
+    ],
+    "final_drc_parity_opens": {
+      "schematic_parity": 0,
+      "unconnected_items": 0,
+      "violations": 0
+    },
+    "final_vias": 2,
+    "mechanical_placement_net_invariants": true,
+    "native_version": "10.0.6-10.0.6~ubuntu26.04.1",
+    "recorded_plans": [
+      {
+        "command": [
+          "recorded-plan",
+          "placed"
+        ],
+        "completion_sha256": "25539328fdfa558ba72b6b6e4bcb6d033fb4b7675cb53fea1b9d8a69005c8fb3",
+        "plan_sha256": "fe61532bfdbd74a8f73bf2c05c8623a5e065c3ec898fbd511822766c71ea932a"
+      },
+      {
+        "command": [
+          "recorded-plan",
+          "polished"
+        ],
+        "completion_sha256": "a82aef18395c8219b48dfd02ae2a34bf1c9326d883d27b451551a9df3471e3f7",
+        "plan_sha256": "bea3dba1937e4c7cbe5651e2f2318f0224da950583262350ea31e702cd337ccf"
+      }
+    ],
+    "router": {
+      "added_copper": 2,
+      "binary_sha256": "b469a1502f0f825aa431a7fbee57e19f1cc80f8bb940df7c17d295f81e0669fe",
+      "deliberate_opens": 1,
+      "drc": {
+        "coordinate_units": "mm",
+        "finding_counts": {
+          "unconnected_items": 0,
+          "violations": 0,
+          "warnings": 0
+        },
+        "source": "tracemaker"
+      },
+      "executed": true,
+      "final_drc": {
+        "coordinate_units": "mm",
+        "finding_counts": {
+          "unconnected_items": 0,
+          "violations": 0,
+          "warnings": 0
+        },
+        "source": "tracemaker"
+      },
+      "inspect": {
+        "min_track_width": 150000
+      },
+      "native_counts": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 0
+      },
+      "pin": "c5e1e8497ffef194206a012ee98f0ba156827f71",
+      "route": {
+        "connections": 1,
+        "escape_corridors": 0,
+        "expansions": 780,
+        "pitch_mm": 0.075,
+        "routed": 1,
+        "seconds": 0.00321002,
+        "tracks": 2,
+        "variant": 0,
+        "variant_name": "",
+        "vias": 0
+      }
+    },
+    "rules_unchanged_all_stages": true,
+    "source_hashes": {
+      "Auto.kicad_sym": "3ef0de3d1d5789866967f6ef27730486b2b4257eecb9d0bcf5b5ed382ab4d93f",
+      "Auto.pretty/R.kicad_mod": "4a6896e11aa3c71da161e7dbe25b93db4953c3257d43e94cc70c784438b0f777",
+      "fp-lib-table": "45db732c13a3934a5cf4187d642219950c7c4c6c8f4ac875137fa381c497aa6f",
+      "sym-lib-table": "90b2d6b4680faa0eb31ccdec0d4af0ef214fd404098794b1a86fdb9dae5bf284",
+      "synthetic.kicad_dru": "130ff653f70f559965612f48382f8b231d518ad3dd59285206906535feadbfa6",
+      "synthetic.kicad_pcb": "712c277019aafc2b5d6ba3cc407ed9d43360c60e984fd849b6c956092c42e4bf",
+      "synthetic.kicad_prl": "0f9f3641f24d314e392684355ed3c60c203198e3ffccf52bed5490108bf0ffd9",
+      "synthetic.kicad_pro": "8ce02827525964034cd42827374a286986cb56766c3dc182cac97a4231a51089",
+      "synthetic.kicad_sch": "978c348c9a482887f5855f123e6922332287370de01cf550cb69b79cdde4a6bd"
+    },
+    "sources_unchanged": true,
+    "stage_record_sha256": {
+      "NEW engine full checks/summary.json": "41c57845090d41f2aadcf7d6ff17450db6a7bc9c3ba1d88089a79effa4a8d22c",
+      "NEW engine native/snapshot.json": "ad0ff17d07a4666e9883382d40dd0f0b68f23e80b04f92c7b8daf52c2b729946",
+      "NEW engine native/validation.json": "58c9a3e06eca9dfac393668210666856c2b8e1f97a7c83995e28f9d98b355a2e",
+      "NEW final full checks/summary.json": "c969e682798bfba33603973e6294d8d21a8d6ff0055663405ba7039f878dede4",
+      "NEW polished native/snapshot.json": "9a21406501a4fd0b6434a605a6730a9d51e8b640d72ace1b69cc612fed64f0f6",
+      "NEW polished native/validation.json": "d73b6790ffd6a04eddb79e3d207e0770b7c0c03269b44c3ca13287548ed55f08",
+      "NEW stripped native/validation.json": "2643a898102001deacdf97541daf141e064da846c4aaa04d0fa808261dd65b03",
+      "NEW stripped/removal.json": "cc09816bf22a57b4fd1d00b3d76ece8ea40257cd2152701555866810ef2be921"
+    },
+    "synthetic_only": true
+  },
+  "limits": [
+    "Tiny two-pad ordinary signal synthetic only, not production/full-board/automatic placement/GPU/live GUI or complete advanced rules/resource support",
+    "Fixture initialized with explicit minima BEFORE first baseline; project/rule bytes fixed throughout, no lowered rules or waived findings",
+    "Native pcbnew SWIG deprecation/property-enum diagnostics remain in private logs; native ERC/DRC/parity and engine findings are zero",
+    "Runtime/source/dependencies/design artifacts remain ignored pending review; this summary is repository-only and not bundled"
+  ],
+  "protected": {
+    "before_after_identical": true,
+    "experiment_files": 171,
+    "experiment_files_before_after_sha256": "024cc63d6d266410f88441708bd25a37ea33a2dc3c0e1a63b7ebe49f6ed84230",
+    "freerouting_controller_unchanged": true,
+    "gitlinks": {
+      "modules/16bit-5v/.history": "b4fa8f3bd5b3963ac55ef82c14aa8d6799d1505b",
+      "modules/16bit/code/16bit/lib/lfs": "8ed63b27be79ab59ee1cd15a950ddd64e7a602f7",
+      "modules/32bit-5v/.history": "b60d33881204c2666d0dc0bf4e7bea9b49112c1c",
+      "opt/AudioJacks": "14a88866e93b8ce4a31ad376b0c6eb85cd4d2cf3",
+      "opt/KiCadLibraries": "0e58e706e6954372a2cb4c6df7c68c9942637bd4",
+      "opt/Panelization.pretty": "3839b22ce1f193f576d41dd2671ccb90c2013311",
+      "opt/Type-C.pretty": "e908953b36d9a1a9838aff4bebddc51223073c25"
+    },
+    "gitlinks_before_after_identical": true,
+    "historical_provision_manifest_unchanged": true,
+    "protected_files_before_after_sha256": "e6cb64cb599ddee2fc502a4b8fa933e648e5f4ebd3f55238d3e74a396ecdf4d8",
+    "tracked_protected_files": 2394
+  },
+  "provenance": {
+    "all_package_and_extracted_bytes_match": true,
+    "binary_sha256": "b469a1502f0f825aa431a7fbee57e19f1cc80f8bb940df7c17d295f81e0669fe",
+    "build_confinement": {
+      "/deps/denied-write.tmp": "denied",
+      "/source/denied-write.tmp": "denied",
+      "/usr/denied-write.tmp": "denied",
+      "home_absent": true,
+      "interfaces": [],
+      "network": "denied",
+      "repo_absent": true
+    },
+    "build_limits": {
+      "address_space_bytes": 4294967296,
+      "aggregate_bytes": 943718400,
+      "file_bytes": 268435456,
+      "wall_s": 360
+    },
+    "build_log_sha256": {
+      "build-0.log": "c906d16eddae1342d7c1d321af4bbdfd78846f1a5d8a7637ea1c71188ab355ab",
+      "build-1.log": "176d517337447ea835a98652f54e504db6a821ada7c1015c7099013842ca4b5a",
+      "build-confinement.log": "e4c2fd7866ba2fad5d2de6505e563a0c96ec173fe92f6c0fb6d64fdce41ce9e1"
+    },
+    "build_seconds": 38.296,
+    "build_statuses": [
+      0,
+      0
+    ],
+    "capability_and_confinement_log_sha256": {
+      "gpu-info.log": "151ca8ba9dd7dd31a23042dfe08a7e6007b954479552cbb44280f73ac8553a61",
+      "runtime-confinement-correct-targets.log": "7a22211009f4c77f8138aefd9b40ca50c0804f5a772306c6da23448ea05608b5",
+      "runtime-confinement.log": "6c49b5b648229fc4298d91f862e8c0f1a48ff38b05e3eaa78a363f0a7261f629",
+      "version.log": "d09a30e3bc114d8ed087318e0d435f251f8677bf1b2a991411e13a3764b84829"
+    },
+    "catalog_review_authorized": true,
+    "catalogs": [
+      {
+        "component": "main",
+        "current_index_sha256": "92eb335c0ed27983d41a5a0efdf0edce3e67bfa34e8e987af9df260ca72d9bf9",
+        "current_index_size": 7581722,
+        "current_inrelease_sha256": "45f95ce276cdba3e41870516a130e03c58b8b7a79e9546b0efe9e526d255740c",
+        "historical_index_sha256": "92eb335c0ed27983d41a5a0efdf0edce3e67bfa34e8e987af9df260ca72d9bf9",
+        "historical_inrelease_sha256": "45f95ce276cdba3e41870516a130e03c58b8b7a79e9546b0efe9e526d255740c",
+        "key_fingerprint": "F6ECB3762474EDA9D21B7022871920D1991BC93C",
+        "origin": "Ubuntu",
+        "signature_verified": true,
+        "suite": "resolute"
+      },
+      {
+        "component": "universe",
+        "current_index_sha256": "9c009342905706a05822f6e751f5b1ac34b687f054bfca9a0a652178445fc44c",
+        "current_index_size": 76792699,
+        "current_inrelease_sha256": "45f95ce276cdba3e41870516a130e03c58b8b7a79e9546b0efe9e526d255740c",
+        "historical_index_sha256": "9c009342905706a05822f6e751f5b1ac34b687f054bfca9a0a652178445fc44c",
+        "historical_inrelease_sha256": "45f95ce276cdba3e41870516a130e03c58b8b7a79e9546b0efe9e526d255740c",
+        "key_fingerprint": "F6ECB3762474EDA9D21B7022871920D1991BC93C",
+        "origin": "Ubuntu",
+        "signature_verified": true,
+        "suite": "resolute"
+      },
+      {
+        "component": "main",
+        "current_index_sha256": "9e32834892216945746fd3f181e6c4f5a5f44486536a50e5f11ac7db4342e126",
+        "current_index_size": 3902881,
+        "current_inrelease_sha256": "26fd5b4daa2682407a1494e436f7ff915b8071686d94fc1819962ff68a70a42c",
+        "historical_index_sha256": "c67ae09afe5c21c5283174a6f8badf53a2b76918a99e32459bf70ca7ff9dc0b0",
+        "historical_inrelease_sha256": "bcae98688b012c843c34e2fb1f20acf20e5ac72b24975c3c260e30eccef8b870",
+        "key_fingerprint": "F6ECB3762474EDA9D21B7022871920D1991BC93C",
+        "origin": "Ubuntu",
+        "signature_verified": true,
+        "suite": "resolute-updates"
+      }
+    ],
+    "dependency_entries": 17086,
+    "dependency_tree_sha256": "8a5dabeddd1e9e3645d345fa632bc89c8f4aedfb00bb237739bbd6048aed6abe",
+    "distinct_network_namespace": true,
+    "engine_capability": "This build has no CUDA support (cpu-only). CPU reference paths are used.",
+    "engine_version": "tracemaker 0.8.0",
+    "exact_authenticated_packages": [
+      {
+        "Architecture": "amd64",
+        "Filename": "pool/main/b/boost1.90/libboost1.90-dev_1.90.0-6ubuntu1_amd64.deb",
+        "Package": "libboost1.90-dev",
+        "SHA256": "7b89698c907fd5d33ccd439674fa53803139923822181c87b910579827aca379",
+        "Version": "1.90.0-6ubuntu1"
+      },
+      {
+        "Architecture": "all",
+        "Filename": "pool/main/n/nlohmann-json3/nlohmann-json3-dev_3.12.0.really.3.12.0.really.3.11.3-3build1_all.deb",
+        "Package": "nlohmann-json3-dev",
+        "SHA256": "d074e6107bef659ccfa169cb1d9e2e0daa9bcecfea84ce13c45812ff9cd58e9d",
+        "Version": "3.12.0.really.3.12.0.really.3.11.3-3build1"
+      },
+      {
+        "Architecture": "amd64",
+        "Filename": "pool/main/libz/libzstd/libzstd-dev_1.5.7+dfsg-3_amd64.deb",
+        "Package": "libzstd-dev",
+        "SHA256": "6d81369284ba3fd094f635fe6b9f8dfc71baaca36c1f758fe62244839e25ecf0",
+        "Version": "1.5.7+dfsg-3"
+      },
+      {
+        "Architecture": "amd64",
+        "Filename": "pool/main/libz/libzstd/libzstd1_1.5.7+dfsg-3_amd64.deb",
+        "Package": "libzstd1",
+        "SHA256": "34365d611ccf1f717f90a92fbe52ed96ae1829ab9be363c68a83563322797f8f",
+        "Version": "1.5.7+dfsg-3"
+      },
+      {
+        "Architecture": "all",
+        "Filename": "pool/universe/e/eigen3/libeigen3-dev_3.4.0-5_all.deb",
+        "Package": "libeigen3-dev",
+        "SHA256": "22060e67427b1acf85465fd5784caf7eecc8c967c662fb2ec774b84ba6174ad9",
+        "Version": "3.4.0-5"
+      },
+      {
+        "Architecture": "all",
+        "Filename": "pool/universe/c/cli11/libcli11-dev_2.6.1+ds-1_all.deb",
+        "Package": "libcli11-dev",
+        "SHA256": "c3a1fc8fdeb27f621dd2c35114c29b35aa73d0e3bf96da409e9e095c3f090421",
+        "Version": "2.6.1+ds-1"
+      },
+      {
+        "Architecture": "amd64",
+        "Filename": "pool/main/s/sqlite3/libsqlite3-dev_3.46.1-9ubuntu0.3_amd64.deb",
+        "Package": "libsqlite3-dev",
+        "SHA256": "57d0bdf2f1199e4305fd4b81a3ab665c5cb5b38654a0b8e032a1beca411e0418",
+        "Version": "3.46.1-9ubuntu0.3"
+      },
+      {
+        "Architecture": "amd64",
+        "Filename": "pool/main/s/sqlite3/libsqlite3-0_3.46.1-9ubuntu0.3_amd64.deb",
+        "Package": "libsqlite3-0",
+        "SHA256": "ff4b5a1e7c028a4bcc30076e4d8197aad1a910df44f4dc8dcf253e9ee9a3a367",
+        "Version": "3.46.1-9ubuntu0.3"
+      }
+    ],
+    "historical_manifest_sha256": "0c58f953bee7dad8de526fec9475e29e8d09d42c7f7de0993565b02b63b494eb",
+    "runtime_confinement": {
+      "/deps/denied.tmp": "denied",
+      "/engine/tracemaker": "denied",
+      "/input/denied.tmp": "denied",
+      "/usr/denied.tmp": "denied",
+      "home_absent": true,
+      "input_pcb": true,
+      "network": "denied",
+      "repo_absent": true
+    },
+    "runtime_limits": {
+      "address_space_GiB": 4,
+      "aggregate_output_MiB": 64,
+      "file_MiB": 16,
+      "private_tmp_MiB": 32,
+      "wall_s": 120
+    },
+    "source_clean_and_hashes_unchanged": true,
+    "source_pin": "c5e1e8497ffef194206a012ee98f0ba156827f71",
+    "source_tree_manifest_sha256": "5189882867d1d1f5ce280aec285f5e17e0359b267dc2d8cd7e9aca559dd139b6",
+    "tool_versions": {
+      "bwrap": "bubblewrap 0.11.1",
+      "cmake": "cmake version 4.2.3",
+      "compiler": "g++-15 (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+      "kicad_cli": "10.0.6",
+      "ninja": "1.13.2"
+    }
+  },
+  "schema_version": 1,
+  "scope": "Strict native/legacy net adapter and disposable synthetic hybrid only; uncommitted; no production designs executed",
+  "tests": [
+    {
+      "all_passed_no_skips": true,
+      "exit_code": 0,
+      "log_sha256": "cd571888909518fb8bbbd395a526c842de83a8c87063bb0321106e9542686cd8",
+      "seconds": 30.467,
+      "suite": "tracemaker",
+      "tests": 45
+    },
+    {
+      "all_passed_no_skips": true,
+      "exit_code": 0,
+      "log_sha256": "ad404436189f1a2b42c0566c26e7bd1e49c6650c1b2deb19fd100bdac3a38d1d",
+      "seconds": 11.792,
+      "suite": "core",
+      "tests": 55
+    }
+  ]
+}

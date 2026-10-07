@@ -23,7 +23,7 @@ python3 -B opt/kicad-tools/kicad_tools.py tracemaker --help
 | Move/rotate/flip/add footprints; copper, vias, zones, outlines, text, selected deletion | `pcb inspect\|plan\|apply` | [PCB API](automation/docs/api.md) |
 | Flat-sheet wires, junctions, local labels | `schematic inspect\|plan\|apply` | [Schematic API](schematic/docs/api.md) |
 | Supported ordinary-project DSN/SES routing | `route inspect-project\|plan-project\|route-project` | [Handoff workflow](API.md), [subset](../kicad-routing/SUPPORTED_SUBSET.md) (optional sibling) |
-| Recommended hybrid signal work (optional, experimental) | `tracemaker freeze\|strip\|run inspect\|route\|drc\|compare\|validate` | [Hybrid recipe + native-format blocker](HYBRID_ROUTING.md) |
+| Recommended hybrid signal work (optional, experimental) | `tracemaker freeze\|strip\|run inspect\|route\|drc\|compare\|validate` | [Hybrid recipe + strict native handoff](HYBRID_ROUTING.md) |
 | Gerber ZIP / BOM / CPL | `export` | [Standalone exporter](jlcpcb/README.md) |
 | Catalog / BOM audit / passive planning | `assembly` | [Assembly API](jlcpcb/ASSEMBLY.md) |
 | Copy / relocate / re-bundle | `bundle [--include-routing] [--include-tracemaker]` | [Bundle contract](BUNDLING.md) |
@@ -47,5 +47,6 @@ are never migrated by these tools; standalone CLIs and Python APIs remain availa
 
 Recommended: **layout core components, protect critical copper, freeze, let TraceMaker
 work on compatible ordinary signals, then inspect and polish with CLI edits**.
-Read the [hybrid recipe and exact handoff blocker](HYBRID_ROUTING.md) first; native
-name-only PCB saves are not yet engine-qualified. Freerouting is an explicit alternative.
+Read the [hybrid recipe and supported-subset gates](HYBRID_ROUTING.md) first. Native
+inline-named saves now pass a real synthetic placement → engine → CLI-polish proof;
+this is not production/full-board admission. Freerouting remains an explicit alternative.

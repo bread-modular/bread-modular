@@ -35,11 +35,21 @@ Do not run these steps merely for help, bundling, unit tests or cosmetic integra
    using `gpgv --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg`, checking
    the recorded archive origin/key identity, not a wildcard matching a PPA.
    Extract signed Release to a private file. Decompress the relevant apt index via
-   `/usr/lib/apt/apt-helper cat-file`; verify uncompressed byte size/SHA256 against
-   signed Release and the recorded index. Match each exact package/version/architecture/
-   filename/SHA256 stanza. **Stop** if records/signatures are unavailable or differ;
-   changing archive metadata/dependencies needs explicit review. Never add signing keys
-   or waive authentication because an old signed index has expired/disappeared.
+   `/usr/lib/apt/apt-helper cat-file`; verify its uncompressed byte size/SHA256 against
+   the **currently authenticated Release**, checking suite, component, architecture
+   and validity. Match **all eight** exact package/version/architecture/Filename/SHA256
+   stanzas from `provision.json`, not just names. **Stop** for any dependency pin/byte
+   mismatch, missing record, wrong origin/key, unsigned/mismatched index or expired catalog.
+
+   A newly signed **catalog refresh** can change Release/index hashes as unrelated
+   packages change; it is not a dependency-pin change. With explicit review authorization,
+   authenticate refreshed metadata using the SAME trusted archive/key, then require all
+   eight pinned records to match exactly. Retain both historical manifest hashes and
+   refreshed signed Release/index hashes, signature identity and exact-match results in
+   a new compact provenance record; **never silently replace `provision.json`**. A pinned
+   package version/filename/architecture/digest change still needs separate review and
+   cannot pass as a catalog refresh. Never add keys or waive authentication because an
+   old signed index expired/disappeared. No automatic provisioning in tests or commands.
 2. With explicit network authorization, fetch only the exact archive URLs recorded
    in the manifest into private `packages/`. Hash each against the authenticated record.
    `dpkg-deb --extract FILE PRIVATE_DEPS` only: no maintainer scripts, apt install,
@@ -80,4 +90,7 @@ weaken isolation if a failure occurs. The runner separately applies 120 s wall,
 
 Historical evidence (repository-only, deliberately **not bundled**):
 `experiments/tracemaker-8bit/evidence/final/common/{provision,engine,build,build-confinement,runtime-confinement}.json`.
-The immutable retained trial took 37.894 s to build; it was not rebuilt for this integration.
+The immutable retained trial took 37.894 s to build. A separate focused synthetic
+reconstruction after main `6715058` took 38.296 s and reproduced the exact binary
+digest; repository-only evidence: `synthetic-verification.json` (not bundled or needed to build). No retained trial
+was rerun or modified. The signed catalog refresh left all eight dependency pins intact.

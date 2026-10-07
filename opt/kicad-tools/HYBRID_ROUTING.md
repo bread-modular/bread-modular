@@ -6,22 +6,26 @@ freeze the approved layout, let the pinned offline router do selected work, then
 and polish with PCB CLI operations. This is not automatic placement or production signoff.
 Freerouting remains an explicit alternative for its separately tested subset, never fallback.
 
-## Current handoff blocker (read before planning work)
+## Qualified net-format handoff (supported subset, not blanket admission)
 
-The successful retained TraceMaker trial used **top-level numbered net definitions**.
-Matching KiCad/pcbnew **10.0.6 actually saves name-only nets**, e.g. `(net "SIGNAL")`
-in pads/tracks, with no top-level `(net 1 "SIGNAL")`. Our **legacy adapter** therefore
-blocks the current PCB API saved-output handoff after `pcb apply`. **`tracemaker strip` and
-`tracemaker run inspect|route|drc` explicitly block this encoding before writes**.
-Do not fabricate numbers, down-save, edit project/net rules, or imply this is a working
-PCB-apply → engine → polish pipeline. Freeze/no-op comparison/native validation and
-return-to-CLI polish are exercised on native synthetic copies; actual engine routing of
-those saves is **not qualified here**. This establishes an **adapter limitation, not upstream engine
-incompatibility**: pinned reader/writer name-only support was not investigated or
-runtime-tested in this integration. Historical KiCad 9/10 claims are not contradicted
-by a helper rejection. No ad-hoc conversion/downgrade or speculative engine patch.
-Use manual CLI work, or separately inspect/qualify the
-explicit Freerouting alternative. Retained legacy-board trials are not new-format proof.
+The adapter strictly resolves both legacy top-level numbered definitions and native
+KiCad 10 inline quoted names such as `(net "SIGNAL")`. At pin
+`c5e1e8497ffef194206a012ee98f0ba156827f71`, a real CPU synthetic loop now passes:
+facade placement → complete freeze → selected segment removal → **one deliberate open
+closed by two engine-added segments** → independent native/engine checks → recorded CLI
+replacement with two ordinary vias → fresh final checks. Matching CLI/pcbnew: 10.0.6.
+No upstream patch, format conversion, invented net IDs, downgraded save or relaxed gate.
+
+Quoted numeric name `"1"` is NOT numeric reference `1`. Global definitions must be
+unique, consistent and include empty net0; numeric references must resolve exactly.
+Inline/global mixtures must agree with existing definitions. Unknown codes, conflicting
+names, malformed or ambiguous references reject before strip/run writes. Netless/empty,
+mounting, power, unconnected, locked and grouped protections remain. Native via manifests
+record canonical names and include numeric codes **only when explicitly defined**.
+See [opt-in synthetic proof](tracemaker/test_native.py). Repository-only compact evidence
+is `tracemaker/synthetic-verification.json`; it is not a runtime or bundled dependency.
+This proves a tiny compatible signal fixture, not full-board/production/GPU placement,
+all advanced rules/resources or live GUI interoperability. Other blockers stay explicit.
 
 Freeze now uses the existing bounded `Plan` dependency discovery for same-stem projects:
 missing hierarchy/local libraries block; transitive native files are copied, with only
@@ -78,15 +82,18 @@ A completed `completion.json` is needed for PCB candidates; only explicit opens-
 Known baseline warnings/exclusions/ignored rules that conflict with PCB apply are blockers,
 not permission to relax policy. Use the completion's `board` path under its `inputs/`.
 
-## 2. Freeze, select and route ONLY a qualified legacy encoding
+## 2. Freeze, select and route qualified legacy or native inline-named boards
 
 Optional controllers: copy with `bundle NEW --include-tracemaker`; read
 [controller help](tracemaker/README.md) and [manual provisioning](tracemaker/BUILD.md)
 when that payload is present. No automatic runtime installation.
 All following paths are **inspected placeholders**, not a production-board recipe;
 `board.kicad_pcb` is an existing root basename and `SIG` an approved ordinary signal.
-`ENGINE`, `DEPS`, `DIGEST` must identify the reviewed pinned CPU build. Stop at the
-name-only blocker above; **do not run this stage on PCB API saved outputs**.
+`ENGINE`, `DEPS`, `DIGEST` must identify the reviewed pinned CPU build.
+This stage accepts qualified legacy numeric and native KiCad 10 inline-named boards,
+including PCB API saved placement candidates. Freeze the completed candidate (or
+explicit opens-only draft) with its complete project context; the strict resolver and
+supported-subset gates above still apply, without conversion or waived checks.
 
 ```sh
 python3 -B "$T" tracemaker --help
@@ -160,7 +167,8 @@ replacement `add_polyline`, `add_via`, or approved move/rotate/flip. Reinspect e
 do not reuse stale UUIDs. Every edited baseline needs its operations/plan/completion and
 new freeze/native checks. **Do not blindly compare intentional geometry edits to the
 old immutable router baseline**: preserve it and retain the authorized delta separately.
-CLI-polished KiCad 10 name-only output cannot currently pass the first-party strip/run admission gate. Re-run final
-ERC/DRC/parity/inventory and independent engine DRC only on qualified engine-compatible
-copies; otherwise record blocked/draft, not acceptance. Keep hashes, removals, commands,
+CLI-polished native inline-named output can now pass the strict format gate. Re-run final
+ERC/DRC/parity/inventory and independent engine DRC on the complete sealed edited
+candidate. Missing/unsupported rules or engine warnings remain blockers, not waivers;
+otherwise record blocked/draft, not acceptance. Keep hashes, removals, commands,
 raw/canonical comparisons and findings as the audit chain; never auto-promote a candidate.

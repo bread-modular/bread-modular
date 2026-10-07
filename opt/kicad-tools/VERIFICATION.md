@@ -500,3 +500,53 @@ Based on main `643389303e90610395078436fed60e7342af61c9`, isolated uncommitted w
   Before/after protected-manifest SHA256:
   `f11c824eb92c1cbc6ad6a1bdcc2333c92a152b3f9d6561370a88e655cc24fd3b`.
   Local logs/manifests are in ignored `tracemaker-integration.tmp/`, not a bundle payload.
+
+
+## Focused native-named compatibility + real synthetic hybrid after main 6715058
+
+This supersedes ONLY the native-format adapter blocker above; historical retained
+8bit/legacy evidence is unchanged. Repository-only compact machine evidence:
+`tracemaker/synthetic-verification.json` (not a bundled runtime/dependency).
+
+- One strict quote-aware resolver covers legacy global numeric and native inline-named
+  nets in strip/compare/run. Quoted numeric names remain names. Unknown codes,
+  duplicate/conflicting globals and malformed/ambiguous mixtures fail before writes;
+  coherent mixed references must agree with explicit definitions. Exact raw protection,
+  UUID removals, net0/power/mounting/locked/grouped protections and minima stay intact.
+- Same trusted Ubuntu key/origin authenticated refreshed signed catalogs. All eight
+  exact name/version/architecture/Filename/SHA256 records AND downloaded/re-extracted
+  bytes match historical pins; `provision.json` is unchanged. Clean upstream pin
+  `c5e1e8497ffef194206a012ee98f0ba156827f71`; CPU build 38.296 s, binary SHA256
+  `b469a1502f0f825aa431a7fbee57e19f1cc80f8bb940df7c17d295f81e0669fe`.
+  TraceMaker reports 0.8.0 / no CUDA. CLI/pcbnew 10.0.6; compiler 15.2.0,
+  CMake 4.2.3, Ninja 1.13.2, bwrap 0.11.1. Networkless capped build/execution;
+  read-only source/deps/executable/system write probes and absent HOME/repo verified.
+- Actual main facade `pcb inspect/plan/apply` moves R2 by 1 mm and explicitly replaces
+  attached copper (moves do not drag traces). Complete returned candidate and Plan
+  closure frozen; exact authorized named-net segment stripped. **1 deliberate native
+  open → 1 engine-routed connection / 2 new segments → 0 opens**. Raw and independent
+  native-canonical comparisons pass; complete sealed candidate engine DRC and full
+  native ERC/XML/ref-pin-net/DRC/parity have zero findings. No output cleanup/rewrite.
+- Fresh CLI inspection/plan/apply explicitly replaces selected engine copper using
+  chosen waypoints and two 0.7/0.3 mm F/B vias. Fresh authorized baseline: final native
+  ERC/DRC/parity/opens and independent engine violations/opens/warnings all zero.
+  Exact footprint/pad/net/outline/layer/zone invariants preserved by stage; original
+  synthetic source hashes unchanged. Fixture minima were initialized once before
+  any baseline; project/custom-rule bytes remain identical across all stages.
+- Final source suites: **45 TraceMaker passed (30.467 s), 55 core passed (11.792 s)**,
+  native and external-engine opt-ins enabled, no skips. Source-only relocated bundle
+  from spaced paths/unrelated cwd: **45 TraceMaker (30.356 s), 55 core (11.760 s)**,
+  no skips, runtime kept external and CPU artifacts under ignored workspace `*.tmp`.
+  Neither/either/both optional bundle combinations contain 65/76/88/99 files;
+  manifest hashes, three relative aliases, relocation and re-bundle all match.
+  New disposable /tmp bundle copies are necessary because bundle destination must
+  be outside its distribution source tree; no other existing project/workspace used.
+- Protected files: 2394 tracked byte/link hashes, 171 experiment
+  files and 7 gitlink identities unchanged. Protected before/after map SHA256:
+  `e6cb64cb599ddee2fc502a4b8fa933e648e5f4ebd3f55238d3e74a396ecdf4d8`.
+  Existing Freerouting API and historical provisioning/8bit evidence unchanged.
+- Limits: tiny compatible synthetic signals only, not production/full-board/automatic
+  placement/live GUI/GPU or every advanced rule/resource. Native pcbnew deprecation/
+  property-enum stderr diagnostics remain visible; no native/engine findings waived.
+  Runtime/design/build artifacts remain ignored pending review and workspace cleanup;
+  only compact first-party evidence is retained. No commit/merge/push or delegation.
