@@ -1,0 +1,146 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-07T00:33:43",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "key": "pth_inside_courtyard"
+        },
+        {
+            "description": "NPTH inside courtyard",
+            "key": "npth_inside_courtyard"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "synthetic.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 1 [PTH_LINK] of F1 on F.Cu",
+                    "pos": {
+                        "x": 10.0,
+                        "y": 10.0
+                    },
+                    "uuid": "336e3bd1-50fb-4040-886e-dd072181e52b"
+                },
+                {
+                    "description": "PTH pad 1 [PTH_LINK] of H1",
+                    "pos": {
+                        "x": 14.0,
+                        "y": 14.0
+                    },
+                    "uuid": "fc1dbe75-c09b-42b4-b994-867ef6ed00de"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 1 [PTH_LINK] of H1",
+                    "pos": {
+                        "x": 14.0,
+                        "y": 14.0
+                    },
+                    "uuid": "fc1dbe75-c09b-42b4-b994-867ef6ed00de"
+                },
+                {
+                    "description": "Pad 1 [PTH_LINK] of B1 on B.Cu",
+                    "pos": {
+                        "x": 18.0,
+                        "y": 10.0
+                    },
+                    "uuid": "dc922aeb-e54e-4b5f-946b-f6a8d1f9b8c9"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 1 [VIA_LINK] of F2 on F.Cu",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 22.0
+                    },
+                    "uuid": "ed61c512-72ab-4dd9-aa3a-80ebf9c8de5e"
+                },
+                {
+                    "description": "Pad 1 [VIA_LINK] of B2 on B.Cu",
+                    "pos": {
+                        "x": 30.0,
+                        "y": 22.0
+                    },
+                    "uuid": "383b1260-ab58-4fa9-82f7-96f0cdc5e52c"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Non-Mirrored text on back layer",
+            "items": [
+                {
+                    "description": "Reference field of B1",
+                    "pos": {
+                        "x": 18.0,
+                        "y": 8.0
+                    },
+                    "uuid": "73fe3c61-86ec-4c55-b447-ef658e0a52dc"
+                }
+            ],
+            "severity": "warning",
+            "type": "nonmirrored_text_on_back_layer"
+        },
+        {
+            "description": "Non-Mirrored text on back layer",
+            "items": [
+                {
+                    "description": "Reference field of B2",
+                    "pos": {
+                        "x": 30.0,
+                        "y": 20.0
+                    },
+                    "uuid": "e6af0134-a9a5-402d-9055-83f7f25ebe0f"
+                }
+            ],
+            "severity": "warning",
+            "type": "nonmirrored_text_on_back_layer"
+        }
+    ]
+}

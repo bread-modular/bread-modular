@@ -1,0 +1,58 @@
+{
+ "coordinate_units": "mm",
+ "source": "tracemaker",
+ "unconnected_items": [
+  {
+   "description": "Missing connection in net TX",
+   "items": [
+    {
+     "description": "Pad 4 of INPUT1 [TX]",
+     "pos": {
+      "x": 50.8,
+      "y": 53.34
+     }
+    },
+    {
+     "description": "Via [TX]",
+     "pos": {
+      "x": 60.974966,
+      "y": 80.528878
+     }
+    }
+   ],
+   "severity": "error",
+   "type": "unconnected_items"
+  }
+ ],
+ "violations": [
+  {
+   "description": "",
+   "items": [
+    {
+     "description": "Via [TX]",
+     "pos": {
+      "x": 59.563,
+      "y": 80.254
+     }
+    }
+   ],
+   "severity": "warning",
+   "type": "via_dangling"
+  },
+  {
+   "description": "",
+   "items": [
+    {
+     "description": "Via [TX]",
+     "pos": {
+      "x": 60.974966,
+      "y": 80.528878
+     }
+    }
+   ],
+   "severity": "warning",
+   "type": "via_dangling"
+  }
+ ],
+ "warnings": []
+}

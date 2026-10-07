@@ -1,0 +1,1045 @@
+{
+  "assets_unchanged": true,
+  "drc": {
+    "active_errors": 1,
+    "counts": {
+      "schematic_parity": 0,
+      "unconnected_items": 1,
+      "violations": 32
+    },
+    "diagnostics": {
+      "unconnected_items:unconnected_items:error": 1,
+      "violations:lib_footprint_mismatch:warning": 18,
+      "violations:silk_over_copper:warning": 8,
+      "violations:silk_overlap:warning": 4,
+      "violations:via_dangling:warning": 2
+    }
+  },
+  "drc_command": {
+    "argv": [
+      "/usr/bin/bwrap",
+      "--unshare-all",
+      "--die-with-parent",
+      "--new-session",
+      "--clearenv",
+      "--ro-bind",
+      "/usr",
+      "/usr",
+      "--ro-bind",
+      "/bin",
+      "/bin",
+      "--ro-bind",
+      "/lib",
+      "/lib",
+      "--ro-bind",
+      "/lib64",
+      "/lib64",
+      "--proc",
+      "/proc",
+      "--dev",
+      "/dev",
+      "--size",
+      "33554432",
+      "--tmpfs",
+      "/tmp",
+      "--dir",
+      "/etc",
+      "--ro-bind",
+      "/etc/ld.so.cache",
+      "/etc/ld.so.cache",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/run/8bit-digital-input",
+      "/input",
+      "--bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/run/8bit-digital-final-judge",
+      "/out",
+      "--setenv",
+      "PATH",
+      "/usr/bin",
+      "--setenv",
+      "HOME",
+      "/tmp/home",
+      "--setenv",
+      "XDG_CONFIG_HOME",
+      "/tmp/config",
+      "--setenv",
+      "XDG_DATA_HOME",
+      "/tmp/data",
+      "--setenv",
+      "LC_ALL",
+      "C",
+      "--chdir",
+      "/input",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/opt/kicad-tools/tracemaker/native_snapshot.py",
+      "/helper.py",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/native-config",
+      "/config",
+      "--setenv",
+      "KICAD_CONFIG_HOME",
+      "/config",
+      "--chdir",
+      "/out/project",
+      "--setenv",
+      "KICAD10_FOOTPRINT_DIR",
+      "/usr/share/kicad/footprints",
+      "--setenv",
+      "KICAD10_SYMBOL_DIR",
+      "/usr/share/kicad/symbols",
+      "/usr/bin/kicad-cli",
+      "pcb",
+      "drc",
+      "--format",
+      "json",
+      "--severity-all",
+      "--all-track-errors",
+      "--refill-zones",
+      "--save-board",
+      "--exit-code-violations",
+      "--schematic-parity",
+      "-o",
+      "/out/drc.json",
+      "/out/project/8bit.kicad_pcb"
+    ],
+    "cap_reason": null,
+    "exit_code": 5,
+    "limits": {
+      "address_space_GiB": 4,
+      "file_MiB": 16,
+      "output_MiB": 64,
+      "private_tmp_MiB": 32,
+      "wall_seconds": 60
+    },
+    "seconds": 1.612
+  },
+  "native_diagnostics_removed": 0,
+  "native_new_files": [
+    "8bit.kicad_prl"
+  ],
+  "new_native_diagnostics": [
+    {
+      "finding": {
+        "description": "Via is not connected or connected on only one layer",
+        "items": [
+          {
+            "description": "Via [TX] on F.Cu - B.Cu",
+            "pos": {
+              "x": 59.563,
+              "y": 80.254
+            },
+            "uuid": "3fa8dbb6-c6f1-4dd8-a765-12076b794876"
+          }
+        ],
+        "severity": "warning",
+        "type": "via_dangling"
+      },
+      "section": "violations"
+    },
+    {
+      "finding": {
+        "description": "Via is not connected or connected on only one layer",
+        "items": [
+          {
+            "description": "Via [TX] on F.Cu - B.Cu",
+            "pos": {
+              "x": 60.974966,
+              "y": 80.528878
+            },
+            "uuid": "e6d7d2f7-5ce8-46c7-960f-7058698c8002"
+          }
+        ],
+        "severity": "warning",
+        "type": "via_dangling"
+      },
+      "section": "violations"
+    },
+    {
+      "finding": {
+        "description": "Missing connection between items",
+        "items": [
+          {
+            "description": "Track [TX] on F.Cu, length 1.2162 mm",
+            "pos": {
+              "x": 59.02,
+              "y": 78.91
+            },
+            "uuid": "9fb37504-07f9-4915-93a7-af71641880e5"
+          },
+          {
+            "description": "Via [TX] on F.Cu - B.Cu",
+            "pos": {
+              "x": 60.974966,
+              "y": 80.528878
+            },
+            "uuid": "e6d7d2f7-5ce8-46c7-960f-7058698c8002"
+          }
+        ],
+        "severity": "error",
+        "type": "unconnected_items"
+      },
+      "section": "unconnected_items"
+    }
+  ],
+  "not_production_signoff": true,
+  "passed_drc_relative_to_baseline": false,
+  "raw_before_reload": {
+    "additions": [
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "73.66",
+            "55.88"
+          ],
+          [
+            "end",
+            "73.66",
+            "53.34"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "11"
+          ],
+          [
+            "uuid",
+            "7aa004f8-e049-4699-8fda-f0ffa2801499"
+          ]
+        ],
+        "kind": "segment",
+        "net": "GATE_OUT"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "51.181",
+            "60.452"
+          ],
+          [
+            "end",
+            "50.8",
+            "60.071"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "10"
+          ],
+          [
+            "uuid",
+            "a4fd3222-7e3e-45b6-a554-46158e38bb53"
+          ]
+        ],
+        "kind": "segment",
+        "net": "UDPI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "50.8",
+            "60.071"
+          ],
+          [
+            "end",
+            "50.8",
+            "55.88"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "10"
+          ],
+          [
+            "uuid",
+            "aad22906-c3a9-4c6b-8648-3694317279b2"
+          ]
+        ],
+        "kind": "segment",
+        "net": "UDPI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "74.422",
+            "60.452"
+          ],
+          [
+            "end",
+            "73.66",
+            "59.69"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "11"
+          ],
+          [
+            "uuid",
+            "b1edff8c-1f74-435c-85c6-b8507906f2f7"
+          ]
+        ],
+        "kind": "segment",
+        "net": "GATE_OUT"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "73.66",
+            "59.69"
+          ],
+          [
+            "end",
+            "73.66",
+            "55.88"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "11"
+          ],
+          [
+            "uuid",
+            "22329003-279f-41b1-a5a9-801b2abfe2c4"
+          ]
+        ],
+        "kind": "segment",
+        "net": "GATE_OUT"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "50.8",
+            "45.72"
+          ],
+          [
+            "end",
+            "51.61",
+            "46.215"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "4d21ac33-18b8-46ae-82ac-69ced21e92f5"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "51.61",
+            "46.215"
+          ],
+          [
+            "end",
+            "72.865",
+            "46.215"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "b9114cf9-e6a2-4d16-baae-dec226afa251"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "72.865",
+            "46.215"
+          ],
+          [
+            "end",
+            "73.66",
+            "45.72"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "a79aebb8-e9ba-4995-a0da-f06a4e0e9e7f"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "50.8",
+            "53.34"
+          ],
+          [
+            "end",
+            "52.26",
+            "54.8"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "bb4c3be8-38c6-4288-91a9-77414551bf08"
+          ]
+        ],
+        "kind": "segment",
+        "net": "TX"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "52.26",
+            "54.8"
+          ],
+          [
+            "end",
+            "52.26",
+            "67.665"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "a88383e2-7901-4770-bc62-4e7aa41d6c15"
+          ]
+        ],
+        "kind": "segment",
+        "net": "TX"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "52.26",
+            "67.665"
+          ],
+          [
+            "end",
+            "54.405",
+            "69.81"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "02f8d065-44b7-4128-a74f-b6068b2f81f4"
+          ]
+        ],
+        "kind": "segment",
+        "net": "TX"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "54.405",
+            "69.81"
+          ],
+          [
+            "end",
+            "59.02",
+            "74.425"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "B.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "17a82322-00cf-44f8-9002-169690e5c30c"
+          ]
+        ],
+        "kind": "segment",
+        "net": "TX"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "59.02",
+            "74.425"
+          ],
+          [
+            "end",
+            "59.02",
+            "78.91"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "B.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "d3860a6b-fd60-4700-81a5-5c9502db98a9"
+          ]
+        ],
+        "kind": "segment",
+        "net": "TX"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "59.02",
+            "78.91"
+          ],
+          [
+            "end",
+            "59.88",
+            "79.77"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "9fb37504-07f9-4915-93a7-af71641880e5"
+          ]
+        ],
+        "kind": "segment",
+        "net": "TX"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "59.88",
+            "79.77"
+          ],
+          [
+            "end",
+            "59.88",
+            "81.31"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "8ede1fae-cfae-43fb-aa4c-47dd5963633c"
+          ]
+        ],
+        "kind": "segment",
+        "net": "TX"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "50.8",
+            "45.72"
+          ],
+          [
+            "end",
+            "47.905",
+            "48.615"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "ff94e36f-4ba8-4ac9-a417-7992cd30b8ec"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "47.905",
+            "48.615"
+          ],
+          [
+            "end",
+            "47.905",
+            "77.22"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "e0e790c1-5d52-4be3-ac67-4471fe4f928e"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "47.905",
+            "77.22"
+          ],
+          [
+            "end",
+            "48.555",
+            "77.87"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "ba0a219b-a107-4485-a2d2-618dd4a03da0"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "48.555",
+            "77.87"
+          ],
+          [
+            "end",
+            "58.955",
+            "77.87"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "29d020b1-0143-4d3c-ad30-a36d421260bf"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "58.955",
+            "77.87"
+          ],
+          [
+            "end",
+            "60.28",
+            "79.195"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "1a9bc787-1625-40b0-baa8-f72ab6f34425"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "60.28",
+            "79.195"
+          ],
+          [
+            "end",
+            "60.28",
+            "81.31"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "8"
+          ],
+          [
+            "uuid",
+            "0563bc4e-246f-4524-86be-ac381b69eaff"
+          ]
+        ],
+        "kind": "segment",
+        "net": "MIDI"
+      },
+      {
+        "definition": [
+          "via",
+          [
+            "at",
+            "54.405",
+            "69.81"
+          ],
+          [
+            "size",
+            "0.7"
+          ],
+          [
+            "drill",
+            "0.3"
+          ],
+          [
+            "layers",
+            "F.Cu",
+            "B.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "d4edb7bc-5cb6-44db-b927-df397d76ccb0"
+          ]
+        ],
+        "kind": "via",
+        "net": "TX"
+      },
+      {
+        "definition": [
+          "via",
+          [
+            "at",
+            "59.02",
+            "78.91"
+          ],
+          [
+            "size",
+            "0.7"
+          ],
+          [
+            "drill",
+            "0.3"
+          ],
+          [
+            "layers",
+            "F.Cu",
+            "B.Cu"
+          ],
+          [
+            "net",
+            "7"
+          ],
+          [
+            "uuid",
+            "76187525-e0e2-4f27-8fb1-a60a35244f90"
+          ]
+        ],
+        "kind": "via",
+        "net": "TX"
+      }
+    ],
+    "mode": "exact-raw-node",
+    "passed": true,
+    "protected_nodes": 369,
+    "removed_or_changed_count": 0,
+    "removed_or_changed_sha256": [],
+    "unauthorized_additions": [],
+    "unique_all_uuids": true
+  },
+  "snapshot_command": {
+    "argv": [
+      "/usr/bin/bwrap",
+      "--unshare-all",
+      "--die-with-parent",
+      "--new-session",
+      "--clearenv",
+      "--ro-bind",
+      "/usr",
+      "/usr",
+      "--ro-bind",
+      "/bin",
+      "/bin",
+      "--ro-bind",
+      "/lib",
+      "/lib",
+      "--ro-bind",
+      "/lib64",
+      "/lib64",
+      "--proc",
+      "/proc",
+      "--dev",
+      "/dev",
+      "--size",
+      "33554432",
+      "--tmpfs",
+      "/tmp",
+      "--dir",
+      "/etc",
+      "--ro-bind",
+      "/etc/ld.so.cache",
+      "/etc/ld.so.cache",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/run/8bit-digital-input",
+      "/input",
+      "--bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/run/8bit-digital-final-judge",
+      "/out",
+      "--setenv",
+      "PATH",
+      "/usr/bin",
+      "--setenv",
+      "HOME",
+      "/tmp/home",
+      "--setenv",
+      "XDG_CONFIG_HOME",
+      "/tmp/config",
+      "--setenv",
+      "XDG_DATA_HOME",
+      "/tmp/data",
+      "--setenv",
+      "LC_ALL",
+      "C",
+      "--chdir",
+      "/input",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/opt/kicad-tools/tracemaker/native_snapshot.py",
+      "/helper.py",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/native-config",
+      "/config",
+      "--setenv",
+      "KICAD_CONFIG_HOME",
+      "/config",
+      "--chdir",
+      "/out/project",
+      "--setenv",
+      "KICAD10_FOOTPRINT_DIR",
+      "/usr/share/kicad/footprints",
+      "--setenv",
+      "KICAD10_SYMBOL_DIR",
+      "/usr/share/kicad/symbols",
+      "/usr/bin/python3",
+      "/helper.py",
+      "/out/project/8bit.kicad_pcb",
+      "/out/snapshot.json",
+      "/out/canonical.kicad_pcb"
+    ],
+    "cap_reason": null,
+    "exit_code": 0,
+    "limits": {
+      "address_space_GiB": 4,
+      "file_MiB": 16,
+      "output_MiB": 64,
+      "private_tmp_MiB": 32,
+      "wall_seconds": 30
+    },
+    "seconds": 0.203
+  }
+}
