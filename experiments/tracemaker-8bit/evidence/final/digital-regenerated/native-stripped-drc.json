@@ -1,0 +1,731 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-07T00:55:46",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "key": "pth_inside_courtyard"
+        },
+        {
+            "description": "NPTH inside courtyard",
+            "key": "npth_inside_courtyard"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "8bit.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 4 [TX] of INPUT1",
+                    "pos": {
+                        "x": 50.8,
+                        "y": 53.34
+                    },
+                    "uuid": "5e1db60a-d2aa-4bce-9113-03d466e280a6"
+                },
+                {
+                    "description": "Pad 12 [TX] of U2 on F.Cu",
+                    "pos": {
+                        "x": 59.88,
+                        "y": 81.31
+                    },
+                    "uuid": "0bca9020-69ee-4118-93d4-f2700101f41d"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 1 [MIDI] of INPUT1",
+                    "pos": {
+                        "x": 50.8,
+                        "y": 45.72
+                    },
+                    "uuid": "a0ddbc18-cd0d-4e54-b5c8-349f526c91a6"
+                },
+                {
+                    "description": "Pad 11 [MIDI] of U2 on F.Cu",
+                    "pos": {
+                        "x": 60.28,
+                        "y": 81.31
+                    },
+                    "uuid": "dda010ba-015a-4a3e-b0fb-02a81f27abd6"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 1 [MIDI] of OUTPUT1",
+                    "pos": {
+                        "x": 73.66,
+                        "y": 45.72
+                    },
+                    "uuid": "455df10b-7b3e-4ff4-a755-4324010bc167"
+                },
+                {
+                    "description": "PTH pad 1 [MIDI] of INPUT1",
+                    "pos": {
+                        "x": 50.8,
+                        "y": 45.72
+                    },
+                    "uuid": "a0ddbc18-cd0d-4e54-b5c8-349f526c91a6"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 5 [UDPI] of INPUT1",
+                    "pos": {
+                        "x": 50.8,
+                        "y": 55.88
+                    },
+                    "uuid": "1c319106-a8f6-4e39-8e09-b1443c43f536"
+                },
+                {
+                    "description": "Pad 2 [UDPI] of R1 on F.Cu",
+                    "pos": {
+                        "x": 51.181,
+                        "y": 60.452
+                    },
+                    "uuid": "65211a18-79b6-4831-8923-dd4b49d6ebbc"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 4 [GATE_OUT] of OUTPUT1",
+                    "pos": {
+                        "x": 73.66,
+                        "y": 53.34
+                    },
+                    "uuid": "e3ff45bf-e3ff-4299-8783-8b4221437f33"
+                },
+                {
+                    "description": "PTH pad 5 [GATE_OUT] of OUTPUT1",
+                    "pos": {
+                        "x": 73.66,
+                        "y": 55.88
+                    },
+                    "uuid": "469ba54e-a74e-4f6a-811e-b4dc817abe1a"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 5 [GATE_OUT] of OUTPUT1",
+                    "pos": {
+                        "x": 73.66,
+                        "y": 55.88
+                    },
+                    "uuid": "469ba54e-a74e-4f6a-811e-b4dc817abe1a"
+                },
+                {
+                    "description": "Pad 2 [GATE_OUT] of R3 on F.Cu",
+                    "pos": {
+                        "x": 74.422,
+                        "y": 60.452
+                    },
+                    "uuid": "5a52329e-4a1b-46bf-8237-c3e591ed0a32"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment on F.Silkscreen",
+                    "pos": {
+                        "x": 70.612,
+                        "y": 46.99
+                    },
+                    "uuid": "8f70a1a7-ac40-4d0c-831d-e61f3b88430b"
+                },
+                {
+                    "description": "Segment of OUTPUT1 on F.Silkscreen",
+                    "pos": {
+                        "x": 72.33,
+                        "y": 46.99
+                    },
+                    "uuid": "decbf9cd-6b22-42db-9d8c-e98071b637b3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment on F.Silkscreen",
+                    "pos": {
+                        "x": 70.612,
+                        "y": 46.99
+                    },
+                    "uuid": "8f70a1a7-ac40-4d0c-831d-e61f3b88430b"
+                },
+                {
+                    "description": "Segment of OUTPUT1 on F.Silkscreen",
+                    "pos": {
+                        "x": 72.33,
+                        "y": 46.99
+                    },
+                    "uuid": "a6b3aeff-1fe0-43cd-937e-63093686cbf9"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment on F.Silkscreen",
+                    "pos": {
+                        "x": 70.612,
+                        "y": 52.07
+                    },
+                    "uuid": "4e623b0f-3646-45d2-b479-f6cba58a9dd2"
+                },
+                {
+                    "description": "Segment of OUTPUT1 on F.Silkscreen",
+                    "pos": {
+                        "x": 72.33,
+                        "y": 46.99
+                    },
+                    "uuid": "a6b3aeff-1fe0-43cd-937e-63093686cbf9"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment on F.Silkscreen",
+                    "pos": {
+                        "x": 74.295,
+                        "y": 52.07
+                    },
+                    "uuid": "1441778e-9f61-46e7-8c2a-54d8cbedd357"
+                },
+                {
+                    "description": "Segment of OUTPUT1 on F.Silkscreen",
+                    "pos": {
+                        "x": 74.99,
+                        "y": 46.99
+                    },
+                    "uuid": "3966b597-1058-4397-b7bc-18fb49c6af85"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Segment of SW1 on F.Silkscreen",
+                    "pos": {
+                        "x": 54.195,
+                        "y": 84.7
+                    },
+                    "uuid": "7f25cb04-4cee-4d6b-ab3d-664413c332fa"
+                },
+                {
+                    "description": "Pad 2 [Net-(SW1-B)] of SW1 on F.Cu",
+                    "pos": {
+                        "x": 54.755,
+                        "y": 84.6
+                    },
+                    "uuid": "2b792726-cc9f-477d-8088-fe51a5b3d3fa"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Segment of SW1 on F.Silkscreen",
+                    "pos": {
+                        "x": 54.195,
+                        "y": 84.7
+                    },
+                    "uuid": "7f25cb04-4cee-4d6b-ab3d-664413c332fa"
+                },
+                {
+                    "description": "Pad 2 [Net-(SW1-B)] of SW1 on F.Cu",
+                    "pos": {
+                        "x": 50.555,
+                        "y": 84.6
+                    },
+                    "uuid": "389f53e9-10d0-45dd-b92a-a25f29016bf6"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Segment of SW1 on F.Silkscreen",
+                    "pos": {
+                        "x": 54.205,
+                        "y": 86.925
+                    },
+                    "uuid": "91e5dab6-36ac-48b5-a6f6-2430eae0a89d"
+                },
+                {
+                    "description": "Pad 1 [GND] of SW1 on F.Cu",
+                    "pos": {
+                        "x": 54.765,
+                        "y": 86.825
+                    },
+                    "uuid": "eb8d7265-1ae1-42a8-99a2-94fe059f60ac"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Segment of SW1 on F.Silkscreen",
+                    "pos": {
+                        "x": 54.205,
+                        "y": 86.925
+                    },
+                    "uuid": "91e5dab6-36ac-48b5-a6f6-2430eae0a89d"
+                },
+                {
+                    "description": "Pad 1 [GND] of SW1 on F.Cu",
+                    "pos": {
+                        "x": 50.565,
+                        "y": 86.825
+                    },
+                    "uuid": "42991de3-62ce-464a-a835-8764c526e64f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Segment of SW1 on F.Silkscreen",
+                    "pos": {
+                        "x": 54.755,
+                        "y": 86.45
+                    },
+                    "uuid": "bde6c618-9797-499b-92b2-bfc7a0909e28"
+                },
+                {
+                    "description": "Pad 2 [Net-(SW1-B)] of SW1 on F.Cu",
+                    "pos": {
+                        "x": 54.755,
+                        "y": 84.6
+                    },
+                    "uuid": "2b792726-cc9f-477d-8088-fe51a5b3d3fa"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Segment of SW1 on F.Silkscreen",
+                    "pos": {
+                        "x": 50.53,
+                        "y": 86.45
+                    },
+                    "uuid": "a6d04809-44c3-47ff-a3ae-07c8384647ec"
+                },
+                {
+                    "description": "Pad 2 [Net-(SW1-B)] of SW1 on F.Cu",
+                    "pos": {
+                        "x": 50.555,
+                        "y": 84.6
+                    },
+                    "uuid": "389f53e9-10d0-45dd-b92a-a25f29016bf6"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "PCB text 'CV2' on F.Silkscreen",
+                    "pos": {
+                        "x": 52.451,
+                        "y": 51.562
+                    },
+                    "uuid": "fd3bb931-1d6c-4f34-be5d-9ed6a9e7370b"
+                },
+                {
+                    "description": "PTH pad 1 [V_SUPPLY] of V_SUPPLY1",
+                    "pos": {
+                        "x": 55.88,
+                        "y": 50.8
+                    },
+                    "uuid": "5b4f0045-90b1-4220-afa4-b8e69dffe21b"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "PCB text 'GATE' on F.Silkscreen",
+                    "pos": {
+                        "x": 71.882,
+                        "y": 54.737
+                    },
+                    "uuid": "1fcc5ba0-4a1f-4149-948e-dce801b39ddc"
+                },
+                {
+                    "description": "Pad 8 [V_SUPPLY] of U1 on F.Cu",
+                    "pos": {
+                        "x": 69.85,
+                        "y": 55.88
+                    },
+                    "uuid": "b55ea865-9a7a-486c-a90b-62ce43b9fc6c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Footprint 'C_1206_3216Metric' does not match copy in library 'Capacitor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint C1",
+                    "pos": {
+                        "x": 59.485,
+                        "y": 88.05
+                    },
+                    "uuid": "0cbdde0c-dbe2-4690-8e9e-e5d4b48614ab"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint R3",
+                    "pos": {
+                        "x": 73.912,
+                        "y": 60.452
+                    },
+                    "uuid": "253ff2a5-7e6e-4b02-9a03-53e0d236da42"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint R1",
+                    "pos": {
+                        "x": 50.671,
+                        "y": 60.452
+                    },
+                    "uuid": "2c80f16e-bdcf-4744-ab0b-1e225056141c"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint C3",
+                    "pos": {
+                        "x": 66.548,
+                        "y": 61.468
+                    },
+                    "uuid": "3a36c6e2-3d54-4169-b168-0c9cf49d1637"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'LED_0603_1608Metric' does not match copy in library 'LED_SMD'",
+            "items": [
+                {
+                    "description": "Footprint D1",
+                    "pos": {
+                        "x": 51.2825,
+                        "y": 80.01
+                    },
+                    "uuid": "4204463a-0186-4b06-9c94-fe6e898ae815"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint C4",
+                    "pos": {
+                        "x": 60.48,
+                        "y": 54.229
+                    },
+                    "uuid": "46823725-f3de-49ad-9de9-e1ab4b561c29"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'PinSocket_1x05_P2.54mm_Vertical' does not match copy in library 'Connector_PinSocket_2.54mm'",
+            "items": [
+                {
+                    "description": "Footprint INPUT1",
+                    "pos": {
+                        "x": 50.8,
+                        "y": 45.72
+                    },
+                    "uuid": "607b82e0-884b-458e-b0e1-45a52f77b4a9"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint R4",
+                    "pos": {
+                        "x": 56.521,
+                        "y": 92.456
+                    },
+                    "uuid": "7449d909-1dd5-42d3-8945-fe6aef6786aa"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'VQFN-20-1EP_3x3mm_P0.4mm_EP1.7x1.7mm' does not match copy in library 'Package_DFN_QFN'",
+            "items": [
+                {
+                    "description": "Footprint U2",
+                    "pos": {
+                        "x": 59.48,
+                        "y": 82.76
+                    },
+                    "uuid": "74b0c10b-c0f3-4cf5-83fb-58d7308454b3"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint R6",
+                    "pos": {
+                        "x": 54.1,
+                        "y": 80.01
+                    },
+                    "uuid": "9e0101b1-9cb8-4ac6-8f18-5f5112a9f062"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint R2",
+                    "pos": {
+                        "x": 64.77,
+                        "y": 54.102
+                    },
+                    "uuid": "ab960692-3e5d-4871-9442-2c8ac0bdf43c"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint R8",
+                    "pos": {
+                        "x": 61.47,
+                        "y": 61.595
+                    },
+                    "uuid": "c14ffd4e-b292-4809-8d90-87cb299555da"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm' does not match copy in library 'Package_SO'",
+            "items": [
+                {
+                    "description": "Footprint U1",
+                    "pos": {
+                        "x": 67.375,
+                        "y": 57.785
+                    },
+                    "uuid": "d3e39b14-167c-4ae8-99ae-c6f72afa7307"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm' does not match copy in library 'Package_SO'",
+            "items": [
+                {
+                    "description": "Footprint U3",
+                    "pos": {
+                        "x": 57.72,
+                        "y": 57.785
+                    },
+                    "uuid": "d8f6ef68-a274-44d9-bb6a-56eb03bdbd60"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint R7",
+                    "pos": {
+                        "x": 54.1,
+                        "y": 61.595
+                    },
+                    "uuid": "ddcbb8a4-205b-40c0-b2cd-1b133da2ec42"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'C_0402_1005Metric' does not match copy in library 'Capacitor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint C2",
+                    "pos": {
+                        "x": 60.706,
+                        "y": 90.678
+                    },
+                    "uuid": "e7f8dada-a16b-4842-a1e4-4685181520cc"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'PinSocket_1x05_P2.54mm_Vertical' does not match copy in library 'Connector_PinSocket_2.54mm'",
+            "items": [
+                {
+                    "description": "Footprint OUTPUT1",
+                    "pos": {
+                        "x": 73.66,
+                        "y": 45.72
+                    },
+                    "uuid": "e9a74815-a1e6-4065-bc66-4af5782d05e3"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'",
+            "items": [
+                {
+                    "description": "Footprint R5",
+                    "pos": {
+                        "x": 58.93,
+                        "y": 92.456
+                    },
+                    "uuid": "f8dd2c0a-6ea4-42d4-9ea5-35a5b7b0684c"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        }
+    ]
+}

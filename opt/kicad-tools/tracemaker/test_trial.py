@@ -1,4 +1,5 @@
 """Unit tests for trusted preparation and raw-data rejection, no engine required."""
+import hashlib
 import json
 from pathlib import Path
 import tempfile
@@ -179,6 +180,93 @@ class TrialTests(unittest.TestCase):
         self.assertEqual(v.fingerprints(a), v.fingerprints(b))
         b["violations"][0]["items"][0]["uuid"] = "other"
         self.assertNotEqual(v.fingerprints(a), v.fingerprints(b))
+
+
+class SignalViaStripTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.signal = VIA.replace('"new-via"', '"signal-via"')
+        self.text = BASE[:-1] + self.signal + ')'
+        self.index = 0
+
+    def source(self, text=None):
+        self.index += 1
+        f = self.root / f'frozen-{self.index}'; f.mkdir()
+        (f / 'board.kicad_pcb').write_text(self.text if text is None else text); t.seal(f)
+        return f
+
+    def reject(self, text=None, flag=True, uuids=('signal-via',), nets=('SIG',)):
+        f = self.source(text); out = self.root / 'denied'; before = t.tree(f)
+        with patch.object(t, 'fresh', side_effect=AssertionError('no output creation')):
+            with self.assertRaises(ValueError):
+                t.strip(f, 'board.kicad_pcb', out, list(nets), flag, uuids)
+        self.assertFalse(out.exists()); self.assertEqual(t.tree(f), before)
+
+    def test_default_retains_signal_and_mounting_vias(self):
+        f = self.source(); out = self.root / 'default'
+        m = t.strip(f, 'board.kicad_pcb', out, ['SIG'])
+        self.assertEqual(m['removed_vias'], [])
+        text = (out / 'board.kicad_pcb').read_text()
+        self.assertIn(self.signal, text); self.assertIn('(uuid "hole")', text)
+
+    def test_explicit_regeneration_manifest_and_exact_retention(self):
+        f = self.source(); out = self.root / 'regenerated'
+        m = t.strip(f, 'board.kicad_pcb', out, ['SIG'], True, ['signal-via'])
+        self.assertEqual(m['source_sha256'], t.sha(f / 'board.kicad_pcb'))
+        self.assertEqual(m['authorized_via_uuids'], ['signal-via'])
+        via = m['removed_vias'][0]
+        self.assertEqual(via['raw_sha256'], hashlib.sha256(self.signal.encode()).hexdigest())
+        self.assertEqual(via['geometry_nm'], {'at_nm': [2000000, 2000000], 'size_nm': [700000],
+                                             'drill_nm': [300000], 'layers': ['F.Cu', 'B.Cu']})
+        self.assertEqual((via['net'], via['net_code']), ('SIG', 1))
+        self.assertEqual(m['removed_segments'][0]['geometry_nm']['width_nm'], [200000])
+        removed = {'track', 'signal-via'}
+        expected = [n[2] for n in t.nodes(self.text) if t.child(n[3], 'uuid') not in [[u] for u in removed]]
+        self.assertEqual(expected, [n[2] for n in t.nodes((out / 'board.kicad_pcb').read_text())])
+        self.assertEqual((f / 'board.kicad_pcb').read_text(), self.text)
+
+    def test_flag_and_exact_uuid_list_required(self):
+        for flag, uuids in [(True, ()), (False, ('signal-via',))]:
+            with self.subTest(flag=flag):
+                f = self.source(); out = self.root / 'denied'
+                with patch.object(t, 'fresh', side_effect=AssertionError('no writes')):
+                    with self.assertRaises(ValueError): t.strip(f, 'board.kicad_pcb', out, ['SIG'], flag, uuids)
+
+    def test_unknown_duplicate_or_nonvia_uuids_rejected(self):
+        for uuids in [('missing',), ('signal-via','signal-via'), ('track',), ('pad',)]:
+            with self.subTest(uuids=uuids):
+                f = self.source(); out = self.root / 'denied'
+                with patch.object(t, 'fresh', side_effect=AssertionError('no writes')):
+                    with self.assertRaises(ValueError): t.strip(f, 'board.kicad_pcb', out, ['SIG'], True, uuids)
+
+    def test_net0_mounting_hole_rejected(self):
+        self.reject(uuids=('hole',))
+
+    def test_foreign_net_via_rejected(self):
+        self.reject(self.text.replace(self.signal, self.signal.replace('(net 1)', '(net 2)')))
+
+    def test_locked_and_grouped_vias_rejected(self):
+        for suffix in ['(locked yes)', 'locked', '(group "g" (id "g") (members "signal-via"))']:
+            text = (BASE[:-1] + self.signal.replace('(uuid "signal-via")', suffix + ' (uuid "signal-via")') + ')') if not suffix.startswith('(group') else self.text[:-1] + suffix + ')'
+            with self.subTest(suffix=suffix):
+                self.reject(text)
+
+    def test_nonstandard_vias_rejected(self):
+        variants = [self.signal.replace('(size 0.7)', '(size 4)'),
+                    self.signal.replace('(drill 0.3)', '(drill 3.2)'),
+                    self.signal.replace('"B.Cu"', '"In1.Cu"'),
+                    self.signal.replace('(via ', '(via blind '),
+                    self.signal.replace('(via ', '(via micro '),
+                    self.signal.replace('(at 2 2)', '(at 2 2 90)'),
+                    self.signal.replace('(at 2 2)', '(at 2 2) (free yes)'),
+                    self.signal.replace('(size 0.7)', '(size 0.7) (size 0.7)')]
+        for variant in variants:
+            with self.subTest(variant=variant):
+                self.reject(self.text.replace(self.signal, variant))
+
+    def test_power_net_rejected_even_with_exact_uuid(self):
+        self.reject(self.text.replace('"SIG"', '"GND"'), nets=('GND',))
 
 
 if __name__ == "__main__":

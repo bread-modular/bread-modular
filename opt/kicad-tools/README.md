@@ -43,3 +43,5 @@ status gates](API.md); a draft is not acceptance or manufacturing approval.
 Historical `opt/kicad-jlcpcb` and both `.agents/skills` discovery paths are the
 three validated relative aliases. Designs, frozen module scripts and releases
 are never migrated by these tools; standalone CLIs and Python APIs remain available.
+
+Experimental discovery: [TraceMaker copied-board runner](tracemaker/README.md) — explicit research-only signal trials; **not** the default router, facade, admission gate or production bundle.

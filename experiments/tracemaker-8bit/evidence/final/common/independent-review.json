@@ -1,0 +1,169 @@
+{
+  "actual_diagnostic_identities_match_historical": true,
+  "baseline": {
+    "active_errors": 0,
+    "counts": {
+      "schematic_parity": 0,
+      "unconnected_items": 0,
+      "violations": 30
+    },
+    "diagnostics": {
+      "violations:lib_footprint_mismatch:warning": 18,
+      "violations:silk_over_copper:warning": 8,
+      "violations:silk_overlap:warning": 4
+    }
+  },
+  "config_drift": {
+    "/home/azero/.config/kicad/10.0/kicad_common.json": {
+      "actual": "f7d020424c7cebb7c4e0c3ef1c55b1bfa2c1c3ea56d1cb265892ea807fc0df14",
+      "historical": "c723a83931e18d9fb23e4e18bdf701b5717189e8f51f4f1c55b95f883c1b0b8c"
+    }
+  },
+  "erc_command": {
+    "argv": [
+      "/usr/bin/bwrap",
+      "--unshare-all",
+      "--die-with-parent",
+      "--new-session",
+      "--clearenv",
+      "--ro-bind",
+      "/usr",
+      "/usr",
+      "--ro-bind",
+      "/bin",
+      "/bin",
+      "--ro-bind",
+      "/lib",
+      "/lib",
+      "--ro-bind",
+      "/lib64",
+      "/lib64",
+      "--proc",
+      "/proc",
+      "--dev",
+      "/dev",
+      "--size",
+      "33554432",
+      "--tmpfs",
+      "/tmp",
+      "--dir",
+      "/etc",
+      "--ro-bind",
+      "/etc/ld.so.cache",
+      "/etc/ld.so.cache",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/305/tracemaker-final.tmp/frozen",
+      "/input",
+      "--bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/305/tracemaker-final.tmp/baseline",
+      "/out",
+      "--setenv",
+      "PATH",
+      "/usr/bin",
+      "--setenv",
+      "HOME",
+      "/tmp/home",
+      "--setenv",
+      "XDG_CONFIG_HOME",
+      "/tmp/config",
+      "--setenv",
+      "XDG_DATA_HOME",
+      "/tmp/data",
+      "--setenv",
+      "LC_ALL",
+      "C",
+      "--chdir",
+      "/input",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/305/tracemaker-final.tmp/native-config",
+      "/config",
+      "--setenv",
+      "KICAD_CONFIG_HOME",
+      "/config",
+      "--setenv",
+      "KICAD10_SYMBOL_DIR",
+      "/usr/share/kicad/symbols",
+      "--chdir",
+      "/out/project",
+      "/usr/bin/kicad-cli",
+      "sch",
+      "erc",
+      "--format",
+      "json",
+      "--severity-all",
+      "--exit-code-violations",
+      "-o",
+      "/out/erc.json",
+      "/out/project/8bit.kicad_sch"
+    ],
+    "cap_reason": null,
+    "exit_code": 5,
+    "limits": {
+      "address_space_GiB": 4,
+      "file_MiB": 16,
+      "output_MiB": 64,
+      "private_tmp_MiB": 32,
+      "wall_seconds": 60
+    },
+    "seconds": 1.31
+  },
+  "erc_counts": {
+    "error:excluded=True": 16,
+    "warning:excluded=False": 4
+  },
+  "historical": {
+    "digital": {
+      "added_vias": 2,
+      "native": {
+        "active_errors": 1,
+        "counts": {
+          "schematic_parity": 0,
+          "unconnected_items": 1,
+          "violations": 32
+        },
+        "diagnostics": {
+          "unconnected_items:unconnected_items:error": 1,
+          "violations:lib_footprint_mismatch:warning": 18,
+          "violations:silk_over_copper:warning": 8,
+          "violations:silk_overlap:warning": 4,
+          "violations:via_dangling:warning": 2
+        }
+      },
+      "passed_relative": false,
+      "protected_native_equal": true,
+      "raw_pass": true,
+      "retained_original_vias": 35,
+      "semantic_pass": true,
+      "source_sha256": "fd1c64b60facbceefdbec01813038154eb43af82910642070ad852ee66a29456"
+    },
+    "udpi": {
+      "added_vias": 0,
+      "native": {
+        "active_errors": 0,
+        "counts": {
+          "schematic_parity": 0,
+          "unconnected_items": 0,
+          "violations": 30
+        },
+        "diagnostics": {
+          "violations:lib_footprint_mismatch:warning": 18,
+          "violations:silk_over_copper:warning": 8,
+          "violations:silk_overlap:warning": 4
+        }
+      },
+      "passed_relative": true,
+      "protected_native_equal": true,
+      "raw_pass": true,
+      "retained_original_vias": 35,
+      "semantic_pass": true,
+      "source_sha256": "856e82a242b399017f936988d862607ce9b8f915bdedfae695875a72458c5994"
+    }
+  },
+  "initial_tests": 18,
+  "prior_merge_protected_paths_unchanged": true,
+  "protected_assets": {
+    "modules/8bit/8bit.kicad_pcb": "e7e2987c6d4fe80e914160363cb04a598f151b704ecac2d5542f4059db44c4c7",
+    "modules/8bit/8bit.kicad_pro": "df9c317e7739d82b7894f53e490da9542e1865bbf28ebe605daef18dec84013f",
+    "modules/8bit/8bit.kicad_sch": "b89d97b8576959601d6ddfc9d97f9b4824ae40c8c70ae1dbbcad5bfa110279b1"
+  }
+}

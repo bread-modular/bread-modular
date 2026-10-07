@@ -1,0 +1,49 @@
+{
+  "exact_via_uuids": [
+    "3fa8dbb6-c6f1-4dd8-a765-12076b794876",
+    "e6d7d2f7-5ce8-46c7-960f-7058698c8002",
+    "99bb5e9f-0dfa-4c37-aae6-140a651605f6",
+    "b0e4b97f-c21d-41b2-addc-20732fcee8ac",
+    "04916adb-848b-46cf-a687-cda8b0b2fcf7",
+    "392a4db2-51ba-47f8-97e6-4807183ea08e"
+  ],
+  "excluded_nets": {
+    "BUFF_CV1": "unproved custom-pad net",
+    "BUFF_CV2": "unproved custom-pad net",
+    "GND": "power or netted-polygon rail",
+    "Net-(D1-A)": "unproved custom-pad net",
+    "Net-(SW1-B)": "unproved custom-pad net",
+    "Net-(U1A-+)": "analog input/feedback kept fixed",
+    "Net-(U1A--)": "analog input/feedback kept fixed",
+    "Net-(U1B--)": "analog input/feedback kept fixed",
+    "Net-(U2-~{RESET}{slash}PA0)": "pre-existing RESET spelling / critical preservation",
+    "Net-(U3A--)": "analog input/feedback kept fixed",
+    "Net-(U3B--)": "analog input/feedback kept fixed",
+    "V_MID": "power or netted-polygon rail",
+    "V_SUPPLY": "power or netted-polygon rail",
+    "unconnected-(RV1-Pad3)": "unconnected",
+    "unconnected-(U2-PA3-Pad2)": "unconnected",
+    "unconnected-(U2-PB0-Pad14)": "unconnected",
+    "unconnected-(U2-PB1-Pad13)": "unconnected",
+    "unconnected-(U2-PB4-Pad10)": "unconnected",
+    "unconnected-(U2-PB5-Pad9)": "unconnected",
+    "unconnected-(U2-PC0-Pad15)": "unconnected",
+    "unconnected-(U2-PC1-Pad16)": "unconnected",
+    "unconnected-(U2-PC2-Pad17)": "unconnected",
+    "unconnected-(U2-PC3-Pad18)": "unconnected"
+  },
+  "selected_net_count": 10,
+  "selected_nets": [
+    "UDPI",
+    "TX",
+    "MIDI",
+    "GATE_OUT",
+    "CV1",
+    "CV2",
+    "AUDIO_OUT",
+    "Net-(U2-PA6)",
+    "Net-(U1B-+)",
+    "Net-(D1-K)"
+  ],
+  "selection": "Four proven digital nets plus six ordinary rect/round/oval signal nets; no newly unproved custom-pad net, power, RESET or analog feedback stripped. MIDI custom pad only already-tested localized exception; no blanket geometry support inferred."
+}

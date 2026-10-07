@@ -1,0 +1,144 @@
+{
+  "best_candidate": "experiments/tracemaker-8bit/validated-signals/8bit.kicad_pcb",
+  "best_scope": "10 selected signal nets; NOT full-board routing or production sign-off",
+  "experiments": {
+    "broader-signals": {
+      "all_retained_raw_nodes_exact": true,
+      "candidate_path": "experiments/tracemaker-8bit/validated-signals/8bit.kicad_pcb",
+      "candidate_sha256": "dd34315b8613d719c641e62f2951ac551eea98b350a15007066ef62da23285f4",
+      "engine_drc_exit": 0,
+      "engine_route": {
+        "connections": 15,
+        "escape_corridors": 0,
+        "expansions": 14691952,
+        "failures": [],
+        "pitch_mm": 0.065,
+        "routed": 15,
+        "seconds": 3.777541502,
+        "tracks": 52,
+        "variant": 0,
+        "variant_name": "",
+        "vias": 5
+      },
+      "exact_baseline_diagnostic_identities": true,
+      "external_seconds": 3.815,
+      "mechanical_holes_exact": true,
+      "metrics": {
+        "candidate_length_mm": 750.3314971071817,
+        "candidate_segments": 258,
+        "candidate_vias": 34,
+        "original_length_mm": 777.5793739094315,
+        "original_segments": 278,
+        "original_vias": 35
+      },
+      "native": {
+        "active_errors": 0,
+        "counts": {
+          "schematic_parity": 0,
+          "unconnected_items": 0,
+          "violations": 30
+        },
+        "diagnostics": {
+          "violations:lib_footprint_mismatch:warning": 18,
+          "violations:silk_over_copper:warning": 8,
+          "violations:silk_overlap:warning": 4
+        }
+      },
+      "native_independent_retained_review": true,
+      "removed_segments": 72,
+      "removed_vias": 6,
+      "selected_net_count": 10,
+      "selected_nets": [
+        "UDPI",
+        "TX",
+        "MIDI",
+        "GATE_OUT",
+        "CV1",
+        "CV2",
+        "AUDIO_OUT",
+        "Net-(U2-PA6)",
+        "Net-(U1B-+)",
+        "Net-(D1-K)"
+      ]
+    },
+    "digital-regenerated": {
+      "all_retained_raw_nodes_exact": true,
+      "candidate_path": "experiments/tracemaker-8bit/validated-digital/8bit.kicad_pcb",
+      "candidate_sha256": "83b481a9d9af69e19a4b0253e2054b6ef986122b7783b8b3dbecab12165481ce",
+      "engine_drc_exit": 0,
+      "engine_route": {
+        "connections": 6,
+        "escape_corridors": 0,
+        "expansions": 12001494,
+        "failures": [],
+        "pitch_mm": 0.065,
+        "routed": 6,
+        "seconds": 3.032589488,
+        "tracks": 21,
+        "variant": 0,
+        "variant_name": "",
+        "vias": 2
+      },
+      "exact_baseline_diagnostic_identities": true,
+      "external_seconds": 3.113,
+      "mechanical_holes_exact": true,
+      "metrics": {
+        "candidate_length_mm": 763.1380593695666,
+        "candidate_segments": 263,
+        "candidate_vias": 35,
+        "original_length_mm": 777.5793739094315,
+        "original_segments": 278,
+        "original_vias": 35
+      },
+      "native": {
+        "active_errors": 0,
+        "counts": {
+          "schematic_parity": 0,
+          "unconnected_items": 0,
+          "violations": 30
+        },
+        "diagnostics": {
+          "violations:lib_footprint_mismatch:warning": 18,
+          "violations:silk_over_copper:warning": 8,
+          "violations:silk_overlap:warning": 4
+        }
+      },
+      "native_independent_retained_review": true,
+      "removed_segments": 36,
+      "removed_vias": 2,
+      "selected_net_count": 4,
+      "selected_nets": [
+        "UDPI",
+        "TX",
+        "MIDI",
+        "GATE_OUT"
+      ]
+    }
+  },
+  "protected": {
+    "base": "4ae33a93e83fbf1716babc93e90a008740d8e598",
+    "configs_before_after": {
+      "/home/azero/.config/kicad/10.0/fp-lib-table": "4042e1c92709d4f872d4cdeaddfa7ec0f6bd49be240e0d9668b76e89888b1e77",
+      "/home/azero/.config/kicad/10.0/kicad_common.json": "f7d020424c7cebb7c4e0c3ef1c55b1bfa2c1c3ea56d1cb265892ea807fc0df14",
+      "/home/azero/.config/kicad/10.0/sym-lib-table": "70d7bba56bcfd2f59d98e2354a8979661f2c49f3686d13e989b20202514654c3"
+    },
+    "git_ignored_runtime_only": "tracemaker-final.tmp/engine.json",
+    "head_unchanged": true,
+    "historical_experiments_unchanged": true,
+    "index_untouched": true,
+    "native_minimum_vias_confirmed": true,
+    "new_route_experiments": 2,
+    "no_cap_fired": true,
+    "production_git_diff_empty": true,
+    "protected_prior_merge_paths_unchanged": true,
+    "referenced_local_and_installed_libraries_unchanged": true,
+    "source_assets_before_after": {
+      "modules/8bit/8bit.kicad_pcb": "e7e2987c6d4fe80e914160363cb04a598f151b704ecac2d5542f4059db44c4c7",
+      "modules/8bit/8bit.kicad_pro": "df9c317e7739d82b7894f53e490da9542e1865bbf28ebe605daef18dec84013f",
+      "modules/8bit/8bit.kicad_sch": "b89d97b8576959601d6ddfc9d97f9b4824ae40c8c70ae1dbbcad5bfa110279b1"
+    },
+    "tests": 27
+  },
+  "shareable_comparison": "/uploads/89a4c98e-79ca-4830-abcc-6e7f365cfd7c.webp",
+  "source_original_sha256": "e7e2987c6d4fe80e914160363cb04a598f151b704ecac2d5542f4059db44c4c7"
+}
