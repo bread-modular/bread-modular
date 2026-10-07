@@ -1,0 +1,413 @@
+{
+  "assets_unchanged": true,
+  "drc": {
+    "active_errors": 0,
+    "counts": {
+      "schematic_parity": 0,
+      "unconnected_items": 0,
+      "violations": 2
+    },
+    "diagnostics": {
+      "violations:nonmirrored_text_on_back_layer:warning": 2
+    }
+  },
+  "drc_command": {
+    "argv": [
+      "/usr/bin/bwrap",
+      "--unshare-all",
+      "--die-with-parent",
+      "--new-session",
+      "--clearenv",
+      "--ro-bind",
+      "/usr",
+      "/usr",
+      "--ro-bind",
+      "/bin",
+      "/bin",
+      "--ro-bind",
+      "/lib",
+      "/lib",
+      "--ro-bind",
+      "/lib64",
+      "/lib64",
+      "--proc",
+      "/proc",
+      "--dev",
+      "/dev",
+      "--size",
+      "33554432",
+      "--tmpfs",
+      "/tmp",
+      "--dir",
+      "/etc",
+      "--ro-bind",
+      "/etc/ld.so.cache",
+      "/etc/ld.so.cache",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/run/synthetic-qualified",
+      "/input",
+      "--bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/run/synthetic-qualified-judge",
+      "/out",
+      "--setenv",
+      "PATH",
+      "/usr/bin",
+      "--setenv",
+      "HOME",
+      "/tmp/home",
+      "--setenv",
+      "XDG_CONFIG_HOME",
+      "/tmp/config",
+      "--setenv",
+      "XDG_DATA_HOME",
+      "/tmp/data",
+      "--setenv",
+      "LC_ALL",
+      "C",
+      "--chdir",
+      "/input",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/opt/kicad-tools/tracemaker/native_snapshot.py",
+      "/helper.py",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/native-config",
+      "/config",
+      "--setenv",
+      "KICAD_CONFIG_HOME",
+      "/config",
+      "--chdir",
+      "/out/project",
+      "--setenv",
+      "KICAD10_FOOTPRINT_DIR",
+      "/usr/share/kicad/footprints",
+      "--setenv",
+      "KICAD10_SYMBOL_DIR",
+      "/usr/share/kicad/symbols",
+      "/usr/bin/kicad-cli",
+      "pcb",
+      "drc",
+      "--format",
+      "json",
+      "--severity-all",
+      "--all-track-errors",
+      "--refill-zones",
+      "--save-board",
+      "--exit-code-violations",
+      "-o",
+      "/out/drc.json",
+      "/out/project/synthetic.kicad_pcb"
+    ],
+    "cap_reason": null,
+    "exit_code": 5,
+    "limits": {
+      "address_space_GiB": 4,
+      "file_MiB": 16,
+      "output_MiB": 64,
+      "private_tmp_MiB": 32,
+      "wall_seconds": 60
+    },
+    "seconds": 1.308
+  },
+  "native_new_files": [
+    "synthetic.kicad_prl"
+  ],
+  "not_production_signoff": true,
+  "raw_before_reload": {
+    "additions": [
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "14",
+            "14"
+          ],
+          [
+            "end",
+            "10",
+            "10"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "PTH_LINK"
+          ],
+          [
+            "uuid",
+            "7aa004f8-e049-4699-8fda-f0ffa2801499"
+          ]
+        ],
+        "kind": "segment",
+        "net": "PTH_LINK"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "14",
+            "14"
+          ],
+          [
+            "end",
+            "18",
+            "10"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "B.Cu"
+          ],
+          [
+            "net",
+            "PTH_LINK"
+          ],
+          [
+            "uuid",
+            "a4fd3222-7e3e-45b6-a554-46158e38bb53"
+          ]
+        ],
+        "kind": "segment",
+        "net": "PTH_LINK"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "20",
+            "22"
+          ],
+          [
+            "end",
+            "20.865",
+            "21.97"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "F.Cu"
+          ],
+          [
+            "net",
+            "VIA_LINK"
+          ],
+          [
+            "uuid",
+            "aad22906-c3a9-4c6b-8648-3694317279b2"
+          ]
+        ],
+        "kind": "segment",
+        "net": "VIA_LINK"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "20.865",
+            "21.97"
+          ],
+          [
+            "end",
+            "29.12",
+            "21.97"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "B.Cu"
+          ],
+          [
+            "net",
+            "VIA_LINK"
+          ],
+          [
+            "uuid",
+            "b1edff8c-1f74-435c-85c6-b8507906f2f7"
+          ]
+        ],
+        "kind": "segment",
+        "net": "VIA_LINK"
+      },
+      {
+        "definition": [
+          "segment",
+          [
+            "start",
+            "29.12",
+            "21.97"
+          ],
+          [
+            "end",
+            "30",
+            "22"
+          ],
+          [
+            "width",
+            "0.2"
+          ],
+          [
+            "layer",
+            "B.Cu"
+          ],
+          [
+            "net",
+            "VIA_LINK"
+          ],
+          [
+            "uuid",
+            "22329003-279f-41b1-a5a9-801b2abfe2c4"
+          ]
+        ],
+        "kind": "segment",
+        "net": "VIA_LINK"
+      },
+      {
+        "definition": [
+          "via",
+          [
+            "at",
+            "20.865",
+            "21.97"
+          ],
+          [
+            "size",
+            "0.7"
+          ],
+          [
+            "drill",
+            "0.3"
+          ],
+          [
+            "layers",
+            "F.Cu",
+            "B.Cu"
+          ],
+          [
+            "net",
+            "VIA_LINK"
+          ],
+          [
+            "uuid",
+            "4d21ac33-18b8-46ae-82ac-69ced21e92f5"
+          ]
+        ],
+        "kind": "via",
+        "net": "VIA_LINK"
+      }
+    ],
+    "mode": "exact-raw-node",
+    "passed": true,
+    "protected_nodes": 17,
+    "removed_or_changed_count": 0,
+    "removed_or_changed_sha256": [],
+    "unauthorized_additions": [],
+    "unique_top_level_uuids": true
+  },
+  "snapshot_command": {
+    "argv": [
+      "/usr/bin/bwrap",
+      "--unshare-all",
+      "--die-with-parent",
+      "--new-session",
+      "--clearenv",
+      "--ro-bind",
+      "/usr",
+      "/usr",
+      "--ro-bind",
+      "/bin",
+      "/bin",
+      "--ro-bind",
+      "/lib",
+      "/lib",
+      "--ro-bind",
+      "/lib64",
+      "/lib64",
+      "--proc",
+      "/proc",
+      "--dev",
+      "/dev",
+      "--size",
+      "33554432",
+      "--tmpfs",
+      "/tmp",
+      "--dir",
+      "/etc",
+      "--ro-bind",
+      "/etc/ld.so.cache",
+      "/etc/ld.so.cache",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/run/synthetic-qualified",
+      "/input",
+      "--bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/run/synthetic-qualified-judge",
+      "/out",
+      "--setenv",
+      "PATH",
+      "/usr/bin",
+      "--setenv",
+      "HOME",
+      "/tmp/home",
+      "--setenv",
+      "XDG_CONFIG_HOME",
+      "/tmp/config",
+      "--setenv",
+      "XDG_DATA_HOME",
+      "/tmp/data",
+      "--setenv",
+      "LC_ALL",
+      "C",
+      "--chdir",
+      "/input",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/opt/kicad-tools/tracemaker/native_snapshot.py",
+      "/helper.py",
+      "--ro-bind",
+      "/home/azero/.okbrain/workspaces/bread-modular-kicad/304/tracemaker-trial.tmp/native-config",
+      "/config",
+      "--setenv",
+      "KICAD_CONFIG_HOME",
+      "/config",
+      "--chdir",
+      "/out/project",
+      "--setenv",
+      "KICAD10_FOOTPRINT_DIR",
+      "/usr/share/kicad/footprints",
+      "--setenv",
+      "KICAD10_SYMBOL_DIR",
+      "/usr/share/kicad/symbols",
+      "/usr/bin/python3",
+      "/helper.py",
+      "/out/project/synthetic.kicad_pcb",
+      "/out/snapshot.json",
+      "/out/canonical.kicad_pcb"
+    ],
+    "cap_reason": null,
+    "exit_code": 0,
+    "limits": {
+      "address_space_GiB": 4,
+      "file_MiB": 16,
+      "output_MiB": 64,
+      "private_tmp_MiB": 32,
+      "wall_seconds": 30
+    },
+    "seconds": 0.203
+  }
+}

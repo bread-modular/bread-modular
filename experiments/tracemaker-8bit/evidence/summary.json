@@ -1,0 +1,87 @@
+{
+  "digital": {
+    "allowed_nets": [
+      "UDPI",
+      "TX",
+      "MIDI",
+      "GATE_OUT"
+    ],
+    "engine": {
+      "connections": 6,
+      "escape_corridors": 0,
+      "expansions": 21701666,
+      "failures": [],
+      "pitch_mm": 0.065,
+      "routed": 6,
+      "seconds": 5.789561669,
+      "tracks": 21,
+      "variant": 0,
+      "variant_name": "",
+      "vias": 2
+    },
+    "native": {
+      "active_errors": 1,
+      "counts": {
+        "schematic_parity": 0,
+        "unconnected_items": 1,
+        "violations": 32
+      },
+      "diagnostics": {
+        "unconnected_items:unconnected_items:error": 1,
+        "violations:lib_footprint_mismatch:warning": 18,
+        "violations:silk_over_copper:warning": 8,
+        "violations:silk_overlap:warning": 4,
+        "violations:via_dangling:warning": 2
+      }
+    },
+    "native_footprints_pads_partition_outline_identical": true,
+    "native_tracks": 263,
+    "native_vias": 37,
+    "original_35_vias_identical": true,
+    "original_selected_length_mm": 129.47782535342725,
+    "passed_drc_relative_to_baseline": false,
+    "removed_segments": 36,
+    "selected_track_length_mm": 115.03651081356222,
+    "track_length_mm": 763.1380593695666
+  },
+  "udpi": {
+    "allowed_nets": [
+      "UDPI"
+    ],
+    "engine": {
+      "connections": 1,
+      "escape_corridors": 0,
+      "expansions": 59,
+      "failures": [],
+      "pitch_mm": 0.065,
+      "routed": 1,
+      "seconds": 0.006653628,
+      "tracks": 2,
+      "variant": 0,
+      "variant_name": "",
+      "vias": 0
+    },
+    "native": {
+      "active_errors": 0,
+      "counts": {
+        "schematic_parity": 0,
+        "unconnected_items": 0,
+        "violations": 30
+      },
+      "diagnostics": {
+        "violations:lib_footprint_mismatch:warning": 18,
+        "violations:silk_over_copper:warning": 8,
+        "violations:silk_overlap:warning": 4
+      }
+    },
+    "native_footprints_pads_partition_outline_identical": true,
+    "native_tracks": 278,
+    "native_vias": 35,
+    "original_35_vias_identical": true,
+    "original_selected_length_mm": 4.72981536726415,
+    "passed_drc_relative_to_baseline": true,
+    "removed_segments": 2,
+    "selected_track_length_mm": 4.72981536726415,
+    "track_length_mm": 777.5793739094315
+  }
+}
