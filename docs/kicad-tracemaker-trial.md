@@ -1,5 +1,10 @@
 # TraceMaker / 8bit — final bounded CPU trial
 
+Current toolkit integration: [recommended hybrid recipe and native-format blocker](../opt/kicad-tools/HYBRID_ROUTING.md),
+[optional CLI/bundle controller](../opt/kicad-tools/tracemaker/README.md).
+This page is historical repository-only research/trial evidence, not relocated provisioning instructions.
+
+
 **Final best scope: 10 explicitly selected signal nets genuinely rebuilt and independently native-validated relative to the original baseline. NOT full-board routing, production sign-off or general engine admission.** Final trial on base `4ae33a93` in isolated workspace 305, Sol Max only; no advisor/subagents, commit/merge/push, production modification or fabrication export. Two new ordinary routing experiments, no tuning sweep, upstream patches, hand routing, component movement or dangerous `--reroute`. [Pinned upstream review and unsupported cases](kicad-tracemaker.md).
 
 Original PCB SHA256: `e7e2987c6d4fe80e914160363cb04a598f151b704ecac2d5542f4059db44c4c7`. New original complete same-stem source copy is retained, **unaltered**, in `experiments/tracemaker-8bit/evidence/final/original/`. Engine-written candidates are also retained **before native reload/save**, not replaced with native rewrites.

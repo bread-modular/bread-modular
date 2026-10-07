@@ -12,7 +12,7 @@ from project import new_output
 ROOT = Path(__file__).resolve().parents[2]
 TOOLKIT_FILES = (
     "kicad_tools.py", "native.py", "project.py", "bundle.py", "README.md", "GUIDE.md", "BUNDLING.md", "MIGRATION.md",
-    "VERIFICATION.md", "BUNDLE_README.md", "API.md", "examples/project.json",
+    "VERIFICATION.md", "BUNDLE_README.md", "API.md", "HYBRID_ROUTING.md", "examples/project.json",
     "tests/fixtures.py", "tests/test_native.py", "tests/test_project.py", "tests/test_cli.py", "tests/test_integration.py",
     "tests/test_consolidation.py", "tests/test_facade.py", "tests/native_handoff.py",
     "automation/__init__.py", "automation/run.py", "automation/api.py",
@@ -124,7 +124,13 @@ def routing_files(root):
     return sorted(files), {"available": True, "allowlist": "bundle-files.json" if manifest.is_file() else "fixed reviewed routing source/docs/tests/evidence", "runtime_included": False}
 
 
-def bundle(destination, dry_run=False, include_routing=False, root=ROOT):
+TRACEMAKER_FILES = (
+    "run.py", "trial.py", "validate.py", "native_snapshot.py", "context.py",
+    "README.md", "BUILD.md", "provision.json", "test_trial.py", "test_integration.py", "test_native.py",
+)
+
+
+def bundle(destination, dry_run=False, include_routing=False, root=ROOT, *, include_tracemaker=False):
     root = Path(os.path.abspath(root))  # lexical: do not conceal a symlink root
     destination = new_output(destination)
     links = compatibility_links(root)
@@ -136,6 +142,12 @@ def bundle(destination, dry_run=False, include_routing=False, root=ROOT):
         optional, status = routing_files(root)
         files += optional
         routing.update(status, included=bool(optional))
+    tracemaker = {"requested": include_tracemaker, "available": (root / "opt/kicad-tools/tracemaker/run.py").is_file(), "included": False}
+    if include_tracemaker:
+        if not tracemaker["available"]:
+            raise Error("Requested optional TraceMaker integration unavailable; nothing downloaded")
+        files += ["opt/kicad-tools/tracemaker/" + p for p in TRACEMAKER_FILES]
+        tracemaker.update(included=True, runtime_included=False, allowlist="fixed reviewed first-party controllers/tests/guides/provision records")
     mapping = {name: name for name in files}
     mapping["README.md"] = "opt/kicad-tools/BUNDLE_README.md"
     hashes = {}
@@ -146,7 +158,7 @@ def bundle(destination, dry_run=False, include_routing=False, root=ROOT):
     if destination == root or root in destination.parents:
         raise Error("Bundle destination must be outside the toolkit distribution source tree")
     manifest = {"schema_version": 2, "kind": "kicad-toolkit-install-by-copy", "files_sha256": hashes,
-                "symlinks": links, "routing": routing, "order_ready": False,
+                "symlinks": links, "routing": routing, "tracemaker": tracemaker, "order_ready": False,
                 "limits": "Tool source/link-text provenance only; no board/project/production or runtime provenance, signatures or approval."}
     result = {"destination": str(destination), "dry_run": dry_run, "file_count": len(hashes),
               "symlink_count": len(links), "manifest": manifest, "source_writes": False}

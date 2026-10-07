@@ -13,8 +13,12 @@ import shutil
 import signal
 import subprocess
 import time
+import sys
+
+sys.dont_write_bytecode = True
 
 PIN = "c5e1e8497ffef194206a012ee98f0ba156827f71"
+REVIEWED_ENGINE_SHA256 = "b469a1502f0f825aa431a7fbee57e19f1cc80f8bb940df7c17d295f81e0669fe"
 TOKEN = re.compile(r'"(?:\\.|[^"\\])*"|[^\s()]+|[()]')
 
 
@@ -64,42 +68,45 @@ def fresh(path, *inputs):
 
 
 def freeze(pcb, output, library_root=None):
-    pcb = Path(pcb).resolve()
-    output = fresh(output, pcb.parent)
-    paths = [pcb]
-    for suffix in (".kicad_pro", ".kicad_sch", ".kicad_dru"):
-        p = pcb.with_suffix(suffix)
-        if p.exists():
-            paths.append(p)
-    paths += [p for p in (pcb.parent / "fp-lib-table", pcb.parent / "sym-lib-table") if p.exists()]
-    libraries = pcb.parent / "footprints"
-    if libraries.exists():
-        if libraries.is_symlink():
-            if library_root is None or not (libraries.resolve() == Path(library_root).resolve() or Path(library_root).resolve() in libraries.resolve().parents):
+    pcb = Path(os.path.abspath(pcb))
+    if not pcb.is_file() or pcb.suffix != ".kicad_pcb" or pcb.is_symlink() or pcb.resolve().parent != pcb.parent:
+        raise ValueError("existing non-aliased PCB file required")
+    if pcb.with_suffix(".kicad_sch").exists() or pcb.with_suffix(".kicad_sch").is_symlink():
+        from context import prepare
+        payload, context, plan, sources = prepare(pcb, library_root)
+        output = fresh(output, pcb.parent, *plan.files)
+        for relative, data in payload.items():
+            dst = output / relative; dst.parent.mkdir(parents=True, exist_ok=True); dst.write_bytes(data)
+        plan.verify_sources(sources)
+        write_json(output / "_context.json", context)
+    else:
+        # Historical board-only experiment subset: never pretend this includes schematic parity.
+        if any((pcb.parent / name).exists() or (pcb.parent / name).is_symlink()
+               for name in ("fp-lib-table", "sym-lib-table")):
+            raise ValueError("project tables require same-stem schematic and verified library closure")
+        paths = [pcb] + [pcb.with_suffix(s) for s in (".kicad_pro", ".kicad_dru")
+                         if pcb.with_suffix(s).exists() or pcb.with_suffix(s).is_symlink()]
+        libraries = pcb.parent / "footprints"
+        payload = {p.name: p.read_bytes() for p in paths if not p.is_symlink()}
+        if len(payload) != len(paths):
+            raise ValueError("board-only project companion symlink unsupported")
+        if libraries.exists() or libraries.is_symlink():
+            source = libraries.resolve()
+            boundary = Path(library_root).resolve() if library_root else source
+            if libraries.is_symlink() and library_root is None:
                 raise ValueError("footprints symlink requires explicit trusted --library-root")
-        source = libraries.resolve()
-        boundary = Path(library_root).resolve() if library_root else source
-        used = {n[3][1] for n in nodes(pcb.read_text()) if n[3][0] == "footprint" and ":" in n[3][1]}
-        for identifier in used:
-            nickname, name = identifier.split(":", 1)
-            f = source / (nickname + ".pretty") / (name + ".kicad_mod")
-            if not f.exists():
-                continue  # Installed standard libraries are provided read-only by native KiCad.
-            if boundary not in f.resolve().parents:
-                raise ValueError("library file escapes explicit root")
-            dst = output / "footprints" / f.relative_to(source)
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(f, dst)
-    for p in paths:
-        if p.is_symlink():
-            if library_root is None or Path(library_root).resolve() not in p.resolve().parents:
-                raise ValueError("project symlink escapes explicit trusted library root")
-        if p.is_dir() and any(x.is_symlink() for x in p.rglob("*")):
-            raise ValueError("nested project symlink")
-        if p.is_dir():
-            shutil.copytree(p, output / p.name)
-        else:
-            shutil.copy2(p, output / p.name)
+            used = {n[3][1] for n in nodes(pcb.read_text()) if n[3][0] == "footprint" and ":" in n[3][1]}
+            for identifier in used:
+                nickname, name = identifier.split(":", 1)
+                if any(not v or Path(v).name != v or v in (".", "..") for v in (nickname, name)):
+                    raise ValueError("unsafe footprint identifier")
+                f = source / (nickname + ".pretty") / (name + ".kicad_mod")
+                if not f.is_file() or boundary not in f.resolve().parents:
+                    raise ValueError(f"Missing/out-of-bound local footprint closure: {identifier}")
+                payload[str(Path("footprints") / f.relative_to(source))] = f.read_bytes()
+        output = fresh(output, pcb.parent)
+        for relative, data in payload.items():
+            dst = output / relative; dst.parent.mkdir(parents=True, exist_ok=True); dst.write_bytes(data)
     seal(output)
     return frozen(output)
 
@@ -160,6 +167,36 @@ def net_name(node, netmap):
     return netmap.get(value[0], value[0])
 
 
+def legacy_netmap(parts):
+    """Explicit reviewed encoding, never guess name/code mappings or rewrite native saves."""
+    definitions = [n[3] for n in parts if n[3][0] == "net"]
+    if not definitions:
+        raise ValueError("TraceMaker adapter handoff BLOCKED: name-only KiCad 10/pcbnew saved output has no top-level numbered net definitions; legacy helper subset only, upstream compatibility unverified here; no automatic format conversion. See HYBRID_ROUTING.md")
+    result = {}
+    for definition in definitions:
+        if len(definition) != 3 or not re.fullmatch(r"0|[1-9][0-9]*", definition[1]) or definition[1] in result:
+            raise ValueError("Unsupported/ambiguous numbered net definitions")
+        result[definition[1]] = definition[2]
+    if result.get("0") != "" or len(set(result.values())) != len(result):
+        raise ValueError("Explicit unique legacy net definitions including net0 required")
+    def walk(node):
+        if node and node[0] == "net":
+            if len(node) not in (2, 3) or node[1] not in result or (len(node) == 3 and node[2] != result[node[1]]):
+                raise ValueError("Mixed/inconsistent net encoding; no net guessing")
+        for item in node:
+            if isinstance(item, list): walk(item)
+    for n in parts: walk(n[3])
+    return result
+
+
+def runtime_ready(native=False):
+    if sys.platform != "linux" or sys.version_info < (3, 11):
+        raise ValueError("TraceMaker requires Linux / Python 3.11+")
+    required = ["/usr/bin/bwrap"] + (["/usr/bin/kicad-cli", "/usr/bin/python3"] if native else [])
+    if any(not Path(p).is_file() or not os.access(p, os.X_OK) for p in required):
+        raise ValueError("Missing optional sandbox/native runtime; no installation or downloads performed")
+
+
 def input_pcb(root, pcb_name):
     """Validate an existing input-root PCB basename before reading or writing."""
     if Path(pcb_name).name != pcb_name or Path(pcb_name).suffix != ".kicad_pcb":
@@ -170,12 +207,12 @@ def input_pcb(root, pcb_name):
     return pcb
 
 
-def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=()):
+def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=(), segment_uuids=()):
     pcb = input_pcb(root, pcb_name)
     frozen(root)
     text = pcb.read_text()
     parts = nodes(text)
-    netmap = {n[3][1]: n[3][2] for n in parts if n[3][0] == "net"}
+    netmap = legacy_netmap(parts)
     if not nets or not set(nets) <= set(netmap.values()):
         raise ValueError("explicit existing named nets required (legacy PCB subset)")
     if any(n in ("GND", "V_SUPPLY", "V_MID", "") or n.startswith("unconnected-") for n in nets):
@@ -185,6 +222,16 @@ def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=
     if len(via_uuids) != len(set(via_uuids)):
         raise ValueError("duplicate authorized via UUID")
     removed_segments = [n for n in parts if n[3][0] == "segment" and net_name(n[3], netmap) in nets]
+    if segment_uuids:
+        if len(segment_uuids) != len(set(segment_uuids)):
+            raise ValueError("duplicate authorized segment UUID")
+        selected = []
+        for uuid in segment_uuids:
+            matches = [n for n in parts if child(n[3], "uuid") == [uuid]]
+            if len(matches) != 1 or matches[0] not in removed_segments:
+                raise ValueError("authorized segment UUID must identify exactly one selected-net segment")
+            selected.append(matches[0])
+        removed_segments = selected
     if not removed_segments:
         raise ValueError("no selected segments")
     removed_vias = []
@@ -236,6 +283,8 @@ def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=
                 "removed_segments": [entry(n) for n in removed_segments],
                 "removed_vias": [entry(n) for n in removed_vias],
                 "protected_policy": "every other raw top-level node"}
+    if segment_uuids:
+        manifest["authorized_segment_uuids"] = list(segment_uuids)
     if regenerate_signal_vias:
         manifest.update(regenerate_signal_vias=True, authorized_via_uuids=list(via_uuids))
     output = fresh(output, root)
@@ -342,12 +391,20 @@ def bounded(argv, output, label, seconds=120):
 
 
 def run(root, pcb_name, output, engine, digest, deps, action="inspect", only_net=None, pitch=None):
-    input_pcb(root, pcb_name)
+    pcb = input_pcb(root, pcb_name)
+    legacy_netmap(nodes(pcb.read_text()))
+    runtime_ready()
+    if digest != REVIEWED_ENGINE_SHA256:
+        raise ValueError("Unreviewed engine SHA256: pinned CPU build/provenance required; see BUILD.md")
+    if not Path(deps).is_dir() or Path(deps).is_symlink():
+        raise ValueError("Missing/nonregular reviewed private dependencies; no installs/downloads")
     if sha(engine) != digest:
         raise ValueError("engine digest mismatch (verify upstream/build provenance separately)")
     before = frozen(root)
     if action not in ("inspect", "route", "drc"):
         raise ValueError("not a tested engine command")
+    if action == "route" and pitch is not None and not 25 <= pitch <= 500:
+        raise ValueError("pitch outside tested bounds")
     output = fresh(output, root, engine, deps)
     argv = sandbox(root, output, engine, deps) + ["/engine/tracemaker", action, "/input/" + pcb_name]
     if action == "route":
@@ -364,6 +421,9 @@ def run(root, pcb_name, output, engine, digest, deps, action="inspect", only_net
     result = bounded(argv, output, action)
     result["input_unchanged"] = frozen(root) == before
     result["engine_sha256"] = sha(engine)
+    result["engine_pin"] = PIN
+    if result["engine_sha256"] != digest:
+        raise ValueError("engine changed during execution")
     write_json(output / (action + ".command.json"), result)
     return result
 
@@ -375,6 +435,7 @@ def main():
     f.add_argument("--library-root", help="explicit trusted boundary for project footprint symlink targets")
     t = s.add_parser("strip"); t.add_argument("input"); t.add_argument("pcb"); t.add_argument("output")
     t.add_argument("--net", action="append", required=True)
+    t.add_argument("--segment-uuid", action="append", default=[], help="optional exact segment removal list; default authorizes ALL segments on selected nets")
     t.add_argument("--regenerate-signal-vias", action="store_true",
                    help="experimental: remove only explicitly enumerated ordinary signal vias")
     t.add_argument("--via-uuid", action="append", default=[],
@@ -390,7 +451,7 @@ def main():
     if a.command == "freeze":
         result = freeze(a.pcb, a.output, a.library_root)
     elif a.command == "strip":
-        result = strip(a.input, a.pcb, a.output, a.net, a.regenerate_signal_vias, a.via_uuid)
+        result = strip(a.input, a.pcb, a.output, a.net, a.regenerate_signal_vias, a.via_uuid, a.segment_uuid)
     elif a.command == "compare":
         result = compare(a.before, a.after, a.net, a.semantic)
     else:

@@ -1,6 +1,6 @@
 ---
 name: kicad-workflow
-description: Common-tool-first portable KiCad native hierarchy/netlist inspection, offline PCB/schematic edits, private ERC/DRC, JLCPCB exports and optional bounded routing without source or approval policy changes.
+description: Common-tool-first portable KiCad native hierarchy/netlist inspection, offline PCB/schematic edits, private ERC/DRC, JLCPCB exports and recommended hybrid TraceMaker signal routing (with explicit format blockers) without source or approval policy changes.
 ---
 
 # Portable KiCad workflow
@@ -74,7 +74,50 @@ They never load or synchronize a PCB: perform explicit downstream synchronizatio
 and PCB DRC/parity before accepting a circuit change. Existing approval policies
 still govern every operation; no source overwrite or frozen migration.
 
-## Routing sequence (optional, never automatic)
+## Recommended hybrid TraceMaker sequence (optional, never automatic)
+
+Actively **recommend the hybrid approach for compatible ordinary signal work**, not
+an autorouter-first/full-board workflow. See the [exact recipe](../../HYBRID_ROUTING.md)
+and the optional [TraceMaker controller](../../tracemaker/README.md).
+
+1. Inspect circuit intent and fixed mechanical constraints, outline, pots/sockets,
+   edge clearances, top/bottom and orientation/polarity/pin roles. Use `pcb inspect`
+   to obtain actual refs/UUIDs/nets/layers; never infer permission from a trial.
+2. Explicitly place core ICs, power/decouplers and interfaces via reviewed `pcb plan/apply`
+   to NEW candidates; no automatic placement. Route/protect critical power/returns,
+   analog/feedback, clocks/differential and constrained copper yourself. Existing locks
+   are rejected; there is **no lock/unlock API**. Moves do not drag attached traces.
+3. Freeze the approved layout as an immutable router baseline: **every transform and
+   non-authorized raw node** must survive exactly. Verify complete hierarchy/local
+   library/rule closure. Missing/unsupported dependencies are blockers, not silent drops.
+4. Choose explicit ordinary signal nets. For rerouting authorize only inspected copper
+   UUIDs (`strip --segment-uuid`); without that option ALL segments on selected nets are
+   authorized. Vias stay unless both exact via UUIDs and the narrow regeneration flag
+   are approved. Preserve power, critical copper, mechanics and mounting holes.
+5. Use pinned reviewed external CPU build/provenance and bounded offline `tracemaker
+   run route --experimental`. No implicit install, router switch or fallback. Independently
+   run engine DRC, exact raw preservation before native reload, canonical semantic
+   preservation, native DRC/parity/ERC/XML and footprint/pad/net/via inventory; inspect
+   physical copper/returns. Route exit zero is not completion or automatic acceptance.
+6. Fine-tune explicitly with `pcb inspect/plan/apply`: selected deletion/replacement
+   polylines/vias and approved transforms, not trace dragging, live GUI or push/shove.
+   Every edited geometry baseline needs reviewed operations/plan/completion and new
+   freeze/final checks; don't blindly compare an intentional edit to the original.
+   Preserve the whole authorization/hash/removal/command/findings audit chain.
+
+**Current concrete blocker:** matching pcbnew/CLI 10.0.6 `pcb apply` saves name-only
+nets, without the legacy top-level numeric netdefs required by our legacy adapter. This is not proof of upstream engine incompatibility.
+`tracemaker strip/run` block it before writes; do not imply the full apply→engine→polish
+loop is qualified, down-save, invent net/rule mappings or weaken gates. Synthetic native
+freeze/no-op comparison/validation/back-to-CLI polish is tested, not engine interoperability.
+Native saves cannot pass the current first-party strip/run admission gate until the adapter handoff is separately qualified.
+The pinned engine itself supports named nets; that does not qualify this controller's end-to-end handoff. No engine runtime test was performed in this integration. No DIY downgrade/conversion. Any incompatible
+snapshot/format or known ERC/baseline-policy conflict stays explicit blocked/draft.
+Only opens-only completed PCB drafts with explicit policy may proceed where supported;
+never waive shorts, clearance, ERC, parity or known warnings/exclusions to gain admission.
+
+## Explicit Freerouting alternative
+
 
 Manually inspect and constrain critical nets **before** optional autorouting:
 power/ground returns, decoupling, current/voltage limits, sensitive analog,
@@ -90,11 +133,12 @@ python3 -B opt/kicad-tools/kicad_tools.py route doctor
 python3 -B opt/kicad-tools/kicad_tools.py route --help
 ```
 
-The facade only delegates when the optional sibling `opt/kicad-routing/run.py`
+The separate unchanged `route` facade only delegates when the optional sibling `opt/kicad-routing/run.py`
 exists; otherwise it reports unavailable. Consult the sibling's actual help for
 `doctor|prepare-runtime|inspect-project|plan-project|route-project|smoke`. Ordinary supported-project DSN/SES routing is offline; runtime
 downloads must be explicit opt-in. No fallback installation or network fetching
-is introduced by this skill. Runtime/JAR/temporary files are not bundled.
+is introduced by this skill. Runtime/JAR/temporary files are not bundled. Freerouting is an explicitly chosen
+alternative for that tested subset, never a silent fallback from blocked TraceMaker.
 
 Use the completed PCB candidate's **`inputs/` subtree** as `--snapshot`; derive
 `--pcb` from its completion record relative to `inputs/`. No hand-edits to board,

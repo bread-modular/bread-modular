@@ -130,3 +130,18 @@ opt-in includes real repository-board exports, which tooling-only work must not
 execute. The toolkit opt-in invokes only named shared **synthetic** methods.
 Relocated copied shared unit tests do not require a `modules/` tree. See
 [verification results and limitations](VERIFICATION.md) and [migration inventory](MIGRATION.md).
+
+## Optional TraceMaker (independent of Freerouting)
+
+`bundle NEW --include-tracemaker` includes only the fixed literal
+`TRACEMAKER_FILES`: first-party dispatcher/controllers/context helper, existing/new
+unit/native tests, README/BUILD and compact pinned signed-package/provenance records.
+`--include-routing` is unchanged; choose neither/either/both explicitly and repeat
+chosen flags when re-bundling. Manifest `tracemaker` records requested/available/included;
+core has neither optional engine and remains usable. An explicitly requested missing
+TraceMaker payload fails nonzero before writes. No manifest expands its allowlist.
+All regular-source/ancestor and exact-three-link safety/hash/dry-run/no-overwrite rules
+apply unchanged. No vendor code, binaries, extracted dependencies, HOME/config, boards,
+experiment trees or output artifacts are copied. The compact standalone provisioning
+guide does not depend on absent experiment JSON; historical links are repository-only.
+[Recommended hybrid workflow and format blocker](HYBRID_ROUTING.md) is always included.
