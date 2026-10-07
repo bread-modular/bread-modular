@@ -105,16 +105,22 @@ and the optional [TraceMaker controller](../../tracemaker/README.md).
    freeze/final checks; don't blindly compare an intentional edit to the original.
    Preserve the whole authorization/hash/removal/command/findings audit chain.
 
-**Current concrete blocker:** matching pcbnew/CLI 10.0.6 `pcb apply` saves name-only
-nets, without the legacy top-level numeric netdefs required by our legacy adapter. This is not proof of upstream engine incompatibility.
-`tracemaker strip/run` block it before writes; do not imply the full apply→engine→polish
-loop is qualified, down-save, invent net/rule mappings or weaken gates. Synthetic native
-freeze/no-op comparison/validation/back-to-CLI polish is tested, not engine interoperability.
-Native saves cannot pass the current first-party strip/run admission gate until the adapter handoff is separately qualified.
-The pinned engine itself supports named nets; that does not qualify this controller's end-to-end handoff. No engine runtime test was performed in this integration. No DIY downgrade/conversion. Any incompatible
-snapshot/format or known ERC/baseline-policy conflict stays explicit blocked/draft.
-Only opens-only completed PCB drafts with explicit policy may proceed where supported;
-never waive shorts, clearance, ERC, parity or known warnings/exclusions to gain admission.
+**Native handoff is now qualified for the narrow tested subset:** matching CLI/pcbnew
+10.0.6 saves inline quoted named nets; the quote-aware strip/compare/run resolver also
+retains legacy numeric support. Quoted numeric names are never numeric IDs. Reject
+unknown codes, conflicting global definitions and malformed/ambiguous mixtures; no
+schematic inference, conversion, downgrade or engine patch. Real synthetic placement →
+selected TraceMaker routing (one deliberate open closed) → recorded CLI polish → fresh
+native + engine/full ERC/XML/DRC/parity checks passes. This is not full-board/production,
+automatic placement, live GUI or complete advanced-rule/resource support.
+
+Use explicit `--experimental`, reviewed pinned external CPU runtime/dependency provenance,
+and a complete sealed candidate for engine DRC. Review newly signed repository catalogs
+against every unchanged dependency pin; never silently substitute manifests or waive
+signatures. Incompatible snapshot/format, missing rules, engine warnings, or known
+ERC/baseline-policy conflicts stay blocked/draft. Only opens-only completed PCB drafts
+with explicit policy may proceed where supported; never waive shorts, clearance, ERC,
+parity or known warnings/exclusions to gain admission. No tests provision a runtime.
 
 ## Explicit Freerouting alternative
 

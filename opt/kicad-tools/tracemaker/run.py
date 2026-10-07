@@ -16,10 +16,10 @@ def parser():
     cli = argparse.ArgumentParser(description=__doc__, epilog=(
         "Recommended: approved layout + critical manual copper, immutable freeze, explicit "
         "ordinary signals, offline router, independent checks, bounded CLI polish. "
-        "See ../HYBRID_ROUTING.md. Name-only KiCad 10 saves are BLOCKED for engine handoff."))
+        "Strict legacy numeric/native inline-named handoff; no conversion or inferred nets. See ../HYBRID_ROUTING.md."))
     sub = cli.add_subparsers(dest="command", required=True)
     for name, help_text in (("freeze", "seal a closed private project copy"),
-                            ("strip", "explicit legacy named-net copper removal"),
+                            ("strip", "explicit ordinary-signal copper removal; legacy numeric/native inline names"),
                             ("run", "bounded engine inspect|route|drc; route requires --experimental"),
                             ("compare", "exact raw / native-canonical preservation"),
                             ("validate", "independent private native DRC/parity/inventory"),

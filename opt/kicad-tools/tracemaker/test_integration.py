@@ -41,6 +41,29 @@ class IntegrationTests(unittest.TestCase):
         pcb.with_suffix(".kicad_sch").write_text('(kicad_sch (version 20250114))')
         return source, pcb
 
+    def test_active_docs_and_help_allow_qualified_native_handoff(self):
+        # Historical VERIFICATION evidence intentionally retains its original limits.
+        docs = ("HYBRID_ROUTING.md", "README.md", "tracemaker/README.md",
+                "skills/kicad-workflow/SKILL.md")
+        texts = [(name, (TOOLS / name).read_text()) for name in docs]
+        for args in (("--help",), ("strip", "--help"), ("run", "--help")):
+            result = self.run_cli(TOOLS / "kicad_tools.py", "tracemaker", *args)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            texts.append((str(args), result.stdout))
+        obsolete = (r"only a qualified legacy encoding|name-only blocker|"
+                    r"do not run this stage on pcb api saved outputs|"
+                    r"name-only kicad 10 saves are blocked|"
+                    r"(?:native )?name-only pcb saves are not yet engine-qualified|"
+                    r"name-only output cannot currently pass")
+        for name, text in texts:
+            with self.subTest(document=name):
+                self.assertNotRegex(" ".join(text.lower().split()), obsolete)
+        section = texts[0][1].split("## 2.", 1)[1].split("## 3.", 1)[0]
+        self.assertIn("legacy or native inline-named boards", section)
+        for caveat in ("supported-subset gates", "--experimental", "--only-net SIG",
+                       "not a production-board recipe", "No automatic runtime installation"):
+            self.assertIn(caveat, section)
+
     def test_help_discovery_and_exact_standalone_passthrough(self):
         top = self.run_cli(TOOLS / "kicad_tools.py", "--help")
         self.assertIn("tracemaker", top.stdout)
@@ -83,17 +106,67 @@ class IntegrationTests(unittest.TestCase):
         self.assertFalse(json.loads(out.getvalue())["engine_executed"])
         self.assertEqual(before, t.tree(self.root))
 
-    def test_name_only_and_mixed_encodings_block_before_any_writes(self):
-        name_only = '(kicad_pcb (version 20260101) (footprint "a" (pad "1" smd rect (net "SIG"))) (segment (net "SIG") (uuid "a")))'
-        mixed = BASE.replace('(net 1) (uuid "track")', '(net "SIG") (uuid "track")')
-        for i, text in enumerate((name_only, mixed, BASE.replace('(net 2 "OTHER")', '(net 1 "OTHER")'))):
+    def test_inline_native_strip_compare_and_runtime_admission(self):
+        text = BASE.replace('(net 0 "") (net 1 "SIG") (net 2 "OTHER")', '')
+        for old, new in [('(net 1 "SIG")', '(net "SIG")'), ('(net 1)', '(net "SIG")'),
+                         ('(net 2)', '(net "OTHER")'), ('(net 0)', '(net "")')]:
+            text = text.replace(old, new)
+        f = self.root / "frozen"; f.mkdir(); (f / "board.kicad_pcb").write_text(text); t.seal(f)
+        out = self.root / "stripped"
+        m = t.strip(f, "board.kicad_pcb", out, ["SIG"], segment_uuids=["track"])
+        self.assertEqual(m['removed_segments'][0]['net'], 'SIG')
+        added = NEW.replace('(net 1)', '(net "SIG")')
+        after = self.root / 'candidate.kicad_pcb'; after.write_text((out / 'board.kicad_pcb').read_text()[:-1]+added+')')
+        self.assertTrue(t.compare(out / 'board.kicad_pcb', after, ['SIG'])['passed'])
+        with patch.object(t, 'runtime_ready', side_effect=ValueError('runtime gate reached')):
+            with self.assertRaisesRegex(ValueError, 'runtime gate reached'):
+                t.run(f, 'board.kicad_pcb', self.root / 'unused', 'absent', t.REVIEWED_ENGINE_SHA256, 'absent')
+        self.assertFalse((self.root / 'unused').exists())
+
+    def test_invalid_net_forms_reject_before_strip_or_run_writes(self):
+        invalid = [BASE.replace('(net 2 "OTHER")', '(net 1 "OTHER")'),
+                   BASE.replace('(net 2 "OTHER")', '(net 2 "SIG")'),
+                   BASE.replace('(net 1) (uuid "track")', '(net 99) (uuid "track")'),
+                   BASE.replace('(net 1) (uuid "track")', '(net "unknown") (uuid "track")'),
+                   BASE.replace('(net 1) (uuid "track")', '(net "1" "SIG") (uuid "track")'),
+                   BASE.replace('(net 1) (uuid "track")', '(net 1) (net "SIG") (uuid "track")'),
+                   BASE.replace('(net 1 "SIG")', '(net 1 "OTHER")', 1)]
+        for i, text in enumerate(invalid):
             f = self.root / f"frozen-{i}"; f.mkdir(); (f / "board.kicad_pcb").write_text(text); t.seal(f)
             before = t.tree(f)
             with patch.object(t, "fresh", side_effect=AssertionError("no writes")), self.assertRaises(ValueError):
                 t.strip(f, "board.kicad_pcb", self.root / "denied", ["SIG"])
-            with patch.object(t, "fresh", side_effect=AssertionError("no writes")), self.assertRaises(ValueError):
+            with patch.object(t, "runtime_ready", side_effect=AssertionError("no runtime")), self.assertRaises(ValueError):
                 t.run(f, "board.kicad_pcb", self.root / "denied", "absent", t.REVIEWED_ENGINE_SHA256, "absent")
+            self.assertFalse(t.compare(f / 'board.kicad_pcb', f / 'board.kicad_pcb')['passed'])
             self.assertEqual(before, t.tree(f)); self.assertFalse((self.root / "denied").exists())
+
+    def test_quote_aware_numeric_names_and_coherent_mixed_references(self):
+        named = '(kicad_pcb (segment (net "1")))'
+        r = t.NetResolver(t.nodes(named)); self.assertEqual(r.net(t.nodes(named)[0][3]), ('1', None))
+        for bad in ['(net 1)', '(net SIG)', '(net "1" 1)', '(net)', '(net 01)', '(net -1)']:
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                t.NetResolver(t.nodes('(kicad_pcb (segment '+bad+'))'))
+        mixed = BASE.replace('(net 1) (uuid "track")', '(net "SIG") (uuid "track")')
+        resolver = t.NetResolver(t.nodes(mixed))
+        self.assertEqual(resolver.net(next(n[3] for n in t.nodes(mixed) if t.child(n[3], 'uuid') == ['track'])), ('SIG', 1))
+        for bad in ['(net "1" "SIG")', '(net 1 SIG)', '(net 0 "x")', '(net 3 "OTHER")']:
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                t.NetResolver(t.nodes(BASE.replace('(net 1 "SIG")', bad, 1)))
+
+    def test_inline_via_manifest_canonical_name_without_invented_code(self):
+        from test_trial import VIA
+        text = BASE[:-1] + VIA + ')'
+        text = text.replace('(net 0 "") (net 1 "SIG") (net 2 "OTHER")', '')
+        for old,new in [('(net 1 "SIG")','(net "1")'),('(net 1)','(net "1")'),
+                        ('(net 2)','(net "OTHER")'),('(net 0)','(net "")')]: text=text.replace(old,new)
+        f=self.root/'frozen'; f.mkdir(); (f/'board.kicad_pcb').write_text(text); t.seal(f)
+        m=t.strip(f,'board.kicad_pcb',self.root/'stripped',['1'],True,['new-via'])
+        via=m['removed_vias'][0]; self.assertEqual(via['net'],'1'); self.assertNotIn('net_code',via)
+        self.assertEqual(via['geometry_nm']['size_nm'],[700000])
+        for name in ['', 'GND', 'V_SUPPLY', 'V_MID', 'unconnected-x']:
+            with self.subTest(name=name), patch.object(t,'fresh',side_effect=AssertionError('no writes')), self.assertRaises(ValueError):
+                t.strip(f,'board.kicad_pcb',self.root/'denied',[name],True,['hole'])
 
     def test_exact_segment_selection_and_foreign_duplicate_uuid_rejection(self):
         f = self.root / "frozen"; f.mkdir()

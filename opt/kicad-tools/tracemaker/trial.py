@@ -137,6 +137,10 @@ def nodes(text):
     return result
 
 
+class Quoted(str):
+    """Keep atom spelling semantics: a quoted numeric name is never a net code."""
+
+
 def parse(text):
     stack = []
     root = None
@@ -152,7 +156,7 @@ def parse(text):
         elif t == ")":
             stack.pop()
         else:
-            stack[-1].append(json.loads(t) if t.startswith('"') else t)
+            stack[-1].append(Quoted(json.loads(t)) if t.startswith('"') else t)
     return root
 
 
@@ -160,33 +164,69 @@ def child(node, key):
     return next((x[1:] for x in node if isinstance(x, list) and x[0] == key), [])
 
 
-def net_name(node, netmap):
-    value = child(node, "net")
-    if not value:
-        raise ValueError("copper has no net")
-    return netmap.get(value[0], value[0])
+class NetResolver:
+    """Strict legacy/global or native/inline contract; validate the whole board first.
+
+    Coherent mixed references must name an existing global definition. Inline-only
+    boards never infer numeric IDs. Raw slices are not changed or reserialized.
+    """
+    def __init__(self, parts):
+        self.codes = {}; self.names = set(); self.by_name = {}
+        definitions = [n[3] for n in parts if n[3][0] == "net"]
+        for definition in definitions:
+            if (len(definition) != 3 or not self.numeric(definition[1])
+                    or not isinstance(definition[2], Quoted) or definition[1] in self.codes):
+                raise ValueError("Unsupported/duplicate global net definition")
+            code, name = definition[1:]
+            if name in self.by_name:
+                raise ValueError("Conflicting/duplicate global net names")
+            self.codes[code] = name; self.by_name[name] = int(code)
+        if definitions and self.codes.get("0") != "":
+            raise ValueError("Global net definitions require explicit empty net0")
+        self.names.update(self.by_name)
+        def walk(node):
+            net_children = [x for x in node if isinstance(x, list) and x and x[0] == "net"]
+            if len(net_children) > 1:
+                raise ValueError("Ambiguous duplicate net reference")
+            for x in node:
+                if isinstance(x, list):
+                    if x and x[0] == "net": self.resolve(x[1:])
+                    else: walk(x)
+        for n in parts:
+            if n[3][0] != "net": walk(n[3])
+
+    @staticmethod
+    def numeric(value):
+        return isinstance(value, str) and not isinstance(value, Quoted) and re.fullmatch(r"0|[1-9][0-9]*", value)
+
+    def resolve(self, values):
+        if len(values) == 1 and isinstance(values[0], Quoted):
+            name = values[0]
+            if self.codes and name not in self.by_name:
+                raise ValueError("Inline/global net conflict; no net guessing")
+            self.names.add(name)
+            return name, self.by_name.get(name)
+        if (len(values) not in (1, 2) or not self.numeric(values[0])
+                or values[0] not in self.codes):
+            raise ValueError("Unknown numeric / malformed net reference")
+        name = self.codes[values[0]]
+        if len(values) == 2 and (not isinstance(values[1], Quoted) or values[1] != name):
+            raise ValueError("Mixed/inconsistent net encoding; no net guessing")
+        return name, int(values[0])
+
+    def net(self, node):
+        values = [x[1:] for x in node if isinstance(x, list) and x and x[0] == "net"]
+        if len(values) != 1:
+            raise ValueError("Copper requires exactly one net reference")
+        return self.resolve(values[0])
 
 
-def legacy_netmap(parts):
-    """Explicit reviewed encoding, never guess name/code mappings or rewrite native saves."""
-    definitions = [n[3] for n in parts if n[3][0] == "net"]
-    if not definitions:
-        raise ValueError("TraceMaker adapter handoff BLOCKED: name-only KiCad 10/pcbnew saved output has no top-level numbered net definitions; legacy helper subset only, upstream compatibility unverified here; no automatic format conversion. See HYBRID_ROUTING.md")
-    result = {}
-    for definition in definitions:
-        if len(definition) != 3 or not re.fullmatch(r"0|[1-9][0-9]*", definition[1]) or definition[1] in result:
-            raise ValueError("Unsupported/ambiguous numbered net definitions")
-        result[definition[1]] = definition[2]
-    if result.get("0") != "" or len(set(result.values())) != len(result):
-        raise ValueError("Explicit unique legacy net definitions including net0 required")
-    def walk(node):
-        if node and node[0] == "net":
-            if len(node) not in (2, 3) or node[1] not in result or (len(node) == 3 and node[2] != result[node[1]]):
-                raise ValueError("Mixed/inconsistent net encoding; no net guessing")
-        for item in node:
-            if isinstance(item, list): walk(item)
-    for n in parts: walk(n[3])
-    return result
+def net_name(node, resolver):
+    return resolver.net(node)[0]
+
+
+def protected_net(name):
+    return name in ("GND", "V_SUPPLY", "V_MID", "") or name.startswith("unconnected-")
 
 
 def runtime_ready(native=False):
@@ -212,10 +252,10 @@ def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=
     frozen(root)
     text = pcb.read_text()
     parts = nodes(text)
-    netmap = legacy_netmap(parts)
-    if not nets or not set(nets) <= set(netmap.values()):
-        raise ValueError("explicit existing named nets required (legacy PCB subset)")
-    if any(n in ("GND", "V_SUPPLY", "V_MID", "") or n.startswith("unconnected-") for n in nets):
+    netmap = NetResolver(parts)
+    if not nets or not set(nets) <= netmap.names:
+        raise ValueError("explicit existing named nets required")
+    if any(protected_net(n) for n in nets):
         raise ValueError("power / unconnected net not allowed")
     if bool(via_uuids) != bool(regenerate_signal_vias):
         raise ValueError("via removal requires --regenerate-signal-vias AND exact --via-uuid list")
@@ -240,7 +280,7 @@ def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=
         if len(matches) != 1 or matches[0][3][0] != "via":
             raise ValueError("authorized UUID must identify exactly one existing via")
         n = matches[0]; node = n[3]
-        if child(node, "net") == ["0"] or net_name(node, netmap) not in nets:
+        if protected_net(net_name(node, netmap)) or net_name(node, netmap) not in nets:
             raise ValueError("net0 / foreign-net via cannot be stripped")
         # Intentionally only the reviewed ordinary 0.7/0.3 mm F/B through-via subset.
         # Reject mounting holes, blind/microvias, special options and unknown syntax.
@@ -276,7 +316,10 @@ def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=
                         raise ValueError("geometry must be exact integer nanometres")
                     geometry[field + "_nm"] = [int(x) for x in nm]
             geometry["layers"] = child(node, "layers") or child(node, "layer")
-            record.update(geometry_nm=geometry, net_code=int(child(node, "net")[0]))
+            record["geometry_nm"] = geometry
+            code = netmap.net(node)[1]
+            if code is not None:
+                record["net_code"] = code
         return record
     # Validate/manifest everything before output creation, including nm conversion.
     manifest = {"source_sha256": sha(pcb), "allowed_nets": nets,
@@ -300,11 +343,17 @@ def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=
 def compare(before, after, allowed=(), semantic=False):
     """All existing nodes must survive; only authorized new segments/vias allowed."""
     a = nodes(Path(before).read_text()); b = nodes(Path(after).read_text())
-    key = (lambda n: json.dumps(n[3], separators=(",", ":"))) if semantic else (lambda n: n[2])
+    try:
+        NetResolver(a); netmap = NetResolver(b)
+    except ValueError as error:
+        return {"passed": False, "net_resolution_error": str(error)}
+    def spelling(node):
+        if isinstance(node, list): return [spelling(x) for x in node]
+        return {"quoted": str(node)} if isinstance(node, Quoted) else node
+    key = (lambda n: json.dumps(spelling(n[3]), separators=(",", ":"))) if semantic else (lambda n: n[2])
     ca = Counter(map(key, a)); cb = Counter(map(key, b))
     removed = list((ca - cb).elements())
     extras = cb - ca
-    netmap = {n[3][1]: n[3][2] for n in b if n[3][0] == "net"}
     additions = []
     unauthorized = []
     for n in b:
@@ -316,7 +365,7 @@ def compare(before, after, allowed=(), semantic=False):
         if node[0] not in ("segment", "via"):
             unauthorized.append(node); continue
         name = net_name(node, netmap)
-        permitted = name in allowed
+        permitted = name in allowed and not protected_net(name)
         if node[0] == "via":
             permitted &= float(child(node, "size")[0]) >= .7
             permitted &= float(child(node, "drill")[0]) >= .3
@@ -392,7 +441,7 @@ def bounded(argv, output, label, seconds=120):
 
 def run(root, pcb_name, output, engine, digest, deps, action="inspect", only_net=None, pitch=None):
     pcb = input_pcb(root, pcb_name)
-    legacy_netmap(nodes(pcb.read_text()))
+    NetResolver(nodes(pcb.read_text()))
     runtime_ready()
     if digest != REVIEWED_ENGINE_SHA256:
         raise ValueError("Unreviewed engine SHA256: pinned CPU build/provenance required; see BUILD.md")
