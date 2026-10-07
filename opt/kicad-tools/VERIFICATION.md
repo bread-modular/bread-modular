@@ -472,3 +472,31 @@ post-merge verification above supersedes that untested-integration status. Insta
 symlink/scan/provenance behavior are not rewritten or fully captured. Native
 DRC graphical/field parity for differently named roots is explicitly not run;
 manual critical-net/electrical/production/order signoff is always separate.
+
+## Bounded TraceMaker facade/bundle integration (no external engine execution)
+
+Based on main `643389303e90610395078436fed60e7342af61c9`, isolated uncommitted work.
+- TraceMaker: 41 tests passed (27 unchanged existing + 13 new unit/integration + 1
+  opt-in actual native synthetic), final suite 11.433 s. Run with
+  `KICAD_TRACEMAKER_NATIVE=1 /usr/bin/python3 -B -m unittest discover -s opt/kicad-tools/tracemaker -v`.
+- Core: 55 passed with `KICAD_TOOLS_INTEGRATION=1`, including both native synthetic
+  core tests. Automation: 13 passed / 13 native opt-in skipped; schematic: 15 passed /
+  12 native opt-in skipped. No released-design tests or external engine rebuild/reroute.
+- Actual matching CLI/pcbnew 10.0.6: approved move + critical replacement route,
+  native saved output → closed freeze → explicit strip/run adapter rejection with
+  no output writes → raw no-op and two independent canonical/native checks → actual
+  CLI selected delete/replacement with two explicit vias → fresh authorized baseline
+  → final native ERC/DRC/XML parity. Zero final DRC/parity/opens; original hashes,
+  footprints/pads/net partition/outline unchanged across the polish transaction.
+- **Not tested/claimed:** upstream pinned reader/writer named-net support or an actual
+  placement→TraceMaker autoroute→polish loop. Native saves have `(net "SIGNAL")` with
+  no top-level numeric netdefs; `trial.py:legacy_netmap` requires numeric definitions.
+  This proves only the adapter boundary, **not engine incompatibility**. No DIY conversion.
+- Bundles: neither/either/both optional controllers, hash verification, exact three
+  compatibility symlinks, dry-run/no overwrite, substituted/unsafe source rejection,
+  paths with spaces/unrelated cwd, relocated help and re-bundle. No binaries/deps/
+  configs/boards/experiment outputs included; mandatory provisioning docs are standalone.
+- 2,335 protected tracked entries (including seven gitlink identity records) unchanged.
+  Before/after protected-manifest SHA256:
+  `f11c824eb92c1cbc6ad6a1bdcc2333c92a152b3f9d6561370a88e655cc24fd3b`.
+  Local logs/manifests are in ignored `tracemaker-integration.tmp/`, not a bundle payload.

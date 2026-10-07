@@ -1,5 +1,10 @@
 # TraceMaker / KiCad — Phase 1 research
 
+Current toolkit integration: [recommended hybrid recipe and native-format blocker](../opt/kicad-tools/HYBRID_ROUTING.md),
+[optional CLI/bundle controller](../opt/kicad-tools/tracemaker/README.md).
+This page is historical repository-only research/trial evidence, not relocated provisioning instructions.
+
+
 Inspected 2026-10-07 in isolated workspace 303. **STOP for parent review.** Only this note and ignored `tracemaker-research.tmp/` were created. No downloaded code, installer, build, tests, plugin or routing ran; no global installs, advisors/delegation, commit/merge/push. No `modules/8bit` board was opened or modified; its inventory/constraints remain a separate handoff.
 
 ## Pin / evidence

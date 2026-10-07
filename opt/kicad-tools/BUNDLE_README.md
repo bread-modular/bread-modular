@@ -28,3 +28,8 @@ Keep the whole relative `opt/` / `.agents/` layout. No original checkout or Git
 is needed. Runtime/JAR/work/logs, designs and releases are never bundled.
 Geometry edits are not live GUI push/shove; no automatic placement or trace drag.
 Schematic edits require explicit PCB synchronization. All approval remains manual.
+
+Recommended bounded [hybrid routing](opt/kicad-tools/HYBRID_ROUTING.md): explicit
+layout/critical copper, freeze, compatible TraceMaker signal work, inspect/manual CLI
+polish. Read the **native saved-output format blocker** first. `--include-tracemaker`
+is independent of `--include-routing`; neither includes vendor runtime or installs it.

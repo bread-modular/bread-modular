@@ -24,7 +24,7 @@ HERE = Path(__file__).resolve().parent
 DELEGATES = {
     "pcb": "automation/run.py", "schematic": "schematic/cli.py",
     "export": "jlcpcb/export.py", "assembly": "jlcpcb/assembly.py",
-    "route": "../kicad-routing/run.py",
+    "route": "../kicad-routing/run.py", "tracemaker": "tracemaker/run.py",
 }
 
 
@@ -236,6 +236,7 @@ def parser():
     bundler.add_argument("destination", help="explicitly NEW directory")
     bundler.add_argument("--dry-run", action="store_true", help="list/hash files; write nothing")
     bundler.add_argument("--include-routing", action="store_true", help="include optional sibling code/docs only (never runtime); see bundling contract")
+    bundler.add_argument("--include-tracemaker", action="store_true", help="include optional pinned TraceMaker controllers/tests/guides only; independent of --include-routing")
     return cli
 
 
@@ -254,7 +255,7 @@ def main(argv=None):
             return netlist_command(args)
         if args.command == "bundle":
             from bundle import bundle
-            result = bundle(args.destination, args.dry_run, args.include_routing)
+            result = bundle(args.destination, args.dry_run, args.include_routing, include_tracemaker=args.include_tracemaker)
             emit(result)
             return 0
     except (Error, OSError, ValueError, ET.ParseError, subprocess.TimeoutExpired) as error:

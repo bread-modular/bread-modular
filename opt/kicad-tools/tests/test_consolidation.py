@@ -174,7 +174,7 @@ class ConsolidationTests(unittest.TestCase):
     def test_current_docs_and_canonical_skills_links_in_repository_and_core_bundle(self):
         distribution, _ = self.make_distribution()
         docs = ("README.md", "opt/kicad-tools/README.md", "opt/kicad-tools/GUIDE.md",
-                "opt/kicad-tools/BUNDLING.md", "opt/kicad-tools/API.md",
+                "opt/kicad-tools/BUNDLING.md", "opt/kicad-tools/API.md", "opt/kicad-tools/HYBRID_ROUTING.md",
                 "opt/kicad-tools/automation/README.md", "opt/kicad-tools/automation/docs/api.md",
                 "opt/kicad-tools/automation/docs/safety.md", "opt/kicad-tools/schematic/README.md",
                 "opt/kicad-tools/schematic/docs/api.md", "opt/kicad-tools/jlcpcb/README.md",
@@ -195,6 +195,8 @@ class ConsolidationTests(unittest.TestCase):
                     optional = relative.startswith("opt/kicad-routing/") or relative == "docs/kicad-routing-research.md"
                     if optional and not (root / "opt/kicad-routing/run.py").is_file():
                         continue
+                    if relative.startswith("opt/kicad-tools/tracemaker/") and not (root / "opt/kicad-tools/tracemaker/run.py").is_file():
+                        continue  # explicitly separate optional payload, like Freerouting above
                     self.assertTrue(target.exists(), f"{name}: {link}")
 
 
