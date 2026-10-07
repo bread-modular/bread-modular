@@ -1,0 +1,5 @@
+# VALIDATED RESEARCH CANDIDATE — 10 selected signal nets only
+
+Ordinary CPU route rebuilt UDPI, TX, MIDI, GATE_OUT, CV1, CV2, AUDIO_OUT, Net-(U2-PA6), Net-(U1B-+), Net-(D1-K) after exact authorization of 72 segments and 6 ordinary electrical vias. Native KiCad: zero opens/active errors/parity and exactly the original 30 diagnostic identities. Independent engine DRC also passes. All 24 footprint transforms/pads/UUIDs, outline, six slotted pot anchors, eight custom QFN pads, both mounting holes, netted B.Cu polygons, power copper and remaining original nodes preserved.
+
+29 original vias retained, including the two net0 4/3.2 mm mounting holes at (62.377580,43.815)/(62.784908,106.045). New vias meet 0.7/0.3 mm minima; project/rules unchanged. Candidate SHA256: `dd34315b8613d719c641e62f2951ac551eea98b350a15007066ef62da23285f4`. NOT full-board routing, production sign-off, a replacement module or general engine admission. [Trial report](../../../docs/kicad-tracemaker-trial.md); evidence: `../evidence/final/broader-signals/`.

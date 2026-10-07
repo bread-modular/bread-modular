@@ -2,6 +2,7 @@
 """Small Linux-only copied-board experiment helper; NOT a production router gate."""
 import argparse
 from collections import Counter
+from decimal import Decimal
 import hashlib
 import json
 import os
@@ -169,7 +170,7 @@ def input_pcb(root, pcb_name):
     return pcb
 
 
-def strip(root, pcb_name, output, nets):
+def strip(root, pcb_name, output, nets, regenerate_signal_vias=False, via_uuids=()):
     pcb = input_pcb(root, pcb_name)
     frozen(root)
     text = pcb.read_text()
@@ -179,31 +180,72 @@ def strip(root, pcb_name, output, nets):
         raise ValueError("explicit existing named nets required (legacy PCB subset)")
     if any(n in ("GND", "V_SUPPLY", "V_MID", "") or n.startswith("unconnected-") for n in nets):
         raise ValueError("power / unconnected net not allowed")
-    removed = [n for n in parts if n[3][0] == "segment" and net_name(n[3], netmap) in nets]
-    if not removed:
+    if bool(via_uuids) != bool(regenerate_signal_vias):
+        raise ValueError("via removal requires --regenerate-signal-vias AND exact --via-uuid list")
+    if len(via_uuids) != len(set(via_uuids)):
+        raise ValueError("duplicate authorized via UUID")
+    removed_segments = [n for n in parts if n[3][0] == "segment" and net_name(n[3], netmap) in nets]
+    if not removed_segments:
         raise ValueError("no selected segments")
+    removed_vias = []
+    for uuid in via_uuids:
+        matches = [n for n in parts if child(n[3], "uuid") == [uuid]]
+        if len(matches) != 1 or matches[0][3][0] != "via":
+            raise ValueError("authorized UUID must identify exactly one existing via")
+        n = matches[0]; node = n[3]
+        if child(node, "net") == ["0"] or net_name(node, netmap) not in nets:
+            raise ValueError("net0 / foreign-net via cannot be stripped")
+        # Intentionally only the reviewed ordinary 0.7/0.3 mm F/B through-via subset.
+        # Reject mounting holes, blind/microvias, special options and unknown syntax.
+        allowed_keys = {"at", "size", "drill", "layers", "net", "uuid", "locked"}
+        if (any(not isinstance(x, list) or not x or x[0] not in allowed_keys for x in node[1:])
+                or len({x[0] for x in node[1:]}) != len(node[1:])
+                or child(node, "layers") != ["F.Cu", "B.Cu"]
+                or child(node, "size") != ["0.7"] or child(node, "drill") != ["0.3"]
+                or len(child(node, "at")) != 2 or len(child(node, "net")) != 1):
+            raise ValueError("nonstandard / mounting via cannot be stripped")
+        removed_vias.append(n)
+    removed = sorted(removed_segments + removed_vias, key=lambda n: n[0])
     group_members = {member for n in parts if n[3][0] == "group"
                      for member in child(n[3], "members")}
     for n in removed:
         node = n[3]
         if "locked" in node or any(isinstance(x, list) and x and x[0] == "locked"
                                    and x[1:] != ["no"] for x in node):
-            raise ValueError("locked selected segment cannot be stripped")
+            raise ValueError("locked selected copper cannot be stripped")
         if group_members.intersection(child(node, "uuid")):
-            raise ValueError("grouped selected segment cannot be stripped")
+            raise ValueError("grouped selected copper cannot be stripped")
+    def entry(n):
+        node = n[3]
+        record = {"uuid": child(node, "uuid")[0], "net": net_name(node, netmap),
+                  "raw_sha256": hashlib.sha256(n[2].encode()).hexdigest(), "definition": node}
+        if regenerate_signal_vias:
+            geometry = {}
+            for field in ("at", "start", "end", "size", "width", "drill"):
+                values = child(node, field)
+                if values:
+                    nm = [Decimal(v) * 1000000 for v in values]
+                    if any(not x.is_finite() or x != x.to_integral_value() for x in nm):
+                        raise ValueError("geometry must be exact integer nanometres")
+                    geometry[field + "_nm"] = [int(x) for x in nm]
+            geometry["layers"] = child(node, "layers") or child(node, "layer")
+            record.update(geometry_nm=geometry, net_code=int(child(node, "net")[0]))
+        return record
+    # Validate/manifest everything before output creation, including nm conversion.
+    manifest = {"source_sha256": sha(pcb), "allowed_nets": nets,
+                "removed_segments": [entry(n) for n in removed_segments],
+                "removed_vias": [entry(n) for n in removed_vias],
+                "protected_policy": "every other raw top-level node"}
+    if regenerate_signal_vias:
+        manifest.update(regenerate_signal_vias=True, authorized_via_uuids=list(via_uuids))
     output = fresh(output, root)
     shutil.copytree(root, output, dirs_exist_ok=True)
     for a, b, _, _ in reversed(removed):
         text = text[:a] + text[b:]
     (output / pcb_name).write_text(text)
-    write_json(output / "removal.json", {"source_sha256": sha(pcb),
-               "allowed_nets": nets, "removed_segments": [
-                   {"uuid": child(n[3], "uuid")[0], "net": net_name(n[3], netmap),
-                    "raw_sha256": hashlib.sha256(n[2].encode()).hexdigest(),
-                    "definition": n[3]} for n in removed],
-               "removed_vias": [], "protected_policy": "every other raw top-level node"})
+    write_json(output / "removal.json", manifest)
     seal(output)
-    return json.loads((output / "removal.json").read_text())
+    return manifest
 
 
 def compare(before, after, allowed=(), semantic=False):
@@ -333,6 +375,10 @@ def main():
     f.add_argument("--library-root", help="explicit trusted boundary for project footprint symlink targets")
     t = s.add_parser("strip"); t.add_argument("input"); t.add_argument("pcb"); t.add_argument("output")
     t.add_argument("--net", action="append", required=True)
+    t.add_argument("--regenerate-signal-vias", action="store_true",
+                   help="experimental: remove only explicitly enumerated ordinary signal vias")
+    t.add_argument("--via-uuid", action="append", default=[],
+                   help="exact existing 0.7/0.3 mm signal through-via UUID; requires regeneration flag")
     r = s.add_parser("run"); r.add_argument("action", choices=["inspect", "route", "drc"])
     r.add_argument("input"); r.add_argument("pcb"); r.add_argument("output")
     r.add_argument("--engine", required=True); r.add_argument("--sha256", required=True)
@@ -344,7 +390,7 @@ def main():
     if a.command == "freeze":
         result = freeze(a.pcb, a.output, a.library_root)
     elif a.command == "strip":
-        result = strip(a.input, a.pcb, a.output, a.net)
+        result = strip(a.input, a.pcb, a.output, a.net, a.regenerate_signal_vias, a.via_uuid)
     elif a.command == "compare":
         result = compare(a.before, a.after, a.net, a.semantic)
     else:

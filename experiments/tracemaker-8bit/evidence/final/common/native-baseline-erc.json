@@ -1,0 +1,370 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-07T00:52:59",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/b63493d3-5f6d-47e3-845b-87e7090fc1ab",
+            "violations": [
+                {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV2 [R_Potentiometer]",
+                            "pos": {
+                                "x": 0.9398,
+                                "y": 1.4859
+                            },
+                            "uuid": "82795ed0-872e-435b-958f-462605395c55"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV3 [R_Potentiometer]",
+                            "pos": {
+                                "x": 0.9398,
+                                "y": 1.9812
+                            },
+                            "uuid": "04eabb0f-3fb6-4718-a004-6fa05bf91319"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'LED' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol D1 [LED]",
+                            "pos": {
+                                "x": 1.4351,
+                                "y": 0.6731
+                            },
+                            "uuid": "602798e4-62d7-498a-85c5-72d1ff9428b8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'R_Potentiometer' doesn't match copy in library 'Device'",
+                    "items": [
+                        {
+                            "description": "Symbol RV1 [R_Potentiometer]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 0.7747
+                            },
+                            "uuid": "4b6b2945-571b-497e-99eb-5efa8d158eca"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 15 [PC0, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 0.7747
+                            },
+                            "uuid": "0c95a756-ba76-498d-845f-efa7a4463387"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 16 [PC1, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 0.8001
+                            },
+                            "uuid": "bce68805-7045-45b6-a360-dfee1e9e2be6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 17 [PC2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 0.8255
+                            },
+                            "uuid": "becd2741-1690-4113-a42d-c34b5a659d4e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 18 [PC3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 0.8509
+                            },
+                            "uuid": "b0a9c6ef-5c88-4983-9319-99159530bd60"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 2 [PA3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.0795,
+                                "y": 0.6223
+                            },
+                            "uuid": "981414ee-eefc-4acd-bbe1-f0179d257474"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 5 [PA4, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.0795,
+                                "y": 0.6477
+                            },
+                            "uuid": "f7ba11d8-8902-456d-a72f-a166d2b2a83c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 6 [PA5, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.0795,
+                                "y": 0.6731
+                            },
+                            "uuid": "65fa9d85-6a8e-4f56-8219-0b454b0dc90a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 14 [PB0, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.0795,
+                                "y": 0.7747
+                            },
+                            "uuid": "28a724cb-513b-47b3-8b7a-574e09d21827"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 13 [PB1, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.0795,
+                                "y": 0.8001
+                            },
+                            "uuid": "de6f3ee1-3047-4bad-87bf-137383404019"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 12 [PB2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.0795,
+                                "y": 0.8255
+                            },
+                            "uuid": "f84df422-b312-4530-b036-8e666689c708"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 10 [PB4, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.0795,
+                                "y": 0.8763
+                            },
+                            "uuid": "84f63ff8-8af4-4f05-8440-fd16642def9b"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol U2 Pin 9 [PB5, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.0795,
+                                "y": 0.9017
+                            },
+                            "uuid": "f0decc0f-9a4d-4f57-9acd-28aed48ae5d4"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol RV1 Pin 3 [3, Passive, Line]",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 0.7747
+                            },
+                            "uuid": "e56ec8c0-c7eb-4d6b-809c-803c04b4add2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Pin not connected",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol RV1 Pin 3 [3, Passive, Line]",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 0.7747
+                            },
+                            "uuid": "e56ec8c0-c7eb-4d6b-809c-803c04b4add2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "comment": "",
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol #PWR01 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 3.4798,
+                                "y": 0.2921
+                            },
+                            "uuid": "066d2e05-6b66-4c40-8d90-399a8569601c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "comment": "",
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "excluded": true,
+                    "items": [
+                        {
+                            "description": "Symbol #PWR03 Pin 1 [Power input, Line]",
+                            "pos": {
+                                "x": 3.7338,
+                                "y": 0.381
+                            },
+                            "uuid": "27a8ec90-43ec-4133-9c93-ec56b5415960"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                }
+            ]
+        }
+    ],
+    "source": "8bit.kicad_sch"
+}
