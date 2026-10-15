@@ -3,10 +3,35 @@
 **Current authority: `base.kicad_sch` + hierarchical `slot.kicad_sch` and the
 saved/refilled PCB.** The current uncommitted candidate adds SMD rail/MONO
 selectors and mode LEDs, cleans selector routing, and corrects headphone
-control-to-channel mapping. Source-bound evidence is in
-`verification/selectors/summary.json` and `verification/routing-polish/summary.json`.
+control-to-channel mapping. Current source-bound evidence is in
+`verification/footprint-library/summary.json`. The earlier `selectors/` and
+`routing-polish/` summaries are historical snapshots of the preceding work.
 These are software checks, not order, bench, mating, or vendor-placement approval.
 Older CHANGELOG/migration evidence and frozen release scripts remain history.
+
+**Completion audit:** the twelve slot schematics now contain the actual selector,
+MOSFET, LED and resistor circuits, and all 48 PCB associations use their real
+schematic UUIDs. All 636 physical ref/pin/net pairs match the native XML netlist.
+The earlier completion pass removed the saved dangling +3.3V branch (two vias and
+four segments) and refilled zones without changing placements or other copper.
+
+**Footprint-library follow-up:** all 61 library-copy warnings are resolved using
+14 explicitly project-local footprint variants and matching schematic assignments.
+All physical geometry, pad nets, placement, copper, silk, fills and rules are
+unchanged. Current results: **0 DRC errors, 0 warnings, 0 opens, 0 parity findings**.
+The same 7 pre-existing root-sheet ERC errors and 4 symbol-library warnings remain;
+there are no new selector-sheet findings or suppressions.
+
+The earlier routing-polish and LED-placement before/after reports were missing.
+Their restored READMEs explicitly distinguish current preservation evidence from
+unverified historical counts. The stack/mating claims below were not remeasured
+by this completion audit; `selectors/summary.json` does not certify those claims.
+
+Current JLCPCB upload files are `jlcpcb/base/base-gerbers.zip`, `bom.csv` and
+`positions.csv` (169 top-side placements, 35 BOM rows). The earlier live Basic
+part audit is retained in `verification/selectors/jlcpcb-basic-parts.json`;
+no part substitutions were needed. Vendor placement/polarity preview and order
+approval remain outstanding.
 
 The exact original 979-line engineering/source rationale, including numbered
 historical sections 1–11, is preserved in
@@ -59,7 +84,8 @@ Q1..Q12 independently buffer the select signal for D4..D15 through 1k R62..R73.
 D4..D15 are directly right of their respective switches with a bold `5V` caption
 matching the existing MONO font. The former SWn 5V LED / OFF=3V3 captions are
 removed. Q1..Q12 were slightly nudged for clearance; the circuit is unchanged.
-See `verification/led-placement/README.md` for the exact bounded layout delta.
+See `verification/led-placement/README.md` for the current placement snapshot
+and preservation check; the earlier move-by-move evidence was unavailable.
 LED current comes from 5V_SYS, not the mux logic. LED ON means 5V is selected
 and its indicator supply is present; it is not an output-voltage measurement.
 
@@ -181,8 +207,9 @@ The updated switch drawing calculation gives **9.6 mm nominal / 8.8 mm assumed
 worst-case clearance** to the module plane. The 1.4 mm switch body has a
 conservative 1.6 mm envelope including tolerance/solder stand-off. This retains
 8.5 mm socket + 2.5 mm module-header assumptions, not proven contact depth or a
-physical mating trial. Per-module underside coverage/exclusions are recorded in
-`verification/selectors/summary.json`.
+physical mating trial. The previously referenced per-module coverage report was
+not present when this completion audit resumed. The current selector summary
+certifies connectivity/preservation/export checks only, not underside clearance.
 
 The source's slot-1 offset (-0.12 mm X / -0.10 mm Y) is preserved. Current module
 inspection covers 28 readable boards: 26 have bottom-mounted headers; **4mix and
@@ -193,4 +220,7 @@ module/assembly limitations, not silently repaired BASE geometry.
 Before any order/release signoff: focused independent current-candidate confirmation, actual socket/module/switch
 mating trial, all selector/reset/startup/load states, stereo/mono and headphone
 bench checks, and JLCPCB package/polarity/placement preview remain unperformed.
-There is no live cost/stock qualification in this release. Old pricing is stale.
+The earlier live JLCPCB classification/stock check for the new selector-related
+parts is retained in `verification/selectors/jlcpcb-basic-parts.json`. It is a
+point-in-time sourcing check, not reserved stock or a current assembly quote.
+Old pricing is stale.

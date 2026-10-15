@@ -1,4 +1,15 @@
-# BASE 1.3.13 — visible findings and dispositions
+# BASE visible findings and dispositions
+
+**Current 1.3.14 footprint-library repair:** `footprint-library/drc.json` and
+`footprint-library/drc-refilled.json` report **0 errors, 0 warnings, 0 opens and
+0 schematic-parity findings**. The 61 mismatches were resolved by matching the
+intentional variants to a project-local library, without geometry or rule changes.
+`footprint-library/erc.json` retains the same 7 root-sheet errors and 4
+symbol-library warnings; no new findings or suppressions.
+See `footprint-library/README.md`. Earlier 61- and 70-warning reports are retained
+as historical evidence, not current results.
+
+# Historical BASE 1.3.13 — visible findings and dispositions
 
 ## PCB DRC on exact saved release source
 

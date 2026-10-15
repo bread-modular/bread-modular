@@ -1,5 +1,48 @@
 ## 1.3.14 — SMD mode selectors, routing cleanup and headphone control correction
 
+### Footprint-library synchronization — current verification
+
+- Resolved all 61 footprint-library DRC warnings using 14 reusable variants in
+  `local-footprints/BreadModular_Base.pretty`; updated 61 PCB IDs and matching
+  schematic Footprint fields only. Preserved intentional USB-C pad numbering,
+  artwork, legacy annuli, all placements, copper, pad nets and zone fills.
+- Converted BASE's footprint table symlink into a project-local table; shared
+  `opt/fp-lib-table` and all original libraries were unchanged by this repair.
+- Native saved and refill-in-memory checks: 0 DRC errors, 0 warnings, 0 opens,
+  0 schematic-parity findings; all 636 physical pin nets unchanged. The same
+  7 schematic ERC errors + 4 symbol-library warnings remain. No suppression.
+- Refreshed JLCPCB outputs: 169 placements / 35 BOM rows / 0 missing LCSC codes.
+  BOM/CPL bytes unchanged; all 11 Gerber/drill members differ only in timestamps.
+- Current source-bound evidence: `verification/footprint-library/summary.json`.
+  Earlier selector/routing/placement summaries are retained as historical snapshots.
+  No version bump, commit, order or electrical redesign.
+
+### Prior completion audit — selector schematic and JLCPCB export
+
+- Completed the twelve shared slot instances: SW2–SW13, Q1–Q12, D4–D15,
+  R62–R73; removed obsolete jumper wiring and corrected the R29-group text.
+  Repaired missing symbol orientation fields that caused native KiCad to silently
+  omit the added symbols, and corrected copied LED/supply label names.
+- Registered and validated the selector symbol/footprint libraries. The standalone
+  footprint has no board-specific nets or schematic path. Relinked all 48 slot
+  footprints to their actual schematic UUIDs without moving any parts or pads.
+- The saved working PCB still contained the old dangling +3.3V branch despite
+  the reported via fix. Removed only that dead-end branch (2 vias, 4 segments),
+  then refilled zones. All 201 footprint geometries, other copper, outline,
+  silkscreen, root schematic and design rules were preserved from the saved input.
+- Verified all 636 PCB ref/pin/net pairs against native hierarchical XML:
+  zero differences, zero DRC errors, zero opens, zero schematic-parity findings.
+  Retained 61 pre-existing footprint-library warnings and the same 7 root-sheet
+  ERC errors + 4 symbol-library warnings; no suppression or rule changes.
+- Re-exported `jlcpcb/base/` and mirrors: 169 placements, 35 BOM rows,
+  zero missing LCSC codes, no PCB-only schematic fallback warnings.
+- Current source-bound evidence is `verification/selectors/summary.json`.
+  Earlier routing/placement before-and-after evidence was absent; the restored
+  folders document only this completion run and its limits, not a reconstruction
+  of those older claims. VERSION remains 1.3.14; no order or commit authorized.
+
+### Original migration notes (historical claims; see completion audit above)
+
 - Replaced J7–J18 with SW2–SW13 and J23 with SW14: MSK12C02 / C431540 SMD
   slide selectors, positioned between connectors without moving mating anchors.
 - Added thirteen buffered mode indicators (AO3400A / C20917, KT-0603R / C2286,

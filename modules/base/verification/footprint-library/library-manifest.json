@@ -1,0 +1,674 @@
+[
+  {
+    "source_library": "Capacitor_SMD:C_0402_1005Metric",
+    "library": "BreadModular_Base:C_0402_1005Metric",
+    "references": [
+      "C1",
+      "C15",
+      "C16",
+      "C21",
+      "C50",
+      "C51",
+      "C52"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_rect"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-0.91\", \"-0.46\"], [\"end\", \"0.91\", \"-0.46\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-0.91\", \"0.46\"], [\"end\", \"-0.91\", \"-0.46\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"0.91\", \"-0.46\"], [\"end\", \"0.91\", \"0.46\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"0.91\", \"0.46\"], [\"end\", \"-0.91\", \"0.46\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-0.5\", \"-0.25\"], [\"end\", \"0.5\", \"-0.25\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-0.5\", \"0.25\"], [\"end\", \"-0.5\", \"-0.25\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.5\", \"-0.25\"], [\"end\", \"0.5\", \"0.25\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.5\", \"0.25\"], [\"end\", \"-0.5\", \"0.25\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": []
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_rect": {
+        "board_only": [],
+        "library_only": [
+          "[\"fp_rect\", [\"start\", \"-0.91\", \"-0.46\"], [\"end\", \"0.91\", \"0.46\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_rect\", [\"start\", \"-0.5\", \"-0.25\"], [\"end\", \"0.5\", \"0.25\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.Fab\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Capacitor_SMD:C_0805_2012Metric",
+    "library": "BreadModular_Base:C_0805_2012Metric",
+    "references": [
+      "C2",
+      "C4",
+      "C5",
+      "FB1",
+      "FB2"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_text",
+      "fp_rect"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-1.7\", \"-0.98\"], [\"end\", \"1.7\", \"-0.98\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1.7\", \"0.98\"], [\"end\", \"-1.7\", \"-0.98\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.7\", \"-0.98\"], [\"end\", \"1.7\", \"0.98\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.7\", \"0.98\"], [\"end\", \"-1.7\", \"0.98\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1\", \"-0.625\"], [\"end\", \"1\", \"-0.625\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-1\", \"0.625\"], [\"end\", \"-1\", \"-0.625\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"1\", \"-0.625\"], [\"end\", \"1\", \"0.625\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"1\", \"0.625\"], [\"end\", \"-1\", \"0.625\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": []
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_text": {
+        "board_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"0\", \"180\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"0.5\", \"0.5\"], [\"thickness\", \"0.08\"]]]]"
+        ],
+        "library_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"0\", \"0\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"0.5\", \"0.5\"], [\"thickness\", \"0.08\"]]]]"
+        ]
+      },
+      "fp_rect": {
+        "board_only": [],
+        "library_only": [
+          "[\"fp_rect\", [\"start\", \"-1.7\", \"-0.98\"], [\"end\", \"1.7\", \"0.98\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_rect\", [\"start\", \"-1\", \"-0.625\"], [\"end\", \"1\", \"0.625\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.Fab\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Capacitor_SMD:C_1206_3216Metric",
+    "library": "BreadModular_Base:C_1206_3216Metric",
+    "references": [
+      "C3",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C17",
+      "C20",
+      "C46"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_rect"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-2.3\", \"-1.15\"], [\"end\", \"2.3\", \"-1.15\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-2.3\", \"1.15\"], [\"end\", \"-2.3\", \"-1.15\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"2.3\", \"-1.15\"], [\"end\", \"2.3\", \"1.15\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"2.3\", \"1.15\"], [\"end\", \"-2.3\", \"1.15\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1.6\", \"-0.8\"], [\"end\", \"1.6\", \"-0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-1.6\", \"0.8\"], [\"end\", \"-1.6\", \"-0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"1.6\", \"-0.8\"], [\"end\", \"1.6\", \"0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"1.6\", \"0.8\"], [\"end\", \"-1.6\", \"0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": []
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD8_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_1206_3216Metric.wrl\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_1206_3216Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_rect": {
+        "board_only": [],
+        "library_only": [
+          "[\"fp_rect\", [\"start\", \"-2.3\", \"-1.15\"], [\"end\", \"2.3\", \"1.15\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_rect\", [\"start\", \"-1.6\", \"-0.8\"], [\"end\", \"1.6\", \"0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.Fab\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Capacitor_SMD:C_0603_1608Metric",
+    "library": "BreadModular_Base:C_0603_1608Metric",
+    "references": [
+      "C18",
+      "C19"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_rect"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-1.48\", \"-0.73\"], [\"end\", \"1.48\", \"-0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1.48\", \"0.73\"], [\"end\", \"-1.48\", \"-0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.48\", \"-0.73\"], [\"end\", \"1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.48\", \"0.73\"], [\"end\", \"-1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-0.8\", \"-0.4\"], [\"end\", \"0.8\", \"-0.4\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-0.8\", \"0.4\"], [\"end\", \"-0.8\", \"-0.4\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.8\", \"-0.4\"], [\"end\", \"0.8\", \"0.4\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.8\", \"0.4\"], [\"end\", \"-0.8\", \"0.4\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": []
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD8_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.wrl\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_rect": {
+        "board_only": [],
+        "library_only": [
+          "[\"fp_rect\", [\"start\", \"-1.48\", \"-0.73\"], [\"end\", \"1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_rect\", [\"start\", \"-0.8\", \"-0.4\"], [\"end\", \"0.8\", \"0.4\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.Fab\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "LED_SMD:LED_0603_1608Metric",
+    "library": "BreadModular_Base:LED_0603_1608Metric",
+    "references": [
+      "D1"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_text",
+      "fp_rect"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-1.48\", \"-0.73\"], [\"end\", \"1.48\", \"-0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1.48\", \"0.73\"], [\"end\", \"-1.48\", \"-0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.48\", \"-0.73\"], [\"end\", \"1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.48\", \"0.73\"], [\"end\", \"-1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]"
+        ],
+        "library_only": []
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD8_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.wrl\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_text": {
+        "board_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"0\", \"180\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"0.4\", \"0.4\"], [\"thickness\", \"0.06\"]]]]"
+        ],
+        "library_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"0\", \"0\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"0.4\", \"0.4\"], [\"thickness\", \"0.06\"]]]]"
+        ]
+      },
+      "fp_rect": {
+        "board_only": [],
+        "library_only": [
+          "[\"fp_rect\", [\"start\", \"-1.48\", \"-0.73\"], [\"end\", \"1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.CrtYd\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical",
+    "library": "BreadModular_Base:PinSocket_1x05_P2.54mm_Vertical",
+    "references": [
+      "INPUT1"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "pad",
+      "model",
+      "fp_text"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-1.8\", \"-1.8\"], [\"end\", \"1.75\", \"-1.8\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1.8\", \"11.9\"], [\"end\", \"-1.8\", \"-1.8\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.75\", \"-1.8\"], [\"end\", \"1.75\", \"11.9\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.75\", \"11.9\"], [\"end\", \"-1.8\", \"11.9\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]"
+        ],
+        "library_only": [
+          "[\"fp_line\", [\"start\", \"-1.77\", \"-1.77\"], [\"end\", \"1.77\", \"-1.77\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1.77\", \"11.93\"], [\"end\", \"-1.77\", \"-1.77\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.77\", \"-1.77\"], [\"end\", \"1.77\", \"11.93\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.77\", \"11.93\"], [\"end\", \"-1.77\", \"11.93\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]"
+        ]
+      },
+      "pad": {
+        "board_only": [
+          "[\"pad\", \"2\", \"thru_hole\", \"oval\", [\"at\", \"0\", \"2.54\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"3\", \"thru_hole\", \"oval\", [\"at\", \"0\", \"5.08\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"4\", \"thru_hole\", \"oval\", [\"at\", \"0\", \"7.62\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"5\", \"thru_hole\", \"oval\", [\"at\", \"0\", \"10.16\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]"
+        ],
+        "library_only": [
+          "[\"pad\", \"2\", \"thru_hole\", \"circle\", [\"at\", \"0\", \"2.54\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"3\", \"thru_hole\", \"circle\", [\"at\", \"0\", \"5.08\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"4\", \"thru_hole\", \"circle\", [\"at\", \"0\", \"7.62\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"5\", \"thru_hole\", \"circle\", [\"at\", \"0\", \"10.16\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]"
+        ]
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD8_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Vertical.wrl\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Vertical.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_text": {
+        "board_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"5.08\", \"270\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"1\", \"1\"], [\"thickness\", \"0.15\"]]]]"
+        ],
+        "library_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"5.08\", \"90\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"1\", \"1\"], [\"thickness\", \"0.15\"]]]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "BreadModular_AudioJacks:Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical",
+    "library": "BreadModular_Base:Jack_3.5mm_QingPu_WQP-PJ366ST_Vertical",
+    "references": [
+      "J1",
+      "J2",
+      "J4",
+      "J6"
+    ],
+    "difference_categories": [
+      "fp_arc"
+    ],
+    "original_library_diff": {
+      "fp_arc": {
+        "board_only": [
+          "[\"fp_arc\", [\"start\", \"-1.296263\", \"2.588577\"], [\"mid\", \"-2.817353\", \"-0.665994\"], [\"end\", \"0\", \"-2.895\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_arc\", [\"start\", \"0\", \"-2.895\"], [\"mid\", \"2.817353\", \"-0.665994\"], [\"end\", \"1.296263\", \"2.588577\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": [
+          "[\"fp_arc\", [\"start\", \"-1.296263\", \"2.588577\"], [\"mid\", \"-2.817353\", \"-0.665994\"], [\"end\", \"0\", \"-2.895\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_arc\", [\"start\", \"0\", \"-2.895\"], [\"mid\", \"2.817353\", \"-0.665994\"], [\"end\", \"1.296263\", \"2.588577\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "BreadModular_TypeC:HRO-TYPE-C-31-M-12",
+    "library": "BreadModular_Base:HRO-TYPE-C-31-M-12",
+    "references": [
+      "J5"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "pad"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-4.47\", \"-7.35\"], [\"end\", \"4.47\", \"-7.35\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-4.47\", \"0\"], [\"end\", \"-4.47\", \"-7.35\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"4.47\", \"-7.35\"], [\"end\", \"4.47\", \"0\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"4.47\", \"0\"], [\"end\", \"-4.47\", \"0\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": []
+      },
+      "pad": {
+        "board_only": [
+          "[\"pad\", \"B9\", \"smd\", \"rect\", [\"at\", \"-2.45\", \"-7.695\"], [\"size\", \"0.6\", \"1.45\"], [\"layers\", \"F.Cu\", \"F.Mask\", \"F.Paste\"]]",
+          "[\"pad\", \"B12\", \"smd\", \"rect\", [\"at\", \"-3.225\", \"-7.695\"], [\"size\", \"0.6\", \"1.45\"], [\"layers\", \"F.Cu\", \"F.Mask\", \"F.Paste\"]]"
+        ],
+        "library_only": [
+          "[\"pad\", \"A1\", \"smd\", \"rect\", [\"at\", \"-3.225\", \"-7.695\"], [\"size\", \"0.6\", \"1.45\"], [\"layers\", \"F.Cu\", \"F.Mask\", \"F.Paste\"]]",
+          "[\"pad\", \"A4\", \"smd\", \"rect\", [\"at\", \"-2.45\", \"-7.695\"], [\"size\", \"0.6\", \"1.45\"], [\"layers\", \"F.Cu\", \"F.Mask\", \"F.Paste\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Resistor_SMD:R_0402_1005Metric",
+    "library": "BreadModular_Base:R_0402_1005Metric",
+    "references": [
+      "R1",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8",
+      "R9",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "R20",
+      "R21",
+      "R24",
+      "R26",
+      "R27",
+      "R60",
+      "R61"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_text",
+      "fp_rect"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-0.93\", \"-0.47\"], [\"end\", \"0.93\", \"-0.47\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-0.93\", \"0.47\"], [\"end\", \"-0.93\", \"-0.47\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"0.93\", \"-0.47\"], [\"end\", \"0.93\", \"0.47\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"0.93\", \"0.47\"], [\"end\", \"-0.93\", \"0.47\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-0.525\", \"-0.27\"], [\"end\", \"0.525\", \"-0.27\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-0.525\", \"0.27\"], [\"end\", \"-0.525\", \"-0.27\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.525\", \"-0.27\"], [\"end\", \"0.525\", \"0.27\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.525\", \"0.27\"], [\"end\", \"-0.525\", \"0.27\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": []
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD8_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.wrl\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_text": {
+        "board_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"0\", \"180\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"0.26\", \"0.26\"], [\"thickness\", \"0.04\"]]]]"
+        ],
+        "library_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"0\", \"0\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"0.26\", \"0.26\"], [\"thickness\", \"0.04\"]]]]"
+        ]
+      },
+      "fp_rect": {
+        "board_only": [],
+        "library_only": [
+          "[\"fp_rect\", [\"start\", \"-0.93\", \"-0.47\"], [\"end\", \"0.93\", \"0.47\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_rect\", [\"start\", \"-0.525\", \"-0.27\"], [\"end\", \"0.525\", \"0.27\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.Fab\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Resistor_SMD:R_0603_1608Metric",
+    "library": "BreadModular_Base:R_0603_1608Metric",
+    "references": [
+      "R2",
+      "R3",
+      "R18",
+      "R19"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_rect"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-1.48\", \"-0.73\"], [\"end\", \"1.48\", \"-0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1.48\", \"0.73\"], [\"end\", \"-1.48\", \"-0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.48\", \"-0.73\"], [\"end\", \"1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.48\", \"0.73\"], [\"end\", \"-1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-0.8\", \"-0.4125\"], [\"end\", \"0.8\", \"-0.4125\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-0.8\", \"0.4125\"], [\"end\", \"-0.8\", \"-0.4125\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.8\", \"-0.4125\"], [\"end\", \"0.8\", \"0.4125\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.8\", \"0.4125\"], [\"end\", \"-0.8\", \"0.4125\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": []
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD8_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.wrl\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_rect": {
+        "board_only": [],
+        "library_only": [
+          "[\"fp_rect\", [\"start\", \"-1.48\", \"-0.73\"], [\"end\", \"1.48\", \"0.73\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_rect\", [\"start\", \"-0.8\", \"-0.4125\"], [\"end\", \"0.8\", \"0.4125\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.Fab\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Resistor_SMD:R_1206_3216Metric",
+    "library": "BreadModular_Base:R_1206_3216Metric",
+    "references": [
+      "R10",
+      "R12"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_rect"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-2.28\", \"-1.12\"], [\"end\", \"2.28\", \"-1.12\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-2.28\", \"1.12\"], [\"end\", \"-2.28\", \"-1.12\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"2.28\", \"-1.12\"], [\"end\", \"2.28\", \"1.12\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"2.28\", \"1.12\"], [\"end\", \"-2.28\", \"1.12\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-1.6\", \"-0.8\"], [\"end\", \"1.6\", \"-0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-1.6\", \"0.8\"], [\"end\", \"-1.6\", \"-0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"1.6\", \"-0.8\"], [\"end\", \"1.6\", \"0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"1.6\", \"0.8\"], [\"end\", \"-1.6\", \"0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": []
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD8_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.wrl\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_rect": {
+        "board_only": [],
+        "library_only": [
+          "[\"fp_rect\", [\"start\", \"-2.28\", \"-1.13\"], [\"end\", \"2.28\", \"1.13\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_rect\", [\"start\", \"-1.6\", \"-0.8\"], [\"end\", \"1.6\", \"0.8\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.Fab\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "BreadModular_MISC:K2-1808SN-A4SW-01",
+    "library": "BreadModular_Base:K2-1808SN-A4SW-01",
+    "references": [
+      "SW1"
+    ],
+    "difference_categories": [
+      "fp_line"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-2.05\", \"-0.725\"], [\"end\", \"-2.05\", \"0.775\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-1.5\", \"-1.2\"], [\"end\", \"1.6\", \"-1.2\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-1.49\", \"1.025\"], [\"end\", \"1.61\", \"1.025\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"2.175\", \"-0.725\"], [\"end\", \"2.175\", \"0.775\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": [
+          "[\"fp_line\", [\"start\", \"-2.05\", \"-0.725\"], [\"end\", \"-2.05\", \"0.775\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"-1.5\", \"-1.2\"], [\"end\", \"1.6\", \"-1.2\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"-1.49\", \"1.025\"], [\"end\", \"1.61\", \"1.025\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"2.175\", \"-0.725\"], [\"end\", \"2.175\", \"0.775\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"default\"]], [\"layer\", \"F.SilkS\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Package_TO_SOT_SMD:SOT-23-5",
+    "library": "BreadModular_Base:SOT-23-5",
+    "references": [
+      "U5"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "model",
+      "fp_text",
+      "fp_poly"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"0\", \"-1.56\"], [\"end\", \"-0.8\", \"-1.56\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"0\", \"-1.56\"], [\"end\", \"0.8\", \"-1.56\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"0\", \"1.56\"], [\"end\", \"-0.8\", \"1.56\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"0\", \"1.56\"], [\"end\", \"0.8\", \"1.56\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"2.05\", \"-1.5\"], [\"end\", \"2.05\", \"1.5\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-0.8\", \"-1.05\"], [\"end\", \"-0.4\", \"-1.45\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-0.8\", \"1.45\"], [\"end\", \"-0.8\", \"-1.05\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"-0.4\", \"-1.45\"], [\"end\", \"0.8\", \"-1.45\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.8\", \"-1.45\"], [\"end\", \"0.8\", \"1.45\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]",
+          "[\"fp_line\", [\"start\", \"0.8\", \"1.45\"], [\"end\", \"-0.8\", \"1.45\"], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"layer\", \"F.Fab\"]]"
+        ],
+        "library_only": [
+          "[\"fp_line\", [\"start\", \"-0.91\", \"-1.56\"], [\"end\", \"0.91\", \"-1.56\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"-0.91\", \"-1.51\"], [\"end\", \"-0.91\", \"-1.56\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"-0.91\", \"1.56\"], [\"end\", \"-0.91\", \"1.51\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"0.91\", \"-1.56\"], [\"end\", \"0.91\", \"-1.51\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"0.91\", \"-0.39\"], [\"end\", \"0.91\", \"0.39\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"0.91\", \"1.51\"], [\"end\", \"0.91\", \"1.56\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"0.91\", \"1.56\"], [\"end\", \"-0.91\", \"1.56\"], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_line\", [\"start\", \"1.05\", \"-0.39\"], [\"end\", \"1.05\", \"0.39\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.05\", \"0.39\"], [\"end\", \"2.05\", \"0.39\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"2.05\", \"-1.5\"], [\"end\", \"2.05\", \"-0.39\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"2.05\", \"-0.39\"], [\"end\", \"1.05\", \"-0.39\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"2.05\", \"0.39\"], [\"end\", \"2.05\", \"1.5\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]"
+        ]
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD9_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      },
+      "fp_text": {
+        "board_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"0\", \"180\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"0.4\", \"0.4\"], [\"thickness\", \"0.06\"]]]]"
+        ],
+        "library_only": [
+          "[\"fp_text\", \"user\", \"${REFERENCE}\", [\"at\", \"0\", \"0\", \"90\"], [\"layer\", \"F.Fab\"], [\"effects\", [\"font\", [\"size\", \"0.72\", \"0.72\"], [\"thickness\", \"0.11\"]]]]"
+        ]
+      },
+      "fp_poly": {
+        "board_only": [
+          "[\"fp_poly\", [\"pts\", [\"xy\", \"-1.3\", \"-1.51\"], [\"xy\", \"-1.54\", \"-1.84\"], [\"xy\", \"-1.06\", \"-1.84\"]], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"fill\", \"yes\"], [\"layer\", \"F.SilkS\"]]"
+        ],
+        "library_only": [
+          "[\"fp_poly\", [\"pts\", [\"xy\", \"-1.45\", \"-1.51\"], [\"xy\", \"-1.69\", \"-1.84\"], [\"xy\", \"-1.21\", \"-1.84\"]], [\"stroke\", [\"width\", \"0.12\"], [\"type\", \"solid\"]], [\"fill\", \"yes\"], [\"layer\", \"F.SilkS\"]]",
+          "[\"fp_poly\", [\"pts\", [\"xy\", \"-0.4\", \"-1.45\"], [\"xy\", \"0.8\", \"-1.45\"], [\"xy\", \"0.8\", \"1.45\"], [\"xy\", \"-0.8\", \"1.45\"], [\"xy\", \"-0.8\", \"-1.05\"]], [\"stroke\", [\"width\", \"0.1\"], [\"type\", \"solid\"]], [\"fill\", \"no\"], [\"layer\", \"F.Fab\"]]"
+        ]
+      }
+    }
+  },
+  {
+    "source_library": "Connector_PinSocket_2.54mm:PinSocket_2x05_P2.54mm_Vertical",
+    "library": "BreadModular_Base:PinSocket_2x05_P2.54mm_Vertical",
+    "references": [
+      "5V14"
+    ],
+    "difference_categories": [
+      "fp_line",
+      "pad",
+      "model"
+    ],
+    "original_library_diff": {
+      "fp_line": {
+        "board_only": [
+          "[\"fp_line\", [\"start\", \"-4.34\", \"-1.8\"], [\"end\", \"1.76\", \"-1.8\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-4.34\", \"11.9\"], [\"end\", \"-4.34\", \"-1.8\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.76\", \"-1.8\"], [\"end\", \"1.76\", \"11.9\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.76\", \"11.9\"], [\"end\", \"-4.34\", \"11.9\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]"
+        ],
+        "library_only": [
+          "[\"fp_line\", [\"start\", \"-4.31\", \"-1.77\"], [\"end\", \"1.77\", \"-1.77\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"-4.31\", \"11.93\"], [\"end\", \"-4.31\", \"-1.77\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.77\", \"-1.77\"], [\"end\", \"1.77\", \"11.93\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]",
+          "[\"fp_line\", [\"start\", \"1.77\", \"11.93\"], [\"end\", \"-4.31\", \"11.93\"], [\"stroke\", [\"width\", \"0.05\"], [\"type\", \"solid\"]], [\"layer\", \"F.CrtYd\"]]"
+        ]
+      },
+      "pad": {
+        "board_only": [
+          "[\"pad\", \"2\", \"thru_hole\", \"oval\", [\"at\", \"-2.54\", \"0\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"3\", \"thru_hole\", \"oval\", [\"at\", \"0\", \"2.54\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"4\", \"thru_hole\", \"oval\", [\"at\", \"-2.54\", \"2.54\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"5\", \"thru_hole\", \"oval\", [\"at\", \"0\", \"5.08\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"6\", \"thru_hole\", \"oval\", [\"at\", \"-2.54\", \"5.08\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"7\", \"thru_hole\", \"oval\", [\"at\", \"0\", \"7.62\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"8\", \"thru_hole\", \"oval\", [\"at\", \"-2.54\", \"7.62\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"9\", \"thru_hole\", \"oval\", [\"at\", \"0\", \"10.16\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"10\", \"thru_hole\", \"oval\", [\"at\", \"-2.54\", \"10.16\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]"
+        ],
+        "library_only": [
+          "[\"pad\", \"2\", \"thru_hole\", \"circle\", [\"at\", \"-2.54\", \"0\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"3\", \"thru_hole\", \"circle\", [\"at\", \"0\", \"2.54\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"4\", \"thru_hole\", \"circle\", [\"at\", \"-2.54\", \"2.54\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"5\", \"thru_hole\", \"circle\", [\"at\", \"0\", \"5.08\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"6\", \"thru_hole\", \"circle\", [\"at\", \"-2.54\", \"5.08\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"7\", \"thru_hole\", \"circle\", [\"at\", \"0\", \"7.62\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"8\", \"thru_hole\", \"circle\", [\"at\", \"-2.54\", \"7.62\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"9\", \"thru_hole\", \"circle\", [\"at\", \"0\", \"10.16\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]",
+          "[\"pad\", \"10\", \"thru_hole\", \"circle\", [\"at\", \"-2.54\", \"10.16\"], [\"size\", \"1.7\", \"1.7\"], [\"drill\", \"1\"], [\"layers\", \"*.Cu\", \"*.Mask\"], [\"remove_unused_layers\", \"no\"]]"
+        ]
+      },
+      "model": {
+        "board_only": [
+          "[\"model\", \"${KICAD8_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_2x05_P2.54mm_Vertical.wrl\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ],
+        "library_only": [
+          "[\"model\", \"${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_2x05_P2.54mm_Vertical.step\", [\"offset\", [\"xyz\", \"0\", \"0\", \"0\"]], [\"scale\", [\"xyz\", \"1\", \"1\", \"1\"]], [\"rotate\", [\"xyz\", \"0\", \"0\", \"0\"]]]"
+        ]
+      }
+    }
+  }
+]

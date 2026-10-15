@@ -1,0 +1,22 @@
+COMMAND: python3 -B opt/kicad-tools/jlcpcb/add_production_files.py base
+EXIT CODE: 0
+STDOUT:
+base/base.kicad_pcb
+Exported 169 components in 35 BOM rows (2 copper layers):
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/base/base-gerbers.zip
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/base/bom.csv
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/base/positions.csv
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/base/export-report.json
+  source PCB : /home/azero/data/projects/bread-modular/modules/base/base.kicad_pcb  (3ec1bd667c1303c8)
+  assembly   : 169 components, 35 BOM rows, 0 missing LCSC numbers
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/base/base-gerbers.zip  282438 B  397666239a56
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/base/bom.csv  3235 B  75d21bf4d574
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/base/positions.csv  6581 B  26b77ec26b71
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/base/export-report.json  3340 B  d8fba52083b4
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/production_files/GERBER-base.zip  11 members
+  /home/azero/data/projects/bread-modular/modules/base/jlcpcb/gerber  unpacked 11 Gerber/drill files
+
+1 board(s) exported, 0 module(s) skipped, 0 failed
+
+STDERR:
+Warning: Export is not a DRC or assembly approval: refill zones and save before export; review Gerbers, holes, part matches, centroids and rotations in JLCPCB's preview.

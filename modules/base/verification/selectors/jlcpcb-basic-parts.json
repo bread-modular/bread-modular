@@ -1,0 +1,206 @@
+{
+  "check": "JLCPCB Basic-part sourcing check for the 1.3.14 5V/MONO selector + LED indicator parts",
+  "board": "modules/base/base.kicad_pcb",
+  "generated_at_utc": "2026-10-15T05:13:33Z",
+  "policy": "New parts must be JLCPCB Basic (actual componentLibraryType == \"base\"). The MSK12C02 slide switch is allowed to be Extended by explicit user instruction. Economy eligibility and stock are recorded for reference.",
+  "catalog_evidence": {
+    "C431540": {
+      "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+      "retrieved_at_utc": "2026-10-15T05:13:26Z",
+      "http_status": 200,
+      "request": {
+        "currentPage": 1,
+        "pageSize": 20,
+        "keyword": "C431540"
+      },
+      "sha256": "eed91e1da806f43e64dd3ba996a9ec395d1a699e8dd8720ceac42e74013f0b8e",
+      "mode": "live",
+      "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+      "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+    },
+    "C20917": {
+      "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+      "retrieved_at_utc": "2026-10-15T05:13:28Z",
+      "http_status": 200,
+      "request": {
+        "currentPage": 1,
+        "pageSize": 20,
+        "keyword": "C20917"
+      },
+      "sha256": "5a375f8da74520ad98e1a60589c059e99cda864b22fe6ca25ac0c58ee727ff62",
+      "mode": "live",
+      "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+      "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+    },
+    "C2286": {
+      "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+      "retrieved_at_utc": "2026-10-15T05:13:30Z",
+      "http_status": 200,
+      "request": {
+        "currentPage": 1,
+        "pageSize": 20,
+        "keyword": "C2286"
+      },
+      "sha256": "a4fdad0c7ecfe590a90a665d0e0074ffffd5be29de87b2d22ca39a19fb594f53",
+      "mode": "live",
+      "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+      "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+    },
+    "C11702": {
+      "source_url": "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList",
+      "retrieved_at_utc": "2026-10-15T05:13:33Z",
+      "http_status": 200,
+      "request": {
+        "currentPage": 1,
+        "pageSize": 20,
+        "keyword": "C11702"
+      },
+      "sha256": "77432690c1a7d222bcc305cd5c788a83834fa113c4c2075fcaf9ea9aa2721838",
+      "mode": "live",
+      "schema_mapping_source": "https://jlcpcb.com/ssr/js/b1851ed7074a22a7e047.js",
+      "schema_mapping_observed_at_utc": "2026-10-05T04:51:32.467955Z"
+    }
+  },
+  "parts": {
+    "C431540": {
+      "description": "SW2..SW14 (5V/MONO rail + line-mono selectors)",
+      "kind": "switch",
+      "placements_on_board": 13,
+      "refs": [
+        "SW2",
+        "SW3",
+        "SW4",
+        "SW5",
+        "SW6",
+        "SW7",
+        "SW8",
+        "SW9",
+        "SW10",
+        "SW11",
+        "SW12",
+        "SW13",
+        "SW14"
+      ],
+      "mpn": "MSK12C02",
+      "manufacturer": "SHOU HAN",
+      "package": "SMD,8x2.8mm",
+      "classification": "Extended",
+      "library_type": "expand",
+      "preferred_extended": false,
+      "economy_eligible": true,
+      "component_product_type": 0,
+      "stock": 183545,
+      "verdict": "ACCEPTED (Extended allowed by instruction)",
+      "catalog_search_truncated": false,
+      "catalog_total_matches": 1
+    },
+    "C20917": {
+      "description": "Q1..Q13 (LED driver buffers incl. MONO indicator)",
+      "kind": "mosfet",
+      "placements_on_board": 13,
+      "refs": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4",
+        "Q5",
+        "Q6",
+        "Q7",
+        "Q8",
+        "Q9",
+        "Q10",
+        "Q11",
+        "Q12",
+        "Q13"
+      ],
+      "mpn": "AO3400A",
+      "manufacturer": "Alpha & Omega Semicon",
+      "package": "SOT-23",
+      "classification": "Basic",
+      "library_type": "base",
+      "preferred_extended": false,
+      "economy_eligible": true,
+      "component_product_type": 0,
+      "stock": 764466,
+      "verdict": "OK (Basic)",
+      "catalog_search_truncated": false,
+      "catalog_total_matches": 1
+    },
+    "C2286": {
+      "description": "D4..D16 (new mode LEDs; shared code with pre-existing D1)",
+      "kind": "led",
+      "placements_on_board": 14,
+      "refs": [
+        "D1",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8",
+        "D9",
+        "D10",
+        "D11",
+        "D12",
+        "D13",
+        "D14",
+        "D15",
+        "D16"
+      ],
+      "mpn": "KT-0603R",
+      "manufacturer": "Hubei KENTO Elec",
+      "package": "0603",
+      "classification": "Basic",
+      "library_type": "base",
+      "preferred_extended": false,
+      "economy_eligible": true,
+      "component_product_type": 0,
+      "stock": 7894080,
+      "verdict": "OK (Basic)",
+      "catalog_search_truncated": false,
+      "catalog_total_matches": 15
+    },
+    "C11702": {
+      "description": "R62..R74 (new 1k LED series resistors; shared code with R1/R14/R15/R20/R21)",
+      "kind": "resistor",
+      "placements_on_board": 18,
+      "refs": [
+        "R1",
+        "R14",
+        "R15",
+        "R20",
+        "R21",
+        "R62",
+        "R63",
+        "R64",
+        "R65",
+        "R66",
+        "R67",
+        "R68",
+        "R69",
+        "R70",
+        "R71",
+        "R72",
+        "R73",
+        "R74"
+      ],
+      "mpn": "0402WGF1001TCE",
+      "manufacturer": "UNI-ROYAL(Uniroyal Elec)",
+      "package": "0402",
+      "classification": "Basic",
+      "library_type": "base",
+      "preferred_extended": false,
+      "economy_eligible": true,
+      "component_product_type": 0,
+      "stock": 14501588,
+      "verdict": "OK (Basic)",
+      "catalog_search_truncated": true,
+      "catalog_total_matches": 32
+    }
+  },
+  "verdicts": [
+    "C431540: ACCEPTED (Extended allowed by instruction)",
+    "C20917: OK (Basic)",
+    "C2286: OK (Basic)",
+    "C11702: OK (Basic)"
+  ]
+}

@@ -1,4 +1,13 @@
-# BASE 1.3.13 — complete bounded candidate evidence, not bench/order approval
+# BASE verification evidence
+
+**Current 1.3.14 footprint-library repair:** see
+[footprint-library/README.md](footprint-library/README.md) and
+[footprint-library/summary.json](footprint-library/summary.json) for the current
+source-bound native checks and JLCPCB export: zero DRC errors/warnings, opens or
+schematic-parity findings. The earlier selector-completion and older reports
+below are historical snapshots, not current PCB/export hashes.
+
+# Historical BASE 1.3.13 — complete bounded candidate evidence, not bench/order approval
 
 ## Scope / prior versus current review
 

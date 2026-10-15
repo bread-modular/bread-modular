@@ -1,0 +1,221 @@
+(footprint "HRO-TYPE-C-31-M-12"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -9.25 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "HRO-TYPE-C-31-M-12"
+		(at 0 1.15 0)
+		(layer "Dwgs.User")
+		(hide yes)
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+
+
+
+
+
+
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -5.08 -0.033)
+		(end -5.08 -7.333)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -5.08 -0.033)
+		(end 5.08 -0.033)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 5.08 -0.033)
+		(end 5.08 -7.333)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -4.47 -7.35)
+		(end 4.47 -7.35)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -4.47 0)
+		(end -4.47 -7.35)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 4.47 -7.35)
+		(end 4.47 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 4.47 0)
+		(end -4.47 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+	)
+	(pad "" np_thru_hole circle
+		(at -2.89 -6.25)
+		(size 0.65 0.65)
+		(drill 0.65)
+		(layers "*.Cu" "*.Mask")
+	)
+	(pad "" np_thru_hole circle
+		(at 2.89 -6.25)
+		(size 0.65 0.65)
+		(drill 0.65)
+		(layers "*.Cu" "*.Mask")
+	)
+	(pad "A5" smd rect
+		(at -1.25 -7.695)
+		(size 0.3 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "A6" smd rect
+		(at -0.25 -7.695)
+		(size 0.3 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "A7" smd rect
+		(at 0.25 -7.695)
+		(size 0.3 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "A8" smd rect
+		(at 1.25 -7.695)
+		(size 0.3 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "A9" smd rect
+		(at 2.45 -7.695)
+		(size 0.6 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "A12" smd rect
+		(at 3.225 -7.695)
+		(size 0.6 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "B5" smd rect
+		(at 1.75 -7.695)
+		(size 0.3 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "B6" smd rect
+		(at 0.75 -7.695)
+		(size 0.3 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "B7" smd rect
+		(at -0.75 -7.695)
+		(size 0.3 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "B8" smd rect
+		(at -1.75 -7.695)
+		(size 0.3 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "B9" smd rect
+		(at -2.45 -7.695)
+		(size 0.6 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "B12" smd rect
+		(at -3.225 -7.695)
+		(size 0.6 1.45)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "S1" thru_hole oval
+		(at -4.32 -6.78)
+		(size 1 2.1)
+		(drill oval 0.6 1.7)
+		(layers "*.Cu" "*.Paste" "*.Mask")
+		(remove_unused_layers no)
+	)
+	(pad "S1" thru_hole oval
+		(at -4.32 -2.6)
+		(size 1 1.6)
+		(drill oval 0.6 1.2)
+		(layers "*.Cu" "*.Paste" "*.Mask")
+		(remove_unused_layers no)
+	)
+	(pad "S1" thru_hole oval
+		(at 4.32 -6.78)
+		(size 1 2.1)
+		(drill oval 0.6 1.7)
+		(layers "*.Cu" "*.Paste" "*.Mask")
+		(remove_unused_layers no)
+	)
+	(pad "S1" thru_hole oval
+		(at 4.32 -2.6)
+		(size 1 1.6)
+		(drill oval 0.6 1.2)
+		(layers "*.Cu" "*.Paste" "*.Mask")
+		(remove_unused_layers no)
+	)
+	(embedded_fonts no)
+)
