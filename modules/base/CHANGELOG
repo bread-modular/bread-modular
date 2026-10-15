@@ -1,3 +1,31 @@
+## 1.3.14 — SMD mode selectors, routing cleanup and headphone control correction
+
+- Replaced J7–J18 with SW2–SW13 and J23 with SW14: MSK12C02 / C431540 SMD
+  slide selectors, positioned between connectors without moving mating anchors.
+- Added thirteen buffered mode indicators (AO3400A / C20917, KT-0603R / C2286,
+  1k / C11702). Existing 100k select pulldowns remain; switch current is logic
+  only. Default assembly position must be checked as 3V3 / STEREO.
+- Initial routing pass preserved all 201 post-migration placements while replacing 1,602 small
+  selector-route segments with 276 cleaner segments. No original power/feedback
+  copper changed. TraceMaker was privately built but rejected by compatibility
+  preflight for the scoped J5 rule; used the approved manual fallback.
+- Follow-up: D4–D15 directly right of their switches; twelve bold 5V labels
+  exactly match the MONO caption. Removed SWn 5V LED / OFF=3V3 silkscreen.
+  Nudged Q1–Q12 +1.1/-0.5 mm for clearance; all other 177 placements retained.
+  Local LED/buffer routing only, no new vias; schematic/netlist untouched.
+- Corrected physical LEFT/RV1 -> left headphone tip and RIGHT/RV2 -> right ring.
+  Four pot signal memberships changed; input and jack channel identities,
+  pot/legend positions and LINE MONO behavior remain intact.
+- Updated schematic drawings, native netlist/parity checks and bounded geometry
+  verification. Regenerated manufacturing outputs are subject to source-hash,
+  BOM/CPL, ZIP and native drill checks in verification/selectors/summary.json.
+- Current PCB: 0 DRC errors, opens or parity failures; 61 existing library-copy
+  warnings. ERC remains 7 errors + 4 warnings by identity. No suppressions.
+- This is an uncommitted software-checked candidate, not a production signoff.
+  Independent current review, JLCPCB placement/polarity preview, switch position,
+  actual mating and reset/load/audio bench checks and order authorization remain.
+  See POWER.md and verification/{selectors,routing-polish,led-placement}/README.md.
+
 ## 1.3.13 — bounded post-review improvement candidate (2026-10-01)
 
 - Imported and hash-verified the complete 79-path 1.3.12 candidate binary patch
