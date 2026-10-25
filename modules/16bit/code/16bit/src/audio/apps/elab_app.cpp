@@ -20,24 +20,8 @@ void ElabApp::audioCallback(AudioInput *input, AudioOutput *output) {
     float waveform = sawWaveform.getSample();
     float subWaveform = subSawWaveform.getSample();
 
-    // Maintain the sample counter
-    sampleCounter++;
-    if (sampleCounter > audioManager->getDac()->getSampleRate()) {
-        sampleCounter = 0;
-    }
-
-    if (sampleCounter % sampleAt == 0) {
-        // TODO: We need to sample the ADC here
-        a1Samples[a1SampleIndex] = (input->left + 1) / 2.0 * 255;
-        a1SampleIndex++;
-        if (a1SampleIndex > sampleCount) {
-            flushNow = true;
-            a1SampleIndex = 0;
-            uint8_t *tempBuffer = a1FlushSamples;
-            a1FlushSamples = a1Samples;
-            a1Samples = tempBuffer;
-        }
-    }
+    // A1 = left, A2 = right; the ADC manager already sampled both inputs.
+    scope.onAudioSample(input->left, input->right, audioManager->getDac()->getSampleRate());
 
     output->left = waveform;
     output->right = waveform + subWaveform;
@@ -55,13 +39,7 @@ void ElabApp::update() {
         lastPulseTime = currentTime;
     }
 
-    if (flushNow) {
-        flushNow = false;
-        if (sendData) {
-            // Send the binary data
-            webSerial->sendBinary(a1FlushSamples, sampleCount);
-        }
-    }
+    scope.sendPending(*webSerial);
 }
 
 __attribute__((cold, noinline))
@@ -107,21 +85,7 @@ void ElabApp::buttonPressedCallback(bool pressed) {
 
 __attribute__((cold, noinline))
 bool ElabApp::onCommandCallback(const char* cmd) {
-    // Parse: start-send
-    if (strncmp(cmd, "start-send", 11) == 0) {
-        // Handle binary data
-        sendData = true;
-        return true;
-    }
-
-    // Parse: stop-send
-    if (strncmp(cmd, "stop-send", 10) == 0) {
-        // Stop sending binary data
-        sendData = false;
-        return true;
-    }
-
-    return false;
+    return scope.onCommand(cmd, *webSerial);
 }
 
 ElabApp* ElabApp::getInstance() {
