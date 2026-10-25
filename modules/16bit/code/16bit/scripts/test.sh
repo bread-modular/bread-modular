@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# test.sh — run every host DSP simulator self-test in tools/ (*_sim.cpp).
+# test.sh — run every host simulator self-test in tools/ (*sim*.cpp).
 #
 # Each tools/<name>_sim.cpp compiles against the SHARED pico-free DSP headers
 # (includes/audio/apps/<app>/...) on the host with plain g++ — no firmware, no
@@ -12,8 +12,9 @@
 #   3. This script discovers it automatically.
 #
 # Usage:
-#   ./scripts/test.sh                 # build & run all *_{sim,test}.cpp drivers
+#   ./scripts/test.sh                 # build & run all *sim*.cpp drivers
 #   CXX=clang++ ./scripts/test.sh     # use a different host compiler
+#   CXXFLAGS="-O1 -g -fsanitize=address,undefined" ./scripts/test.sh
 #
 # Exit code = number of failing drivers.
 set -euo pipefail
@@ -21,6 +22,8 @@ set -euo pipefail
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 PROJECT_ROOT="$(dirname -- "$SCRIPT_DIR")"
 CXX="${CXX:-g++}"
+# Optional host instrumentation/optimization flags, passed at compile AND link.
+read -r -a EXTRA_CXXFLAGS <<< "${CXXFLAGS:-}"
 
 cd "$PROJECT_ROOT"
 
@@ -39,7 +42,7 @@ for src in tools/*sim*.cpp; do
     echo "============================================================"
     echo "== Building + running: $name"
     echo "============================================================"
-    "$CXX" -std=c++17 -O2 -Wall -Wextra -I includes -o "$bin" "$src"
+    "$CXX" -std=c++17 -O2 -Wall -Wextra -pthread "${EXTRA_CXXFLAGS[@]}" -I includes -o "$bin" "$src"
     if "$bin"; then
         echo "  PASS: $name"
     else

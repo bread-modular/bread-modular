@@ -19,6 +19,7 @@ runs — nothing is re-implemented in the simulator.
 | `monosynth_dsp.h`            | shared DSP core (in `includes/audio/apps/monosynth/`) — used by firmware AND the sim |
 | `sim_monosynth.cpp`          | host simulator: renders a WAV, analyses it, runs self-tests   |
 | `sim_motion_recorder.cpp`    | host self-tests for the shared MIDI-clock motion recorder (monosynth & polysynth MODE button) |
+| `sim_elab_scope.cpp`         | production ELab scope helper: command selection, legacy/dual payloads, boundaries, encoding, and cross-core ownership |
 | `analyze_monosynth_wav.py`   | Python analysis of the rendered WAV (FFT, envelope, freq)     |
 | `run_monosynth_sim.sh`       | one-shot build + run                                          |
 
@@ -85,6 +86,49 @@ It builds each one with the host `g++` (against the shared pico-free headers),
 runs its assertions, and reports pass/fail. Add a new app's sim driver and it is
 picked up with no change to the runner — see `scripts/test.sh` for the reusable
 pattern.
+
+## ELab dual-channel scope regressions
+
+`sim_elab_scope.cpp` exercises the **production** Pico-free
+`includes/audio/apps/elab_scope.h`, not a separate capture/command implementation.
+The serial probe uses the existing production base64 codec and its 2048-byte
+output-buffer capacity; no physical USB transport is emulated or required.
+
+Coverage includes exact commands and rejected similar names; capability value 2;
+old-client 500-byte A1-only behavior; dual 1000-byte planar layout and paired A2
+mapping; 499/500/501 boundaries and subsequent windows; all 4096 normalized ADC
+codes, saturation/infinities/NaN; original decimation/counter rollover; repeated
+starts/stops and mode switches; bounded queue overrun; and immutability while a
+send is stalled for twenty producer windows. A real two-thread stress test also
+checks ownership and channel pairing through 500000 audio callbacks, including
+concurrent mode changes, repeated starts, capability queries, and stop/restart.
+
+From the firmware directory (`modules/16bit/code/16bit`):
+
+```sh
+# All host drivers, including the scope regressions:
+./scripts/test.sh
+
+# All drivers with AddressSanitizer, UndefinedBehaviorSanitizer, and float casts:
+CXXFLAGS="-O1 -g -fsanitize=address,undefined,float-cast-overflow -fno-omit-frame-pointer" ./scripts/test.sh
+
+# Focused scope driver, optimized:
+mkdir -p .build/host
+g++ -std=c++17 -O2 -Wall -Wextra -pthread -I includes tools/sim_elab_scope.cpp -o .build/host/sim_elab_scope
+.build/host/sim_elab_scope
+
+# Optional race detector (requires a working host ThreadSanitizer runtime):
+g++ -std=c++17 -O1 -g -Wall -Wextra -pthread -fsanitize=thread -fno-omit-frame-pointer -I includes tools/sim_elab_scope.cpp -o .build/host/sim_elab_scope_tsan
+.build/host/sim_elab_scope_tsan
+
+# Actual ELab firmware build (SDK/toolchain set up per the firmware README):
+./scripts/build.sh -DAPP_NAME=elab
+```
+
+The host tests do not establish physical ADC skew, USB throughput, or hardware
+real-time timing. The firmware README documents the negotiation contract and
+existing timing limitations. Neither the host runner nor `build.sh` flashes a
+board.
 
 ## Reuse this for another 16bit app
 

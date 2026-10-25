@@ -131,3 +131,70 @@ framed as `::val::<value>::val::` (or `::list::…::list::` / `::bin::…::bin::
 > `set-app` only accepts that app — runtime app switching was removed in favor
 > of one-firmware-per-app. These commands remain backward compatible with the
 > previous multi-app firmware.
+
+### ELab oscilloscope: channel negotiation and legacy compatibility
+
+These commands are specific to the `elab` firmware. Send the **exact command**
+followed by a newline (the serial layer also accepts CR/CRLF). Prefixes, suffixes,
+arguments, and similar names such as `start-send-20` are not accepted.
+
+| Command | Behavior |
+|---------|----------|
+| `get-scope-channels` | Replies `::val::2::val::` without changing the stream mode. |
+| `start-send` | Starts/continues the **legacy A1-only** stream: exactly **500 raw uint8 bytes** per decoded binary payload. |
+| `start-send-2` | Starts/continues the dual stream: exactly **1000 raw uint8 bytes**, planar **A1 [0..499], then A2 [500..999]**. No header or interleaving. |
+| `stop-send` | Stops either mode and discards queued complete windows. |
+
+Both stream modes retain the existing `::bin::<base64>::bin::` framing and a
+trailing newline. A1 is `AudioInput.left`; A2 is `AudioInput.right`. Dual payload
+bytes `i` and `500 + i` come from the **same capture step**, using a shared sample
+index. The ADC manager already reads both ADCs in each audio callback; those ADC
+conversions are sequential, not hardware-simultaneous.
+
+**Website negotiation:** request `get-scope-channels` first. Only after a positive
+capability response of `2` should a new UI use `start-send-2`. Missing, unknown,
+or unsupported capability responses must fall back to `start-send`, which remains
+500-byte A1-only even on this new firmware. Thus old UIs work unchanged; new UIs
+can still work with old firmware. Repeated starts/stops are idempotent, and
+switching modes never mixes payload lengths. Commands and sends run sequentially
+on the main core: after `stop-send` is processed no more frames are sent, but a
+frame already handed to USB before that command cannot be recalled.
+
+**Encoding and timing (unchanged):** normalized input is converted with
+`uint8((input + 1) / 2.0 * 255)`, truncating rather than rounding: -1 -> 0,
+0 -> 127, +1 -> 255. The existing voltage interpretation/calibration is unchanged.
+Out-of-range inputs now saturate to 0/255; NaN encodes as 0. The original integer
+sample divider is **4 audio callbacks**, nominally **0.0907 ms at 44.1 kHz**
+(approximately 0.1 ms as assumed by the UI), not a new precise 0.1 ms timer. The
+existing counter reset after 44,100 also retains its occasional one-callback
+interval at rollover. A 500-sample window normally takes about 45 ms to collect;
+USB delivery time is separate. No audio/ADC/DAC timing has been changed.
+
+**Ownership and overload:** `includes/audio/apps/elab_scope.h` contains the
+Pico-free production helper used by the firmware and host regression tests. It
+uses three fixed 1000-byte buffers (3000 payload bytes plus small metadata): one
+producer-private write slot and capacity for two published windows, including
+any window being encoded/sent. Lock-free 32-bit release/acquire index loads/stores
+publish only complete paired windows and release a read slot only after the
+synchronous serial send returns. The audio path neither allocates nor waits,
+and no audio-critical lock surrounds base64 encoding or USB output. When full,
+the producer drops **new complete windows**, never overwriting queued/in-flight
+ones. There is no unbounded backlog, timestamp, or overrun marker in the protocol;
+a slow host may see gaps, not torn or channel-misaligned windows.
+
+Capture continues even while stopped (as before). A mode change discards queued
+complete windows but does not reset audio-owned counters or a partial window, so
+the first subsequent window may include samples taken before the command. A
+repeated start in the same mode does not discard pending data. USB/serial can
+still delay main-core work (including pulse/button updates); it never holds up
+the scope's audio-core producer.
+
+Host regressions (no hardware/SDK required):
+
+```sh
+./scripts/test.sh
+# Also run the host drivers with memory/undefined-behavior checks:
+CXXFLAGS="-O1 -g -fsanitize=address,undefined,float-cast-overflow -fno-omit-frame-pointer" ./scripts/test.sh
+```
+
+See `tools/README.md` for the focused scope test and threaded ownership checks.
